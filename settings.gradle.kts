@@ -45,7 +45,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        // 本地构件仓：没有 GitHub Packages 凭据时 miuix 与 COUI 的正式来源，且必须先于远端快照仓库解析。
+        // 本地构件仓：没有 GitHub Packages 凭据时 miuix 与 COUI 的兜底来源，且必须先于远端快照仓库解析。
         // 稳定副本优先，其次各自 checkout 的构建产物目录——构建目录会被 gradle clean 清掉，副本不会。
         // 目录不存在时 Gradle 视作空仓库，不影响有凭据的常规路径。
         listOf(
@@ -75,6 +75,19 @@ dependencyResolutionManagement {
                     password = gprKey.get()
                 }
             }
+        }
+        // GitHub Packages (Costben/coui17)：COUI 17 的 1.2.0-SNAPSHOT 滚动快照只发布在这里，不在 Maven Central。
+        // 与 miuix 相同，公开包也必须带 read:packages 凭据；只放行 COUI 的 group，避免其它依赖逐个去这里撞 401。
+        maven {
+            name = "GitHubPackagesCoui"
+            url = uri("https://maven.pkg.github.com/Costben/coui17")
+            if (gprUser.isPresent && gprKey.isPresent) {
+                credentials {
+                    username = gprUser.get()
+                    password = gprKey.get()
+                }
+            }
+            content { includeGroup("io.github.suqi8.coui.kmp") }
         }
         // Cling Repo
         maven { 
