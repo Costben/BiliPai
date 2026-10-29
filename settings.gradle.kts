@@ -45,6 +45,19 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        // 本地构件仓：没有 GitHub Packages 凭据时 miuix 与 COUI 的正式来源，且必须先于远端快照仓库解析。
+        // 稳定副本优先，其次各自 checkout 的构建产物目录——构建目录会被 gradle clean 清掉，副本不会。
+        // 目录不存在时 Gradle 视作空仓库，不影响有凭据的常规路径。
+        listOf(
+            "miuix-local-repo",
+            "miuix/build/repository/local",
+            "coui-local-repo",
+            "coui/build/repository/local",
+        ).forEach { path -> maven { url = uri(rootDir.parentFile.resolve(path)) } }
+        // 仍需指向其它 COUI（ColorOS 风格 Compose 组件库）构件目录时用 -Pbili.coui.repository=<path>。
+        providers.gradleProperty("bili.coui.repository").orNull?.let { path ->
+            maven { url = uri(rootDir.resolve(path)) }
+        }
         maven { url = uri("https://jitpack.io") }
         // GitHub Packages (compose-miuix-ui/miuix).
         // Authentication is required even for this public package. Keep credentials outside

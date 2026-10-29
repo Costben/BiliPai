@@ -61,6 +61,13 @@ dependencies {
     // Shared liquid value controls render a safe sibling track backdrop.
     implementation(libs.miuix.blur)
     implementation(libs.miuix.preference)
+    // COUI 17 是唯一的自绘皮肤；ui/preference 走 api，app 与共享门面消费同一套组件。
+    api(libs.coui.ui)
+    api(libs.coui.preference)
+    implementation(libs.coui.blur)
+    implementation(libs.coui.shader)
+    implementation(libs.coui.squircle)
+    implementation(libs.coui.icons)
     // ModalBottomSheet/Dialog 侧边预测返回：与 app 内 NavigationBackHandler 同栈。
     implementation("androidx.navigationevent:navigationevent-compose:1.1.2")
 
