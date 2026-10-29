@@ -444,6 +444,13 @@ dependencies {
     implementation(libs.miuix.shader)
     implementation(libs.miuix.squircle)
     implementation(libs.miuix.icons)
+    // COUI 17 接管全部页面组件；miuix 仅剩调色板数据层与自研导航模块在用，迁完后再删。
+    implementation(libs.coui.ui)
+    implementation(libs.coui.preference)
+    implementation(libs.coui.blur)
+    implementation(libs.coui.shader)
+    implementation(libs.coui.squircle)
+    implementation(libs.coui.icons)
     implementation(project(":miuix-navigation"))
     // 图标扩展库 (全屏、设置图标等)
     implementation("androidx.compose.material:material-icons-extended")

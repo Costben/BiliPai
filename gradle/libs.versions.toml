@@ -12,6 +12,9 @@ activityCompose = "1.13.0"
 composeBom = "2026.09.00"
 window = "1.5.1"
 miuix = "0.9.4-153920c7-SNAPSHOT"
+# COUI 17：Miuix 的 ColorOS 风格 fork，坐标前缀 io.github.suqi8.coui.kmp。
+# 滚动坐标：本机 ../coui 每次提交都会重新发布到 coui/build/repository/local。
+coui = "1.2.0-SNAPSHOT"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -37,6 +40,14 @@ miuix-shader = { group = "top.yukonga.miuix.kmp", name = "miuix-shader-android",
 miuix-squircle = { group = "top.yukonga.miuix.kmp", name = "miuix-squircle-android", version.ref = "miuix" }
 miuix-icons = { group = "top.yukonga.miuix.kmp", name = "miuix-icons-android", version.ref = "miuix" }
 # Navigation is bundled in :miuix-navigation to retain the video-return patches.
+# COUI 17：与 miuix 一一对应的 ColorOS 风格实现。
+coui-ui = { group = "io.github.suqi8.coui.kmp", name = "coui-ui-android", version.ref = "coui" }
+coui-preference = { group = "io.github.suqi8.coui.kmp", name = "coui-preference-android", version.ref = "coui" }
+coui-blur = { group = "io.github.suqi8.coui.kmp", name = "coui-blur-android", version.ref = "coui" }
+coui-shader = { group = "io.github.suqi8.coui.kmp", name = "coui-shader-android", version.ref = "coui" }
+coui-squircle = { group = "io.github.suqi8.coui.kmp", name = "coui-squircle-android", version.ref = "coui" }
+coui-icons = { group = "io.github.suqi8.coui.kmp", name = "coui-icons-android", version.ref = "coui" }
+coui-nav = { group = "io.github.suqi8.coui.kmp", name = "coui-nav-android", version.ref = "coui" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
