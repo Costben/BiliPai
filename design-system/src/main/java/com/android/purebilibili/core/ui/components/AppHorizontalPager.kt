@@ -44,23 +44,30 @@ fun AppHorizontalPager(
     shouldYieldGesture: () -> Boolean = { false },
     pageContent: @Composable PagerScope.(Int) -> Unit,
 ) {
-    val miuix = LocalAppUiStyle.current.usesMiuixFamilySkin
+    val isCoui = LocalAppUiStyle.current == AppUiStyle.COUI17
+    val isLegacyMiuix = LocalAppUiStyle.current == AppUiStyle.MIUIX
     val enabled = userScrollEnabled && !shouldYieldGesture()
-    val resolvedFling = flingBehavior ?: if (miuix) {
-        PagerDefaults.flingBehavior(state, snapAnimationSpec = PagerNavigationSpringSpec)
-    } else PagerDefaults.flingBehavior(state)
-    val resolvedNestedScroll = pageNestedScrollConnection ?: if (miuix) {
+    val couiSpringSpec = androidx.compose.animation.core.spring<Float>(
+        dampingRatio = 0.9f,
+        stiffness = 500f,
+    )
+    val resolvedFling = flingBehavior ?: when {
+        isCoui -> PagerDefaults.flingBehavior(state, snapAnimationSpec = couiSpringSpec)
+        isLegacyMiuix -> PagerDefaults.flingBehavior(state, snapAnimationSpec = PagerNavigationSpringSpec)
+        else -> PagerDefaults.flingBehavior(state)
+    }
+    val resolvedNestedScroll = pageNestedScrollConnection ?: if (isLegacyMiuix) {
         PagerGestureNestedScrollConnection
     } else PagerDefaults.pageNestedScrollConnection(state, Orientation.Horizontal)
     HorizontalPager(
         state = state,
-        modifier = if (miuix) modifier.pagerGestureOverride(
+        modifier = if (isLegacyMiuix) modifier.pagerGestureOverride(
             pagerState = state, flingBehavior = resolvedFling, enabled = enabled,
         ) else modifier,
         contentPadding = contentPadding, pageSize = pageSize,
         beyondViewportPageCount = beyondViewportPageCount, pageSpacing = pageSpacing,
         verticalAlignment = verticalAlignment, flingBehavior = resolvedFling,
-        userScrollEnabled = !miuix && enabled, reverseLayout = reverseLayout, key = key,
+        userScrollEnabled = !isLegacyMiuix && enabled, reverseLayout = reverseLayout, key = key,
         pageNestedScrollConnection = resolvedNestedScroll, snapPosition = snapPosition,
         overscrollEffect = overscrollEffect, pageContent = pageContent,
     )

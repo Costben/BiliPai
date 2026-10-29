@@ -200,7 +200,7 @@ import io.github.suqi8.coui.kmp.blur.layerBackdrop as miuixLayerBackdrop
 import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop as rememberMiuixLayerBackdrop
 import io.github.suqi8.coui.kmp.icon.COUIIcons
 import io.github.suqi8.coui.kmp.icon.extended.Search
-import top.yukonga.miuix.kmp.basic.NavigationBarDefaults as MiuixNavigationBarDefaults
+import io.github.suqi8.coui.kmp.basic.NavigationBarDefaults as CouiNavigationBarDefaults
 import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 private val iosIndicatorSpecular: MiuixHighlight = MiuixHighlight(
     width = AppSpacingTokens.Micro / 2,
@@ -639,7 +639,7 @@ internal fun resolveBiliPaiBottomBarDockHeight(
 ): Dp {
     // 联动宿主与内层原生导航共用此行高，避免父级仍按旧胶囊高度约束图文。
     return if (nativeMiuixNavigation && !hasUiSkinDecoration) {
-        MiuixNavigationBarDefaults.ItemHeight
+        CouiNavigationBarDefaults.ItemHeight
     } else if (hasUiSkinDecoration) {
         // Search width changes must not compress the skin's icon/label stack.
         resolveBottomBarSkinDockHeight()
@@ -3211,12 +3211,6 @@ private fun MiuixBottomBar(
                             iconStyle = sharedBarIconStyle
                         ),
                         label = itemLabel,
-                        colors = if (com.android.purebilibili.core.ui.isMiuixNonGlassEnabled() && uiSkinDecoration == null) {
-                            MiuixNavigationBarDefaults.navigationBarItemColors()
-                        } else MiuixNavigationBarDefaults.navigationBarItemColors(
-                            unselectedContentColor = skinItemColors.unselectedColor,
-                            selectedContentColor = skinItemColors.selectedColor,
-                        ),
                         badge = reminderBadgeText?.let { badgeText ->
                             {
                                 AppPlatformNavigationBadge {

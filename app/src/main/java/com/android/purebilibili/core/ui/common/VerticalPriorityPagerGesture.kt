@@ -152,8 +152,8 @@ internal fun Modifier.verticalPriorityHorizontalPagerSwipe(
 ): Modifier = composed {
     if (!enabled) return@composed this
     // Glass comment lists need child-first arbitration even while the list is flinging.
-    // Other callers retain Miuix's native cross-axis takeover behavior by default.
-    if (!forceVerticalPriority && LocalAppUiStyle.current.usesMiuixFamilySkin) {
+    // Legacy Miuix retains native cross-axis takeover behavior by default; COUI uses smooth Spring fling.
+    if (!forceVerticalPriority && LocalAppUiStyle.current == AppUiStyle.MIUIX) {
         return@composed pagerGestureOverride(
             pagerState = state,
             flingBehavior = PagerDefaults.flingBehavior(state, snapAnimationSpec = PagerNavigationSpringSpec),

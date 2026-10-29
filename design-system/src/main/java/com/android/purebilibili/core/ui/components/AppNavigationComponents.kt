@@ -24,20 +24,17 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
-import top.yukonga.miuix.kmp.basic.Badge as MiuixBadge
-import top.yukonga.miuix.kmp.basic.BadgeDefaults as MiuixBadgeDefaults
-import top.yukonga.miuix.kmp.basic.NavigationBar as MiuixNavigationBar
-import top.yukonga.miuix.kmp.basic.NavigationBarDefaults as MiuixNavigationBarDefaults
-import top.yukonga.miuix.kmp.basic.NavigationBarDisplayMode as MiuixNavigationBarDisplayMode
-import top.yukonga.miuix.kmp.basic.NavigationBarItem as MiuixNavigationBarItem
-import top.yukonga.miuix.kmp.basic.NavigationBarItemColors as MiuixNavigationBarItemColors
-import top.yukonga.miuix.kmp.basic.NavigationRail as MiuixNavigationRail
-import top.yukonga.miuix.kmp.basic.NavigationRailDefaults as MiuixNavigationRailDefaults
-import top.yukonga.miuix.kmp.basic.NavigationRailItem as MiuixNavigationRailItem
-import top.yukonga.miuix.kmp.basic.NavigationRailValue as MiuixNavigationRailValue
-import top.yukonga.miuix.kmp.basic.rememberNavigationRailState as rememberMiuixNavigationRailState
+import io.github.suqi8.coui.kmp.basic.Badge as CouiBadge
+import io.github.suqi8.coui.kmp.basic.BadgeDefaults as CouiBadgeDefaults
+import io.github.suqi8.coui.kmp.basic.NavigationBar as CouiNavigationBar
+import io.github.suqi8.coui.kmp.basic.NavigationBarDefaults as CouiNavigationBarDefaults
+import io.github.suqi8.coui.kmp.basic.NavigationBarDisplayMode as CouiNavigationBarDisplayMode
+import io.github.suqi8.coui.kmp.basic.NavigationBarItem as CouiNavigationBarItem
+import io.github.suqi8.coui.kmp.basic.NavigationRail as CouiNavigationRail
+import io.github.suqi8.coui.kmp.basic.NavigationRailDefaults as CouiNavigationRailDefaults
+import io.github.suqi8.coui.kmp.basic.NavigationRailItem as CouiNavigationRailItem
+import io.github.suqi8.coui.kmp.basic.NavigationRailDisplayMode as CouiNavigationRailDisplayMode
 import io.github.suqi8.coui.kmp.theme.COUITheme
-import kotlinx.coroutines.flow.drop
 
 @Composable
 fun AppNavigationBar(
@@ -88,12 +85,12 @@ enum class AppPlatformNavigationBarDisplayMode {
     ICON_WITH_SELECTED_LABEL,
 }
 
-private fun AppPlatformNavigationBarDisplayMode.toMiuixDisplayMode(): MiuixNavigationBarDisplayMode =
+private fun AppPlatformNavigationBarDisplayMode.toCouiDisplayMode(): CouiNavigationBarDisplayMode =
     when (this) {
-        AppPlatformNavigationBarDisplayMode.ICON_AND_TEXT -> MiuixNavigationBarDisplayMode.IconAndText
-        AppPlatformNavigationBarDisplayMode.ICON_ONLY -> MiuixNavigationBarDisplayMode.IconOnly
+        AppPlatformNavigationBarDisplayMode.ICON_AND_TEXT -> CouiNavigationBarDisplayMode.IconAndText
+        AppPlatformNavigationBarDisplayMode.ICON_ONLY -> CouiNavigationBarDisplayMode.IconOnly
         AppPlatformNavigationBarDisplayMode.ICON_WITH_SELECTED_LABEL ->
-            MiuixNavigationBarDisplayMode.IconWithSelectedLabel
+            CouiNavigationBarDisplayMode.IconWithSelectedLabel
     }
 
 @Composable
@@ -104,12 +101,12 @@ fun AppPlatformNavigationBar(
     defaultWindowInsetsPadding: Boolean = true,
     mode: AppPlatformNavigationBarDisplayMode = AppPlatformNavigationBarDisplayMode.ICON_AND_TEXT,
     content: @Composable RowScope.() -> Unit,
-) = MiuixNavigationBar(
+) = CouiNavigationBar(
     modifier = modifier.focusGroup(),
     color = color,
     showDivider = showDivider,
     defaultWindowInsetsPadding = defaultWindowInsetsPadding,
-    mode = mode.toMiuixDisplayMode(),
+    mode = mode.toCouiDisplayMode(),
     content = content,
 )
 
@@ -121,9 +118,9 @@ fun RowScope.AppPlatformNavigationBarItem(
     label: String,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    colors: MiuixNavigationBarItemColors = MiuixNavigationBarDefaults.navigationBarItemColors(),
+    colors: Any? = null,
     badge: (@Composable () -> Unit)? = null,
-) = MiuixNavigationBarItem(
+) = CouiNavigationBarItem(
     selected = selected,
     onClick = onClick,
     icon = icon,
@@ -135,22 +132,28 @@ fun RowScope.AppPlatformNavigationBarItem(
             this.selected = selected
         },
     enabled = enabled,
-    colors = colors,
-    badge = badge,
 )
 
 @Composable
 fun AppPlatformNavigationBadge(
     modifier: Modifier = Modifier,
-    containerColor: Color = MiuixBadgeDefaults.containerColor,
-    contentColor: Color = MiuixBadgeDefaults.contentColor,
-    content: @Composable (RowScope.() -> Unit)? = null,
-) = MiuixBadge(
-    modifier = modifier,
-    containerColor = containerColor,
-    contentColor = contentColor,
-    content = content,
-)
+    containerColor: Color = Color.Unspecified,
+    contentColor: Color = Color.Unspecified,
+    count: Int = 0,
+    isDot: Boolean = true,
+    content: (@Composable RowScope.() -> Unit)? = null,
+) {
+    if (content != null) {
+        androidx.compose.foundation.layout.Row(modifier = modifier) {
+            content()
+        }
+    } else {
+        CouiBadge(
+            modifier = modifier,
+            count = if (isDot) 0 else count,
+        )
+    }
+}
 
 @Composable
 fun AppPlatformNavigationRail(
@@ -160,48 +163,16 @@ fun AppPlatformNavigationRail(
     modifier: Modifier = Modifier,
     color: Color = COUITheme.colorScheme.surface,
     showDivider: Boolean = true,
-    minWidth: Dp = MiuixNavigationRailDefaults.MinWidth,
-    expandedWidth: Dp = MiuixNavigationRailDefaults.ExpandedWidth,
+    minWidth: Dp = CouiNavigationRailDefaults.MinWidth,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    val latestOnExpandedChange = rememberUpdatedState(onExpandedChange)
-    if (expanded) {
-        // 可展开重载：state 非空（新版 miuix 将 state 参数改为非空并拆分出非展开重载）。
-        val state = rememberMiuixNavigationRailState(
-            if (initiallyExpanded) {
-                MiuixNavigationRailValue.Expanded
-            } else {
-                MiuixNavigationRailValue.Collapsed
-            }
-        )
-        LaunchedEffect(state) {
-            snapshotFlow { state.currentValue }
-                .drop(1)
-                .collect {
-                    latestOnExpandedChange.value(it == MiuixNavigationRailValue.Expanded)
-                }
-        }
-        MiuixNavigationRail(
-            modifier = modifier.focusGroup(),
-            state = state,
-            color = color,
-            showDivider = showDivider,
-            minWidth = minWidth,
-            expandedWidth = expandedWidth,
-            content = content,
-        )
-    } else {
-        // 经典收起布局：非展开重载（等价于旧版 state = null）。
-        MiuixNavigationRail(
-            modifier = modifier.focusGroup(),
-            expanded = false,
-            color = color,
-            showDivider = showDivider,
-            minWidth = minWidth,
-            expandedWidth = expandedWidth,
-            content = content,
-        )
-    }
+    CouiNavigationRail(
+        modifier = modifier.focusGroup(),
+        color = color,
+        showDivider = showDivider,
+        minWidth = minWidth,
+        content = content,
+    )
 }
 
 @Composable
@@ -212,7 +183,7 @@ fun ColumnScope.AppPlatformNavigationRailItem(
     label: String,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-) = MiuixNavigationRailItem(
+) = CouiNavigationRailItem(
     selected = selected,
     onClick = onClick,
     icon = icon,

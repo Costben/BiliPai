@@ -54,7 +54,9 @@ internal fun AppCouiListItem(
         }
         if (trailingContent != null) {
             Spacer(modifier = Modifier.width(8.dp))
-            ProvideAppActionContentColor(AppContentColors.secondaryText(), trailingContent)
+            ProvideAppActionContentColor(AppContentColors.secondaryText()) {
+                trailingContent()
+            }
         }
     }
 }

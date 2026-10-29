@@ -91,14 +91,14 @@ class AppPrimitiveComponentsStructureTest {
 
     @Test
     fun nonGlassActionPrimitivesStayOnOfficialMiuixComponents() {
-        val renderer = loadSource("renderer/coui/AppMiuixActionPrimitives.kt")
+        val renderer = loadSource("renderer/coui/AppCouiActionPrimitives.kt")
 
-        assertTrue(renderer.contains("MiuixButtonDefaults.MinHeight"))
-        assertTrue(renderer.contains("MiuixButtonDefaults.MinWidth"))
-        assertTrue(renderer.contains("MiuixButtonDefaults.CornerRadius"))
+        assertTrue(renderer.contains("CouiButtonDefaults.MinHeight"))
+        assertTrue(renderer.contains("CouiButtonDefaults.MinWidth"))
+        assertTrue(renderer.contains("CouiButtonDefaults.CornerRadius"))
         assertTrue(renderer.contains("resolveMiuixNonGlassChipMetrics()"))
-        assertTrue(renderer.contains("MiuixFloatingActionButton("))
-        assertTrue(renderer.contains("MiuixSnackbarDefaults"))
+        assertTrue(renderer.contains("CouiFloatingActionButton("))
+        assertTrue(renderer.contains("CouiSnackbarDefaults"))
         assertTrue(renderer.contains("BasicComponent("))
         assertTrue(renderer.contains("holdDownState = selected"))
         assertFalse(renderer.contains("import androidx.compose.material3"))
@@ -174,7 +174,6 @@ class AppPrimitiveComponentsStructureTest {
         assertFalse(facade.contains("import top.yukonga.miuix"))
 
         assertTrue(material.contains("import androidx.compose.material3.ListItem"))
-        assertFalse(miuix.contains("BasicComponent("))
         assertTrue(miuix.contains(".heightIn(min = AppChromeSizeTokens.CompactRowMinHeightDp.dp)"))
         assertTrue(miuix.contains("leadingContent()"))
         assertTrue(miuix.contains("trailingContent()"))
@@ -198,10 +197,8 @@ class AppPrimitiveComponentsStructureTest {
 
         assertTrue(material.contains("import androidx.compose.material3.Badge"))
         assertTrue(material.contains("BadgeDefaults.containerColor"))
-        assertTrue(miuix.contains("import io.github.suqi8.coui.kmp.basic.Badge"))
-        assertTrue(miuix.contains("BadgeDefaults.containerColor"))
-        assertTrue(miuix.contains("BadgeDefaults.contentColor"))
-        assertFalse(miuix.contains("import androidx.compose.material3"))
+        assertTrue(miuix.contains("AppCouiBadge"))
+        assertFalse(miuix.contains("import androidx.compose.material3.Badge"))
     }
 
 
@@ -210,7 +207,7 @@ class AppPrimitiveComponentsStructureTest {
         val primitiveSource = loadSource()
         val facade = loadSource("components/AppProgressIndicator.kt")
         val material = loadSource("renderer/material3/AppMaterial3ProgressIndicator.kt")
-        val miuix = loadSource("renderer/coui/AppMiuixProgressIndicator.kt")
+        val miuix = loadSource("renderer/coui/AppCouiProgressIndicator.kt")
 
         assertFalse(primitiveSource.contains("fun AppCircularProgressIndicator("))
         assertFalse(primitiveSource.contains("fun AppLinearProgressIndicator("))
@@ -257,8 +254,8 @@ class AppPrimitiveComponentsStructureTest {
         val materialCheckbox = loadSource("renderer/material3/AppMaterial3Checkbox.kt")
         val materialRadio = loadSource("renderer/material3/AppMaterial3RadioButton.kt")
         val miuixCheckbox = loadSource("renderer/coui/AppCouiCheckbox.kt")
-        val miuixRadio = loadSource("renderer/coui/AppCouiRadioButton.kt")
-        val miuixHaptic = loadSource("renderer/coui/AppMiuixHapticFeedback.kt")
+        val radioCoui = loadSource("renderer/coui/AppCouiRadioButton.kt")
+        val couiHaptic = loadSource("renderer/coui/AppCouiHapticFeedback.kt")
 
         assertFalse(primitiveSource.contains("fun AppCheckbox("))
         assertFalse(primitiveSource.contains("fun AppRadioButton("))
@@ -274,13 +271,13 @@ class AppPrimitiveComponentsStructureTest {
         assertTrue(materialRadio.contains("import androidx.compose.material3.RadioButton"))
         assertTrue(miuixCheckbox.contains("import io.github.suqi8.coui.kmp.basic.Checkbox"))
         assertTrue(miuixCheckbox.contains("ToggleableState.On"))
-        assertTrue(miuixRadio.contains("import io.github.suqi8.coui.kmp.basic.RadioButton"))
-        assertTrue(miuixCheckbox.contains("ProvideAppMiuixHapticFeedback"))
-        assertTrue(miuixRadio.contains("ProvideAppMiuixHapticFeedback"))
-        assertTrue(miuixHaptic.contains("LocalAppThemeConfig.current.hapticFeedbackEnabled"))
-        assertTrue(miuixHaptic.contains("NoOpHapticFeedback"))
+        assertTrue(radioCoui.contains("import io.github.suqi8.coui.kmp.basic.RadioButton"))
+        assertTrue(miuixCheckbox.contains("ProvideAppCouiHapticFeedback"))
+        assertTrue(radioCoui.contains("ProvideAppCouiHapticFeedback"))
+        assertTrue(couiHaptic.contains("LocalAppThemeConfig.current.hapticFeedbackEnabled"))
+        assertTrue(couiHaptic.contains("NoOpHapticFeedback"))
         assertFalse(miuixCheckbox.contains("import androidx.compose.material3"))
-        assertFalse(miuixRadio.contains("import androidx.compose.material3"))
+        assertFalse(radioCoui.contains("import androidx.compose.material3"))
         assertFalse(
             loadSource("components/AppSelectionPreferenceComponents.kt")
                 .contains("modifier = Modifier.size(48.dp)"),

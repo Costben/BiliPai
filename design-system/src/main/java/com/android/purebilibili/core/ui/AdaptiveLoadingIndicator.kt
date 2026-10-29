@@ -7,9 +7,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.github.suqi8.coui.kmp.basic.CircularProgressIndicator as MiuixCircularProgressIndicator
-import io.github.suqi8.coui.kmp.basic.InfiniteProgressIndicator as MiuixInfiniteProgressIndicator
-import io.github.suqi8.coui.kmp.basic.ProgressIndicatorDefaults as MiuixProgressIndicatorDefaults
+import io.github.suqi8.coui.kmp.basic.CircularProgressIndicator as CouiCircularProgressIndicator
+import io.github.suqi8.coui.kmp.basic.InfiniteProgressIndicator as CouiInfiniteProgressIndicator
+import io.github.suqi8.coui.kmp.basic.ProgressIndicatorDefaults as CouiProgressIndicatorDefaults
 
 /**
  * Preset-aware indeterminate loading indicator.
@@ -69,8 +69,8 @@ fun AdaptiveLoadingIndicator(
 
         AdaptiveLoadingVisual.MIUIX_INFINITE -> {
             val indicatorSize = size
-                ?: MiuixProgressIndicatorDefaults.DefaultInfiniteProgressIndicatorSize * 1.6f
-            MiuixInfiniteProgressIndicator(
+                ?: CouiProgressIndicatorDefaults.DefaultInfiniteProgressIndicatorSize * 1.6f
+            CouiInfiniteProgressIndicator(
                 modifier = modifier,
                 color = resolvedColor,
                 size = indicatorSize,
@@ -79,15 +79,15 @@ fun AdaptiveLoadingIndicator(
 
         AdaptiveLoadingVisual.MIUIX_CIRCULAR -> {
             val indicatorSize = size
-                ?: MiuixProgressIndicatorDefaults.DefaultCircularProgressIndicatorSize
-            MiuixCircularProgressIndicator(
+                ?: CouiProgressIndicatorDefaults.DefaultCircularProgressIndicatorSize
+            CouiCircularProgressIndicator(
                 modifier = modifier,
                 progress = null,
-                colors = MiuixProgressIndicatorDefaults.progressIndicatorColors(
+                colors = CouiProgressIndicatorDefaults.progressIndicatorColors(
                     foregroundColor = resolvedColor,
                 ),
                 strokeWidth = strokeWidth.coerceAtLeast(
-                    MiuixProgressIndicatorDefaults.DefaultCircularProgressIndicatorStrokeWidth * 0.5f
+                    CouiProgressIndicatorDefaults.DefaultCircularProgressIndicatorStrokeWidth * 0.5f
                 ),
                 size = indicatorSize,
             )

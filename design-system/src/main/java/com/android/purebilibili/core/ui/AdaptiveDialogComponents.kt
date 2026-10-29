@@ -240,7 +240,7 @@ internal fun AdaptiveAlertDialog(
                     modifier = modifier,
                     onDismissRequest = onDismissRequest,
                     maxWidth = contentLayout.maxWidthDp.dp,
-                    backgroundColor = containerColor ?: top.yukonga.miuix.kmp.layout.DialogDefaults.backgroundColor(),
+                    backgroundColor = containerColor ?: io.github.suqi8.coui.kmp.layout.DialogDefaults.backgroundColor(),
                 ) {
                     NativeMiuixAlertDialogBody(icon, title, text, confirmButton, dismissButton)
                 }
@@ -416,14 +416,14 @@ private fun NativeMiuixAlertDialogBody(
         title?.let {
             NativeMiuixDialogTextSlot(
                 style = typography.title4.copy(fontWeight = FontWeight.Medium),
-                color = top.yukonga.miuix.kmp.layout.DialogDefaults.titleColor(),
+                color = io.github.suqi8.coui.kmp.layout.DialogDefaults.titleColor(),
                 content = it,
             )
         }
         text?.let {
             NativeMiuixDialogTextSlot(
                 style = typography.body1,
-                color = top.yukonga.miuix.kmp.layout.DialogDefaults.summaryColor(),
+                color = io.github.suqi8.coui.kmp.layout.DialogDefaults.summaryColor(),
                 content = it,
             )
         }

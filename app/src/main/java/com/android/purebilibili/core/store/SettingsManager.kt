@@ -942,7 +942,7 @@ internal fun resolveUiPresetPreferenceValue(rawValue: Int?): UiPreset {
 }
 
 internal fun resolveAndroidNativeVariantPreferenceValue(rawValue: Int?): AndroidNativeVariant {
-    return AndroidNativeVariant.fromValue(rawValue ?: AndroidNativeVariant.MATERIAL3.value)
+    return AndroidNativeVariant.fromValue(rawValue ?: AndroidNativeVariant.COUI17.value)
 }
 
 enum class DanmakuPanelWidthMode(val value: Int, val label: String, val widthFraction: Float) {
