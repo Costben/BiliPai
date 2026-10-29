@@ -55,3 +55,9 @@
 -keepclassmembers class * {
     @android.webkit.JavascriptInterface <methods>;
 }
+
+# COUI 17 按 material-color-utilities 5.0.0 编译，应用侧的 material-kolor 6.x 把它顶到 6.0.0，
+# DynamicScheme 的旧签名随之消失。COUI 只在 Monet 取色模式下走 colorsFromSeed，而 BiliPai 的
+# COUI ThemeController 只用 System/Light/Dark 并显式传入色板，这条路径不可达，只需压掉缺类告警。
+-dontwarn com.materialkolor.scheme.DynamicScheme$Platform
+-dontwarn com.materialkolor.scheme.DynamicScheme
