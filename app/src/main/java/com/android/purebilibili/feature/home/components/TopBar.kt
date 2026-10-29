@@ -121,7 +121,7 @@ import com.android.purebilibili.core.ui.ContainerLevel
 import com.android.purebilibili.core.ui.adaptive.MotionTier
 import com.android.purebilibili.core.ui.blur.currentUnifiedBlurIntensity
 import com.android.purebilibili.feature.home.components.liquid.rememberCombinedBackdrop as rememberMiuixCombinedBackdrop
-import top.yukonga.miuix.kmp.blur.Backdrop as MiuixBackdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop as MiuixBackdrop
 import com.android.purebilibili.core.ui.blur.rememberChromeBackdropSource
 import dev.chrisbanes.haze.HazeState
 import androidx.compose.ui.platform.LocalDensity
@@ -136,6 +136,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withTimeoutOrNull
 import androidx.compose.foundation.combinedClickable // [Added]
 import java.io.File
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 private const val IOS_TOP_TAB_CONTENT_PADDING_DP = 2f
 private const val TOP_TAB_WIDE_CENTER_BREAKPOINT_DP = 600f
@@ -1898,7 +1899,7 @@ private fun LightweightHomeTopTabs(
                 pagerDrivesIndicator = pagerState != null && !isLiquidGlassEnabled &&
                     LocalAppUiStyle.current == AppUiStyle.MATERIAL3,
             )
-        val isMiuixUnderline = LocalAppUiStyle.current == AppUiStyle.MIUIX
+        val isMiuixUnderline = LocalAppUiStyle.current.usesMiuixFamilySkin
         val leftAnimationSpec: androidx.compose.animation.core.AnimationSpec<Float> = if (shouldAnimateMd3Tap) {
             if (isMiuixUnderline) {
                 spring(
@@ -2903,8 +2904,8 @@ private fun LightweightTopTabItem(
     )
     val selectedColor = when {
         skinPlainStyle -> skinPlainContentColor ?: colorScheme.onSurface
-        com.android.purebilibili.core.ui.isMiuixNonGlassEnabled() -> top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.onBackground
-        uiStyle == AppUiStyle.MIUIX -> colorScheme.onSurface
+        com.android.purebilibili.core.ui.isMiuixNonGlassEnabled() -> io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.onBackground
+        uiStyle.usesMiuixFamilySkin -> colorScheme.onSurface
         presentation == AppTopTabPresentation.MOVING_CAPSULE ->
             resolveIosTopTabSelectedContentColor(colorScheme, uiStyle)
         presentation == AppTopTabPresentation.MATERIAL_UNDERLINE ->
@@ -2933,7 +2934,7 @@ private fun LightweightTopTabItem(
         com.android.purebilibili.core.ui.isMiuixNonGlassEnabled() &&
             presentation == AppTopTabPresentation.MOVING_CAPSULE &&
             colorMode == TopTabLiquidColorMode.NORMAL ->
-            top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.surfaceContainer.let { selectionColor ->
+            io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.surfaceContainer.let { selectionColor ->
                 selectionColor.copy(alpha = selectionColor.alpha * selectionFraction.coerceIn(0f, 1f))
             }
         presentation == AppTopTabPresentation.MOVING_CAPSULE && colorMode == TopTabLiquidColorMode.NORMAL ->

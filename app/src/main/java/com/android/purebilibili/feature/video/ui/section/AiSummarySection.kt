@@ -44,14 +44,15 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
-import top.yukonga.miuix.kmp.anim.folmeSpring
+import io.github.suqi8.coui.kmp.anim.folmeSpring
 import com.android.purebilibili.core.ui.motion.folmeExpandEnterTransition
 import com.android.purebilibili.core.ui.motion.folmeExpandExitTransition
-import top.yukonga.miuix.kmp.basic.BasicComponent
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.ArrowRight
-import top.yukonga.miuix.kmp.theme.MiuixTheme
-import top.yukonga.miuix.kmp.basic.Text as MiuixText
+import io.github.suqi8.coui.kmp.basic.BasicComponent
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.ArrowRight
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import io.github.suqi8.coui.kmp.basic.Text as MiuixText
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /**
  * AI Video Summary Card — adaptive native card (M3 Card / Miuix Card).
@@ -71,7 +72,7 @@ fun AiSummaryCard(
         modelResult.summary.takeIf { it.isNotBlank() } ?: "查看分段总结和时间点"
     }
     var expanded by remember { mutableStateOf(defaultExpanded) }
-    val useMiuix = LocalAppUiStyle.current == AppUiStyle.MIUIX
+    val useMiuix = LocalAppUiStyle.current.usesMiuixFamilySkin
     val horizontalPadding = if (useMiuix) 12.dp else 16.dp
     val containerColor = MaterialTheme.colorScheme.surfaceContainerLow
 
@@ -226,7 +227,7 @@ private fun MiuixAiSummaryHeader(
         },
         endActions = {
             AppIcon(
-                imageVector = MiuixIcons.Basic.ArrowRight,
+                imageVector = COUIIcons.Basic.ArrowRight,
                 contentDescription = null,
                 tint = AppSurfaceTokens.onSurfaceVariantActions(),
                 modifier = Modifier
@@ -237,13 +238,13 @@ private fun MiuixAiSummaryHeader(
     ) {
         MiuixText(
             text = "AI 总结",
-            style = MiuixTheme.textStyles.headline1,
+            style = COUITheme.textStyles.headline1,
             fontWeight = FontWeight.Medium,
             color = AppSurfaceTokens.onSurface()
         )
         MiuixText(
             text = preview,
-            style = MiuixTheme.textStyles.body2,
+            style = COUITheme.textStyles.body2,
             color = AppSurfaceTokens.onSurfaceVariantSummary(),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis

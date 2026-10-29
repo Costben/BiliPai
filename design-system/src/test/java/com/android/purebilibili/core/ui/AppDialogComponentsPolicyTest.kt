@@ -95,7 +95,7 @@ class AppDialogComponentsPolicyTest {
         assertTrue(selection.contains("type = AppPopupSurfaceType.DIALOG"))
         assertTrue(selection.contains("AppSingleChoicePresentation.CENTERED_DIALOG"))
         assertTrue(primitives.contains("DropdownMenu("))
-        assertTrue(primitives.contains("LocalAppUiStyle.current == AppUiStyle.MIUIX &&"))
+        assertTrue(primitives.contains("LocalAppUiStyle.current.usesMiuixFamilySkin &&"))
         assertTrue(actionMenu.contains("WindowCascadingListPopup("))
         assertTrue(actionMenu.contains("action.onClick?.invoke()"))
     }

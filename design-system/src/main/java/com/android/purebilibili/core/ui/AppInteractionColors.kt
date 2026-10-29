@@ -7,8 +7,8 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
-import top.yukonga.miuix.kmp.basic.ButtonDefaults
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.basic.ButtonDefaults
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** 根主题记录的材质边界，不受页面为使用原生组件而临时关闭玻璃的局部覆盖影响。 */
 internal val LocalAppNativeInteractionColorsEnabled = staticCompositionLocalOf<Boolean?> { null }
@@ -35,7 +35,7 @@ object AppInteractionColors {
     @Composable
     fun nativeNavigation(role: AppNavigationColorRole = AppNavigationColorRole.TABS): AppNavigationStateColors? {
         if (!nativeInteractionColorsEnabled()) return null
-        val scheme = MiuixTheme.colorScheme
+        val scheme = COUITheme.colorScheme
         return when (role) {
             AppNavigationColorRole.TABS -> AppNavigationStateColors(
                 selectedContainer = scheme.surfaceContainer,
@@ -65,7 +65,7 @@ object AppInteractionColors {
     @ReadOnlyComposable
     internal fun nativeContentScheme(forceMiuix: Boolean = false): ColorScheme? {
         if (!forceMiuix && !nativeInteractionColorsEnabled()) return null
-        val native = MiuixTheme.colorScheme
+        val native = COUITheme.colorScheme
         return MaterialTheme.colorScheme.copy(
             primary = native.primary,
             onPrimary = native.onPrimary,

@@ -4,24 +4,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import com.android.purebilibili.R
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Community
-import top.yukonga.miuix.kmp.icon.extended.Contacts
-import top.yukonga.miuix.kmp.icon.extended.ContactsCircle
-import top.yukonga.miuix.kmp.icon.extended.Favorites
-import top.yukonga.miuix.kmp.icon.extended.Folder
-import top.yukonga.miuix.kmp.icon.extended.GridView
-import top.yukonga.miuix.kmp.icon.extended.Home
-import top.yukonga.miuix.kmp.icon.extended.Music
-import top.yukonga.miuix.kmp.icon.extended.Notes
-import top.yukonga.miuix.kmp.icon.extended.Play
-import top.yukonga.miuix.kmp.icon.extended.Recent
-import top.yukonga.miuix.kmp.icon.extended.Recording
-import top.yukonga.miuix.kmp.icon.extended.Settings
-import top.yukonga.miuix.kmp.icon.extended.Stopwatch
-import top.yukonga.miuix.kmp.icon.extended.Store
-import top.yukonga.miuix.kmp.icon.extended.Theme
-import top.yukonga.miuix.kmp.icon.extended.TopDownloads
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.Community
+import io.github.suqi8.coui.kmp.icon.extended.Contacts
+import io.github.suqi8.coui.kmp.icon.extended.ContactsCircle
+import io.github.suqi8.coui.kmp.icon.extended.Favorites
+import io.github.suqi8.coui.kmp.icon.extended.Folder
+import io.github.suqi8.coui.kmp.icon.extended.GridView
+import io.github.suqi8.coui.kmp.icon.extended.Home
+import io.github.suqi8.coui.kmp.icon.extended.Music
+import io.github.suqi8.coui.kmp.icon.extended.Notes
+import io.github.suqi8.coui.kmp.icon.extended.Play
+import io.github.suqi8.coui.kmp.icon.extended.Recent
+import io.github.suqi8.coui.kmp.icon.extended.Recording
+import io.github.suqi8.coui.kmp.icon.extended.Settings
+import io.github.suqi8.coui.kmp.icon.extended.Stopwatch
+import io.github.suqi8.coui.kmp.icon.extended.Store
+import io.github.suqi8.coui.kmp.icon.extended.Theme
+import io.github.suqi8.coui.kmp.icon.extended.TopDownloads
 
 private enum class HomeNavigationIconRole {
     HOME,
@@ -134,23 +134,23 @@ private fun resolveMiuixHomeNavigationIcon(
     }
     return when (role) {
         HomeNavigationIconRole.HOME -> ImageVector.vectorResource(R.drawable.bp_nav_home_outline_24)
-        HomeNavigationIconRole.DYNAMIC -> MiuixIcons.Light.Community
-        HomeNavigationIconRole.STORY -> MiuixIcons.Light.Play
+        HomeNavigationIconRole.DYNAMIC -> COUIIcons.Light.Community
+        HomeNavigationIconRole.STORY -> COUIIcons.Light.Play
         HomeNavigationIconRole.HISTORY -> ImageVector.vectorResource(R.drawable.bp_nav_history_outline_24)
-        HomeNavigationIconRole.LISTEN_VIDEO -> MiuixIcons.Light.Music
-        HomeNavigationIconRole.PROFILE -> MiuixIcons.Light.ContactsCircle
-        HomeNavigationIconRole.FAVORITE -> MiuixIcons.Light.Favorites
-        HomeNavigationIconRole.LIVE -> MiuixIcons.Light.Recording
-        HomeNavigationIconRole.WATCH_LATER -> MiuixIcons.Light.Stopwatch
-        HomeNavigationIconRole.SETTINGS -> if (selected) MiuixIcons.Demibold.Settings else MiuixIcons.Light.Settings
-        HomeNavigationIconRole.PLUGINS -> MiuixIcons.Light.Folder
-        HomeNavigationIconRole.FOLLOW -> MiuixIcons.Light.Contacts
-        HomeNavigationIconRole.POPULAR -> MiuixIcons.Light.TopDownloads
-        HomeNavigationIconRole.ANIME -> MiuixIcons.Light.Play
-        HomeNavigationIconRole.GAME -> MiuixIcons.Light.Store
-        HomeNavigationIconRole.PARTITION -> MiuixIcons.Light.GridView
-        HomeNavigationIconRole.KNOWLEDGE -> MiuixIcons.Light.Notes
-        HomeNavigationIconRole.TECH -> MiuixIcons.Light.Theme
+        HomeNavigationIconRole.LISTEN_VIDEO -> COUIIcons.Light.Music
+        HomeNavigationIconRole.PROFILE -> COUIIcons.Light.ContactsCircle
+        HomeNavigationIconRole.FAVORITE -> COUIIcons.Light.Favorites
+        HomeNavigationIconRole.LIVE -> COUIIcons.Light.Recording
+        HomeNavigationIconRole.WATCH_LATER -> COUIIcons.Light.Stopwatch
+        HomeNavigationIconRole.SETTINGS -> if (selected) COUIIcons.Demibold.Settings else COUIIcons.Light.Settings
+        HomeNavigationIconRole.PLUGINS -> COUIIcons.Light.Folder
+        HomeNavigationIconRole.FOLLOW -> COUIIcons.Light.Contacts
+        HomeNavigationIconRole.POPULAR -> COUIIcons.Light.TopDownloads
+        HomeNavigationIconRole.ANIME -> COUIIcons.Light.Play
+        HomeNavigationIconRole.GAME -> COUIIcons.Light.Store
+        HomeNavigationIconRole.PARTITION -> COUIIcons.Light.GridView
+        HomeNavigationIconRole.KNOWLEDGE -> COUIIcons.Light.Notes
+        HomeNavigationIconRole.TECH -> COUIIcons.Light.Theme
         HomeNavigationIconRole.SUBSCRIPTIONS -> ImageVector.vectorResource(R.drawable.ms_rss_feed_24)
     }
 }

@@ -42,6 +42,7 @@ fun resolveAppIconStyle(
     AppIconStyle.AUTO -> when (uiStyle) {
         AppUiStyle.MATERIAL3 -> AppIconStyle.MD3_STANDARD
         AppUiStyle.MIUIX -> AppIconStyle.AUTO
+        AppUiStyle.COUI17 -> AppIconStyle.AUTO
     }
     else -> iconStyle
 }
@@ -140,6 +141,11 @@ fun resolveAppSemanticVisualPolicy(
 ): AppSemanticVisualPolicy = when (uiStyle) {
     AppUiStyle.MATERIAL3 -> AppSemanticVisualPolicy.material(materialPalette).copy(iconStyle = iconStyle)
     AppUiStyle.MIUIX -> AppSemanticVisualPolicy.material(materialPalette).copy(
+        iconFamily = AppSemanticIconFamily.MIUIX,
+        prefersGroupedListCards = true,
+        iconStyle = iconStyle,
+    )
+    AppUiStyle.COUI17 -> AppSemanticVisualPolicy.material(materialPalette).copy(
         iconFamily = AppSemanticIconFamily.MIUIX,
         prefersGroupedListCards = true,
         iconStyle = iconStyle,

@@ -1,4 +1,4 @@
-package com.android.purebilibili.core.ui.renderer.miuix
+package com.android.purebilibili.core.ui.renderer.coui
 
 import com.android.purebilibili.core.ui.AppChromeSizeTokens
 import androidx.compose.runtime.Composable
@@ -16,7 +16,7 @@ import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.ProvideAppActionContentColor
 
 @Composable
-internal fun AppMiuixListItem(
+internal fun AppCouiListItem(
     headlineContent: @Composable () -> Unit,
     modifier: Modifier,
     overlineContent: (@Composable () -> Unit)?,
@@ -25,7 +25,7 @@ internal fun AppMiuixListItem(
     trailingContent: (@Composable () -> Unit)?,
 ) {
     if (com.android.purebilibili.core.ui.isMiuixNonGlassEnabled()) {
-        top.yukonga.miuix.kmp.basic.BasicComponent(
+        io.github.suqi8.coui.kmp.basic.BasicComponent(
             modifier = modifier,
             startAction = leadingContent,
             endActions = trailingContent?.let { slot -> { slot() } },

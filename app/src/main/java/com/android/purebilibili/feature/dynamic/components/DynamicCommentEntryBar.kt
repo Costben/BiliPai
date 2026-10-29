@@ -24,7 +24,7 @@ import com.android.purebilibili.feature.home.components.resolveFloatingDockGeome
 import com.android.purebilibili.feature.home.components.resolveSharedBottomBarCapsuleShape
 import com.android.purebilibili.feature.video.ui.components.CommentEntryBarContent
 import com.android.purebilibili.feature.video.ui.components.resolveBottomInputBarPlaceholderTextColor
-import top.yukonga.miuix.kmp.blur.Backdrop as MiuixBackdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop as MiuixBackdrop
 
 /**
  * 动态评论输入入口。

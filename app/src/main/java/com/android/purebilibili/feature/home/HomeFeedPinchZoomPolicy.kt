@@ -38,6 +38,7 @@ import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.util.WindowWidthSizeClass
 import kotlinx.coroutines.launch
 import kotlin.math.abs
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /** 双指向外扩 (放大视图，减少列数) 的单档阈值 */
 internal const val PINCH_ZOOM_IN_FACTOR = 1.25f
@@ -298,6 +299,17 @@ internal fun GridPinchColumnHudPill(
                     GridPinchColumnHudContent(columns = columns, modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
                 }
             }
+            AppUiStyle.COUI17 -> {
+                // MIUIX 风格 HUD 胶囊：Miuix 连续曲率 Squircle 药丸容器
+                AppSurface(
+                    shape = AppShapes.container(ContainerLevel.Pill),
+                    color = MaterialTheme.colorScheme.inverseSurface.copy(alpha = 0.85f),
+                    tonalElevation = 6.dp,
+                    shadowElevation = 8.dp,
+                ) {
+                    GridPinchColumnHudContent(columns = columns, modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+                }
+            }
         }
     }
 }
@@ -320,7 +332,7 @@ private fun GridPinchColumnHudContent(
         label = "pinchColumnHudCount",
     ) { columnCount ->
         androidx.compose.foundation.layout.Row(modifier = modifier) {
-            if (LocalAppUiStyle.current == AppUiStyle.MIUIX) {
+            if (LocalAppUiStyle.current.usesMiuixFamilySkin) {
                 AppText(
                     text = "$columnCount 列网格",
                     style = MaterialTheme.typography.labelLarge,

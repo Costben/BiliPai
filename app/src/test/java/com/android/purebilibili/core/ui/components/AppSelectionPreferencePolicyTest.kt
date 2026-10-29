@@ -86,7 +86,7 @@ class AppSelectionPreferencePolicyTest {
 
         // WindowSpinner 仅限 MIUIX 预设的跟随弹出分支
         assertTrue(section.contains("presentation == AppSingleChoicePresentation.WINDOW_POPUP &&"))
-        assertTrue(section.contains("LocalAppUiStyle.current == AppUiStyle.MIUIX"))
+        assertTrue(section.contains("LocalAppUiStyle.current.usesMiuixFamilySkin"))
         assertTrue(section.contains("WindowSpinnerPreference("))
         assertTrue(section.contains("AppPreference("))
         assertTrue(section.contains("DropdownMenu("))

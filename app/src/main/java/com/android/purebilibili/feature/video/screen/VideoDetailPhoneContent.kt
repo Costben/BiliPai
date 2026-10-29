@@ -64,8 +64,8 @@ import com.android.purebilibili.feature.video.viewmodel.VideoEngagementUiState
 import com.android.purebilibili.feature.video.viewmodel.VideoPlaybackUiState
 import com.android.purebilibili.feature.video.viewmodel.withEngagementUiState
 import com.android.purebilibili.feature.video.player.PlaylistItem
-import top.yukonga.miuix.kmp.blur.layerBackdrop
-import top.yukonga.miuix.kmp.blur.rememberLayerBackdrop
+import io.github.suqi8.coui.kmp.blur.layerBackdrop
+import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop
 import dev.chrisbanes.haze.HazeState
 import com.android.purebilibili.core.ui.blur.hazeEffectCompat
 import dev.chrisbanes.haze.blur.materials.HazeMaterials
@@ -557,7 +557,7 @@ private fun ExternalPlaylistQueueCollapsedBar(
     onClick: () -> Unit,
     hazeState: HazeState,
     liquidGlassEnabled: Boolean,
-    backdrop: top.yukonga.miuix.kmp.blur.Backdrop?,
+    backdrop: io.github.suqi8.coui.kmp.blur.Backdrop?,
     isScrollInProgressProvider: () -> Boolean,
     modifier: Modifier = Modifier
 ) {

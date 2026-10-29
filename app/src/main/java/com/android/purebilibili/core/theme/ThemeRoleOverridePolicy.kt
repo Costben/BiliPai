@@ -231,7 +231,7 @@ internal fun resolveConfiguredMaterialScheme(
             source, customSeed, overridden.primary, overrides.enabled,
             if (darkTheme) overrides.dark.controlAccentHex else overrides.light.controlAccentHex,
         ),
-        liquidGlassEnabled = liquidGlassEnabled && uiStyle != AppUiStyle.MIUIX,
+        liquidGlassEnabled = liquidGlassEnabled && !uiStyle.usesMiuixFamilySkin,
         source = source,
     )
 }

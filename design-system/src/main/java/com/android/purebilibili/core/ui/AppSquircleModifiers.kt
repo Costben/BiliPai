@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.Dp
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.theme.shouldUseMiuixSmoothRounding
-import top.yukonga.miuix.kmp.squircle.squircleBackground
+import io.github.suqi8.coui.kmp.squircle.squircleBackground
 
 @Composable
 fun Modifier.adaptiveSquircleBackground(
@@ -24,6 +24,9 @@ fun Modifier.adaptiveSquircleBackground(
         AppUiStyle.MATERIAL3 -> {
             clip(RoundedCornerShape(cornerRadius))
                 .background(color)
+        }
+        AppUiStyle.COUI17 -> {
+            squircleBackground(color = color, cornerRadius = cornerRadius)
         }
     }
 }

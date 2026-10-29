@@ -2,6 +2,7 @@ package com.android.purebilibili.feature.video.ui.feedback
 
 import androidx.compose.ui.graphics.Color
 import com.android.purebilibili.core.theme.AppUiStyle
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 enum class VideoFeedbackAnchor {
     BottomCenter,
@@ -36,7 +37,7 @@ fun resolveVideoDetailActionActiveColors(
     return VideoDetailActionActiveColors(
         primaryAction = primary,
         watchLater = primary,
-        downloadInProgress = if (uiStyle == AppUiStyle.MIUIX) primary else secondary,
+        downloadInProgress = if (uiStyle.usesMiuixFamilySkin) primary else secondary,
         downloaded = primary
     )
 }

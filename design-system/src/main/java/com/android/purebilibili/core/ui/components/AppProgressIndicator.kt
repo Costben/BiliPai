@@ -9,8 +9,10 @@ import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.renderer.material3.AppMaterial3CircularProgressIndicator
 import com.android.purebilibili.core.ui.renderer.material3.AppMaterial3LinearProgressIndicator
-import com.android.purebilibili.core.ui.renderer.miuix.AppMiuixCircularProgressIndicator
-import com.android.purebilibili.core.ui.renderer.miuix.AppMiuixLinearProgressIndicator
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiCircularProgressIndicator
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiLinearProgressIndicator
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiCircularProgressIndicator
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiLinearProgressIndicator
 
 @Composable
 fun AppCircularProgressIndicator(
@@ -30,7 +32,14 @@ fun AppCircularProgressIndicator(
             trackColor = trackColor,
             strokeCap = strokeCap,
         )
-        AppUiStyle.MIUIX -> AppMiuixCircularProgressIndicator(
+        AppUiStyle.MIUIX -> AppCouiCircularProgressIndicator(
+            progress = progress,
+            modifier = modifier,
+            color = color,
+            strokeWidth = strokeWidth,
+            trackColor = trackColor,
+        )
+        AppUiStyle.COUI17 -> AppCouiCircularProgressIndicator(
             progress = progress,
             modifier = modifier,
             color = color,
@@ -56,7 +65,13 @@ fun AppCircularProgressIndicator(
             trackColor = trackColor,
             strokeCap = strokeCap,
         )
-        AppUiStyle.MIUIX -> AppMiuixCircularProgressIndicator(
+        AppUiStyle.MIUIX -> AppCouiCircularProgressIndicator(
+            modifier = modifier,
+            color = color,
+            strokeWidth = strokeWidth,
+            trackColor = trackColor,
+        )
+        AppUiStyle.COUI17 -> AppCouiCircularProgressIndicator(
             modifier = modifier,
             color = color,
             strokeWidth = strokeWidth,
@@ -79,7 +94,12 @@ fun AppLinearProgressIndicator(
             trackColor = trackColor,
             strokeCap = strokeCap,
         )
-        AppUiStyle.MIUIX -> AppMiuixLinearProgressIndicator(
+        AppUiStyle.MIUIX -> AppCouiLinearProgressIndicator(
+            modifier = modifier,
+            color = color,
+            trackColor = trackColor,
+        )
+        AppUiStyle.COUI17 -> AppCouiLinearProgressIndicator(
             modifier = modifier,
             color = color,
             trackColor = trackColor,
@@ -103,7 +123,13 @@ fun AppLinearProgressIndicator(
             trackColor = trackColor,
             strokeCap = strokeCap,
         )
-        AppUiStyle.MIUIX -> AppMiuixLinearProgressIndicator(
+        AppUiStyle.MIUIX -> AppCouiLinearProgressIndicator(
+            progress = progress,
+            modifier = modifier,
+            color = color,
+            trackColor = trackColor,
+        )
+        AppUiStyle.COUI17 -> AppCouiLinearProgressIndicator(
             progress = progress,
             modifier = modifier,
             color = color,

@@ -30,7 +30,7 @@ internal fun ListScopedSearchActiveBar(
     searchQuery: String,
     onClear: () -> Unit,
     modifier: Modifier = Modifier,
-    backdrop: top.yukonga.miuix.kmp.blur.Backdrop? = null,
+    backdrop: io.github.suqi8.coui.kmp.blur.Backdrop? = null,
 ) {
     BottomBarMatchedReusableLiquidDock(
         shape = AppShapes.container(ContainerLevel.Pill),

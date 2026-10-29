@@ -101,7 +101,7 @@ import com.android.purebilibili.feature.home.components.resolveBiliPaiBottomBarS
 import com.android.purebilibili.feature.home.components.resolveBottomBarDarkTheme
 import com.android.purebilibili.feature.home.components.resolveSharedBottomBarCapsuleShape
 import kotlin.math.abs
-import top.yukonga.miuix.kmp.blur.Backdrop as MiuixBackdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop as MiuixBackdrop
 
 internal data class AudioNowPlayingBarState(
     val bvid: String = "",

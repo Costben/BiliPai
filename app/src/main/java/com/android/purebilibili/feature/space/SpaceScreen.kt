@@ -292,6 +292,7 @@ import com.android.purebilibili.feature.video.ui.feedback.followActionAnchor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collect
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 // UP 空间多张头图自动轮播间隔
 private const val SPACE_BANNER_AUTO_ROTATE_INTERVAL_MS = 4_000L
@@ -3779,7 +3780,7 @@ private fun SpaceSecondarySwitchRow(
     val themeConfig = LocalAppThemeConfig.current
     // Contribution categories keep the same content-sized Miuix buttons with
     // either glass preference. Scope the override to this row only.
-    val tabThemeConfig = if (uiStyle == AppUiStyle.MIUIX) {
+    val tabThemeConfig = if (uiStyle.usesMiuixFamilySkin) {
         themeConfig.copy(liquidGlassEnabled = false)
     } else {
         themeConfig

@@ -87,6 +87,7 @@ internal fun AppUpdateDialogHost(
     when (LocalAppUiStyle.current) {
         AppUiStyle.MATERIAL3 -> Material3AppUpdateDialog(state = dialogState, actions = actions)
         AppUiStyle.MIUIX -> MiuixAppUpdateDialog(state = dialogState, actions = actions)
+        AppUiStyle.COUI17 -> MiuixAppUpdateDialog(state = dialogState, actions = actions)
     }
 }
 

@@ -24,6 +24,7 @@ import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppTextButton
 import com.android.purebilibili.feature.settings.DarkThemeSchedule
 import com.android.purebilibili.feature.settings.formatThemeScheduleTime
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /** Plain preference UI; persistence is owned by SettingsViewModel. */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,7 +61,7 @@ internal fun DarkThemeSchedulePreference(
     editingStart?.let { start ->
         val minute = if (start) schedule.startMinute else schedule.endMinute
         val time = rememberTimePickerState(minute / 60, minute % 60, is24Hour = true)
-        val useWheel = LocalAppUiStyle.current == AppUiStyle.MIUIX ||
+        val useWheel = LocalAppUiStyle.current.usesMiuixFamilySkin ||
             LocalAppThemeConfig.current.liquidGlassEnabled
         var keyboardInput by remember(start) { mutableStateOf(false) }
         var hourScrolling by remember(start) { mutableStateOf(false) }

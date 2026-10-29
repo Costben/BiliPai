@@ -182,7 +182,7 @@ fun DynamicSidebar(
     onToggleExpand: () -> Unit,
     topPadding: androidx.compose.ui.unit.Dp, // 新增：内部处理顶部间距
     onBackClick: () -> Unit, // 新增：返回按钮回调
-    chromeBackdrop: top.yukonga.miuix.kmp.blur.Backdrop? = null,
+    chromeBackdrop: io.github.suqi8.coui.kmp.blur.Backdrop? = null,
     modifier: Modifier = Modifier
 ) {
     val animatedWidth by animateFloatAsState(

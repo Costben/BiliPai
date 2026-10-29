@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import top.yukonga.miuix.kmp.blur.ProgressiveBlur
+import io.github.suqi8.coui.kmp.blur.ProgressiveBlur
 
 /** 分类文字背后保留保护平台，搜索区域较轻，尾部在控件下方渐隐。 */
 internal fun homeTopReadabilityStops(

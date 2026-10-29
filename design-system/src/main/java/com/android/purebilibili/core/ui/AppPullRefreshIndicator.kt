@@ -38,6 +38,10 @@ fun resolveAppPullRefreshProfile(
         AppPullRefreshMotionStyle.PLATFORM,
         AppPullRefreshIndicatorStyle.MATERIAL_DEFAULT,
     )
+    PresetPrimitiveRenderer.COUI_BRIDGED -> AppPullRefreshProfile(
+        AppPullRefreshMotionStyle.PLATFORM,
+        AppPullRefreshIndicatorStyle.MIUIX_NATIVE,
+    )
 }
 
 @Composable
@@ -49,6 +53,7 @@ internal fun resolveAppPullRefreshIndicatorRenderer(
 ): AppPullRefreshIndicatorRenderer = when (uiStyle) {
     AppUiStyle.MIUIX -> AppPullRefreshIndicatorRenderer.MIUIX
     AppUiStyle.MATERIAL3 -> AppPullRefreshIndicatorRenderer.MATERIAL3
+    AppUiStyle.COUI17 -> AppPullRefreshIndicatorRenderer.MIUIX
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -79,6 +84,12 @@ fun AppPullRefreshLoadingIndicator(
                 )
             }
         }
+        PresetPrimitiveRenderer.COUI_BRIDGED -> PullToRefreshDefaults.Indicator(
+            state = state,
+            isRefreshing = isRefreshing,
+            modifier = modifier,
+            color = AppContentColors.accent(),
+        )
     }
 }
 
@@ -99,6 +110,12 @@ fun AppPullRefreshLoadingIndicator(
             size = AppSpacingTokens.DoubleExtraLarge + AppSpacingTokens.ExtraSmall,
             color = color,
             density = AdaptiveLoadingDensity.PAGE,
+        )
+        PresetPrimitiveRenderer.COUI_BRIDGED -> AdaptiveLoadingIndicator(
+            modifier = modifier,
+            size = AppSpacingTokens.ExtraLarge - AppSpacingTokens.Micro,
+            color = color,
+            strokeWidth = AppSpacingTokens.Micro,
         )
     }
 }

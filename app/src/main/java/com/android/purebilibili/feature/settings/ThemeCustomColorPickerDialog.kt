@@ -2,6 +2,7 @@
 
 package com.android.purebilibili.feature.settings
 
+import com.android.purebilibili.core.theme.toCouiColors
 import android.os.SystemClock
 import android.os.Build
 import androidx.compose.foundation.Canvas
@@ -46,8 +47,8 @@ import kotlin.math.roundToInt
 import com.materialkolor.Contrast
 import com.materialkolor.PaletteStyle
 import com.materialkolor.dynamiccolor.ColorSpec
-import top.yukonga.miuix.kmp.theme.MiuixTheme
-import top.yukonga.miuix.kmp.theme.ThemeController
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import io.github.suqi8.coui.kmp.theme.ThemeController
 
 @Composable
 internal fun ThemeCustomColorPickerDialog(
@@ -104,13 +105,16 @@ internal fun ThemeCustomColorPickerDialog(
     val previewScheme = previewPalette.material
     val previewIssues = remember(previewScheme) { assessThemeContrast(previewScheme).filterNot { it.passes } }
     val previewMiuixController = remember(previewPalette, previewDark) {
+        val previewColors = previewPalette.miuix.toCouiColors()
         ThemeController(
-            colorSchemeMode = resolveMiuixColorSchemeMode(
-                if (previewDark) AppThemeMode.DARK else AppThemeMode.LIGHT,
-                dynamicColorEnabled = false,
+            colorSchemeMode = io.github.suqi8.coui.kmp.theme.ColorSchemeMode.valueOf(
+                resolveMiuixColorSchemeMode(
+                    if (previewDark) AppThemeMode.DARK else AppThemeMode.LIGHT,
+                    dynamicColorEnabled = false,
+                ).name
             ),
-            lightColors = previewPalette.miuix,
-            darkColors = previewPalette.miuix,
+            lightColors = previewColors,
+            darkColors = previewColors,
             isDark = previewDark,
         )
     }
@@ -208,7 +212,7 @@ internal fun ThemeCustomColorPickerDialog(
                                     LocalLiquidControlThemeColor provides previewPalette.liquidAccent,
                                     LocalAppThemeConfig provides previewConfig,
                                 ) {
-                                    MiuixTheme(controller = previewMiuixController) {
+                                    COUITheme(controller = previewMiuixController) {
                                         MaterialTheme(colorScheme = previewScheme) {
                                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                                                 AppSwitch(checked = previewChecked, onCheckedChange = { previewChecked = it },

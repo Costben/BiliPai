@@ -71,9 +71,9 @@ import com.android.purebilibili.data.model.response.VideoItem
 import com.android.purebilibili.feature.home.components.BottomBarLiquidSegmentedControl
 import com.android.purebilibili.feature.home.components.HomeHeroCarousel
 import com.android.purebilibili.feature.home.components.HomeHeroCarouselImmersive
-import top.yukonga.miuix.kmp.blur.Backdrop as MiuixBackdrop
-import top.yukonga.miuix.kmp.blur.layerBackdrop
-import top.yukonga.miuix.kmp.blur.rememberLayerBackdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop as MiuixBackdrop
+import io.github.suqi8.coui.kmp.blur.layerBackdrop
+import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop
 import com.android.purebilibili.feature.home.components.cards.ElegantVideoCard
 import com.android.purebilibili.feature.home.components.cards.LocalHomeScrollTickProvider
 import com.android.purebilibili.feature.home.components.cards.LocalHomeCardScrolling

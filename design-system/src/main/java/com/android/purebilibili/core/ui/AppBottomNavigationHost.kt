@@ -31,5 +31,6 @@ fun AppBottomNavigationHost(
     when (renderer) {
         PresetPrimitiveRenderer.MATERIAL3 -> materialContent(policy)
         PresetPrimitiveRenderer.MIUIX_BRIDGED -> platformContent(policy)
+        PresetPrimitiveRenderer.COUI_BRIDGED -> platformContent(policy)
     }
 }

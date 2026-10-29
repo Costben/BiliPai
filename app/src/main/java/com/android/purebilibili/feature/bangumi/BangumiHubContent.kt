@@ -114,7 +114,7 @@ import com.android.purebilibili.data.model.response.TimelineDay
 import com.android.purebilibili.data.model.response.TimelineEpisode
 import com.android.purebilibili.feature.bangumi.ui.list.BangumiBadge
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
 
 internal const val BANGUMI_POSTER_ASPECT_RATIO = 0.75f
 

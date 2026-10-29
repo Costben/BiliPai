@@ -55,8 +55,9 @@ import com.android.purebilibili.core.ui.appContentDialogWidth
 import com.android.purebilibili.core.ui.resolveAppContentDialogLayoutPolicy
 import com.android.purebilibili.core.ui.resolveAppContentDialogProperties
 import kotlin.math.round
-import top.yukonga.miuix.kmp.basic.DropdownItem
-import top.yukonga.miuix.kmp.preference.WindowSpinnerPreference
+import io.github.suqi8.coui.kmp.basic.DropdownItem
+import io.github.suqi8.coui.kmp.preference.WindowSpinnerPreference
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 enum class AppSingleChoicePresentation(val storageValue: String) {
     WINDOW_POPUP("window_popup"),
@@ -210,7 +211,7 @@ fun <T> AppSingleChoicePreference(
                         AppGlassChoiceValueText(
                             text = selectedLabel.orEmpty(),
                             // Match the corresponding native preference value; glass only changes the control surface.
-                            style = if (LocalAppUiStyle.current == AppUiStyle.MIUIX ||
+                            style = if (LocalAppUiStyle.current.usesMiuixFamilySkin ||
                                 com.android.purebilibili.core.ui.rememberResolvedAppListItemStyle() == com.android.purebilibili.core.ui.AppListItemStyle.NATIVE
                             ) {
                                 MaterialTheme.typography.bodySmall
@@ -240,7 +241,7 @@ fun <T> AppSingleChoicePreference(
     }
 
     if (presentation == AppSingleChoicePresentation.WINDOW_POPUP &&
-        LocalAppUiStyle.current == AppUiStyle.MIUIX
+        LocalAppUiStyle.current.usesMiuixFamilySkin
     ) {
         val selectedIndex = options.indexOfFirst { it.value == selectedValue }.coerceAtLeast(0)
         val dropdownItems = remember(options, optionLeading) {

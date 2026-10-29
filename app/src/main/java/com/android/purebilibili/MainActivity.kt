@@ -1459,8 +1459,12 @@ open class MainActivity : AppCompatActivity() {
             val nativeMiuixPopupsEnabled by com.android.purebilibili.core.store.player.PlayerSettingsStore
                 .getNativeMiuixPlayerPopups(context)
                 .collectAsStateWithLifecycle(initialValue = true)
-            val liquidGlassEnabled by SettingsManager.getAndroidNativeLiquidGlassEnabled(context)
+            val storedLiquidGlassEnabled by SettingsManager.getAndroidNativeLiquidGlassEnabled(context)
                 .collectAsStateWithLifecycle(initialValue = true)
+            // 液态玻璃是 BiliPai 自有的材质语言；COUI 17 有自己的模糊与悬浮层规范，二者叠加会让
+            // 所有 COUI 分支被玻璃分支截走。只在运行时屏蔽，不改写用户的开关值，切回 Material 3 即恢复。
+            val liquidGlassEnabled = storedLiquidGlassEnabled &&
+                appThemeSettings.uiStyle != com.android.purebilibili.core.theme.AppUiStyle.COUI17
             val liquidControlsUseThemeColor by SettingsManager.getLiquidControlsUseThemeColor(context)
                 .collectAsStateWithLifecycle(initialValue = false)
             val appThemeConfig = remember(

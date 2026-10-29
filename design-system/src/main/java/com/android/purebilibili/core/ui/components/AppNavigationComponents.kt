@@ -36,7 +36,7 @@ import top.yukonga.miuix.kmp.basic.NavigationRailDefaults as MiuixNavigationRail
 import top.yukonga.miuix.kmp.basic.NavigationRailItem as MiuixNavigationRailItem
 import top.yukonga.miuix.kmp.basic.NavigationRailValue as MiuixNavigationRailValue
 import top.yukonga.miuix.kmp.basic.rememberNavigationRailState as rememberMiuixNavigationRailState
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import kotlinx.coroutines.flow.drop
 
 @Composable
@@ -99,7 +99,7 @@ private fun AppPlatformNavigationBarDisplayMode.toMiuixDisplayMode(): MiuixNavig
 @Composable
 fun AppPlatformNavigationBar(
     modifier: Modifier = Modifier,
-    color: Color = MiuixTheme.colorScheme.surface,
+    color: Color = COUITheme.colorScheme.surface,
     showDivider: Boolean = true,
     defaultWindowInsetsPadding: Boolean = true,
     mode: AppPlatformNavigationBarDisplayMode = AppPlatformNavigationBarDisplayMode.ICON_AND_TEXT,
@@ -158,7 +158,7 @@ fun AppPlatformNavigationRail(
     initiallyExpanded: Boolean = expanded,
     onExpandedChange: (Boolean) -> Unit = {},
     modifier: Modifier = Modifier,
-    color: Color = MiuixTheme.colorScheme.surface,
+    color: Color = COUITheme.colorScheme.surface,
     showDivider: Boolean = true,
     minWidth: Dp = MiuixNavigationRailDefaults.MinWidth,
     expandedWidth: Dp = MiuixNavigationRailDefaults.ExpandedWidth,

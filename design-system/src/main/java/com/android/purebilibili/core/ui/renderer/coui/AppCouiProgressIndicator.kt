@@ -1,17 +1,17 @@
-package com.android.purebilibili.core.ui.renderer.miuix
+package com.android.purebilibili.core.ui.renderer.coui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.isSpecified
-import top.yukonga.miuix.kmp.basic.CircularProgressIndicator
-import top.yukonga.miuix.kmp.basic.LinearProgressIndicator
-import top.yukonga.miuix.kmp.basic.ProgressIndicatorColors
-import top.yukonga.miuix.kmp.basic.ProgressIndicatorDefaults
+import io.github.suqi8.coui.kmp.basic.CircularProgressIndicator
+import io.github.suqi8.coui.kmp.basic.LinearProgressIndicator
+import io.github.suqi8.coui.kmp.basic.ProgressIndicatorColors
+import io.github.suqi8.coui.kmp.basic.ProgressIndicatorDefaults
 
 @Composable
-internal fun AppMiuixCircularProgressIndicator(
+internal fun AppCouiCircularProgressIndicator(
     progress: () -> Float,
     modifier: Modifier,
     color: Color,
@@ -28,7 +28,7 @@ internal fun AppMiuixCircularProgressIndicator(
 )
 
 @Composable
-internal fun AppMiuixCircularProgressIndicator(
+internal fun AppCouiCircularProgressIndicator(
     modifier: Modifier,
     color: Color,
     strokeWidth: Dp,
@@ -43,7 +43,7 @@ internal fun AppMiuixCircularProgressIndicator(
 )
 
 @Composable
-internal fun AppMiuixLinearProgressIndicator(
+internal fun AppCouiLinearProgressIndicator(
     modifier: Modifier,
     color: Color,
     trackColor: Color,
@@ -54,7 +54,7 @@ internal fun AppMiuixLinearProgressIndicator(
 )
 
 @Composable
-internal fun AppMiuixLinearProgressIndicator(
+internal fun AppCouiLinearProgressIndicator(
     progress: () -> Float,
     modifier: Modifier,
     color: Color,

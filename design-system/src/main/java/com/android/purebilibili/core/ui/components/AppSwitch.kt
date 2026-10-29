@@ -7,7 +7,8 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.renderer.material3.AppMaterial3Switch
-import com.android.purebilibili.core.ui.renderer.miuix.AppMiuixSwitch
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiSwitch
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiSwitch
 
 @Composable
 fun AppSwitch(
@@ -42,7 +43,13 @@ fun AppSwitch(
             interactionSource = interactionSource,
             showThumbIcon = showThumbIcon,
         )
-        AppUiStyle.MIUIX -> AppMiuixSwitch(
+        AppUiStyle.MIUIX -> AppCouiSwitch(
+            checked = checked,
+            onCheckedChange = onCheckedChange,
+            modifier = modifier,
+            enabled = enabled,
+        )
+        AppUiStyle.COUI17 -> AppCouiSwitch(
             checked = checked,
             onCheckedChange = onCheckedChange,
             modifier = modifier,

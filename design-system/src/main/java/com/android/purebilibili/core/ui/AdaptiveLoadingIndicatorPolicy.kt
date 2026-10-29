@@ -9,9 +9,9 @@ import com.android.purebilibili.core.theme.AppUiStyle
  *   with [ColorScheme.primary] (dynamic color when enabled).
  * - [MATERIAL3_CIRCULAR]: official M3 [androidx.compose.material3.CircularProgressIndicator]
  *   for compact / inline slots with a smaller default size.
- * - [MIUIX_INFINITE]: Miuix orbiting-dot [top.yukonga.miuix.kmp.basic.InfiniteProgressIndicator]
+ * - [MIUIX_INFINITE]: Miuix orbiting-dot [io.github.suqi8.coui.kmp.basic.InfiniteProgressIndicator]
  *   for page-level loading.
- * - [MIUIX_CIRCULAR]: Miuix [top.yukonga.miuix.kmp.basic.CircularProgressIndicator]
+ * - [MIUIX_CIRCULAR]: Miuix [io.github.suqi8.coui.kmp.basic.CircularProgressIndicator]
  *   for compact / inline slots.
  */
 enum class AdaptiveLoadingVisual {
@@ -49,6 +49,10 @@ fun resolveAdaptiveLoadingVisual(
         AdaptiveLoadingDensity.COMPACT -> AdaptiveLoadingVisual.MATERIAL3_CIRCULAR
     }
     PresetPrimitiveRenderer.MIUIX_BRIDGED -> when (density) {
+        AdaptiveLoadingDensity.PAGE -> AdaptiveLoadingVisual.MIUIX_INFINITE
+        AdaptiveLoadingDensity.COMPACT -> AdaptiveLoadingVisual.MIUIX_CIRCULAR
+    }
+    PresetPrimitiveRenderer.COUI_BRIDGED -> when (density) {
         AdaptiveLoadingDensity.PAGE -> AdaptiveLoadingVisual.MIUIX_INFINITE
         AdaptiveLoadingDensity.COMPACT -> AdaptiveLoadingVisual.MIUIX_CIRCULAR
     }

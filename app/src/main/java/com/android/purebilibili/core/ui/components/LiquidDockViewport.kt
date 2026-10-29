@@ -23,6 +23,7 @@ import com.android.purebilibili.core.ui.ContainerLevel
 import com.android.purebilibili.core.ui.LocalAppThemeConfig
 import com.android.purebilibili.feature.home.components.resolveFloatingDockCaptureInsets
 import com.android.purebilibili.feature.home.components.FloatingBottomBarGeometryMode
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /** 长玻璃 dock 左右收住滚动内容，上下保留指示器放大、拉伸的采样余量。 */
 internal fun Modifier.clipLiquidDockScrollContent(
@@ -74,7 +75,7 @@ internal fun Modifier.liquidDockViewport(
     val liquidGlassEnabled = LocalAppThemeConfig.current.liquidGlassEnabled
     val shape = if (liquidGlassEnabled) {
         CircleShape
-    } else if (uiStyle == AppUiStyle.MIUIX) {
+    } else if (uiStyle.usesMiuixFamilySkin) {
         AppShapes.container(ContainerLevel.Card)
     } else {
         CircleShape

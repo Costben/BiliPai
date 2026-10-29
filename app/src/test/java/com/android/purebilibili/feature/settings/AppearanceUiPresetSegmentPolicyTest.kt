@@ -10,15 +10,15 @@ class AppearanceUiPresetSegmentPolicyTest {
     fun uiStyleSegmentOptions_exposeStableOrder_andUseProvidedLabels() {
         val options = resolveThemeSelectionOptions(
             material3Label = "Material 3",
-            miuixLabel = "Miuix",
+            couiLabel = "COUI 17",
         )
 
         assertEquals(
-            listOf(AppUiStyle.MATERIAL3, AppUiStyle.MIUIX),
+            listOf(AppUiStyle.MATERIAL3, AppUiStyle.COUI17),
             options.map { it.value }
         )
         assertEquals(
-            listOf("Material 3", "Miuix"),
+            listOf("Material 3", "COUI 17"),
             options.map { it.label }
         )
     }

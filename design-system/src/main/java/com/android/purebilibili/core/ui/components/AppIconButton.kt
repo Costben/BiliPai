@@ -9,7 +9,9 @@ import androidx.compose.ui.graphics.Color
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.renderer.material3.AppMaterial3IconButton
-import com.android.purebilibili.core.ui.renderer.miuix.AppMiuixIconButton
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiIconButton
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiIconButton
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 @Immutable
 data class AppIconButtonColors(
@@ -98,7 +100,7 @@ private fun AppIconButtonImpl(
     }
     // 玻璃图标的弹性由外层 dock 提供，普通 MD3 图标保留原生涟漪与固定形状。
     val elasticFeedbackEnabled = enabled &&
-        ((LocalAppUiStyle.current == AppUiStyle.MIUIX &&
+        ((LocalAppUiStyle.current.usesMiuixFamilySkin &&
             com.android.purebilibili.core.ui.LocalAppThemeConfig.current.liquidGlassEnabled) ||
             LocalAppIconButtonGlassSurfaceProvided.current)
     ProvideAppElasticFeedback(enabled = elasticFeedbackEnabled) {
@@ -112,7 +114,21 @@ private fun AppIconButtonImpl(
                 variant = variant,
                 content = content,
             )
-            AppUiStyle.MIUIX -> AppMiuixIconButton(
+            AppUiStyle.MIUIX -> AppCouiIconButton(
+                onClick = feedbackClick,
+                modifier = modifier.appElasticPress(
+                    enabled = elasticFeedbackEnabled,
+                    highlightShape = androidx.compose.foundation.shape.RoundedCornerShape(
+                        com.android.purebilibili.core.ui.AppChromeSizeTokens.MiuixNativeCompactCornerRadiusDp.dp,
+                    ),
+                ),
+                enabled = enabled,
+                colors = colors,
+                interactionSource = interactionSource,
+                variant = variant,
+                content = content,
+            )
+            AppUiStyle.COUI17 -> AppCouiIconButton(
                 onClick = feedbackClick,
                 modifier = modifier.appElasticPress(
                     enabled = elasticFeedbackEnabled,

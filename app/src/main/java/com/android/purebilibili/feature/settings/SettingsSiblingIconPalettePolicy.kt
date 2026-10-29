@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.Color
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.AppEntryIconPalette
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /**
  * 设置页同级条目的多彩色板，与偏好分组内的入口彩色分配共用同一份定义。
@@ -45,7 +46,7 @@ internal fun rememberSettingsSiblingIconTints(
     siblingCount: Int,
     paletteOffset: Int = 0,
 ): List<Color> {
-    val colorful = LocalAppUiStyle.current == AppUiStyle.MIUIX
+    val colorful = LocalAppUiStyle.current.usesMiuixFamilySkin
     return remember(siblingCount, paletteOffset, colorful) {
         resolveSettingsSiblingIconTints(siblingCount, paletteOffset, colorful)
     }

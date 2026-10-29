@@ -6,7 +6,8 @@ import androidx.compose.ui.Modifier
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.renderer.material3.AppMaterial3RadioButton
-import com.android.purebilibili.core.ui.renderer.miuix.AppMiuixRadioButton
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiRadioButton
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiRadioButton
 
 @Composable
 fun AppRadioButton(
@@ -25,7 +26,13 @@ fun AppRadioButton(
             enabled = enabled,
             interactionSource = interactionSource,
         )
-        AppUiStyle.MIUIX -> AppMiuixRadioButton(
+        AppUiStyle.MIUIX -> AppCouiRadioButton(
+            selected = selected,
+            onClick = onClick,
+            modifier = modifier,
+            enabled = enabled,
+        )
+        AppUiStyle.COUI17 -> AppCouiRadioButton(
             selected = selected,
             onClick = onClick,
             modifier = modifier,

@@ -18,7 +18,8 @@ fun resolveAppDrawerVisualPolicy(
     blurEnabled: Boolean,
 ): AppDrawerVisualPolicy = when (renderer) {
     PresetPrimitiveRenderer.MATERIAL3,
-    PresetPrimitiveRenderer.MIUIX_BRIDGED -> AppDrawerVisualPolicy(
+    PresetPrimitiveRenderer.MIUIX_BRIDGED,
+    PresetPrimitiveRenderer.COUI_BRIDGED -> AppDrawerVisualPolicy(
         containerTreatment = if (blurEnabled) {
             AppDrawerContainerTreatment.TRANSLUCENT
         } else {

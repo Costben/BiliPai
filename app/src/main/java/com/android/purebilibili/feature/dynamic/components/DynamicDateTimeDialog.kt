@@ -34,6 +34,7 @@ import com.android.purebilibili.core.ui.components.AppTextButton
 import com.android.purebilibili.core.ui.components.AppTextField
 import com.android.purebilibili.feature.settings.screen.ThemeTimeWheelPicker
 import java.util.Calendar
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,7 +49,7 @@ internal fun DynamicDateTimeDialog(
     var month by remember { mutableStateOf((initial.get(Calendar.MONTH) + 1).toString()) }
     var day by remember { mutableStateOf(initial.get(Calendar.DAY_OF_MONTH).toString()) }
     val time = rememberTimePickerState(initial.get(Calendar.HOUR_OF_DAY), initial.get(Calendar.MINUTE), is24Hour = true)
-    val useWheel = LocalAppUiStyle.current == AppUiStyle.MIUIX || LocalAppThemeConfig.current.liquidGlassEnabled
+    val useWheel = LocalAppUiStyle.current.usesMiuixFamilySkin || LocalAppThemeConfig.current.liquidGlassEnabled
     var hourScrolling by remember { mutableStateOf(false) }
     var minuteScrolling by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf<String?>(null) }

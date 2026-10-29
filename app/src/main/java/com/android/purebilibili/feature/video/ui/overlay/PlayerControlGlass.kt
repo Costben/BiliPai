@@ -29,7 +29,7 @@ import com.android.purebilibili.core.ui.components.rememberAppElasticPressState
 import com.android.purebilibili.feature.home.components.biliPaiFloatingDockShell
 import com.android.purebilibili.feature.home.components.LocalLiquidGlassRenderConfig
 import com.android.purebilibili.feature.home.components.resolveBiliPaiBottomBarContainerColor
-import top.yukonga.miuix.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
 
 private val LocalPlayerGlassGroupSurface = compositionLocalOf { false }
 
@@ -166,7 +166,7 @@ internal fun PlayerControlGlassDock(
                 // 播放器控件保留媒体表面的白色前景，不跟随外部页面明暗取色。
                 LocalAppIconButtonGlassSurfaceProvided provides true,
                 androidx.compose.material3.LocalContentColor provides Color.White,
-                top.yukonga.miuix.kmp.theme.LocalContentColor provides Color.White,
+                io.github.suqi8.coui.kmp.theme.LocalContentColor provides Color.White,
             ) {
                 com.android.purebilibili.core.ui.blur.AppGlassContainerContent(
                     enabled = glass && shellSource != null,

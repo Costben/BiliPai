@@ -162,9 +162,9 @@ import com.android.purebilibili.feature.home.resolveHomeCardWallpaperSurfaceMode
 import com.android.purebilibili.feature.home.resolveHomeWallpaperBackdropAppearance
 import com.android.purebilibili.feature.home.resolveHomeWallpaperUri
 import com.android.purebilibili.core.ui.AppShapes
-import top.yukonga.miuix.kmp.blur.Backdrop as MiuixBackdrop
-import top.yukonga.miuix.kmp.blur.blur
-import top.yukonga.miuix.kmp.blur.drawBackdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop as MiuixBackdrop
+import io.github.suqi8.coui.kmp.blur.blur
+import io.github.suqi8.coui.kmp.blur.drawBackdrop
 import com.android.purebilibili.core.ui.AdaptivePullToRefreshBox
 import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.AppTopBar

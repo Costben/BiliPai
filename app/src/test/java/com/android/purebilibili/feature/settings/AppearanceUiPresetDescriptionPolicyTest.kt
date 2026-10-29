@@ -13,7 +13,9 @@ class AppearanceUiPresetDescriptionPolicyTest {
             materialTitle = "Android Native · Material 3",
             materialSummary = "Use Material 3 structure while keeping blur and liquid glass.",
             miuixTitle = "Android Native · Miuix",
-            miuixSummary = "Use Miuix chrome while keeping the Android navigation structure."
+            miuixSummary = "Use Miuix chrome while keeping the Android navigation structure.",
+            couiTitle = "Android Native · COUI 17",
+            couiSummary = "Use ColorOS-style COUI components."
         )
 
         assertEquals("Android Native · Material 3", description.title)
@@ -30,7 +32,9 @@ class AppearanceUiPresetDescriptionPolicyTest {
             materialTitle = "Android Native · Material 3",
             materialSummary = "Use Material 3 structure while keeping blur and liquid glass.",
             miuixTitle = "Android Native · Miuix",
-            miuixSummary = "Use Miuix chrome while keeping the Android navigation structure."
+            miuixSummary = "Use Miuix chrome while keeping the Android navigation structure.",
+            couiTitle = "Android Native · COUI 17",
+            couiSummary = "Use ColorOS-style COUI components."
         )
 
         assertEquals("Android Native · Miuix", description.title)

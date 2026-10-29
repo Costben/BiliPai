@@ -105,6 +105,7 @@ import okhttp3.Request
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 internal fun downloadUiSkinRemotePackage(url: String): ByteArray {
     val request = Request.Builder()
@@ -700,7 +701,7 @@ fun PluginsContent(
                             .padding(16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        if (LocalAppUiStyle.current == AppUiStyle.MIUIX || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
+                        if (LocalAppUiStyle.current.usesMiuixFamilySkin || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
                             SettingsFunctionIcon(
                                 title = "导入外部插件",
                                 imageVector = com.android.purebilibili.feature.settings.rememberMaterialSymbol(com.android.purebilibili.R.drawable.ms_cloud_download_24),
@@ -757,7 +758,7 @@ fun PluginsContent(
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            if (LocalAppUiStyle.current == AppUiStyle.MIUIX || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
+                            if (LocalAppUiStyle.current.usesMiuixFamilySkin || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
                                 SettingsFunctionIcon(
                                     title = "导入 JS 媒体插件",
                                     imageVector = com.android.purebilibili.feature.settings.rememberMaterialSymbol(com.android.purebilibili.R.drawable.ms_terminal_24),
@@ -887,7 +888,7 @@ fun PluginsContent(
                             .padding(16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        if (LocalAppUiStyle.current == AppUiStyle.MIUIX || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
+                        if (LocalAppUiStyle.current.usesMiuixFamilySkin || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
                             SettingsFunctionIcon(
                                 title = "开放 Kotlin 插件包",
                                 imageVector = com.android.purebilibili.feature.settings.rememberMaterialSymbol(com.android.purebilibili.R.drawable.ms_shield_fill_24),
@@ -1024,7 +1025,7 @@ fun PluginsContent(
                                 .padding(horizontal = 16.dp, vertical = 12.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            if (LocalAppUiStyle.current == AppUiStyle.MIUIX || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
+                            if (LocalAppUiStyle.current.usesMiuixFamilySkin || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
                                 SettingsFunctionIcon(
                                     title = "在线装扮",
                                     imageVector = com.android.purebilibili.feature.settings.rememberMaterialSymbol(com.android.purebilibili.R.drawable.ms_cloud_fill_24),
@@ -1083,7 +1084,7 @@ fun PluginsContent(
                                 .padding(horizontal = 16.dp, vertical = 12.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            if (LocalAppUiStyle.current == AppUiStyle.MIUIX || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
+                            if (LocalAppUiStyle.current.usesMiuixFamilySkin || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
                                 SettingsFunctionIcon(
                                     title = "导入界面皮肤包",
                                     imageVector = com.android.purebilibili.feature.settings.rememberMaterialSymbol(com.android.purebilibili.R.drawable.ms_brush_fill_24),
@@ -2222,7 +2223,7 @@ private fun InstalledUiSkinItem(
 /** 插件列表入口色：Miuix 下按列表顺序取入口彩色，其余主题保持中性内容色。 */
 @Composable
 private fun rememberPluginEntryIconTint(index: Int): Color {
-    if (LocalAppUiStyle.current != AppUiStyle.MIUIX) return AppContentColors.secondaryText()
+    if (!LocalAppUiStyle.current.usesMiuixFamilySkin) return AppContentColors.secondaryText()
     return remember(index) { resolveAppEntryIconColor(index) }
 }
 
@@ -2262,7 +2263,7 @@ private fun PluginItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             // 图标
-            if (LocalAppUiStyle.current == AppUiStyle.MIUIX || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
+            if (LocalAppUiStyle.current.usesMiuixFamilySkin || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
                 SettingsFunctionIcon(
                     title = plugin.name,
                     imageVector = when (plugin.id) {
@@ -2481,7 +2482,7 @@ private fun InstalledJsPluginItem(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            if (LocalAppUiStyle.current == AppUiStyle.MIUIX || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
+            if (LocalAppUiStyle.current.usesMiuixFamilySkin || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
                 SettingsFunctionIcon(
                     title = installed.manifest.title,
                     imageVector = rememberMaterialSymbol(R.drawable.ms_data_object_fill_24),
@@ -2793,7 +2794,7 @@ private fun JsonPluginStatsNotificationSection(
                     .padding(horizontal = 16.dp, vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if (LocalAppUiStyle.current == AppUiStyle.MIUIX || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
+                if (LocalAppUiStyle.current.usesMiuixFamilySkin || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
                     SettingsFunctionIcon(
                         title = "插件统计通知",
                         imageVector = com.android.purebilibili.feature.settings.rememberMaterialSymbol(com.android.purebilibili.R.drawable.ms_notifications_24),
@@ -2882,9 +2883,9 @@ private fun JsonPluginItem(
             // 图标
             Box(
                 modifier = Modifier
-                    .size(if ((LocalAppUiStyle.current == AppUiStyle.MIUIX || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) && plugin.iconUrl.isNullOrBlank()) 32.dp else 36.dp)
+                    .size(if ((LocalAppUiStyle.current.usesMiuixFamilySkin || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) && plugin.iconUrl.isNullOrBlank()) 32.dp else 36.dp)
                     .adaptiveSquircleBackground(
-                        if ((LocalAppUiStyle.current == AppUiStyle.MIUIX || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) && plugin.iconUrl.isNullOrBlank()) Color.Transparent else jsonPluginTint,
+                        if ((LocalAppUiStyle.current.usesMiuixFamilySkin || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) && plugin.iconUrl.isNullOrBlank()) Color.Transparent else jsonPluginTint,
                         10.dp,
                     ),
                 contentAlignment = Alignment.Center

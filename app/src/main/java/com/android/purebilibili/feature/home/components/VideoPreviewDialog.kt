@@ -61,9 +61,9 @@ import androidx.compose.material.icons.rounded.Fullscreen
 import com.android.purebilibili.core.ui.blur.unifiedBlur
 import com.android.purebilibili.core.ui.blur.shouldAllowRenderEffectBackedHazeEffect
 import com.android.purebilibili.core.ui.performance.isLowBlurBudgetForced
-import top.yukonga.miuix.kmp.blur.Backdrop
-import top.yukonga.miuix.kmp.blur.drawBackdrop
-import top.yukonga.miuix.kmp.blur.blur
+import io.github.suqi8.coui.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.drawBackdrop
+import io.github.suqi8.coui.kmp.blur.blur
 import androidx.compose.ui.zIndex
 
 internal fun shouldEnableSaveCoverAction(coverUrl: String): Boolean = coverUrl.isNotBlank()

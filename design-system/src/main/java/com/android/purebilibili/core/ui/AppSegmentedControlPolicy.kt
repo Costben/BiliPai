@@ -82,6 +82,13 @@ internal fun resolveAppSegmentedControlPolicy(
             usesMaterialColorTokens = true,
             preferredCornerRadius = preferred,
         )
+        AppUiStyle.COUI17 -> AppSegmentedControlPolicy(
+            usesEmphasizedTitle = true,
+            usesMaterialFallback = true,
+            usesNativeTabRow = true,
+            usesMaterialColorTokens = false,
+            preferredCornerRadius = preferred,
+        )
     }
 }
 

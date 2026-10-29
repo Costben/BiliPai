@@ -159,6 +159,7 @@ import com.android.purebilibili.core.theme.BottomBarColors  // 统一底栏颜�
 import com.android.purebilibili.core.theme.BottomBarColorPalette  // 调色板
 import com.android.purebilibili.core.theme.LocalCornerRadiusScale
 import com.android.purebilibili.core.theme.AppUiStyle
+import io.github.suqi8.coui.kmp.basic.BottomFloatingNavigationBarItem
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 
 import kotlinx.coroutines.launch  //  延迟导航
@@ -187,18 +188,19 @@ import com.android.purebilibili.core.store.LiquidGlassStyle // [New] Top-level e
 import com.android.purebilibili.core.store.LiquidGlassMode
 import androidx.compose.animation.core.EaseOut
 import kotlin.math.sign
-import top.yukonga.miuix.kmp.blur.Backdrop as MiuixBackdrop
-import top.yukonga.miuix.kmp.blur.blur as miuixBlur
-import top.yukonga.miuix.kmp.blur.drawBackdrop as miuixDrawBackdrop
-import top.yukonga.miuix.kmp.blur.highlight.BloomStroke
-import top.yukonga.miuix.kmp.blur.highlight.Highlight as MiuixHighlight
-import top.yukonga.miuix.kmp.blur.highlight.LightPosition
-import top.yukonga.miuix.kmp.blur.highlight.LightSource
-import top.yukonga.miuix.kmp.blur.layerBackdrop as miuixLayerBackdrop
-import top.yukonga.miuix.kmp.blur.rememberLayerBackdrop as rememberMiuixLayerBackdrop
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Search
+import io.github.suqi8.coui.kmp.blur.Backdrop as MiuixBackdrop
+import io.github.suqi8.coui.kmp.blur.blur as miuixBlur
+import io.github.suqi8.coui.kmp.blur.drawBackdrop as miuixDrawBackdrop
+import io.github.suqi8.coui.kmp.blur.highlight.BloomStroke
+import io.github.suqi8.coui.kmp.blur.highlight.Highlight as MiuixHighlight
+import io.github.suqi8.coui.kmp.blur.highlight.LightPosition
+import io.github.suqi8.coui.kmp.blur.highlight.LightSource
+import io.github.suqi8.coui.kmp.blur.layerBackdrop as miuixLayerBackdrop
+import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop as rememberMiuixLayerBackdrop
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.Search
 import top.yukonga.miuix.kmp.basic.NavigationBarDefaults as MiuixNavigationBarDefaults
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 private val iosIndicatorSpecular: MiuixHighlight = MiuixHighlight(
     width = AppSpacingTokens.Micro / 2,
     alpha = 1f,
@@ -1081,7 +1083,7 @@ internal fun Modifier.biliPaiMiuixFloatingDockSurface(
         materialSpec.shellRefractionHeightDp, materialSpec.shellRefractionAmountDp,
         materialSpec.shellChromaticAberration, liquidGlassTuning.saturation,
     ) {
-        val block: top.yukonga.miuix.kmp.blur.BackdropEffectScope.() -> Unit = {
+        val block: io.github.suqi8.coui.kmp.blur.BackdropEffectScope.() -> Unit = {
             if (renderGlassEffects) {
                 val resolvedShellRefractionAmountDp = if (drawShellLens) {
                     materialSpec.shellRefractionAmountDp *
@@ -1133,7 +1135,7 @@ internal fun Modifier.biliPaiMiuixFloatingDockSurface(
     val backdropHighlight = remember(
         baseHighlight, renderGlassEffects, materialSpec.highlightWidthScale, effectiveShellLensIntensity,
     ) {
-        val block: top.yukonga.miuix.kmp.blur.BackdropEffectScope.() -> MiuixHighlight? = {
+        val block: io.github.suqi8.coui.kmp.blur.BackdropEffectScope.() -> MiuixHighlight? = {
             baseHighlight?.value?.copy(
                 alpha = if (renderGlassEffects) {
                     0.75f * materialSpec.highlightWidthScale *
@@ -3762,14 +3764,14 @@ private fun BiliPaiFloatingBottomBarChrome(
         com.android.purebilibili.core.ui.AppNavigationColorRole.BAR,
     )
     val useNativeMiuixNavigation = com.android.purebilibili.core.ui.isMiuixNonGlassEnabled() && uiSkinDecoration == null
-    val themedMiuixSelection = LocalAppUiStyle.current == AppUiStyle.MIUIX &&
+    val themedMiuixSelection = LocalAppUiStyle.current.usesMiuixFamilySkin &&
         !effectiveGlassEnabled && uiSkinDecoration == null
     val themedMd3Selection = LocalAppUiStyle.current == AppUiStyle.MATERIAL3 &&
         !effectiveGlassEnabled && uiSkinDecoration == null
     val nativeSelectionColors = rememberNativeBottomBarSelectionColors()
     val baseSelectedColor = when {
         useNativeMiuixNavigation -> nativeNavigationColors?.selectedContent
-            ?: top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.onSurfaceContainer
+            ?: io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.onSurfaceContainer
         themedMd3Selection -> nativeSelectionColors.content
         else -> AppContentColors.selectionAccent(effectiveGlassEnabled)
     }
@@ -4125,10 +4127,45 @@ private fun BiliPaiFloatingBottomBarChrome(
                                 }
                             }
                         }
-                        if (useNativeMiuixNavigation) {
+                        if (useNativeMiuixNavigation && LocalAppUiStyle.current == AppUiStyle.COUI17) {
+                            // ColorOS 17 的主导航是悬浮胶囊而非贴边导航栏；外层搜索布局仍决定 Dock 的位置与动画，
+                            // 胶囊自身按 COUI 的条目宽度规则排布。未读数沿用 COUI 的数字红点。
+                            io.github.suqi8.coui.kmp.basic.BottomFloatingNavigationBar(
+                                modifier = dockModifier,
+                                backdrop = null,
+                            ) {
+                                visibleItems.forEachIndexed { index, item ->
+                                    val unread = if (shouldShowBottomBarDynamicReminderBadge(item, dynamicUnreadCount)) {
+                                        dynamicUnreadCount
+                                    } else {
+                                        0
+                                    }
+                                    BottomFloatingNavigationBarItem(
+                                        selected = currentItem == item,
+                                        onClick = { handleBottomBarItemClick(index, item) },
+                                        icon = resolveSharedBottomBarIcon(item, false, iconStyle),
+                                        selectedIcon = resolveSharedBottomBarIcon(item, true, iconStyle),
+                                        label = resolveBottomNavItemLabel(item, itemLabels),
+                                        redDot = if (unread > 0) {
+                                            io.github.suqi8.coui.kmp.basic.BottomFloatingRedDot.Count(unread)
+                                        } else {
+                                            null
+                                        },
+                                    )
+                                }
+                                if (isTablet && onToggleSidebar != null) {
+                                    BottomFloatingNavigationBarItem(
+                                        selected = false,
+                                        onClick = ::handleBottomBarSidebarClick,
+                                        icon = resolveSharedBottomBarSidebarIcon(iconStyle),
+                                        label = stringResource(R.string.sidebar_toggle),
+                                    )
+                                }
+                            }
+                        } else if (useNativeMiuixNavigation) {
                             AppPlatformNavigationBar(
                                 modifier = dockModifier.clip(resolveSharedBottomBarCapsuleShape()),
-                                color = top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.surfaceContainer,
+                                color = io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.surfaceContainer,
                                 showDivider = false,
                                 defaultWindowInsetsPadding = false,
                                 mode = resolveMd3BottomBarDisplayMode(labelMode).toAppPlatformNavigationDisplayMode(),
@@ -4923,7 +4960,7 @@ internal fun BiliPaiBottomBarSearchVisualContent(
         ) {
             AppIcon(
                 imageVector = if (iconStyle == SharedFloatingBottomBarIconStyle.MIUIX) {
-                    MiuixIcons.Search
+                    COUIIcons.Search
                 } else {
                     Icons.Outlined.Search
                 },

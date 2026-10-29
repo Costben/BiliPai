@@ -40,7 +40,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.components.ProvideAppActionContentColor
-import top.yukonga.miuix.kmp.window.WindowDialog
+import io.github.suqi8.coui.kmp.window.WindowDialog
 
 enum class AppAlertDialogRenderer {
     MATERIAL_ALERT,
@@ -59,6 +59,11 @@ fun resolveAppAlertDialogRenderer(
         AppAlertDialogRenderer.MATERIAL_ALERT
     }
     AppUiStyle.MATERIAL3 -> AppAlertDialogRenderer.MATERIAL_ALERT
+    AppUiStyle.COUI17 -> if (nativeMiuixPopupsEnabled) {
+        AppAlertDialogRenderer.LOCAL_DIALOG
+    } else {
+        AppAlertDialogRenderer.MATERIAL_ALERT
+    }
 }
 
 data class DialogActionLayoutPolicy(
@@ -403,7 +408,7 @@ private fun NativeMiuixAlertDialogBody(
     confirmButton: @Composable (() -> Unit)?,
     dismissButton: @Composable (() -> Unit)?,
 ) {
-    val typography = top.yukonga.miuix.kmp.theme.MiuixTheme.textStyles
+    val typography = io.github.suqi8.coui.kmp.theme.COUITheme.textStyles
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         icon?.let {
             Box(Modifier.padding(bottom = 12.dp), contentAlignment = Alignment.Center) { it() }
@@ -467,16 +472,16 @@ internal fun AdaptiveDialogAction(
 ) {
     if (isMiuixNonGlassEnabled()) {
         val colors = if (LocalNativeMiuixConfirmAction.current) {
-            top.yukonga.miuix.kmp.basic.ButtonDefaults.buttonColorsPrimary()
+            io.github.suqi8.coui.kmp.basic.ButtonDefaults.buttonColorsPrimary()
         } else {
-            top.yukonga.miuix.kmp.basic.ButtonDefaults.buttonColors()
+            io.github.suqi8.coui.kmp.basic.ButtonDefaults.buttonColors()
         }
-        top.yukonga.miuix.kmp.basic.Button(
+        io.github.suqi8.coui.kmp.basic.Button(
             onClick = onClick,
             modifier = if (LocalNativeMiuixDialogActionRow.current) modifier.fillMaxWidth() else modifier,
             colors = colors,
         ) {
-            ProvideAppActionContentColor(top.yukonga.miuix.kmp.theme.LocalContentColor.current, content)
+            ProvideAppActionContentColor(io.github.suqi8.coui.kmp.theme.LocalContentColor.current, content)
         }
         return
     }

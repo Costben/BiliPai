@@ -32,9 +32,10 @@ import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.AppContentColors
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.basic.VerticalScrollBar
-import top.yukonga.miuix.kmp.basic.rememberScrollBarAdapter
-import top.yukonga.miuix.kmp.interfaces.ExperimentalScrollBarApi
+import io.github.suqi8.coui.kmp.basic.VerticalScrollBar
+import io.github.suqi8.coui.kmp.basic.rememberScrollBarAdapter
+import io.github.suqi8.coui.kmp.interfaces.ExperimentalScrollBarApi
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /** 菜单右侧滚动提示共用正文状态；无溢出时不占触摸区域。 */
 @OptIn(ExperimentalScrollBarApi::class)
@@ -45,7 +46,7 @@ internal fun AppMenuScrollbar(
     glass: Boolean = false,
 ) {
     if (scrollState.viewportSize <= 0 || scrollState.maxValue <= 0 || scrollState.maxValue == Int.MAX_VALUE) return
-    if (!glass && LocalAppUiStyle.current == AppUiStyle.MIUIX) {
+    if (!glass && LocalAppUiStyle.current.usesMiuixFamilySkin) {
         VerticalScrollBar(
             adapter = rememberScrollBarAdapter(scrollState),
             modifier = modifier.fillMaxHeight(),

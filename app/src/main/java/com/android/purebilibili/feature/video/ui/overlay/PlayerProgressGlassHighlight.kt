@@ -15,10 +15,10 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.inset
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import top.yukonga.miuix.kmp.blur.LocalRuntimeShaderCache
-import top.yukonga.miuix.kmp.blur.RuntimeShaderCache
-import top.yukonga.miuix.kmp.blur.highlight.BloomStroke
-import top.yukonga.miuix.kmp.blur.highlight.Highlight
+import io.github.suqi8.coui.kmp.blur.LocalRuntimeShaderCache
+import io.github.suqi8.coui.kmp.blur.RuntimeShaderCache
+import io.github.suqi8.coui.kmp.blur.highlight.BloomStroke
+import io.github.suqi8.coui.kmp.blur.highlight.Highlight
 
 /** 仅玻璃播放器使用轨道高光；不增加背景采样，也不改变原生轨道尺寸和触摸区域。 */
 @Composable

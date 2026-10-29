@@ -30,6 +30,12 @@ internal fun resolveSharedLiquidGlassChromeEnabled(
     androidNativeLiquidGlassEnabled: Boolean
 ): Boolean = resolveGlobalLiquidGlassReuseEnabled(androidNativeLiquidGlassEnabled)
 
+// ColorOS 17 的主导航只有悬浮胶囊一种形态；COUI 17 下贴边底栏只在渲染时改为悬浮，用户保存值不变。
 internal fun resolveEffectiveHomeSettings(
     homeSettings: HomeSettings,
-): HomeSettings = homeSettings
+    uiStyle: AppUiStyle = AppUiStyle.MATERIAL3,
+): HomeSettings = if (uiStyle == AppUiStyle.COUI17 && !homeSettings.isBottomBarFloating) {
+    homeSettings.copy(isBottomBarFloating = true)
+} else {
+    homeSettings
+}

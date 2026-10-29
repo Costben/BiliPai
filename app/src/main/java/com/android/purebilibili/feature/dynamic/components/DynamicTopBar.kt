@@ -55,7 +55,7 @@ import java.io.File
 import com.android.purebilibili.core.ui.components.LocalAppTopBarIconDecorationEnabled
 import com.android.purebilibili.core.ui.components.LocalAppTopBarIconBackdrop
 import com.android.purebilibili.feature.home.components.BiliPaiImmersiveTopBar
-import top.yukonga.miuix.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
 import com.android.purebilibili.core.ui.blur.BlurSurfaceType
 import com.android.purebilibili.core.ui.blur.unifiedBlur
 import com.android.purebilibili.core.ui.blur.recoverableBlurEnabled

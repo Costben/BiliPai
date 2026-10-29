@@ -27,6 +27,7 @@ import com.android.purebilibili.core.ui.adaptiveSquircleBackground
 import com.android.purebilibili.core.ui.AppIconStyle
 import com.android.purebilibili.core.ui.rememberResolvedAppIconStyle
 import com.android.purebilibili.core.ui.LocalAppThemeConfig
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /** Opt-in at the settings boundary; other preferences and MD3 retain their defaults. */
 val LocalAppPreferenceIconColors = staticCompositionLocalOf<Map<String, Color>?> { null }
@@ -38,7 +39,7 @@ fun useColorfulPreferenceIcons(): Boolean = resolveUsesColorfulPreferenceIcons(
 
 internal fun resolveUsesColorfulPreferenceIcons(style: AppIconStyle, uiStyle: AppUiStyle, settingsScope: Boolean): Boolean = when (style) {
     AppIconStyle.SOFT_COLORFUL, AppIconStyle.VIVID_COLORFUL -> true
-    AppIconStyle.AUTO -> uiStyle == AppUiStyle.MIUIX && settingsScope
+    AppIconStyle.AUTO -> uiStyle.usesMiuixFamilySkin && settingsScope
     else -> false
 }
 

@@ -47,7 +47,7 @@ import com.android.purebilibili.feature.home.components.LocalLiquidGlassRenderCo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
 import kotlin.math.roundToInt
 
 /**

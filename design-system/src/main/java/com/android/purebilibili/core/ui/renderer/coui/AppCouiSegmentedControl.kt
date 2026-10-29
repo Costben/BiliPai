@@ -1,4 +1,4 @@
-package com.android.purebilibili.core.ui.renderer.miuix
+package com.android.purebilibili.core.ui.renderer.coui
 
 import com.android.purebilibili.core.ui.components.tabIndicatorBounds
 import androidx.compose.foundation.layout.Box
@@ -40,7 +40,7 @@ import com.android.purebilibili.core.ui.LocalImmersiveTopChromeActive
 import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.isMiuixNonGlassEnabled
 import com.android.purebilibili.core.ui.components.shouldUseOpaqueMiuixTabBackdrop
-import top.yukonga.miuix.kmp.squircle.addSquircleRect
+import io.github.suqi8.coui.kmp.squircle.addSquircleRect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalDensity
@@ -70,11 +70,11 @@ import com.android.purebilibili.core.ui.resolveRoundedControlVisualGeometry
 import com.android.purebilibili.core.ui.resolveMiuixNonGlassControlGeometry
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
-import top.yukonga.miuix.kmp.basic.TabRow
-import top.yukonga.miuix.kmp.basic.TabRowDefaults
-import top.yukonga.miuix.kmp.squircle.squircleClip
-import top.yukonga.miuix.kmp.squircle.squircleBorder
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.basic.TabRow
+import io.github.suqi8.coui.kmp.basic.TabRowDefaults
+import io.github.suqi8.coui.kmp.squircle.squircleClip
+import io.github.suqi8.coui.kmp.squircle.squircleBorder
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.semantics.Role
@@ -82,10 +82,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.resolveMiuixNonGlassContentTabItemWidths
 import com.android.purebilibili.core.ui.components.resolveElasticTabIndicatorBounds
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 
 @Composable
-internal fun <T> AppMiuixSegmentedControl(
+internal fun <T> AppCouiSegmentedControl(
     options: List<AppSegmentOption<T>>,
     selectedValue: T,
     enabled: Boolean,
@@ -99,7 +100,7 @@ internal fun <T> AppMiuixSegmentedControl(
     onSelectionChange: (T) -> Unit,
 ) {
     // Compact choices use the same native geometry and transition as other Miuix tabs.
-    AppMiuixNonGlassTabs(
+    AppCouiNonGlassTabs(
         options = options,
         selectedValue = selectedValue,
         enabled = enabled,
@@ -118,7 +119,7 @@ internal fun <T> AppMiuixSegmentedControl(
 }
 
 @Composable
-internal fun <T> AppMiuixTabRow(
+internal fun <T> AppCouiTabRow(
     options: List<AppSegmentOption<T>>,
     selectedValue: T,
     enabled: Boolean,
@@ -142,10 +143,10 @@ internal fun <T> AppMiuixTabRow(
 ) {
     // Native Miuix controls keep measured, padding-aware slots under either material.
     // Actual liquid dock rendering is selected outside this renderer.
-    if (LocalAppUiStyle.current == AppUiStyle.MIUIX || fixedItemWidth != null ||
+    if (LocalAppUiStyle.current.usesMiuixFamilySkin || fixedItemWidth != null ||
         labelFontSize.isSpecified || containerHorizontalPadding != 0.dp
     ) {
-        AppMiuixNonGlassTabs(
+        AppCouiNonGlassTabs(
             options = options,
             selectedValue = selectedValue,
             enabled = enabled,
@@ -169,7 +170,7 @@ internal fun <T> AppMiuixTabRow(
         return
     }
     if (contentSizedNonGlassItems && scrollable) {
-        AppMiuixNonGlassTabs(
+        AppCouiNonGlassTabs(
             options = options,
             selectedValue = selectedValue,
             enabled = enabled,
@@ -189,9 +190,9 @@ internal fun <T> AppMiuixTabRow(
         )
         return
     }
-    if (LocalAppUiStyle.current == AppUiStyle.MIUIX) {
+    if (LocalAppUiStyle.current.usesMiuixFamilySkin) {
         if (options.size <= 2 && !scrollable) {
-            AppMiuixSegmentedControl(
+            AppCouiSegmentedControl(
                 options = options,
                 selectedValue = selectedValue,
                 enabled = enabled,
@@ -203,7 +204,7 @@ internal fun <T> AppMiuixTabRow(
             )
             return
         }
-        AppMiuixNonGlassTabs(
+        AppCouiNonGlassTabs(
             options = options,
             selectedValue = selectedValue,
             enabled = enabled,
@@ -260,7 +261,7 @@ internal fun <T> AppMiuixTabRow(
 
 /** Opaque controls measure labels before applying the caller's size preferences. */
 @Composable
-private fun <T> AppMiuixNonGlassTabs(
+private fun <T> AppCouiNonGlassTabs(
     options: List<AppSegmentOption<T>>,
     selectedValue: T,
     enabled: Boolean,
@@ -290,8 +291,8 @@ private fun <T> AppMiuixNonGlassTabs(
     val density = LocalDensity.current
     val measurer = rememberTextMeasurer()
     val tabColors = resolveAppMiuixSegmentedColors(colors)
-    val style = MiuixTheme.textStyles.main.copy(
-        fontSize = if (labelFontSize.isSpecified) labelFontSize else MiuixTheme.textStyles.body1.fontSize,
+    val style = COUITheme.textStyles.main.copy(
+        fontSize = if (labelFontSize.isSpecified) labelFontSize else COUITheme.textStyles.body1.fontSize,
         fontWeight = FontWeight.Bold,
     )
     val labelSizes = remember(labels, measurementLabels, style, measurer, density) {
@@ -317,10 +318,10 @@ private fun <T> AppMiuixNonGlassTabs(
     val geometry = resolveMiuixNonGlassControlGeometry(compact, textHeight)
     // Native Miuix controls keep measured, padding-aware slots under either material.
     // Actual liquid dock rendering is selected outside this renderer.
-    if (LocalAppUiStyle.current == AppUiStyle.MIUIX || fixedItemWidth != null ||
+    if (LocalAppUiStyle.current.usesMiuixFamilySkin || fixedItemWidth != null ||
         labelFontSize.isSpecified || containerHorizontalPadding != 0.dp
     ) {
-        AppMiuixSizedTabs(
+        AppCouiSizedTabs(
             options = options,
             selectedIndex = selectedIndex,
             enabled = enabled,
@@ -334,15 +335,15 @@ private fun <T> AppMiuixNonGlassTabs(
             ),
             equalizeItemWidths = equalizeScrollableItemWidths,
             colors = nativeNavigation?.let { palette -> AppSegmentedControlColors(
-                outerContainerColor = MiuixTheme.colorScheme.surface,
+                outerContainerColor = COUITheme.colorScheme.surface,
                 activeContainerColor = palette.selectedContainer,
                 activeContentColor = palette.selectedContent,
                 inactiveContentColor = palette.unselectedContent,
             ) } ?: if (nativeStyle) AppSegmentedControlColors(
-                outerContainerColor = MiuixTheme.colorScheme.surface,
-                activeContainerColor = MiuixTheme.colorScheme.surfaceContainer,
-                activeContentColor = MiuixTheme.colorScheme.onBackground,
-                inactiveContentColor = MiuixTheme.colorScheme.onSurfaceVariantSummary,
+                outerContainerColor = COUITheme.colorScheme.surface,
+                activeContainerColor = COUITheme.colorScheme.surfaceContainer,
+                activeContentColor = COUITheme.colorScheme.onBackground,
+                inactiveContentColor = COUITheme.colorScheme.onSurfaceVariantSummary,
             ) else colors,
             height = maxOf(height ?: geometry.height, geometry.height),
             cornerRadius = geometry.cornerRadius,
@@ -358,7 +359,7 @@ private fun <T> AppMiuixNonGlassTabs(
         return
     }
     if (contentSizedItems && scrollable) {
-        AppMiuixContentSizedNonGlassTabs(
+        AppCouiContentSizedNonGlassTabs(
             options = options,
             selectedValue = selectedValue,
             selectedIndex = selectedIndex,
@@ -433,7 +434,7 @@ private fun <T> AppMiuixNonGlassTabs(
 }
 
 @Composable
-private fun <T> AppMiuixContentSizedNonGlassTabs(
+private fun <T> AppCouiContentSizedNonGlassTabs(
     options: List<AppSegmentOption<T>>,
     selectedValue: T,
     selectedIndex: Int,
@@ -545,7 +546,7 @@ private fun <T> AppMiuixContentSizedNonGlassTabs(
                             tabColors.contentColor
                         },
                         fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
-                        fontSize = MiuixTheme.textStyles.body1.fontSize,
+                        fontSize = COUITheme.textStyles.body1.fontSize,
                         maxLines = 1,
                         softWrap = false,
                         overflow = TextOverflow.Visible,
@@ -557,7 +558,7 @@ private fun <T> AppMiuixContentSizedNonGlassTabs(
 }
 
 @Composable
-private fun <T> AppMiuixSizedTabs(
+private fun <T> AppCouiSizedTabs(
     options: List<AppSegmentOption<T>>,
     selectedIndex: Int,
     enabled: Boolean,
@@ -579,7 +580,7 @@ private fun <T> AppMiuixSizedTabs(
 ) {
     val tabColors = resolveAppMiuixSegmentedColors(colors)
     val nativeStyle = isMiuixNonGlassEnabled()
-    val scheme = MiuixTheme.colorScheme
+    val scheme = COUITheme.colorScheme
     val itemClip = Modifier.squircleClip(cornerRadius)
     val density = LocalDensity.current
     val scrollState = rememberScrollState()

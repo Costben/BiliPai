@@ -10,7 +10,8 @@ import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.ContainerLevel
 import com.android.purebilibili.core.ui.renderer.material3.AppMaterial3Card
-import com.android.purebilibili.core.ui.renderer.miuix.AppMiuixCard
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiCard
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiCard
 
 @Immutable
 sealed interface AppCardShape {
@@ -66,7 +67,16 @@ fun AppCard(
             onLongClick = onLongClick,
             content = content,
         )
-        AppUiStyle.MIUIX -> AppMiuixCard(
+        AppUiStyle.MIUIX -> AppCouiCard(
+            // Miuix exposes one native Card variant; both app variants map to that component.
+            modifier = modifier,
+            shape = shape,
+            colors = resolvedColors,
+            onClick = onClick,
+            onLongClick = onLongClick,
+            content = content,
+        )
+        AppUiStyle.COUI17 -> AppCouiCard(
             // Miuix exposes one native Card variant; both app variants map to that component.
             modifier = modifier,
             shape = shape,

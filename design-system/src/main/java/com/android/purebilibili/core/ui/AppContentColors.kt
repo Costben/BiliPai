@@ -49,7 +49,7 @@ object AppContentColors {
     @Composable
     @ReadOnlyComposable
     fun onAccent(): Color = if (nativeInteractionColorsEnabled()) {
-        top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.onPrimary
+        io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.onPrimary
     } else MaterialTheme.colorScheme.onPrimary
 
     @Composable
@@ -110,7 +110,7 @@ private fun ProvideResolvedAppContentColors(miuixContentColors: Boolean, content
     CompositionLocalProvider(
         LocalAppContentPalette provides palette,
         androidx.compose.material3.LocalContentColor provides foreground,
-        top.yukonga.miuix.kmp.theme.LocalContentColor provides foreground,
+        io.github.suqi8.coui.kmp.theme.LocalContentColor provides foreground,
         content = content,
     )
 }

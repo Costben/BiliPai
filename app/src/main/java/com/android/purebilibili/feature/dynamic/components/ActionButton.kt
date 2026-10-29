@@ -44,9 +44,10 @@ import com.android.purebilibili.core.ui.rememberAppLikeIcon
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.feature.dynamic.resolveDynamicActionButtonText
-import top.yukonga.miuix.kmp.basic.ButtonDefaults as MiuixButtonDefaults
-import top.yukonga.miuix.kmp.theme.MiuixTheme
-import top.yukonga.miuix.kmp.basic.Button as MiuixButton
+import io.github.suqi8.coui.kmp.basic.ButtonDefaults as MiuixButtonDefaults
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import io.github.suqi8.coui.kmp.basic.Button as MiuixButton
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 /**
  *  iOS 风格操作按钮 - 现代化胶囊设计
  *
@@ -72,11 +73,11 @@ fun ActionButton(
     val isComment = label == "评论"
 
     // Ordinary actions remain neutral; confirmed likes use the active theme accent.
-    val miuix = LocalAppUiStyle.current == AppUiStyle.MIUIX
-    val neutralContentColor = if (miuix) MiuixTheme.colorScheme.onSecondaryVariant
+    val miuix = LocalAppUiStyle.current.usesMiuixFamilySkin
+    val neutralContentColor = if (miuix) COUITheme.colorScheme.onSecondaryVariant
         else colorScheme.onSurfaceVariant
     val buttonColor = when {
-        !enabled -> if (miuix) MiuixTheme.colorScheme.disabledOnSecondaryVariant
+        !enabled -> if (miuix) COUITheme.colorScheme.disabledOnSecondaryVariant
             else colorScheme.onSurface.copy(alpha = 0.38f)
         isLike && isActive -> DynamicStatusPalette.liked()
         else -> neutralContentColor
@@ -107,7 +108,7 @@ fun ActionButton(
         }
 
         // Miuix 动态底栏统一使用原生 Button，保证图标、文字、触控区与桌面 PiliPlus 风格一致。
-        if (LocalAppUiStyle.current == AppUiStyle.MIUIX) {
+        if (LocalAppUiStyle.current.usesMiuixFamilySkin) {
             MiuixButton(
                 onClick = onClick,
                 enabled = enabled,

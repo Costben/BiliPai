@@ -103,13 +103,13 @@ import com.android.purebilibili.core.store.resolveGlobalLiquidGlassReuseEnabled
 import com.android.purebilibili.core.store.resolveHomeHeaderBlurEnabled
 import com.android.purebilibili.navigation.resolveAppNavigationAppearance
 import java.io.File
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Messages
-import top.yukonga.miuix.kmp.icon.extended.Search
-import top.yukonga.miuix.kmp.icon.extended.Settings
-import top.yukonga.miuix.kmp.blur.drawBackdrop as miuixDrawBackdrop
-import top.yukonga.miuix.kmp.blur.blur as miuixBlur
-import top.yukonga.miuix.kmp.blur.ProgressiveBlur
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.Messages
+import io.github.suqi8.coui.kmp.icon.extended.Search
+import io.github.suqi8.coui.kmp.icon.extended.Settings
+import io.github.suqi8.coui.kmp.blur.drawBackdrop as miuixDrawBackdrop
+import io.github.suqi8.coui.kmp.blur.blur as miuixBlur
+import io.github.suqi8.coui.kmp.blur.ProgressiveBlur
 
 private const val HOME_HEADER_LIQUID_GLASS_ALPHA = 0.10f
 
@@ -127,9 +127,9 @@ internal fun resolveHomeTopActionIcons(iconFamily: AppSemanticIconFamily): HomeT
             inbox = resolveAppInboxIcon(),
         )
         AppSemanticIconFamily.MIUIX -> HomeTopActionIcons(
-            search = MiuixIcons.Search,
-            settings = MiuixIcons.Settings,
-            inbox = MiuixIcons.Messages,
+            search = COUIIcons.Search,
+            settings = COUIIcons.Settings,
+            inbox = COUIIcons.Messages,
         )
     }
 
@@ -1350,7 +1350,7 @@ internal fun Modifier.homeTopChromeSurface(
     shape: Shape,
     surfaceColor: Color,
     hazeState: HazeState?,
-    miuixBackdrop: top.yukonga.miuix.kmp.blur.Backdrop? = null,
+    miuixBackdrop: io.github.suqi8.coui.kmp.blur.Backdrop? = null,
     liquidStyle: LiquidGlassStyle,
     liquidGlassTuning: LiquidGlassTuning? = null,
     liquidGlassPreset: BottomBarLiquidGlassPreset = BottomBarLiquidGlassPreset.BILIPAI_TUNED,
@@ -1508,7 +1508,7 @@ fun HomeHeader(
     pullProgress: Float = 0f,  // 0.0 ~ 1.0+ 下拉进度
     pagerState: androidx.compose.foundation.pager.PagerState? = null, // [New] PagerState for sync
     // Miuix is the single liquid-glass renderer for the home chrome.
-    miuixBackdrop: top.yukonga.miuix.kmp.blur.Backdrop? = null,
+    miuixBackdrop: io.github.suqi8.coui.kmp.blur.Backdrop? = null,
     homeSettings: com.android.purebilibili.core.store.HomeSettings? = null,
     topTabsVisible: Boolean = true,
     topTabsCollapsed: Boolean = false,

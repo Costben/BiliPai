@@ -1,4 +1,4 @@
-package com.android.purebilibili.core.ui.renderer.miuix
+package com.android.purebilibili.core.ui.renderer.coui
 
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
@@ -12,13 +12,13 @@ import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.LocalAppThemeConfig
 import com.android.purebilibili.core.ui.components.AppCardColors
 import com.android.purebilibili.core.ui.components.AppCardShape
-import top.yukonga.miuix.kmp.basic.Card
-import top.yukonga.miuix.kmp.basic.CardDefaults
-import top.yukonga.miuix.kmp.theme.MiuixTheme
-import top.yukonga.miuix.kmp.utils.PressFeedbackType
+import io.github.suqi8.coui.kmp.basic.Card
+import io.github.suqi8.coui.kmp.basic.CardDefaults
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import io.github.suqi8.coui.kmp.utils.PressFeedbackType
 
 @Composable
-internal fun AppMiuixCard(
+internal fun AppCouiCard(
     modifier: Modifier,
     shape: AppCardShape?,
     colors: AppCardColors?,
@@ -46,7 +46,7 @@ internal fun AppMiuixCard(
             onLongPress = onLongClick,
             content = {
                 CompositionLocalProvider(
-                    androidx.compose.material3.LocalContentColor provides top.yukonga.miuix.kmp.theme.LocalContentColor.current,
+                    androidx.compose.material3.LocalContentColor provides io.github.suqi8.coui.kmp.theme.LocalContentColor.current,
                 ) {
                     content()
                 }
@@ -59,7 +59,7 @@ internal fun AppMiuixCard(
             colors = resolvedColors,
             content = {
                 CompositionLocalProvider(
-                    androidx.compose.material3.LocalContentColor provides top.yukonga.miuix.kmp.theme.LocalContentColor.current,
+                    androidx.compose.material3.LocalContentColor provides io.github.suqi8.coui.kmp.theme.LocalContentColor.current,
                 ) {
                     content()
                 }
@@ -80,11 +80,11 @@ private fun AppCardShape.toMiuixCornerRadius(): Dp = when (this) {
 
 @Composable
 private fun miuixCardContentColorFor(backgroundColor: Color): Color {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     return when (backgroundColor) {
         colors.surfaceContainer -> colors.onSurfaceContainer
         colors.surfaceContainerHigh -> colors.onSurfaceContainerHigh
         colors.surfaceContainerHighest -> colors.onSurfaceContainerHighest
-        else -> miuixContentColorFor(backgroundColor)
+        else -> couiContentColorFor(backgroundColor)
     }
 }

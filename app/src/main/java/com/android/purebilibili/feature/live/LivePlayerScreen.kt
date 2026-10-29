@@ -121,8 +121,8 @@ import com.android.purebilibili.feature.live.components.LiveSuperChatFlashOverla
 import com.android.purebilibili.feature.live.components.LiveShareToMessageSheet
 import com.android.purebilibili.core.ui.components.AppSegmentOption
 import com.android.purebilibili.core.ui.components.AppThemeAdaptiveTabRow
-import top.yukonga.miuix.kmp.blur.layerBackdrop
-import top.yukonga.miuix.kmp.blur.rememberLayerBackdrop
+import io.github.suqi8.coui.kmp.blur.layerBackdrop
+import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop
 import com.android.purebilibili.feature.video.player.shouldContinuePlaybackDuringPause
 import com.android.purebilibili.feature.video.state.isPlaybackActiveForLifecycle
 import com.android.purebilibili.feature.video.state.shouldResumeAfterLifecyclePause

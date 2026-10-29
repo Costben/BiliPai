@@ -3810,7 +3810,7 @@ private data class ProfileProgressiveTopChrome(
     val source: ChromeBackdropSource?,
     val enabled: Boolean,
 ) {
-    val backdrop: top.yukonga.miuix.kmp.blur.Backdrop?
+    val backdrop: io.github.suqi8.coui.kmp.blur.Backdrop?
         get() = source?.takeIf { it.isReady }?.backdrop
 }
 

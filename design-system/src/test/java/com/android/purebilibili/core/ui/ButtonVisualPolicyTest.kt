@@ -75,7 +75,7 @@ class ButtonVisualPolicyTest {
             custom,
             resolveAppButtonContentPadding(AppUiStyle.MATERIAL3, custom, defaultPadding),
         )
-        // MIUIX:原样透传,由 AppMiuixButton 的 insideMargin 管线控制。
+        // MIUIX:原样透传,由 AppCouiButton 的 insideMargin 管线控制。
         assertEquals(
             defaultPadding,
             resolveAppButtonContentPadding(AppUiStyle.MIUIX, defaultPadding, defaultPadding),

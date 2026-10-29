@@ -1053,6 +1053,7 @@ private fun VideoInfoChip(
     val shape = when (LocalAppUiStyle.current) {
         AppUiStyle.MATERIAL3 -> MaterialTheme.shapes.small
         AppUiStyle.MIUIX -> AppShapes.container(ContainerLevel.Tag)
+        AppUiStyle.COUI17 -> AppShapes.container(ContainerLevel.Tag)
     }
     Box(
         modifier = modifier

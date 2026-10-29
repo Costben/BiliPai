@@ -8,10 +8,10 @@ import com.android.purebilibili.core.ui.components.appActionClickable
 import com.android.purebilibili.core.ui.AppContentColors
 
 import com.android.purebilibili.core.ui.components.appSearchElasticPress
-import top.yukonga.miuix.kmp.window.WindowListPopup
-import top.yukonga.miuix.kmp.basic.ListPopupColumn
-import top.yukonga.miuix.kmp.basic.ListPopupDefaults
-import top.yukonga.miuix.kmp.basic.PopupPositionProvider
+import io.github.suqi8.coui.kmp.window.WindowListPopup
+import io.github.suqi8.coui.kmp.basic.ListPopupColumn
+import io.github.suqi8.coui.kmp.basic.ListPopupDefaults
+import io.github.suqi8.coui.kmp.basic.PopupPositionProvider
 
 import com.android.purebilibili.navigation.animatePagerSelection
 
@@ -234,7 +234,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
-import top.yukonga.miuix.kmp.blur.Backdrop as MiuixBackdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop as MiuixBackdrop
 import com.android.purebilibili.core.ui.blur.rememberChromeBackdropSource
 
 internal enum class MusicGlassMaterialMode {

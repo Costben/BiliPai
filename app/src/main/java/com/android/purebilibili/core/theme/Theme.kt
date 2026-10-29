@@ -189,7 +189,7 @@ internal fun resolveMiuixColorSchemeMode(
 }
 
 internal fun shouldUseNativeMiuixPalette(uiStyle: AppUiStyle): Boolean =
-    uiStyle == AppUiStyle.MIUIX
+    uiStyle.usesMiuixFamilySkin
 
 internal fun resolvePaletteStylePreference(rawValue: String?): PaletteStyle {
     return runCatching {
@@ -1110,7 +1110,7 @@ fun PureBiliBiliTheme(
     ) {
         MiuixTheme(
             controller = controller,
-            textStyles = miuixTextStyles
+            textStyles = remember(miuixTextStyles) { miuixTextStyles.toMiuixTextStyles() }
         ) {
             MaterialTheme(
                 colorScheme = materialColorScheme,
@@ -1118,11 +1118,36 @@ fun PureBiliBiliTheme(
                 shapes = shapes,
                 motionScheme = materialMotionScheme,
                 content = {
-                    com.android.purebilibili.core.ui.ProvideAppContentColors(
-                        nativeInteractionColors = com.android.purebilibili.core.ui.isMiuixNonGlassEnabled(uiStyle, liquidGlassEnabled),
-                        miuixContentColors = uiStyle == AppUiStyle.MIUIX,
-                        content = content,
-                    )
+                    val themedContent: @Composable () -> Unit = {
+                        com.android.purebilibili.core.ui.ProvideAppContentColors(
+                            nativeInteractionColors = com.android.purebilibili.core.ui.isMiuixNonGlassEnabled(uiStyle, liquidGlassEnabled),
+                            miuixContentColors = uiStyle.usesMiuixFamilySkin,
+                            content = content,
+                        )
+                    }
+                    // COUI 组件在所有皮肤下都可能出现（共享门面直接调用），因此始终提供 COUITheme；
+                    // 色板与动画帧同源，非 COUI 皮肤读到的就是原先 Miuix 的那一份颜色。
+                    val couiColors = remember(animatedPalette.miuix, uiStyle, darkTheme) {
+                        val bridged = animatedPalette.miuix.toCouiColors()
+                        if (uiStyle == AppUiStyle.COUI17) bridged.withNativeNavigationRoles(darkTheme) else bridged
+                    }
+                    val outerOverscroll = androidx.compose.foundation.LocalOverscrollFactory.current
+                    val outerIndication = androidx.compose.foundation.LocalIndication.current
+                    io.github.suqi8.coui.kmp.theme.COUITheme(
+                        colors = couiColors,
+                        textStyles = miuixTextStyles,
+                    ) {
+                        if (uiStyle == AppUiStyle.COUI17) {
+                            themedContent()
+                        } else {
+                            // 只有 COUI 17 才换 ColorOS 的回弹与按压反馈，其余皮肤保持原有手感。
+                            CompositionLocalProvider(
+                                androidx.compose.foundation.LocalOverscrollFactory provides outerOverscroll,
+                                androidx.compose.foundation.LocalIndication provides outerIndication,
+                                content = themedContent,
+                            )
+                        }
+                    }
                 }
             )
         }

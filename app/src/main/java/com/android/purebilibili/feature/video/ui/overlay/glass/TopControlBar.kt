@@ -683,7 +683,7 @@ private fun AdaptivePlayerTitleInfoDock(
     val textMeasurer = rememberTextMeasurer()
     val baseTextStyle = if (com.android.purebilibili.core.theme.LocalAppUiStyle.current ==
         com.android.purebilibili.core.theme.AppUiStyle.MIUIX) {
-        top.yukonga.miuix.kmp.theme.MiuixTheme.textStyles.main
+        io.github.suqi8.coui.kmp.theme.COUITheme.textStyles.main
     } else LocalTextStyle.current
     val metaTextStyle = baseTextStyle.copy(fontSize = 11.sp, lineHeight = 14.sp)
     val density = LocalDensity.current

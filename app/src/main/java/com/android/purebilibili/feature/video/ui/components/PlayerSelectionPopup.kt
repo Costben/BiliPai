@@ -46,10 +46,11 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.*
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
-import top.yukonga.miuix.kmp.basic.DropdownImpl
-import top.yukonga.miuix.kmp.basic.DropdownItem
-import top.yukonga.miuix.kmp.basic.SmallTitle
+import io.github.suqi8.coui.kmp.basic.DropdownImpl
+import io.github.suqi8.coui.kmp.basic.DropdownItem
+import io.github.suqi8.coui.kmp.basic.SmallTitle
 import kotlin.math.roundToInt
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 enum class PlayerListPopupPlacement { CENTER, START, END, END_BOTTOM, ANCHOR_END }
 
@@ -136,7 +137,7 @@ fun PlayerSelectionPopup(
         .heightIn(max = height)
         .semantics { paneTitle = title }
 
-    if (LocalAppUiStyle.current == AppUiStyle.MIUIX) {
+    if (LocalAppUiStyle.current.usesMiuixFamilySkin) {
         // 和倍速 / 画面比例菜单一致的行为：点菜单外收起菜单，且这一下点击被遮罩吃掉、
         // 不穿透给下层按钮（否则会出现"关闭又被同一个点击重新打开"的闪烁）。
         // 做法：Popup 内容铺满全屏 —— 一层透明遮罩负责消费点击并关闭，菜单本身叠在其上。
@@ -378,7 +379,7 @@ internal fun PlayerNativeDropdownItem(
         )
         return
     }
-    if (LocalAppUiStyle.current == AppUiStyle.MIUIX) {
+    if (LocalAppUiStyle.current.usesMiuixFamilySkin) {
         Box(modifier = itemModifier) {
             DropdownImpl(
                 item = item,

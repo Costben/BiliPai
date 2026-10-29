@@ -1,7 +1,7 @@
 package com.android.purebilibili.feature.home.components.liquid
 
-import top.yukonga.miuix.kmp.blur.BackdropEffectScope
-import top.yukonga.miuix.kmp.blur.colorControls
+import io.github.suqi8.coui.kmp.blur.BackdropEffectScope
+import io.github.suqi8.coui.kmp.blur.colorControls
 
 fun BackdropEffectScope.vibrancy(saturation: Float = 1.5f) {
     colorControls(

@@ -8,7 +8,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
-import top.yukonga.miuix.kmp.theme.defaultTextStyles
+import io.github.suqi8.coui.kmp.theme.defaultTextStyles
 
 class AppDisplayPolicyTest {
 

@@ -17,13 +17,13 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.android.purebilibili.core.ui.performance.isLowBlurBudgetForced
-import top.yukonga.miuix.kmp.blur.Backdrop
-import top.yukonga.miuix.kmp.blur.BlendColorEntry
-import top.yukonga.miuix.kmp.blur.BlurColors
-import top.yukonga.miuix.kmp.blur.ProgressiveBlur
-import top.yukonga.miuix.kmp.blur.drawBackdrop
-import top.yukonga.miuix.kmp.blur.progressiveTextureBlurEffect
-import top.yukonga.miuix.kmp.blur.progressiveTextureBlur
+import io.github.suqi8.coui.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.BlendColorEntry
+import io.github.suqi8.coui.kmp.blur.BlurColors
+import io.github.suqi8.coui.kmp.blur.ProgressiveBlur
+import io.github.suqi8.coui.kmp.blur.drawBackdrop
+import io.github.suqi8.coui.kmp.blur.progressiveTextureBlurEffect
+import io.github.suqi8.coui.kmp.blur.progressiveTextureBlur
 
 internal const val BILIPAI_PROGRESSIVE_TOP_BLUR_RADIUS_DP = 10f
 internal const val BILIPAI_PROGRESSIVE_TOP_BLUR_START_FRACTION = 0f

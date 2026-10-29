@@ -27,7 +27,7 @@ import com.android.purebilibili.core.ui.motion.scrollCompactExpansionSpring
 import com.android.purebilibili.core.ui.motion.interactiveSnapSpring
 import com.android.purebilibili.core.ui.motion.rememberSystemReduceMotion
 import dev.chrisbanes.haze.HazeState
-import top.yukonga.miuix.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
 import kotlin.math.roundToInt
 
 internal fun resolveScrollCompactExtent(expanded: Int, button: Int, progress: Float): Int =

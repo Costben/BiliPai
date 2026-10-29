@@ -37,7 +37,7 @@ class ThemeSelectionMigrationPolicyTest {
                 keyVariant to AndroidNativeVariant.MATERIAL3.value
             )
         )
-        assertEquals(AppUiStyle.MIUIX, result.selection)
+        assertEquals(AppUiStyle.COUI17, result.selection)
         assertTrue(result.needsWrite)
     }
 
@@ -56,36 +56,36 @@ class ThemeSelectionMigrationPolicyTest {
     // --- 迁移表 ---
 
     @Test
-    fun legacyIos_withMiuixVariant_migratesToMiuix() {
+    fun legacyIos_withMiuixVariant_migratesToCoui17() {
         val result = migrate(
             mutablePreferencesOf(
                 keyPreset to UiPreset.IOS.value,
                 keyVariant to AndroidNativeVariant.MIUIX.value
             )
         )
-        assertEquals(AppUiStyle.MIUIX, result.selection)
+        assertEquals(AppUiStyle.COUI17, result.selection)
     }
 
     @Test
-    fun legacyIos_withMaterial3Variant_migratesToMiuix() {
+    fun legacyIos_withMaterial3Variant_migratesToCoui17() {
         val result = migrate(
             mutablePreferencesOf(
                 keyPreset to UiPreset.IOS.value,
                 keyVariant to AndroidNativeVariant.MATERIAL3.value
             )
         )
-        assertEquals(AppUiStyle.MIUIX, result.selection)
+        assertEquals(AppUiStyle.COUI17, result.selection)
     }
 
     @Test
-    fun legacyMd3_withMiuixVariant_keepsMiuix() {
+    fun legacyMd3_withMiuixVariant_migratesToCoui17() {
         val result = migrate(
             mutablePreferencesOf(
                 keyPreset to UiPreset.MD3.value,
                 keyVariant to AndroidNativeVariant.MIUIX.value
             )
         )
-        assertEquals(AppUiStyle.MIUIX, result.selection)
+        assertEquals(AppUiStyle.COUI17, result.selection)
     }
 
     @Test
@@ -107,14 +107,14 @@ class ThemeSelectionMigrationPolicyTest {
     }
 
     @Test
-    fun invalidKeys_migrateToMiuix() {
+    fun invalidKeys_migrateToCoui17() {
         val result = migrate(
             mutablePreferencesOf(
                 keyPreset to 99,
                 keyVariant to 99
             )
         )
-        assertEquals(AppUiStyle.MIUIX, result.selection)
+        assertEquals(AppUiStyle.COUI17, result.selection)
     }
 
     @Test
@@ -139,7 +139,7 @@ class ThemeSelectionMigrationPolicyTest {
         val result = migrate(prefs)
         result.migrationEdits(prefs)
 
-        assertEquals(AppUiStyle.MIUIX.name, prefs[keySelection])
+        assertEquals(AppUiStyle.COUI17.name, prefs[keySelection])
         assertNull(prefs[keyPreset])
         assertNull(prefs[keyVariant])
     }
@@ -170,7 +170,7 @@ class ThemeSelectionMigrationPolicyTest {
         migrate(prefs).migrationEdits(prefs)
 
         val second = migrate(prefs)
-        assertEquals(AppUiStyle.MIUIX, second.selection)
+        assertEquals(AppUiStyle.COUI17, second.selection)
         assertFalse(second.needsWrite)
     }
 

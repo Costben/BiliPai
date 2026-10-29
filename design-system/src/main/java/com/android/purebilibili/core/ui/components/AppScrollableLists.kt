@@ -23,9 +23,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
-import top.yukonga.miuix.kmp.basic.VerticalScrollBar
-import top.yukonga.miuix.kmp.basic.rememberScrollBarAdapter
-import top.yukonga.miuix.kmp.interfaces.ExperimentalScrollBarApi
+import io.github.suqi8.coui.kmp.basic.VerticalScrollBar
+import io.github.suqi8.coui.kmp.basic.rememberScrollBarAdapter
+import io.github.suqi8.coui.kmp.interfaces.ExperimentalScrollBarApi
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /** The scrollbar shares the list state; dragging never creates a second scroll model. */
 @OptIn(ExperimentalScrollBarApi::class)
@@ -49,7 +50,7 @@ fun AppLazyColumn(
             flingBehavior = flingBehavior, userScrollEnabled = userScrollEnabled,
             overscrollEffect = overscrollEffect, content = content,
         )
-        if (LocalAppUiStyle.current == AppUiStyle.MIUIX && userScrollEnabled) {
+        if (LocalAppUiStyle.current.usesMiuixFamilySkin && userScrollEnabled) {
             Box(Modifier.matchParentSize()) {
                 VerticalScrollBar(
                     adapter = rememberScrollBarAdapter(state),
@@ -83,7 +84,7 @@ fun AppLazyVerticalGrid(
             horizontalArrangement = horizontalArrangement, flingBehavior = flingBehavior,
             userScrollEnabled = userScrollEnabled, overscrollEffect = overscrollEffect, content = content,
         )
-        if (LocalAppUiStyle.current == AppUiStyle.MIUIX && userScrollEnabled) {
+        if (LocalAppUiStyle.current.usesMiuixFamilySkin && userScrollEnabled) {
             Box(Modifier.matchParentSize()) {
                 VerticalScrollBar(
                     adapter = rememberScrollBarAdapter(state),

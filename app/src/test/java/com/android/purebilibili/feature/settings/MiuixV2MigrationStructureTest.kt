@@ -45,7 +45,7 @@ class MiuixV2MigrationStructureTest {
         val source = loadSource("design-system/src/main/java/com/android/purebilibili/core/ui/AppSurfaceTokens.kt")
         assertTrue(source.contains("fun onSurfaceVariantSummary()"))
         assertTrue(source.contains("fun onSurfaceVariantActions()"))
-        assertTrue(source.contains("MiuixTheme.colorScheme.onSurfaceVariantSummary"))
+        assertTrue(source.contains("COUITheme.colorScheme.onSurfaceVariantSummary"))
     }
 
     @Test
@@ -79,11 +79,11 @@ class MiuixV2MigrationStructureTest {
             "app/src/main/java/com/android/purebilibili/feature/settings/AppSegmentedControl.kt",
             "app/src/main/java/com/android/purebilibili/navigation3/BiliPaiNavDisplayHost.kt",
         ).filter { path ->
-            loadSource(path).contains("MiuixTheme.colorScheme")
+            loadSource(path).contains("COUITheme.colorScheme")
         }
         assertTrue(
             offenders.isEmpty(),
-            "Direct MiuixTheme.colorScheme reads should route through AppSurfaceTokens:\n" +
+            "Direct COUITheme.colorScheme reads should route through AppSurfaceTokens:\n" +
                 offenders.joinToString("\n")
         )
     }
@@ -102,7 +102,7 @@ class MiuixV2MigrationStructureTest {
 
     @Test
     fun md3SegmentedControl_routesMiuixVariantToTabRow() {
-        val source = loadSource("design-system/src/main/java/com/android/purebilibili/core/ui/renderer/miuix/AppMiuixSegmentedControl.kt")
+        val source = loadSource("design-system/src/main/java/com/android/purebilibili/core/ui/renderer/coui/AppCouiSegmentedControl.kt")
         val componentSource = loadSource("design-system/src/main/java/com/android/purebilibili/core/ui/components/AppSegmentedControl.kt")
         val policySource = loadSource("design-system/src/main/java/com/android/purebilibili/core/ui/AppSegmentedControlPolicy.kt")
         // 双值 AppUiStyle 政策：MIUIX 用原生 TabRow，MATERIAL3 用 Material fallback。
@@ -110,7 +110,7 @@ class MiuixV2MigrationStructureTest {
         assertTrue(policySource.contains("usesNativeTabRow = true"))
         assertTrue(policySource.contains("usesNativeTabRow = false"))
         assertTrue(componentSource.contains("resolveAppSegmentedRenderer(policy.usesNativeTabRow)"))
-        assertTrue(componentSource.contains("AppMiuixSegmentedControl("))
+        assertTrue(componentSource.contains("AppCouiSegmentedControl("))
         assertTrue(source.contains("TabRow("))
         assertTrue(source.contains("rememberLazyListState()"))
         assertTrue(source.contains("selectedIndex == 0 || selectedIndex == options.lastIndex"))
@@ -180,7 +180,7 @@ class MiuixV2MigrationStructureTest {
     fun adaptiveScaffold_miuixPathMountsPopupHostForOverlayDialogs() {
         val source = loadSource("design-system/src/main/java/com/android/purebilibili/core/ui/AdaptiveChrome.kt")
         assertTrue(source.contains("resolveAdaptiveScaffoldRenderer("))
-        assertTrue(source.contains("MiuixPopupUtils.MiuixPopupHost()"))
+        assertTrue(source.contains("COUIPopupUtils.MiuixPopupHost()"))
         assertTrue(source.contains("popupHost ="))
     }
 
@@ -215,7 +215,7 @@ class MiuixV2MigrationStructureTest {
     @Test
     fun md3SegmentedControl_usesAdaptiveSquircleBackground() {
         val source = loadSource(
-            "design-system/src/main/java/com/android/purebilibili/core/ui/renderer/miuix/AppMiuixSegmentedControl.kt"
+            "design-system/src/main/java/com/android/purebilibili/core/ui/renderer/coui/AppCouiSegmentedControl.kt"
         )
         assertTrue(source.contains("adaptiveSquircleBackground("))
     }

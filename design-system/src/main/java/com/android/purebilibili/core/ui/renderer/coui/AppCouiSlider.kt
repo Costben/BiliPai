@@ -1,14 +1,14 @@
-package com.android.purebilibili.core.ui.renderer.miuix
+package com.android.purebilibili.core.ui.renderer.coui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.android.purebilibili.core.ui.components.AppSliderColors
 import com.android.purebilibili.core.ui.components.appDesktopFocusableItemVisuals
-import top.yukonga.miuix.kmp.basic.Slider
-import top.yukonga.miuix.kmp.basic.SliderDefaults
+import io.github.suqi8.coui.kmp.basic.Slider
+import io.github.suqi8.coui.kmp.basic.SliderDefaults
 
 @Composable
-internal fun AppMiuixSlider(
+internal fun AppCouiSlider(
     value: Float,
     onValueChange: (Float) -> Unit,
     modifier: Modifier,

@@ -9,8 +9,8 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.sp
 import kotlin.math.roundToInt
-import top.yukonga.miuix.kmp.theme.TextStyles
-import top.yukonga.miuix.kmp.theme.defaultTextStyles
+import io.github.suqi8.coui.kmp.theme.TextStyles
+import io.github.suqi8.coui.kmp.theme.defaultTextStyles
 
 private const val DISPLAY_NARROW_WIDTH_THRESHOLD_DP = 360
 // 下限与设置段选项(resolveAppDpiOverrideSegmentOptions 的 90..110)对齐;

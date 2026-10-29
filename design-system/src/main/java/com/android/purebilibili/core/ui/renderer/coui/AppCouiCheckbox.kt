@@ -1,17 +1,17 @@
-package com.android.purebilibili.core.ui.renderer.miuix
+package com.android.purebilibili.core.ui.renderer.coui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.state.ToggleableState
 import com.android.purebilibili.core.ui.components.AppCheckboxColors
 import com.android.purebilibili.core.ui.components.appDesktopFocusableItemVisuals
-import top.yukonga.miuix.kmp.basic.Checkbox
-import top.yukonga.miuix.kmp.basic.CheckboxDefaults
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.basic.Checkbox
+import io.github.suqi8.coui.kmp.basic.CheckboxDefaults
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.android.purebilibili.core.theme.resolveControlGlyphColor
 
 @Composable
-internal fun AppMiuixCheckbox(
+internal fun AppCouiCheckbox(
     checked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
     modifier: Modifier,
@@ -22,13 +22,13 @@ internal fun AppMiuixCheckbox(
         CheckboxDefaults.checkboxColors(
             // Explicit fills need their own paired checkmark; unedited native Miuix stays native.
             checkedForegroundColor = resolveControlGlyphColor(
-                MiuixTheme.colorScheme.onPrimary, it.checkedColor, MiuixTheme.colorScheme.surface,
+                COUITheme.colorScheme.onPrimary, it.checkedColor, COUITheme.colorScheme.surface,
             ),
             checkedBackgroundColor = it.checkedColor,
             uncheckedBackgroundColor = it.uncheckedColor,
         )
     } ?: CheckboxDefaults.checkboxColors()
-    ProvideAppMiuixHapticFeedback {
+    ProvideAppCouiHapticFeedback {
         Checkbox(
             state = if (checked) ToggleableState.On else ToggleableState.Off,
             onClick = onCheckedChange?.let { callback -> { callback(!checked) } },

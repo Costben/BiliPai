@@ -50,7 +50,7 @@ import com.android.purebilibili.core.ui.ContainerLevel
 import com.android.purebilibili.feature.video.ui.components.PlayerListPopupPlacement
 import com.android.purebilibili.feature.video.ui.components.glass.PlayerMiuixListPopup
 import com.android.purebilibili.feature.video.ui.components.PlayerNativeDropdownItem
-import top.yukonga.miuix.kmp.basic.DropdownItem
+import io.github.suqi8.coui.kmp.basic.DropdownItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

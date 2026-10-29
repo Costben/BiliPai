@@ -85,9 +85,9 @@ import com.android.purebilibili.feature.dynamic.components.DynamicAdaptiveSegmen
 import com.android.purebilibili.feature.dynamic.components.DynamicPublishComposer
 import com.android.purebilibili.feature.home.components.BottomBarMatchedReusableLiquidDock
 import com.android.purebilibili.feature.home.components.resolveFloatingDockGeometryScale
-import top.yukonga.miuix.kmp.basic.Button as MiuixButton
-import top.yukonga.miuix.kmp.blur.layerBackdrop
-import top.yukonga.miuix.kmp.blur.rememberLayerBackdrop
+import io.github.suqi8.coui.kmp.basic.Button as MiuixButton
+import io.github.suqi8.coui.kmp.blur.layerBackdrop
+import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop
 
 @Composable
 fun TopicDetailScreen(
@@ -437,7 +437,7 @@ private fun TopicSortControl(
 @Composable
 private fun TopicParticipateButton(
     liquidGlassEnabled: Boolean,
-    backdrop: top.yukonga.miuix.kmp.blur.Backdrop?,
+    backdrop: io.github.suqi8.coui.kmp.blur.Backdrop?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {

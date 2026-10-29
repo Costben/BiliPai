@@ -102,9 +102,9 @@ class UiPresetMigrationPolicyTest {
         combos.forEach { (preset, variant, expected) ->
             assertEquals(expected, resolveUiStyle(preset, variant))
         }
-        // 运行时枚举只保留两值，任何组合都不可能产生 iOS 选择。
+        // 运行时枚举不含 iOS，任何组合都不可能产生 iOS 选择。
         assertEquals(
-            setOf(AppUiStyle.MATERIAL3, AppUiStyle.MIUIX),
+            setOf(AppUiStyle.MATERIAL3, AppUiStyle.MIUIX, AppUiStyle.COUI17),
             AppUiStyle.entries.toSet()
         )
     }

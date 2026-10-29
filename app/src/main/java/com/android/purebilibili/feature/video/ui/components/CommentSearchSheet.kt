@@ -83,9 +83,10 @@ import com.android.purebilibili.feature.video.viewmodel.FullCommentSearchUiState
 import com.android.purebilibili.feature.home.components.bottomBarMatchedCaptureOverflow
 import com.android.purebilibili.feature.home.components.biliPaiFloatingDockShell
 import com.android.purebilibili.feature.home.components.BottomBarLiquidSegmentedControl
-import top.yukonga.miuix.kmp.blur.Backdrop
-import top.yukonga.miuix.kmp.blur.layerBackdrop
-import top.yukonga.miuix.kmp.blur.rememberLayerBackdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.layerBackdrop
+import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /**
  * 评论区搜索排序模式
@@ -320,7 +321,7 @@ fun CommentSearchSheet(
                                 .alpha(0f)
                                 .layerBackdrop(filterBackdrop)
                                 .background(
-                                    if (LocalAppUiStyle.current == AppUiStyle.MIUIX) {
+                                    if (LocalAppUiStyle.current.usesMiuixFamilySkin) {
                                         MaterialTheme.colorScheme.surfaceContainer
                                     } else MaterialTheme.colorScheme.surfaceContainerLow
                                 ),

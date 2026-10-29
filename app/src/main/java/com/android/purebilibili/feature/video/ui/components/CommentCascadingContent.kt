@@ -25,7 +25,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import com.android.purebilibili.core.ui.LocalAppThemeConfig
 import com.android.purebilibili.core.ui.rememberAppBottomSheetMotion
-import top.yukonga.miuix.kmp.anim.folmeSpring
+import io.github.suqi8.coui.kmp.anim.folmeSpring
 
 // Match the cascading menu's near-critically-damped expansion and quicker collapse.
 internal fun <T> commentCascadeSpring(expanding: Boolean): SpringSpec<T> =

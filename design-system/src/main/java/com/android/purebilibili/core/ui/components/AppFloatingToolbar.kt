@@ -19,7 +19,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
-import top.yukonga.miuix.kmp.basic.FloatingToolbar
+import io.github.suqi8.coui.kmp.basic.FloatingToolbar
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /** 常规 MD3 操作容器。窄窗口与大字号下允许横向滚动，不压缩按钮触控范围。 */
 @Composable
@@ -58,7 +59,7 @@ fun AppFloatingToolbar(
     modifier: Modifier = Modifier,
     content: @Composable RowScope.() -> Unit,
 ) {
-    if (LocalAppUiStyle.current == AppUiStyle.MIUIX) {
+    if (LocalAppUiStyle.current.usesMiuixFamilySkin) {
         FloatingToolbar(modifier = modifier, outSidePadding = PaddingValues()) {
             Row(
                 modifier = Modifier.horizontalScroll(rememberScrollState()),

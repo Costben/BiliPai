@@ -7,7 +7,7 @@ import androidx.compose.ui.graphics.GraphicsLayerScope
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.unit.Density
-import top.yukonga.miuix.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
 
 /** 背景采样与可见遮色按绘制顺序合成；不捕获按钮、文字或玻璃自身。 */
 class SurfaceOverlayBackdrop(

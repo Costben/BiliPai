@@ -12,8 +12,8 @@ import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sqrt
-import top.yukonga.miuix.kmp.blur.BackdropEffectScope
-import top.yukonga.miuix.kmp.blur.runtimeShaderEffect
+import io.github.suqi8.coui.kmp.blur.BackdropEffectScope
+import io.github.suqi8.coui.kmp.blur.runtimeShaderEffect
 
 private fun popupUnionBounds(a: Rect, b: Rect): Rect = Rect(
     min(a.left, b.left), min(a.top, b.top), max(a.right, b.right), max(a.bottom, b.bottom),

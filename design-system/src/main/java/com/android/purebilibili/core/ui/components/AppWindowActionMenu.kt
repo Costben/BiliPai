@@ -14,17 +14,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.android.purebilibili.core.ui.LocalAppThemeConfig
-import top.yukonga.miuix.kmp.basic.PopupPositionProvider
-import top.yukonga.miuix.kmp.basic.DropdownItem
-import top.yukonga.miuix.kmp.window.WindowCascadingListPopup
-import top.yukonga.miuix.kmp.basic.DropdownEntry
+import io.github.suqi8.coui.kmp.basic.PopupPositionProvider
+import io.github.suqi8.coui.kmp.basic.DropdownItem
+import io.github.suqi8.coui.kmp.window.WindowCascadingListPopup
+import io.github.suqi8.coui.kmp.basic.DropdownEntry
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.theme.AppUiStyle
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.runtime.key
-import top.yukonga.miuix.kmp.window.WindowListPopup
+import io.github.suqi8.coui.kmp.window.WindowListPopup
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /**
  * An action exposed from a page-level overflow menu.
@@ -98,7 +99,7 @@ fun AppWindowActionMenu(
 
     val glassSource = source ?: rememberAppGlassMenuSource()
     val glassMenuAvailable = appGlassMenuAvailable()
-    if (glassMenuAvailable || LocalAppUiStyle.current != AppUiStyle.MIUIX || !LocalAppThemeConfig.current.nativeMiuixPopupsEnabled) {
+    if (glassMenuAvailable || !LocalAppUiStyle.current.usesMiuixFamilySkin || !LocalAppThemeConfig.current.nativeMiuixPopupsEnabled) {
         var expanded by remember { mutableStateOf(false) }
         var parentActions by remember { mutableStateOf(emptyList<AppWindowAction>()) }
         val visibleGroups = if (glassMenuAvailable) flattenGlassWindowActionGroups(groups)
@@ -306,7 +307,7 @@ private fun AppCompactWindowActionMenu(
                 onExpandedChange?.invoke(true)
             },
         ) { content() }
-        if (LocalAppUiStyle.current == AppUiStyle.MIUIX &&
+        if (LocalAppUiStyle.current.usesMiuixFamilySkin &&
             LocalAppThemeConfig.current.nativeMiuixPopupsEnabled && !appGlassMenuAvailable()
         ) {
             WindowListPopup(

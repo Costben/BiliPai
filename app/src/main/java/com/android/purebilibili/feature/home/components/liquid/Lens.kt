@@ -3,7 +3,7 @@
 package com.android.purebilibili.feature.home.components.liquid
 
 import com.android.purebilibili.core.ui.effect.lens as sharedLens
-import top.yukonga.miuix.kmp.blur.BackdropEffectScope
+import io.github.suqi8.coui.kmp.blur.BackdropEffectScope
 
 /** Keep app callers on the same shared Kyant lens as design-system value controls. */
 fun BackdropEffectScope.lens(

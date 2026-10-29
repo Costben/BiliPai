@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.blur.BlurIntensity
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /**
  * UI 组件运行时需要的应用级配置。
@@ -37,7 +38,7 @@ data class AppThemeConfig(
 )
 
 fun isMiuixNonGlassEnabled(uiStyle: AppUiStyle, liquidGlassEnabled: Boolean): Boolean =
-    uiStyle == AppUiStyle.MIUIX && !liquidGlassEnabled
+    uiStyle.usesMiuixFamilySkin && !liquidGlassEnabled
 
 @Composable
 @ReadOnlyComposable

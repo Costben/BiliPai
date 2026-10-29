@@ -15,6 +15,7 @@ import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.motion.AppMotionTokens
 import com.android.purebilibili.core.ui.rememberAppBottomSheetMotion
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /** Inline expansion, with one owner for both height and content lifetime. */
 @Composable
@@ -34,7 +35,7 @@ internal fun CommentContentReveal(
         modifier = modifier,
         enter = if (reducedMotion) {
             fadeIn(AppMotionTokens.resolveBottomSheetFadeEnterSpec(uiStyle))
-        } else if (uiStyle == AppUiStyle.MIUIX) {
+        } else if (uiStyle.usesMiuixFamilySkin) {
             // Shared with the cascading conversation transition in both material modes.
             // Keep the MD3 branch's existing motion and all native layout parameters.
             expandVertically(
@@ -53,7 +54,7 @@ internal fun CommentContentReveal(
         },
         exit = if (reducedMotion) {
             fadeOut(AppMotionTokens.resolveBottomSheetFadeExitSpec(uiStyle))
-        } else if (uiStyle == AppUiStyle.MIUIX) {
+        } else if (uiStyle.usesMiuixFamilySkin) {
             shrinkVertically(
                 animationSpec = commentCascadeSpring(false),
                 shrinkTowards = Alignment.Top,

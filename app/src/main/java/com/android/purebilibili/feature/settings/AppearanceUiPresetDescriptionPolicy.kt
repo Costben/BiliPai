@@ -12,7 +12,9 @@ internal fun resolveAppearanceUiPresetDescription(
     materialTitle: String,
     materialSummary: String,
     miuixTitle: String,
-    miuixSummary: String
+    miuixSummary: String,
+    couiTitle: String,
+    couiSummary: String
 ): AppearanceUiPresetDescription {
     return when (selection) {
         AppUiStyle.MATERIAL3 -> AppearanceUiPresetDescription(
@@ -21,6 +23,11 @@ internal fun resolveAppearanceUiPresetDescription(
         )
 
         AppUiStyle.MIUIX -> AppearanceUiPresetDescription(
+            title = miuixTitle,
+            summary = miuixSummary
+        )
+
+        AppUiStyle.COUI17 -> AppearanceUiPresetDescription(
             title = miuixTitle,
             summary = miuixSummary
         )

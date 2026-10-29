@@ -12,6 +12,7 @@ fun resolveAdaptiveSideNavigationRailRenderer(
 ): AdaptiveSideNavigationRailRenderer = when (uiStyle) {
     AppUiStyle.MIUIX -> AdaptiveSideNavigationRailRenderer.MIUIX
     AppUiStyle.MATERIAL3 -> AdaptiveSideNavigationRailRenderer.MATERIAL3
+    AppUiStyle.COUI17 -> AdaptiveSideNavigationRailRenderer.MIUIX
 }
 
 fun shouldUseExpandableMiuixNavigationRail(isExpandedWidthClass: Boolean): Boolean =

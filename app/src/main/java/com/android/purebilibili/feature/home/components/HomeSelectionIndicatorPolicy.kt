@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.home.components
 
 import com.android.purebilibili.core.theme.AppUiStyle
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 internal enum class HomeSelectionIndicatorStyle {
     CAPSULE,
@@ -14,6 +15,6 @@ internal fun resolveHomeSelectionIndicatorStyle(
 ): HomeSelectionIndicatorStyle = when {
     liquidGlassEnabled -> HomeSelectionIndicatorStyle.CAPSULE
     forceMaterialUnderline -> HomeSelectionIndicatorStyle.MD3_UNDERLINE
-    uiStyle == AppUiStyle.MIUIX -> HomeSelectionIndicatorStyle.CAPSULE
+    uiStyle.usesMiuixFamilySkin -> HomeSelectionIndicatorStyle.CAPSULE
     else -> HomeSelectionIndicatorStyle.MD3_UNDERLINE
 }

@@ -9,7 +9,8 @@ import androidx.compose.ui.graphics.Color
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.renderer.material3.AppMaterial3Checkbox
-import com.android.purebilibili.core.ui.renderer.miuix.AppMiuixCheckbox
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiCheckbox
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiCheckbox
 
 @Immutable
 data class AppCheckboxColors(
@@ -53,7 +54,14 @@ fun AppCheckbox(
             colors = colors,
             interactionSource = interactionSource,
         )
-        AppUiStyle.MIUIX -> AppMiuixCheckbox(
+        AppUiStyle.MIUIX -> AppCouiCheckbox(
+            checked = checked,
+            onCheckedChange = onCheckedChange,
+            modifier = modifier,
+            enabled = enabled,
+            colors = colors,
+        )
+        AppUiStyle.COUI17 -> AppCouiCheckbox(
             checked = checked,
             onCheckedChange = onCheckedChange,
             modifier = modifier,

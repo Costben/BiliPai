@@ -19,10 +19,11 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
-import top.yukonga.miuix.kmp.basic.ColorPicker
-import top.yukonga.miuix.kmp.basic.HsvHueSlider
-import top.yukonga.miuix.kmp.basic.HsvSaturationSlider
-import top.yukonga.miuix.kmp.basic.HsvValueSlider
+import io.github.suqi8.coui.kmp.basic.ColorPicker
+import io.github.suqi8.coui.kmp.basic.HsvHueSlider
+import io.github.suqi8.coui.kmp.basic.HsvSaturationSlider
+import io.github.suqi8.coui.kmp.basic.HsvValueSlider
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /** Theme colors are opaque; alpha is exposed only for callers that store it. */
 @Composable
@@ -43,7 +44,7 @@ fun AppColorPicker(
         }
     }
     val liquid = useAppLiquidValueControls()
-    val miuix = LocalAppUiStyle.current == AppUiStyle.MIUIX && !liquid
+    val miuix = LocalAppUiStyle.current.usesMiuixFamilySkin && !liquid
     if (miuix && alphaEnabled) {
         ColorPicker(color = color, onColorChanged = onColorChanged, modifier = modifier)
         return

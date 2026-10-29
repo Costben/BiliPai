@@ -28,7 +28,7 @@ import com.android.purebilibili.feature.home.components.resolveHomeTopDockMinimu
 import com.android.purebilibili.feature.home.components.resolveFloatingDockCaptureInsets
 import com.android.purebilibili.feature.home.components.FloatingBottomBarGeometryMode
 import com.android.purebilibili.feature.home.components.BottomBarLiquidSegmentedControl
-import top.yukonga.miuix.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
 
 
 internal fun resolveAppAdaptiveTabMinWidth(requestedMinTabWidth: Dp): Dp =

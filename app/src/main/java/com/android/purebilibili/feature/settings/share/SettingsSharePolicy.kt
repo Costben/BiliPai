@@ -63,6 +63,8 @@ internal fun resolveDebugThemeValues(
     return when (styleName) {
         AppUiStyle.MIUIX.name -> 1 to 1 // MD3 + Miuix
         AppUiStyle.MATERIAL3.name -> 1 to 0 // MD3 + Material 3
+        // COUI 17 的变体值是 3；沿用同一套遗留编码，旧版本导入时不会误判成 Material 3。
+        AppUiStyle.COUI17.name -> 1 to 3
         else -> (jsonElementAsInt(rawSettings[SHARE_KEY_LEGACY_UI_PRESET]) ?: 0) to
             (jsonElementAsInt(rawSettings[SHARE_KEY_LEGACY_ANDROID_NATIVE_VARIANT]) ?: 0)
     }

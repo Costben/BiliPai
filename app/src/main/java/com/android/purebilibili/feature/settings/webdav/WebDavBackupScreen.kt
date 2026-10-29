@@ -47,9 +47,9 @@ import com.android.purebilibili.core.ui.components.AppPreferenceGroup
 import com.android.purebilibili.core.ui.components.AppPreferenceSectionTitle
 import com.android.purebilibili.core.ui.components.AppTextField
 import com.android.purebilibili.core.ui.components.AppSwitchPreference
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Reset
-import top.yukonga.miuix.kmp.icon.extended.UploadCloud
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.Reset
+import io.github.suqi8.coui.kmp.icon.extended.UploadCloud
 
 private enum class WebDavEditMode {
     SERVER,
@@ -187,7 +187,7 @@ fun WebDavBackupScreen(
                     AppPreference(
                         icon = rememberThemeAwareSettingsIcon(
                             materialSymbolResource = R.drawable.ms_cloud_done_24,
-                            miuixIcon = MiuixIcons.UploadCloud,
+                            miuixIcon = COUIIcons.UploadCloud,
                         ),
                         title = "测试连接",
                         subtitle = "检查账号和云端文件夹是否可用",
@@ -206,7 +206,7 @@ fun WebDavBackupScreen(
                     AppPreference(
                         icon = rememberThemeAwareSettingsIcon(
                             materialSymbolResource = R.drawable.ms_settings_backup_restore_24,
-                            miuixIcon = MiuixIcons.Reset,
+                            miuixIcon = COUIIcons.Reset,
                         ),
                         title = "恢复最新备份",
                         subtitle = "会覆盖本地设置，建议先手动备份",

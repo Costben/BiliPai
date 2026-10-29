@@ -31,8 +31,8 @@ internal sealed interface SettingsOptionPreview {
     data class Density(val scale: Float) : SettingsOptionPreview
     data class Choice(val anchored: Boolean) : SettingsOptionPreview
 
-    /** 界面预设小样:[miuix] 为真示意 Miuix 彩色容器条目,为假示意 MD3 单色条目。 */
-    data class UiPreset(val miuix: Boolean) : SettingsOptionPreview
+    /** 界面预设小样:[miuix] 为真示意 Miuix 彩色容器条目,[coui] 为真示意 COUI 17 卡片分组。 */
+    data class UiPreset(val miuix: Boolean, val coui: Boolean = false) : SettingsOptionPreview
 
     /** 列表条目样式小样:0 跟随预设(双风格)、1 项目自定义、2 原生组件。 */
     data class ListItem(val mode: Int) : SettingsOptionPreview
@@ -141,19 +141,30 @@ internal fun SettingsOptionPreviewThumb(
                         if (index == 0) accent else muted) }
                 }
                 is SettingsOptionPreview.UiPreset -> {
-                    // 两行条目:MD3 预设为无容器单色图标;Miuix 预设为彩色圆角容器图标。
+                    // 两行条目:MD3 无容器单色图标;Miuix 彩色圆角容器;COUI 17 三行卡片分组 + 蓝色图标。
                     val chipColor = if (preview.miuix) accent.copy(alpha = 0.22f) else muted.copy(alpha = 0.5f)
                     val glyphColor = if (preview.miuix) accent else muted
-                    repeat(2) { row ->
-                        val y = 4f + row * 13f
-                        if (preview.miuix) {
-                            tile(3f, y, 9f, 9f, chipColor, 2.4f)
-                            tile(5.5f, y + 2.5f, 4f, 4f, glyphColor, 1f)
-                        } else {
-                            tile(5.5f, y + 2f, 4.5f, 4.5f, glyphColor, 1f)
+                    if (preview.coui) {
+                        tile(2f, 1f, 40f, 28f, surface, 4f)
+                        repeat(3) { row ->
+                            val y = 4f + row * 8.4f
+                            tile(5f, y, 6.5f, 6.5f, accent.copy(alpha = 0.18f), 2f)
+                            tile(6.6f, y + 1.6f, 3.2f, 3.2f, accent, 1f)
+                            tile(14f, y + 1.4f, 22f, 1.8f, if (row == 0) foreground.copy(alpha = 0.6f) else muted)
+                            tile(14f, y + 4.4f, 14f, 1.3f, muted)
                         }
-                        tile(15f, y + 1f, 22f, 2.2f, if (row == 0) foreground.copy(alpha = 0.6f) else muted)
-                        tile(15f, y + 5f, 15f, 1.6f, muted)
+                    } else {
+                        repeat(2) { row ->
+                            val y = 4f + row * 13f
+                            if (preview.miuix) {
+                                tile(3f, y, 9f, 9f, chipColor, 2.4f)
+                                tile(5.5f, y + 2.5f, 4f, 4f, glyphColor, 1f)
+                            } else {
+                                tile(5.5f, y + 2f, 4.5f, 4.5f, glyphColor, 1f)
+                            }
+                            tile(15f, y + 1f, 22f, 2.2f, if (row == 0) foreground.copy(alpha = 0.6f) else muted)
+                            tile(15f, y + 5f, 15f, 1.6f, muted)
+                        }
                     }
                 }
                 is SettingsOptionPreview.ListItem -> {

@@ -78,9 +78,9 @@ import com.android.purebilibili.feature.home.components.biliPaiProgressiveTopBlu
 import com.android.purebilibili.core.ui.blur.topSolidProgressiveFade
 import com.android.purebilibili.core.ui.performance.TrackJankStateFlag
 import com.android.purebilibili.core.ui.performance.TrackScrollJank
-import top.yukonga.miuix.kmp.blur.Backdrop as MiuixBackdrop
-import top.yukonga.miuix.kmp.blur.layerBackdrop as miuixLayerBackdrop
-import top.yukonga.miuix.kmp.blur.rememberLayerBackdrop as rememberMiuixLayerBackdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop as MiuixBackdrop
+import io.github.suqi8.coui.kmp.blur.layerBackdrop as miuixLayerBackdrop
+import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop as rememberMiuixLayerBackdrop
 import com.android.purebilibili.data.model.response.RelatedVideo
 import com.android.purebilibili.data.model.response.ReplyItem
 import com.android.purebilibili.data.model.response.ReplyVoteCard

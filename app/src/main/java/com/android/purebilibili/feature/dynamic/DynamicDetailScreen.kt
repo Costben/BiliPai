@@ -111,6 +111,7 @@ internal fun resolveDynamicDetailBottomBarColor(
 ): Color = when (uiStyle) {
     AppUiStyle.MIUIX -> colorScheme.background
     AppUiStyle.MATERIAL3 -> colorScheme.surface
+    AppUiStyle.COUI17 -> colorScheme.background
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

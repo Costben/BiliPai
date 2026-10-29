@@ -34,6 +34,7 @@
     <string name="appearance_android_native_variant_subtitle">选择更接近 Google 或小米系统的安卓界面风格</string>
     <string name="appearance_android_native_variant_material3">Google Material 3</string>
     <string name="appearance_android_native_variant_miuix">Miuix</string>
+    <string name="appearance_android_native_variant_coui17">COUI 17</string>
     <string name="appearance_theme_mode_title">主题模式</string>
     <string name="appearance_theme_mode_subtitle">选择浅色、深色或跟随系统</string>
     <string name="appearance_dark_theme_style_title">深色风格</string>

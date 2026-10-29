@@ -11,7 +11,8 @@ import kotlinx.coroutines.flow.first
 /**
  * 主题选择持久化与一次性迁移（theme_selection_v1）。
  *
- * 目标架构：运行时只保留 MIUIX / MATERIAL3 两值，枚举持久化使用稳定字符串。
+ * 目标架构：运行时只保留 MATERIAL3 / COUI17，枚举持久化使用稳定字符串。
+ * Miuix 皮肤已由同血统的 COUI 17 取代，旧存档里的 MIUIX 在读取时改写为 COUI17。
  * 历史旧键 `ui_preset` / `android_native_variant_v1` 在首次读取时按
  * FRONTEND_ARCHITECTURE_THEME_SIMPLIFICATION_PLAN.md §5.2 迁移表单向迁移：
  * iOS、非法值 → MIUIX；全量缺失 → 新用户默认 Material 3；同一事务写入新键并删除旧键。
@@ -19,10 +20,15 @@ import kotlinx.coroutines.flow.first
 
 internal val KEY_THEME_SELECTION = stringPreferencesKey("theme_selection_v1")
 
+// 旧 Miuix 用户换到同血统的 COUI 17，而不是退回 Material 3：布局密度与交互习惯更接近。
+internal fun AppUiStyle.retiringMiuix(): AppUiStyle =
+    if (this == AppUiStyle.MIUIX) AppUiStyle.COUI17 else this
+
 /** 解析新键的稳定字符串值。非法值（含历史 iOS 字符串）视为缺失。 */
 internal fun parseThemeSelectionString(rawValue: String): AppUiStyle? = when (rawValue) {
     AppUiStyle.MATERIAL3.name -> AppUiStyle.MATERIAL3
-    AppUiStyle.MIUIX.name -> AppUiStyle.MIUIX
+    AppUiStyle.MIUIX.name -> AppUiStyle.COUI17
+    AppUiStyle.COUI17.name -> AppUiStyle.COUI17
     else -> null
 }
 
@@ -33,7 +39,7 @@ internal fun resolveThemeSelectionFromPreferences(
     legacyVariantKey: Preferences.Key<Int>
 ): AppUiStyle {
     return preferences[KEY_THEME_SELECTION]?.let(::parseThemeSelectionString)
-        ?: AppUiStyle.fromLegacyValues(preferences[legacyPresetKey], preferences[legacyVariantKey])
+        ?: AppUiStyle.fromLegacyValues(preferences[legacyPresetKey], preferences[legacyVariantKey]).retiringMiuix()
 }
 
 internal data class ThemeSelectionMigrationResult(
@@ -53,13 +59,17 @@ internal fun resolveThemeSelectionMigration(
     legacyPresetKey: Preferences.Key<Int>,
     legacyVariantKey: Preferences.Key<Int>
 ): ThemeSelectionMigrationResult {
-    val newKeyValue = preferences[KEY_THEME_SELECTION]?.let(::parseThemeSelectionString)
+    val rawNewKey = preferences[KEY_THEME_SELECTION]
+    val newKeyValue = rawNewKey?.let(::parseThemeSelectionString)
     return if (newKeyValue != null) {
+        val rewritesRetiredStyle = rawNewKey != newKeyValue.name
         ThemeSelectionMigrationResult(
             selection = newKeyValue,
-            needsWrite = preferences.contains(legacyPresetKey) ||
+            needsWrite = rewritesRetiredStyle ||
+                preferences.contains(legacyPresetKey) ||
                 preferences.contains(legacyVariantKey),
             migrationEdits = {
+                if (rewritesRetiredStyle) this[KEY_THEME_SELECTION] = newKeyValue.name
                 remove(legacyPresetKey)
                 remove(legacyVariantKey)
             }
@@ -68,7 +78,7 @@ internal fun resolveThemeSelectionMigration(
         val legacyStyle = AppUiStyle.fromLegacyValues(
             preferences[legacyPresetKey],
             preferences[legacyVariantKey]
-        )
+        ).retiringMiuix()
         ThemeSelectionMigrationResult(
             selection = legacyStyle,
             needsWrite = true,

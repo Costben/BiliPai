@@ -21,7 +21,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
-import top.yukonga.miuix.kmp.basic.NumberPicker
+import io.github.suqi8.coui.kmp.basic.NumberPicker
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /** The caller owns the pending value; selecting a number never commits a timer. */
 @Composable
@@ -32,7 +33,7 @@ fun AppNumberPicker(
     range: IntRange = 0..59,
     label: String = "分钟",
 ) {
-    if (LocalAppUiStyle.current == AppUiStyle.MIUIX) {
+    if (LocalAppUiStyle.current.usesMiuixFamilySkin) {
         Column(modifier = modifier) {
             AppText(label)
             NumberPicker(

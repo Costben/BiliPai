@@ -21,8 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import top.yukonga.miuix.kmp.basic.PullToRefresh as MiuixPullToRefresh
-import top.yukonga.miuix.kmp.basic.rememberPullToRefreshState as rememberMiuixPullToRefreshState
+import io.github.suqi8.coui.kmp.basic.PullToRefresh as MiuixPullToRefresh
+import io.github.suqi8.coui.kmp.basic.rememberPullToRefreshState as rememberMiuixPullToRefreshState
 
 /**
  * @param indicatorTopInset Distance from this box's top to where the indicator
@@ -123,6 +123,22 @@ fun AdaptivePullToRefreshBox(
                 )
             }
         }
+        PresetPrimitiveRenderer.COUI_BRIDGED -> {
+            CompositionLocalProvider(LocalHapticFeedback provides refreshHaptic) {
+                ComfortablePullToRefreshBox(
+                    isRefreshing = isRefreshing,
+                    onRefresh = onRefresh,
+                    modifier = modifier,
+                    state = state,
+                    contentAlignment = contentAlignment,
+                    enabled = enabled,
+                    indicator = indicator,
+                    content = {
+                        CompositionLocalProvider(LocalHapticFeedback provides contentHaptic) { content() }
+                    },
+                )
+            }
+        }
     }
 }
 
@@ -157,6 +173,14 @@ fun BoxScope.AdaptivePullToRefreshDefaultIndicator(
                 modifier = indicatorModifier,
                 isRefreshing = isRefreshing,
                 state = state,
+            )
+        }
+        PresetPrimitiveRenderer.COUI_BRIDGED -> {
+            PullToRefreshDefaults.Indicator(
+                modifier = indicatorModifier,
+                isRefreshing = isRefreshing,
+                state = state,
+                color = AppContentColors.accent(),
             )
         }
     }

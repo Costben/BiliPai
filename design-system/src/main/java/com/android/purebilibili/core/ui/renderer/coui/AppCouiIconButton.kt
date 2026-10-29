@@ -1,4 +1,4 @@
-package com.android.purebilibili.core.ui.renderer.miuix
+package com.android.purebilibili.core.ui.renderer.coui
 
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -20,14 +20,14 @@ import com.android.purebilibili.core.ui.components.LocalAppActionContentColor
 import com.android.purebilibili.core.ui.components.appDesktopFocusableItemVisuals
 import com.android.purebilibili.core.ui.AppChromeSizeTokens
 import androidx.compose.ui.unit.dp
-import top.yukonga.miuix.kmp.basic.ButtonDefaults as MiuixButtonDefaults
-import top.yukonga.miuix.kmp.basic.IconButtonDefaults
+import io.github.suqi8.coui.kmp.basic.ButtonDefaults as CouiButtonDefaults
+import io.github.suqi8.coui.kmp.basic.IconButtonDefaults
 import com.android.purebilibili.core.ui.isMiuixNonGlassEnabled
-import top.yukonga.miuix.kmp.basic.IconButton as MiuixIconButton
-import top.yukonga.miuix.kmp.theme.LocalContentColor as MiuixLocalContentColor
+import io.github.suqi8.coui.kmp.basic.IconButton as CouiIconButton
+import io.github.suqi8.coui.kmp.theme.LocalContentColor as CouiLocalContentColor
 
 @Composable
-internal fun AppMiuixIconButton(
+internal fun AppCouiIconButton(
     onClick: () -> Unit,
     modifier: Modifier,
     enabled: Boolean,
@@ -36,7 +36,7 @@ internal fun AppMiuixIconButton(
     variant: AppIconButtonVariant,
     content: @Composable () -> Unit,
 ) {
-    val neutralContentColor = LocalAppActionContentColor.current.takeOrElse { MiuixLocalContentColor.current }
+    val neutralContentColor = LocalAppActionContentColor.current.takeOrElse { CouiLocalContentColor.current }
     val defaultColors = when (variant) {
         AppIconButtonVariant.Standard -> AppIconButtonColors(
             containerColor = Color.Unspecified,
@@ -44,7 +44,7 @@ internal fun AppMiuixIconButton(
             disabledContainerColor = Color.Unspecified,
             disabledContentColor = neutralContentColor.copy(alpha = 0.38f),
         )
-        AppIconButtonVariant.Filled -> MiuixButtonDefaults.buttonColorsPrimary().let {
+        AppIconButtonVariant.Filled -> CouiButtonDefaults.buttonColorsPrimary().let {
             AppIconButtonColors(
                 containerColor = it.color,
                 contentColor = it.contentColor,
@@ -83,7 +83,7 @@ internal fun AppMiuixIconButton(
         .then(pointerMirror)
 
     CompositionLocalProvider(
-        MiuixLocalContentColor provides contentColor,
+        CouiLocalContentColor provides contentColor,
         androidx.compose.material3.LocalContentColor provides contentColor,
         com.android.purebilibili.core.ui.LocalAppButtonSlotPalette provides
             if (LocalAppIconButtonGlassSurfaceProvided.current) null else com.android.purebilibili.core.ui.AppButtonSlotPalette(
@@ -92,7 +92,7 @@ internal fun AppMiuixIconButton(
                 enabled = enabled,
             ),
     ) {
-        MiuixIconButton(
+        CouiIconButton(
             onClick = onClick,
             modifier = nativeModifier,
             enabled = enabled,

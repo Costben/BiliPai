@@ -78,7 +78,7 @@ class DynamicNeutralUiStructureTest {
         assertTrue(actionSource.contains("insideMargin = PaddingValues("))
         assertTrue(actionSource.contains("horizontal = AppSpacingTokens.Small"))
         assertTrue(actionSource.contains("useFilledShell = !isComment && LocalAppUiStyle.current != AppUiStyle.MATERIAL3"))
-        assertTrue(actionSource.contains("if (isForward && LocalAppUiStyle.current == AppUiStyle.MIUIX)"))
+        assertTrue(actionSource.contains("if (isForward && LocalAppUiStyle.current.usesMiuixFamilySkin)"))
         assertFalse(actionSource.contains("FilledTonalButton("))
         assertFalse(actionSource.contains("shape = AppShapes.container(ContainerLevel.Card)"))
     }

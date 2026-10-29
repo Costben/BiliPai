@@ -12,6 +12,7 @@ fun resolveAdaptiveScaffoldRenderer(
 ): AdaptiveScaffoldRenderer = when (uiStyle) {
     AppUiStyle.MIUIX -> AdaptiveScaffoldRenderer.MIUIX_SCAFFOLD_WITH_POPUP_HOST
     AppUiStyle.MATERIAL3 -> AdaptiveScaffoldRenderer.MATERIAL3_SCAFFOLD
+    AppUiStyle.COUI17 -> AdaptiveScaffoldRenderer.MIUIX_SCAFFOLD_WITH_POPUP_HOST
 }
 
 fun shouldMountMiuixPopupHostOnAdaptiveScaffold(

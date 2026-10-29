@@ -3,7 +3,7 @@ package com.android.purebilibili.feature.home.components
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import top.yukonga.miuix.kmp.blur.ProgressiveBlur
+import io.github.suqi8.coui.kmp.blur.ProgressiveBlur
 
 class HomeTopReadabilityProtectionTest {
     @Test
