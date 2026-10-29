@@ -3,7 +3,7 @@ package com.android.purebilibili.core.ui.components
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
-import top.yukonga.miuix.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
 
 /** The app supplies its glass material; the design system owns placement and scope. */
 interface AppTopBarIconDecorator {

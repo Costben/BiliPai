@@ -33,6 +33,7 @@ import com.android.purebilibili.core.ui.components.rememberAdaptivePreferenceIco
 import com.android.purebilibili.core.ui.components.rememberAdaptiveSemanticIconTint
 import com.android.purebilibili.core.ui.components.AppPreferenceSectionTitle
 import com.android.purebilibili.feature.settings.ui.SettingsPageScaffold
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 private data class TipEntry(
     @DrawableRes val iconResId: Int,
@@ -226,7 +227,7 @@ private fun TipItem(
             .padding(16.dp),
         verticalAlignment = Alignment.Top
     ) {
-        if (LocalAppUiStyle.current == AppUiStyle.MIUIX || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
+        if (LocalAppUiStyle.current.usesMiuixFamilySkin || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
             SettingsFunctionIcon(
                 title = title,
                 imageVector = icon,

@@ -468,9 +468,11 @@ fun AppNavigation(
             context = kotlin.coroutines.EmptyCoroutineContext,
         )
     val homeSettings = resolvedHomeSettings ?: return
-    val effectiveHomeSettings = remember(homeSettings) {
+    val appUiStyle = com.android.purebilibili.core.theme.LocalAppUiStyle.current
+    val effectiveHomeSettings = remember(homeSettings, appUiStyle) {
         resolveEffectiveHomeSettings(
             homeSettings = homeSettings,
+            uiStyle = appUiStyle,
         )
     }
     val liquidGlassRenderConfig = remember(
@@ -494,9 +496,9 @@ fun AppNavigation(
     val bottomBarUiSkinDecoration = rememberBottomBarUiSkinDecoration(uiSkinState)
     val homeUiSkinDecoration = rememberHomeUiSkinDecoration(uiSkinState)
     val dynamicPublishSkinDecoration = rememberDynamicPublishSkinDecoration(uiSkinState)
-    val appearance = remember(homeSettings) {
+    val appearance = remember(effectiveHomeSettings) {
         resolveAppNavigationAppearance(
-            homeSettings = homeSettings,
+            homeSettings = effectiveHomeSettings,
         )
     }
     val cardTransitionEnabled = appearance.cardTransitionEnabled

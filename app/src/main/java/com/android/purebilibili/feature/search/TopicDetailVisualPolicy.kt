@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.search
 
 import com.android.purebilibili.core.theme.AppUiStyle
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 internal enum class TopicParticipateChrome {
     MATERIAL_EXTENDED_FAB,
@@ -18,7 +19,7 @@ internal fun resolveTopicParticipateChrome(
     liquidGlassEnabled: Boolean,
 ): TopicParticipateChrome = when {
     liquidGlassEnabled -> TopicParticipateChrome.LIQUID_GLASS_DOCK
-    uiStyle == AppUiStyle.MIUIX -> TopicParticipateChrome.MIUIX_COMPACT_BUTTON
+    uiStyle.usesMiuixFamilySkin -> TopicParticipateChrome.MIUIX_COMPACT_BUTTON
     else -> TopicParticipateChrome.MATERIAL_EXTENDED_FAB
 }
 

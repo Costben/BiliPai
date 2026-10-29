@@ -91,7 +91,7 @@ import com.android.purebilibili.feature.home.components.trackLiquidGlassAdaptive
 import coil3.compose.AsyncImage
 import kotlin.math.abs
 import kotlin.math.roundToInt
-import top.yukonga.miuix.kmp.blur.ProgressiveBlur
+import io.github.suqi8.coui.kmp.blur.ProgressiveBlur
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable

@@ -388,8 +388,8 @@ class BottomBarMiuixStructureTest {
         assertTrue(source.contains("AppPlatformNavigationBar("))
         assertTrue(source.contains("MiuixDockedBottomBarItem("))
         assertTrue(source.contains("fun Md3BottomBarDisplayMode.toAppPlatformNavigationDisplayMode()"))
-        assertFalse(source.contains("import top.yukonga.miuix.kmp.basic.NavigationBar as MiuixNavigationBar"))
-        assertFalse(source.contains("import top.yukonga.miuix.kmp.basic.NavigationBarItem as MiuixNavigationBarItem"))
+        assertFalse(source.contains("import io.github.suqi8.coui.kmp.basic.NavigationBar as MiuixNavigationBar"))
+        assertFalse(source.contains("import io.github.suqi8.coui.kmp.basic.NavigationBarItem as MiuixNavigationBarItem"))
     }
 
     @Test

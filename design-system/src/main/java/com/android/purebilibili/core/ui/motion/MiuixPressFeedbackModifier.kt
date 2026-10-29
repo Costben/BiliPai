@@ -4,10 +4,10 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import top.yukonga.miuix.kmp.utils.PressFeedbackType
-import top.yukonga.miuix.kmp.utils.SinkFeedback
-import top.yukonga.miuix.kmp.utils.TiltFeedback
-import top.yukonga.miuix.kmp.utils.pressable
+import io.github.suqi8.coui.kmp.utils.PressFeedbackType
+import io.github.suqi8.coui.kmp.utils.SinkFeedback
+import io.github.suqi8.coui.kmp.utils.TiltFeedback
+import io.github.suqi8.coui.kmp.utils.pressable
 
 /**
  * 依据当前系统主题自适应应用 Miuix 官方触控按压反馈。
@@ -31,7 +31,8 @@ fun Modifier.adaptiveMiuixPressFeedback(
     val resolvedInteractionSource = interactionSource ?: remember { MutableInteractionSource() }
     val feedback = remember(feedbackType) {
         when (feedbackType) {
-            PressFeedbackType.None -> null
+            // COUI 的 Tint 由组件自身的按压底色实现，没有独立的 Indication 可挂。
+            PressFeedbackType.None, PressFeedbackType.Tint -> null
             PressFeedbackType.Sink -> SinkFeedback()
             PressFeedbackType.Tilt -> TiltFeedback()
         }

@@ -68,6 +68,7 @@ import com.android.purebilibili.feature.settings.SettingsBottomBarScrollTracker
 import com.android.purebilibili.feature.settings.SettingsPageScrollHost
 import com.android.purebilibili.feature.settings.reduceSettingsBottomBarScroll
 import kotlinx.coroutines.flow.distinctUntilChanged
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 internal val LocalSettingsTopContentPadding = staticCompositionLocalOf { 0.dp }
 
@@ -185,6 +186,8 @@ internal fun SettingsPageScaffold(
         // pane, and list share one tone. Cards stay on surfaceContainer.
         AppUiStyle.MIUIX -> AppSurfaceTokens.chromeBackground()
         AppUiStyle.MATERIAL3 -> AppSurfaceTokens.groupedListContainer()
+        // COUI 17 是灰底白卡：画布取 COUI 的 surface，卡片停在 surfaceContainer，顶栏与画布同色。
+        AppUiStyle.COUI17 -> AppSurfaceTokens.chromeBackground()
     }
 
     CompositionLocalProvider(
@@ -192,7 +195,7 @@ internal fun SettingsPageScaffold(
         // Settings-only Miuix icons; shared defaults and MD3 remain unchanged in both glass states.
         com.android.purebilibili.core.ui.components.LocalAppPreferenceIconColors provides
             com.android.purebilibili.feature.settings.settingsIconColors(),
-        LocalAppPreferenceGroupPresentation provides if (LocalAppUiStyle.current == AppUiStyle.MIUIX) {
+        LocalAppPreferenceGroupPresentation provides if (LocalAppUiStyle.current.usesMiuixFamilySkin) {
             AppPreferenceGroupPresentation.CARD
         } else {
             AppPreferenceGroupPresentation.FLAT

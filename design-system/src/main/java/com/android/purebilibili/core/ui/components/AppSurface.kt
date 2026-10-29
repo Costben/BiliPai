@@ -13,8 +13,10 @@ import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.renderer.material3.AppMaterial3HorizontalDivider
 import com.android.purebilibili.core.ui.renderer.material3.AppMaterial3Surface
-import com.android.purebilibili.core.ui.renderer.miuix.AppMiuixHorizontalDivider
-import com.android.purebilibili.core.ui.renderer.miuix.AppMiuixSurface
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiHorizontalDivider
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiSurface
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiHorizontalDivider
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiSurface
 
 @Composable
 fun AppSurface(
@@ -38,7 +40,17 @@ fun AppSurface(
             border = border,
             content = content,
         )
-        AppUiStyle.MIUIX -> AppMiuixSurface(
+        AppUiStyle.MIUIX -> AppCouiSurface(
+            // Miuix Surface has no tonal-elevation role; do not reinterpret it as a shadow.
+            modifier = modifier,
+            shape = shape,
+            color = color,
+            contentColor = contentColor,
+            shadowElevation = shadowElevation,
+            border = border,
+            content = content,
+        )
+        AppUiStyle.COUI17 -> AppCouiSurface(
             // Miuix Surface has no tonal-elevation role; do not reinterpret it as a shadow.
             modifier = modifier,
             shape = shape,
@@ -79,7 +91,20 @@ fun AppSurface(
             interactionSource = interactionSource,
             content = content,
         )
-        AppUiStyle.MIUIX -> AppMiuixSurface(
+        AppUiStyle.MIUIX -> AppCouiSurface(
+            // Miuix Surface has no tonal-elevation role; do not reinterpret it as a shadow.
+            onClick = onClick,
+            modifier = modifier,
+            enabled = enabled,
+            shape = shape,
+            color = color,
+            contentColor = contentColor,
+            shadowElevation = shadowElevation,
+            border = border,
+            interactionSource = interactionSource,
+            content = content,
+        )
+        AppUiStyle.COUI17 -> AppCouiSurface(
             // Miuix Surface has no tonal-elevation role; do not reinterpret it as a shadow.
             onClick = onClick,
             modifier = modifier,
@@ -107,7 +132,12 @@ fun AppHorizontalDivider(
             thickness = thickness,
             color = color,
         )
-        AppUiStyle.MIUIX -> AppMiuixHorizontalDivider(
+        AppUiStyle.MIUIX -> AppCouiHorizontalDivider(
+            modifier = modifier,
+            thickness = thickness,
+            color = color,
+        )
+        AppUiStyle.COUI17 -> AppCouiHorizontalDivider(
             modifier = modifier,
             thickness = thickness,
             color = color,

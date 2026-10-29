@@ -39,6 +39,7 @@ import com.android.purebilibili.feature.video.playback.next.NextWatchSuggestion
 import com.android.purebilibili.feature.video.playback.next.isNextWatchWindow
 import com.android.purebilibili.feature.video.playback.next.nextWatchRemainingSeconds
 import kotlinx.coroutines.delay
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /** Poll only while the player host is composed; no callback is tied to a countdown timer. */
 @Composable
@@ -125,11 +126,11 @@ private fun NextWatchCard(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val miuix = LocalAppUiStyle.current == AppUiStyle.MIUIX
+    val miuix = LocalAppUiStyle.current.usesMiuixFamilySkin
     val shape = if (miuix) AppShapes.container(ContainerLevel.Card) else androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
-    val container = if (miuix) top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.surfaceContainerHigh
+    val container = if (miuix) io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.surfaceContainerHigh
         else MaterialTheme.colorScheme.surfaceContainerHigh
-    val content = if (miuix) top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.onSurface
+    val content = if (miuix) io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.onSurface
         else AppContentColors.primaryText()
     AppSurface(modifier = modifier, shape = shape, color = container, tonalElevation = 3.dp) {
         Row(verticalAlignment = Alignment.CenterVertically) {

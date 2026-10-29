@@ -14,7 +14,8 @@ import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.theme.resolveAndroidNativeChromeTokens
 import com.android.purebilibili.core.theme.resolveCornerRadiusScale
-import top.yukonga.miuix.kmp.squircle.addSquircleRect
+import io.github.suqi8.coui.kmp.squircle.addSquircleRect
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /** Uses the same upstream path geometry as native Miuix controls. */
 internal data class MiuixContainerShape(val radius: Dp) : Shape {
@@ -39,7 +40,7 @@ object AppShapes {
         uiStyle: AppUiStyle,
         liquidGlassEnabled: Boolean = true,
     ): Dp {
-        if (uiStyle == AppUiStyle.MIUIX) {
+        if (uiStyle.usesMiuixFamilySkin) {
             when (level) {
                 ContainerLevel.Card -> return 16.dp
                 ContainerLevel.MediaCover -> return 12.dp
@@ -62,7 +63,7 @@ object AppShapes {
         liquidGlassEnabled: Boolean = true,
     ): Shape {
         val dp = resolveContainerCornerDp(level, uiStyle, liquidGlassEnabled)
-        if (uiStyle == AppUiStyle.MIUIX && !liquidGlassEnabled && level != ContainerLevel.Sheet) {
+        if (uiStyle.usesMiuixFamilySkin && !liquidGlassEnabled && level != ContainerLevel.Sheet) {
             return MiuixContainerShape(dp)
         }
         return if (level == ContainerLevel.Sheet) {
@@ -152,7 +153,7 @@ object AppShapes {
     @Composable
     fun mediaCover(
         legacyLevel: ContainerLevel = ContainerLevel.Card,
-    ): Shape = if (LocalAppUiStyle.current == AppUiStyle.MIUIX) {
+    ): Shape = if (LocalAppUiStyle.current.usesMiuixFamilySkin) {
         container(ContainerLevel.MediaCover)
     } else {
         container(legacyLevel)
@@ -161,7 +162,7 @@ object AppShapes {
     @Composable
     fun borderedMediaCover(
         legacyLevel: ContainerLevel = ContainerLevel.Card,
-    ): Shape = if (LocalAppUiStyle.current == AppUiStyle.MIUIX) {
+    ): Shape = if (LocalAppUiStyle.current.usesMiuixFamilySkin) {
         borderedContainer(ContainerLevel.MediaCover)
     } else {
         borderedContainer(legacyLevel)
@@ -170,7 +171,7 @@ object AppShapes {
     @Composable
     fun mediaCoverCornerDp(
         legacyLevel: ContainerLevel = ContainerLevel.Card,
-    ): Dp = if (LocalAppUiStyle.current == AppUiStyle.MIUIX) {
+    ): Dp = if (LocalAppUiStyle.current.usesMiuixFamilySkin) {
         containerCornerDp(ContainerLevel.MediaCover)
     } else {
         containerCornerDp(legacyLevel)

@@ -20,8 +20,11 @@ import com.android.purebilibili.core.ui.renderer.material3.AppMaterial3TabRow
 import com.android.purebilibili.core.ui.isMiuixNonGlassEnabled
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
-import com.android.purebilibili.core.ui.renderer.miuix.AppMiuixSegmentedControl
-import com.android.purebilibili.core.ui.renderer.miuix.AppMiuixTabRow
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiSegmentedControl
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiTabRow
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiSegmentedControl
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiTabRow
 
 data class AppSegmentOption<T>(
     val value: T,
@@ -397,19 +400,35 @@ fun <T> AppNativeSegmentedControl(
             containerHorizontalPadding = containerHorizontalPadding,
             onSelectionChange = onSelectionChange,
         )
-        AppSegmentedRenderer.MIUIX -> AppMiuixSegmentedControl(
-            options = options,
-            selectedValue = selectedValue,
-            enabled = enabled,
-            colors = colors,
-            modifier = modifier,
-            indicatorPositionProvider = indicatorPositionProvider,
-            height = height,
-            itemWidth = itemWidth,
-            labelFontSize = labelFontSize,
-            containerHorizontalPadding = containerHorizontalPadding,
-            onSelectionChange = onSelectionChange,
-        )
+        AppSegmentedRenderer.MIUIX -> if (LocalAppUiStyle.current == AppUiStyle.COUI17) {
+            AppCouiSegmentedControl(
+                options = options,
+                selectedValue = selectedValue,
+                enabled = enabled,
+                colors = colors,
+                modifier = modifier,
+                indicatorPositionProvider = indicatorPositionProvider,
+                height = height,
+                itemWidth = itemWidth,
+                labelFontSize = labelFontSize,
+                containerHorizontalPadding = containerHorizontalPadding,
+                onSelectionChange = onSelectionChange,
+            )
+        } else {
+            AppCouiSegmentedControl(
+                options = options,
+                selectedValue = selectedValue,
+                enabled = enabled,
+                colors = colors,
+                modifier = modifier,
+                indicatorPositionProvider = indicatorPositionProvider,
+                height = height,
+                itemWidth = itemWidth,
+                labelFontSize = labelFontSize,
+                containerHorizontalPadding = containerHorizontalPadding,
+                onSelectionChange = onSelectionChange,
+            )
+        }
     }
     }
 }
@@ -450,10 +469,10 @@ fun <T> AppNativeTabRow(
     if (options.isEmpty()) return
     // This entry renders native controls even when the page also uses glass docks.
     // Label measurement and native slot spacing follow the renderer, not the glass switch.
-    val nativeMiuix = !forceMaterial3 && LocalAppUiStyle.current == AppUiStyle.MIUIX
+    val nativeMiuix = !forceMaterial3 && LocalAppUiStyle.current.usesMiuixFamilySkin
     val defaultLabelStyle = if (nativeMiuix) {
-        top.yukonga.miuix.kmp.theme.MiuixTheme.textStyles.main.copy(
-            fontSize = top.yukonga.miuix.kmp.theme.MiuixTheme.textStyles.body1.fontSize,
+        io.github.suqi8.coui.kmp.theme.COUITheme.textStyles.main.copy(
+            fontSize = io.github.suqi8.coui.kmp.theme.COUITheme.textStyles.body1.fontSize,
             fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
         )
     } else {
@@ -542,41 +561,79 @@ fun <T> AppNativeTabRow(
             modifier = modifier,
             onSelectionChange = onSelectionChange,
         )
-        AppSegmentedRenderer.MIUIX -> AppMiuixTabRow(
-            options = options,
-            selectedValue = selectedValue,
-            enabled = enabled,
-            scrollable = effectiveScrollable,
-            // Content-sized tabs measure each label independently. A shared longest-label
-            // minimum would enlarge every short tab when a long collection title appears.
-            minTabWidth = resolveMiuixTabMinWidth(
-                requestedMinWidth = minTabWidth,
-                sharedMinWidth = targetTabWidth,
-                contentSizedItems = useContentSizedMiuixItems,
-            ),
-            colors = colors,
-            preferredCornerRadius = policy.preferredCornerRadius,
-            height = height,
-            fixedItemWidth = fixedItemWidth,
-            labelFontSize = labelFontSize,
-            containerHorizontalPadding = containerHorizontalPadding,
-            modifier = if (fixedItemWidth == null && shouldUseCompactMiuixTabRow(options.size, effectiveScrollable, compactMiuixWhenTwoOptions)) {
-                modifier.width(
-                    compactItemWidth * options.size + containerHorizontalPadding * 2 +
-                        if (nativeMiuix) AppSpacingTokens.Small * (options.size - 1) else 0.dp,
-                )
-            } else {
-                modifier
-            },
-            indicatorPositionProvider = indicatorPositionProvider,
-            equalizeScrollableItemWidths = equalizeMiuixNonGlassItems,
-            centerContent = centerContent,
-            contentSizedNonGlassItems = useContentSizedMiuixItems,
-            contentSizedNonGlassMaxItemWidth = contentSizedMiuixNonGlassMaxItemWidth,
-            drawNonGlassTrack = drawMiuixNonGlassTrack,
-            stretchToFill = forceEqualWidth,
-            onSelectionChange = onSelectionChange,
-        )
+        AppSegmentedRenderer.MIUIX -> if (LocalAppUiStyle.current == AppUiStyle.COUI17) {
+            AppCouiTabRow(
+                options = options,
+                selectedValue = selectedValue,
+                enabled = enabled,
+                scrollable = effectiveScrollable,
+                // Content-sized tabs measure each label independently. A shared longest-label
+                // minimum would enlarge every short tab when a long collection title appears.
+                minTabWidth = resolveMiuixTabMinWidth(
+                    requestedMinWidth = minTabWidth,
+                    sharedMinWidth = targetTabWidth,
+                    contentSizedItems = useContentSizedMiuixItems,
+                ),
+                colors = colors,
+                preferredCornerRadius = policy.preferredCornerRadius,
+                height = height,
+                fixedItemWidth = fixedItemWidth,
+                labelFontSize = labelFontSize,
+                containerHorizontalPadding = containerHorizontalPadding,
+                modifier = if (fixedItemWidth == null && shouldUseCompactMiuixTabRow(options.size, effectiveScrollable, compactMiuixWhenTwoOptions)) {
+                    modifier.width(
+                        compactItemWidth * options.size + containerHorizontalPadding * 2 +
+                            if (nativeMiuix) AppSpacingTokens.Small * (options.size - 1) else 0.dp,
+                    )
+                } else {
+                    modifier
+                },
+                indicatorPositionProvider = indicatorPositionProvider,
+                equalizeScrollableItemWidths = equalizeMiuixNonGlassItems,
+                centerContent = centerContent,
+                contentSizedNonGlassItems = useContentSizedMiuixItems,
+                contentSizedNonGlassMaxItemWidth = contentSizedMiuixNonGlassMaxItemWidth,
+                drawNonGlassTrack = drawMiuixNonGlassTrack,
+                stretchToFill = forceEqualWidth,
+                onSelectionChange = onSelectionChange,
+            )
+        } else {
+            AppCouiTabRow(
+                options = options,
+                selectedValue = selectedValue,
+                enabled = enabled,
+                scrollable = effectiveScrollable,
+                // Content-sized tabs measure each label independently. A shared longest-label
+                // minimum would enlarge every short tab when a long collection title appears.
+                minTabWidth = resolveMiuixTabMinWidth(
+                    requestedMinWidth = minTabWidth,
+                    sharedMinWidth = targetTabWidth,
+                    contentSizedItems = useContentSizedMiuixItems,
+                ),
+                colors = colors,
+                preferredCornerRadius = policy.preferredCornerRadius,
+                height = height,
+                fixedItemWidth = fixedItemWidth,
+                labelFontSize = labelFontSize,
+                containerHorizontalPadding = containerHorizontalPadding,
+                modifier = if (fixedItemWidth == null && shouldUseCompactMiuixTabRow(options.size, effectiveScrollable, compactMiuixWhenTwoOptions)) {
+                    modifier.width(
+                        compactItemWidth * options.size + containerHorizontalPadding * 2 +
+                            if (nativeMiuix) AppSpacingTokens.Small * (options.size - 1) else 0.dp,
+                    )
+                } else {
+                    modifier
+                },
+                indicatorPositionProvider = indicatorPositionProvider,
+                equalizeScrollableItemWidths = equalizeMiuixNonGlassItems,
+                centerContent = centerContent,
+                contentSizedNonGlassItems = useContentSizedMiuixItems,
+                contentSizedNonGlassMaxItemWidth = contentSizedMiuixNonGlassMaxItemWidth,
+                drawNonGlassTrack = drawMiuixNonGlassTrack,
+                stretchToFill = forceEqualWidth,
+                onSelectionChange = onSelectionChange,
+            )
+        }
     }
     }
 }

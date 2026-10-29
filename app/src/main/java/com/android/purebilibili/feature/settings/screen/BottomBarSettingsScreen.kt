@@ -68,6 +68,7 @@ import com.android.purebilibili.core.ui.animation.EntranceGroup
 import com.android.purebilibili.core.ui.animation.entrance
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /**
  *  底栏项目配置
@@ -173,7 +174,7 @@ fun BottomBarSettingsContent(
     val iconFamily = rememberAppSemanticVisualPolicy().effectiveIconFamily
     val windowSizeClass = LocalWindowSizeClass.current
     val displayContext = LocalAppWindowAdaptiveInfo.current.displayContext
-    val isMiuix = LocalAppUiStyle.current == AppUiStyle.MIUIX
+    val isMiuix = LocalAppUiStyle.current.usesMiuixFamilySkin
     val standaloneHorizontalPadding = if (isMiuix) 16.dp else 0.dp
     val bottomInset = maxOf(
         WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding(),

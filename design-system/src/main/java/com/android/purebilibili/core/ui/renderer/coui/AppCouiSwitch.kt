@@ -1,19 +1,19 @@
-package com.android.purebilibili.core.ui.renderer.miuix
+package com.android.purebilibili.core.ui.renderer.coui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.android.purebilibili.core.ui.components.appDesktopFocusableItemVisuals
-import top.yukonga.miuix.kmp.basic.Switch
-import top.yukonga.miuix.kmp.basic.SwitchDefaults
+import io.github.suqi8.coui.kmp.basic.Switch
+import io.github.suqi8.coui.kmp.basic.SwitchDefaults
 
 @Composable
-internal fun AppMiuixSwitch(
+internal fun AppCouiSwitch(
     checked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
     modifier: Modifier,
     enabled: Boolean,
 ) {
-    ProvideAppMiuixHapticFeedback {
+    ProvideAppCouiHapticFeedback {
         Switch(
             checked = checked,
             onCheckedChange = onCheckedChange,

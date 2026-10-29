@@ -25,6 +25,7 @@ import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.AppTopTabPresentation
 import com.android.purebilibili.feature.video.ui.section.VideoGestureMode
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /**
  * Three fully distinct volume/brightness feedback skins.
@@ -69,7 +70,7 @@ fun resolveGestureLevelOverlayStyle(
     presentation: AppTopTabPresentation,
     uiStyle: AppUiStyle = AppUiStyle.MATERIAL3,
 ): GestureLevelOverlayStyle {
-    if (uiStyle == AppUiStyle.MIUIX) return GestureLevelOverlayStyle.Miuix
+    if (uiStyle.usesMiuixFamilySkin) return GestureLevelOverlayStyle.Miuix
     return when (presentation) {
         AppTopTabPresentation.TONAL_CAPSULE -> GestureLevelOverlayStyle.Miuix
         AppTopTabPresentation.MOVING_CAPSULE -> GestureLevelOverlayStyle.Ios

@@ -7,9 +7,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import top.yukonga.miuix.kmp.basic.CircularProgressIndicator as MiuixCircularProgressIndicator
-import top.yukonga.miuix.kmp.basic.InfiniteProgressIndicator as MiuixInfiniteProgressIndicator
-import top.yukonga.miuix.kmp.basic.ProgressIndicatorDefaults as MiuixProgressIndicatorDefaults
+import io.github.suqi8.coui.kmp.basic.CircularProgressIndicator as MiuixCircularProgressIndicator
+import io.github.suqi8.coui.kmp.basic.InfiniteProgressIndicator as MiuixInfiniteProgressIndicator
+import io.github.suqi8.coui.kmp.basic.ProgressIndicatorDefaults as MiuixProgressIndicatorDefaults
 
 /**
  * Preset-aware indeterminate loading indicator.

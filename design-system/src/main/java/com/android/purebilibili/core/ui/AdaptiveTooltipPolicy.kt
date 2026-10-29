@@ -13,4 +13,5 @@ fun resolveAdaptiveTooltipRenderer(
 ): AdaptiveTooltipRenderer = when (uiStyle) {
     AppUiStyle.MIUIX -> AdaptiveTooltipRenderer.MIUIX_TOOLTIP_BOX
     AppUiStyle.MATERIAL3 -> AdaptiveTooltipRenderer.MATERIAL3_TOOLTIP_BOX
+    AppUiStyle.COUI17 -> AdaptiveTooltipRenderer.MIUIX_TOOLTIP_BOX
 }

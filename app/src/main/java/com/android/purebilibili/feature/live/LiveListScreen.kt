@@ -840,7 +840,7 @@ private fun LiveListHeader(
     onBack: () -> Unit,
     onSearchClick: () -> Unit,
     onAreaListClick: () -> Unit,
-    searchBackdrop: top.yukonga.miuix.kmp.blur.Backdrop? = null,
+    searchBackdrop: io.github.suqi8.coui.kmp.blur.Backdrop? = null,
 ) {
     val palette = rememberLiveChromePalette()
     val compactChrome = rememberAppTopChromePolicy().compactChromeSpec

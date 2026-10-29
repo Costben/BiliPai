@@ -2,6 +2,7 @@ package com.android.purebilibili.feature.audio.screen
 
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.resolveAndroidNativeChromeTokens
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 internal data class MusicPlayerChromeSpec(
     val uiStyle: AppUiStyle,
@@ -28,8 +29,8 @@ internal fun resolveMusicPlayerChromeSpec(
         usePaletteImmersiveBackdrop = true,
         coverShapeIsCircle = true,
         horizontalPaddingDp = tokens.denseHorizontalSpacingDp,
-        playButtonSizeDp = if (uiStyle == AppUiStyle.MIUIX) 68 else 76,
-        skipButtonSizeDp = if (uiStyle == AppUiStyle.MIUIX) 48 else 56,
+        playButtonSizeDp = if (uiStyle.usesMiuixFamilySkin) 68 else 76,
+        skipButtonSizeDp = if (uiStyle.usesMiuixFamilySkin) 48 else 56,
         coverStyle = coverStyle
     )
 }

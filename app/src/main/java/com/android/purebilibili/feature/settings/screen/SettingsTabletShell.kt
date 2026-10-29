@@ -73,6 +73,7 @@ import androidx.compose.material3.adaptive.layout.PaneAdaptedValue
 import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldPaneScope
 import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldValue
 import androidx.compose.material3.adaptive.layout.calculatePaneScaffoldDirective
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
@@ -233,7 +234,7 @@ fun SettingsTabletShell(
                                     }
                                 },
                                 icon = {
-                                    if (LocalAppUiStyle.current == AppUiStyle.MIUIX || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
+                                    if (LocalAppUiStyle.current.usesMiuixFamilySkin || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
                                         SettingsFunctionIcon(
                                             title = category.title,
                                             imageVector = visual.icon,

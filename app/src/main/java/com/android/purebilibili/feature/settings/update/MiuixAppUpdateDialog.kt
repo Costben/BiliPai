@@ -21,19 +21,19 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import top.yukonga.miuix.kmp.basic.ButtonDefaults
-import top.yukonga.miuix.kmp.basic.Card
-import top.yukonga.miuix.kmp.basic.CardDefaults
-import top.yukonga.miuix.kmp.basic.HorizontalDivider
-import top.yukonga.miuix.kmp.basic.Icon
-import top.yukonga.miuix.kmp.basic.IconButton
-import top.yukonga.miuix.kmp.basic.LinearProgressIndicator
-import top.yukonga.miuix.kmp.basic.Text
-import top.yukonga.miuix.kmp.basic.TextButton
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.Close
-import top.yukonga.miuix.kmp.theme.MiuixTheme
-import top.yukonga.miuix.kmp.window.WindowDialog
+import io.github.suqi8.coui.kmp.basic.ButtonDefaults
+import io.github.suqi8.coui.kmp.basic.Card
+import io.github.suqi8.coui.kmp.basic.CardDefaults
+import io.github.suqi8.coui.kmp.basic.HorizontalDivider
+import io.github.suqi8.coui.kmp.basic.Icon
+import io.github.suqi8.coui.kmp.basic.IconButton
+import io.github.suqi8.coui.kmp.basic.LinearProgressIndicator
+import io.github.suqi8.coui.kmp.basic.Text
+import io.github.suqi8.coui.kmp.basic.TextButton
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.Close
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import io.github.suqi8.coui.kmp.window.WindowDialog
 
 /** Miuix renderer: native responsive WindowDialog, cards, progress and squircle buttons. */
 @Composable
@@ -73,16 +73,16 @@ private fun MiuixUpdateHeader(
         ) {
             Text(
                 text = if (state.showReleaseNotesOnly) "更新日志" else "发现新版本",
-                style = MiuixTheme.textStyles.headline1,
+                style = COUITheme.textStyles.headline1,
                 fontWeight = FontWeight.SemiBold,
-                color = MiuixTheme.colorScheme.onSurface,
+                color = COUITheme.colorScheme.onSurface,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
                 text = "版本 ${state.update.latestVersion}",
-                style = MiuixTheme.textStyles.body2,
-                color = MiuixTheme.colorScheme.onSurfaceSecondary,
+                style = COUITheme.textStyles.body2,
+                color = COUITheme.colorScheme.onSurfaceSecondary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -94,10 +94,10 @@ private fun MiuixUpdateHeader(
             modifier = Modifier.appElasticPress(),
         ) {
             Icon(
-                imageVector = MiuixIcons.Basic.Close,
+                imageVector = COUIIcons.Basic.Close,
                 contentDescription = "关闭",
                 modifier = Modifier.size(24.dp),
-                tint = MiuixTheme.colorScheme.onSurfaceSecondary,
+                tint = COUITheme.colorScheme.onSurfaceSecondary,
             )
         }
     }
@@ -148,8 +148,8 @@ private fun MiuixVersionCard(
         modifier = modifier.fillMaxWidth(),
         insideMargin = PaddingValues(16.dp),
         colors = CardDefaults.defaultColors(
-            color = MiuixTheme.colorScheme.surfaceContainer,
-            contentColor = MiuixTheme.colorScheme.onSurfaceContainer,
+            color = COUITheme.colorScheme.surfaceContainer,
+            contentColor = COUITheme.colorScheme.onSurfaceContainer,
         ),
     ) {
         Row(
@@ -172,8 +172,8 @@ private fun MiuixVersionCard(
             Text(
                 text = "安装包  $assetName",
                 modifier = Modifier.padding(top = 10.dp),
-                style = MiuixTheme.textStyles.body2,
-                color = MiuixTheme.colorScheme.onSurfaceSecondary,
+                style = COUITheme.textStyles.body2,
+                color = COUITheme.colorScheme.onSurfaceSecondary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 softWrap = false,
@@ -192,14 +192,14 @@ private fun MiuixVersionValue(
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(2.dp)) {
         Text(
             text = label,
-            style = MiuixTheme.textStyles.body2,
-            color = MiuixTheme.colorScheme.onSurfaceSecondary,
+            style = COUITheme.textStyles.body2,
+            color = COUITheme.colorScheme.onSurfaceSecondary,
             maxLines = 1,
         )
         Text(
             text = value,
-            style = MiuixTheme.textStyles.headline1,
-            color = if (emphasized) MiuixTheme.colorScheme.primary else MiuixTheme.colorScheme.onSurface,
+            style = COUITheme.textStyles.headline1,
+            color = if (emphasized) COUITheme.colorScheme.primary else COUITheme.colorScheme.onSurface,
             fontWeight = if (emphasized) FontWeight.SemiBold else FontWeight.Medium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -217,13 +217,13 @@ private fun MiuixDownloadStatus(
         modifier = modifier.fillMaxWidth(),
         insideMargin = PaddingValues(16.dp),
         colors = CardDefaults.defaultColors(
-            color = MiuixTheme.colorScheme.secondaryContainer,
-            contentColor = MiuixTheme.colorScheme.onSecondaryContainer,
+            color = COUITheme.colorScheme.secondaryContainer,
+            contentColor = COUITheme.colorScheme.onSecondaryContainer,
         ),
     ) {
         Text(
             text = appUpdateStatusText(state),
-            style = MiuixTheme.textStyles.body1,
+            style = COUITheme.textStyles.body1,
             fontWeight = FontWeight.Medium,
         )
         if (state.isActiveDownload()) {
@@ -240,7 +240,7 @@ private fun MiuixDownloadStatus(
                     "此 Release 未提供 SHA-256 校验信息"
                 },
                 modifier = Modifier.padding(top = 8.dp),
-                style = MiuixTheme.textStyles.body2,
+                style = COUITheme.textStyles.body2,
             )
         }
     }
@@ -254,39 +254,39 @@ private fun MiuixReleaseNotes(
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(
             text = "本次更新",
-            style = MiuixTheme.textStyles.headline1,
+            style = COUITheme.textStyles.headline1,
             fontWeight = FontWeight.SemiBold,
-            color = MiuixTheme.colorScheme.onSurface,
+            color = COUITheme.colorScheme.onSurface,
         )
         parseUpdateReleaseNotes(releaseNotes).forEach { block ->
             when (block) {
                 is AppUpdateReleaseNotesBlock.Heading -> Text(
                     text = block.text,
                     style = if (block.level == 1) {
-                        MiuixTheme.textStyles.headline1
+                        COUITheme.textStyles.headline1
                     } else {
-                        MiuixTheme.textStyles.body1
+                        COUITheme.textStyles.body1
                     },
                     fontWeight = FontWeight.SemiBold,
-                    color = MiuixTheme.colorScheme.onSurface,
+                    color = COUITheme.colorScheme.onSurface,
                 )
                 is AppUpdateReleaseNotesBlock.Bullet -> Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    Text(text = "•", color = MiuixTheme.colorScheme.primary)
+                    Text(text = "•", color = COUITheme.colorScheme.primary)
                     Text(
                         text = block.text,
                         modifier = Modifier.weight(1f),
-                        style = MiuixTheme.textStyles.body1,
-                        color = MiuixTheme.colorScheme.onSurfaceSecondary,
+                        style = COUITheme.textStyles.body1,
+                        color = COUITheme.colorScheme.onSurfaceSecondary,
                     )
                 }
                 AppUpdateReleaseNotesBlock.Divider -> HorizontalDivider()
                 is AppUpdateReleaseNotesBlock.Paragraph -> Text(
                     text = block.text,
-                    style = MiuixTheme.textStyles.body1,
-                    color = MiuixTheme.colorScheme.onSurfaceSecondary,
+                    style = COUITheme.textStyles.body1,
+                    color = COUITheme.colorScheme.onSurfaceSecondary,
                 )
             }
         }
@@ -301,8 +301,8 @@ private fun MiuixDownloadChannels(
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(
             text = "其他下载渠道",
-            style = MiuixTheme.textStyles.body2,
-            color = MiuixTheme.colorScheme.onSurfaceSecondary,
+            style = COUITheme.textStyles.body2,
+            color = COUITheme.colorScheme.onSurfaceSecondary,
         )
         Row(
             modifier = Modifier

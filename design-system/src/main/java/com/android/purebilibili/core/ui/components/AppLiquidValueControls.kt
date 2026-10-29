@@ -58,9 +58,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.coroutines.flow.first
 import kotlin.math.abs
-import top.yukonga.miuix.kmp.blur.*
+import io.github.suqi8.coui.kmp.blur.*
 import com.android.purebilibili.core.ui.effect.lens
-import top.yukonga.miuix.kmp.blur.highlight.Highlight
+import io.github.suqi8.coui.kmp.blur.highlight.Highlight
 import androidx.compose.ui.res.colorResource
 import com.android.purebilibili.designsystem.R
 import com.android.purebilibili.core.ui.LocalComponentMotionEnabled

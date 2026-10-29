@@ -48,6 +48,7 @@ import com.android.purebilibili.feature.cast.hasRawLocalNetworkAccess
 import com.android.purebilibili.feature.cast.localNetworkRuntimePermissions
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /**
  *  权限管理页面
@@ -284,7 +285,7 @@ private fun PermissionItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         // 图标
-        if (LocalAppUiStyle.current == AppUiStyle.MIUIX || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
+        if (LocalAppUiStyle.current.usesMiuixFamilySkin || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
             SettingsFunctionIcon(
                 title = name,
                 imageVector = permissionIcon,

@@ -112,13 +112,13 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.blur.Backdrop
-import top.yukonga.miuix.kmp.blur.blur
-import top.yukonga.miuix.kmp.blur.drawBackdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.blur
+import io.github.suqi8.coui.kmp.blur.drawBackdrop
 import com.android.purebilibili.core.ui.blur.rememberChromeBackdropSource
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import androidx.compose.material3.LocalContentColor as M3LocalContentColor
-import top.yukonga.miuix.kmp.theme.LocalContentColor as MiuixLocalContentColor
+import io.github.suqi8.coui.kmp.theme.LocalContentColor as MiuixLocalContentColor
 
 val LocalFloatingBottomBarContentColor = staticCompositionLocalOf { Color.Unspecified }
 
@@ -163,9 +163,9 @@ class FloatingBottomBarColors(
 object FloatingBottomBarDefaults {
     @Composable
     fun colors(
-        containerColor: Color = MiuixTheme.colorScheme.surfaceContainer,
-        indicatorColor: Color = MiuixTheme.colorScheme.primary,
-        contentColor: Color = MiuixTheme.colorScheme.onSurface,
+        containerColor: Color = COUITheme.colorScheme.surfaceContainer,
+        indicatorColor: Color = COUITheme.colorScheme.primary,
+        contentColor: Color = COUITheme.colorScheme.onSurface,
         activeContentColor: Color = indicatorColor
     ): FloatingBottomBarColors = FloatingBottomBarColors(
         containerColor = containerColor,

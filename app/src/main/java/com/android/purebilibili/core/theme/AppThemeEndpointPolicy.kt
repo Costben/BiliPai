@@ -27,8 +27,24 @@ internal fun resolveAppThemeEndpointPalette(
     // Wallpaper edits can change a role's backdrop. Repair only extended foregrounds
     // before either native bridge; glass on/off consumes the same corrected palette.
     val configured = if (preserveGeneratedPalette) enforceSeedTextContrast(overridden) else overridden
+    // COUI 17 以 ColorOS 原生中性色为底，只接受用户强调色；Material 兜底表面也对齐到同一份色板，
+    // 否则 COUI 组件之外的页面背景仍是 BiliPai 调色板，整页会出现两种底色。
+    if (uiStyle == AppUiStyle.COUI17) {
+        val accent = resolveLiquidControlAccentColor(
+            source = source,
+            customSeed = customSeed,
+            generatedAccent = configured.primary,
+            roleOverridesEnabled = roleOverrides.enabled,
+            roleControlHex = if (darkTheme) roleOverrides.dark.controlAccentHex else roleOverrides.light.controlAccentHex,
+        )
+        val coui = resolveCouiColorsFromAccent(accent, resolveReadableForeground(accent), darkTheme).toMiuixColors()
+        // COUI 的 secondary 是中性控件底色而不是强调色，Material 侧的 secondary/tertiary 必须保留生成的强调族，
+        // 否则用它着色的图标会变成浅灰、几乎看不见。
+        val material = alignMaterialSurfacesWithMiuix(configured, coui, preserveMaterialAccentRoles = true)
+        return AppThemePalette(material, coui, accent)
+    }
     // Miuix 内容色板不随玻璃开关切换；玻璃控件的强调色单独提供。
-    if (uiStyle == AppUiStyle.MIUIX) {
+    if (uiStyle.usesMiuixFamilySkin) {
         val generatedMiuix = resolveMiuixColorsFromMaterialBridge(
             createMiuixMaterialBridge(configured), darkTheme, useMonetMapping = true,
         )

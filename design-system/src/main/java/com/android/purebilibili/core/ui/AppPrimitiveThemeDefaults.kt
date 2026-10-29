@@ -10,8 +10,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.LineHeightStyle
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
-import top.yukonga.miuix.kmp.theme.LocalContentColor as MiuixLocalContentColor
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.LocalContentColor as MiuixLocalContentColor
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** 原生组件槽位可局部提供字阶，未提供时沿用各材质自己的默认字阶。 */
 internal val LocalAppTextStyleOverride = androidx.compose.runtime.staticCompositionLocalOf<TextStyle?> { null }
@@ -21,7 +21,8 @@ internal val LocalAppTextStyleOverride = androidx.compose.runtime.staticComposit
 @ReadOnlyComposable
 internal fun currentAppTextStyle(): TextStyle = LocalAppTextStyleOverride.current ?: when (LocalAppUiStyle.current) {
     AppUiStyle.MATERIAL3 -> MaterialLocalTextStyle.current
-    AppUiStyle.MIUIX -> MiuixTheme.textStyles.main
+    AppUiStyle.MIUIX -> COUITheme.textStyles.main
+    AppUiStyle.COUI17 -> COUITheme.textStyles.main
 }
 
 /**
@@ -50,4 +51,5 @@ fun appTextStyleWithLineHeightStyle(lineHeightStyle: LineHeightStyle): TextStyle
 internal fun currentAppContentColor(): Color = when (LocalAppUiStyle.current) {
     AppUiStyle.MATERIAL3 -> MaterialLocalContentColor.current
     AppUiStyle.MIUIX -> MiuixLocalContentColor.current
+    AppUiStyle.COUI17 -> MiuixLocalContentColor.current
 }

@@ -170,8 +170,8 @@ import com.android.purebilibili.feature.home.components.shouldShowTopTabIcon
 import com.android.purebilibili.feature.home.components.shouldShowTopTabText
 import com.android.purebilibili.feature.home.components.HomeSelectionIndicatorStyle
 import com.android.purebilibili.feature.home.components.resolveHomeSelectionIndicatorStyle
-import top.yukonga.miuix.kmp.blur.layerBackdrop
-import top.yukonga.miuix.kmp.blur.rememberLayerBackdrop
+import io.github.suqi8.coui.kmp.blur.layerBackdrop
+import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeSource
 import com.android.purebilibili.core.ui.blur.unifiedBlur
@@ -1175,8 +1175,8 @@ private fun PartitionSideRailMovingIndicator(
     liquidGlassIndicatorEnabled: Boolean,
     liquidGlassPreset: BottomBarLiquidGlassPreset,
     liquidGlassTuning: LiquidGlassTuning,
-    contentBackdrop: top.yukonga.miuix.kmp.blur.Backdrop,
-    backdrop: top.yukonga.miuix.kmp.blur.Backdrop,
+    contentBackdrop: io.github.suqi8.coui.kmp.blur.Backdrop,
+    backdrop: io.github.suqi8.coui.kmp.blur.Backdrop,
     maxVideoPushPx: Float,
     horizontalPadding: PartitionSideRailIndicatorHorizontalPadding,
     onVideoListPushChanged: (Float) -> Unit,

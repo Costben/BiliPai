@@ -77,7 +77,7 @@ fun AppCompactMenuItem(
     val glassScope = LocalAppGlassMenuScope.current
     val menuModifier = modifier.glassMenuItem(enabled, dismissOnClick, feedbackClick).glassMenuSelectedItem(selected)
     if (glassScope == null && com.android.purebilibili.core.ui.isMiuixNonGlassEnabled()) {
-        top.yukonga.miuix.kmp.basic.BasicComponent(
+        io.github.suqi8.coui.kmp.basic.BasicComponent(
             modifier = menuModifier.semantics(mergeDescendants = true) {
                 this.selected = selected
                 if (!enabled) disabled()

@@ -51,7 +51,7 @@ import com.android.purebilibili.core.ui.ContainerLevel
 import dev.chrisbanes.haze.HazeState
 import coil3.compose.AsyncImage
 import java.io.File
-import top.yukonga.miuix.kmp.blur.Backdrop as MiuixBackdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop as MiuixBackdrop
 
 @Composable
 internal fun HomeTopTabChrome(

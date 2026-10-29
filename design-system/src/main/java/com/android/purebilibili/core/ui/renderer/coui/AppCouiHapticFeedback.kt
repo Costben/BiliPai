@@ -1,4 +1,4 @@
-package com.android.purebilibili.core.ui.renderer.miuix
+package com.android.purebilibili.core.ui.renderer.coui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -12,7 +12,7 @@ private object NoOpHapticFeedback : HapticFeedback {
 }
 
 @Composable
-internal fun ProvideAppMiuixHapticFeedback(
+internal fun ProvideAppCouiHapticFeedback(
     scene: com.android.purebilibili.core.ui.AppHapticScene = com.android.purebilibili.core.ui.AppHapticScene.CONTROLS,
     content: @Composable () -> Unit,
 ) {

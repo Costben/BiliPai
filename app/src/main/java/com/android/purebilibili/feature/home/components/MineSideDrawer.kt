@@ -57,7 +57,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.SwapHoriz
 import kotlinx.coroutines.launch
 import java.io.File
-import top.yukonga.miuix.kmp.blur.Backdrop as MiuixBackdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop as MiuixBackdrop
 
 /**
  * 首页侧边栏 - 优化版 (带毛玻璃效果)

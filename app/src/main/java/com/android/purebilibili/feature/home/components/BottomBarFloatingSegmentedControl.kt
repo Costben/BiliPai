@@ -45,9 +45,9 @@ import com.android.purebilibili.core.ui.wallpaper.LocalGlobalWallpaperBackdropSo
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.clipLiquidDockScrollContent
 import com.android.purebilibili.feature.home.components.miuix.DampedDragTrackingMode
-import top.yukonga.miuix.kmp.blur.Backdrop
-import top.yukonga.miuix.kmp.blur.layerBackdrop
-import top.yukonga.miuix.kmp.blur.rememberLayerBackdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.layerBackdrop
+import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop
 
 /**
  * Reuse wrapper around [FloatingBottomBar]. No local drawBackdrop / lens / vibrancy.

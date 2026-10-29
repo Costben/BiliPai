@@ -69,18 +69,20 @@ import com.android.purebilibili.core.ui.rememberResolvedAppListItemStyle
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import com.android.purebilibili.core.ui.AppSurfaceTokens
-import top.yukonga.miuix.kmp.basic.BasicComponent
-import top.yukonga.miuix.kmp.basic.BasicComponentDefaults
-import top.yukonga.miuix.kmp.basic.Card as MiuixCard
-import top.yukonga.miuix.kmp.basic.CardDefaults as MiuixCardDefaults
-import top.yukonga.miuix.kmp.basic.SmallTitle
-import top.yukonga.miuix.kmp.preference.ArrowPreference as MiuixArrowPreference
-import top.yukonga.miuix.kmp.basic.InputField
-import top.yukonga.miuix.kmp.basic.TextField as MiuixTextField
-import top.yukonga.miuix.kmp.basic.TextFieldDefaults as MiuixTextFieldDefaults
+import io.github.suqi8.coui.kmp.basic.BasicComponent
+import io.github.suqi8.coui.kmp.basic.BasicComponentDefaults
+import io.github.suqi8.coui.kmp.basic.Card as MiuixCard
+import io.github.suqi8.coui.kmp.basic.CardDefaults as MiuixCardDefaults
+import io.github.suqi8.coui.kmp.basic.SmallTitle
+import io.github.suqi8.coui.kmp.preference.ArrowPreference as MiuixArrowPreference
+import io.github.suqi8.coui.kmp.basic.InputField
+import io.github.suqi8.coui.kmp.basic.SearchBarDefaults
+import io.github.suqi8.coui.kmp.basic.TextField as MiuixTextField
+import io.github.suqi8.coui.kmp.basic.TextFieldDefaults as MiuixTextFieldDefaults
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.delay
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 
 /**
@@ -150,7 +152,7 @@ internal fun resolveAdaptiveListComponentVisualSpec(
 ): AdaptiveListComponentVisualSpec {
     val chromeTokens = resolveAndroidNativeChromeTokens(uiStyle)
     val compactChrome = resolveCompactCapsuleChromeSpec(uiStyle)
-    return if (uiStyle == AppUiStyle.MIUIX) {
+    return if (uiStyle.usesMiuixFamilySkin) {
         AdaptiveListComponentVisualSpec(
             sectionStartPaddingDp = chromeTokens.denseHorizontalSpacingDp,
             groupCornerRadiusDp = 16,
@@ -205,7 +207,7 @@ internal fun resolveAdaptiveListRowVisualSpec(
 ): AdaptiveListRowVisualSpec {
     // Shared app-authored rows use compact spacing in either material and theme.
     // Native renderers retain their intrinsic content height; long text can grow the row.
-    return if (uiStyle == AppUiStyle.MIUIX) {
+    return if (uiStyle.usesMiuixFamilySkin) {
         AdaptiveListRowVisualSpec(
             insideHorizontalPaddingDp = 16,
             insideVerticalPaddingDp = AppChromeSizeTokens.PreferenceVerticalPaddingDp,
@@ -249,6 +251,7 @@ internal fun resolveAdaptiveGroupContainerColor(
     val resolvedColor = when (uiStyle) {
         AppUiStyle.MIUIX -> colorScheme.surfaceContainer
         AppUiStyle.MATERIAL3 -> colorScheme.surfaceContainerLow
+        AppUiStyle.COUI17 -> colorScheme.surfaceContainer
     }
     return resolveGlobalWallpaperListContainerColor(
         containerColor = resolvedColor,
@@ -263,7 +266,7 @@ internal fun resolveAdaptiveGroupContainerColor(
 fun adaptivePreferenceGroupContainerColor(): Color = resolveAdaptiveGroupContainerColor(
     uiStyle = LocalAppUiStyle.current,
     colorScheme = MaterialTheme.colorScheme,
-    globalWallpaperVisible = LocalGlobalWallpaperBackdropVisible.current && LocalAppUiStyle.current != AppUiStyle.MIUIX,
+    globalWallpaperVisible = LocalGlobalWallpaperBackdropVisible.current && !LocalAppUiStyle.current.usesMiuixFamilySkin,
 )
 
 internal fun resolveAdaptiveSearchBarContainerColor(
@@ -274,6 +277,7 @@ internal fun resolveAdaptiveSearchBarContainerColor(
     val resolvedColor = when (uiStyle) {
         AppUiStyle.MIUIX -> colorScheme.surfaceContainerHigh
         AppUiStyle.MATERIAL3 -> colorScheme.surfaceContainerHigh
+        AppUiStyle.COUI17 -> colorScheme.surfaceContainerHigh
     }
     return resolveGlobalWallpaperListContainerColor(
         containerColor = resolvedColor,
@@ -290,7 +294,7 @@ internal fun resolveAdaptiveSearchBarContainerOverride(
 
 internal fun shouldUseNativeMiuixSearchBar(
     uiStyle: AppUiStyle
-): Boolean = uiStyle == AppUiStyle.MIUIX
+): Boolean = uiStyle.usesMiuixFamilySkin
 
 internal fun resolveGlobalWallpaperListContainerColor(
     containerColor: Color,
@@ -415,7 +419,7 @@ fun rememberAdaptiveSemanticIconTint(
     val neutralEntryColor = AppContentColors.secondaryText()
     val requestsNeutralEntryColor = iconTint == Color.Unspecified || iconTint == neutralEntryColor
     // Miuix 分组内的中性图标请求按声明顺序取多彩入口色；其余情况保持语义解析结果
-    if (uiStyle == AppUiStyle.MIUIX && cursor != null && requestsNeutralEntryColor) {
+    if (uiStyle.usesMiuixFamilySkin && cursor != null && requestsNeutralEntryColor) {
         return remember(cursor) { cursor.nextColor() }
     }
     return remember(iconTint, uiStyle, dynamicColorActive, colorScheme) {
@@ -500,7 +504,7 @@ fun AppAdaptiveSwitch(
 fun AdaptivePreferenceSectionTitleRenderer(title: String) {
     val uiStyle = LocalAppUiStyle.current
     val visualSpec = rememberAdaptiveListComponentVisualSpec()
-    if (uiStyle == AppUiStyle.MIUIX) {
+    if (uiStyle.usesMiuixFamilySkin) {
         SmallTitle(
             text = title,
             textColor = AppSurfaceTokens.onSurfaceVariantSummary(),
@@ -553,7 +557,7 @@ fun AdaptivePreferenceGroupRenderer(
     val appliedShape = shape ?: defaultShape
     val resolvedContainerColor = adaptivePreferenceGroupContainerColor()
 
-    if (uiStyle == AppUiStyle.MIUIX) {
+    if (uiStyle.usesMiuixFamilySkin) {
         MiuixCard(
             modifier = modifier.padding(horizontal = 16.dp),
             cornerRadius = visualSpec.groupCornerRadiusDp.dp,
@@ -1584,7 +1588,7 @@ fun AppSearchEntry(
 ) {
     val uiStyle = LocalAppUiStyle.current
     val hintColor = AppContentColors.secondaryText()
-    val shape = if (uiStyle == AppUiStyle.MIUIX) androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
+    val shape = if (uiStyle.usesMiuixFamilySkin) androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
         else androidx.compose.foundation.shape.CircleShape
     Row(
         modifier = modifier
@@ -1637,7 +1641,7 @@ fun AdaptiveTextFieldRenderer(
                     borderColor = if (isError) {
                         AppContentColors.error()
                     } else {
-                        MiuixTheme.colorScheme.primary
+                        COUITheme.colorScheme.primary
                     },
                 ),
             )
@@ -1683,7 +1687,7 @@ private fun MiuixAdaptiveSearchBar(
                 .fillMaxWidth()
                 .height(height),
             label = placeholder,
-            color = containerColor,
+            colors = SearchBarDefaults.searchBarColors(backgroundColor = containerColor),
             interactionSource = interactionSource,
         )
         return
@@ -1701,7 +1705,7 @@ private fun MiuixAdaptiveSearchBar(
             .fillMaxWidth()
             .height(height),
         label = placeholder,
-        color = containerColor,
+        colors = SearchBarDefaults.searchBarColors(backgroundColor = containerColor),
         interactionSource = interactionSource,
     )
 }

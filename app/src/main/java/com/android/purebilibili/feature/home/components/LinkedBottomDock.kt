@@ -52,7 +52,7 @@ import com.android.purebilibili.feature.audio.screen.resolveAudioNowPlayingPrese
 import com.android.purebilibili.feature.home.LocalHomeScrollOffset
 import kotlinx.coroutines.flow.collect
 import dev.chrisbanes.haze.HazeState
-import top.yukonga.miuix.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
 import kotlin.math.roundToInt
 
 typealias LinkedDockNowPlayingSlot = @Composable (

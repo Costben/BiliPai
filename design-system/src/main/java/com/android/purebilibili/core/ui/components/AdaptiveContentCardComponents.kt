@@ -22,9 +22,9 @@ import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
-import top.yukonga.miuix.kmp.basic.Card as MiuixCard
-import top.yukonga.miuix.kmp.basic.CardDefaults as MiuixCardDefaults
-import top.yukonga.miuix.kmp.utils.PressFeedbackType
+import io.github.suqi8.coui.kmp.basic.Card as MiuixCard
+import io.github.suqi8.coui.kmp.basic.CardDefaults as MiuixCardDefaults
+import io.github.suqi8.coui.kmp.utils.PressFeedbackType
 
 /**
  * Content card that follows the active UI style:
@@ -103,6 +103,33 @@ fun AppContentCard(
                         content = content,
                     )
                 }
+            }
+        }
+        AppUiStyle.COUI17 -> {
+            if (onClick != null) {
+                MiuixCard(
+                    modifier = modifier,
+                    cornerRadius = MiuixCardDefaults.CornerRadius,
+                    insideMargin = contentPadding,
+                    colors = MiuixCardDefaults.defaultColors(
+                        color = containerColor,
+                        contentColor = contentColor,
+                    ),
+                    pressFeedbackType = PressFeedbackType.Sink,
+                    onClick = onClick,
+                    content = content,
+                )
+            } else {
+                MiuixCard(
+                    modifier = modifier,
+                    cornerRadius = MiuixCardDefaults.CornerRadius,
+                    insideMargin = contentPadding,
+                    colors = MiuixCardDefaults.defaultColors(
+                        color = containerColor,
+                        contentColor = contentColor,
+                    ),
+                    content = content,
+                )
             }
         }
     }
@@ -237,6 +264,26 @@ fun AppTagChip(
                 )
             }
         }
+        AppUiStyle.COUI17 -> {
+            Surface(
+                onClick = onClick,
+                enabled = enabled,
+                modifier = modifier.then(sizeModifier),
+                shape = AppShapes.container(ContainerLevel.Chip),
+                color = colorScheme.surfaceContainerHighest,
+                contentColor = colorScheme.onSurfaceVariant,
+            ) {
+                AppText(
+                    text = label,
+                    style = labelStyle,
+                    maxLines = 1,
+                    modifier = Modifier.padding(
+                        horizontal = metrics.horizontalPadding,
+                        vertical = metrics.verticalPadding,
+                    ),
+                )
+            }
+        }
     }
 }
 
@@ -265,6 +312,7 @@ fun AppStatusBadge(
         shape = when (LocalAppUiStyle.current) {
             AppUiStyle.MATERIAL3 -> MaterialTheme.shapes.small
             AppUiStyle.MIUIX -> AppShapes.container(ContainerLevel.Tag)
+            AppUiStyle.COUI17 -> AppShapes.container(ContainerLevel.Tag)
         },
         color = containerColor,
         contentColor = contentColor,

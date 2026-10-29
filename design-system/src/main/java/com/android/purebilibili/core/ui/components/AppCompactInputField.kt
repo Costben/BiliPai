@@ -24,6 +24,7 @@ import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.AppSurfaceTokens
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /** Compact inline input without clipping a native field's 56dp decoration/minimum height. */
 @Composable
@@ -34,7 +35,7 @@ fun AppCompactInputField(
     placeholder: String = "",
     height: Dp = 40.dp,
     containerColor: Color = AppSurfaceTokens.searchContainer(),
-    shape: Shape = if (LocalAppUiStyle.current == AppUiStyle.MIUIX) RoundedCornerShape(12.dp) else CircleShape,
+    shape: Shape = if (LocalAppUiStyle.current.usesMiuixFamilySkin) RoundedCornerShape(12.dp) else CircleShape,
     readOnly: Boolean = false,
     singleLine: Boolean = true,
     maxLines: Int = if (singleLine) 1 else 4,
@@ -52,7 +53,7 @@ fun AppCompactInputField(
     }
     if (com.android.purebilibili.core.ui.isMiuixNonGlassEnabled()) {
         // 原生输入框自行测量文字与边距，不把玻璃输入框的固定高度或胶囊形状带入此分支。
-        top.yukonga.miuix.kmp.basic.TextField(
+        io.github.suqi8.coui.kmp.basic.TextField(
             value = value,
             onValueChange = onValueChange,
             modifier = modifier.heightIn(min = height).focusRequester(requester),
@@ -66,9 +67,9 @@ fun AppCompactInputField(
             keyboardActions = keyboardActions,
             leadingIcon = leadingIcon,
             trailingIcon = trailingIcon,
-            colors = top.yukonga.miuix.kmp.basic.TextFieldDefaults.textFieldColors(
+            colors = io.github.suqi8.coui.kmp.basic.TextFieldDefaults.textFieldColors(
                 backgroundColor = if (containerColor == AppSurfaceTokens.searchContainer()) {
-                    top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.secondaryContainer
+                    io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.secondaryContainer
                 } else containerColor,
             ),
         )
@@ -134,7 +135,7 @@ fun AppCompactInputField(
     placeholder: String = "",
     height: Dp = 40.dp,
     containerColor: Color = AppSurfaceTokens.searchContainer(),
-    shape: Shape = if (LocalAppUiStyle.current == AppUiStyle.MIUIX) RoundedCornerShape(12.dp) else CircleShape,
+    shape: Shape = if (LocalAppUiStyle.current.usesMiuixFamilySkin) RoundedCornerShape(12.dp) else CircleShape,
     readOnly: Boolean = false,
     singleLine: Boolean = true,
     maxLines: Int = if (singleLine) 1 else 4,
@@ -152,7 +153,7 @@ fun AppCompactInputField(
     }
     if (com.android.purebilibili.core.ui.isMiuixNonGlassEnabled()) {
         // 原生输入框自行测量文字与边距，不把玻璃输入框的固定高度或胶囊形状带入此分支。
-        top.yukonga.miuix.kmp.basic.TextField(
+        io.github.suqi8.coui.kmp.basic.TextField(
             value = value,
             onValueChange = onValueChange,
             modifier = modifier.heightIn(min = height).focusRequester(requester),
@@ -166,9 +167,9 @@ fun AppCompactInputField(
             keyboardActions = keyboardActions,
             leadingIcon = leadingIcon,
             trailingIcon = trailingIcon,
-            colors = top.yukonga.miuix.kmp.basic.TextFieldDefaults.textFieldColors(
+            colors = io.github.suqi8.coui.kmp.basic.TextFieldDefaults.textFieldColors(
                 backgroundColor = if (containerColor == AppSurfaceTokens.searchContainer()) {
-                    top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.secondaryContainer
+                    io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.secondaryContainer
                 } else containerColor,
             ),
         )

@@ -91,7 +91,8 @@ import com.mohamedrejeb.richeditor.model.rememberRichTextState
 import com.mohamedrejeb.richeditor.ui.BasicRichText
 import com.mohamedrejeb.richeditor.ui.BasicRichTextEditor
 import com.mohamedrejeb.richeditor.ui.material3.RichTextEditor
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 @Composable
 fun VideoNoteCard(
@@ -527,11 +528,11 @@ internal fun VideoNoteEditorField(
         modifier = modifier
             .verticalScroll(rememberScrollState())
     ) {
-        if (LocalAppUiStyle.current == AppUiStyle.MIUIX) {
+        if (LocalAppUiStyle.current.usesMiuixFamilySkin) {
             // Keep the same rich-text state/history, with Miuix field colors and shape.
             BasicRichTextEditor(
                 state = richTextState,
-                textStyle = MiuixTheme.textStyles.body1.copy(
+                textStyle = COUITheme.textStyles.body1.copy(
                     color = AppSurfaceTokens.onSurface()
                 ),
                 cursorBrush = SolidColor(AppSurfaceTokens.primary()),
@@ -1034,7 +1035,7 @@ private fun VideoNoteTimestampChips(
     if (timestamps.isEmpty()) return
     FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
         timestamps.forEach { timestamp ->
-            if (LocalAppUiStyle.current == AppUiStyle.MIUIX) {
+            if (LocalAppUiStyle.current.usesMiuixFamilySkin) {
                 VideoDetailSecondaryButton(
                     onClick = { onTimestampClick(timestamp.seconds * 1000L) }
                 ) {

@@ -19,11 +19,11 @@ import androidx.compose.ui.unit.dp
 import com.android.purebilibili.feature.home.components.LiquidGlassTuning
 import com.android.purebilibili.feature.home.components.resolveBiliPaiBottomBarContainerColor
 import com.android.purebilibili.feature.home.components.liquid.lens
-import top.yukonga.miuix.kmp.blur.Backdrop
-import top.yukonga.miuix.kmp.blur.BackdropEffectScope
-import top.yukonga.miuix.kmp.blur.blur
-import top.yukonga.miuix.kmp.blur.colorControls
-import top.yukonga.miuix.kmp.blur.drawBackdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.BackdropEffectScope
+import io.github.suqi8.coui.kmp.blur.blur
+import io.github.suqi8.coui.kmp.blur.colorControls
+import io.github.suqi8.coui.kmp.blur.drawBackdrop
 
 /** 配色仅由玻璃弹窗入口读取，原生组件和侧栏继续使用自身材质。 */
 @Composable

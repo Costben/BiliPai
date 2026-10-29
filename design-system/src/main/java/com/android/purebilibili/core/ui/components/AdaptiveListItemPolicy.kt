@@ -1,6 +1,7 @@
 package com.android.purebilibili.core.ui.components
 
 import com.android.purebilibili.core.theme.AppUiStyle
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 enum class AppClickableItemRenderer {
     CUPERTINO,
@@ -16,7 +17,7 @@ fun resolveAppClickableItemRenderer(
     centered: Boolean,
 ): AppClickableItemRenderer = when {
     centered -> AppClickableItemRenderer.CUPERTINO
-    uiStyle == AppUiStyle.MIUIX -> {
+    uiStyle.usesMiuixFamilySkin -> {
         if (onClick != null && showChevron) {
             AppClickableItemRenderer.MIUIX_ARROW
         } else {

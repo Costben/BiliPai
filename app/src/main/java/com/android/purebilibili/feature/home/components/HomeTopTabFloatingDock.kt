@@ -48,7 +48,8 @@ import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.appTextStyleWithLineHeightStyle
 import com.android.purebilibili.core.store.BottomBarLiquidGlassPreset
 import dev.chrisbanes.haze.HazeState
-import top.yukonga.miuix.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 internal fun shouldHomeTopTabUseFloatingBottomBarDock(
     skinPlainStyle: Boolean,
@@ -77,7 +78,7 @@ internal fun shouldUseOfficialMd3HomeTopToolbar(
 internal fun shouldUseOfficialMiuixHomeTopTabs(
     uiStyle: AppUiStyle,
     liquidGlassEnabled: Boolean,
-): Boolean = uiStyle == AppUiStyle.MIUIX && !liquidGlassEnabled
+): Boolean = uiStyle.usesMiuixFamilySkin && !liquidGlassEnabled
 
 /** Glass exports the selected glyph in the exact accent, matching the bottom dock.
  * Its translucent shell alone is not the composited backdrop for contrast checks.
@@ -264,7 +265,7 @@ internal fun HomeTopTabFloatingDock(
     )
     val selectedContentColor = if (shouldUseOfficialMiuixHomeTopTabs(LocalAppUiStyle.current, liquidGlassEffectsEnabled)) {
         com.android.purebilibili.core.ui.AppInteractionColors.nativeNavigation()?.selectedContent
-            ?: top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.onBackground
+            ?: io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.onBackground
     } else resolveHomeTopTabSelectedContentColor(
         accent = AppContentColors.selectionAccent(liquidGlassEffectsEnabled),
         shellColor = shellColor,
@@ -312,9 +313,9 @@ internal fun HomeTopTabFloatingDock(
         containerColorOverride = shellColor,
         // 图标分类保留自绘布局，非玻璃选中底色遵循原生标签；玻璃与 MD3 独立取色。
         indicatorIdleSurfaceColorOverride = if (
-            LocalAppUiStyle.current == AppUiStyle.MIUIX && !liquidGlassEffectsEnabled
+            LocalAppUiStyle.current.usesMiuixFamilySkin && !liquidGlassEffectsEnabled
         ) com.android.purebilibili.core.ui.AppInteractionColors.nativeNavigation()?.selectedContainer
-            ?: top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.surfaceContainer else null,
+            ?: io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.surfaceContainer else null,
         selectedTextColorOverride = selectedContentColor,
         unselectedTextColorOverride = unselectedContentColor,
         indicatorPositionProvider = indicatorPositionProvider,

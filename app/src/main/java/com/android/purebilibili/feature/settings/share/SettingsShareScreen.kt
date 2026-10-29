@@ -45,9 +45,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.android.purebilibili.BuildConfig
 import com.android.purebilibili.R
 import com.android.purebilibili.feature.settings.rememberThemeAwareSettingsIcon
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.Report
-import top.yukonga.miuix.kmp.icon.extended.Tasks
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.Report
+import io.github.suqi8.coui.kmp.icon.extended.Tasks
 import com.android.purebilibili.feature.settings.SettingsPageScrollHost
 import com.android.purebilibili.feature.settings.ui.SettingsPageScaffold
 import com.android.purebilibili.feature.settings.ui.settingsScrollContentPadding
@@ -150,7 +150,7 @@ fun SettingsShareScreen(
                     AppPreference(
                         icon = rememberThemeAwareSettingsIcon(
                             materialSymbolResource = R.drawable.ms_task_alt_24,
-                            miuixIcon = MiuixIcons.Tasks,
+                            miuixIcon = COUIIcons.Tasks,
                         ),
                         title = "包含的设置",
                         subtitle = "外观、播放、手势、弹幕和导航等不含隐私的设置",
@@ -180,7 +180,7 @@ fun SettingsShareScreen(
                         onCheckedChange = viewModel::setIncludeDeviceDebug,
                         icon = rememberThemeAwareSettingsIcon(
                             materialSymbolResource = R.drawable.ms_report_24,
-                            miuixIcon = MiuixIcons.Report,
+                            miuixIcon = COUIIcons.Report,
                         ),
                         iconTint = AppContentColors.secondaryText(),
                     )

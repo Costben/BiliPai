@@ -3,7 +3,7 @@ package com.android.purebilibili.feature.home.components
 /** Expanded width class gets the 0.9.3 expandable rail; Medium stays classic fixed. */
 fun shouldUseExpandableMiuixSideBar(isExpandedWidthClass: Boolean): Boolean = isExpandedWidthClass
 
-/** Official [top.yukonga.miuix.kmp.basic.NavigationRailItem] cannot host skin bitmaps. */
+/** Official [io.github.suqi8.coui.kmp.basic.NavigationRailItem] cannot host skin bitmaps. */
 fun shouldUseMiuixOfficialSideBarItem(skinIconPath: String?): Boolean = skinIconPath == null
 
 enum class HomeSideBarClickAction {

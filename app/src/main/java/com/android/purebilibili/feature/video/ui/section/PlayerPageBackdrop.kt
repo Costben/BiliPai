@@ -6,7 +6,7 @@ import androidx.compose.runtime.remember
 import com.android.purebilibili.core.ui.blur.ChromeBackdropSource
 import com.android.purebilibili.core.ui.blur.rememberChromeBackdropSource
 import com.android.purebilibili.feature.home.components.liquid.rememberCombinedBackdrop
-import top.yukonga.miuix.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
 
 /**
  * Capture the player page in paint order, excluding all glass consumers.

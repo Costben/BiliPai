@@ -16,7 +16,14 @@ enum class PresetPrimitiveRenderer {
     /** Material 3 native components. MATERIAL3 style. */
     MATERIAL3,
     /** Miuix native components. MIUIX style. */
-    MIUIX_BRIDGED
+    MIUIX_BRIDGED,
+    /**
+     * COUI 17 native components. COUI17 style.
+     *
+     * 迁移期的收敛点：还没换成 COUI 的共享组件把 COUI17 当 MATERIAL3 处理，
+     * 保证选中 COUI 17 时不会出现半套 Miuix 的半成品外观。
+     */
+    COUI_BRIDGED
 }
 
 fun resolvePresetPrimitiveRenderer(
@@ -24,6 +31,7 @@ fun resolvePresetPrimitiveRenderer(
 ): PresetPrimitiveRenderer = when (uiStyle) {
     AppUiStyle.MIUIX -> PresetPrimitiveRenderer.MIUIX_BRIDGED
     AppUiStyle.MATERIAL3 -> PresetPrimitiveRenderer.MATERIAL3
+    AppUiStyle.COUI17 -> PresetPrimitiveRenderer.MIUIX_BRIDGED
 }
 
 @Composable

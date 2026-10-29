@@ -119,8 +119,8 @@ class SideBarRendererPolicyTest {
         assertTrue(source.contains("SideBarAccountSwitchButton("))
         assertTrue(source.contains("onAccountSwitchClick"))
         assertTrue(source.contains("resolveHomeSideBarClickAction("))
-        assertFalse(source.contains("import top.yukonga.miuix.kmp.basic.NavigationRail as MiuixNavigationRail"))
-        assertFalse(source.contains("import top.yukonga.miuix.kmp.basic.NavigationRailItem as MiuixNavigationRailItem"))
+        assertFalse(source.contains("import io.github.suqi8.coui.kmp.basic.NavigationRail as MiuixNavigationRail"))
+        assertFalse(source.contains("import io.github.suqi8.coui.kmp.basic.NavigationRailItem as MiuixNavigationRailItem"))
     }
 
     @Test

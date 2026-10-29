@@ -3,13 +3,14 @@ package com.android.purebilibili.core.ui.components
 import androidx.compose.ui.graphics.Color
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.ui.isMiuixNonGlassEnabled
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 internal fun shouldUseMiuixOutlinedTextField(
     uiStyle: AppUiStyle,
     hasPrefix: Boolean,
     hasSuffix: Boolean,
     liquidGlassEnabled: Boolean = false,
-): Boolean = uiStyle == AppUiStyle.MIUIX && (!liquidGlassEnabled || (!hasPrefix && !hasSuffix))
+): Boolean = uiStyle.usesMiuixFamilySkin && (!liquidGlassEnabled || (!hasPrefix && !hasSuffix))
 
 /**
  * Native Miuix action primitives are used when UI style is MIUIX.
@@ -17,13 +18,13 @@ internal fun shouldUseMiuixOutlinedTextField(
  */
 internal fun shouldUseMiuixActionPrimitive(
     uiStyle: AppUiStyle,
-): Boolean = uiStyle == AppUiStyle.MIUIX
+): Boolean = uiStyle.usesMiuixFamilySkin
 
 @Deprecated("Action primitives now consistently follow Miuix theme regardless of liquid glass.")
 internal fun shouldUseMiuixNonGlassActionPrimitive(
     uiStyle: AppUiStyle,
     liquidGlassEnabled: Boolean = false,
-): Boolean = uiStyle == AppUiStyle.MIUIX
+): Boolean = uiStyle.usesMiuixFamilySkin
 
 internal enum class AppMiuixActionTone {
     PRIMARY,

@@ -10,6 +10,7 @@ import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.ui.AppSpacingTokens
 import com.android.purebilibili.core.ui.AppTopChromePolicy
 import com.android.purebilibili.core.ui.AppTopTabPresentation
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 enum class TopTabMaterialMode {
     PLAIN,
@@ -506,7 +507,7 @@ internal fun resolveMd3TopTabSelectedContainerColor(
     presentation: AppTopTabPresentation = AppTopTabPresentation.MATERIAL_UNDERLINE,
     uiStyle: AppUiStyle = AppUiStyle.MATERIAL3
 ): androidx.compose.ui.graphics.Color = when {
-    uiStyle == AppUiStyle.MIUIX -> colorScheme.primary
+    uiStyle.usesMiuixFamilySkin -> colorScheme.primary
     presentation == AppTopTabPresentation.TONAL_CAPSULE -> colorScheme.secondaryContainer
     else -> colorScheme.primary
 }
@@ -516,7 +517,7 @@ internal fun resolveMd3TopTabSelectedIconColor(
     presentation: AppTopTabPresentation = AppTopTabPresentation.MATERIAL_UNDERLINE,
     uiStyle: AppUiStyle = AppUiStyle.MATERIAL3
 ): androidx.compose.ui.graphics.Color = when {
-    uiStyle == AppUiStyle.MIUIX -> colorScheme.primary
+    uiStyle.usesMiuixFamilySkin -> colorScheme.primary
     presentation == AppTopTabPresentation.TONAL_CAPSULE -> colorScheme.onSecondaryContainer
     else -> colorScheme.primary
 }
@@ -526,7 +527,7 @@ internal fun resolveMd3TopTabSelectedLabelColor(
     presentation: AppTopTabPresentation = AppTopTabPresentation.MATERIAL_UNDERLINE,
     uiStyle: AppUiStyle = AppUiStyle.MATERIAL3
 ): androidx.compose.ui.graphics.Color = when {
-    uiStyle == AppUiStyle.MIUIX -> colorScheme.primary
+    uiStyle.usesMiuixFamilySkin -> colorScheme.primary
     presentation == AppTopTabPresentation.TONAL_CAPSULE -> colorScheme.onSecondaryContainer
     else -> colorScheme.primary
 }

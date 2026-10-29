@@ -12,6 +12,7 @@ import com.android.purebilibili.core.ui.components.AppSegmentOption
 import com.materialkolor.Contrast
 import com.materialkolor.PaletteStyle
 import com.materialkolor.dynamiccolor.ColorSpec
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 internal fun resolveThemeModeSegmentOptions(
     followSystemLabel: String = AppThemeMode.FOLLOW_SYSTEM.label,
@@ -192,7 +193,7 @@ internal fun shouldShowMd3PaletteStyleControls(source: Md3ColorSource): Boolean 
     source != Md3ColorSource.FOLLOW_WALLPAPER
 
 internal fun resolveAdvancedPaletteSubtitle(uiStyle: AppUiStyle): String =
-    if (uiStyle == AppUiStyle.MIUIX) {
+    if (uiStyle.usesMiuixFamilySkin) {
         "自定义明暗模式的背景、文字与控件色，卡片层次随背景调整"
     } else {
         "自定义明暗模式的背景、文字与控件色"

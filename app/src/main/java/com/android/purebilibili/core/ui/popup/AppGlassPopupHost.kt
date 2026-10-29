@@ -132,11 +132,12 @@ import kotlin.math.roundToInt
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import top.yukonga.miuix.kmp.blur.Backdrop
-import top.yukonga.miuix.kmp.blur.BackdropEffectScope
-import top.yukonga.miuix.kmp.blur.blur
-import top.yukonga.miuix.kmp.blur.colorControls
-import top.yukonga.miuix.kmp.blur.drawBackdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.BackdropEffectScope
+import io.github.suqi8.coui.kmp.blur.blur
+import io.github.suqi8.coui.kmp.blur.colorControls
+import io.github.suqi8.coui.kmp.blur.drawBackdrop
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /** 液态玻璃弹窗与页面的安全边距。 */
 private val PopupScreenMargin = 16.dp
@@ -1419,10 +1420,10 @@ private fun AppGlassChoicePopupCard(
                                     text = option.label,
                                     tapToCopyEnabled = false,
                                     // 保持各主题原生菜单的字号和字重，玻璃只改变弹窗材质。
-                                    style = if (LocalAppUiStyle.current == AppUiStyle.MIUIX) {
+                                    style = if (LocalAppUiStyle.current.usesMiuixFamilySkin) {
                                         MaterialTheme.typography.bodyMedium
                                     } else MaterialTheme.typography.bodyLarge,
-                                    fontWeight = if (LocalAppUiStyle.current == AppUiStyle.MIUIX) {
+                                    fontWeight = if (LocalAppUiStyle.current.usesMiuixFamilySkin) {
                                         FontWeight.Medium
                                     } else null,
                                     color = AppContentColors.primaryText(),

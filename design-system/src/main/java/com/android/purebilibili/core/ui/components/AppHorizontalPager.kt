@@ -22,6 +22,7 @@ import com.android.purebilibili.core.theme.LocalAppUiStyle
 import top.yukonga.miuix.kmp.utils.PagerGestureNestedScrollConnection
 import top.yukonga.miuix.kmp.utils.PagerNavigationSpringSpec
 import top.yukonga.miuix.kmp.utils.pagerGestureOverride
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /** Miuix owns cross-axis touch recognition; Material keeps Foundation's native pager. */
 @Composable
@@ -43,7 +44,7 @@ fun AppHorizontalPager(
     shouldYieldGesture: () -> Boolean = { false },
     pageContent: @Composable PagerScope.(Int) -> Unit,
 ) {
-    val miuix = LocalAppUiStyle.current == AppUiStyle.MIUIX
+    val miuix = LocalAppUiStyle.current.usesMiuixFamilySkin
     val enabled = userScrollEnabled && !shouldYieldGesture()
     val resolvedFling = flingBehavior ?: if (miuix) {
         PagerDefaults.flingBehavior(state, snapAnimationSpec = PagerNavigationSpringSpec)

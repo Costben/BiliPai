@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.audio.screen
 
 import com.android.purebilibili.core.theme.AppUiStyle
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 internal const val MUSIC_WAVY_AMPLITUDE_DP = 6
 internal const val MUSIC_WAVY_WAVELENGTH_DP = 22
@@ -16,7 +17,7 @@ internal fun shouldAnimateMusicWavyProgress(
 internal fun shouldUseNativeThemeMusicProgress(
     glassEnabled: Boolean,
     uiStyle: AppUiStyle
-): Boolean = !glassEnabled || uiStyle == AppUiStyle.MIUIX
+): Boolean = !glassEnabled || uiStyle.usesMiuixFamilySkin
 
 internal fun shouldUseMusicWavyProgress(
     glassEnabled: Boolean,

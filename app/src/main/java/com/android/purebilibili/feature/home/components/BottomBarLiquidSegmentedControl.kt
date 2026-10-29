@@ -89,11 +89,11 @@ import com.android.purebilibili.feature.home.components.liquid.lens as miuixLens
 import com.android.purebilibili.feature.home.components.liquid.rememberCombinedBackdrop as rememberMiuixCombinedBackdrop
 import com.android.purebilibili.feature.home.components.liquid.vibrancy as miuixVibrancy
 import com.android.purebilibili.feature.home.components.miuix.InteractiveHighlight
-import top.yukonga.miuix.kmp.blur.Backdrop as MiuixBackdrop
-import top.yukonga.miuix.kmp.blur.blur as miuixBlur
-import top.yukonga.miuix.kmp.blur.drawBackdrop as miuixDrawBackdrop
-import top.yukonga.miuix.kmp.blur.layerBackdrop as miuixLayerBackdrop
-import top.yukonga.miuix.kmp.blur.rememberLayerBackdrop as rememberMiuixLayerBackdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop as MiuixBackdrop
+import io.github.suqi8.coui.kmp.blur.blur as miuixBlur
+import io.github.suqi8.coui.kmp.blur.drawBackdrop as miuixDrawBackdrop
+import io.github.suqi8.coui.kmp.blur.layerBackdrop as miuixLayerBackdrop
+import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop as rememberMiuixLayerBackdrop
 import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.math.min

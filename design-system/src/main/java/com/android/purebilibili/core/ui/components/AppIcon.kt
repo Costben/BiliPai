@@ -11,7 +11,8 @@ import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.currentAppContentColor
 import com.android.purebilibili.core.ui.renderer.material3.AppMaterial3Icon
-import com.android.purebilibili.core.ui.renderer.miuix.AppMiuixIcon
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiIcon
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiIcon
 
 @Composable
 fun AppIcon(
@@ -21,7 +22,8 @@ fun AppIcon(
     tint: Color = currentAppContentColor(),
 ) = when (LocalAppUiStyle.current) {
     AppUiStyle.MATERIAL3 -> AppMaterial3Icon(imageVector, contentDescription, modifier, tint)
-    AppUiStyle.MIUIX -> AppMiuixIcon(imageVector, contentDescription, modifier, tint)
+    AppUiStyle.MIUIX -> AppCouiIcon(imageVector, contentDescription, modifier, tint)
+    AppUiStyle.COUI17 -> AppCouiIcon(imageVector, contentDescription, modifier, tint)
 }
 
 @Composable
@@ -32,7 +34,8 @@ fun AppIcon(
     tint: Color = currentAppContentColor(),
 ) = when (LocalAppUiStyle.current) {
     AppUiStyle.MATERIAL3 -> AppMaterial3Icon(bitmap, contentDescription, modifier, tint)
-    AppUiStyle.MIUIX -> AppMiuixIcon(bitmap, contentDescription, modifier, tint)
+    AppUiStyle.MIUIX -> AppCouiIcon(bitmap, contentDescription, modifier, tint)
+    AppUiStyle.COUI17 -> AppCouiIcon(bitmap, contentDescription, modifier, tint)
 }
 
 @Composable
@@ -43,7 +46,8 @@ fun AppIcon(
     tint: Color = currentAppContentColor(),
 ) = when (LocalAppUiStyle.current) {
     AppUiStyle.MATERIAL3 -> AppMaterial3Icon(painter, contentDescription, modifier, tint)
-    AppUiStyle.MIUIX -> AppMiuixIcon(painter, contentDescription, modifier, tint)
+    AppUiStyle.MIUIX -> AppCouiIcon(painter, contentDescription, modifier, tint)
+    AppUiStyle.COUI17 -> AppCouiIcon(painter, contentDescription, modifier, tint)
 }
 
 @Composable
@@ -54,5 +58,6 @@ fun AppIcon(
     modifier: Modifier = Modifier,
 ) = when (LocalAppUiStyle.current) {
     AppUiStyle.MATERIAL3 -> AppMaterial3Icon(painter, tint, contentDescription, modifier)
-    AppUiStyle.MIUIX -> AppMiuixIcon(painter, tint, contentDescription, modifier)
+    AppUiStyle.MIUIX -> AppCouiIcon(painter, tint, contentDescription, modifier)
+    AppUiStyle.COUI17 -> AppCouiIcon(painter, tint, contentDescription, modifier)
 }

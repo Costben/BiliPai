@@ -31,12 +31,13 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.*
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
-import top.yukonga.miuix.kmp.basic.DropdownImpl
-import top.yukonga.miuix.kmp.basic.DropdownItem
-import top.yukonga.miuix.kmp.basic.SmallTitle
-import top.yukonga.miuix.kmp.basic.PopupPositionProvider as MiuixPopupPositionProvider
-import top.yukonga.miuix.kmp.window.WindowListPopup
+import io.github.suqi8.coui.kmp.basic.DropdownImpl
+import io.github.suqi8.coui.kmp.basic.DropdownItem
+import io.github.suqi8.coui.kmp.basic.SmallTitle
+import io.github.suqi8.coui.kmp.basic.PopupPositionProvider as MiuixPopupPositionProvider
+import io.github.suqi8.coui.kmp.window.WindowListPopup
 import kotlin.math.roundToInt
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 enum class PlayerListPopupPlacement { CENTER, START, END, END_BOTTOM, ANCHOR_END }
 
@@ -130,7 +131,7 @@ fun PlayerSelectionPopup(
         .heightIn(max = height)
         .semantics { paneTitle = title }
 
-    if (LocalAppUiStyle.current == AppUiStyle.MIUIX) {
+    if (LocalAppUiStyle.current.usesMiuixFamilySkin) {
         val provider = remember(placement, anchorBounds, gap, requestedMaxHeight) {
             val measuredAnchor = anchorBounds
             object : MiuixPopupPositionProvider {
@@ -315,7 +316,7 @@ internal fun PlayerNativeDropdownItem(
         )
         return
     }
-    if (LocalAppUiStyle.current == AppUiStyle.MIUIX) {
+    if (LocalAppUiStyle.current.usesMiuixFamilySkin) {
         Box(modifier = itemModifier) {
             DropdownImpl(
                 item = item,

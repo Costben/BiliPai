@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import com.android.purebilibili.feature.home.components.BottomBarLiquidSegmentedControl
-import top.yukonga.miuix.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
 
 /** Liquid reuse is opt-in; the disabled path is the active theme's native segmented control. */
 @Composable

@@ -20,7 +20,7 @@ import com.android.purebilibili.R
 import com.android.purebilibili.core.ui.adaptive.AppHingePaneLayout
 
 /** 只包含直播间背景，顶栏玻璃不得采样包含自身的页面录制。 */
-internal val LocalLiveRoomHeaderBackdrop = compositionLocalOf<top.yukonga.miuix.kmp.blur.Backdrop?> { null }
+internal val LocalLiveRoomHeaderBackdrop = compositionLocalOf<io.github.suqi8.coui.kmp.blur.Backdrop?> { null }
 
 /** 直播间的窗口布局。播放器、聊天与发送入口由调用方接入同一份房间状态。 */
 @Composable

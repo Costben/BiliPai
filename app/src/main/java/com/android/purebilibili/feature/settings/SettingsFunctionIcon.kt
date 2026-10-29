@@ -15,6 +15,7 @@ import com.android.purebilibili.core.ui.components.AppPreferenceIconPalette
 import com.android.purebilibili.core.ui.components.preferenceIconColorForKey
 import com.android.purebilibili.core.ui.components.AppPreferenceLeadingIcon
 import com.android.purebilibili.core.ui.components.LocalAppPreferenceIconColors
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 private fun settingsCategoryIconColor(category: SettingsRootCategory): Color =
     AppPreferenceIconPalette[when (canonicalSettingsRootCategory(category)) {
@@ -46,7 +47,7 @@ private val settingsFunctionIconColors: Map<String, Color> by lazy {
 
 @Composable
 internal fun settingsIconColors(): Map<String, Color>? =
-    if (LocalAppUiStyle.current == AppUiStyle.MIUIX ||
+    if (LocalAppUiStyle.current.usesMiuixFamilySkin ||
         com.android.purebilibili.core.ui.LocalAppIconStyle.current in setOf(
             com.android.purebilibili.core.ui.AppIconStyle.SOFT_COLORFUL,
             com.android.purebilibili.core.ui.AppIconStyle.VIVID_COLORFUL,

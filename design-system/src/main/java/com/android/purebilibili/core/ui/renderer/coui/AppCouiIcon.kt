@@ -1,4 +1,4 @@
-package com.android.purebilibili.core.ui.renderer.miuix
+package com.android.purebilibili.core.ui.renderer.coui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -7,10 +7,10 @@ import androidx.compose.ui.graphics.ColorProducer
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
-import top.yukonga.miuix.kmp.basic.Icon
+import io.github.suqi8.coui.kmp.basic.Icon
 
 @Composable
-internal fun AppMiuixIcon(
+internal fun AppCouiIcon(
     imageVector: ImageVector,
     contentDescription: String?,
     modifier: Modifier,
@@ -18,7 +18,7 @@ internal fun AppMiuixIcon(
 ) = Icon(imageVector, contentDescription, modifier, com.android.purebilibili.core.ui.resolveAppButtonSlotColor(tint))
 
 @Composable
-internal fun AppMiuixIcon(
+internal fun AppCouiIcon(
     bitmap: ImageBitmap,
     contentDescription: String?,
     modifier: Modifier,
@@ -26,7 +26,7 @@ internal fun AppMiuixIcon(
 ) = Icon(bitmap, contentDescription, modifier, com.android.purebilibili.core.ui.resolveAppButtonSlotColor(tint))
 
 @Composable
-internal fun AppMiuixIcon(
+internal fun AppCouiIcon(
     painter: Painter,
     contentDescription: String?,
     modifier: Modifier,
@@ -34,7 +34,7 @@ internal fun AppMiuixIcon(
 ) = Icon(painter, contentDescription, modifier, com.android.purebilibili.core.ui.resolveAppButtonSlotColor(tint))
 
 @Composable
-internal fun AppMiuixIcon(
+internal fun AppCouiIcon(
     painter: Painter,
     tint: ColorProducer?,
     contentDescription: String?,

@@ -17,7 +17,8 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.renderer.material3.AppMaterial3Slider
-import com.android.purebilibili.core.ui.renderer.miuix.AppMiuixSlider
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiSlider
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiSlider
 
 @Immutable
 data class AppSliderColors(
@@ -90,7 +91,17 @@ fun AppSlider(
             colors = colors,
             interactionSource = interactionSource,
         )
-        AppUiStyle.MIUIX -> AppMiuixSlider(
+        AppUiStyle.MIUIX -> AppCouiSlider(
+            value = value,
+            onValueChange = onSliderValueChange,
+            modifier = sizedModifier,
+            enabled = enabled,
+            valueRange = valueRange,
+            steps = steps,
+            onValueChangeFinished = onValueChangeFinished,
+            colors = colors,
+        )
+        AppUiStyle.COUI17 -> AppCouiSlider(
             value = value,
             onValueChange = onSliderValueChange,
             modifier = sizedModifier,

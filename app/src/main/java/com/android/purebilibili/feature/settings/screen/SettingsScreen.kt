@@ -46,6 +46,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.android.purebilibili.core.store.DEFAULT_ANALYTICS_ENABLED
 import com.android.purebilibili.core.store.DEFAULT_CRASH_TRACKING_ENABLED
 import com.android.purebilibili.core.ui.AppSpacingTokens
+import com.android.purebilibili.core.theme.AppUiStyle
+import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.theme.LocalSettingsLiquidGlassEnabled
 import com.android.purebilibili.core.ui.LocalBottomBarVisible
 import com.android.purebilibili.core.ui.animation.LocalAppNavigationEntranceReady
@@ -1199,14 +1201,24 @@ private fun MobileSettingsNavLayout(
     fun SettingsRootContent() {
         when (destination) {
             SettingsNavDestination.Home -> {
-                Column {
-                    SettingsHomeSearchEntry(onClick = onSearchOpen)
-                    Box(modifier = Modifier.padding(top = 8.dp).entrance()) {
-                        SettingsRootCategoryListSection(
-                            categories = sectionOrder,
-                            onCategoryClick = onCategoryClick,
-                            onDonateClick = onDonateClick,
-                        )
+                // COUI 17 先只接管设置首页，其余页面等迁移阶段逐条替换。
+                if (LocalAppUiStyle.current == AppUiStyle.COUI17) {
+                    CouiSettingsHomeContent(
+                        categories = sectionOrder,
+                        onCategoryClick = onCategoryClick,
+                        onDonateClick = onDonateClick,
+                        onSearchOpen = onSearchOpen,
+                    )
+                } else {
+                    Column {
+                        SettingsHomeSearchEntry(onClick = onSearchOpen)
+                        Box(modifier = Modifier.padding(top = 8.dp).entrance()) {
+                            SettingsRootCategoryListSection(
+                                categories = sectionOrder,
+                                onCategoryClick = onCategoryClick,
+                                onDonateClick = onDonateClick,
+                            )
+                        }
                     }
                 }
             }

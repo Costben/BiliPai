@@ -12,13 +12,14 @@ class UiStyleCompatibilityPolicyTest {
         assertEquals(AppUiStyle.MIUIX, resolveUiStyle(UiPreset.IOS, AndroidNativeVariant.MIUIX))
         assertEquals(AppUiStyle.MATERIAL3, resolveUiStyle(UiPreset.MD3, AndroidNativeVariant.MATERIAL3))
         assertEquals(AppUiStyle.MIUIX, resolveUiStyle(UiPreset.MD3, AndroidNativeVariant.MIUIX))
+        assertEquals(AppUiStyle.COUI17, resolveUiStyle(UiPreset.MD3, AndroidNativeVariant.COUI17))
     }
 
     @Test
-    fun runtimeEnum_keepsOnlyTwoValues() {
-        // 两值模型：运行时枚举不再包含 iOS，历史 iOS 只存在于迁移边界。
+    fun runtimeEnum_keepsOnlyAndroidStyles() {
+        // 运行时枚举不再包含 iOS，历史 iOS 只存在于迁移边界。
         assertEquals(
-            setOf(AppUiStyle.MATERIAL3, AppUiStyle.MIUIX),
+            setOf(AppUiStyle.MATERIAL3, AppUiStyle.MIUIX, AppUiStyle.COUI17),
             AppUiStyle.entries.toSet()
         )
     }

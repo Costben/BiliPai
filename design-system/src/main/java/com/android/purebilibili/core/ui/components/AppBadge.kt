@@ -7,7 +7,8 @@ import androidx.compose.ui.graphics.Color
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.renderer.material3.AppMaterial3Badge
-import com.android.purebilibili.core.ui.renderer.miuix.AppMiuixBadge
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiBadge
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiBadge
 
 @Composable
 fun AppBadge(
@@ -31,7 +32,13 @@ fun AppBadge(
             contentColor = resolvedContent,
             content = content,
         )
-        AppUiStyle.MIUIX -> AppMiuixBadge(
+        AppUiStyle.MIUIX -> AppCouiBadge(
+            modifier = modifier,
+            containerColor = resolvedContainer,
+            contentColor = resolvedContent,
+            content = content,
+        )
+        AppUiStyle.COUI17 -> AppCouiBadge(
             modifier = modifier,
             containerColor = resolvedContainer,
             contentColor = resolvedContent,

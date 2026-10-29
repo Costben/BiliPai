@@ -1,4 +1,4 @@
-package com.android.purebilibili.core.ui.renderer.miuix
+package com.android.purebilibili.core.ui.renderer.coui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -12,14 +12,14 @@ import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.isSpecified
 import com.android.purebilibili.core.ui.components.appDesktopInteractionVisuals
-import top.yukonga.miuix.kmp.basic.DividerDefaults
-import top.yukonga.miuix.kmp.basic.HorizontalDivider
-import top.yukonga.miuix.kmp.basic.Surface
-import top.yukonga.miuix.kmp.theme.LocalContentColor
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.basic.DividerDefaults
+import io.github.suqi8.coui.kmp.basic.HorizontalDivider
+import io.github.suqi8.coui.kmp.basic.Surface
+import io.github.suqi8.coui.kmp.theme.LocalContentColor
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
-internal fun AppMiuixSurface(
+internal fun AppCouiSurface(
     modifier: Modifier,
     shape: Shape,
     color: Color,
@@ -28,12 +28,12 @@ internal fun AppMiuixSurface(
     border: BorderStroke?,
     content: @Composable () -> Unit,
 ) {
-    val resolvedColor = color.takeOrElse { MiuixTheme.colorScheme.surface }
+    val resolvedColor = color.takeOrElse { COUITheme.colorScheme.surface }
     Surface(
         modifier = modifier,
         shape = shape,
         color = resolvedColor,
-        contentColor = contentColor.takeOrElse { miuixContentColorFor(resolvedColor) },
+        contentColor = contentColor.takeOrElse { couiContentColorFor(resolvedColor) },
         shadowElevation = shadowElevation,
         border = border,
         content = {
@@ -47,7 +47,7 @@ internal fun AppMiuixSurface(
 }
 
 @Composable
-internal fun AppMiuixSurface(
+internal fun AppCouiSurface(
     onClick: () -> Unit,
     modifier: Modifier,
     enabled: Boolean,
@@ -59,7 +59,7 @@ internal fun AppMiuixSurface(
     interactionSource: MutableInteractionSource?,
     content: @Composable () -> Unit,
 ) {
-    val resolvedColor = color.takeOrElse { MiuixTheme.colorScheme.surface }
+    val resolvedColor = color.takeOrElse { COUITheme.colorScheme.surface }
     val resolvedInteractionSource = interactionSource ?: remember { MutableInteractionSource() }
     Surface(
         onClick = onClick,
@@ -67,7 +67,7 @@ internal fun AppMiuixSurface(
         enabled = enabled,
         shape = shape,
         color = resolvedColor,
-        contentColor = contentColor.takeOrElse { miuixContentColorFor(resolvedColor) },
+        contentColor = contentColor.takeOrElse { couiContentColorFor(resolvedColor) },
         shadowElevation = shadowElevation,
         border = border,
         interactionSource = resolvedInteractionSource,
@@ -82,7 +82,7 @@ internal fun AppMiuixSurface(
 }
 
 @Composable
-internal fun AppMiuixHorizontalDivider(
+internal fun AppCouiHorizontalDivider(
     modifier: Modifier,
     thickness: Dp,
     color: Color,
@@ -93,8 +93,8 @@ internal fun AppMiuixHorizontalDivider(
 )
 
 @Composable
-internal fun miuixContentColorFor(backgroundColor: Color): Color {
-    val colors = MiuixTheme.colorScheme
+internal fun couiContentColorFor(backgroundColor: Color): Color {
+    val colors = COUITheme.colorScheme
     return when (backgroundColor) {
         colors.primary -> colors.onPrimary
         colors.primaryContainer -> colors.onPrimaryContainer

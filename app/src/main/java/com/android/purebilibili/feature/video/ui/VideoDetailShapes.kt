@@ -21,35 +21,41 @@ object VideoDetailShapes {
     fun contentCard(): Shape = when (LocalAppUiStyle.current) {
         AppUiStyle.MATERIAL3 -> MaterialTheme.shapes.large
         AppUiStyle.MIUIX -> AppShapes.container(ContainerLevel.Card)
+        AppUiStyle.COUI17 -> AppShapes.container(ContainerLevel.Card)
     }
 
     @Composable
     fun media(): Shape = when (LocalAppUiStyle.current) {
         AppUiStyle.MATERIAL3 -> MaterialTheme.shapes.medium
         AppUiStyle.MIUIX -> AppShapes.container(ContainerLevel.Field)
+        AppUiStyle.COUI17 -> AppShapes.container(ContainerLevel.Field)
     }
 
     @Composable
     fun field(): Shape = when (LocalAppUiStyle.current) {
         AppUiStyle.MATERIAL3 -> MaterialTheme.shapes.medium
         AppUiStyle.MIUIX -> AppShapes.container(ContainerLevel.Field)
+        AppUiStyle.COUI17 -> AppShapes.container(ContainerLevel.Field)
     }
 
     @Composable
     fun leadingIcon(): Shape = when (LocalAppUiStyle.current) {
         AppUiStyle.MATERIAL3 -> MaterialTheme.shapes.medium
         AppUiStyle.MIUIX -> AppShapes.container(ContainerLevel.Chip)
+        AppUiStyle.COUI17 -> AppShapes.container(ContainerLevel.Chip)
     }
 
     @Composable
     fun compactIcon(): Shape = when (LocalAppUiStyle.current) {
         AppUiStyle.MATERIAL3 -> MaterialTheme.shapes.small
         AppUiStyle.MIUIX -> AppShapes.container(ContainerLevel.Chip)
+        AppUiStyle.COUI17 -> AppShapes.container(ContainerLevel.Chip)
     }
 
     @Composable
     fun action(): Shape = when (LocalAppUiStyle.current) {
         AppUiStyle.MATERIAL3 -> MaterialTheme.shapes.extraLarge
         AppUiStyle.MIUIX -> AppShapes.container(ContainerLevel.Card)
+        AppUiStyle.COUI17 -> AppShapes.container(ContainerLevel.Card)
     }
 }

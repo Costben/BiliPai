@@ -8,7 +8,7 @@ import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.components.appElasticPress
 import com.android.purebilibili.core.ui.components.AppOutlinedButton
-import top.yukonga.miuix.kmp.basic.Button as MiuixButton
+import io.github.suqi8.coui.kmp.basic.Button as MiuixButton
 
 /** Secondary actions shared by video notes and AI summary, using each theme's native button. */
 @Composable
@@ -26,6 +26,13 @@ internal fun VideoDetailSecondaryButton(
             content = content
         )
         AppUiStyle.MIUIX -> MiuixButton(
+            onClick = onClick,
+            modifier = modifier.appElasticPress(enabled = enabled),
+            enabled = enabled,
+            minHeight = 48.dp,
+            content = content
+        )
+        AppUiStyle.COUI17 -> MiuixButton(
             onClick = onClick,
             modifier = modifier.appElasticPress(enabled = enabled),
             enabled = enabled,

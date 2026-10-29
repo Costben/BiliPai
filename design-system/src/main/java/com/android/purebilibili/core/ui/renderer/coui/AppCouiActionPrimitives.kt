@@ -1,4 +1,4 @@
-package com.android.purebilibili.core.ui.renderer.miuix
+package com.android.purebilibili.core.ui.renderer.coui
 
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -41,35 +41,35 @@ import com.android.purebilibili.core.ui.components.appDesktopInteractionVisuals
 import com.android.purebilibili.core.ui.components.resolveMiuixChipActionTone
 import com.android.purebilibili.core.ui.components.resolveMiuixFabMinSizeDp
 import com.android.purebilibili.core.ui.components.resolveMiuixNonGlassChipMetrics
-import top.yukonga.miuix.kmp.basic.BasicComponent
-import top.yukonga.miuix.kmp.basic.Button as MiuixButton
-import top.yukonga.miuix.kmp.basic.ButtonColors as MiuixButtonColors
-import top.yukonga.miuix.kmp.basic.ButtonDefaults as MiuixButtonDefaults
-import top.yukonga.miuix.kmp.basic.FloatingActionButton as MiuixFloatingActionButton
-import top.yukonga.miuix.kmp.basic.FloatingActionButtonDefaults as MiuixFloatingActionButtonDefaults
-import top.yukonga.miuix.kmp.basic.Icon as MiuixIcon
-import top.yukonga.miuix.kmp.basic.SnackbarDefaults as MiuixSnackbarDefaults
-import top.yukonga.miuix.kmp.basic.Text as MiuixText
-import top.yukonga.miuix.kmp.basic.TextButton as MiuixTextButton
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.basic.Close
-import top.yukonga.miuix.kmp.squircle.squircleBackground
-import top.yukonga.miuix.kmp.squircle.squircleBorder
-import top.yukonga.miuix.kmp.theme.LocalContentColor as MiuixLocalContentColor
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.basic.BasicComponent
+import io.github.suqi8.coui.kmp.basic.Button as CouiButton
+import io.github.suqi8.coui.kmp.basic.ButtonColors as CouiButtonColors
+import io.github.suqi8.coui.kmp.basic.ButtonDefaults as CouiButtonDefaults
+import io.github.suqi8.coui.kmp.basic.FloatingActionButton as CouiFloatingActionButton
+import io.github.suqi8.coui.kmp.basic.FloatingActionButtonDefaults as CouiFloatingActionButtonDefaults
+import io.github.suqi8.coui.kmp.basic.Icon as CouiIcon
+import io.github.suqi8.coui.kmp.basic.SnackbarDefaults as CouiSnackbarDefaults
+import io.github.suqi8.coui.kmp.basic.Text as CouiText
+import io.github.suqi8.coui.kmp.basic.TextButton as CouiTextButton
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.Close
+import io.github.suqi8.coui.kmp.squircle.squircleBackground
+import io.github.suqi8.coui.kmp.squircle.squircleBorder
+import io.github.suqi8.coui.kmp.theme.LocalContentColor as CouiLocalContentColor
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
-internal fun AppMiuixButton(
+internal fun AppCouiButton(
     onClick: () -> Unit,
     modifier: Modifier,
     enabled: Boolean,
-    colors: MiuixButtonColors,
+    colors: CouiButtonColors,
     insideMargin: PaddingValues,
     interactionSource: MutableInteractionSource,
     border: BorderStroke? = null,
     content: @Composable RowScope.() -> Unit,
 ) {
-    MiuixButton(
+    CouiButton(
         onClick = onClick,
         modifier = modifier.then(
             if (border == null) {
@@ -80,28 +80,28 @@ internal fun AppMiuixButton(
                     Modifier.squircleBorder(
                         width = border.width,
                         color = brush.value,
-                        cornerRadius = MiuixButtonDefaults.CornerRadius,
+                        cornerRadius = CouiButtonDefaults.CornerRadius,
                     )
                 } else {
-                    Modifier.border(border, RoundedCornerShape(MiuixButtonDefaults.CornerRadius))
+                    Modifier.border(border, RoundedCornerShape(CouiButtonDefaults.CornerRadius))
                 }
             }
         ),
         enabled = enabled,
         colors = colors,
         insideMargin = insideMargin,
-        minHeight = MiuixButtonDefaults.MinHeight,
-        minWidth = MiuixButtonDefaults.MinWidth,
-        cornerRadius = MiuixButtonDefaults.CornerRadius,
+        minHeight = CouiButtonDefaults.MinHeight,
+        minWidth = CouiButtonDefaults.MinWidth,
+        cornerRadius = CouiButtonDefaults.CornerRadius,
         interactionSource = interactionSource,
         content = {
             // Slots can contain Material Text/Icon alongside native Miuix content.
             CompositionLocalProvider(
-                androidx.compose.material3.LocalContentColor provides MiuixLocalContentColor.current,
+                androidx.compose.material3.LocalContentColor provides CouiLocalContentColor.current,
                 com.android.purebilibili.core.ui.LocalAppButtonSlotPalette provides
                     com.android.purebilibili.core.ui.AppButtonSlotPalette(
                         containerColor = if (enabled) colors.color else colors.disabledColor,
-                        contentColor = MiuixLocalContentColor.current,
+                        contentColor = CouiLocalContentColor.current,
                         enabled = enabled,
                     ),
             ) {
@@ -112,7 +112,7 @@ internal fun AppMiuixButton(
 }
 
 @Composable
-internal fun AppMiuixChip(
+internal fun AppCouiChip(
     onClick: () -> Unit,
     selected: Boolean,
     enabled: Boolean,
@@ -124,8 +124,8 @@ internal fun AppMiuixChip(
     label: @Composable () -> Unit,
 ) {
     val colors = when (resolveMiuixChipActionTone(selected)) {
-        AppMiuixActionTone.PRIMARY -> MiuixButtonDefaults.buttonColorsPrimary()
-        AppMiuixActionTone.SECONDARY -> MiuixButtonDefaults.buttonColors()
+        AppMiuixActionTone.PRIMARY -> CouiButtonDefaults.buttonColorsPrimary()
+        AppMiuixActionTone.SECONDARY -> CouiButtonDefaults.buttonColors()
     }
     val scheme = androidx.compose.material3.MaterialTheme.colorScheme
     val selectedContainer = colors.color
@@ -133,34 +133,34 @@ internal fun AppMiuixChip(
     val navigation = if (navigationColors && selected && isMiuixNonGlassEnabled()) {
         com.android.purebilibili.core.ui.AppInteractionColors.nativeNavigation()
     } else null
-    val readableColors = if (navigation != null) MiuixButtonColors(
+    val readableColors = if (navigation != null) CouiButtonColors(
         color = navigation.selectedContainer,
         contentColor = navigation.selectedContent,
         disabledColor = colors.disabledColor,
         disabledContentColor = colors.disabledContentColor,
-    ) else if (isMiuixNonGlassEnabled()) colors else MiuixButtonColors(
+    ) else if (isMiuixNonGlassEnabled()) colors else CouiButtonColors(
         color = selectedContainer,
         contentColor = com.android.purebilibili.core.ui.resolveButtonContentColor(selectedContainer, selectedContent, scheme),
         disabledColor = colors.disabledColor,
         disabledContentColor = colors.disabledContentColor,
     )
     val metrics = resolveMiuixNonGlassChipMetrics()
-    MiuixButton(
+    CouiButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
         colors = readableColors,
-        insideMargin = if (isMiuixNonGlassEnabled()) MiuixButtonDefaults.InsideMargin else PaddingValues(
+        insideMargin = if (isMiuixNonGlassEnabled()) CouiButtonDefaults.InsideMargin else PaddingValues(
             horizontal = metrics.horizontalPaddingDp.dp,
             vertical = AppSpacingTokens.None,
         ),
-        minHeight = if (isMiuixNonGlassEnabled()) MiuixButtonDefaults.MinHeight else metrics.minHeightDp.dp,
-        minWidth = if (isMiuixNonGlassEnabled()) MiuixButtonDefaults.MinWidth else metrics.minWidthDp.dp,
-        cornerRadius = if (isMiuixNonGlassEnabled()) MiuixButtonDefaults.CornerRadius else metrics.cornerRadiusDp.dp,
+        minHeight = if (isMiuixNonGlassEnabled()) CouiButtonDefaults.MinHeight else metrics.minHeightDp.dp,
+        minWidth = if (isMiuixNonGlassEnabled()) CouiButtonDefaults.MinWidth else metrics.minWidthDp.dp,
+        cornerRadius = if (isMiuixNonGlassEnabled()) CouiButtonDefaults.CornerRadius else metrics.cornerRadiusDp.dp,
         interactionSource = interactionSource,
     ) {
         CompositionLocalProvider(
-            androidx.compose.material3.LocalContentColor provides MiuixLocalContentColor.current,
+            androidx.compose.material3.LocalContentColor provides CouiLocalContentColor.current,
         ) {
             if (leadingIcon != null) {
                 leadingIcon()
@@ -176,7 +176,7 @@ internal fun AppMiuixChip(
 }
 
 @Composable
-internal fun AppMiuixFloatingActionButton(
+internal fun AppCouiFloatingActionButton(
     onClick: () -> Unit,
     modifier: Modifier,
     containerColor: Color,
@@ -185,18 +185,18 @@ internal fun AppMiuixFloatingActionButton(
     content: @Composable () -> Unit,
 ) {
     val minSize = resolveMiuixFabMinSizeDp(small).dp
-    MiuixFloatingActionButton(
+    CouiFloatingActionButton(
         onClick = onClick,
         modifier = modifier,
         shape = CircleShape,
         containerColor = containerColor,
-        shadowElevation = MiuixFloatingActionButtonDefaults.ShadowElevation,
+        shadowElevation = CouiFloatingActionButtonDefaults.ShadowElevation,
         minWidth = minSize,
         minHeight = minSize,
     ) {
         // Native FAB's internal Surface resets LocalContentColor; provide the pair inside it.
         CompositionLocalProvider(
-            MiuixLocalContentColor provides contentColor,
+            CouiLocalContentColor provides contentColor,
             androidx.compose.material3.LocalContentColor provides contentColor,
         ) {
             content()
@@ -205,22 +205,22 @@ internal fun AppMiuixFloatingActionButton(
 }
 
 @Composable
-internal fun AppMiuixSnackbar(
+internal fun AppCouiSnackbar(
     modifier: Modifier,
     action: (@Composable () -> Unit)?,
     content: @Composable () -> Unit,
 ) {
-    val colors = MiuixSnackbarDefaults.snackbarColors()
-    AppMiuixSnackbarContainer(modifier = modifier, containerColor = colors.containerColor) {
+    val colors = CouiSnackbarDefaults.snackbarColors()
+    AppCouiSnackbarContainer(modifier = modifier, containerColor = colors.containerColor) {
         CompositionLocalProvider(
-            MiuixLocalContentColor provides colors.contentColor,
+            CouiLocalContentColor provides colors.contentColor,
             androidx.compose.material3.LocalContentColor provides colors.contentColor,
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .defaultMinSize(minHeight = AppChromeSizeTokens.MinimumTouchTarget)
-                    .padding(MiuixSnackbarDefaults.InsideMargin),
+                    .padding(CouiSnackbarDefaults.InsideMargin),
             ) {
                 Row(
                     modifier = Modifier.weight(1f),
@@ -238,7 +238,7 @@ internal fun AppMiuixSnackbar(
 }
 
 @Composable
-internal fun AppMiuixMessageSnackbar(
+internal fun AppCouiMessageSnackbar(
     message: String,
     actionLabel: String?,
     onAction: (() -> Unit)?,
@@ -246,41 +246,41 @@ internal fun AppMiuixMessageSnackbar(
     onDismiss: (() -> Unit)?,
     modifier: Modifier,
 ) {
-    val colors = MiuixSnackbarDefaults.snackbarColors()
-    AppMiuixSnackbarContainer(modifier = modifier, containerColor = colors.containerColor) {
+    val colors = CouiSnackbarDefaults.snackbarColors()
+    AppCouiSnackbarContainer(modifier = modifier, containerColor = colors.containerColor) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .defaultMinSize(minHeight = AppChromeSizeTokens.MinimumTouchTarget)
-                .padding(MiuixSnackbarDefaults.InsideMargin),
+                .padding(CouiSnackbarDefaults.InsideMargin),
         ) {
-            MiuixText(
+            CouiText(
                 text = message,
                 color = colors.contentColor,
-                style = MiuixTheme.textStyles.body2,
+                style = COUITheme.textStyles.body2,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.weight(1f),
             )
             if (!actionLabel.isNullOrEmpty() && onAction != null) {
-                MiuixTextButton(
+                CouiTextButton(
                     text = actionLabel,
                     onClick = onAction,
                     modifier = Modifier.padding(start = AppSpacingTokens.Medium),
-                    cornerRadius = MiuixSnackbarDefaults.ActionCornerRadius,
+                    cornerRadius = CouiSnackbarActionCornerRadius,
                     minWidth = 26.dp,
                     minHeight = 26.dp,
-                    colors = MiuixButtonDefaults.textButtonColorsPrimary(
-                        color = colors.actionContainerColor,
+                    colors = CouiButtonDefaults.textButtonColorsPrimary(
+                        color = COUITheme.colorScheme.primary,
                         textColor = colors.actionContentColor,
                     ),
-                    insideMargin = MiuixSnackbarDefaults.ActionInsideMargin,
-                    textStyle = MiuixTheme.textStyles.button,
+                    insideMargin = CouiSnackbarActionInsideMargin,
+                    textStyle = COUITheme.textStyles.button,
                 )
             }
             if (withDismissAction && onDismiss != null) {
-                MiuixIcon(
-                    imageVector = MiuixIcons.Basic.Close,
+                CouiIcon(
+                    imageVector = COUIIcons.Basic.Close,
                     contentDescription = "关闭",
                     tint = colors.dismissActionContentColor,
                     modifier = Modifier
@@ -298,7 +298,7 @@ internal fun AppMiuixMessageSnackbar(
 }
 
 @Composable
-internal fun AppMiuixNavigationDrawerItem(
+internal fun AppCouiNavigationDrawerItem(
     label: @Composable () -> Unit,
     selected: Boolean,
     onClick: () -> Unit,
@@ -308,10 +308,10 @@ internal fun AppMiuixNavigationDrawerItem(
     interactionSource: MutableInteractionSource,
 ) {
     val navigationColors = com.android.purebilibili.core.ui.AppInteractionColors.nativeNavigation()
-    val selectedContent = navigationColors?.selectedContent ?: MiuixTheme.colorScheme.onPrimaryContainer
+    val selectedContent = navigationColors?.selectedContent ?: COUITheme.colorScheme.onPrimaryContainer
     val itemModifier = if (selected) modifier.squircleBackground(
-        color = navigationColors?.selectedContainer ?: MiuixTheme.colorScheme.primaryContainer,
-        cornerRadius = MiuixButtonDefaults.CornerRadius,
+        color = navigationColors?.selectedContainer ?: COUITheme.colorScheme.primaryContainer,
+        cornerRadius = CouiButtonDefaults.CornerRadius,
     ) else modifier
     BasicComponent(
         modifier = itemModifier.appDesktopInteractionVisuals(interactionSource),
@@ -336,19 +336,19 @@ internal fun AppMiuixNavigationDrawerItem(
 }
 
 @Composable
-private fun AppMiuixSnackbarContainer(
+private fun AppCouiSnackbarContainer(
     modifier: Modifier,
     containerColor: Color,
     content: @Composable () -> Unit,
 ) {
-    val cornerRadius = MiuixSnackbarDefaults.CornerRadius
+    val cornerRadius = CouiSnackbarDefaults.CornerRadius
     Box(
         modifier = modifier
             .semantics(mergeDescendants = false) {
                 isTraversalGroup = true
                 liveRegion = LiveRegionMode.Polite
             }
-            .padding(MiuixSnackbarDefaults.OuterPadding)
+            .padding(CouiSnackbarOuterPadding)
             .dropShadow(
                 shape = RoundedCornerShape(cornerRadius),
                 shadow = Shadow(
@@ -362,3 +362,8 @@ private fun AppMiuixSnackbarContainer(
         content()
     }
 }
+
+// COUI 未公开 Snackbar action 与浮层外边距的 token，这里按 miuix 同角色取值补齐。
+private val CouiSnackbarActionCornerRadius = 50.dp
+private val CouiSnackbarActionInsideMargin = PaddingValues(horizontal = 12.dp, vertical = 0.dp)
+private val CouiSnackbarOuterPadding = PaddingValues(start = 12.dp, end = 12.dp, top = 8.dp)

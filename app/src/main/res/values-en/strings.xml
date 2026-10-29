@@ -33,6 +33,7 @@
     <string name="appearance_android_native_variant_subtitle">Choose Google or Xiaomi-style controls</string>
     <string name="appearance_android_native_variant_material3">Google Material 3</string>
     <string name="appearance_android_native_variant_miuix">Miuix</string>
+    <string name="appearance_android_native_variant_coui17">COUI 17</string>
     <string name="appearance_theme_mode_title">Theme Mode</string>
     <string name="appearance_theme_mode_subtitle">Choose light, dark, or follow system</string>
     <string name="appearance_dark_theme_style_title">Dark Theme Style</string>

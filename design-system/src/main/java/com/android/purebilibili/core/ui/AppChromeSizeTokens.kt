@@ -110,5 +110,30 @@ fun resolveCompactCapsuleChromeSpec(
                 standardGapDp = 12
             )
         }
+        AppUiStyle.COUI17 -> {
+            val primaryHeight = 44
+            CompactCapsuleChromeSpec(
+                primaryHeightDp = primaryHeight,
+                secondaryButtonSizeDp = secondarySize,
+                chipHeightDp = 32,
+                compactChipHeightDp = 28,
+                primaryCornerRadiusDp = minOf(
+                    chromeTokens.containerCornerRadiusDp, // 20
+                    (primaryHeight * 0.3f).toInt(),
+                ),
+                secondaryButtonCornerRadiusDp = minOf(
+                    chromeTokens.containerCornerRadiusDp,
+                    (secondarySize * 0.3f).toInt(),
+                ),
+                chipCornerRadiusDp = minOf(16, (32 * 0.3f).toInt()), // 9 → keep 9
+                compactChipCornerRadiusDp = minOf(14, (28 * 0.3f).toInt()),
+                iconSizeDp = 20,
+                smallIconSizeDp = 16,
+                inputHorizontalPaddingDp = 14,
+                chipHorizontalPaddingDp = 12,
+                compactChipHorizontalPaddingDp = 10,
+                standardGapDp = 8
+            )
+        }
     }
 }

@@ -165,7 +165,7 @@ import com.android.purebilibili.feature.home.components.resolveHomeTopEdgeButton
 import com.android.purebilibili.feature.home.components.shouldUseBiliPaiProgressiveTopBlur
 import com.android.purebilibili.core.ui.adaptive.MotionTier
 import com.android.purebilibili.core.ui.performance.isLowBlurBudgetForced
-import top.yukonga.miuix.kmp.blur.Backdrop as MiuixBackdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop as MiuixBackdrop
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.roundToInt
@@ -247,6 +247,7 @@ import kotlinx.coroutines.launch
 
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.purebilibili.core.ui.AdaptiveLoadingIndicator
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 
 internal fun shouldShowSearchHotSection(
@@ -346,6 +347,7 @@ internal fun resolveSearchComponentSpacingSpec(uiStyle: AppUiStyle): SearchCompo
     when (uiStyle) {
         AppUiStyle.MATERIAL3 -> SearchComponentSpacingSpec(16, 8, 0, 12)
         AppUiStyle.MIUIX -> SearchComponentSpacingSpec(12, 8, 0, 8)
+        AppUiStyle.COUI17 -> SearchComponentSpacingSpec(12, 8, 0, 8)
     }
 
 internal data class SearchChromeVisualSpec(
@@ -3730,7 +3732,7 @@ fun SearchFilterBar(
     }
     if (filterControls.isEmpty()) return
 
-    val useMiuixPresentation = LocalAppUiStyle.current == AppUiStyle.MIUIX
+    val useMiuixPresentation = LocalAppUiStyle.current.usesMiuixFamilySkin
     val filterRowPadding = if (useMiuixPresentation) {
         Modifier.padding(horizontal = AppSpacingTokens.Large, vertical = AppSpacingTokens.Small)
     } else {
@@ -4182,7 +4184,7 @@ fun SearchResultCard(
     index: Int,
     onClick: (String) -> Unit
 ) {
-    val useMiuixPresentation = LocalAppUiStyle.current == AppUiStyle.MIUIX
+    val useMiuixPresentation = LocalAppUiStyle.current.usesMiuixFamilySkin
     val coverUrl = remember(video.bvid) {
         FormatUtils.fixImageUrl(if (video.pic.startsWith("//")) "https:${video.pic}" else video.pic)
     }
@@ -4340,7 +4342,7 @@ internal fun UpSearchResultCard(
     onTransitionClick: ((String) -> Unit)? = null,
     onLiveClick: (() -> Unit)? = null,
 ) {
-    val useMiuixPresentation = LocalAppUiStyle.current == AppUiStyle.MIUIX
+    val useMiuixPresentation = LocalAppUiStyle.current.usesMiuixFamilySkin
     val cleanedItem = remember(upItem) { upItem.cleanupFields() }
     val transitionKey = rememberSaveable(upItem.mid) {
         "${searchUpContainerKey(upItem.mid)}:${java.util.UUID.randomUUID()}"
@@ -4526,7 +4528,7 @@ internal fun BangumiSearchResultCard(
     categoryLabel: String? = null,
     onTransitionClick: ((String) -> Unit)? = null,
 ) {
-    val useMiuixPresentation = LocalAppUiStyle.current == AppUiStyle.MIUIX
+    val useMiuixPresentation = LocalAppUiStyle.current.usesMiuixFamilySkin
     val transitionKey = rememberSaveable(item.seasonId) {
         "${searchBangumiContainerKey(item.seasonId)}:${java.util.UUID.randomUUID()}"
     }
@@ -4758,7 +4760,7 @@ internal fun LiveSearchResultCard(
     appearance: SearchResultCardAppearance,
     onClick: () -> Unit
 ) {
-    val useMiuixPresentation = LocalAppUiStyle.current == AppUiStyle.MIUIX
+    val useMiuixPresentation = LocalAppUiStyle.current.usesMiuixFamilySkin
     SearchResultCardSurface(
         appearance = appearance,
         onClick = onClick
@@ -4958,7 +4960,7 @@ internal fun LiveUserSearchResultCard(
     appearance: SearchResultCardAppearance,
     onClick: () -> Unit
 ) {
-    val useMiuixPresentation = LocalAppUiStyle.current == AppUiStyle.MIUIX
+    val useMiuixPresentation = LocalAppUiStyle.current.usesMiuixFamilySkin
     val cleaned = remember(item.uid, item.uname, item.uface) { item.cleanupFields() }
     SearchResultCardSurface(
         appearance = appearance,
@@ -5031,7 +5033,7 @@ internal fun TopicSearchResultCard(
     appearance: SearchResultCardAppearance,
     onClick: () -> Unit
 ) {
-    val useMiuixPresentation = LocalAppUiStyle.current == AppUiStyle.MIUIX
+    val useMiuixPresentation = LocalAppUiStyle.current.usesMiuixFamilySkin
     val cleaned = remember(item.topicId, item.title, item.cover) { item.cleanupFields() }
     SearchResultCardSurface(
         appearance = appearance,
@@ -5093,7 +5095,7 @@ internal fun PhotoSearchResultCard(
     item: SearchPhotoItem,
     appearance: SearchResultCardAppearance
 ) {
-    val useMiuixPresentation = LocalAppUiStyle.current == AppUiStyle.MIUIX
+    val useMiuixPresentation = LocalAppUiStyle.current.usesMiuixFamilySkin
     val cleaned = remember(item.id, item.title, item.cover) { item.cleanupFields() }
     SearchResultCardSurface(
         appearance = appearance.copy(

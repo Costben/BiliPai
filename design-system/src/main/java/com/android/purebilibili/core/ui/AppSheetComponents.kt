@@ -72,10 +72,11 @@ import androidx.navigationevent.findViewTreeNavigationEventDispatcherOwner
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.theme.resolveAndroidNativeChromeTokens
-import top.yukonga.miuix.kmp.window.WindowBottomSheet
-import top.yukonga.miuix.kmp.window.WindowDialog
+import io.github.suqi8.coui.kmp.window.WindowBottomSheet
+import io.github.suqi8.coui.kmp.window.WindowDialog
 import com.android.purebilibili.core.ui.motion.AppMotionTokens
 import kotlinx.coroutines.flow.collect
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 data class AdaptiveBottomSheetVisualSpec(
     val cornerRadiusDp: Int,
@@ -166,6 +167,7 @@ enum class BottomSheetHost {
 fun resolveBottomSheetHost(uiStyle: AppUiStyle): BottomSheetHost = when (uiStyle) {
     AppUiStyle.MIUIX -> BottomSheetHost.MIUIX_WINDOW
     AppUiStyle.MATERIAL3 -> BottomSheetHost.MATERIAL3
+    AppUiStyle.COUI17 -> BottomSheetHost.MIUIX_WINDOW
 }
 
 internal fun bottomSheetScrimEnterTransition(
@@ -293,7 +295,7 @@ fun AppModalBottomSheet(
     }
     if (!visible && !retained) return
     val uiStyle = LocalAppUiStyle.current
-    val miuix = uiStyle == AppUiStyle.MIUIX
+    val miuix = uiStyle.usesMiuixFamilySkin
     // Collection-style sheets keep the covered page sharp in glass, MD3 and Miuix,
     // including centered/hinge-safe hosts. Surface material and scrim stay independent.
     val blurBehind = backgroundBlurBehind

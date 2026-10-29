@@ -20,7 +20,7 @@ internal fun ProvideAppActionContentColor(color: Color, content: @Composable () 
     CompositionLocalProvider(
         LocalAppActionContentColor provides color,
         androidx.compose.material3.LocalContentColor provides color,
-        top.yukonga.miuix.kmp.theme.LocalContentColor provides color,
+        io.github.suqi8.coui.kmp.theme.LocalContentColor provides color,
         content = content,
     )
 }
@@ -34,7 +34,7 @@ object AppTextButtonDefaults {
     fun colors(): androidx.compose.material3.ButtonColors {
         val chromeColor = LocalAppActionContentColor.current
         if (com.android.purebilibili.core.ui.isMiuixNonGlassEnabled()) {
-            val native = top.yukonga.miuix.kmp.basic.ButtonDefaults.textButtonColors()
+            val native = io.github.suqi8.coui.kmp.basic.ButtonDefaults.textButtonColors()
             return ButtonDefaults.textButtonColors(
                 containerColor = native.color,
                 contentColor = if (chromeColor == Color.Unspecified) native.textColor else chromeColor,
@@ -53,7 +53,7 @@ object AppTextButtonDefaults {
     @Composable
     fun primaryColors(): androidx.compose.material3.ButtonColors {
         if (com.android.purebilibili.core.ui.isMiuixNonGlassEnabled()) {
-            val native = top.yukonga.miuix.kmp.basic.ButtonDefaults.textButtonColorsPrimary()
+            val native = io.github.suqi8.coui.kmp.basic.ButtonDefaults.textButtonColorsPrimary()
             return ButtonDefaults.textButtonColors(
                 containerColor = native.color,
                 contentColor = native.textColor,

@@ -38,6 +38,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.math.abs
 import kotlin.math.sign
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 internal enum class PagerGestureDirection {
     UNDECIDED,
@@ -152,7 +153,7 @@ internal fun Modifier.verticalPriorityHorizontalPagerSwipe(
     if (!enabled) return@composed this
     // Glass comment lists need child-first arbitration even while the list is flinging.
     // Other callers retain Miuix's native cross-axis takeover behavior by default.
-    if (!forceVerticalPriority && LocalAppUiStyle.current == AppUiStyle.MIUIX) {
+    if (!forceVerticalPriority && LocalAppUiStyle.current.usesMiuixFamilySkin) {
         return@composed pagerGestureOverride(
             pagerState = state,
             flingBehavior = PagerDefaults.flingBehavior(state, snapAnimationSpec = PagerNavigationSpringSpec),

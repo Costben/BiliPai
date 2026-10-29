@@ -21,6 +21,7 @@ import com.android.purebilibili.core.ui.AppSemanticAccentRole
 import com.android.purebilibili.core.ui.AppSemanticIconFamily
 import com.android.purebilibili.core.ui.AppSemanticVisualPolicy
 import com.android.purebilibili.core.ui.rememberAppSemanticVisualPolicy
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 internal data class SettingsEntryVisual(
     val icon: ImageVector? = null,
@@ -40,7 +41,7 @@ internal fun rememberSettingsEntryTint(
     val uiStyle = LocalAppUiStyle.current
     val neutralColor = AppContentColors.secondaryText()
     return remember(role, iosTint, uiStyle, neutralColor) {
-        if (uiStyle == AppUiStyle.MIUIX) iosTint else neutralColor
+        if (uiStyle.usesMiuixFamilySkin) iosTint else neutralColor
     }
 }
 
@@ -93,7 +94,7 @@ internal fun rememberSettingsEntryVisual(
 ): SettingsEntryVisual {
     val policy = rememberAppSemanticVisualPolicy()
     val neutralColor = AppContentColors.secondaryText()
-    val colorful = LocalAppUiStyle.current == AppUiStyle.MIUIX
+    val colorful = LocalAppUiStyle.current.usesMiuixFamilySkin
     val resolved = remember(target, policy, neutralColor, colorful) {
         resolveSettingsEntryVisual(target, policy, neutralColor, colorful)
     }

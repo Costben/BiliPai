@@ -97,6 +97,7 @@ import com.android.purebilibili.core.ui.common.rememberClipboardCopyHandler
 import com.android.purebilibili.core.ui.components.AppPreferenceDivider as SettingsDivider
 import com.android.purebilibili.core.ui.components.AppSliderDialogPreference as SettingSliderItem
 import com.android.purebilibili.core.ui.components.AppPreferenceGroupPresentation
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 
 
@@ -115,7 +116,7 @@ internal fun SettingsCardGroup(
     content: @Composable ColumnScope.() -> Unit
 ) {
     SettingsGroup(
-        presentation = if (LocalAppUiStyle.current == AppUiStyle.MIUIX) {
+        presentation = if (LocalAppUiStyle.current.usesMiuixFamilySkin) {
             AppPreferenceGroupPresentation.CARD
         } else {
             AppPreferenceGroupPresentation.FLAT
@@ -292,7 +293,7 @@ private fun SettingsCategoryContainerOrigin(
         sources.sources[target]?.takeIf { it.owner == owner }?.anchor ?: SettingsContainerAnchor()
     }
     val layer = androidx.compose.ui.graphics.rememberGraphicsLayer()
-    val roundedGroup = LocalAppUiStyle.current == AppUiStyle.MIUIX
+    val roundedGroup = LocalAppUiStyle.current.usesMiuixFamilySkin
     // 首页 MD3 使用平铺分组；Miuix 沿用卡片在各玻璃状态下的实际底色。
     val color = if (roundedGroup) {
         com.android.purebilibili.core.ui.components.adaptivePreferenceGroupContainerColor()
@@ -349,7 +350,7 @@ private fun SettingsRootCategoryRow(
             ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        if (LocalAppUiStyle.current == AppUiStyle.MIUIX || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
+        if (LocalAppUiStyle.current.usesMiuixFamilySkin || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
             SettingsFunctionIcon(title = iconColorKey, imageVector = icon, painter = iconPainter)
         } else Box(
             modifier = Modifier
@@ -1238,7 +1239,7 @@ private fun FeedDynamicTabVisibilityItem(
             )
     ) {
         Row(verticalAlignment = Alignment.Top) {
-            if (LocalAppUiStyle.current == AppUiStyle.MIUIX || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
+            if (LocalAppUiStyle.current.usesMiuixFamilySkin || com.android.purebilibili.core.ui.components.useColorfulPreferenceIcons()) {
                 SettingsFunctionIcon(
                     title = "动态分类",
                     imageVector = icon,

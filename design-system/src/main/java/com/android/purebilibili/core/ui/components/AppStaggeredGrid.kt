@@ -22,10 +22,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
-import top.yukonga.miuix.kmp.basic.ScrollBarAdapter
-import top.yukonga.miuix.kmp.basic.VerticalScrollBar
-import top.yukonga.miuix.kmp.interfaces.ExperimentalScrollBarApi
+import io.github.suqi8.coui.kmp.basic.ScrollBarAdapter
+import io.github.suqi8.coui.kmp.basic.VerticalScrollBar
+import io.github.suqi8.coui.kmp.interfaces.ExperimentalScrollBarApi
 import kotlin.math.abs
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 @OptIn(ExperimentalScrollBarApi::class)
 @Composable
@@ -49,7 +50,7 @@ fun AppLazyVerticalStaggeredGrid(
             horizontalArrangement = horizontalArrangement, flingBehavior = flingBehavior,
             userScrollEnabled = userScrollEnabled, overscrollEffect = overscrollEffect, content = content,
         )
-        if (LocalAppUiStyle.current == AppUiStyle.MIUIX && userScrollEnabled) {
+        if (LocalAppUiStyle.current.usesMiuixFamilySkin && userScrollEnabled) {
             val adapter = remember(state) { StaggeredGridScrollBarAdapter(state) }
             Box(Modifier.matchParentSize()) {
                 VerticalScrollBar(

@@ -405,18 +405,18 @@ class NativeThemeMigrationBoundaryTest {
     private companion object {
         const val MATERIAL3_IMPORT = "import androidx.compose.material3."
         const val MIUIX_VENDOR_IMPORT = "import top.yukonga.miuix."
-        const val MIUIX_ICON_IMPORT = "import top.yukonga.miuix.kmp.icon."
+        const val MIUIX_ICON_IMPORT = "import io.github.suqi8.coui.kmp.icon."
         const val MIUIX_NAVIGATION_IMPORT = "import top.yukonga.miuix.kmp.nav."
 
         val MIUIX_COMPONENT_IMPORTS = listOf(
-            "import top.yukonga.miuix.kmp.basic.",
-            "import top.yukonga.miuix.kmp.preference.",
+            "import io.github.suqi8.coui.kmp.basic.",
+            "import io.github.suqi8.coui.kmp.preference.",
             "import top.yukonga.miuix.kmp.overlay.",
         )
         val MIUIX_VISUAL_EFFECT_IMPORTS = listOf(
-            "import top.yukonga.miuix.kmp.blur.",
-            "import top.yukonga.miuix.kmp.shader.",
-            "import top.yukonga.miuix.kmp.squircle.",
+            "import io.github.suqi8.coui.kmp.blur.",
+            "import io.github.suqi8.coui.kmp.shader.",
+            "import io.github.suqi8.coui.kmp.squircle.",
         )
         val APP_UI_STYLE_BRANCH = Regex("\\bAppUiStyle\\.")
         val MATERIAL_SLIDER_DEFAULTS_CALL = Regex("(?<![A-Za-z0-9_])SliderDefaults\\.colors\\(")

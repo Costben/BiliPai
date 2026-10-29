@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.android.purebilibili.core.util.FormatUtils
 import com.android.purebilibili.data.model.response.ViewPoint
 import com.android.purebilibili.feature.video.ui.components.PlayerNativeDropdownItem
-import top.yukonga.miuix.kmp.basic.DropdownItem
+import io.github.suqi8.coui.kmp.basic.DropdownItem
 
 @Composable
 fun ChapterListPanel(

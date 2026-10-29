@@ -25,6 +25,7 @@ fun resolveAppListItemStyle(
     AppListItemStyle.AUTO -> when (uiStyle) {
         AppUiStyle.MATERIAL3 -> AppListItemStyle.NATIVE
         AppUiStyle.MIUIX -> AppListItemStyle.NATIVE
+        AppUiStyle.COUI17 -> AppListItemStyle.NATIVE
     }
     else -> style
 }

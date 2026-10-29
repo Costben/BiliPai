@@ -76,8 +76,8 @@ class MiuixThemeBridgePolicyTest {
     fun `miuix page canvas follows resolved surface role`() {
         listOf(false, true).forEach { dark ->
             val scheme = if (dark) darkColorScheme() else lightColorScheme()
-            val expected = if (dark) top.yukonga.miuix.kmp.theme.darkColorScheme()
-                else top.yukonga.miuix.kmp.theme.lightColorScheme()
+            val expected = if (dark) io.github.suqi8.coui.kmp.theme.darkColorScheme()
+                else io.github.suqi8.coui.kmp.theme.lightColorScheme()
             val colors = resolveNativeMiuixColors(scheme, dark)
             assertEquals(if (dark) Color(0xFF121212) else expected.background, colors.background)
             assertEquals(if (dark) Color(0xFF121212) else expected.surface, colors.surface)
@@ -103,8 +103,8 @@ class MiuixThemeBridgePolicyTest {
         val primary = Color(0xFFB3261E)
         listOf(false, true).forEach { dark ->
             val scheme = if (dark) darkColorScheme(primary = primary) else lightColorScheme(primary = primary)
-            val expected = if (dark) top.yukonga.miuix.kmp.theme.darkColorScheme()
-                else top.yukonga.miuix.kmp.theme.lightColorScheme()
+            val expected = if (dark) io.github.suqi8.coui.kmp.theme.darkColorScheme()
+                else io.github.suqi8.coui.kmp.theme.lightColorScheme()
             val colors = resolveNativeMiuixColors(scheme, dark)
             assertEquals(scheme.onPrimaryFixed, colors.onPrimaryVariant)
             assertEquals(scheme.onTertiaryContainer, colors.onTertiaryContainer)
@@ -120,8 +120,8 @@ class MiuixThemeBridgePolicyTest {
     fun `native miuix preserves upstream neutral and disabled control roles in both themes`() {
         listOf(false, true).forEach { dark ->
             val scheme = if (dark) darkColorScheme() else lightColorScheme()
-            val expected = if (dark) top.yukonga.miuix.kmp.theme.darkColorScheme()
-                else top.yukonga.miuix.kmp.theme.lightColorScheme()
+            val expected = if (dark) io.github.suqi8.coui.kmp.theme.darkColorScheme()
+                else io.github.suqi8.coui.kmp.theme.lightColorScheme()
             val colors = resolveNativeMiuixColors(scheme, dark)
             assertEquals(if (dark) Color(0xFF121212) else expected.background, colors.background)
             assertEquals(if (dark) Color(0xFF121212) else expected.surface, colors.surface)
@@ -158,7 +158,7 @@ class MiuixThemeBridgePolicyTest {
     @Test
     fun `native miuix ignores custom material surfaces`() {
         val scheme = darkColorScheme(background = Color(0xFF123456))
-        val upstream = top.yukonga.miuix.kmp.theme.darkColorScheme()
+        val upstream = io.github.suqi8.coui.kmp.theme.darkColorScheme()
         val colors = resolveNativeMiuixColors(scheme, true)
         assertEquals(Color(0xFF121212), colors.background)
         assertEquals(Color(0xFF121212), colors.surface)

@@ -2,6 +2,7 @@
 
 package com.android.purebilibili.feature.settings
 
+import com.android.purebilibili.core.store.retiringMiuix
 import com.android.purebilibili.core.theme.SeedPaletteStyle
 import com.android.purebilibili.core.theme.SeedPresetColors
 import com.android.purebilibili.core.theme.SeedPresetColorNames
@@ -101,6 +102,7 @@ import com.android.purebilibili.core.ui.components.*
 import com.android.purebilibili.core.ui.animation.EntranceGroup
 import com.android.purebilibili.core.ui.animation.entrance
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /**
  *  外观设置二级页面
@@ -336,16 +338,17 @@ fun AppearanceSettingsContent(
     val uiPresetTitle = stringResource(R.string.appearance_ui_preset_title)
     val uiPresetSubtitle = stringResource(R.string.appearance_ui_preset_subtitle)
     val uiStyleMaterialLabel = stringResource(R.string.appearance_android_native_variant_material3)
-    val uiStyleMiuixLabel = stringResource(R.string.appearance_android_native_variant_miuix)
-    val uiStyleOptions = remember(uiStyleMaterialLabel, uiStyleMiuixLabel) {
+    val uiStyleCouiLabel = stringResource(R.string.appearance_android_native_variant_coui17)
+    val uiStyleOptions = remember(uiStyleMaterialLabel, uiStyleCouiLabel) {
         resolveThemeSelectionOptions(
             material3Label = uiStyleMaterialLabel,
-            miuixLabel = uiStyleMiuixLabel,
+            couiLabel = uiStyleCouiLabel,
         )
     }
-    val selectedUiStyleLabel = uiStyleOptions
-        .first { it.value == state.themeSelection }
-        .label
+    val selectedUiStyleLabel = (
+        uiStyleOptions.firstOrNull { it.value == state.themeSelection.retiringMiuix() }
+            ?: uiStyleOptions.first()
+        ).label
     val themeModeTitle = stringResource(R.string.appearance_theme_mode_title)
     val themeModeSubtitle = stringResource(R.string.appearance_theme_mode_subtitle)
     val themeModeFollowSystemLabel = stringResource(R.string.theme_mode_follow_system)
@@ -625,7 +628,12 @@ fun AppearanceSettingsContent(
                             options = uiStyleOptions,
                             selectedValue = state.themeSelection,
                             optionLeading = { value ->
-                                SettingsOptionPreviewThumb(SettingsOptionPreview.UiPreset(miuix = value == AppUiStyle.MIUIX))
+                                SettingsOptionPreviewThumb(
+                                    SettingsOptionPreview.UiPreset(
+                                        miuix = value == AppUiStyle.MIUIX,
+                                        coui = value == AppUiStyle.COUI17,
+                                    )
+                                )
                             },
                             onSelectionChange = viewModel::setThemeSelection,
                         )
@@ -923,7 +931,7 @@ fun AppearanceSettingsContent(
                                         enabled = storedThemeRoleOverrides != ThemeRoleOverrides(),
                                     ) {
                                         AppText(stringResource(
-                                            if (palettePreviewConfiguration.uiStyle == AppUiStyle.MIUIX) {
+                                            if (palettePreviewConfiguration.uiStyle.usesMiuixFamilySkin) {
                                                 R.string.appearance_theme_restore_miuix_palette
                                             } else {
                                                 R.string.appearance_theme_restore_md3_palette

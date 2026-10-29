@@ -8,7 +8,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.ui.Alignment
-import top.yukonga.miuix.kmp.anim.folmeSpring
+import io.github.suqi8.coui.kmp.anim.folmeSpring
 
 enum class VerticalContentRevealMode {
     DefaultExpand,

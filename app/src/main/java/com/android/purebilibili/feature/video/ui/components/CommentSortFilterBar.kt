@@ -28,8 +28,9 @@ import com.android.purebilibili.core.ui.AppChromeSizeTokens
 import com.android.purebilibili.core.util.FormatUtils
 import com.android.purebilibili.feature.home.components.BottomBarLiquidSegmentedControl
 import com.android.purebilibili.feature.video.viewmodel.CommentSortMode
-import top.yukonga.miuix.kmp.blur.Backdrop as MiuixBackdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop as MiuixBackdrop
 import kotlin.math.ceil
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 internal data class CommentSortSegmentedControlSpec(
     val itemWidthDp: Int,
@@ -191,7 +192,7 @@ fun CommentSortHeader(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         CommentListTitle(
-            title = if (uiStyle == AppUiStyle.MIUIX) "评论" else "${sortMode.label}评论",
+            title = if (uiStyle.usesMiuixFamilySkin) "评论" else "${sortMode.label}评论",
             count = count,
             liquidGlassEnabled = liquidGlassEnabled,
             compactTypography = compactTypography,
@@ -213,7 +214,7 @@ fun CommentSortHeader(
                     )
                 }
             }
-            if (uiStyle == AppUiStyle.MIUIX) {
+            if (uiStyle.usesMiuixFamilySkin) {
                 Box(
                     modifier = Modifier.width((spec.itemWidthDp * sortModes.size).dp),
                     contentAlignment = Alignment.CenterStart,

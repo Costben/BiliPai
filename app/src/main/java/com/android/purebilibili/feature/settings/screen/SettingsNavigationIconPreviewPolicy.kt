@@ -5,8 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.vectorResource
 import com.android.purebilibili.R
 import com.android.purebilibili.core.ui.AppSemanticIconFamily
-import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.extended.*
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.*
 
 private enum class SettingsNavigationIconRole {
     HOME,
@@ -87,24 +87,24 @@ internal fun resolveSettingsNavigationPreviewIcon(
 
     return when (iconFamily) {
         AppSemanticIconFamily.MIUIX -> when (role) {
-            SettingsNavigationIconRole.HOME -> if (selected) MiuixIcons.Medium.Home else MiuixIcons.Home
-            SettingsNavigationIconRole.DYNAMIC -> if (selected) MiuixIcons.Medium.Messages else MiuixIcons.Messages
-            SettingsNavigationIconRole.STORY -> if (selected) MiuixIcons.Medium.Recording else MiuixIcons.Recording
-            SettingsNavigationIconRole.HISTORY -> if (selected) MiuixIcons.Medium.Recent else MiuixIcons.Recent
-            SettingsNavigationIconRole.LISTEN_VIDEO -> if (selected) MiuixIcons.Medium.Music else MiuixIcons.Music
-            SettingsNavigationIconRole.PROFILE -> MiuixIcons.ContactsCircle
-            SettingsNavigationIconRole.FAVORITE -> if (selected) MiuixIcons.FavoritesFill else MiuixIcons.Favorites
-            SettingsNavigationIconRole.LIVE -> if (selected) MiuixIcons.Medium.RecordingTape else MiuixIcons.RecordingTape
-            SettingsNavigationIconRole.WATCH_LATER -> if (selected) MiuixIcons.Medium.WorldClock else MiuixIcons.WorldClock
-            SettingsNavigationIconRole.SETTINGS -> if (selected) MiuixIcons.Medium.Settings else MiuixIcons.Settings
-            SettingsNavigationIconRole.PLUGINS -> if (selected) MiuixIcons.FolderFill else MiuixIcons.Folder
-            SettingsNavigationIconRole.FOLLOW -> MiuixIcons.Contacts
-            SettingsNavigationIconRole.POPULAR -> MiuixIcons.TopDownloads
-            SettingsNavigationIconRole.ANIME -> if (selected) MiuixIcons.FavoritesFill else MiuixIcons.Favorites
-            SettingsNavigationIconRole.GAME -> MiuixIcons.Store
-            SettingsNavigationIconRole.PARTITION -> if (selected) MiuixIcons.Medium.GridView else MiuixIcons.GridView
-            SettingsNavigationIconRole.KNOWLEDGE -> MiuixIcons.Notes
-            SettingsNavigationIconRole.TECH -> MiuixIcons.MindMap
+            SettingsNavigationIconRole.HOME -> if (selected) COUIIcons.Medium.Home else COUIIcons.Home
+            SettingsNavigationIconRole.DYNAMIC -> if (selected) COUIIcons.Medium.Messages else COUIIcons.Messages
+            SettingsNavigationIconRole.STORY -> if (selected) COUIIcons.Medium.Recording else COUIIcons.Recording
+            SettingsNavigationIconRole.HISTORY -> if (selected) COUIIcons.Medium.Recent else COUIIcons.Recent
+            SettingsNavigationIconRole.LISTEN_VIDEO -> if (selected) COUIIcons.Medium.Music else COUIIcons.Music
+            SettingsNavigationIconRole.PROFILE -> COUIIcons.ContactsCircle
+            SettingsNavigationIconRole.FAVORITE -> if (selected) COUIIcons.FavoritesFill else COUIIcons.Favorites
+            SettingsNavigationIconRole.LIVE -> if (selected) COUIIcons.Medium.RecordingTape else COUIIcons.RecordingTape
+            SettingsNavigationIconRole.WATCH_LATER -> if (selected) COUIIcons.Medium.WorldClock else COUIIcons.WorldClock
+            SettingsNavigationIconRole.SETTINGS -> if (selected) COUIIcons.Medium.Settings else COUIIcons.Settings
+            SettingsNavigationIconRole.PLUGINS -> if (selected) COUIIcons.FolderFill else COUIIcons.Folder
+            SettingsNavigationIconRole.FOLLOW -> COUIIcons.Contacts
+            SettingsNavigationIconRole.POPULAR -> COUIIcons.TopDownloads
+            SettingsNavigationIconRole.ANIME -> if (selected) COUIIcons.FavoritesFill else COUIIcons.Favorites
+            SettingsNavigationIconRole.GAME -> COUIIcons.Store
+            SettingsNavigationIconRole.PARTITION -> if (selected) COUIIcons.Medium.GridView else COUIIcons.GridView
+            SettingsNavigationIconRole.KNOWLEDGE -> COUIIcons.Notes
+            SettingsNavigationIconRole.TECH -> COUIIcons.MindMap
             SettingsNavigationIconRole.SUBSCRIPTIONS -> ImageVector.vectorResource(R.drawable.ms_rss_feed_24)
         }
         AppSemanticIconFamily.MATERIAL -> ImageVector.vectorResource(

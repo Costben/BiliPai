@@ -28,7 +28,7 @@ import androidx.compose.foundation.lazy.grid.*
 import com.android.purebilibili.core.ui.rememberHomeStaggeredGridState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.*  // 🌊 瀑布流布局
-import top.yukonga.miuix.kmp.blur.Backdrop as MiuixBackdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop as MiuixBackdrop
 import com.android.purebilibili.core.ui.blur.rememberChromeBackdropSource
 import com.android.purebilibili.core.ui.components.AppHorizontalPager as HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -1105,13 +1105,15 @@ fun HomeScreen(
     }
 
     // 解构设置值（避免每次访问都触发重组）
-    val effectiveHomeSettings = remember(homeSettings) {
+    val effectiveUiStyle = com.android.purebilibili.core.theme.LocalAppUiStyle.current
+    val effectiveHomeSettings = remember(homeSettings, effectiveUiStyle) {
         resolveEffectiveHomeSettings(
             homeSettings = homeSettings,
+            uiStyle = effectiveUiStyle,
         )
     }
     val displayMode = homeSettings.displayMode
-    val isBottomBarFloating = homeSettings.isBottomBarFloating
+    val isBottomBarFloating = effectiveHomeSettings.isBottomBarFloating
     val bottomBarLabelMode = homeSettings.bottomBarLabelMode
     val baseIsHeaderBlurEnabled = remember(homeSettings.headerBlurMode) {
         resolveHomeHeaderBlurEnabled(

@@ -192,8 +192,15 @@ class VideoActivity : ComponentActivity() {
             val runtimeVisualGuardEnabled by SettingsManager
                 .getRuntimeVisualGuardEnabled(this@VideoActivity)
                 .collectAsStateWithLifecycle(initialValue = true)
-            val liquidGlassEnabled by SettingsManager.getAndroidNativeLiquidGlassEnabled(this@VideoActivity)
+            val storedLiquidGlassEnabled by SettingsManager.getAndroidNativeLiquidGlassEnabled(this@VideoActivity)
                 .collectAsStateWithLifecycle(initialValue = true)
+            val videoThemeSettings by remember { SettingsManager.getAppThemeSettings(this@VideoActivity) }
+                .collectAsStateWithLifecycle(
+                    initialValue = SettingsManager.getInitialAppThemeSettings(this@VideoActivity)
+                )
+            // 与主界面一致：COUI 17 下液态玻璃只在运行时屏蔽，用户开关保持原值。
+            val liquidGlassEnabled = storedLiquidGlassEnabled &&
+                videoThemeSettings.uiStyle != com.android.purebilibili.core.theme.AppUiStyle.COUI17
             val appThemeConfig = remember(
                 liquidGlassEnabled,
                 blurIntensity,

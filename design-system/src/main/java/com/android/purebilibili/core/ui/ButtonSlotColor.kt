@@ -35,7 +35,7 @@ internal fun ProvideAppButtonSlotPalette(
     val foreground = androidx.compose.material3.LocalContentColor.current
     CompositionLocalProvider(
         LocalAppButtonSlotPalette provides AppButtonSlotPalette(containerColor, foreground, enabled),
-        top.yukonga.miuix.kmp.theme.LocalContentColor provides foreground,
+        io.github.suqi8.coui.kmp.theme.LocalContentColor provides foreground,
         content = content,
     )
 }

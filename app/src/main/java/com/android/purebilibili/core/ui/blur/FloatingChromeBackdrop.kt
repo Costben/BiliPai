@@ -2,7 +2,7 @@ package com.android.purebilibili.core.ui.blur
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.staticCompositionLocalOf
-import top.yukonga.miuix.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
 
 /**
  * Shared app-shell backdrop for chrome drawn outside the navigation capture subtree.

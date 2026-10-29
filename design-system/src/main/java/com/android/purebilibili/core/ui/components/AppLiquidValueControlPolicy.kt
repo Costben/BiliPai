@@ -40,6 +40,7 @@ internal fun appSwitchGeometry(
         materialSwitchWithoutContent
     }
     AppUiStyle.MIUIX -> miuixSwitch
+    AppUiStyle.COUI17 -> miuixSwitch
 }
 
 @Immutable
@@ -60,6 +61,7 @@ internal fun appSliderGeometry(style: AppUiStyle): AppSliderGeometry = when (sty
     AppUiStyle.MATERIAL3 -> materialSlider
     // Miuix SliderDefaults.MinHeight track; resting knob diameter is 72% of it.
     AppUiStyle.MIUIX -> miuixSlider
+    AppUiStyle.COUI17 -> miuixSlider
 }
 
 /** Pointer travel follows the visible thumb endpoints, including RTL and collapsed tracks. */

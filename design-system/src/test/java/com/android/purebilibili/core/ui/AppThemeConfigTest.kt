@@ -2,6 +2,7 @@ package com.android.purebilibili.core.ui
 
 import com.android.purebilibili.core.ui.blur.BlurIntensity
 import com.android.purebilibili.core.theme.AppUiStyle
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -28,7 +29,7 @@ class AppThemeConfigTest {
     fun `non glass design is scoped to Miuix without changing blur preferences`() {
         for (style in AppUiStyle.entries) {
             for (glass in listOf(false, true)) {
-                assertEquals(style == AppUiStyle.MIUIX && !glass, isMiuixNonGlassEnabled(style, glass))
+                assertEquals(style.usesMiuixFamilySkin && !glass, isMiuixNonGlassEnabled(style, glass))
             }
         }
         val config = AppThemeConfig(liquidGlassEnabled = false, bottomBarBlurEnabled = true)

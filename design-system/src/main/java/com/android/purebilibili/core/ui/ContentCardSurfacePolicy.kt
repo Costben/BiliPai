@@ -36,6 +36,14 @@ fun resolveContentCardSurfaceSpec(
         tonalElevationDp = 0f,
         shadowElevationDp = 0f
     )
+    AppUiStyle.COUI17 -> ContentCardSurfaceSpec(
+        usesTonalContainerTreatment = true,
+        cornerLevel = ContainerLevel.Card,
+        borderWidthDp = 0.8f,
+        borderAlpha = 0.22f,
+        tonalElevationDp = 0f,
+        shadowElevationDp = 0f
+    )
 }
 
 @Composable

@@ -53,9 +53,10 @@ import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.AppSpacingTokens
 import com.android.purebilibili.core.ui.LocalAppThemeConfig
 import com.android.purebilibili.core.ui.resolveButtonContentColor
-import top.yukonga.miuix.kmp.basic.Text as MiuixText
-import top.yukonga.miuix.kmp.theme.LocalContentColor as MiuixLocalContentColor
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.basic.Text as MiuixText
+import io.github.suqi8.coui.kmp.theme.LocalContentColor as MiuixLocalContentColor
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 @Composable
 fun AppPrimaryButton(
@@ -66,7 +67,7 @@ fun AppPrimaryButton(
     isLoading: Boolean = false,
     leadingIcon: ImageVector? = null,
 ): Unit = AppExactTouchTargets {
-    val elasticFeedbackEnabled = enabled && !isLoading && LocalAppUiStyle.current == AppUiStyle.MIUIX &&
+    val elasticFeedbackEnabled = enabled && !isLoading && LocalAppUiStyle.current.usesMiuixFamilySkin &&
         LocalAppThemeConfig.current.liquidGlassEnabled
     ProvideAppElasticFeedback(enabled = elasticFeedbackEnabled) {
         val haptic = LocalHapticFeedback.current
@@ -148,7 +149,7 @@ fun AppPrimaryButton(
                         )
                         Spacer(modifier = Modifier.width(AppSpacingTokens.Small))
                     }
-                    MiuixText(text = text, style = MiuixTheme.textStyles.button)
+                    MiuixText(text = text, style = COUITheme.textStyles.button)
                 }
             }
         }

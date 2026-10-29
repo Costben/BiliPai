@@ -92,10 +92,10 @@ import com.android.purebilibili.feature.video.ui.components.shouldTriggerGesture
 import com.android.purebilibili.feature.video.ui.section.VideoGestureMode
 import com.android.purebilibili.feature.video.ui.section.resolveVideoGestureMotionSpec
 import kotlin.math.roundToInt
-import top.yukonga.miuix.kmp.basic.Slider
-import top.yukonga.miuix.kmp.basic.SliderDefaults
-import top.yukonga.miuix.kmp.theme.MiuixTheme
-import top.yukonga.miuix.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.basic.Slider
+import io.github.suqi8.coui.kmp.basic.SliderDefaults
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import io.github.suqi8.coui.kmp.blur.Backdrop
 import com.android.purebilibili.feature.video.ui.overlay.playerControlGlassSurface
 import com.android.purebilibili.feature.home.components.resolveBottomBarDarkTheme
 
@@ -130,7 +130,7 @@ fun BoxScope.GestureLevelOverlayHost(
     val colorScheme = MaterialTheme.colorScheme
     val glassDarkTheme = resolveBottomBarDarkTheme(colorScheme.background)
     val glassContentColor = glassContentColorOverride ?: colorScheme.onSurface
-    val miuixColorScheme = MiuixTheme.colorScheme
+    val miuixColorScheme = COUITheme.colorScheme
     val spec = remember(style, kind, percent, colorScheme, miuixColorScheme, brightnessColor) {
         resolveGestureLevelOverlaySpec(
             style = style,
@@ -497,7 +497,7 @@ private fun MiuixGestureLevelSlider(
     progress: Float,
     modifier: Modifier = Modifier
 ) {
-    val colors = MiuixTheme.colorScheme
+    val colors = COUITheme.colorScheme
     // This is feedback for the player's gesture, so disable slider input while
     // retaining a readable active appearance over video.
     val sliderColors = SliderDefaults.sliderColors(
@@ -506,7 +506,7 @@ private fun MiuixGestureLevelSlider(
         disabledBackgroundColor = Color.White.copy(alpha = 0.14f),
         disabledThumbColor = Color.White
     )
-    top.yukonga.miuix.kmp.basic.Surface(
+    io.github.suqi8.coui.kmp.basic.Surface(
         modifier = modifier,
         shape = RoundedCornerShape(50),
         color = Color(0xFF16181D).copy(alpha = 0.72f),
@@ -520,7 +520,7 @@ private fun MiuixGestureLevelSlider(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            top.yukonga.miuix.kmp.basic.Icon(
+            io.github.suqi8.coui.kmp.basic.Icon(
                 imageVector = icon,
                 contentDescription = null,
                 tint = Color.White,
@@ -619,7 +619,7 @@ fun GestureLevelOverlayContent(
     val motionSpec = remember { resolveVideoGestureMotionSpec() }
     val brightnessColor = colorResource(R.color.player_brightness_accent)
     val colorScheme = MaterialTheme.colorScheme
-    val miuixColorScheme = MiuixTheme.colorScheme
+    val miuixColorScheme = COUITheme.colorScheme
     val spec = remember(style, kind, percent, colorScheme, miuixColorScheme, brightnessColor) {
         resolveGestureLevelOverlaySpec(
             style = style,

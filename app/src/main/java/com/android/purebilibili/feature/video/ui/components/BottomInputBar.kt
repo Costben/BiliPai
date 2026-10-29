@@ -78,7 +78,7 @@ import com.android.purebilibili.feature.home.components.resolveBottomBarSurfaceC
 import com.android.purebilibili.feature.home.components.resolveFloatingDockGeometryScale
 import com.android.purebilibili.feature.home.components.resolveSharedBottomBarCapsuleShape
 import dev.chrisbanes.haze.HazeState
-import top.yukonga.miuix.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
 import kotlinx.coroutines.flow.distinctUntilChanged

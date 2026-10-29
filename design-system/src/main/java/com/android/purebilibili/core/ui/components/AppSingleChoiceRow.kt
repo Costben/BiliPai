@@ -38,7 +38,7 @@ fun AppSingleChoiceRow(
 ) {
     val feedbackClick = appActionWithFeedback(com.android.purebilibili.core.ui.AppHapticScene.MENUS, onClick)
     if (com.android.purebilibili.core.ui.isMiuixNonGlassEnabled()) {
-        top.yukonga.miuix.kmp.basic.BasicComponent(
+        io.github.suqi8.coui.kmp.basic.BasicComponent(
             modifier = modifier.semantics {
                 this.selected = selected
                 if (!enabled) disabled()

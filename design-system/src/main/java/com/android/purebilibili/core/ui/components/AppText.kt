@@ -20,7 +20,8 @@ import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.currentAppTextStyle
 import com.android.purebilibili.core.ui.renderer.material3.AppMaterial3Text
-import com.android.purebilibili.core.ui.renderer.miuix.AppMiuixText
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiText
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiText
 
 internal fun shouldCopyGlobalTextTap(
     text: String,
@@ -73,7 +74,12 @@ fun AppText(
             letterSpacing, textDecoration, textAlign, lineHeight, overflow, softWrap, maxLines,
             minLines, onTextLayout, style,
         )
-        AppUiStyle.MIUIX -> AppMiuixText(
+        AppUiStyle.MIUIX -> AppCouiText(
+            text, effectiveModifier, color, autoSize, fontSize, fontStyle, fontWeight, fontFamily,
+            letterSpacing, textDecoration, textAlign, lineHeight, overflow, softWrap, maxLines,
+            minLines, onTextLayout, style,
+        )
+        AppUiStyle.COUI17 -> AppCouiText(
             text, effectiveModifier, color, autoSize, fontSize, fontStyle, fontWeight, fontFamily,
             letterSpacing, textDecoration, textAlign, lineHeight, overflow, softWrap, maxLines,
             minLines, onTextLayout, style,
@@ -121,7 +127,12 @@ fun AppText(
             letterSpacing, textDecoration, textAlign, lineHeight, overflow, softWrap, maxLines,
             minLines, onTextLayout, style,
         )
-        AppUiStyle.MIUIX -> AppMiuixText(
+        AppUiStyle.MIUIX -> AppCouiText(
+            text, color, effectiveModifier, autoSize, fontSize, fontStyle, fontWeight, fontFamily,
+            letterSpacing, textDecoration, textAlign, lineHeight, overflow, softWrap, maxLines,
+            minLines, onTextLayout, style,
+        )
+        AppUiStyle.COUI17 -> AppCouiText(
             text, color, effectiveModifier, autoSize, fontSize, fontStyle, fontWeight, fontFamily,
             letterSpacing, textDecoration, textAlign, lineHeight, overflow, softWrap, maxLines,
             minLines, onTextLayout, style,
@@ -159,7 +170,12 @@ fun AppText(
             letterSpacing, textDecoration, textAlign, lineHeight, overflow, softWrap, maxLines,
             minLines, inlineContent, onTextLayout, style,
         )
-        AppUiStyle.MIUIX -> AppMiuixText(
+        AppUiStyle.MIUIX -> AppCouiText(
+            text, effectiveModifier, color, autoSize, fontSize, fontStyle, fontWeight, fontFamily,
+            letterSpacing, textDecoration, textAlign, lineHeight, overflow, softWrap, maxLines,
+            minLines, inlineContent, onTextLayout, style,
+        )
+        AppUiStyle.COUI17 -> AppCouiText(
             text, effectiveModifier, color, autoSize, fontSize, fontStyle, fontWeight, fontFamily,
             letterSpacing, textDecoration, textAlign, lineHeight, overflow, softWrap, maxLines,
             minLines, inlineContent, onTextLayout, style,
@@ -197,7 +213,12 @@ fun AppText(
             letterSpacing, textDecoration, textAlign, lineHeight, overflow, softWrap, maxLines,
             minLines, inlineContent, onTextLayout, style,
         )
-        AppUiStyle.MIUIX -> AppMiuixText(
+        AppUiStyle.MIUIX -> AppCouiText(
+            text, color, effectiveModifier, autoSize, fontSize, fontStyle, fontWeight, fontFamily,
+            letterSpacing, textDecoration, textAlign, lineHeight, overflow, softWrap, maxLines,
+            minLines, inlineContent, onTextLayout, style,
+        )
+        AppUiStyle.COUI17 -> AppCouiText(
             text, color, effectiveModifier, autoSize, fontSize, fontStyle, fontWeight, fontFamily,
             letterSpacing, textDecoration, textAlign, lineHeight, overflow, softWrap, maxLines,
             minLines, inlineContent, onTextLayout, style,

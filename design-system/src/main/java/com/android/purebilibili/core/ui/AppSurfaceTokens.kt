@@ -9,7 +9,8 @@ import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.unit.dp
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
-import top.yukonga.miuix.kmp.theme.MiuixTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /**
  * 两值主题的表面 tokens。用这些访问器替代 feature 页面对
@@ -72,42 +73,42 @@ object AppSurfaceTokens {
     @Composable
     @ReadOnlyComposable
     fun searchContainer(): Color = resolveMiuixSemanticColorComposable(
-        miuixColor = MiuixTheme.colorScheme.surfaceContainerHigh,
+        miuixColor = COUITheme.colorScheme.surfaceContainerHigh,
         materialFallback = resolveSearchContainer(MaterialTheme.colorScheme)
     )
 
     @Composable
     @ReadOnlyComposable
     fun searchContent(): Color = resolveMiuixSemanticColorComposable(
-        miuixColor = MiuixTheme.colorScheme.onSurfaceContainerHigh,
+        miuixColor = COUITheme.colorScheme.onSurfaceContainerHigh,
         materialFallback = resolveSearchContent(MaterialTheme.colorScheme)
     )
 
     @Composable
     @ReadOnlyComposable
     fun onSurfaceVariantSummary(): Color = resolveMiuixSemanticColorComposable(
-        miuixColor = MiuixTheme.colorScheme.onSurfaceVariantSummary,
+        miuixColor = COUITheme.colorScheme.onSurfaceVariantSummary,
         materialFallback = MaterialTheme.colorScheme.onSurfaceVariant
     )
 
     @Composable
     @ReadOnlyComposable
     fun onSurfaceVariantActions(): Color = resolveMiuixSemanticColorComposable(
-        miuixColor = MiuixTheme.colorScheme.onSurfaceVariantActions,
+        miuixColor = COUITheme.colorScheme.onSurfaceVariantActions,
         materialFallback = MaterialTheme.colorScheme.onSurfaceVariant
     )
 
     @Composable
     @ReadOnlyComposable
     fun secondaryContainer(): Color = resolveMiuixSemanticColorComposable(
-        miuixColor = MiuixTheme.colorScheme.secondaryContainer,
+        miuixColor = COUITheme.colorScheme.secondaryContainer,
         materialFallback = MaterialTheme.colorScheme.secondaryContainer
     )
 
     @Composable
     @ReadOnlyComposable
     fun onSecondaryContainer(): Color = resolveMiuixSemanticColorComposable(
-        miuixColor = MiuixTheme.colorScheme.onSecondaryContainer,
+        miuixColor = COUITheme.colorScheme.onSecondaryContainer,
         materialFallback = MaterialTheme.colorScheme.onSecondaryContainer
     )
 
@@ -120,70 +121,70 @@ object AppSurfaceTokens {
     @Composable
     @ReadOnlyComposable
     fun surface(): Color = resolveMiuixSemanticColorComposable(
-        miuixColor = MiuixTheme.colorScheme.surface,
+        miuixColor = COUITheme.colorScheme.surface,
         materialFallback = MaterialTheme.colorScheme.surface
     )
 
     @Composable
     @ReadOnlyComposable
     fun surfaceContainer(): Color = resolveMiuixSemanticColorComposable(
-        miuixColor = MiuixTheme.colorScheme.surfaceContainer,
+        miuixColor = COUITheme.colorScheme.surfaceContainer,
         materialFallback = MaterialTheme.colorScheme.surfaceContainer
     )
 
     @Composable
     @ReadOnlyComposable
     fun surfaceContainerHigh(): Color = resolveMiuixSemanticColorComposable(
-        miuixColor = MiuixTheme.colorScheme.surfaceContainerHigh,
+        miuixColor = COUITheme.colorScheme.surfaceContainerHigh,
         materialFallback = MaterialTheme.colorScheme.surfaceContainerHigh
     )
 
     @Composable
     @ReadOnlyComposable
     fun surfaceContainerHighest(): Color = resolveMiuixSemanticColorComposable(
-        miuixColor = MiuixTheme.colorScheme.surfaceContainerHighest,
+        miuixColor = COUITheme.colorScheme.surfaceContainerHighest,
         materialFallback = MaterialTheme.colorScheme.surfaceContainerHighest
     )
 
     @Composable
     @ReadOnlyComposable
     fun onSurface(): Color = resolveMiuixSemanticColorComposable(
-        miuixColor = MiuixTheme.colorScheme.onSurface,
+        miuixColor = COUITheme.colorScheme.onSurface,
         materialFallback = MaterialTheme.colorScheme.onSurface
     )
 
     @Composable
     @ReadOnlyComposable
     fun onSurfaceSecondary(): Color = resolveMiuixSemanticColorComposable(
-        miuixColor = MiuixTheme.colorScheme.onSurfaceSecondary,
+        miuixColor = COUITheme.colorScheme.onSurfaceSecondary,
         materialFallback = MaterialTheme.colorScheme.onSurfaceVariant
     )
 
     @Composable
     @ReadOnlyComposable
     fun onSurfaceContainer(): Color = resolveMiuixSemanticColorComposable(
-        miuixColor = MiuixTheme.colorScheme.onSurfaceContainer,
+        miuixColor = COUITheme.colorScheme.onSurfaceContainer,
         materialFallback = MaterialTheme.colorScheme.onSurface
     )
 
     @Composable
     @ReadOnlyComposable
     fun onSurfaceContainerHigh(): Color = resolveMiuixSemanticColorComposable(
-        miuixColor = MiuixTheme.colorScheme.onSurfaceContainerHigh,
+        miuixColor = COUITheme.colorScheme.onSurfaceContainerHigh,
         materialFallback = MaterialTheme.colorScheme.onSurfaceVariant
     )
 
     @Composable
     @ReadOnlyComposable
     fun onSurfaceContainerHighest(): Color = resolveMiuixSemanticColorComposable(
-        miuixColor = MiuixTheme.colorScheme.onSurfaceContainerHighest,
+        miuixColor = COUITheme.colorScheme.onSurfaceContainerHighest,
         materialFallback = MaterialTheme.colorScheme.onSurfaceVariant
     )
 
     @Composable
     @ReadOnlyComposable
     fun primary(): Color = resolveMiuixSemanticColorComposable(
-        miuixColor = MiuixTheme.colorScheme.primary,
+        miuixColor = COUITheme.colorScheme.primary,
         materialFallback = MaterialTheme.colorScheme.primary
     )
 
@@ -213,35 +214,35 @@ object AppSurfaceTokens {
     @Composable
     @ReadOnlyComposable
     fun primaryContainer(): Color = resolveMiuixSemanticColorComposable(
-        miuixColor = MiuixTheme.colorScheme.primaryContainer,
+        miuixColor = COUITheme.colorScheme.primaryContainer,
         materialFallback = MaterialTheme.colorScheme.primaryContainer,
     )
 
     @Composable
     @ReadOnlyComposable
     fun onPrimaryContainer(): Color = resolveMiuixSemanticColorComposable(
-        miuixColor = MiuixTheme.colorScheme.onPrimaryContainer,
+        miuixColor = COUITheme.colorScheme.onPrimaryContainer,
         materialFallback = MaterialTheme.colorScheme.onPrimaryContainer,
     )
 
     @Composable
     @ReadOnlyComposable
     fun outline(): Color = resolveMiuixSemanticColorComposable(
-        miuixColor = MiuixTheme.colorScheme.outline,
+        miuixColor = COUITheme.colorScheme.outline,
         materialFallback = MaterialTheme.colorScheme.outline
     )
 
     @Composable
     @ReadOnlyComposable
     fun error(): Color = resolveMiuixSemanticColorComposable(
-        miuixColor = MiuixTheme.colorScheme.error,
+        miuixColor = COUITheme.colorScheme.error,
         materialFallback = MaterialTheme.colorScheme.error
     )
 
     @Composable
     @ReadOnlyComposable
     fun disabledContent(): Color = resolveMiuixSemanticColorComposable(
-        miuixColor = MiuixTheme.colorScheme.disabledOnSurface,
+        miuixColor = COUITheme.colorScheme.disabledOnSurface,
         materialFallback = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
     )
 
@@ -257,7 +258,7 @@ object AppSurfaceTokens {
         miuixColor: Color,
         materialFallback: Color
     ): Color {
-        val isMiuix = LocalAppUiStyle.current == AppUiStyle.MIUIX
+        val isMiuix = LocalAppUiStyle.current.usesMiuixFamilySkin
         return resolveMiuixSemanticColor(
             isMiuix = isMiuix,
             miuixColor = miuixColor,

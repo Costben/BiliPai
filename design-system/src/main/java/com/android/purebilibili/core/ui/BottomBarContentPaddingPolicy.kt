@@ -5,6 +5,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 data class BottomBarContentPaddingSpec(
     val floatingBodyHeight: Dp,
@@ -23,7 +24,7 @@ fun resolveBottomBarContentPaddingSpec(
     // changes item content, but it does not change the navigation shell's
     // occupied height.
     return resolveBottomBarContentPaddingSpec(
-        compactDockedBar = uiStyle == AppUiStyle.MIUIX,
+        compactDockedBar = uiStyle.usesMiuixFamilySkin,
         hasUiSkinDecoration = hasUiSkinDecoration,
     )
 }
@@ -81,7 +82,7 @@ fun rememberAppBottomBarContentPadding(
 ): Dp {
     val uiStyle = LocalAppUiStyle.current
     val spec = resolveBottomBarContentPaddingSpec(
-        compactDockedBar = uiStyle == AppUiStyle.MIUIX,
+        compactDockedBar = uiStyle.usesMiuixFamilySkin,
         hasUiSkinDecoration = hasUiSkinDecoration,
     )
     return calculateBottomBarContentPadding(

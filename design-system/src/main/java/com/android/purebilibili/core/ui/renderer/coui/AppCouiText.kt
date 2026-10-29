@@ -1,4 +1,4 @@
-package com.android.purebilibili.core.ui.renderer.miuix
+package com.android.purebilibili.core.ui.renderer.coui
 
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.TextAutoSize
@@ -16,10 +16,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
-import top.yukonga.miuix.kmp.basic.Text
+import io.github.suqi8.coui.kmp.basic.Text
 
 @Composable
-internal fun AppMiuixText(
+internal fun AppCouiText(
     text: String,
     modifier: Modifier,
     color: Color,
@@ -60,7 +60,7 @@ internal fun AppMiuixText(
 )
 
 @Composable
-internal fun AppMiuixText(
+internal fun AppCouiText(
     text: String,
     color: ColorProducer,
     modifier: Modifier,
@@ -101,7 +101,7 @@ internal fun AppMiuixText(
 )
 
 @Composable
-internal fun AppMiuixText(
+internal fun AppCouiText(
     text: AnnotatedString,
     modifier: Modifier,
     color: Color,
@@ -144,7 +144,7 @@ internal fun AppMiuixText(
 )
 
 @Composable
-internal fun AppMiuixText(
+internal fun AppCouiText(
     text: AnnotatedString,
     color: ColorProducer,
     modifier: Modifier,

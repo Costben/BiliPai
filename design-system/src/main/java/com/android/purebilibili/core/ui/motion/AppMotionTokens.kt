@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.IntOffset
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.theme.resolveAndroidNativeChromeTokens
-import top.yukonga.miuix.kmp.anim.folmeSpring
+import io.github.suqi8.coui.kmp.anim.folmeSpring
 
 fun <T> emphasizedEnterTween(durationMillis: Int): TweenSpec<T> =
     tween(durationMillis = durationMillis, easing = AppMotionEasing.EmphasizedEnter)
@@ -94,6 +94,10 @@ object AppMotionTokens {
             durationMillis = 200,
             easing = AppMotionEasing.Md3Standard
         )
+        AppUiStyle.COUI17 -> tween(
+            durationMillis = 180,
+            easing = AppMotionEasing.Continuity
+        )
     }
 
     fun <T> resolveEmphasizedSpec(
@@ -107,6 +111,10 @@ object AppMotionTokens {
             durationMillis = 300,
             easing = AppMotionEasing.Md3EmphasizedDecelerate
         )
+        AppUiStyle.COUI17 -> tween(
+            durationMillis = 240,
+            easing = AppMotionEasing.EmphasizedEnter
+        )
     }
 
     fun <T> resolveExpressiveSpec(
@@ -119,6 +127,10 @@ object AppMotionTokens {
         AppUiStyle.MATERIAL3 -> tween(
             durationMillis = 180,
             easing = AppMotionEasing.Md3EmphasizedAccelerate
+        )
+        AppUiStyle.COUI17 -> tween(
+            durationMillis = 150,
+            easing = AppMotionEasing.EmphasizedExit
         )
     }
 

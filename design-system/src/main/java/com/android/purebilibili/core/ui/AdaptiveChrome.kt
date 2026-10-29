@@ -48,16 +48,17 @@ import dev.chrisbanes.haze.hazeSource
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.theme.resolveAndroidNativeChromeTokens
-import top.yukonga.miuix.kmp.basic.Scaffold as MiuixScaffold
-import top.yukonga.miuix.kmp.basic.MiuixScrollBehavior as rememberMiuixTopAppBarScrollBehavior
-import top.yukonga.miuix.kmp.basic.ScrollBehavior as MiuixTopAppBarScrollBehavior
-import top.yukonga.miuix.kmp.basic.SmallTopAppBar as MiuixSmallTopAppBar
-import top.yukonga.miuix.kmp.basic.TopAppBar as MiuixTopAppBar
-import top.yukonga.miuix.kmp.utils.MiuixPopupUtils
+import io.github.suqi8.coui.kmp.basic.Scaffold as MiuixScaffold
+import io.github.suqi8.coui.kmp.basic.COUIScrollBehavior as rememberMiuixTopAppBarScrollBehavior
+import io.github.suqi8.coui.kmp.basic.ScrollBehavior as MiuixTopAppBarScrollBehavior
+import io.github.suqi8.coui.kmp.basic.SmallTopAppBar as MiuixSmallTopAppBar
+import io.github.suqi8.coui.kmp.basic.TopAppBar as MiuixTopAppBar
+import io.github.suqi8.coui.kmp.utils.COUIPopupUtils
+import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 fun isNativeMiuixEnabled(
     uiStyle: AppUiStyle
-): Boolean = uiStyle == AppUiStyle.MIUIX
+): Boolean = uiStyle.usesMiuixFamilySkin
 
 @Composable
 fun rememberIsNativeMiuixEnabled(): Boolean {
@@ -280,7 +281,7 @@ fun AdaptiveScaffold(
             bottomBar = bottomBar,
             floatingActionButton = floatingActionButton,
             snackbarHost = snackbarHost,
-            popupHost = { MiuixPopupUtils.MiuixPopupHost() },
+            popupHost = { COUIPopupUtils.COUIPopupHost() },
             containerColor = effectiveContainerColor,
             contentWindowInsets = contentWindowInsets,
             content = recordedContent
@@ -335,7 +336,7 @@ fun AdaptiveTopAppBar(
                 CompositionLocalProvider(
                     com.android.purebilibili.core.ui.components.LocalAppTopBarIconDecorationEnabled provides true,
                     com.android.purebilibili.core.ui.components.LocalAppActionContentColor provides LocalContentColor.current,
-                    top.yukonga.miuix.kmp.theme.LocalContentColor provides LocalContentColor.current,
+                    io.github.suqi8.coui.kmp.theme.LocalContentColor provides LocalContentColor.current,
                 ) {
                     AppChromeOverflowSlot {
                         Box(Modifier.padding(end = 6.dp)) { navigationIcon() }
@@ -347,7 +348,7 @@ fun AdaptiveTopAppBar(
                     CompositionLocalProvider(
                         com.android.purebilibili.core.ui.components.LocalAppTopBarIconDecorationEnabled provides true,
                         com.android.purebilibili.core.ui.components.LocalAppActionContentColor provides LocalContentColor.current,
-                        top.yukonga.miuix.kmp.theme.LocalContentColor provides LocalContentColor.current,
+                        io.github.suqi8.coui.kmp.theme.LocalContentColor provides LocalContentColor.current,
                     ) { Row(verticalAlignment = Alignment.CenterVertically, content = actions) }
                 }
             },
@@ -483,7 +484,7 @@ private fun NativeAdaptiveTopAppBar(
                     MiuixSmallTopAppBar(
                         title = displayTitle,
                         titleColor = if (smallTitleColor == Color.Unspecified) {
-                            top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.onSurface
+                            io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.onSurface
                         } else smallTitleColor,
                         modifier = modifier,
                         color = topAppBarColors.containerColor,
@@ -608,6 +609,14 @@ fun resolveAppTopChromePolicy(
         compactChromeSpec = resolveCompactCapsuleChromeSpec(uiStyle),
     )
     AppUiStyle.MATERIAL3 -> AppTopChromePolicy(
+        tabPresentation = AppTopTabPresentation.MATERIAL_UNDERLINE,
+        iconFamily = AppSemanticIconFamily.MATERIAL,
+        iconStyle = iconStyle,
+        compactChromeSpec = resolveCompactCapsuleChromeSpec(uiStyle),
+    )
+    AppUiStyle.COUI17 -> AppTopChromePolicy(
+        // Miuix liquid glass uses the same moving dock indicator contract as the
+        // Material renderer. TONAL_CAPSULE is the retired per-item filled capsule.
         tabPresentation = AppTopTabPresentation.MATERIAL_UNDERLINE,
         iconFamily = AppSemanticIconFamily.MATERIAL,
         iconStyle = iconStyle,
