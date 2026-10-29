@@ -73,7 +73,7 @@ fun resolveUiStyle(
     uiPreset: UiPreset,
     androidNativeVariant: AndroidNativeVariant
 ): AppUiStyle = when (uiPreset) {
-    // 单向迁移：历史 iOS 值不再产生 iOS 运行时选择，统一迁移为默认主题 MIUIX。
+    // 单向迁移：历史 iOS 值统一迁移为 MIUIX。
     UiPreset.IOS -> AppUiStyle.MIUIX
     UiPreset.MD3 -> when (androidNativeVariant) {
         AndroidNativeVariant.MATERIAL3 -> AppUiStyle.MATERIAL3

@@ -31,7 +31,7 @@ fun resolvePresetPrimitiveRenderer(
 ): PresetPrimitiveRenderer = when (uiStyle) {
     AppUiStyle.MIUIX -> PresetPrimitiveRenderer.MIUIX_BRIDGED
     AppUiStyle.MATERIAL3 -> PresetPrimitiveRenderer.MATERIAL3
-    AppUiStyle.COUI17 -> PresetPrimitiveRenderer.MIUIX_BRIDGED
+    AppUiStyle.COUI17 -> PresetPrimitiveRenderer.COUI_BRIDGED
 }
 
 @Composable

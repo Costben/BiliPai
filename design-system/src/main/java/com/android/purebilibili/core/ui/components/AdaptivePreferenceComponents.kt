@@ -217,7 +217,7 @@ internal fun resolveAdaptiveListRowVisualSpec(
         )
     } else {
         AdaptiveListRowVisualSpec(
-            insideHorizontalPaddingDp = 16,
+            insideHorizontalPaddingDp = 18,
             insideVerticalPaddingDp = AppChromeSizeTokens.PreferenceVerticalPaddingDp,
             trailingIconSizeDp = 16,
             trailingSpacingDp = 8,

@@ -9,7 +9,7 @@ data class AppNavigationCapabilities(
 fun resolveAppNavigationCapabilities(
     renderer: PresetPrimitiveRenderer,
 ): AppNavigationCapabilities = AppNavigationCapabilities(
-    usePlatformSideRail = renderer == PresetPrimitiveRenderer.MIUIX_BRIDGED,
+    usePlatformSideRail = renderer == PresetPrimitiveRenderer.MIUIX_BRIDGED || renderer == PresetPrimitiveRenderer.COUI_BRIDGED,
 )
 
 @Composable

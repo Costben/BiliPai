@@ -10,7 +10,7 @@ import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import io.github.suqi8.coui.kmp.basic.TooltipAnchorPosition
-import io.github.suqi8.coui.kmp.basic.TooltipBox as MiuixTooltipBox
+import io.github.suqi8.coui.kmp.basic.TooltipBox as CouiTooltipBox
 
 /**
  * Long-press / hover tooltip bridge.
@@ -27,8 +27,9 @@ fun AdaptivePlainTooltipBox(
     content: @Composable () -> Unit
 ) {
     when (rememberPresetPrimitiveRenderer()) {
-        PresetPrimitiveRenderer.MIUIX_BRIDGED -> {
-            MiuixTooltipBox(
+        PresetPrimitiveRenderer.MIUIX_BRIDGED,
+        PresetPrimitiveRenderer.COUI_BRIDGED -> {
+            CouiTooltipBox(
                 text = text,
                 modifier = modifier,
                 enabled = enabled && text.isNotBlank(),
@@ -37,28 +38,6 @@ fun AdaptivePlainTooltipBox(
             )
         }
         PresetPrimitiveRenderer.MATERIAL3 -> {
-            if (text.isNotBlank() && enabled) {
-                val tooltipState = rememberTooltipState()
-                TooltipBox(
-                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                    tooltip = {
-                        PlainTooltip {
-                            Text(text = text)
-                        }
-                    },
-                    state = tooltipState,
-                    modifier = modifier,
-                    focusable = false,
-                    enableUserInput = enabled,
-                    content = content
-                )
-            } else {
-                Box(modifier = modifier) {
-                    content()
-                }
-            }
-        }
-        PresetPrimitiveRenderer.COUI_BRIDGED -> {
             if (text.isNotBlank() && enabled) {
                 val tooltipState = rememberTooltipState()
                 TooltipBox(
