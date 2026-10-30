@@ -631,12 +631,16 @@ private fun AdaptiveSwitchPreferenceBody(
     val iconStyle = rememberResolvedAppIconStyle()
     val effectiveIconTint = rememberAdaptivePreferenceIconContainerColor(iconTint, colorKey = title)
     val filledIconContentColor = rememberAdaptivePreferenceIconContentColor(effectiveIconTint)
-    val iconContentColor = if (useColorfulPreferenceIcons()) Color.White else resolveAdaptivePreferenceIconGlyphColor(
-        treatment = iconTreatment,
-        iconStyle = iconStyle,
-        containerContentColor = filledIconContentColor,
-        semanticIconColor = effectiveIconTint,
-    )
+    val iconContentColor = if (useColorfulPreferenceIcons() && iconTreatment != AppPreferenceIconTreatment.PLAIN) {
+        Color.White
+    } else {
+        resolveAdaptivePreferenceIconGlyphColor(
+            treatment = iconTreatment,
+            iconStyle = iconStyle,
+            containerContentColor = filledIconContentColor,
+            semanticIconColor = effectiveIconTint,
+        )
+    }
     val iconBackgroundAlpha = if (useColorfulPreferenceIcons()) 1f else resolveAdaptivePreferenceIconBackgroundAlpha(
         iconTreatment,
         visualSpec.iconBackgroundAlpha,
@@ -801,12 +805,16 @@ fun AdaptiveSliderPreferenceRenderer(
     val iconStyle = rememberResolvedAppIconStyle()
     val effectiveIconTint = rememberAdaptivePreferenceIconContainerColor(iconTint, colorKey = title)
     val filledIconContentColor = rememberAdaptivePreferenceIconContentColor(effectiveIconTint)
-    val iconContentColor = if (useColorfulPreferenceIcons()) Color.White else resolveAdaptivePreferenceIconGlyphColor(
-        treatment = iconTreatment,
-        iconStyle = iconStyle,
-        containerContentColor = filledIconContentColor,
-        semanticIconColor = effectiveIconTint,
-    )
+    val iconContentColor = if (useColorfulPreferenceIcons() && iconTreatment != AppPreferenceIconTreatment.PLAIN) {
+        Color.White
+    } else {
+        resolveAdaptivePreferenceIconGlyphColor(
+            treatment = iconTreatment,
+            iconStyle = iconStyle,
+            containerContentColor = filledIconContentColor,
+            semanticIconColor = effectiveIconTint,
+        )
+    }
     val iconBackgroundAlpha = if (useColorfulPreferenceIcons()) 1f else resolveAdaptivePreferenceIconBackgroundAlpha(
         iconTreatment,
         visualSpec.iconBackgroundAlpha,
@@ -1011,12 +1019,16 @@ internal fun AdaptivePreferenceContent(
     val iconStyle = rememberResolvedAppIconStyle()
     val effectiveIconTint = rememberAdaptivePreferenceIconContainerColor(iconTint, colorKey = title)
     val filledIconContentColor = rememberAdaptivePreferenceIconContentColor(effectiveIconTint)
-    val iconContentColor = if (useColorfulPreferenceIcons()) Color.White else resolveAdaptivePreferenceIconGlyphColor(
-        treatment = iconTreatment,
-        iconStyle = iconStyle,
-        containerContentColor = filledIconContentColor,
-        semanticIconColor = effectiveIconTint,
-    )
+    val iconContentColor = if (useColorfulPreferenceIcons() && iconTreatment != AppPreferenceIconTreatment.PLAIN) {
+        Color.White
+    } else {
+        resolveAdaptivePreferenceIconGlyphColor(
+            treatment = iconTreatment,
+            iconStyle = iconStyle,
+            containerContentColor = filledIconContentColor,
+            semanticIconColor = effectiveIconTint,
+        )
+    }
     val iconBackgroundAlpha = if (useColorfulPreferenceIcons()) 1f else resolveAdaptivePreferenceIconBackgroundAlpha(
         iconTreatment,
         visualSpec.iconBackgroundAlpha,
@@ -1178,7 +1190,7 @@ internal fun AdaptivePreferenceContent(
                         Icon(
                             painter = iconPainter,
                             contentDescription = null,
-                            tint = if (useColorfulPreferenceIcons()) Color.White else effectiveIconTint,
+                            tint = if (useColorfulPreferenceIcons() && LocalAppPreferenceIconTreatment.current != AppPreferenceIconTreatment.PLAIN) Color.White else effectiveIconTint,
                             modifier = Modifier.size(visualSpec.iconGlyphSizeDp.dp)
                         )
                     }
@@ -1493,12 +1505,16 @@ fun AdaptivePreferenceGridItemRenderer(
     val iconStyle = rememberResolvedAppIconStyle()
     val effectiveIconTint = rememberAdaptivePreferenceIconContainerColor(iconTint, colorKey = title)
     val filledIconContentColor = rememberAdaptivePreferenceIconContentColor(effectiveIconTint)
-    val iconContentColor = if (useColorfulPreferenceIcons()) Color.White else resolveAdaptivePreferenceIconGlyphColor(
-        treatment = iconTreatment,
-        iconStyle = iconStyle,
-        containerContentColor = filledIconContentColor,
-        semanticIconColor = effectiveIconTint,
-    )
+    val iconContentColor = if (useColorfulPreferenceIcons() && iconTreatment != AppPreferenceIconTreatment.PLAIN) {
+        Color.White
+    } else {
+        resolveAdaptivePreferenceIconGlyphColor(
+            treatment = iconTreatment,
+            iconStyle = iconStyle,
+            containerContentColor = filledIconContentColor,
+            semanticIconColor = effectiveIconTint,
+        )
+    }
     val iconBackgroundAlpha = if (useColorfulPreferenceIcons()) 1f else resolveAdaptivePreferenceIconBackgroundAlpha(
         iconTreatment,
         visualSpec.iconBackgroundAlpha,
