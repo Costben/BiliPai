@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +20,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.android.purebilibili.R
 import com.android.purebilibili.core.util.HapticType
+import androidx.compose.ui.platform.LocalDensity
 import io.github.suqi8.coui.kmp.basic.BottomFloatingAccessoryNavigationBar
 import io.github.suqi8.coui.kmp.basic.BottomFloatingNavigationBar
 import io.github.suqi8.coui.kmp.basic.BottomFloatingNavigationBarDefaults
@@ -27,6 +29,7 @@ import io.github.suqi8.coui.kmp.basic.BottomFloatingRedDot
 import io.github.suqi8.coui.kmp.basic.Icon
 import io.github.suqi8.coui.kmp.blur.Backdrop
 import io.github.suqi8.coui.kmp.theme.COUITheme
+import io.github.suqi8.coui.kmp.utils.rememberGalleryDensity
 
 /**
  * COUI 17 底栏的 1 + 3 + 1 排布：首尾两项是融出胶囊的圆形附件，其余条目留在胶囊内。
@@ -76,66 +79,71 @@ internal fun CouiAccessoryBottomBar(
     modifier: Modifier = Modifier,
     onToggleSidebar: (() -> Unit)? = null,
 ) {
-    val slots = remember(visibleItems) { resolveCouiAccessoryBottomBarSlots(visibleItems) }
-    val barModifier = modifier.padding(bottom = BottomFloatingNavigationBarDefaults.navigationBarPadding())
-    val tap: (BottomNavItem) -> Unit = { item ->
-        performMaterialBottomBarTap(haptic = haptic, onClick = { onItemClick(item) })
-    }
-    val capsuleContent: @Composable androidx.compose.foundation.layout.RowScope.() -> Unit = {
-        slots.capsule.forEach { item ->
-            BottomFloatingNavigationBarItem(
-                selected = currentItem == item,
-                onClick = { tap(item) },
-                icon = resolveSharedBottomBarIcon(item, false, iconStyle),
-                selectedIcon = resolveSharedBottomBarIcon(item, true, iconStyle),
-                label = resolveBottomNavItemLabel(item, itemLabels),
-                redDot = resolveCouiBottomBarRedDot(item, dynamicUnreadCount),
-            )
+    val galleryDensity = rememberGalleryDensity()
+    CompositionLocalProvider(
+        LocalDensity provides galleryDensity
+    ) {
+        val slots = remember(visibleItems) { resolveCouiAccessoryBottomBarSlots(visibleItems) }
+        val barModifier = modifier.padding(bottom = BottomFloatingNavigationBarDefaults.navigationBarPadding())
+        val tap: (BottomNavItem) -> Unit = { item ->
+            performMaterialBottomBarTap(haptic = haptic, onClick = { onItemClick(item) })
         }
-        if (onToggleSidebar != null) {
-            BottomFloatingNavigationBarItem(
-                selected = false,
-                onClick = { performMaterialBottomBarTap(haptic = haptic, onClick = onToggleSidebar) },
-                icon = resolveSharedBottomBarSidebarIcon(iconStyle),
-                label = stringResource(R.string.sidebar_toggle),
-            )
+        val capsuleContent: @Composable androidx.compose.foundation.layout.RowScope.() -> Unit = {
+            slots.capsule.forEach { item ->
+                BottomFloatingNavigationBarItem(
+                    selected = currentItem == item,
+                    onClick = { tap(item) },
+                    icon = resolveSharedBottomBarIcon(item, false, iconStyle),
+                    selectedIcon = resolveSharedBottomBarIcon(item, true, iconStyle),
+                    label = resolveBottomNavItemLabel(item, itemLabels),
+                    redDot = resolveCouiBottomBarRedDot(item, dynamicUnreadCount),
+                )
+            }
+            if (onToggleSidebar != null) {
+                BottomFloatingNavigationBarItem(
+                    selected = false,
+                    onClick = { performMaterialBottomBarTap(haptic = haptic, onClick = onToggleSidebar) },
+                    icon = resolveSharedBottomBarSidebarIcon(iconStyle),
+                    label = stringResource(R.string.sidebar_toggle),
+                )
+            }
         }
-    }
-    val start = slots.start
-    val end = slots.end
-    if (start == null || end == null) {
-        BottomFloatingNavigationBar(
+        val start = slots.start
+        val end = slots.end
+        if (start == null || end == null) {
+            BottomFloatingNavigationBar(
+                modifier = barModifier,
+                backdrop = backdrop,
+                content = capsuleContent,
+            )
+            return@CompositionLocalProvider
+        }
+        BottomFloatingAccessoryNavigationBar(
             modifier = barModifier,
             backdrop = backdrop,
+            startAccessory = {
+                CouiBottomBarAccessory(
+                    item = start,
+                    selected = currentItem == start,
+                    label = resolveBottomNavItemLabel(start, itemLabels),
+                    iconStyle = iconStyle,
+                    redDot = resolveCouiBottomBarRedDot(start, dynamicUnreadCount),
+                    onClick = { tap(start) },
+                )
+            },
+            endAccessory = {
+                CouiBottomBarAccessory(
+                    item = end,
+                    selected = currentItem == end,
+                    label = resolveBottomNavItemLabel(end, itemLabels),
+                    iconStyle = iconStyle,
+                    redDot = resolveCouiBottomBarRedDot(end, dynamicUnreadCount),
+                    onClick = { tap(end) },
+                )
+            },
             content = capsuleContent,
         )
-        return
     }
-    BottomFloatingAccessoryNavigationBar(
-        modifier = barModifier,
-        backdrop = backdrop,
-        startAccessory = {
-            CouiBottomBarAccessory(
-                item = start,
-                selected = currentItem == start,
-                label = resolveBottomNavItemLabel(start, itemLabels),
-                iconStyle = iconStyle,
-                redDot = resolveCouiBottomBarRedDot(start, dynamicUnreadCount),
-                onClick = { tap(start) },
-            )
-        },
-        endAccessory = {
-            CouiBottomBarAccessory(
-                item = end,
-                selected = currentItem == end,
-                label = resolveBottomNavItemLabel(end, itemLabels),
-                iconStyle = iconStyle,
-                redDot = resolveCouiBottomBarRedDot(end, dynamicUnreadCount),
-                onClick = { tap(end) },
-            )
-        },
-        content = capsuleContent,
-    )
 }
 
 /** 圆形附件只放图标；圆形本体由融合球材质绘制，这里不画背景。配色与胶囊条目同一套 COUI 规则。 */

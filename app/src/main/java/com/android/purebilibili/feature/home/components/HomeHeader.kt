@@ -2888,7 +2888,12 @@ fun HomeHeader(
                                 }
                             }
 
-                            Spacer(modifier = Modifier.width(resolveHomeTopEdgeControlGap(topChromePolicy)))
+                            Spacer(
+                                modifier = Modifier.width(
+                                    if (couiHeader) io.github.suqi8.coui.kmp.basic.TopAppBarDefaults.ActionMenuItemSpacing
+                                    else resolveHomeTopEdgeControlGap(topChromePolicy)
+                                )
+                            )
 
                             val topRightActionButtonSize = resolveHomeTopSettingsButtonSize(topChromePolicy)
                             if (couiHeader) {

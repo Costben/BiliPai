@@ -1138,7 +1138,11 @@ fun PureBiliBiliTheme(
                         textStyles = miuixTextStyles,
                     ) {
                         if (uiStyle == AppUiStyle.COUI17) {
-                            themedContent()
+                            val galleryDensity = io.github.suqi8.coui.kmp.utils.rememberGalleryDensity()
+                            CompositionLocalProvider(
+                                androidx.compose.ui.platform.LocalDensity provides galleryDensity,
+                                content = themedContent,
+                            )
                         } else {
                             // 只有 COUI 17 才换 ColorOS 的回弹与按压反馈，其余皮肤保持原有手感。
                             CompositionLocalProvider(
