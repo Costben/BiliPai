@@ -5,6 +5,10 @@ name: Device Build
 # 本地联调时拉不到包。这里只跑 assembleRelease 并把 APK 作为 artifact 上传。
 
 on:
+  push:
+    branches:
+      - coui17
+      - main
   workflow_dispatch:
 
 permissions:
