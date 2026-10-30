@@ -450,7 +450,7 @@ fun DynamicScreen(
     val appNavigationSettings by SettingsManager.getAppNavigationSettings(context)
         .collectAsStateWithLifecycle(initialValue = AppNavigationSettings())
     val shouldAutoCollapseBottomBar = shouldAutoCollapseDynamicBottomBar(
-        visibilityMode = appNavigationSettings.bottomBarVisibilityMode
+        visibilityMode = com.android.purebilibili.navigation.resolveEffectiveBottomBarVisibilityMode(appNavigationSettings.bottomBarVisibilityMode, com.android.purebilibili.core.theme.LocalAppUiStyle.current)
     )
     // 底栏隐藏/复原若改变 contentPadding，会触发不等高卡片重排；平板与折叠屏上抽搐最明显。
     // 自动折叠期间钉住已预留的底部空间，底栏只做显隐、不拉动列表布局。

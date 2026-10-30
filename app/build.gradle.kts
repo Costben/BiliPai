@@ -175,10 +175,10 @@ android {
             buildConfigField("boolean", "ALLOW_HARDCODED_DNS_FALLBACK", "false")
             buildConfigField("boolean", "ENABLE_VERBOSE_DEBUG_LOGS", "false")
             buildConfigField("boolean", "ENABLE_VERBOSE_RUNTIME_LOG_PERSISTENCE", "false")
-            // 🔥 启用 R8 代码压缩
-            isMinifyEnabled = true
-            // 🔥 启用资源压缩 (移除未使用的资源)
-            isShrinkResources = true
+            // 本地联调跳过 R8，避免低内存环境构建被 kill
+            isMinifyEnabled = false
+            isShrinkResources = false
+            signingConfig = signingConfigs.getByName("debug")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

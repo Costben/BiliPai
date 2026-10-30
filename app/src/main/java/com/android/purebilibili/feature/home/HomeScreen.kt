@@ -1235,8 +1235,11 @@ fun HomeScreen(
             hasBackdrop = true,
             blurRadiusDp = homeLiquidGlassTuning.progressiveBlurRadius,
         ) && !com.android.purebilibili.core.ui.performance.isLowBlurBudgetForced()
+    // COUI 17 顶栏的渐变模糊材质始终采样首页内容。
     val shouldCaptureHomeChromeBackdrop = isLiquidGlassEnabled || isHeaderBlurEnabled ||
-        isBottomBarBlurEnabled || progressiveTopBlurNeedsBackdrop
+        isBottomBarBlurEnabled || progressiveTopBlurNeedsBackdrop ||
+        com.android.purebilibili.core.theme.LocalAppUiStyle.current ==
+        com.android.purebilibili.core.theme.AppUiStyle.COUI17
     val homeMiuixBackdropSource = if (shouldCaptureHomeChromeBackdrop) {
         rememberChromeBackdropSource()
     } else {
@@ -1594,7 +1597,7 @@ fun HomeScreen(
         }
     }
 
-    val bottomBarVisibilityMode = appNavigationSettings.bottomBarVisibilityMode
+    val bottomBarVisibilityMode = com.android.purebilibili.navigation.resolveEffectiveBottomBarVisibilityMode(appNavigationSettings.bottomBarVisibilityMode, com.android.purebilibili.core.theme.LocalAppUiStyle.current)
 
     //  [Refactor] 使用全局 CompositionLocal 控制底栏可见性
     val setBottomBarVisible = LocalSetBottomBarVisible.current
@@ -1816,7 +1819,11 @@ fun HomeScreen(
     val searchCollapseDistancePx = with(density) { searchCollapseDistanceDp.toPx() }
     val headerCollapseMode = resolveHomeRecommendationHeaderCollapseMode(
         homeHeaderCollapseMode = homeSettings.homeHeaderCollapseMode
-    )
+    ).let {
+        if (appUiStyle == com.android.purebilibili.core.theme.AppUiStyle.COUI17) {
+            com.android.purebilibili.feature.home.policy.resolveCouiHomeHeaderCollapseMode(it)
+        } else it
+    }
     val homeBarHideType = homeSettings.homeBarHideType
     val collapseSearchOnScroll = headerCollapseMode.collapseSearch
     val collapseTabsOnScroll = headerCollapseMode.collapseTabs

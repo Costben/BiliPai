@@ -945,7 +945,7 @@ fun WatchLaterScreen(
     val appNavigationSettings by SettingsManager.getAppNavigationSettings(context)
         .collectAsStateWithLifecycle(initialValue = com.android.purebilibili.core.store.AppNavigationSettings())
     val shouldAutoHideBottomBar = com.android.purebilibili.core.ui.shouldAutoHideBottomBarOnScroll(
-        visibilityMode = appNavigationSettings.bottomBarVisibilityMode,
+        visibilityMode = com.android.purebilibili.navigation.resolveEffectiveBottomBarVisibilityMode(appNavigationSettings.bottomBarVisibilityMode, com.android.purebilibili.core.theme.LocalAppUiStyle.current),
     )
     val liveWatchLaterBottomPadding = com.android.purebilibili.core.ui.LocalBottomBarContentPadding.current
     val isBottomBarVisibleForPadding = com.android.purebilibili.core.ui.LocalBottomBarVisible.current

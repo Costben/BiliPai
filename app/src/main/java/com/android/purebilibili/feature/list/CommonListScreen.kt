@@ -498,7 +498,7 @@ fun CommonListScreen(
     val appNavigationSettings by SettingsManager.getAppNavigationSettings(context)
         .collectAsStateWithLifecycle(initialValue = com.android.purebilibili.core.store.AppNavigationSettings())
     val shouldAutoHideBottomBar = com.android.purebilibili.core.ui.shouldAutoHideBottomBarOnScroll(
-        visibilityMode = appNavigationSettings.bottomBarVisibilityMode,
+        visibilityMode = com.android.purebilibili.navigation.resolveEffectiveBottomBarVisibilityMode(appNavigationSettings.bottomBarVisibilityMode, com.android.purebilibili.core.theme.LocalAppUiStyle.current),
     )
 
     // 监听列表滚动实现底栏自动隐藏/显示

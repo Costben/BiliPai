@@ -1622,6 +1622,8 @@ fun HomeHeader(
     val topTrimImagePath = uiSkinDecoration?.topAtmosphereImagePath
     val hasIllustratedHeader = !topTrimImagePath.isNullOrBlank() ||
         !uiSkinDecoration?.topTabBackgroundImagePath.isNullOrBlank()
+    // COUI 17：顶栏材质改为 ColorOS 渐变模糊，第一行只放头像与光影图标按钮，不再显示搜索框。
+    val couiHeader = LocalAppUiStyle.current == AppUiStyle.COUI17 && !hasIllustratedHeader
     val useUnifiedTopPanel = !hasIllustratedHeader && shouldUseUnifiedHomeTopPanel(topChromePolicy)
     val useDetachedTopTabDock = shouldUseDetachedHomeTopTabDock(
         presentation = topChromePolicy.tabPresentation,
@@ -2405,9 +2407,17 @@ fun HomeHeader(
             containerWidthDp = maxWidth,
             chromePolicy = topChromePolicy
         )
-        val shouldRenderContinuousSlab = effectiveContinuousSlabRenderMode != HomeTopChromeRenderMode.PLAIN ||
-            isProgressiveBlurActive ||
-            isProgressiveFadeActive
+        val shouldRenderContinuousSlab = !couiHeader && (
+            effectiveContinuousSlabRenderMode != HomeTopChromeRenderMode.PLAIN ||
+                isProgressiveBlurActive ||
+                isProgressiveFadeActive
+            )
+        if (couiHeader) {
+            CouiHomeHeaderMaterial(
+                height = pinnedChromeContentHeight,
+                backdrop = miuixBackdrop,
+            )
+        }
         if (shouldRenderContinuousSlab) {
             Box(
                 modifier = Modifier
@@ -2458,7 +2468,7 @@ fun HomeHeader(
             } else 1f,
         )
         // 非玻璃渐进顶栏按控件位置保护分类文字，尾部渐隐；普通磨砂与无特效仍用原来的实色遮罩。
-        if (nativeTopProtectionAlpha > 0f) {
+        if (!couiHeader && nativeTopProtectionAlpha > 0f) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -2775,7 +2785,17 @@ fun HomeHeader(
 
                             // Search placement only hides the middle pill. With tabs hidden,
                             // this row still owns the avatar and settings in both materials.
-                            if (bottomBarSearchEnabled) {
+                            if (couiHeader) {
+                                Spacer(modifier = Modifier.weight(1f))
+                                CouiHomeTopActionButton(
+                                    icon = topActionIcons.search,
+                                    contentDescription = "搜索",
+                                    onClick = {
+                                        haptic(HapticType.LIGHT)
+                                        onSearchClick()
+                                    },
+                                )
+                            } else if (bottomBarSearchEnabled) {
                                 Spacer(modifier = Modifier.weight(1f))
                             } else {
                                 BottomBarMatchedReusableLiquidDock(
@@ -2871,7 +2891,25 @@ fun HomeHeader(
                             Spacer(modifier = Modifier.width(resolveHomeTopEdgeControlGap(topChromePolicy)))
 
                             val topRightActionButtonSize = resolveHomeTopSettingsButtonSize(topChromePolicy)
-                            Box(
+                            if (couiHeader) {
+                                Box {
+                                    CouiHomeTopActionButton(
+                                        icon = topRightActionIcon,
+                                        contentDescription = topRightActionContentDescription,
+                                        onClick = {
+                                            performHomeTopBarTap(haptic = haptic, onClick = onTopRightActionClick)
+                                        },
+                                    )
+                                    if (topRightUnreadBadge != null) {
+                                        HomeTopUnreadBadge(
+                                            text = topRightUnreadBadge,
+                                            layout = topRightUnreadBadgeLayout,
+                                            borderColor = AppSurfaceTokens.cardContainer(),
+                                            modifier = Modifier.align(Alignment.TopEnd),
+                                        )
+                                    }
+                                }
+                            } else Box(
                                 modifier = Modifier
                                     .fillMaxHeight()
                                     .width(

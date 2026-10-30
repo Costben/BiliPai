@@ -9,7 +9,7 @@ import androidx.compose.ui.graphics.Color
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.renderer.material3.AppMaterial3IconButton
-import com.android.purebilibili.core.ui.renderer.coui.AppCouiIconButton
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiHighlightedIconButton
 import com.android.purebilibili.core.ui.renderer.coui.AppCouiIconButton
 import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
@@ -87,6 +87,22 @@ private fun AppIconButtonImpl(
     content: @Composable () -> Unit,
 ): Unit = AppExactTouchTargets {
     val feedbackClick = appActionWithFeedback(onClick)
+    // COUI 17 顶栏图标改用 ColorOS 的光影按钮，替代液态玻璃外壳。
+    if (LocalAppTopBarIconDecorationEnabled.current &&
+        LocalAppUiStyle.current == AppUiStyle.COUI17 &&
+        variant == AppIconButtonVariant.Standard
+    ) {
+        androidx.compose.runtime.CompositionLocalProvider(LocalAppTopBarIconDecorationEnabled provides false) {
+            AppCouiHighlightedIconButton(
+                onClick = feedbackClick,
+                modifier = modifier,
+                enabled = enabled,
+                colors = colors,
+                content = content,
+            )
+        }
+        return@AppExactTouchTargets
+    }
     val decorator = LocalAppTopBarIconDecorator.current.takeIf {
         LocalAppTopBarIconDecorationEnabled.current
     }

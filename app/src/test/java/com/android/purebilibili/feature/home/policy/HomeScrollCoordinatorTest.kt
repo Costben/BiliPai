@@ -92,6 +92,22 @@ class HomeScrollCoordinatorTest {
     }
 
     @Test
+    fun couiHeader_alwaysCollapsesFirstRow() {
+        assertEquals(HomeHeaderCollapseMode.SEARCH_ONLY, resolveCouiHomeHeaderCollapseMode(HomeHeaderCollapseMode.OFF))
+        assertEquals(HomeHeaderCollapseMode.BOTH, resolveCouiHomeHeaderCollapseMode(HomeHeaderCollapseMode.TABS_ONLY))
+        listOf(
+            HomeHeaderCollapseMode.SEARCH_ONLY,
+            HomeHeaderCollapseMode.BOTH,
+            HomeHeaderCollapseMode.SHOW_AT_TOP_ONLY,
+        ).forEach { mode ->
+            assertEquals(mode, resolveCouiHomeHeaderCollapseMode(mode))
+        }
+        HomeHeaderCollapseMode.entries.forEach { mode ->
+            assertEquals(true, resolveCouiHomeHeaderCollapseMode(mode).collapseSearch)
+        }
+    }
+
+    @Test
     fun reverseScroll_hasSameHeaderMotionForGlassAndNativeStyles() {
         for (glass in listOf(false, true)) {
             val result = reduceHomePreScroll(

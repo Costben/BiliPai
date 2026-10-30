@@ -754,7 +754,7 @@ fun AppNavigation(
                 initialValue = com.android.purebilibili.core.store.PlayerInteractionSettings(),
                 context = kotlin.coroutines.EmptyCoroutineContext
             )
-        val bottomBarVisibilityMode = appNavigationSettings.bottomBarVisibilityMode
+        val bottomBarVisibilityMode = com.android.purebilibili.navigation.resolveEffectiveBottomBarVisibilityMode(appNavigationSettings.bottomBarVisibilityMode, com.android.purebilibili.core.theme.LocalAppUiStyle.current)
         // 玻璃、MD3 与 Miuix 共用优先级：整栏隐藏时不再响应 Dock 下滑收缩。
         val bottomBarHomeSettings = remember(effectiveHomeSettings, bottomBarVisibilityMode) {
             resolveBottomBarScrollSettings(effectiveHomeSettings, bottomBarVisibilityMode)
@@ -2112,8 +2112,10 @@ fun AppNavigation(
                     !com.android.purebilibili.feature.web.shouldOpenWebUrlExternally(it.url)
             }
         val floatingBackdropDemand = remember { com.android.purebilibili.core.ui.blur.FloatingChromeBackdropDemand() }
+        // COUI 17 的悬浮底栏与顶栏都是毛玻璃材质，始终需要页面录制。
         val shouldCaptureBottomBarBackdrop = navigationBackdropCaptureEnabled &&
-            (homeSettings.androidNativeLiquidGlassEnabled || isBottomBarBlurEnabled)
+            (homeSettings.androidNativeLiquidGlassEnabled || isBottomBarBlurEnabled ||
+                appUiStyle == com.android.purebilibili.core.theme.AppUiStyle.COUI17)
         val bottomBarBackdropSource = if (shouldCaptureBottomBarBackdrop) {
             // Bind the shared recording to every frame of the app theme palette,
             // rather than waiting for navigation/layout to invalidate a static page.

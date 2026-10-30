@@ -231,21 +231,32 @@ fun AdaptiveScaffold(
     // 页面渐进模糊与玻璃图标复用同一份内容录制；未就绪时也不另建临时背景源。
     // 默认仍由 scaffold 录制，关闭玻璃时不改变 MD3 / Miuix 的原生路径。
     val iconBackdropEnabled = contentBackdropEnabled && LocalAppThemeConfig.current.liquidGlassEnabled
-    val localIconBackdropSource = if (iconBackdropEnabled && topBarIconBackdropSource == null) {
+    // COUI 17 的顶栏材质是 ColorOS 渐变模糊，同样要采样页面内容，替代 haze 毛玻璃。
+    val couiAppBarMaterialEnabled = contentBackdropEnabled && LocalAppUiStyle.current == AppUiStyle.COUI17
+    val localIconBackdropSource = if (
+        (iconBackdropEnabled || couiAppBarMaterialEnabled) && topBarIconBackdropSource == null
+    ) {
         com.android.purebilibili.core.ui.blur.rememberChromeBackdropSource()
     } else null
     val iconBackdropSource = if (iconBackdropEnabled) {
         topBarIconBackdropSource ?: localIconBackdropSource
     } else null
+    val couiAppBarBackdrop = if (couiAppBarMaterialEnabled) {
+        (topBarIconBackdropSource ?: localIconBackdropSource)?.takeIf { it.isReady }?.backdrop
+    } else null
     // 顶栏毛玻璃：由统一的「顶部模糊」开关控制；句柄为 null 时 chrome 保持原生容器色。
     val scaffoldHaze = rememberAdaptiveScaffoldHaze(
-        userEnabled = contentBackdropEnabled && LocalAppThemeConfig.current.headerBlurEnabled
+        userEnabled = contentBackdropEnabled && LocalAppThemeConfig.current.headerBlurEnabled &&
+            !couiAppBarMaterialEnabled
     )
     val decoratedTopBar: @Composable () -> Unit = {
         CompositionLocalProvider(
             LocalAdaptiveScaffoldHaze provides scaffoldHaze,
             com.android.purebilibili.core.ui.components.LocalAppTopBarIconBackdrop provides
                 iconBackdropSource?.takeIf { it.isReady }?.backdrop,
+            io.github.suqi8.coui.kmp.blur.LocalBackdrop provides couiAppBarBackdrop,
+            // 录制层铺满整个内容区（含顶栏下方），材质总有像素可采样。
+            io.github.suqi8.coui.kmp.basic.LocalEdgeToEdge provides couiAppBarMaterialEnabled,
         ) { topBar() }
     }
     val recordedContent: @Composable (PaddingValues) -> Unit = { padding ->
@@ -464,35 +475,52 @@ private fun NativeAdaptiveTopAppBar(
                 decoratedActions()
             }
         }
+        // COUI 17：顶栏用 ColorOS 渐变模糊材质（脚手架提供录制与 edge-to-edge），沉浸式顶栏保持透明。
+        val couiBar = uiStyle == AppUiStyle.COUI17
+        val couiGradientGlass = couiBar && !LocalImmersiveTopChromeActive.current
+        val nativeBarColor = if (couiGradientGlass) {
+            io.github.suqi8.coui.kmp.basic.AppBarBlurOverlayDefaults.containerColor()
+        } else {
+            topAppBarColors.containerColor
+        }
+        // COUI 的光影按钮自带 40dp 圆形与外沿光晕，图标间距交还给原生顶栏。
+        val nativeIconPadding = if (couiBar) {
+            io.github.suqi8.coui.kmp.basic.TopAppBarDefaults.NavigationIconPadding
+        } else 0.dp
+        val nativeActionPadding = if (couiBar) {
+            io.github.suqi8.coui.kmp.basic.TopAppBarDefaults.ActionIconPadding
+        } else 0.dp
         when (style) {
             AdaptiveTopAppBarStyle.LARGE -> {
                 MiuixTopAppBar(
                     title = displayTitle,
                     largeTitle = displayLargeTitle,
                     modifier = modifier,
-                    color = topAppBarColors.containerColor,
+                    color = nativeBarColor,
                     navigationIcon = navigationContent,
                     actions = actionsContent,
                     scrollBehavior = collapseBehavior?.miuixScrollBehavior,
+                    gradientGlass = couiGradientGlass,
                     // Large titles share titlePadding with the collapsed title. Keep upstream
                     // insets so the expanded heading does not touch the window edge.
                 )
             }
 
             AdaptiveTopAppBarStyle.SMALL -> {
-                if (isMiuixNonGlassEnabled()) {
+                if (couiBar || isMiuixNonGlassEnabled()) {
                     MiuixSmallTopAppBar(
                         title = displayTitle,
                         titleColor = if (smallTitleColor == Color.Unspecified) {
                             io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.onSurface
                         } else smallTitleColor,
                         modifier = modifier,
-                        color = topAppBarColors.containerColor,
+                        color = nativeBarColor,
                         navigationIcon = navigationContent,
                         actions = actionsContent,
+                        gradientGlass = couiGradientGlass,
                         titlePadding = 0.dp,
-                        navigationIconPadding = 0.dp,
-                        actionIconPadding = 0.dp,
+                        navigationIconPadding = nativeIconPadding,
+                        actionIconPadding = nativeActionPadding,
                     )
                 } else {
                     TopAppBar(
@@ -511,12 +539,13 @@ private fun NativeAdaptiveTopAppBar(
                 MiuixSmallTopAppBar(
                     title = displayTitle,
                     modifier = modifier,
-                    color = topAppBarColors.containerColor,
+                    color = nativeBarColor,
                     navigationIcon = navigationContent,
                     actions = actionsContent,
+                    gradientGlass = couiGradientGlass,
                     titlePadding = 0.dp,
-                    navigationIconPadding = 0.dp,
-                    actionIconPadding = 0.dp,
+                    navigationIconPadding = nativeIconPadding,
+                    actionIconPadding = nativeActionPadding,
                 )
             }
         }

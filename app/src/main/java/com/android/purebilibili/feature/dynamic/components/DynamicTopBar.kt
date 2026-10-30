@@ -118,6 +118,9 @@ fun DynamicTopBarWithTabs(
     val tabHeight = resolveDynamicTopBarTabHeightDp(density.fontScale).dp
     val appThemeConfig = com.android.purebilibili.core.ui.LocalAppThemeConfig.current
     val liquidGlassEnabled = appThemeConfig.liquidGlassEnabled
+    // COUI 17 的顶栏图标同样走光影按钮装饰。
+    val topBarIconDecorationEnabled = liquidGlassEnabled ||
+        com.android.purebilibili.core.theme.LocalAppUiStyle.current == com.android.purebilibili.core.theme.AppUiStyle.COUI17
     val headerBlurEnabled = appThemeConfig.headerBlurEnabled
     val progressiveTopBlurEnabled = appThemeConfig.progressiveTopBlurEnabled
     val isProgressiveBlurActive = progressiveTopBlurEnabled && !headerBlurEnabled
@@ -195,7 +198,7 @@ fun DynamicTopBarWithTabs(
                 miuixBackdrop = visibleDockBackdrop.takeIf { liquidGlassEnabled },
             )
             CompositionLocalProvider(
-                LocalAppTopBarIconDecorationEnabled provides liquidGlassEnabled,
+                LocalAppTopBarIconDecorationEnabled provides topBarIconDecorationEnabled,
                 LocalAppTopBarIconBackdrop provides dockBackdrop,
             ) {
                 AppIconButton(
@@ -231,7 +234,7 @@ fun DynamicTopBarWithTabs(
             ) + fadeOut(),
         ) {
             CompositionLocalProvider(
-                LocalAppTopBarIconDecorationEnabled provides liquidGlassEnabled,
+                LocalAppTopBarIconDecorationEnabled provides topBarIconDecorationEnabled,
                 LocalAppTopBarIconBackdrop provides dockBackdrop,
             ) {
                     Row(

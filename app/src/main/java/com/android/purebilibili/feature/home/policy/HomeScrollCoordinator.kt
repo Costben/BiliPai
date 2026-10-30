@@ -30,6 +30,18 @@ internal fun resolveHomeRecommendationHeaderCollapseMode(
     return homeHeaderCollapseMode
 }
 
+/**
+ * COUI 17 顶栏的第一行（头像与操作按钮）只在回滚时出现：仍保留分类栏的模式改为至少收起第一行。
+ * 只在渲染时改写，用户保存的模式不变。
+ */
+internal fun resolveCouiHomeHeaderCollapseMode(
+    homeHeaderCollapseMode: HomeHeaderCollapseMode
+): HomeHeaderCollapseMode = when (homeHeaderCollapseMode) {
+    HomeHeaderCollapseMode.OFF -> HomeHeaderCollapseMode.SEARCH_ONLY
+    HomeHeaderCollapseMode.TABS_ONLY -> HomeHeaderCollapseMode.BOTH
+    else -> homeHeaderCollapseMode
+}
+
 internal fun quantizeHomeHeaderOffset(
     offsetPx: Float,
     stepPx: Float

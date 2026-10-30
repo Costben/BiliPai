@@ -45,3 +45,16 @@ internal fun resolveAppNavigationAppearance(
         bottomBarFloating = homeSettings.isBottomBarFloating
     )
 }
+
+/** COUI 17 的悬浮底栏常驻显示：下滑隐藏在渲染时改为始终显示，永久隐藏保持不变，不改写用户保存值。 */
+internal fun resolveEffectiveBottomBarVisibilityMode(
+    mode: SettingsManager.BottomBarVisibilityMode,
+    uiStyle: com.android.purebilibili.core.theme.AppUiStyle,
+): SettingsManager.BottomBarVisibilityMode =
+    if (uiStyle == com.android.purebilibili.core.theme.AppUiStyle.COUI17 &&
+        mode == SettingsManager.BottomBarVisibilityMode.SCROLL_HIDE
+    ) {
+        SettingsManager.BottomBarVisibilityMode.ALWAYS_VISIBLE
+    } else {
+        mode
+    }

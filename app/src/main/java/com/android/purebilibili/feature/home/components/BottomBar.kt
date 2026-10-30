@@ -3074,6 +3074,24 @@ private fun MiuixBottomBar(
             blurIntensity = blurIntensity
         )
     }
+    // ColorOS 17 的底栏常驻显示：不随滚动收起，也不承载底栏搜索；播放条仍走联动 Dock。
+    if (isFloating && LocalAppUiStyle.current == AppUiStyle.COUI17 && uiSkinDecoration == null &&
+        nowPlayingContent == null
+    ) {
+        CouiAccessoryBottomBar(
+            currentItem = currentItem,
+            onItemClick = onItemClick,
+            visibleItems = visibleItems,
+            itemLabels = itemLabels,
+            dynamicUnreadCount = dynamicUnreadCount,
+            iconStyle = sharedBarIconStyle,
+            backdrop = miuixBackdrop,
+            haptic = haptic,
+            modifier = modifier,
+            onToggleSidebar = onToggleSidebar.takeIf { isTablet },
+        )
+        return
+    }
     if (isFloating) {
         BiliPaiFloatingBottomBar(
             currentItem = currentItem,
@@ -4126,25 +4144,16 @@ private fun BiliPaiFloatingBottomBarChrome(
                             // 胶囊自身按 COUI 的条目宽度规则排布。未读数沿用 COUI 的数字红点。
                             io.github.suqi8.coui.kmp.basic.BottomFloatingNavigationBar(
                                 modifier = dockModifier,
-                                backdrop = null,
+                                backdrop = miuixBackdrop,
                             ) {
                                 visibleItems.forEachIndexed { index, item ->
-                                    val unread = if (shouldShowBottomBarDynamicReminderBadge(item, dynamicUnreadCount)) {
-                                        dynamicUnreadCount
-                                    } else {
-                                        0
-                                    }
                                     BottomFloatingNavigationBarItem(
                                         selected = currentItem == item,
                                         onClick = { handleBottomBarItemClick(index, item) },
                                         icon = resolveSharedBottomBarIcon(item, false, iconStyle),
                                         selectedIcon = resolveSharedBottomBarIcon(item, true, iconStyle),
                                         label = resolveBottomNavItemLabel(item, itemLabels),
-                                        redDot = if (unread > 0) {
-                                            io.github.suqi8.coui.kmp.basic.BottomFloatingRedDot.Count(unread)
-                                        } else {
-                                            null
-                                        },
+                                        redDot = resolveCouiBottomBarRedDot(item, dynamicUnreadCount),
                                     )
                                 }
                                 if (isTablet && onToggleSidebar != null) {
@@ -5282,7 +5291,7 @@ internal fun resolveHomeNavigationBarIcon(
 ): ImageVector = resolveMiuixBottomNavigationIcon(item, selected)
 
 @Composable
-private fun resolveSharedBottomBarIcon(
+internal fun resolveSharedBottomBarIcon(
     item: BottomNavItem,
     selected: Boolean,
     iconStyle: SharedFloatingBottomBarIconStyle
@@ -5292,7 +5301,7 @@ private fun resolveSharedBottomBarIcon(
 }
 
 @Composable
-private fun resolveSharedBottomBarSidebarIcon(
+internal fun resolveSharedBottomBarSidebarIcon(
     iconStyle: SharedFloatingBottomBarIconStyle
 ): ImageVector = when (iconStyle) {
     SharedFloatingBottomBarIconStyle.MATERIAL -> Icons.AutoMirrored.Outlined.MenuOpen
