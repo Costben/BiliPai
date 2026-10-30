@@ -333,7 +333,7 @@ class HomeScrollCoordinatorTest {
 
         assertEquals(-120f, result.headerOffsetPx)
         assertNull(result.bottomBarVisibilityIntent)
-        assertNull(result.globalScrollOffset)
+        assertEquals(90f, result.globalScrollOffset)
     }
 
     @Test
