@@ -245,6 +245,8 @@ fun HomeScreen(
     onAccountSwitchClick: (() -> Unit)? = null,
     onSettingsClick: () -> Unit,
     onSearchClick: () -> Unit,
+    // 原地搜索提交后带着关键词进入搜索页
+    onSearchSubmit: (String) -> Unit = {},
     //  新增：动态页面回调
     onDynamicClick: () -> Unit = {},
     //  新增：历史记录回调
@@ -359,6 +361,7 @@ fun HomeScreen(
     var subscriptionScrollToTopRequestId by remember { mutableIntStateOf(0) }
     var subscriptionArticleOpen by remember { mutableStateOf(false) }
     var subscriptionArticleScrolling by remember { mutableStateOf(false) }
+    var inlineSearchVisible by rememberSaveable { mutableStateOf(false) }
     val subscriptionListState = rememberHomeStaggeredGridState()
     // [Feature] Video Preview State (Global Scope)
     val targetVideoItemState = remember { mutableStateOf<VideoItem?>(null) }
@@ -2867,7 +2870,7 @@ fun HomeScreen(
                 val searchEntry = resolveHomeTopTabEntryOrNull(topTabEntries, pagerState.currentPage)
                 if (searchEntry is HomeTopTabEntry.Category && shouldEmbedLivePageInHomeTopTab(searchEntry.category)) {
                     onLiveSearchClick()
-                } else onSearchClick()
+                } else inlineSearchVisible = true
             },
             topCategories = localizedTopTabLabels,
             topCategoryKeys = topTabKeys,
@@ -3421,6 +3424,12 @@ fun HomeScreen(
 
 // [Removed] Animation logic moved inside HorizontalPager where the active state exists
 
+    // 原地搜索时收起底栏，避免胶囊浮在遮罩之上。
+    val setBottomBarVisibleForSearch = LocalSetBottomBarVisible.current
+    LaunchedEffect(inlineSearchVisible) {
+        setBottomBarVisibleForSearch(!inlineSearchVisible)
+    }
+
     // 指示器位置逻辑也移入 graphicsLayer
     Box(
         modifier = Modifier.fillMaxSize()
@@ -3437,6 +3446,15 @@ fun HomeScreen(
                 onDismissRequest = {
                     pendingNotInterestedVideo = null
                 }
+            )
+        }
+        if (inlineSearchVisible) {
+            com.android.purebilibili.feature.home.components.HomeInlineSearchOverlay(
+                onDismiss = { inlineSearchVisible = false },
+                onSubmit = { keyword ->
+                    inlineSearchVisible = false
+                    onSearchSubmit(keyword)
+                },
             )
         }
     }

@@ -3009,6 +3009,11 @@ fun AppNavigation(
                                 onSearchClick = {
                                     if (canNavigate(false)) pushNavigation3Key(BiliPaiNavKey.Search)
                                 },
+                                onSearchSubmit = { keyword ->
+                                    if (canNavigate(false)) {
+                                        pushNavigation3Key(BiliPaiNavKey.Search(keyword = keyword))
+                                    }
+                                },
                                 onAvatarClick = { pushNavigation3Key(BiliPaiNavKey.Login) },
                                 onProfileClick = { pushNavigation3Route(ScreenRoutes.Profile.route) },
                                 onLogout = {
