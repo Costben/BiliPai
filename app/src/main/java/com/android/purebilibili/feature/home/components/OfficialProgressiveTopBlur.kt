@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.addOutline
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
-import top.yukonga.miuix.kmp.blur.ProgressiveBlur
+import io.github.suqi8.coui.kmp.blur.ProgressiveBlur
 import kotlin.math.ceil
 import kotlin.math.cos
 import kotlin.math.sin

@@ -51,8 +51,8 @@ import com.android.purebilibili.feature.home.components.isOfficialProgressiveBlu
 import com.android.purebilibili.feature.home.components.OFFICIAL_BACKDROP_MIN_FULL_SDK
 import com.android.purebilibili.feature.home.components.rememberOfficialProgressiveTopBlur
 import com.android.purebilibili.feature.home.components.resolveLiquidGlassTuning
-import top.yukonga.miuix.kmp.blur.ProgressiveBlur
-import top.yukonga.miuix.kmp.blur.progressiveTextureBlur
+import io.github.suqi8.coui.kmp.blur.ProgressiveBlur
+import io.github.suqi8.coui.kmp.blur.progressiveTextureBlur
 
 /** 两个真实渲染器消费相同画面；交互只移动预览背景，不修改已保存设置。 */
 @Composable

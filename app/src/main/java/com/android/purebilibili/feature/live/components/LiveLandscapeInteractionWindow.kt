@@ -33,7 +33,7 @@ import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppIconButton
 import com.android.purebilibili.core.ui.components.AppText
-import top.yukonga.miuix.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.Backdrop
 import kotlin.math.roundToInt
 
 /** 标题拖动与消息滚动分区；位置随可用窗口夹紧，收起后卸载消息内容。 */
