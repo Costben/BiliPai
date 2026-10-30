@@ -1482,7 +1482,10 @@ fun AdaptivePreferenceDividerRenderer(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = indent)
+            .padding(
+                start = indent,
+                end = rowSpec.insideHorizontalPaddingDp.dp,
+            )
             .height(0.5.dp)
             .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
     )
