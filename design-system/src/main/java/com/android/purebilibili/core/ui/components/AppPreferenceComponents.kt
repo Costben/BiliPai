@@ -67,7 +67,7 @@ fun AppSwitchPreference(
     subtitleColor: Color = AppContentColors.secondaryText(),
     titleTrailingContent: (@Composable () -> Unit)? = null,
 ) = AdaptiveSwitchPreferenceContent(
-    icon = icon,
+    icon = icon ?: rememberPreferenceFallbackIcon(title),
     title = title,
     subtitle = subtitle,
     checked = checked,
@@ -94,7 +94,7 @@ fun AppSliderPreference(
     subtitleColor: Color = AppContentColors.secondaryText(),
     valueColor: Color = AppContentColors.primaryText(),
 ) = AdaptiveSliderPreferenceRenderer(
-    icon = icon,
+    icon = icon ?: rememberPreferenceFallbackIcon(title),
     title = title,
     subtitle = subtitle,
     value = value,
@@ -128,7 +128,7 @@ fun AppPreference(
     showChevron: Boolean = true,
     trailingContent: @Composable (() -> Unit)? = null,
 ) = AdaptivePreferenceContent(
-    icon = icon,
+    icon = icon ?: rememberPreferenceFallbackIcon(title)?.takeIf { iconPainter == null },
     iconPainter = iconPainter,
     title = title,
     subtitle = subtitle,

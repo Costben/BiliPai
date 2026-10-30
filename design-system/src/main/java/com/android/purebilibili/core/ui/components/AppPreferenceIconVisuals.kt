@@ -97,6 +97,7 @@ internal fun colorfulPreferenceIconColor(key: String?, fallback: Color): Color {
 /** Shared by ordinary, switch, slider, menu and manually authored settings rows. */
 @Composable
 internal fun Modifier.appPreferenceIconBackground(color: Color, cornerRadius: Dp): Modifier {
+    if (LocalAppPreferenceIconTreatment.current == AppPreferenceIconTreatment.PLAIN) return this
     if (!useColorfulPreferenceIcons()) {
         return adaptiveSquircleBackground(color = color, cornerRadius = cornerRadius)
     }

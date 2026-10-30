@@ -48,6 +48,9 @@ internal fun CouiSettingsHomeContent(
     Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
         CouiSettingsSearchEntry(onClick = onSearchOpen)
         Spacer(Modifier.height(12.dp))
+        // COUI 的分割线从文字起点开始：内边距 16 + 图标 20 + 图标与文字间距 8。
+        val dividerStartDp = 16 + (categories.firstOrNull()
+            ?.let { rememberSettingsEntryVisual(it.searchTarget).iconSizeDp } ?: 20) + 8
         Card(modifier = Modifier.fillMaxWidth()) {
             categories.forEachIndexed { index, category ->
                 val visual = rememberSettingsEntryVisual(category.searchTarget)
@@ -65,10 +68,10 @@ internal fun CouiSettingsHomeContent(
                     onClick = { onCategoryClick(category) },
                 )
                 if (index != categories.lastIndex) {
-                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                    HorizontalDivider(modifier = Modifier.padding(start = dividerStartDp.dp, end = 16.dp))
                 }
             }
-            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+            HorizontalDivider(modifier = Modifier.padding(start = dividerStartDp.dp, end = 16.dp))
             CouiDonatePreference(onClick = onDonateClick)
         }
     }

@@ -1268,6 +1268,13 @@ private fun MobileSettingsNavLayout(
                 com.android.purebilibili.core.ui.AppTopBarStyle.CENTERED
             }
         },
+        // 一级页保留圆角容器图标；二级页只画字形主体。
+        preferenceIconTreatment =
+            if (destination == SettingsNavDestination.Home) {
+                com.android.purebilibili.core.ui.components.AppPreferenceIconTreatment.FILLED
+            } else {
+                com.android.purebilibili.core.ui.components.AppPreferenceIconTreatment.PLAIN
+            },
     ) {
         if (rootEntranceEnabled) {
             EntranceGroup(startWhen = rootEntranceStartWhen) {

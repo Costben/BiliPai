@@ -142,6 +142,7 @@ internal fun SettingsPageScaffold(
     externalContentHandlesTopPadding: Boolean = false,
     topBarStyle: AppTopBarStyle = AppTopBarStyle.CENTERED,
     actions: @Composable RowScope.() -> Unit = {},
+    preferenceIconTreatment: AppPreferenceIconTreatment = AppPreferenceIconTreatment.PLAIN,
     header: (@Composable () -> Unit)? = null,
     lazyListContent: (LazyListScope.() -> Unit)? = null,
     content: @Composable () -> Unit = {},
@@ -202,7 +203,7 @@ internal fun SettingsPageScaffold(
     }
 
     CompositionLocalProvider(
-        LocalAppPreferenceIconTreatment provides AppPreferenceIconTreatment.FILLED,
+        LocalAppPreferenceIconTreatment provides preferenceIconTreatment,
         // Settings-only Miuix icons; shared defaults and MD3 remain unchanged in both glass states.
         com.android.purebilibili.core.ui.components.LocalAppPreferenceIconColors provides
             com.android.purebilibili.feature.settings.settingsIconColors(),

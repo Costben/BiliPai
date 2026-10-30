@@ -140,6 +140,7 @@ fun <T> AppSingleChoicePreference(
 ) {
     // 液态玻璃材质分支：玻璃宿主提供 presenter 时，行尾与弹窗整体交给宿主渲染；
     // 未提供时以下 Miuix/MD3 原生路径保持不变。
+    val resolvedIcon = icon ?: rememberPreferenceFallbackIcon(title)
     val menuPresenter = LocalAppGlassMenuPresenter.current
     val sameWindow = menuPresenter == null || menuPresenter.ownerView === androidx.compose.ui.platform.LocalView.current
     val glassPresenter = LocalAppSingleChoicePopupPresenter.current.takeIf {
@@ -190,7 +191,7 @@ fun <T> AppSingleChoicePreference(
                 .onGloballyPositioned { anchorBounds = it.boundsInWindow() },
         ) {
             AppPreference(
-                icon = icon,
+                icon = resolvedIcon,
                 title = title,
                 subtitle = subtitle,
                 value = null,
@@ -263,7 +264,7 @@ fun <T> AppSingleChoicePreference(
                 summary = subtitle,
                 enabled = enabled,
                 modifier = modifier.alpha(if (enabled) 1f else 0.6f),
-                startAction = icon?.let { imageVector ->
+                startAction = resolvedIcon?.let { imageVector ->
                     {
                         if (useColorfulPreferenceIcons() || com.android.purebilibili.core.ui.rememberResolvedAppIconStyle() == com.android.purebilibili.core.ui.AppIconStyle.THEME_CONTAINER) {
                             AppPreferenceLeadingIcon(title = title, imageVector = imageVector)
@@ -300,7 +301,7 @@ fun <T> AppSingleChoicePreference(
 
     Box(modifier = modifier.alpha(if (enabled) 1f else 0.6f)) {
         AppPreference(
-            icon = icon,
+            icon = resolvedIcon,
             title = title,
             subtitle = subtitle,
             value = selectedLabel,

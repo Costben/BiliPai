@@ -115,6 +115,8 @@ data class AdaptiveListComponentVisualSpec(
 enum class AppPreferenceIconTreatment {
     TONAL,
     FILLED,
+    /** 只画主体字形，不铺圆角矩形底色。设置二级页使用。 */
+    PLAIN,
 }
 
 val LocalAppPreferenceIconTreatment = staticCompositionLocalOf {
@@ -381,26 +383,28 @@ internal fun resolveAdaptivePreferenceIconGlyphColor(
     iconStyle: AppIconStyle,
     containerContentColor: Color,
     semanticIconColor: Color,
-): Color = if (
+): Color = when {
+    treatment == AppPreferenceIconTreatment.PLAIN ->
+        if (semanticIconColor.alpha > 0f) semanticIconColor else containerContentColor
     treatment == AppPreferenceIconTreatment.FILLED ||
-    iconStyle == AppIconStyle.THEME_CONTAINER ||
-    iconStyle == AppIconStyle.MD3_STANDARD
-) {
-    // MD3_STANDARD 的容器色是 Color.Transparent，若走 semanticIconColor 会得到透明
-    // glyph（图标消失只剩文字）；这里用 containerContentColor（onSurfaceVariant 单色）。
-    containerContentColor
-} else {
-    semanticIconColor
+        iconStyle == AppIconStyle.THEME_CONTAINER ||
+        iconStyle == AppIconStyle.MD3_STANDARD -> {
+        // MD3_STANDARD 的容器色是 Color.Transparent，若走 semanticIconColor 会得到透明
+        // glyph（图标消失只剩文字）；这里用 containerContentColor（onSurfaceVariant 单色）。
+        containerContentColor
+    }
+    else -> semanticIconColor
 }
 
 internal fun resolveAdaptivePreferenceIconBackgroundAlpha(
     treatment: AppPreferenceIconTreatment,
     tonalAlpha: Float,
     iconStyle: AppIconStyle = AppIconStyle.AUTO,
-): Float = when (iconStyle) {
-    AppIconStyle.THEME_CONTAINER -> 1f
-    AppIconStyle.MD3_STANDARD -> 0f
-    AppIconStyle.AUTO, AppIconStyle.SOFT_COLORFUL, AppIconStyle.VIVID_COLORFUL -> if (treatment == AppPreferenceIconTreatment.FILLED) 1f else tonalAlpha
+): Float = when {
+    treatment == AppPreferenceIconTreatment.PLAIN -> 0f
+    iconStyle == AppIconStyle.THEME_CONTAINER -> 1f
+    iconStyle == AppIconStyle.MD3_STANDARD -> 0f
+    else -> if (treatment == AppPreferenceIconTreatment.FILLED) 1f else tonalAlpha
 }
 
 @Composable
@@ -1453,8 +1457,23 @@ fun AdaptivePreferenceDividerRenderer(
     modifier: Modifier = Modifier,
     startIndent: androidx.compose.ui.unit.Dp = 66.dp
 ) {
-    // 迁移后所有样式统一使用 0.dp 分隔线，渲染器保持空操作。
-    return
+    // 设置二级页（PLAIN 字形）在 COUI 17 下显示逐行分割线；
+    // 起点与行标题对齐：行内边距 + 图标槽 + 图标文字间距。其他皮肤保持 0 线。
+    if (LocalAppPreferenceIconTreatment.current != AppPreferenceIconTreatment.PLAIN ||
+        LocalAppUiStyle.current != AppUiStyle.COUI17
+    ) {
+        return
+    }
+    val componentSpec = rememberAdaptiveListComponentVisualSpec()
+    val rowSpec = rememberAdaptiveListRowVisualSpec()
+    val indent = (rowSpec.insideHorizontalPaddingDp + componentSpec.iconContainerSizeDp + 14).dp
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(start = indent)
+            .height(0.5.dp)
+            .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
+    )
 }
 
 
