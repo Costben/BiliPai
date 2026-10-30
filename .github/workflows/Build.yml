@@ -122,6 +122,7 @@ jobs:
           BILI_RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
         run: |
           COMMON_ARGS=(
+            "--max-workers=4"
             "-Pbili.build.commitSha=${BILI_BUILD_COMMIT_SHA}"
             "-Pbili.build.gitRef=${BILI_BUILD_GIT_REF}"
             "-Pbili.build.workflowRunId=${BILI_BUILD_WORKFLOW_RUN_ID}"
