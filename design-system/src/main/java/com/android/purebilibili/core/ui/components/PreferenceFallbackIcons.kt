@@ -21,7 +21,7 @@ internal fun rememberPreferenceFallbackIcon(title: String?): ImageVector? {
 /** 标题里带当前值时只比较冒号前的功能名，避免换值换图标。 */
 internal fun resolvePreferenceFallbackIcon(title: String): ImageVector {
     val key = title.substringBefore('：').substringBefore(':').trim()
-    fun has(vararg words: String) = words.any(key::contains)
+    fun has(vararg words: String) = words.any { key.contains(it) }
     return when {
         has("深色", "夜间", "暗色") -> AppIcons.Outlined.DarkMode
         has("时间", "定时", "开始", "结束", "停留", "自动退出", "分钟", "小时") -> AppIcons.Outlined.Schedule
