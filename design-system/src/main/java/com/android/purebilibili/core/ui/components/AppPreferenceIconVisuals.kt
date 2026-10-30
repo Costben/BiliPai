@@ -163,13 +163,19 @@ fun AppPreferenceLeadingIcon(
         return
     }
     val color = colorfulPreferenceIconColor(title, AppPreferenceIconPalette.first())
+    // PLAIN 不铺彩色底，白色字形会与白卡同色，改用彩色样式分配的色值。
+    val glyphColor = if (LocalAppPreferenceIconTreatment.current == AppPreferenceIconTreatment.PLAIN) {
+        color
+    } else {
+        Color.White
+    }
     Box(
         modifier = modifier
             .size(32.dp)
             .appPreferenceIconBackground(color, 10.dp),
         contentAlignment = Alignment.Center,
     ) {
-        if (imageVector != null) AppIcon(imageVector, contentDescription, Modifier.size(22.dp), Color.White)
-        else if (painter != null) AppIcon(painter, contentDescription, Modifier.size(22.dp), Color.White)
+        if (imageVector != null) AppIcon(imageVector, contentDescription, Modifier.size(22.dp), glyphColor)
+        else if (painter != null) AppIcon(painter, contentDescription, Modifier.size(22.dp), glyphColor)
     }
 }
