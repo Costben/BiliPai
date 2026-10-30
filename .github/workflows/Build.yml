@@ -79,8 +79,11 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
   
-      - name: Set up Android SDK and NDK
-        uses: android-actions/setup-android@v3
+      # runner 镜像自带 Android SDK；这里只需接受许可证，AGP 会按需安装缺失组件。
+      # 原 android-actions/setup-android@v3 会安装已被 Google 移除的 `tools` 包，
+      # runner 镜像更新后 sdkmanager 直接退出 1（上游已知问题），故绕开。
+      - name: Accept Android SDK licenses
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
   
       - name: Grant execute permission to gradlew
         run: chmod +x gradlew
