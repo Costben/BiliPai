@@ -38,8 +38,8 @@ import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppIconButton
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.motion.rememberSystemReduceMotion
-import com.android.purebilibili.core.ui.animation.gl.ThanosEffectView
-import com.android.purebilibili.core.ui.animation.gl.isThanosEffectSupported
+import com.android.purebilibili.core.ui.animation.MeltBallEffectView
+import com.android.purebilibili.core.ui.animation.MeltBallMergeTarget
 import com.android.purebilibili.core.ui.findHostActivity
 import com.android.purebilibili.core.ui.transition.captureNativeVideoCardImage
 import com.android.purebilibili.core.ui.transition.captureNativeVideoCardBitmap
@@ -160,14 +160,14 @@ internal fun AudioNowPlayingBar(
         val dissolveContext = LocalContext.current
 
         // 从窗口已绘制的像素截取横条，避免离屏重绘实时模糊/旋转图层。
-        // 点按取消立即暂停；粒子首帧隐藏本体，消散完成后再关闭会话。
+        // 点按取消立即暂停；绒球首帧隐藏本体，吸进底栏后再关闭会话。
         val dismissAfterCancel by rememberUpdatedState(onDismiss)
         var cancelDissolving by remember(state.bvid) { mutableStateOf(false) }
         var dissolveContentHidden by remember(state.bvid) { mutableStateOf(false) }
-        var dissolveEffectView by remember { mutableStateOf<ThanosEffectView?>(null) }
+        var dissolveEffectView by remember { mutableStateOf<MeltBallEffectView?>(null) }
 
         fun finishCancelDissolveCleanup() {
-            // Dock / AnimatedVisibility 保留本体直到退场结束。粒子结束后不能恢复
+            // Dock / AnimatedVisibility 保留本体直到退场结束。动画结束后不能恢复
             // alpha，否则清理与宿主移除之间会重新露出横条，随后再淡出一次。
             dissolveContentHidden = true
             dissolveEffectView?.dispose()
@@ -180,7 +180,7 @@ internal fun AudioNowPlayingBar(
                 cancelDissolving = true
                 onCancelPlayback()
                 val hostWindow = dissolveContext.findHostActivity()?.window
-                if (hostWindow == null || !isThanosEffectSupported(dissolveContext)) {
+                if (hostWindow == null) {
                     dismissAfterCancel()
                 } else {
                     snapshotScope.launch {
@@ -201,10 +201,11 @@ internal fun AudioNowPlayingBar(
                             }
                             val bitmap = snapshot.bitmap
                             dissolveEffectView?.dispose()
-                            dissolveEffectView = ThanosEffectView.attach(
+                            dissolveEffectView = MeltBallEffectView.attach(
                                 window = hostWindow,
                                 bitmap = bitmap,
                                 windowBounds = android.graphics.RectF(snapshot.windowBounds),
+                                mergeTarget = MeltBallMergeTarget.BOTTOM_BAR,
                                 onFirstFrame = { dissolveContentHidden = true },
                                 onComplete = {
                                     finishCancelDissolveCleanup()

@@ -962,6 +962,7 @@ internal fun HomeCategoryPageContent(
                 collapseAfterDissolve = false,
                 publishGlobalDissolveState = false,
                 keepInvisibleAfterDissolve = true,
+                meltBallTarget = com.android.purebilibili.core.ui.animation.MeltBallMergeTarget.SCREEN_EDGE,
             ) {
                 com.android.purebilibili.feature.home.components.HomeOverlayPillButton(
                     overlayPillColors = overlayPillColors,

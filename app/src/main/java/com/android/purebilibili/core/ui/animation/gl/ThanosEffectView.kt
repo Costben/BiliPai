@@ -18,6 +18,7 @@ import android.view.Surface
 import android.view.TextureView
 import android.view.ViewGroup
 import android.view.Window
+import com.android.purebilibili.core.ui.animation.OverlayEffectView
 import java.util.concurrent.atomic.AtomicBoolean
 
 internal fun isThanosEffectSupported(context: Context): Boolean {
@@ -42,7 +43,7 @@ internal class ThanosEffectView private constructor(
     private var onFirstFrame: (() -> Unit)?,
     private var onComplete: (() -> Unit)?,
     private var onFinalTail: (() -> Unit)?,
-) : TextureView(context), TextureView.SurfaceTextureListener {
+) : TextureView(context), TextureView.SurfaceTextureListener, OverlayEffectView {
     private var session: RenderSession? = null
     private var disposed = false
     private var firstFrameDelivered = false
@@ -97,7 +98,7 @@ internal class ThanosEffectView private constructor(
         choreographer.postFrameCallback(frameCallback)
     }
 
-    fun dispose() {
+    override fun dispose() {
         if (disposed) return
         disposed = true
         onFirstFrame = null

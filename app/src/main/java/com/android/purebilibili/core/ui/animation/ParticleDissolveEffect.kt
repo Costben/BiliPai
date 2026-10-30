@@ -155,6 +155,7 @@ fun DissolvableVideoCard(
     publishGlobalDissolveState: Boolean = true,
     keepInvisibleAfterDissolve: Boolean = false,
     reflowDuringFinalTail: Boolean = false,
+    meltBallTarget: MeltBallMergeTarget? = null,
     onReflowStarted: () -> Unit = {},
     content: @Composable () -> Unit
 ) {
@@ -167,7 +168,7 @@ fun DissolvableVideoCard(
     var shouldCollapse by remember(cardId) { mutableStateOf(false) }
     var keepContentHidden by remember(cardId) { mutableStateOf(false) }
     var hasCompletedCurrentDissolve by remember(cardId) { mutableStateOf(false) }
-    var effectView by remember(cardId) { mutableStateOf<ThanosEffectView?>(null) }
+    var effectView by remember(cardId) { mutableStateOf<OverlayEffectView?>(null) }
     val latestOnComplete by rememberUpdatedState(onDissolveComplete)
     val latestOnReflowStarted by rememberUpdatedState(onReflowStarted)
     val latestIsDissolving by rememberUpdatedState(isDissolving)
@@ -233,7 +234,8 @@ fun DissolvableVideoCard(
         }
         hasCompletedCurrentDissolve = false
         val window = findWindow(context)
-        if (window == null || !isThanosEffectSupported(context)) {
+        val meltTarget = meltBallTarget
+        if (window == null || (meltTarget == null && !isThanosEffectSupported(context))) {
             finishEffect()
             return@LaunchedEffect
         }
@@ -263,21 +265,33 @@ fun DissolvableVideoCard(
             finishEffect()
             return@LaunchedEffect
         }
-        effectView = ThanosEffectView.attach(
-            window = window,
-            bitmap = bitmap,
-            windowBounds = bounds,
-            onFirstFrame = {
-                keepContentHidden = true
-                if (publishGlobalState && cardId.isNotEmpty()) {
-                    DissolveAnimationManager.startDissolving(cardId)
-                }
-            },
-            onComplete = { finishEffect() },
-            onFinalTail = {
-                if (reflowDuringFinalTail && collapseAfterDissolve) beginCollapse()
-            },
-        )
+        val startDissolve = {
+            keepContentHidden = true
+            if (publishGlobalState && cardId.isNotEmpty()) {
+                DissolveAnimationManager.startDissolving(cardId)
+            }
+        }
+        effectView = if (meltTarget != null) {
+            MeltBallEffectView.attach(
+                window = window,
+                bitmap = bitmap,
+                windowBounds = bounds,
+                mergeTarget = meltTarget,
+                onFirstFrame = startDissolve,
+                onComplete = { finishEffect() },
+            )
+        } else {
+            ThanosEffectView.attach(
+                window = window,
+                bitmap = bitmap,
+                windowBounds = bounds,
+                onFirstFrame = startDissolve,
+                onComplete = { finishEffect() },
+                onFinalTail = {
+                    if (reflowDuringFinalTail && collapseAfterDissolve) beginCollapse()
+                },
+            )
+        }
         if (effectView == null) {
             if (!bitmap.isRecycled) bitmap.recycle()
             finishEffect()
