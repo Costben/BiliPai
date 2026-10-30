@@ -1,0 +1,66 @@
+name: Device Build
+
+# 手动触发，只为装机产出可下载的 release APK：
+# 上游 Build.yml 需要 FCM secret，且 APK 上传受发布策略开关限制，
+# 本地联调时拉不到包。这里只跑 assembleRelease 并把 APK 作为 artifact 上传。
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: read
+
+concurrency:
+  group: device-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      NATIVE_TARGET: "arm64-v8a"
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "21"
+
+      - name: Set up Gradle cache
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Grant execute permission to gradlew
+        run: chmod +x gradlew
+
+      - name: Build release APK
+        env:
+          # settings.gradle.kts 用这两个环境变量作为 GitHub Packages 凭据，
+          # COUI 的 1.2.0-SNAPSHOT 只在那里发布。
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ github.token }}
+          BILI_BUILD_COMMIT_SHA: ${{ github.sha }}
+          BILI_BUILD_GIT_REF: ${{ github.ref }}
+          BILI_BUILD_WORKFLOW_RUN_ID: ${{ github.run_id }}
+          BILI_BUILD_WORKFLOW_RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          ./gradlew --stacktrace \
+            -Pbili.build.commitSha="$BILI_BUILD_COMMIT_SHA" \
+            -Pbili.build.gitRef="$BILI_BUILD_GIT_REF" \
+            -Pbili.build.workflowRunId="$BILI_BUILD_WORKFLOW_RUN_ID" \
+            -Pbili.build.workflowRunUrl="$BILI_BUILD_WORKFLOW_RUN_URL" \
+            assembleRelease
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: bilipai-release-apk
+          path: app/build/outputs/bilipai/release/*.apk
+          retention-days: 7
+          if-no-files-found: error
