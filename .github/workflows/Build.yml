@@ -18,6 +18,7 @@ permissions:
   actions: read
   attestations: write
   id-token: write
+  packages: read
 
 env:
   GITHUB_APK_DISTRIBUTION_ENABLED: "true"
@@ -110,6 +111,8 @@ jobs:
   
       - name: Build APK
         env:
+          # GitHub Packages（Miuix SNAPSHOT）解析需要 token 鉴权，匿名 401。
+          GITHUB_TOKEN: ${{ github.token }}
           BILI_BUILD_COMMIT_SHA: ${{ github.sha }}
           BILI_BUILD_GIT_REF: ${{ github.ref }}
           BILI_BUILD_WORKFLOW_RUN_ID: ${{ github.run_id }}
