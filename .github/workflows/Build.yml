@@ -20,6 +20,11 @@ permissions:
   id-token: write
   packages: read
 
+# 同一分支/标签的新 push 会取消仍在跑的旧构建，避免并行重复消耗 runner。
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   GITHUB_APK_DISTRIBUTION_ENABLED: "true"
 
