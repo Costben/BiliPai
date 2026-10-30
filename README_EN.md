@@ -12,7 +12,7 @@
 <img src="https://img.shields.io/badge/Android-8.0%2B-34C759?style=flat-square" alt="Android 8.0+" />
 <img src="https://img.shields.io/badge/License-GPLv3-FF3B30?style=flat-square" alt="GPLv3" />
 
-[Download](#download) · [Wiki](https://github.com/jay3-yy/BiliPai/wiki) · [Telegram channel](https://t.me/bilipai666) · [Telegram group](https://t.me/bilipai888/1)
+[Download](#download) · [Wiki](https://github.com/Costben/BiliPai/wiki) · [Telegram channel](https://t.me/bilipai666) · [Telegram group](https://t.me/bilipai888/1)
 
 </div>
 
@@ -79,7 +79,7 @@ See [CHANGELOG.md](CHANGELOG.md) for details.
 Use JDK 21 and Android SDK 37.
 
 ```bash
-git clone https://github.com/jay3-yy/BiliPai.git
+git clone https://github.com/Costben/BiliPai.git
 cd BiliPai
 ./gradlew :app:assembleDev
 ```
@@ -88,7 +88,7 @@ Miuix dependencies require GitHub Packages access. Set `gpr.user` and `gpr.key` 
 
 ## Contributing
 
-Share bugs and ideas through [Issues](https://github.com/jay3-yy/BiliPai/issues/new/choose), or help improve features and translations with a [pull request](https://github.com/jay3-yy/BiliPai/pulls).
+Share bugs and ideas through [Issues](https://github.com/Costben/BiliPai/issues/new/choose), or help improve features and translations with a [pull request](https://github.com/Costben/BiliPai/pulls).
 
 ## Acknowledgements
 

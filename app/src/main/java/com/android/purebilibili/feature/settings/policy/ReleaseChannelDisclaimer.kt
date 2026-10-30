@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.dp
 import com.android.purebilibili.core.ui.AppAlertDialog
 import com.android.purebilibili.core.ui.components.AppTextButton
 
-const val OFFICIAL_GITHUB_URL = "https://github.com/jay3-yy/BiliPai/"
+const val OFFICIAL_GITHUB_URL = "https://github.com/Costben/BiliPai/"
 /** 官方 Telegram 频道（公告 / 发布） */
 const val OFFICIAL_TELEGRAM_CHANNEL_URL = "https://t.me/bilipai666"
 /** 官方 Telegram 交流群（话题入口） */

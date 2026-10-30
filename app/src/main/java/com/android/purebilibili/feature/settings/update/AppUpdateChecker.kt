@@ -96,7 +96,7 @@ internal data class AppUpdateReleaseCandidate(
 )
 
 object AppUpdateChecker {
-    private const val RELEASES_API = "https://api.github.com/repos/jay3-yy/BiliPai/releases"
+    private const val RELEASES_API = "https://api.github.com/repos/Costben/BiliPai/releases"
     private const val CONNECT_TIMEOUT_MS = 6000
     private const val READ_TIMEOUT_MS = 8000
     private val releaseJson = Json { ignoreUnknownKeys = true }
@@ -258,7 +258,7 @@ object AppUpdateChecker {
         if (tagName.isBlank()) return null
         val releaseUrl = releaseObject["html_url"]?.jsonPrimitive?.content
             ?.takeIf { it.isNotBlank() }
-            ?: "https://github.com/jay3-yy/BiliPai/releases"
+            ?: "https://github.com/Costben/BiliPai/releases"
         val releaseNotes = releaseObject["body"]?.jsonPrimitive?.content.orEmpty().trim()
         val publishedAt = releaseObject["published_at"]?.jsonPrimitive?.content?.takeIf { it.isNotBlank() }
         val isPrerelease = releaseObject["prerelease"]?.jsonPrimitive?.content?.toBooleanStrictOrNull() ?: false

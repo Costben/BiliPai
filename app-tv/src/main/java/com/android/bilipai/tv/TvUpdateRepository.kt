@@ -22,8 +22,8 @@ internal fun matchingTvRelease(metadata: JsonObject, assetNames: Set<String>, pa
 }
 
 object TvUpdateRepository {
-    const val feedbackUrl = "https://github.com/jay3-yy/BiliPai/issues/new"
-    private const val releases = "https://api.github.com/repos/jay3-yy/BiliPai/releases?per_page=20"
+    const val feedbackUrl = "https://github.com/Costben/BiliPai/issues/new"
+    private const val releases = "https://api.github.com/repos/Costben/BiliPai/releases?per_page=20"
     private fun read(url: String): String {
         require(url.startsWith("https://api.github.com/") || url.startsWith("https://github.com/")) { "发行地址无效" }
         return NetworkModule.okHttpClient.newCall(Request.Builder().url(url).header("Accept", "application/vnd.github+json").build())
@@ -43,7 +43,7 @@ object TvUpdateRepository {
                 if (!matchingTvRelease(metadata, assets.map { it["name"]!!.jsonPrimitive.content }.toSet(), context.packageName, local.longVersionCode)) return@mapNotNull null
                 val version = metadata["versionName"]?.jsonPrimitive?.content.orEmpty()
                 if (!ReleaseVersionPolicy.isRemoteNewer(local.versionName.orEmpty(), version)) return@mapNotNull null
-                val page = release["html_url"]?.jsonPrimitive?.content?.takeIf { it.startsWith("https://github.com/jay3-yy/BiliPai/releases/") }
+                val page = release["html_url"]?.jsonPrimitive?.content?.takeIf { it.startsWith("https://github.com/Costben/BiliPai/releases/") }
                     ?: return@mapNotNull null
                 Triple(metadata["versionCode"]!!.jsonPrimitive.long, version, page)
             }

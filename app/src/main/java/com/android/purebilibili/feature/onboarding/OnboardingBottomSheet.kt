@@ -275,11 +275,11 @@ fun OnboardingBottomSheet(
                     //  GitHub 链接
                     Spacer(modifier = Modifier.height(AppSpacingTokens.Medium))
                     AppText(
-                        "github.com/jay3-yy/BiliPai",
+                        "github.com/Costben/BiliPai",
                         style = MaterialTheme.typography.labelMedium,
                         color = AppContentColors.accent().copy(alpha = 0.8f),
                         modifier = Modifier.clickable {
-                            uriHandler.openUri("https://github.com/jay3-yy/BiliPai")
+                            uriHandler.openUri("https://github.com/Costben/BiliPai")
                         }
                     )
                 }

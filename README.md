@@ -12,7 +12,7 @@
 <img src="https://img.shields.io/badge/Android-8.0%2B-34C759?style=flat-square" alt="Android 8.0+" />
 <img src="https://img.shields.io/badge/License-GPLv3-FF3B30?style=flat-square" alt="GPLv3" />
 
-[下载](#下载与安装) · [Wiki](https://github.com/jay3-yy/BiliPai/wiki) · [Telegram 频道](https://t.me/bilipai666) · [Telegram 交流群](https://t.me/bilipai888/1)
+[下载](#下载与安装) · [Wiki](https://github.com/Costben/BiliPai/wiki) · [Telegram 频道](https://t.me/bilipai666) · [Telegram 交流群](https://t.me/bilipai888/1)
 
 </div>
 
@@ -79,7 +79,7 @@
 环境：JDK 21、Android SDK 37。
 
 ```bash
-git clone https://github.com/jay3-yy/BiliPai.git
+git clone https://github.com/Costben/BiliPai.git
 cd BiliPai
 ./gradlew :app:assembleDev
 ```
@@ -88,7 +88,7 @@ Miuix 依赖从 GitHub Packages 获取，需在本机 `~/.gradle/gradle.properti
 
 ## 参与贡献
 
-欢迎通过 [Issue](https://github.com/jay3-yy/BiliPai/issues/new/choose) 反馈问题、提出建议，也欢迎提交 [Pull Request](https://github.com/jay3-yy/BiliPai/pulls)，一起完善功能和翻译。
+欢迎通过 [Issue](https://github.com/Costben/BiliPai/issues/new/choose) 反馈问题、提出建议，也欢迎提交 [Pull Request](https://github.com/Costben/BiliPai/pulls)，一起完善功能和翻译。
 
 ## 致谢
 

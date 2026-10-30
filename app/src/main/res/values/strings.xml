@@ -185,7 +185,7 @@
     <string name="user_agreement_agree_continue">同意并继续</string>
     <string name="user_agreement_decline_exit">不同意并退出</string>
     <string name="user_agreement_section_open_source">一、软件性质与开源协议</string>
-    <string name="user_agreement_open_source_1">BiliPai 是一款基于 GNU GPL v3 协议开源的第三方哔哩哔哩客户端，源代码可在项目仓库（https://github.com/jay3-yy/BiliPai）公开获取。本应用与上海幻电信息科技有限公司（哔哩哔哩）无任何隶属、合作或授权关系，哔哩哔哩及相关名称、标识的权利归其各自权利人所有。本应用按“现状”提供，适用 GPL v3 的全部条款：在遵守 GPL v3 的前提下，您可自由使用、修改和再分发本应用；除 GPL v3 明文规定外，本应用不提供任何明示或默示的担保。您继续使用即表示同时接受本协议与 GPL v3 开源协议。</string>
+    <string name="user_agreement_open_source_1">BiliPai 是一款基于 GNU GPL v3 协议开源的第三方哔哩哔哩客户端，源代码可在项目仓库（https://github.com/Costben/BiliPai）公开获取。本应用与上海幻电信息科技有限公司（哔哩哔哩）无任何隶属、合作或授权关系，哔哩哔哩及相关名称、标识的权利归其各自权利人所有。本应用按“现状”提供，适用 GPL v3 的全部条款：在遵守 GPL v3 的前提下，您可自由使用、修改和再分发本应用；除 GPL v3 明文规定外，本应用不提供任何明示或默示的担保。您继续使用即表示同时接受本协议与 GPL v3 开源协议。</string>
     <string name="user_agreement_open_source_2">本应用是完全免费的软件：任何渠道均不得单独出售、付费下载、捆绑收费或以牟利为目的进行分发。任何个人或组织均有权依据 GPL v3 从项目仓库免费获取完整源代码；如您是通过付费途径获得本应用的，您已遭受倒卖行为，请勿相信此类商业宣传，并可向项目仓库举报相关售卖渠道。</string>
     <string name="user_agreement_section_privacy">二、隐私与数据处理</string>
     <string name="user_agreement_privacy_1">1. 本应用不设任何开发者服务器，不收集、不上传您的个人身份信息、浏览记录或登录凭据。</string>

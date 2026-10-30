@@ -61,7 +61,7 @@ class UserAgreementPolicyTest {
         val links = userAgreementChannelLinks(
             telegramChannelUrl = "https://t.me/bilipai666",
             telegramGroupUrl = "https://t.me/bilipai888/1",
-            githubUrl = "https://github.com/jay3-yy/BiliPai/",
+            githubUrl = "https://github.com/Costben/BiliPai/",
         )
         assertEquals(3, links.size)
         assertEquals(
