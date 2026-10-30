@@ -1,51 +1,23 @@
 package com.android.purebilibili.feature.home.components
 
 import io.github.suqi8.coui.kmp.basic.BottomFloatingRedDot
+import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class CouiAccessoryBottomBarPolicyTest {
 
     @Test
-    fun fiveItems_mapToStartBallThreeCapsuleItemsAndEndBall() {
-        val slots = resolveCouiAccessoryBottomBarSlots(
-            listOf(
-                BottomNavItem.HOME,
-                BottomNavItem.DYNAMIC,
-                BottomNavItem.HISTORY,
-                BottomNavItem.LISTEN_VIDEO,
-                BottomNavItem.PROFILE,
-            )
-        )
+    fun `bottom bar keeps every item in one continuous capsule`() {
+        val source = sourceText("CouiAccessoryBottomBar.kt")
 
-        assertEquals(BottomNavItem.HOME, slots.start)
-        assertEquals(
-            listOf(BottomNavItem.DYNAMIC, BottomNavItem.HISTORY, BottomNavItem.LISTEN_VIDEO),
-            slots.capsule,
-        )
-        assertEquals(BottomNavItem.PROFILE, slots.end)
-    }
-
-    @Test
-    fun customOrder_followsLeftToRightPositions() {
-        val slots = resolveCouiAccessoryBottomBarSlots(
-            listOf(BottomNavItem.PROFILE, BottomNavItem.HOME, BottomNavItem.DYNAMIC)
-        )
-
-        assertEquals(BottomNavItem.PROFILE, slots.start)
-        assertEquals(listOf(BottomNavItem.HOME), slots.capsule)
-        assertEquals(BottomNavItem.DYNAMIC, slots.end)
-    }
-
-    @Test
-    fun fewerThanThreeItems_stayInOneCapsule() {
-        val items = listOf(BottomNavItem.HOME, BottomNavItem.PROFILE)
-        val slots = resolveCouiAccessoryBottomBarSlots(items)
-
-        assertNull(slots.start)
-        assertEquals(items, slots.capsule)
-        assertNull(slots.end)
+        assertTrue(source.contains("BottomFloatingNavigationBar("))
+        assertFalse(source.contains("BottomFloatingAccessoryNavigationBar"))
+        assertFalse(source.contains("CouiBottomBarAccessory"))
+        assertFalse(source.contains("resolveCouiAccessoryBottomBarSlots"))
     }
 
     @Test
@@ -58,4 +30,9 @@ class CouiAccessoryBottomBarPolicyTest {
         assertNull(resolveCouiBottomBarRedDot(BottomNavItem.DYNAMIC, 0))
         assertNull(resolveCouiBottomBarRedDot(BottomNavItem.HOME, 12))
     }
+
+    private fun sourceText(fileName: String): String = listOf(
+        File("app/src/main/java/com/android/purebilibili/feature/home/components/$fileName"),
+        File("src/main/java/com/android/purebilibili/feature/home/components/$fileName"),
+    ).first { it.exists() }.readText()
 }

@@ -352,21 +352,7 @@ internal fun BiliPaiNavDisplayHost(
             gesturePoseEnabled = videoSharedReturnGestureFollowEnabled,
         )
     }
-    // 抓取返回卡片的瞬间给一次轻触觉反馈，强化“拿起来了”的跟手感。
-    if (videoSharedReturnGestureFollowEnabled || videoSharedReturnGestureTranslationEnabled) {
-        val followHapticFeedback = com.android.purebilibili.core.ui.rememberAppHapticFeedback(com.android.purebilibili.core.ui.AppHapticScene.NAVIGATION)
-        LaunchedEffect(videoCardTransitionProgress.gestureFollow) {
-            androidx.compose.runtime.snapshotFlow {
-                videoCardTransitionProgress.gestureFollow.grabEvent
-            }.collect { grabEvent ->
-                if (grabEvent > 0L) {
-                    followHapticFeedback.performHapticFeedback(
-                        androidx.compose.ui.hapticfeedback.HapticFeedbackType.TextHandleMove
-                    )
-                }
-            }
-        }
-    }
+    // 返回手势的振动交给系统（predictive back 自己会反馈），应用不再叠加一次。
     val navigationEventDispatcher = LocalNavigationEventDispatcherOwner.current?.navigationEventDispatcher
     LaunchedEffect(navigationEventDispatcher, videoCardTransitionProgress, cardMorphAvailable) {
         if (cardMorphAvailable &&
