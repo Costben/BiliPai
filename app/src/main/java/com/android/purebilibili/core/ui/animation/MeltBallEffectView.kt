@@ -133,7 +133,8 @@ internal class MeltBallEffectView private constructor(
         val drawAlpha = (fade * 255f).toInt()
         paint.alpha = drawAlpha
         haloPaint.alpha = drawAlpha
-        rimPaint.alpha = drawAlpha
+        // Paint.setAlpha 会覆盖颜色自带透明度，描边这里按原始 0x55 再乘整体淡出。
+        rimPaint.alpha = (0x55 * fade).toInt()
 
         drawHalo(canvas, centerX, centerY, radius, p)
         drawNeck(canvas, centerX, centerY, radius, targetX, targetY, p)
