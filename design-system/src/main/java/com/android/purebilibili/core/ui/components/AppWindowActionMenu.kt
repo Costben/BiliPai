@@ -1,5 +1,7 @@
 package com.android.purebilibili.core.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
@@ -20,9 +22,6 @@ import io.github.suqi8.coui.kmp.window.WindowCascadingListPopup
 import io.github.suqi8.coui.kmp.basic.DropdownEntry
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.theme.AppUiStyle
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.runtime.key
 import io.github.suqi8.coui.kmp.window.WindowListPopup
 import com.android.purebilibili.core.theme.usesMiuixFamilySkin
@@ -242,7 +241,7 @@ private fun AppCompactWindowActionMenu(
                         dismissOnClick = false,
                         onClick = { parentActions = parentActions.dropLast(1) },
                         leadingIcon = {
-                            AppIcon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
+                            AppIcon(AppIcons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                         },
                     )
                 }
@@ -271,7 +270,7 @@ private fun AppCompactWindowActionMenu(
                             trailingIcon = if (action.children.isNotEmpty()) {
                                 {
                                     AppIcon(
-                                        Icons.AutoMirrored.Filled.ArrowForward,
+                                        AppIcons.AutoMirrored.Filled.ArrowForward,
                                         contentDescription = null,
                                     )
                                 }

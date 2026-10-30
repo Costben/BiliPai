@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import android.widget.Toast
@@ -26,11 +28,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.outlined.ChatBubbleOutline
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -277,7 +274,7 @@ fun CommentSearchSheet(
                         modifier = Modifier.size(36.dp),
                     ) {
                         AppIcon(
-                            imageVector = Icons.Default.Close,
+                            imageVector = AppIcons.Filled.Close,
                             contentDescription = "关闭",
                             modifier = Modifier.size(20.dp),
                         )
@@ -392,7 +389,7 @@ fun CommentSearchSheet(
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             AppIcon(
-                                imageVector = Icons.Outlined.Search,
+                                imageVector = AppIcons.Outlined.Search,
                                 contentDescription = null,
                                 modifier = Modifier.size(42.dp),
                                 tint = AppContentColors.secondaryText().copy(alpha = 0.35f),
@@ -650,7 +647,7 @@ private fun CommentSearchResultRow(
                         if (item.like > 0) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 AppIcon(
-                                    imageVector = Icons.Outlined.ThumbUp,
+                                    imageVector = AppIcons.Outlined.ThumbUp,
                                     contentDescription = "点赞",
                                     modifier = Modifier.size(13.dp),
                                     tint = AppContentColors.secondaryText().copy(alpha = 0.6f),
@@ -668,7 +665,7 @@ private fun CommentSearchResultRow(
                         if (item.rcount > 0) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 AppIcon(
-                                    imageVector = Icons.Outlined.ChatBubbleOutline,
+                                    imageVector = AppIcons.Outlined.ChatBubbleOutline,
                                     contentDescription = "回复",
                                     modifier = Modifier.size(13.dp),
                                     tint = AppContentColors.secondaryText().copy(alpha = 0.6f),

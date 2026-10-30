@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.live
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.navigation.tabSelectedPage
 import com.android.purebilibili.navigation.tabIndicatorPosition
 import com.android.purebilibili.core.ui.AppSurfaceTokens
@@ -17,11 +19,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.outlined.Remove
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -121,7 +118,7 @@ internal fun LiveAreaScreen(
         topBar = {
             AppTopBar(
                 title = "全部标签",
-                navigationIcon = { AppIconButton(onClick = onBack) { AppIcon(Icons.AutoMirrored.Outlined.ArrowBack, "返回") } },
+                navigationIcon = { AppIconButton(onClick = onBack) { AppIcon(AppIcons.AutoMirrored.Outlined.ArrowBack, "返回") } },
                 actions = {
                     AppTextButton(enabled = !loading && !saving && favoritesError == null, onClick = { if (editing) finishEditing() else editing = true }) {
                         AppText(if (saving) "保存中…" else if (editing) "完成" else "编辑")
@@ -377,7 +374,7 @@ private fun LiveAreaGridItem(
                     .size(17.dp)
             ) {
                 AppIcon(
-                    imageVector = if (isFavorite) Icons.Outlined.Check else Icons.Outlined.Add,
+                    imageVector = if (isFavorite) AppIcons.Outlined.Check else AppIcons.Outlined.Add,
                     contentDescription = if (isFavorite) "取消收藏" else "收藏标签",
                     tint = if (isFavorite) colorScheme.onSurfaceVariant else colorScheme.onSurface,
                     modifier = Modifier.padding(AppSpacingTokens.Micro)

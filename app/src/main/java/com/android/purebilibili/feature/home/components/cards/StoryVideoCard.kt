@@ -86,8 +86,6 @@ import com.android.purebilibili.core.ui.transition.videoCardShellSharedBoundsOrE
 import com.android.purebilibili.feature.home.HomeCoverRequestSpec
 import com.android.purebilibili.feature.home.resolveHomeCoverImageSource
 import com.android.purebilibili.feature.home.resolveHomeCardEnterAnimationEnabledAtMount
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
 import kotlin.math.roundToInt
 
 /**

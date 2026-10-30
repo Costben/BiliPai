@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.live
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.navigation.tabSelectedPage
 import com.android.purebilibili.navigation.tabIndicatorPosition
 import com.android.purebilibili.core.ui.components.appCountedTabOption
@@ -20,10 +22,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -207,7 +205,7 @@ fun LiveSearchScreen(
                         .padding(horizontal = spec.homeMetrics.safeSpaceDp.dp, vertical = AppSpacingTokens.ExtraSmall),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    AppIconButton(onClick = onBack) { AppIcon(Icons.AutoMirrored.Outlined.ArrowBack, "返回") }
+                    AppIconButton(onClick = onBack) { AppIcon(AppIcons.AutoMirrored.Outlined.ArrowBack, "返回") }
                     BasicTextField(
                         value = query,
                         onValueChange = { if (it.isEmpty()) clear() else query = it },
@@ -225,10 +223,10 @@ fun LiveSearchScreen(
                         },
                     )
                     AppIconButton(onClick = { if (query.isEmpty()) onBack() else { clear(); focusRequester.requestFocus(); keyboard?.show() } }) {
-                        AppIcon(Icons.Outlined.Close, "清空")
+                        AppIcon(AppIcons.Outlined.Close, "清空")
                     }
                     AppIconButton(onClick = { submit() }, enabled = query.isNotBlank()) {
-                        AppIcon(Icons.Outlined.Search, "搜索")
+                        AppIcon(AppIcons.Outlined.Search, "搜索")
                     }
                 }
                 if (submitted) {

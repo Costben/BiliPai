@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.screen
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.navigation.tabSelectedPage
 import com.android.purebilibili.navigation.tabIndicatorPosition
 import com.android.purebilibili.feature.video.ui.components.RelatedVideoList
@@ -55,12 +57,6 @@ import com.android.purebilibili.core.ui.components.AppHorizontalPager as Horizon
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.PlaylistPlay
-import androidx.compose.material.icons.outlined.ChatBubbleOutline
-import androidx.compose.material.icons.outlined.KeyboardDoubleArrowLeft
-import androidx.compose.material.icons.outlined.KeyboardDoubleArrowRight
-import androidx.compose.material.icons.outlined.PlaylistPlay
 import com.android.purebilibili.core.ui.AdaptivePullToRefreshBox
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppIconButton
@@ -1184,9 +1180,9 @@ private fun CinemaSideCurtain(
                 ) {
                     AppIcon(
                         imageVector = if (targetState == TabletSideCurtainState.OPEN) {
-                            Icons.Outlined.KeyboardDoubleArrowRight
+                            AppIcons.Outlined.KeyboardDoubleArrowRight
                         } else {
-                            Icons.Outlined.KeyboardDoubleArrowLeft
+                            AppIcons.Outlined.KeyboardDoubleArrowLeft
                         },
                         contentDescription = "切换侧栏",
                         tint = AppContentColors.secondaryText()
@@ -1213,14 +1209,14 @@ private fun CinemaSideCurtain(
                         ) {
                             AppIconButton(onClick = { onTabSelected(0) }) {
                                 AppIcon(
-                                    imageVector = Icons.Outlined.ChatBubbleOutline,
+                                    imageVector = AppIcons.Outlined.ChatBubbleOutline,
                                     contentDescription = "comments"
                                 )
                             }
                             Spacer(modifier = Modifier.height(10.dp))
                             AppIconButton(onClick = { onTabSelected(1) }) {
                                 AppIcon(
-                                    imageVector = Icons.AutoMirrored.Outlined.PlaylistPlay,
+                                    imageVector = AppIcons.AutoMirrored.Outlined.PlaylistPlay,
                                     contentDescription = "related videos"
                                 )
                             }

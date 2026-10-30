@@ -1,6 +1,8 @@
 // 文件路径: feature/home/components/BottomBar.kt
 package com.android.purebilibili.feature.home.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.animation.rememberLiquidIndicatorWobble
 import com.android.purebilibili.core.ui.animation.liquidWobbleScaleX
 import com.android.purebilibili.core.ui.animation.liquidWobbleScaleY
@@ -49,31 +51,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.MenuOpen
-import androidx.compose.material.icons.filled.CollectionsBookmark
-import androidx.compose.material.icons.filled.Extension
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.LiveTv
-import androidx.compose.material.icons.filled.LibraryMusic
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.PlayCircle
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.WatchLater
-import androidx.compose.material.icons.outlined.CollectionsBookmark
-import androidx.compose.material.icons.outlined.Extension
-import androidx.compose.material.icons.outlined.History
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.LiveTv
-import androidx.compose.material.icons.outlined.LibraryMusic
-import androidx.compose.material.icons.outlined.NotificationsNone
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.PlayCircleOutline
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.WatchLater
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.appSearchElasticPress
 import com.android.purebilibili.core.ui.components.appElasticPress
@@ -2704,7 +2681,7 @@ private fun MaterialBottomBar(
                         icon = {
                             if (showIcon) {
                                 AppIcon(
-                                    imageVector = Icons.AutoMirrored.Outlined.MenuOpen,
+                                    imageVector = AppIcons.AutoMirrored.Outlined.MenuOpen,
                                     contentDescription = sidebarLabel
                                 )
                             } else {
@@ -2863,7 +2840,7 @@ private fun OfficialMd3FloatingToolbarContent(
                     },
                 ) {
                     AppIcon(
-                        imageVector = Icons.AutoMirrored.Outlined.MenuOpen,
+                        imageVector = AppIcons.AutoMirrored.Outlined.MenuOpen,
                         contentDescription = stringResource(R.string.sidebar_toggle),
                     )
                 }
@@ -4450,7 +4427,7 @@ private fun ColumnScope.FloatingBottomBarTabVisual(
                     imageVector = if (iconStyle == SharedFloatingBottomBarIconStyle.MIUIX) {
                         resolveMiuixPreferredHomeNavigationIcon(tabId = "PARTITION")
                     } else {
-                        Icons.AutoMirrored.Outlined.MenuOpen
+                        AppIcons.AutoMirrored.Outlined.MenuOpen
                     },
                     contentDescription = label,
                     tint = contentColor
@@ -4965,7 +4942,7 @@ internal fun BiliPaiBottomBarSearchVisualContent(
                 imageVector = if (iconStyle == SharedFloatingBottomBarIconStyle.MIUIX) {
                     COUIIcons.Search
                 } else {
-                    Icons.Outlined.Search
+                    AppIcons.Outlined.Search
                 },
                 contentDescription = "搜索",
                 tint = contentColor,
@@ -5205,7 +5182,7 @@ private fun RowScope.AndroidNativeBottomBarItem(
                             }
                             item == null -> {
                                 AppIcon(
-                                    imageVector = Icons.AutoMirrored.Outlined.MenuOpen,
+                                    imageVector = AppIcons.AutoMirrored.Outlined.MenuOpen,
                                     contentDescription = label
                                 )
                             }
@@ -5271,17 +5248,17 @@ internal fun resolveMaterialBottomBarIcon(
     item: BottomNavItem,
     selected: Boolean
 ): ImageVector = when (item) {
-    BottomNavItem.HOME -> if (selected) Icons.Filled.Home else Icons.Outlined.Home
-    BottomNavItem.DYNAMIC -> if (selected) Icons.Filled.Notifications else Icons.Outlined.NotificationsNone
-    BottomNavItem.STORY -> if (selected) Icons.Filled.PlayCircle else Icons.Outlined.PlayCircleOutline
-    BottomNavItem.HISTORY -> if (selected) Icons.Filled.History else Icons.Outlined.History
-    BottomNavItem.LISTEN_VIDEO -> if (selected) Icons.Filled.LibraryMusic else Icons.Outlined.LibraryMusic
-    BottomNavItem.PROFILE -> if (selected) Icons.Filled.Person else Icons.Outlined.Person
-    BottomNavItem.FAVORITE -> if (selected) Icons.Filled.CollectionsBookmark else Icons.Outlined.CollectionsBookmark
-    BottomNavItem.LIVE -> if (selected) Icons.Filled.LiveTv else Icons.Outlined.LiveTv
-    BottomNavItem.WATCHLATER -> if (selected) Icons.Filled.WatchLater else Icons.Outlined.WatchLater
-    BottomNavItem.SETTINGS -> if (selected) Icons.Filled.Settings else Icons.Outlined.Settings
-    BottomNavItem.PLUGINS -> if (selected) Icons.Filled.Extension else Icons.Outlined.Extension
+    BottomNavItem.HOME -> if (selected) AppIcons.Filled.Home else AppIcons.Outlined.Home
+    BottomNavItem.DYNAMIC -> if (selected) AppIcons.Filled.Notifications else AppIcons.Outlined.NotificationsNone
+    BottomNavItem.STORY -> if (selected) AppIcons.Filled.PlayCircle else AppIcons.Outlined.PlayCircleOutline
+    BottomNavItem.HISTORY -> if (selected) AppIcons.Filled.History else AppIcons.Outlined.History
+    BottomNavItem.LISTEN_VIDEO -> if (selected) AppIcons.Filled.LibraryMusic else AppIcons.Outlined.LibraryMusic
+    BottomNavItem.PROFILE -> if (selected) AppIcons.Filled.Person else AppIcons.Outlined.Person
+    BottomNavItem.FAVORITE -> if (selected) AppIcons.Filled.CollectionsBookmark else AppIcons.Outlined.CollectionsBookmark
+    BottomNavItem.LIVE -> if (selected) AppIcons.Filled.LiveTv else AppIcons.Outlined.LiveTv
+    BottomNavItem.WATCHLATER -> if (selected) AppIcons.Filled.WatchLater else AppIcons.Outlined.WatchLater
+    BottomNavItem.SETTINGS -> if (selected) AppIcons.Filled.Settings else AppIcons.Outlined.Settings
+    BottomNavItem.PLUGINS -> if (selected) AppIcons.Filled.Extension else AppIcons.Outlined.Extension
 }
 
 @Composable
@@ -5304,7 +5281,7 @@ internal fun resolveSharedBottomBarIcon(
 internal fun resolveSharedBottomBarSidebarIcon(
     iconStyle: SharedFloatingBottomBarIconStyle
 ): ImageVector = when (iconStyle) {
-    SharedFloatingBottomBarIconStyle.MATERIAL -> Icons.AutoMirrored.Outlined.MenuOpen
+    SharedFloatingBottomBarIconStyle.MATERIAL -> AppIcons.AutoMirrored.Outlined.MenuOpen
     SharedFloatingBottomBarIconStyle.MIUIX ->
         resolveMiuixPreferredHomeNavigationIcon(tabId = "PARTITION")
 }

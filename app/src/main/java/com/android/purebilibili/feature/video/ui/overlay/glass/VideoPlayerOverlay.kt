@@ -1,6 +1,8 @@
 // 文件路径: feature/video/VideoPlayerOverlay.kt
 package com.android.purebilibili.feature.video.ui.overlay.glass
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.feature.video.ui.overlay.*
 
 import com.android.purebilibili.core.ui.components.rememberFollowActionWithConfirmation
@@ -31,12 +33,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChatBubble
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
 import androidx.compose.material3.*
 import com.android.purebilibili.core.ui.components.appGlassMenuSource
 import androidx.compose.runtime.*
@@ -418,8 +414,8 @@ internal fun FullscreenLockButton(
                 Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                     AppIcon(
                         imageVector = when (visualState.icon) {
-                            FullscreenLockButtonIcon.LOCKED -> Icons.Outlined.Lock
-                            FullscreenLockButtonIcon.UNLOCKED -> Icons.Outlined.LockOpen
+                            FullscreenLockButtonIcon.LOCKED -> AppIcons.Outlined.Lock
+                            FullscreenLockButtonIcon.UNLOCKED -> AppIcons.Outlined.LockOpen
                         },
                         contentDescription = visualState.contentDescription,
                         tint = foreground,
@@ -1827,7 +1823,7 @@ private fun VideoPlayerOverlayContent(
                     ) {
                         Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                             AppIcon(
-                                imageVector = Icons.Outlined.Camera,
+                                imageVector = AppIcons.Outlined.Camera,
                                 contentDescription = "截图",
                                 tint = Color.White,
                                 modifier = Modifier.size(overlayVisualPolicy.lockIconSizeDp.dp)
@@ -2008,7 +2004,7 @@ private fun VideoPlayerOverlayContent(
                             }
                         ) {
                             AppIcon(
-                                imageVector = Icons.Outlined.Close,
+                                imageVector = AppIcons.Outlined.Close,
                                 contentDescription = "关闭卡顿提示"
                             )
                         }
@@ -2683,7 +2679,7 @@ private fun PortraitTopBar(
                     modifier = Modifier.size(layoutPolicy.buttonSizeDp.dp)
                 ) {
                     AppIcon(
-                        imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowLeft,
+                        imageVector = AppIcons.AutoMirrored.Outlined.KeyboardArrowLeft,
                         contentDescription = "返回",
                         tint = Color.White,
                         modifier = Modifier.size(layoutPolicy.iconSizeDp.dp)
@@ -2718,7 +2714,7 @@ private fun PortraitTopBar(
                         )
                 ) {
                     AppIcon(
-                        imageVector = Icons.Outlined.Headphones,
+                        imageVector = AppIcons.Outlined.Headphones,
                         contentDescription = "听视频",
                         tint = if (isAudioOnly) AppContentColors.onAccent() else Color.White,
                         modifier = Modifier.size(layoutPolicy.iconSizeDp.dp)
@@ -2731,7 +2727,7 @@ private fun PortraitTopBar(
                         modifier = Modifier.size(layoutPolicy.buttonSizeDp.dp)
                     ) {
                         AppIcon(
-                            imageVector = Icons.Outlined.Tv,
+                            imageVector = AppIcons.Outlined.Tv,
                             contentDescription = "投屏",
                             tint = Color.White,
                             modifier = Modifier.size(layoutPolicy.iconSizeDp.dp)
@@ -2891,7 +2887,7 @@ private fun PlaybackInsightPanel(
                 }
                 AppIconButton(onClick = onDismiss) {
                     AppIcon(
-                        imageVector = Icons.Outlined.Close,
+                        imageVector = AppIcons.Outlined.Close,
                         contentDescription = "关闭"
                     )
                 }
@@ -3620,7 +3616,7 @@ private fun LandscapeEpisodeItem(
             // 无封面时的占位 (或纯文本模式)
              if (isCurrent) {
                 AppIcon(
-                    imageVector = Icons.Outlined.PlayArrow,
+                    imageVector = AppIcons.Outlined.PlayArrow,
                     contentDescription = null,
                     tint = AppContentColors.accent(),
                     modifier = Modifier.size(layoutPolicy.metaIconSizeDp.dp)
@@ -3666,7 +3662,7 @@ private fun LandscapeEpisodeItem(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     // 播放量
                     AppIcon(
-                        imageVector = Icons.Outlined.PlayCircle,
+                        imageVector = AppIcons.Outlined.PlayCircle,
                         contentDescription = null,
                         tint = AppContentColors.secondaryText(),
                         modifier = Modifier.size(layoutPolicy.metaIconSizeDp.dp)
@@ -3682,7 +3678,7 @@ private fun LandscapeEpisodeItem(
 
                     // 弹幕
                     AppIcon(
-                        imageVector = Icons.Filled.ChatBubble,
+                        imageVector = AppIcons.Filled.ChatBubble,
                         contentDescription = null,
                         tint = AppContentColors.secondaryText(),
                         modifier = Modifier.size(layoutPolicy.metaIconSizeDp.dp)

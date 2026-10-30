@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.list
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.components.appActionWithFeedback
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -20,8 +22,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import com.android.purebilibili.core.ui.components.AppLazyVerticalStaggeredGrid as LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppFloatingToolbar
 import androidx.compose.foundation.layout.Row
@@ -643,7 +643,7 @@ private fun FavoritePgcCard(
                         onClick = onRemove,
                         modifier = Modifier.align(Alignment.TopEnd),
                     ) {
-                        AppIcon(Icons.Rounded.Close, contentDescription = "取消收藏")
+                        AppIcon(AppIcons.Rounded.Close, contentDescription = "取消收藏")
                     }
                 } else {
                     AppCheckbox(
@@ -736,7 +736,7 @@ private fun FavoriteGenericCategoryCard(
         trailingContent = if (batchMode) null else {
             {
                 AppIconButton(onClick = onRemove) {
-                    AppIcon(Icons.Rounded.Close, contentDescription = "移除收藏")
+                    AppIcon(AppIcons.Rounded.Close, contentDescription = "移除收藏")
                 }
             }
         },

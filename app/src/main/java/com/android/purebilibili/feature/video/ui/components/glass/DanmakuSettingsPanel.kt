@@ -1,6 +1,8 @@
 // File: feature/video/ui/components/DanmakuSettingsPanel.kt
 package com.android.purebilibili.feature.video.ui.components.glass
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.feature.video.ui.components.*
 
 import com.android.purebilibili.core.ui.LocalAppThemeConfig
@@ -47,10 +49,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -665,7 +663,7 @@ private fun DanmakuBlockManagerDialog(
                             .background(panelColors.resetButtonBackgroundColor, CircleShape)
                     ) {
                         AppIcon(
-                            Icons.Outlined.Close,
+                            AppIcons.Outlined.Close,
                             contentDescription = "关闭",
                             tint = panelColors.resetButtonColor,
                             modifier = Modifier.size(18.dp)
@@ -1132,7 +1130,7 @@ private fun DanmakuSliderItem(
                             .background(colors.resetButtonBackgroundColor, CircleShape)
                     ) {
                         AppIcon(
-                            imageVector = Icons.Outlined.Refresh,
+                            imageVector = AppIcons.Outlined.Refresh,
                             contentDescription = "重置",
                             tint = colors.resetButtonColor,
                             modifier = Modifier.size(20.dp)

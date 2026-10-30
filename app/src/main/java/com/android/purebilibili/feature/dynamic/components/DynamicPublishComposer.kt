@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.dynamic.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
@@ -27,12 +29,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Image
-import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.Visibility
-import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -373,7 +369,7 @@ fun DynamicPublishComposer(
                                 enabled = !submitting,
                             ) {
                                 AppIcon(
-                                    if (privatePublish) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
+                                    if (privatePublish) AppIcons.Outlined.VisibilityOff else AppIcons.Outlined.Visibility,
                                     contentDescription = null,
                                 )
                                 AppText(if (privatePublish) "仅自己可见" else "所有人可见")
@@ -440,7 +436,7 @@ fun DynamicPublishComposer(
                                         enabled = !submitting,
                                         modifier = Modifier.align(Alignment.BottomEnd).size(AppChromeSizeTokens.MinimumTouchTarget),
                                     ) {
-                                        AppIcon(Icons.Outlined.Edit, contentDescription = "裁剪图片")
+                                        AppIcon(AppIcons.Outlined.Edit, contentDescription = "裁剪图片")
                                     }
                                     AppIconButton(
                                         onClick = { imageUris = imageUris - uri },
@@ -470,7 +466,7 @@ fun DynamicPublishComposer(
                                             modifier = Modifier.fillMaxSize(),
                                             contentAlignment = Alignment.Center,
                                         ) {
-                                            AppIcon(Icons.Outlined.Add, contentDescription = "添加图片")
+                                            AppIcon(AppIcons.Outlined.Add, contentDescription = "添加图片")
                                         }
                                     }
                                 }
@@ -505,7 +501,7 @@ fun DynamicPublishComposer(
                             },
                             enabled = !submitting && imageUris.size < MAX_DYNAMIC_IMAGES,
                         ) {
-                            AppIcon(Icons.Outlined.Image, contentDescription = null)
+                            AppIcon(AppIcons.Outlined.Image, contentDescription = null)
                             AppText("图片 ${imageUris.size}/$MAX_DYNAMIC_IMAGES")
                         }
                     }

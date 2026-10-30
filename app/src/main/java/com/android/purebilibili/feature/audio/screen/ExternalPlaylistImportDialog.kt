@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.audio.screen
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.AppAlertDialog
 import com.android.purebilibili.core.ui.components.appElasticPress
@@ -22,9 +24,6 @@ import androidx.compose.foundation.layout.width
 import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.Edit
 import com.android.purebilibili.core.ui.components.AppButton as Button
 import com.android.purebilibili.core.ui.components.AppCard as Card
 import com.android.purebilibili.core.ui.components.AppCardDefaults as CardDefaults
@@ -382,7 +381,7 @@ fun ExternalPlaylistImportDialog(
                         modifier = Modifier.weight(1f),
                     )
                     IconButton(onClick = onDismiss, modifier = Modifier.appElasticPress()) {
-                        Icon(Icons.Outlined.Close, contentDescription = "关闭")
+                        Icon(AppIcons.Outlined.Close, contentDescription = "关闭")
                     }
                 }
                 Spacer(Modifier.height(8.dp))
@@ -692,7 +691,7 @@ fun ExternalPlaylistImportDialog(
                                                 enabled = matchResults.isNotEmpty() && !matching && !favoriting,
                                             ),
                                         ) {
-                                            Icon(Icons.Outlined.Edit, contentDescription = "手动修正")
+                                            Icon(AppIcons.Outlined.Edit, contentDescription = "手动修正")
                                         }
                                     }
                                 }

@@ -1,6 +1,8 @@
 // File: feature/video/ui/components/DanmakuPoolSheet.kt
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import com.android.purebilibili.core.ui.components.appSearchElasticPress
@@ -18,16 +20,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Block
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Report
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.outlined.ContentCopy
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -178,7 +170,7 @@ fun DanmakuPoolSheet(
                         modifier = Modifier.size(36.dp),
                     ) {
                         AppIcon(
-                            imageVector = Icons.Default.Close,
+                            imageVector = AppIcons.Filled.Close,
                             contentDescription = "关闭",
                             modifier = Modifier.size(20.dp),
                         )
@@ -203,7 +195,7 @@ fun DanmakuPoolSheet(
                 },
                 leadingIcon = {
                     AppIcon(
-                        imageVector = Icons.Default.Search,
+                        imageVector = AppIcons.Filled.Search,
                         contentDescription = "搜索",
                         modifier = Modifier.size(18.dp),
                         tint = AppContentColors.secondaryText(),
@@ -216,7 +208,7 @@ fun DanmakuPoolSheet(
                             modifier = Modifier.size(28.dp),
                         ) {
                             AppIcon(
-                                imageVector = Icons.Default.Close,
+                                imageVector = AppIcons.Filled.Close,
                                 contentDescription = "清空",
                                 modifier = Modifier.size(16.dp),
                             )
@@ -346,7 +338,7 @@ fun DanmakuPoolSheet(
                                 .padding(vertical = 8.dp),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            AppIcon(Icons.Outlined.PlayArrow, contentDescription = null, modifier = Modifier.size(20.dp))
+                            AppIcon(AppIcons.Outlined.PlayArrow, contentDescription = null, modifier = Modifier.size(20.dp))
                             Spacer(modifier = Modifier.width(10.dp))
                             AppText(
                                 text = "跳转到该时间 (${FormatUtils.formatDuration(item.showAtTime)})",
@@ -382,7 +374,7 @@ fun DanmakuPoolSheet(
                                 .padding(vertical = 8.dp),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            AppIcon(Icons.Outlined.ContentCopy, contentDescription = null, modifier = Modifier.size(20.dp))
+                            AppIcon(AppIcons.Outlined.ContentCopy, contentDescription = null, modifier = Modifier.size(20.dp))
                             Spacer(modifier = Modifier.width(10.dp))
                             AppText(text = "复制弹幕内容", style = MaterialTheme.typography.bodyMedium)
                         }
@@ -400,7 +392,7 @@ fun DanmakuPoolSheet(
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 AppIcon(
-                                    Icons.Outlined.Delete,
+                                    AppIcons.Outlined.Delete,
                                     contentDescription = null,
                                     modifier = Modifier.size(20.dp),
                                     tint = AppContentColors.error(),
@@ -427,7 +419,7 @@ fun DanmakuPoolSheet(
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 AppIcon(
-                                    Icons.Filled.Block,
+                                    AppIcons.Filled.Block,
                                     contentDescription = null,
                                     modifier = Modifier.size(20.dp),
                                 )
@@ -446,7 +438,7 @@ fun DanmakuPoolSheet(
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
                                 AppIcon(
-                                    Icons.Filled.Report,
+                                    AppIcons.Filled.Report,
                                     contentDescription = null,
                                     modifier = Modifier.size(20.dp),
                                     tint = AppContentColors.error(),
@@ -591,7 +583,7 @@ private fun DanmakuPoolItemRow(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 AppIcon(
-                    imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                    imageVector = if (isLiked) AppIcons.Filled.Favorite else AppIcons.Outlined.FavoriteBorder,
                     contentDescription = "赞同",
                     modifier = Modifier.size(16.dp),
                     tint = if (isLiked) AppContentColors.accent() else AppContentColors.secondaryText(),

@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.plugin.googlecast
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.plugin.BuiltinPluginIds
 
 import android.content.Context
@@ -16,8 +18,6 @@ import com.android.purebilibili.plugin.sdk.PluginCapability
 import com.android.purebilibili.plugin.sdk.PluginCapabilityManifest
 import com.android.purebilibili.core.util.Logger
 import com.google.android.gms.cast.framework.CastContext
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Cast
 import kotlinx.coroutines.flow.StateFlow
 
 private const val TAG = "GoogleCastPlugin"
@@ -35,7 +35,7 @@ class GoogleCastPlugin : BuiltinPlugin, CastPluginApi {
     // This plugin uses an app-owned route list, not the system Output Switcher.
     override val discoveryRequirement: CastDiscoveryRequirement
         get() = resolveGoogleCastDiscoveryRequirement(Build.VERSION.SDK_INT)
-    override val icon: ImageVector = Icons.Rounded.Cast
+    override val icon: ImageVector = AppIcons.Rounded.Cast
     override val capabilityManifest: PluginCapabilityManifest = PluginCapabilityManifest(
         pluginId = id,
         displayName = name,

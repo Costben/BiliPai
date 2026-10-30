@@ -1,5 +1,7 @@
 package com.android.purebilibili.core.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.animateBounds
 import androidx.compose.animation.core.spring
@@ -7,9 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.lazy.grid.LazyGridItemScope
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridItemScope
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.GridView
-import androidx.compose.material.icons.outlined.ViewAgenda
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -112,7 +111,7 @@ internal fun VideoListLayoutToggle(
 ) {
     AppIconButton(onClick = onClick, modifier = modifier, enabled = enabled) {
         AppIcon(
-            imageVector = if (singleColumn) Icons.Outlined.GridView else Icons.Outlined.ViewAgenda,
+            imageVector = if (singleColumn) AppIcons.Outlined.GridView else AppIcons.Outlined.ViewAgenda,
             contentDescription = if (singleColumn) "切换为双列" else "切换为单列",
             modifier = iconModifier,
         )

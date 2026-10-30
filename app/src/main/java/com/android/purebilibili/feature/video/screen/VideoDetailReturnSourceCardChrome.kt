@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.screen
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.compose.foundation.background
@@ -17,11 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Alarm
-import androidx.compose.material.icons.outlined.PlayCircle
-import androidx.compose.material.icons.outlined.Subtitles
-import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -828,7 +825,7 @@ private fun BoxScope.LandingCoverChrome(
                 ),
             ) {
                 LandingCoverStat(
-                    icon = Icons.Outlined.PlayCircle,
+                    icon = AppIcons.Outlined.PlayCircle,
                     text = model.viewText,
                     minWidth = resolveVideoCardPrimaryStatBadgeMinWidthDp(model.viewText).dp,
                     useGlass = presentation.useGlassStats,
@@ -836,7 +833,7 @@ private fun BoxScope.LandingCoverChrome(
                 )
                 if (presentation.showSecondaryStatOnCover && model.danmakuText.isNotBlank()) {
                     LandingCoverStat(
-                        icon = Icons.Outlined.Subtitles,
+                        icon = AppIcons.Outlined.Subtitles,
                         text = model.danmakuText,
                         minWidth = resolveVideoCardSecondaryStatBadgeMinWidthDp(
                             model.danmakuText,
@@ -847,7 +844,7 @@ private fun BoxScope.LandingCoverChrome(
                 }
                 if (presentation.showOnlineCountOnCover) {
                     LandingCoverStat(
-                        icon = Icons.Outlined.Visibility,
+                        icon = AppIcons.Outlined.Visibility,
                         text = presentation.onlineCountText,
                         useGlass = presentation.useGlassStats,
                         textStyle = overlayStyle,
@@ -855,7 +852,7 @@ private fun BoxScope.LandingCoverChrome(
                 }
                 if (presentation.showDurationAsStat && model.durationText.isNotBlank()) {
                     LandingCoverStat(
-                        icon = Icons.Outlined.Alarm,
+                        icon = AppIcons.Outlined.Alarm,
                         text = model.durationText,
                         useGlass = presentation.useGlassStats,
                         textStyle = overlayStyle,

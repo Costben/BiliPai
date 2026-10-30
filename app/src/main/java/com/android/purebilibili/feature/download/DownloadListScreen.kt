@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.download
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.components.AppTextButton as TextButton
 
 import com.android.purebilibili.core.util.rememberHapticFeedback
@@ -43,8 +45,6 @@ import com.android.purebilibili.core.ui.components.AppLazyVerticalGrid as LazyVe
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 //  Material Icons
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -721,7 +721,7 @@ private fun DownloadTaskItem(
                 if (task.isDownloading || task.canResume) {
                     AppIconButton(onClick = onPauseResume) {
                         AppIcon(
-                            imageVector = if (task.isDownloading) Icons.Outlined.Pause else Icons.Outlined.PlayArrow,
+                            imageVector = if (task.isDownloading) AppIcons.Outlined.Pause else AppIcons.Outlined.PlayArrow,
                             contentDescription = if (task.isDownloading) "暂停" else "继续",
                             tint = AppContentColors.accent()
                         )
@@ -731,7 +731,7 @@ private fun DownloadTaskItem(
                 // 删除
                 AppIconButton(onClick = onDelete) {
                     AppIcon(
-                        imageVector = Icons.Outlined.Delete,
+                        imageVector = AppIcons.Outlined.Delete,
                         contentDescription = "删除",
                         tint = AppContentColors.error()
                     )

@@ -1,6 +1,8 @@
 // 文件路径: feature/video/ui/components/CommentFraudDialog.kt
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppText
@@ -18,8 +20,6 @@ import com.android.purebilibili.core.ui.AdaptiveLoadingIndicator
 import com.android.purebilibili.core.ui.AppAlertDialog
 import com.android.purebilibili.core.ui.components.AppTextButton
 import com.android.purebilibili.data.model.CommentFraudStatus
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
 
 /**
  * [新增] 评论反诈检测结果弹窗
@@ -34,37 +34,37 @@ fun CommentFraudResultDialog(
     val (icon, title, description, color) = remember(status) {
         when (status) {
             CommentFraudStatus.NORMAL -> FraudDialogInfo(
-                icon = Icons.Outlined.CheckCircle,
+                icon = AppIcons.Outlined.CheckCircle,
                 title = "评论正常",
                 description = "您的评论可以被其他用户正常看到。",
                 color = FraudStatusColor.GREEN
             )
             CommentFraudStatus.SHADOW_BANNED -> FraudDialogInfo(
-                icon = Icons.Outlined.VisibilityOff,
+                icon = AppIcons.Outlined.VisibilityOff,
                 title = "评论被 ShadowBan",
                 description = "您的评论仅自己可见，其他用户无法看到。这可能是因为评论内容触发了阿瓦隆风控系统。\n\n建议：删除此评论并修改内容后重新发送。",
                 color = FraudStatusColor.RED
             )
             CommentFraudStatus.DELETED -> FraudDialogInfo(
-                icon = Icons.Outlined.Delete,
+                icon = AppIcons.Outlined.Delete,
                 title = "评论被系统秒删",
                 description = "您的评论已被系统自动删除，包括您自己也无法看到。评论内容可能包含严格敏感词。",
                 color = FraudStatusColor.RED
             )
             CommentFraudStatus.UNDER_REVIEW -> FraudDialogInfo(
-                icon = Icons.Outlined.Schedule,
+                icon = AppIcons.Outlined.Schedule,
                 title = "评论疑似审核中",
                 description = "您的评论可能正在等待审核，目前其他用户暂时无法看到。审核通过后将自动显示。",
                 color = FraudStatusColor.ORANGE
             )
             CommentFraudStatus.INVISIBLE -> FraudDialogInfo(
-                icon = Icons.Outlined.Visibility,
+                icon = AppIcons.Outlined.Visibility,
                 title = "评论被前端隐藏",
                 description = "您的评论数据存在，但已被前端隐藏，其他用户看不到。这通常是因为被 UP 主拉黑或评论被标记为隐身。\n\n建议：删除此评论。",
                 color = FraudStatusColor.ORANGE
             )
             CommentFraudStatus.UNKNOWN -> FraudDialogInfo(
-                icon = Icons.Outlined.HelpOutline,
+                icon = AppIcons.Outlined.HelpOutline,
                 title = "检测结果未知",
                 description = "无法确定评论状态，可能是网络问题导致检测失败。",
                 color = FraudStatusColor.GRAY

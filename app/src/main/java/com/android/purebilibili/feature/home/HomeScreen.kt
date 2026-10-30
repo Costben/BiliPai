@@ -1,6 +1,8 @@
 // 文件路径: feature/home/HomeScreen.kt
 package com.android.purebilibili.feature.home
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.plugin.BuiltinPluginIds
 
 import com.android.purebilibili.core.ui.motion.AppMotionEasing
@@ -45,8 +47,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import com.android.purebilibili.core.ui.components.appActionClickable
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Close
 import com.android.purebilibili.core.ui.components.AppIcon
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.zIndex
@@ -3087,7 +3087,7 @@ fun HomeScreen(
                             contentAlignment = androidx.compose.ui.Alignment.Center
                         ) {
                             AppIcon(
-                                imageVector = Icons.Outlined.Close,
+                                imageVector = AppIcons.Outlined.Close,
                                 contentDescription = "关闭",
                                 modifier = Modifier.size(14.dp)
                             )

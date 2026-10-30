@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.live.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.navigation.tabSelectedPage
 import com.android.purebilibili.navigation.tabIndicatorPosition
 import com.android.purebilibili.core.ui.AppContentColors
@@ -23,12 +25,7 @@ import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import kotlinx.coroutines.launch
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Block
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.Report
 import com.android.purebilibili.core.ui.AppAlertDialog
 import com.android.purebilibili.core.ui.components.AppAssistChip
 import com.android.purebilibili.core.ui.components.AppButton
@@ -88,7 +85,7 @@ fun LiveReportDialog(
 ) {
     AppAlertDialog(
         onDismissRequest = onDismiss,
-        icon = { AppIcon(Icons.Outlined.Report, contentDescription = null) },
+        icon = { AppIcon(AppIcons.Outlined.Report, contentDescription = null) },
         title = { AppText("举报弹幕") },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(AppSpacingTokens.Medium)) {
@@ -255,7 +252,7 @@ fun LiveDmBlockSheet(
                     com.android.purebilibili.core.ui.AppTopBar(
                         title = "弹幕屏蔽",
                         navigationIcon = {
-                            AppIconButton(onClick = onDismiss) { AppIcon(Icons.AutoMirrored.Outlined.ArrowBack, "返回") }
+                            AppIconButton(onClick = onDismiss) { AppIcon(AppIcons.AutoMirrored.Outlined.ArrowBack, "返回") }
                         },
                         actions = {
                             AppTextButton(enabled = isLoggedIn, onClick = { value = ""; showAdd = true }) { AppText("添加") }
@@ -475,7 +472,7 @@ private fun LiveShieldUserSection(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             AppIcon(
-                                Icons.Outlined.Block,
+                                AppIcons.Outlined.Block,
                                 contentDescription = null,
                                 tint = AppContentColors.secondaryText(),
                                 modifier = Modifier.size(18.dp)

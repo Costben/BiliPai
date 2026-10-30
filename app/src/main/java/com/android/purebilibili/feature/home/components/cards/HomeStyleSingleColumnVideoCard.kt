@@ -85,7 +85,6 @@ import com.android.purebilibili.core.util.HapticType
 import com.android.purebilibili.core.util.rememberHapticFeedback
 import com.android.purebilibili.data.model.response.VideoItem
 import com.android.purebilibili.feature.home.resolveHomeCoverRequestSpec
-import androidx.compose.material.icons.Icons
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 

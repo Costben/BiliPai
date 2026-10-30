@@ -1,10 +1,10 @@
 package com.android.purebilibili.feature.list
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -73,7 +73,7 @@ internal fun ListScopedSearchActiveBar(
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 AppIcon(
-                    imageVector = Icons.Rounded.Close,
+                    imageVector = AppIcons.Rounded.Close,
                     contentDescription = "清除搜索",
                 )
             }

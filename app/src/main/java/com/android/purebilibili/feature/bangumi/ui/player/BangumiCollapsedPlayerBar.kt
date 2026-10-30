@@ -1,6 +1,8 @@
 // 文件路径: feature/bangumi/ui/player/BangumiCollapsedPlayerBar.kt
 package com.android.purebilibili.feature.bangumi.ui.player
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.compose.foundation.background
@@ -16,9 +18,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -97,7 +96,7 @@ fun BangumiCollapsedPlayerBar(
                         modifier = Modifier.size(48.dp)
                     ) {
                         AppIcon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
+                            AppIcons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "返回",
                             tint = AppContentColors.primaryText(),
                         )
@@ -110,7 +109,7 @@ fun BangumiCollapsedPlayerBar(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.PlayArrow,
+                        imageVector = AppIcons.Filled.PlayArrow,
                         contentDescription = null,
                         tint = AppContentColors.accent(),
                         modifier = Modifier.size(22.dp)

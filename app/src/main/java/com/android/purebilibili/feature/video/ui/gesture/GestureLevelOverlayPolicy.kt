@@ -1,18 +1,7 @@
 package com.android.purebilibili.feature.video.ui.gesture
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.VolumeDown
-import androidx.compose.material.icons.automirrored.filled.VolumeMute
-import androidx.compose.material.icons.automirrored.filled.VolumeOff
-import androidx.compose.material.icons.automirrored.filled.VolumeUp
-import androidx.compose.material.icons.filled.Brightness4
-import androidx.compose.material.icons.filled.Brightness5
-import androidx.compose.material.icons.filled.Brightness6
-import androidx.compose.material.icons.filled.Brightness7
-import androidx.compose.material.icons.filled.BrightnessHigh
-import androidx.compose.material.icons.filled.BrightnessLow
-import androidx.compose.material.icons.filled.BrightnessMedium
-import androidx.compose.material.icons.filled.LightMode
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
@@ -183,39 +172,39 @@ fun resolveGestureLevelIcon(
     return when (kind) {
         GestureLevelKind.Volume -> when (style) {
             GestureLevelOverlayStyle.Md3 -> when {
-                p < 0.01f -> Icons.AutoMirrored.Filled.VolumeOff
-                p < 0.34f -> Icons.AutoMirrored.Filled.VolumeMute
-                p < 0.67f -> Icons.AutoMirrored.Filled.VolumeDown
-                else -> Icons.AutoMirrored.Filled.VolumeUp
+                p < 0.01f -> AppIcons.AutoMirrored.Filled.VolumeOff
+                p < 0.34f -> AppIcons.AutoMirrored.Filled.VolumeMute
+                p < 0.67f -> AppIcons.AutoMirrored.Filled.VolumeDown
+                else -> AppIcons.AutoMirrored.Filled.VolumeUp
             }
             GestureLevelOverlayStyle.Ios -> when {
-                p < 0.01f -> Icons.AutoMirrored.Filled.VolumeOff
-                p < 0.45f -> Icons.AutoMirrored.Filled.VolumeDown
-                else -> Icons.AutoMirrored.Filled.VolumeUp
+                p < 0.01f -> AppIcons.AutoMirrored.Filled.VolumeOff
+                p < 0.45f -> AppIcons.AutoMirrored.Filled.VolumeDown
+                else -> AppIcons.AutoMirrored.Filled.VolumeUp
             }
             GestureLevelOverlayStyle.Miuix -> when {
-                p < 0.01f -> Icons.AutoMirrored.Filled.VolumeOff
-                p < 0.34f -> Icons.AutoMirrored.Filled.VolumeMute
-                p < 0.67f -> Icons.AutoMirrored.Filled.VolumeDown
-                else -> Icons.AutoMirrored.Filled.VolumeUp
+                p < 0.01f -> AppIcons.AutoMirrored.Filled.VolumeOff
+                p < 0.34f -> AppIcons.AutoMirrored.Filled.VolumeMute
+                p < 0.67f -> AppIcons.AutoMirrored.Filled.VolumeDown
+                else -> AppIcons.AutoMirrored.Filled.VolumeUp
             }
         }
         GestureLevelKind.Brightness -> when (style) {
             GestureLevelOverlayStyle.Md3 -> when {
-                p < 0.34f -> Icons.Filled.BrightnessLow
-                p < 0.67f -> Icons.Filled.BrightnessMedium
-                else -> Icons.Filled.BrightnessHigh
+                p < 0.34f -> AppIcons.Filled.BrightnessLow
+                p < 0.67f -> AppIcons.Filled.BrightnessMedium
+                else -> AppIcons.Filled.BrightnessHigh
             }
             GestureLevelOverlayStyle.Ios -> when {
-                p < 0.34f -> Icons.Filled.BrightnessLow
-                p < 0.67f -> Icons.Filled.LightMode
-                else -> Icons.Filled.BrightnessHigh
+                p < 0.34f -> AppIcons.Filled.BrightnessLow
+                p < 0.67f -> AppIcons.Filled.LightMode
+                else -> AppIcons.Filled.BrightnessHigh
             }
             GestureLevelOverlayStyle.Miuix -> when {
-                p < 0.20f -> Icons.Filled.Brightness4
-                p < 0.40f -> Icons.Filled.Brightness5
-                p < 0.70f -> Icons.Filled.Brightness6
-                else -> Icons.Filled.Brightness7
+                p < 0.20f -> AppIcons.Filled.Brightness4
+                p < 0.40f -> AppIcons.Filled.Brightness5
+                p < 0.70f -> AppIcons.Filled.Brightness6
+                else -> AppIcons.Filled.Brightness7
             }
         }
     }

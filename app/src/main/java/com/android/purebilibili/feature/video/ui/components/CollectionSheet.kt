@@ -1,6 +1,8 @@
 // 文件路径: feature/video/ui/components/CollectionSheet.kt
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.util.rememberHapticFeedback
 import com.android.purebilibili.core.util.HapticType
 
@@ -27,14 +29,7 @@ import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.icons.Icons
 import androidx.compose.animation.animateContentSize
-import androidx.compose.material.icons.outlined.ArrowDownward
-import androidx.compose.material.icons.outlined.ArrowUpward
-import androidx.compose.material.icons.outlined.KeyboardArrowDown
-import androidx.compose.material.icons.outlined.KeyboardArrowUp
-import androidx.compose.material.icons.outlined.History
-import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -220,7 +215,7 @@ fun CollectionSheet(
                     }
                 ) {
                     Icon(
-                        Icons.Outlined.Share,
+                        AppIcons.Outlined.Share,
                         contentDescription = "分享合集",
                         tint = AppContentColors.secondaryText(),
                         modifier = Modifier.size(20.dp)
@@ -228,9 +223,9 @@ fun CollectionSheet(
                 }
                 AppIconButton(onClick = ::cycleSortMode) {
                     val sortIcon: ImageVector = when (sortMode) {
-                        CollectionSortMode.ASCENDING -> Icons.Outlined.ArrowUpward
-                        CollectionSortMode.DESCENDING -> Icons.Outlined.ArrowDownward
-                        CollectionSortMode.RECENT -> Icons.Outlined.History
+                        CollectionSortMode.ASCENDING -> AppIcons.Outlined.ArrowUpward
+                        CollectionSortMode.DESCENDING -> AppIcons.Outlined.ArrowDownward
+                        CollectionSortMode.RECENT -> AppIcons.Outlined.History
                     }
                     Icon(
                         sortIcon,
@@ -306,9 +301,9 @@ fun CollectionSheet(
                     ) {
                         AppIcon(
                             imageVector = if (introExpanded) {
-                                Icons.Outlined.KeyboardArrowUp
+                                AppIcons.Outlined.KeyboardArrowUp
                             } else {
-                                Icons.Outlined.KeyboardArrowDown
+                                AppIcons.Outlined.KeyboardArrowDown
                             },
                             contentDescription = if (introExpanded) "收起简介" else "展开简介",
                             tint = AppContentColors.secondaryText(),

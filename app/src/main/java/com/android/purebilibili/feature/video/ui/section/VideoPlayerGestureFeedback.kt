@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.section
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -11,9 +13,6 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -155,7 +154,7 @@ internal fun PlayerOrientationHint(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             AppIcon(
-                imageVector = Icons.Filled.Refresh,
+                imageVector = AppIcons.Filled.Refresh,
                 contentDescription = null,
                 tint = Color.White,
                 modifier = Modifier.size(16.dp)
@@ -226,7 +225,7 @@ internal fun PlayerRestorePictureButton(
             shape = AppShapes.container(ContainerLevel.Floating)
         ) {
             AppIcon(
-                imageVector = Icons.Filled.Refresh,
+                imageVector = AppIcons.Filled.Refresh,
                 contentDescription = "还原画面",
                 modifier = Modifier.size(uiLayoutPolicy.restoreButtonIconSizeDp.dp)
             )
@@ -369,7 +368,7 @@ internal fun PlayerLongPressSpeedHint(
                         modifier = Modifier.size(36.dp * longPressSpeedHintScale),
                     ) {
                         AppIcon(
-                            imageVector = Icons.Outlined.Close,
+                            imageVector = AppIcons.Outlined.Close,
                             contentDescription = "关闭倍速提示",
                             tint = Color.White,
                             modifier = Modifier.size(14.dp * longPressSpeedHintScale),

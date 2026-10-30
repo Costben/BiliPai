@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.components.appActionClickable
 import com.android.purebilibili.core.ui.components.appActionWithFeedback
 
@@ -41,12 +43,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Reply
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.ThumbDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -1836,7 +1833,7 @@ fun ReplyItemView(
                                     label = "屏蔽该用户",
                                     appearance = appearance,
                                     onClick = { confirmBlockUser = true },
-                                    icon = Icons.Outlined.Block
+                                    icon = AppIcons.Outlined.Block
                                 )
                                 ReplyTextAction(
                                     label = "举报",
@@ -1845,7 +1842,7 @@ fun ReplyItemView(
                                         hatePromptHandled = true
                                         showReportDialog = true
                                     },
-                                    icon = Icons.Outlined.Flag
+                                    icon = AppIcons.Outlined.Flag
                                 )
                             }
                         }
@@ -1944,7 +1941,7 @@ fun ReplyItemView(
                                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                             ) {
                                 AppIcon(
-                                    imageVector = Icons.Outlined.Translate,
+                                    imageVector = AppIcons.Outlined.Translate,
                                     contentDescription = null,
                                     tint = if (isTranslated) appearance.accentColor else appearance.actionTint,
                                     modifier = Modifier.size(15.dp)
@@ -1985,7 +1982,7 @@ fun ReplyItemView(
                         Box(modifier = Modifier.height(32.dp)) {
                             AppIconButton(onClick = onDeleteClick) {
                                 AppIcon(
-                                    imageVector = Icons.Outlined.Delete,
+                                    imageVector = AppIcons.Outlined.Delete,
                                     contentDescription = "删除",
                                     tint = appearance.actionTint,
                                     modifier = Modifier.size(16.dp),
@@ -2027,7 +2024,7 @@ fun ReplyItemView(
                             enabled = onHateClick != null
                         ) {
                             AppIcon(
-                                imageVector = Icons.Filled.ThumbDown,
+                                imageVector = AppIcons.Filled.ThumbDown,
                                 contentDescription = if (isHated) "取消点踩" else "点踩评论",
                                 tint = if (isHated) AppContentColors.error() else appearance.actionTint,
                                 modifier = Modifier.size(16.dp)
@@ -2243,7 +2240,7 @@ fun ReplyItemView(
                 .testTag("$COMMENT_ACTION_BUTTON_TAG_PREFIX${item.rpid}")
         ) {
             AppIcon(
-                imageVector = Icons.Filled.MoreVert,
+                imageVector = AppIcons.Filled.MoreVert,
                 contentDescription = "评论操作",
                 tint = appearance.actionTint,
                 modifier = Modifier.size(18.dp)
@@ -3014,7 +3011,7 @@ internal fun ReplyTextAction(
     label: String,
     appearance: VideoCommentAppearance,
     onClick: () -> Unit,
-    icon: ImageVector = Icons.AutoMirrored.Outlined.Reply
+    icon: ImageVector = AppIcons.AutoMirrored.Outlined.Reply
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,

@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Bolt
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -98,7 +96,7 @@ fun UserAvatarCornerMarkBadge(
             UserAvatarCornerMark.Personal,
             UserAvatarCornerMark.Organization -> {
                 Icon(
-                    imageVector = Icons.Outlined.Bolt,
+                    imageVector = AppIcons.Outlined.Bolt,
                     contentDescription = null,
                     tint = if (mark == UserAvatarCornerMark.Personal) {
                         officialVerifyColor(OfficialVerifyBadgeTone.PERSONAL)

@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.plugin
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.plugin.BuiltinPluginIds
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -20,8 +22,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import com.android.purebilibili.core.ui.common.AppSelectionContainer as SelectionContainer
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.PersonOff
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -64,7 +64,7 @@ class HomeFeedAnonymizerPlugin : BuiltinPlugin {
     override val description: String = "仅在 Web 首页推荐接口隐藏登录 Cookie，让推荐流更接近未登录公共热门"
     override val version: String = "1.0.2"
     override val author: String = "BiliPai项目组"
-    override val icon: ImageVector = Icons.Outlined.PersonOff
+    override val icon: ImageVector = AppIcons.Outlined.PersonOff
     override val capabilityManifest: PluginCapabilityManifest = PluginCapabilityManifest(
         pluginId = id,
         displayName = name,

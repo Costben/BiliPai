@@ -1,5 +1,7 @@
 package com.android.purebilibili.core.ui.popup
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.focusGroup
@@ -27,8 +29,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -1441,7 +1441,7 @@ private fun AppGlassChoicePopupCard(
                             if (selected) {
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Icon(
-                                    imageVector = Icons.Default.Check,
+                                    imageVector = AppIcons.Filled.Check,
                                     contentDescription = null,
                                     tint = AppContentColors.primaryText(),
                                     modifier = Modifier.size(20.dp),

@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.onboarding
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.compose.foundation.clickable
@@ -17,14 +19,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.BugReport
-import androidx.compose.material.icons.outlined.Campaign
-import androidx.compose.material.icons.outlined.Code
-import androidx.compose.material.icons.outlined.Groups
-import androidx.compose.material.icons.outlined.OpenInNew
-import androidx.compose.material.icons.outlined.Policy
-import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -158,7 +152,7 @@ fun OnboardingScreen(
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     AppIcon(
-                        imageVector = Icons.Outlined.Policy,
+                        imageVector = AppIcons.Outlined.Policy,
                         contentDescription = null,
                         tint = AppContentColors.accent(),
                         modifier = Modifier.size(28.dp),
@@ -226,7 +220,7 @@ fun OnboardingScreen(
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     AppIcon(
-                        imageVector = Icons.Outlined.Public,
+                        imageVector = AppIcons.Outlined.Public,
                         contentDescription = null,
                         tint = AppContentColors.accent(),
                         modifier = Modifier.size(22.dp),
@@ -301,14 +295,14 @@ private fun UserAgreementClause.bodyResource(): Int = when (this) {
 }
 
 private fun UserAgreementClause.icon(): ImageVector = when (this) {
-    UserAgreementClause.OPEN_SOURCE_FREE -> Icons.Outlined.Code
-    UserAgreementClause.NO_DOMESTIC_PROMO -> Icons.Outlined.Campaign
-    UserAgreementClause.FEEDBACK_WITH_LOGS -> Icons.Outlined.BugReport
+    UserAgreementClause.OPEN_SOURCE_FREE -> AppIcons.Outlined.Code
+    UserAgreementClause.NO_DOMESTIC_PROMO -> AppIcons.Outlined.Campaign
+    UserAgreementClause.FEEDBACK_WITH_LOGS -> AppIcons.Outlined.BugReport
 }
 
 private fun UserAgreementChannelLink.icon(): ImageVector = when (url) {
-    OFFICIAL_TELEGRAM_CHANNEL_URL -> Icons.Outlined.Campaign
-    OFFICIAL_TELEGRAM_GROUP_URL -> Icons.Outlined.Groups
-    OFFICIAL_GITHUB_URL -> Icons.Outlined.Code
-    else -> Icons.Outlined.OpenInNew
+    OFFICIAL_TELEGRAM_CHANNEL_URL -> AppIcons.Outlined.Campaign
+    OFFICIAL_TELEGRAM_GROUP_URL -> AppIcons.Outlined.Groups
+    OFFICIAL_GITHUB_URL -> AppIcons.Outlined.Code
+    else -> AppIcons.Outlined.OpenInNew
 }

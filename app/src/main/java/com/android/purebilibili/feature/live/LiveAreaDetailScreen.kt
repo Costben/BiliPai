@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.live
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.navigation.tabSelectedPage
 import com.android.purebilibili.navigation.tabIndicatorPosition
 import com.android.purebilibili.core.ui.AppContentColors
@@ -8,13 +10,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.Image
-import androidx.compose.material.icons.outlined.Photo
-import androidx.compose.material.icons.outlined.Menu
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -94,8 +89,8 @@ fun LiveAreaDetailScreen(
             Column {
                 AppTopBar(
                     title = parentTitle,
-                    navigationIcon = { AppIconButton(onClick = onBack) { AppIcon(Icons.AutoMirrored.Outlined.ArrowBack, "返回") } },
-                    actions = { AppIconButton(onClick = onSearchClick) { AppIcon(Icons.Outlined.Search, "搜索直播") } },
+                    navigationIcon = { AppIconButton(onClick = onBack) { AppIcon(AppIcons.AutoMirrored.Outlined.ArrowBack, "返回") } },
+                    actions = { AppIconButton(onClick = onSearchClick) { AppIcon(AppIcons.Outlined.Search, "搜索直播") } },
                 )
                 if (metadataLoaded) {
                     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -115,9 +110,9 @@ fun LiveAreaDetailScreen(
                             modifier = Modifier.weight(1f),
                         )
                         AppIconButton(onClick = { showFirstFrame = !showFirstFrame }) {
-                            AppIcon(if (showFirstFrame) Icons.Outlined.Photo else Icons.Outlined.Image, if (showFirstFrame) "显示封面" else "显示首帧")
+                            AppIcon(if (showFirstFrame) AppIcons.Outlined.Photo else AppIcons.Outlined.Image, if (showFirstFrame) "显示封面" else "显示首帧")
                         }
-                        AppIconButton(onClick = { showMenu = true }) { AppIcon(Icons.Outlined.Menu, "显示分区菜单") }
+                        AppIconButton(onClick = { showMenu = true }) { AppIcon(AppIcons.Outlined.Menu, "显示分区菜单") }
                     }
                 }
             }
@@ -180,7 +175,7 @@ private fun LiveAreaMenuSheet(
                     AppText(title, style = MaterialTheme.typography.titleLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
                 AppIconButton(onClick = { visible = false }, modifier = Modifier.size(40.dp)) {
-                    AppIcon(Icons.Outlined.Close, "关闭分区菜单")
+                    AppIcon(AppIcons.Outlined.Close, "关闭分区菜单")
                 }
             }
             LazyVerticalGrid(

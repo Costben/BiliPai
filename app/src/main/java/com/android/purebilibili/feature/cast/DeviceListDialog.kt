@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.cast
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import android.content.Intent
 import android.net.Uri
@@ -13,9 +15,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Cast
-import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -136,7 +135,7 @@ fun DeviceListDialog(
 
     AppAlertDialog(
         onDismissRequest = onDismissRequest,
-        icon = { AppIcon(Icons.Rounded.Cast, null) },
+        icon = { AppIcon(AppIcons.Rounded.Cast, null) },
         title = {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 AppText("选择投屏设备")
@@ -154,7 +153,7 @@ fun DeviceListDialog(
                         }
                     }
                 ) {
-                    AppIcon(Icons.Rounded.Refresh, "刷新")
+                    AppIcon(AppIcons.Rounded.Refresh, "刷新")
                 }
             }
         },
@@ -279,7 +278,7 @@ fun DeviceListDialog(
                             AppListItem(
                                 headlineContent = { AppText(route.name) },
                                 supportingContent = { AppText(route.description ?: plugin.name) },
-                                leadingContent = { AppIcon(entry.presentation.icon ?: Icons.Rounded.Cast, null) },
+                                leadingContent = { AppIcon(entry.presentation.icon ?: AppIcons.Rounded.Cast, null) },
                                 modifier = Modifier
                                     .clickable { onPluginCastDeviceSelected(plugin, route) }
                                     .fillMaxWidth()

@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.list
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.layout.Arrangement
 import com.android.purebilibili.core.ui.components.VideoStatusBadges
 import com.android.purebilibili.core.ui.AppContentColors
@@ -12,8 +14,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -221,7 +221,7 @@ internal fun FavoritePersonalCard(
                     onClick = onRemove,
                 ) {
                     AppIcon(
-                        imageVector = Icons.Rounded.Close,
+                        imageVector = AppIcons.Rounded.Close,
                         contentDescription = "移出收藏夹",
                         tint = AppContentColors.secondaryText(),
                     )

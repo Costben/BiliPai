@@ -2,6 +2,8 @@
 
 package com.android.purebilibili.feature.home.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import coil3.request.crossfade
 
 import com.android.purebilibili.core.ui.AppSpacingTokens
@@ -38,8 +40,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import com.android.purebilibili.core.ui.components.AppHorizontalPager as HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.PlayArrow
 import com.android.purebilibili.core.ui.components.AppIcon
 import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
@@ -605,7 +605,7 @@ private fun HomeHeroCarouselCard(
                 ) {
                     if (activeForPlayback) {
                         AppIcon(
-                            imageVector = Icons.Rounded.PlayArrow,
+                            imageVector = AppIcons.Rounded.PlayArrow,
                             contentDescription = null,
                             tint = MediaContrastPalette.Foreground.copy(alpha = 0.9f),
                             modifier = Modifier.size(AppSpacingTokens.ExtraLarge - AppSpacingTokens.Micro)

@@ -7,7 +7,6 @@ import com.android.purebilibili.feature.video.ui.components.RelatedVideoList
 
 import com.android.purebilibili.core.ui.AppContentColors
 
-import androidx.compose.material.icons.outlined.Edit
 
 import com.android.purebilibili.navigation.animatePagerSelection
 import com.android.purebilibili.core.ui.components.AppIcon

@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.list
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.components.appActionWithFeedback
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -20,9 +22,6 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.selected
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.CheckCircle
-import androidx.compose.material.icons.rounded.RadioButtonUnchecked
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -219,12 +218,12 @@ private fun FavoriteFolderCard(
                 contentAlignment = Alignment.Center,
             ) {
                 AppIcon(
-                    imageVector = Icons.Rounded.RadioButtonUnchecked,
+                    imageVector = AppIcons.Rounded.RadioButtonUnchecked,
                     contentDescription = if (selected) "已选择" else "未选择",
                     tint = selectionColor,
                 )
                 AppIcon(
-                    imageVector = Icons.Rounded.CheckCircle,
+                    imageVector = AppIcons.Rounded.CheckCircle,
                     contentDescription = null,
                     tint = selectionColor,
                     modifier = Modifier.graphicsLayer {

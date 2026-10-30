@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.matchinfo
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,8 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -96,7 +96,7 @@ fun MatchInfoScreen(
                 title = "比赛详情",
                 navigationIcon = {
                     AppIconButton(onClick = onBack) {
-                        AppIcon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "返回")
+                        AppIcon(AppIcons.AutoMirrored.Outlined.ArrowBack, contentDescription = "返回")
                     }
                 },
             )

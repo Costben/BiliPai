@@ -1,6 +1,8 @@
 // 文件路径: feature/dynamic/components/DynamicCard.kt
 package com.android.purebilibili.feature.dynamic.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.components.appActionWithFeedback
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -36,9 +38,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 //  Material Icons
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ChatBubbleOutline
-import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.material3.MaterialTheme
@@ -1162,9 +1161,9 @@ fun DynamicCardV2(
                     ) {
                         AppIcon(
                             imageVector = if (interactionItem.type == 1) {
-                                Icons.Outlined.ChatBubbleOutline
+                                AppIcons.Outlined.ChatBubbleOutline
                             } else {
-                                Icons.Outlined.ThumbUp
+                                AppIcons.Outlined.ThumbUp
                             },
                             contentDescription = null,
                             modifier = Modifier.size(13.dp),

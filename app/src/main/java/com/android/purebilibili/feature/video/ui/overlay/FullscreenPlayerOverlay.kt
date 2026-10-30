@@ -1,6 +1,8 @@
 // 文件路径: feature/video/FullscreenPlayerOverlay.kt
 package com.android.purebilibili.feature.video.ui.overlay
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppText
@@ -37,17 +39,8 @@ import com.android.purebilibili.feature.video.ui.gesture.PlayerGestureInputSurfa
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
 import androidx.compose.material3.*
 // 🌈 Material Icons Extended - 亮度图标
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BrightnessLow
-import androidx.compose.material.icons.filled.BrightnessMedium
-import androidx.compose.material.icons.filled.BrightnessHigh
-import androidx.compose.material.icons.filled.Pause
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -1217,7 +1210,7 @@ fun FullscreenPlayerOverlay(
                         modifier = Modifier.padding(16.dp)
                     ) {
                         AppIconButton(onClick = onNavigateToDetail) {
-                            AppIcon(Icons.AutoMirrored.Outlined.KeyboardArrowLeft, "返回详情页", tint = Color.White)
+                            AppIcon(AppIcons.AutoMirrored.Outlined.KeyboardArrowLeft, "返回详情页", tint = Color.White)
                         }
                         Spacer(Modifier.width(8.dp))
                         AppText(
@@ -1264,7 +1257,7 @@ fun FullscreenPlayerOverlay(
 
                         //  [新增] 弹幕设置按钮
                         AppIconButton(onClick = { showDanmakuSettings = true }) {
-                            AppIcon(Icons.Outlined.Settings, "弹幕设置", tint = Color.White)
+                            AppIcon(AppIcons.Outlined.Settings, "弹幕设置", tint = Color.White)
                         }
                     }
                 }
@@ -1299,7 +1292,7 @@ fun FullscreenPlayerOverlay(
                                 },
                             ) {
                                 AppIcon(
-                                    imageVector = if (isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow,
+                                    imageVector = if (isPlaying) AppIcons.Filled.Pause else AppIcons.Filled.PlayArrow,
                                     contentDescription = if (isPlaying) "暂停" else "播放",
                                     tint = AppContentColors.accent(),
                                     modifier = Modifier.size(32.dp)

@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.overlay.glass
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.feature.video.ui.overlay.*
 
 import androidx.compose.animation.AnimatedVisibility
@@ -10,9 +12,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Pause
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -58,7 +57,7 @@ internal fun CenterPlaybackControl(
                     modifier = Modifier.fillMaxSize(),
                 ) {
                     AppIcon(
-                        imageVector = if (isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow,
+                        imageVector = if (isPlaying) AppIcons.Filled.Pause else AppIcons.Filled.PlayArrow,
                         contentDescription = if (isPlaying) "暂停播放" else "开始播放",
                         tint = Color.White,
                         modifier = Modifier.size(diameter * 0.48f),

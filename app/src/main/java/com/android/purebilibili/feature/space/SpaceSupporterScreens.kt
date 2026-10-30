@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.space
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import com.android.purebilibili.core.ui.components.AppSurface
@@ -21,10 +23,8 @@ import androidx.compose.foundation.layout.width
 import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
@@ -87,7 +87,7 @@ fun SpaceUpowerRankScreen(
                 navigationIcon = {
                     AppIconButton(onClick = onBack) {
                         AppIcon(
-                            imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+                            imageVector = AppIcons.AutoMirrored.Outlined.ArrowBack,
                             contentDescription = "返回"
                         )
                     }
@@ -259,7 +259,7 @@ fun SpaceMemberGuardScreen(
                 navigationIcon = {
                     AppIconButton(onClick = onBack) {
                         AppIcon(
-                            imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+                            imageVector = AppIcons.AutoMirrored.Outlined.ArrowBack,
                             contentDescription = "返回"
                         )
                     }

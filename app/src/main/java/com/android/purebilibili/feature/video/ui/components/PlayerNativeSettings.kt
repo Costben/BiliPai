@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.components.appActionClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,8 +18,6 @@ import com.android.purebilibili.core.ui.components.AppSwitch
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
@@ -108,7 +108,7 @@ internal fun PlayerNativeSettingsHost(
                 ) {
                     Text("更多操作", fontSize = 16.sp)
                     Spacer(Modifier.weight(1f))
-                    PanelAction(Icons.Outlined.Close, "关闭", requestDismiss)
+                    PanelAction(AppIcons.Outlined.Close, "关闭", requestDismiss)
                 }
                 content()
             }
@@ -143,31 +143,31 @@ internal fun PlayerSettingsRow(title: String, subtitle: String? = null, onClick:
         } else {
         Icon(
             imageVector = when (title) {
-                "稍后再看（添加 / 移出）" -> Icons.Outlined.WatchLater
-                "查看笔记" -> Icons.Outlined.EditNote
-                "离线缓存" -> Icons.Outlined.FolderZip
-                "保存字幕" -> Icons.Outlined.Download
-                "保存封面" -> Icons.Outlined.Image
-                "定时关闭" -> Icons.Outlined.HourglassTop
-                "播放地址" -> Icons.Outlined.Link
-                "重载视频" -> Icons.Outlined.Refresh
-                "画质增强" -> Icons.Outlined.StayCurrentLandscape
-                "播放器音量" -> Icons.Outlined.VolumeUp
-                "画面变换" -> Icons.Outlined.Flip
-                "恢复默认" -> Icons.Outlined.Restore
-                "CDN 设置" -> Icons.Outlined.Cloud
-                "选择画质" -> Icons.Outlined.PlayCircle
-                "选择音质" -> Icons.Outlined.Album
-                "首选编码格式" -> Icons.Outlined.AvTimer
-                "播完后行为" -> Icons.Outlined.Repeat
-                "弹幕列表" -> Icons.Outlined.Comment
-                "字幕设置" -> Icons.Outlined.Subtitles
-                "加载字幕" -> Icons.Outlined.FileOpen
-                "播放信息" -> Icons.Outlined.Info
-                "举报" -> Icons.Outlined.ErrorOutline
+                "稍后再看（添加 / 移出）" -> AppIcons.Outlined.WatchLater
+                "查看笔记" -> AppIcons.Outlined.EditNote
+                "离线缓存" -> AppIcons.Outlined.FolderZip
+                "保存字幕" -> AppIcons.Outlined.Download
+                "保存封面" -> AppIcons.Outlined.Image
+                "定时关闭" -> AppIcons.Outlined.HourglassTop
+                "播放地址" -> AppIcons.Outlined.Link
+                "重载视频" -> AppIcons.Outlined.Refresh
+                "画质增强" -> AppIcons.Outlined.StayCurrentLandscape
+                "播放器音量" -> AppIcons.Outlined.VolumeUp
+                "画面变换" -> AppIcons.Outlined.Flip
+                "恢复默认" -> AppIcons.Outlined.Restore
+                "CDN 设置" -> AppIcons.Outlined.Cloud
+                "选择画质" -> AppIcons.Outlined.PlayCircle
+                "选择音质" -> AppIcons.Outlined.Album
+                "首选编码格式" -> AppIcons.Outlined.AvTimer
+                "播完后行为" -> AppIcons.Outlined.Repeat
+                "弹幕列表" -> AppIcons.Outlined.Comment
+                "字幕设置" -> AppIcons.Outlined.Subtitles
+                "加载字幕" -> AppIcons.Outlined.FileOpen
+                "播放信息" -> AppIcons.Outlined.Info
+                "举报" -> AppIcons.Outlined.ErrorOutline
                 FullscreenActionCountSettings.TITLE -> ImageVector.vectorResource(com.android.purebilibili.R.drawable.ic_settings_action_counts_24)
-                "返回" -> Icons.Outlined.ArrowBack
-                else -> Icons.Outlined.Settings
+                "返回" -> AppIcons.Outlined.ArrowBack
+                else -> AppIcons.Outlined.Settings
             },
             contentDescription = null,
             modifier = Modifier.size(20.dp),
@@ -225,7 +225,7 @@ internal fun PlayerSettingsPopupRow(
                         expanded = false
                         if (label != current) onSelected(index)
                     },
-                    trailingIcon = if (label == current) ({ Icon(Icons.Outlined.Done, null) }) else null,
+                    trailingIcon = if (label == current) ({ Icon(AppIcons.Outlined.Done, null) }) else null,
                 )
             }
         }
@@ -244,7 +244,7 @@ internal fun PlayerSettingsSelectionRow(
     ListItem(
         headlineContent = { Text(title, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (enabled) 1f else 0.38f)) },
         supportingContent = if (subtitle != null) ({ Text(subtitle, fontSize = 12.sp) }) else null,
-        trailingContent = { if (selected) Icon(Icons.Outlined.Done, null, tint = MaterialTheme.colorScheme.primary) },
+        trailingContent = { if (selected) Icon(AppIcons.Outlined.Done, null, tint = MaterialTheme.colorScheme.primary) },
         modifier = Modifier.fillMaxWidth().appActionClickable(enabled = enabled) { if (!selected || allowSelectedClick) onClick() },
         // 玻璃容器接管时透出父容器；其他场景保留原生列表底色。
         colors = ListItemDefaults.colors(

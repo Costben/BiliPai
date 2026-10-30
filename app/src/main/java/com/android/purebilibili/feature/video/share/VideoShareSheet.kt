@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.share
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppHorizontalDivider
 
@@ -32,11 +34,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Link
-import androidx.compose.material.icons.outlined.MoreHoriz
-import androidx.compose.material.icons.outlined.People
-import androidx.compose.material.icons.outlined.DynamicFeed
 import com.android.purebilibili.core.store.TokenManager
 import com.android.purebilibili.core.ui.components.AppIcon
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -128,7 +125,7 @@ internal fun VideoShareSheet(
             target = VideoShareTarget.BILIBILI_DYNAMIC,
             label = "分享到动态",
             iconText = null,
-            iconVector = Icons.Outlined.DynamicFeed,
+            iconVector = AppIcons.Outlined.DynamicFeed,
             backgroundColor = MaterialTheme.colorScheme.primaryContainer,
             contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
         ),
@@ -136,7 +133,7 @@ internal fun VideoShareSheet(
             target = VideoShareTarget.BILIBILI_FRIENDS,
             label = "B 站好友",
             iconText = null,
-            iconVector = Icons.Outlined.People,
+            iconVector = AppIcons.Outlined.People,
             backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
             contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
         ),
@@ -160,7 +157,7 @@ internal fun VideoShareSheet(
             target = VideoShareTarget.COPY_LINK,
             label = "复制链接",
             iconText = null,
-            iconVector = Icons.Outlined.Link,
+            iconVector = AppIcons.Outlined.Link,
             backgroundColor = neutralIconBackground,
             contentColor = neutralIconContent
         ),
@@ -168,7 +165,7 @@ internal fun VideoShareSheet(
             target = VideoShareTarget.MORE,
             label = "更多",
             iconText = null,
-            iconVector = Icons.Outlined.MoreHoriz,
+            iconVector = AppIcons.Outlined.MoreHoriz,
             backgroundColor = neutralIconBackground,
             contentColor = neutralIconContent
         )

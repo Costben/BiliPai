@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -8,13 +10,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Reply
-import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Report
-import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -100,7 +95,7 @@ internal fun DanmakuActionToolbar(
                 val countLabel = if (voteCount > 999) "999+" else voteCount.toString()
                 Box(Modifier.size(40.dp)) {
                     ToolbarAction(
-                        icon = Icons.Filled.ThumbUp,
+                        icon = AppIcons.Filled.ThumbUp,
                         description = "${if (hasLiked) "取消点赞" else "点赞"}，$countLabel 赞",
                         enabled = canVote && !voteLoading,
                         selected = hasLiked,
@@ -114,14 +109,14 @@ internal fun DanmakuActionToolbar(
                         modifier = Modifier.align(Alignment.TopEnd).padding(top = 1.dp),
                     )
                 }
-                ToolbarAction(Icons.Filled.ContentCopy, "复制弹幕", onClick = onCopy)
+                ToolbarAction(AppIcons.Filled.ContentCopy, "复制弹幕", onClick = onCopy)
                 ToolbarAction(
-                    if (canRecall) Icons.AutoMirrored.Filled.Reply else Icons.Filled.Report,
+                    if (canRecall) AppIcons.AutoMirrored.Filled.Reply else AppIcons.Filled.Report,
                     if (canRecall) "撤回弹幕" else "举报弹幕",
                     onClick = onReportOrRecall,
                 )
-                if (hasTimestamp) ToolbarAction(Icons.Filled.PlayArrow, "跳转到弹幕时间", onClick = onTimestamp)
-                ToolbarAction(Icons.Filled.MoreHoriz, "更多弹幕操作", onClick = onMore)
+                if (hasTimestamp) ToolbarAction(AppIcons.Filled.PlayArrow, "跳转到弹幕时间", onClick = onTimestamp)
+                ToolbarAction(AppIcons.Filled.MoreHoriz, "更多弹幕操作", onClick = onMore)
             }
         }
     }

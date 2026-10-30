@@ -1,6 +1,8 @@
 // 文件路径: feature/plugin/SponsorBlockPlugin.kt
 package com.android.purebilibili.feature.plugin
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.plugin.BuiltinPluginIds
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -22,8 +24,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 //  Material Icons
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
 import com.android.purebilibili.core.ui.AppAlertDialog
 import com.android.purebilibili.core.ui.components.AppButton
 import androidx.compose.material3.MaterialTheme
@@ -175,7 +175,7 @@ class SponsorBlockPlugin : BuiltinPlugin, PlayerPluginApi {
     override val description = "自动跳过视频中的广告、赞助、片头片尾等片段"
     override val version = "1.1.1"
     override val author = "BiliPai项目组"
-    override val icon: ImageVector = Icons.Outlined.Send
+    override val icon: ImageVector = AppIcons.Outlined.Send
     override val capabilityManifest: PluginCapabilityManifest = PluginCapabilityManifest(
         pluginId = id,
         displayName = name,
@@ -319,7 +319,7 @@ class SponsorBlockPlugin : BuiltinPlugin, PlayerPluginApi {
 
             SponsorBlockSettingsSection(title = "片段规则", subtitle = "按类别选择总是跳过、本次跳过、手动跳过、仅显示或禁用") {
                 AppSwitchPreference(
-                    icon = Icons.Outlined.Bolt,
+                    icon = AppIcons.Outlined.Bolt,
                     title = "全部自动跳过",
                     subtitle = "关闭后，所有类别先改为显示跳过按钮",
                     checked = autoSkip,
@@ -344,7 +344,7 @@ class SponsorBlockPlugin : BuiltinPlugin, PlayerPluginApi {
                     },
                 )
                 AppPreference(
-                    icon = Icons.Outlined.Timer,
+                    icon = AppIcons.Outlined.Timer,
                     title = "最短片段时长",
                     subtitle = "短于该时长的社区片段不会参与跳过或提示",
                     value = "${config.minimumSegmentDurationSeconds}s",
@@ -368,7 +368,7 @@ class SponsorBlockPlugin : BuiltinPlugin, PlayerPluginApi {
 
             SponsorBlockSettingsSection(title = "通知") {
                 AppSwitchPreference(
-                    icon = Icons.Outlined.Info,
+                    icon = AppIcons.Outlined.Info,
                     title = "跳过提示",
                     subtitle = "自动跳过时显示简短提示",
                     checked = skipToastEnabled,
@@ -379,7 +379,7 @@ class SponsorBlockPlugin : BuiltinPlugin, PlayerPluginApi {
                     iconTint = if (neutralMiuix) preferenceIconColor else AppContentColors.accent(),
                 )
                 AppSwitchPreference(
-                    icon = Icons.Outlined.Notifications,
+                    icon = AppIcons.Outlined.Notifications,
                     title = "每日汇总通知",
                     subtitle = "当天有跳过记录时，汇总跳过次数和节省时间",
                     checked = dailySummaryNotificationEnabled,
@@ -403,7 +403,7 @@ class SponsorBlockPlugin : BuiltinPlugin, PlayerPluginApi {
                     )
                 }
                 AppPreference(
-                    icon = Icons.Outlined.Notifications,
+                    icon = AppIcons.Outlined.Notifications,
                     title = "发送测试通知",
                     subtitle = "确认通知权限和展示效果，不写入跳过记录",
                     onClick = { notificationPermission.launchWithPermission { sendTestNotification() } },
@@ -413,7 +413,7 @@ class SponsorBlockPlugin : BuiltinPlugin, PlayerPluginApi {
 
             SponsorBlockSettingsSection(title = "社区与隐私", subtitle = "所有发送都指向下方服务器；默认关闭，提交片段始终需要逐次确认") {
                 AppPreference(
-                    icon = Icons.Outlined.Dns,
+                    icon = AppIcons.Outlined.Dns,
                     title = "社区服务器",
                     subtitle = serverStatus?.message ?: config.serverBaseUrl,
                     value = if (serverStatus?.reachable == true) "正常" else null,
@@ -421,7 +421,7 @@ class SponsorBlockPlugin : BuiltinPlugin, PlayerPluginApi {
                     iconTint = if (neutralMiuix) preferenceIconColor else MaterialTheme.colorScheme.secondary,
                 )
                 AppSwitchPreference(
-                    icon = Icons.Outlined.BarChart,
+                    icon = AppIcons.Outlined.BarChart,
                     title = "上传跳过贡献",
                     subtitle = "仅在实际跳过时上传片段匿名 UUID；不会上传连续观看轨迹",
                     checked = communityTrackingEnabled,
@@ -432,7 +432,7 @@ class SponsorBlockPlugin : BuiltinPlugin, PlayerPluginApi {
                     iconTint = if (neutralMiuix) preferenceIconColor else MaterialTheme.colorScheme.tertiary,
                 )
                 AppSwitchPreference(
-                    icon = Icons.Outlined.Send,
+                    icon = AppIcons.Outlined.Send,
                     title = "允许提交社区片段",
                     subtitle = "允许播放页标记起止时间；提交前会显示类别、时间和服务器供确认",
                     checked = communityContributionEnabled,
@@ -443,7 +443,7 @@ class SponsorBlockPlugin : BuiltinPlugin, PlayerPluginApi {
                     iconTint = if (neutralMiuix) preferenceIconColor else MaterialTheme.colorScheme.tertiary,
                 )
                 AppPreference(
-                    icon = Icons.Outlined.Person,
+                    icon = AppIcons.Outlined.Person,
                     title = "社区用户 ID",
                     subtitle = "${config.userId.take(8)}… · 用于归属你的片段贡献",
                     onClick = {
@@ -462,7 +462,7 @@ class SponsorBlockPlugin : BuiltinPlugin, PlayerPluginApi {
 
             SponsorBlockSettingsSection(title = "关于") {
                 AppPreference(
-                    icon = Icons.Outlined.Info,
+                    icon = AppIcons.Outlined.Info,
                     title = aboutItem.title,
                     subtitle = aboutItem.subtitle,
                     value = aboutItem.value,

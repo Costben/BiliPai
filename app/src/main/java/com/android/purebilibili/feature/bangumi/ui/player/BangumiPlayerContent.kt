@@ -12,11 +12,6 @@ import com.android.purebilibili.core.ui.AppIcons
 import com.android.purebilibili.core.ui.rememberAppShareIcon
 import com.android.purebilibili.core.ui.rememberAppWatchLaterIcon
 import com.android.purebilibili.feature.video.ui.section.BiliActionButton
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ThumbUp
-import androidx.compose.material.icons.rounded.ThumbUp
-import androidx.compose.material.icons.outlined.StarBorder
-import androidx.compose.material.icons.rounded.Star
 
 import com.android.purebilibili.navigation.animatePagerSelection
 import com.android.purebilibili.core.ui.resolveFilledButtonContainerColor
@@ -495,7 +490,7 @@ fun BangumiPlayerContent(
                 ) {
                     Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
                         BiliActionButton(
-                            icon = if (likeStatusKnown && isLiked) Icons.Rounded.ThumbUp else Icons.Outlined.ThumbUp,
+                            icon = if (likeStatusKnown && isLiked) AppIcons.Rounded.ThumbUp else AppIcons.Outlined.ThumbUp,
                             text = if (tripleInProgress) "处理中" else if (likeStatusKnown && isLiked) "已点赞" else "点赞",
                             isActive = likeStatusKnown && isLiked,
                             activeColor = actionColor,
@@ -518,7 +513,7 @@ fun BangumiPlayerContent(
                     }
                     Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
                         BiliActionButton(
-                            icon = if (isFavorited == true) Icons.Rounded.Star else Icons.Outlined.StarBorder,
+                            icon = if (isFavorited == true) AppIcons.Rounded.Star else AppIcons.Outlined.StarBorder,
                             text = if (isFavorited == true) "已收藏" else "收藏",
                             isActive = isFavorited == true,
                             activeColor = actionColor,

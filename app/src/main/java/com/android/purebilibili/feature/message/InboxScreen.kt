@@ -1,6 +1,8 @@
 // 私信收件箱页面
 package com.android.purebilibili.feature.message
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.components.appActionClickable
 import com.android.purebilibili.core.ui.components.appActionWithFeedback
 
@@ -21,18 +23,6 @@ import androidx.compose.foundation.layout.*
 import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.outlined.PersonAdd
-import androidx.compose.material.icons.outlined.DoneAll
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.SmartDisplay
-import androidx.compose.material.icons.outlined.Contacts
-import androidx.compose.material.icons.outlined.DeleteSweep
-import androidx.compose.material.icons.outlined.ChatBubbleOutline
-import androidx.compose.material.icons.outlined.AlternateEmail
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.NotificationsNone
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -166,16 +156,16 @@ fun InboxScreen(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         if (uiState.pageType == 1) {
-                            AppIconButton(onClick = { onOpenLink("https://www.bilibili.com/h5/follow/newFans?navhide=1&$webThemeQuery") }) { AppIcon(Icons.Outlined.PersonAdd, "新增粉丝") }
+                            AppIconButton(onClick = { onOpenLink("https://www.bilibili.com/h5/follow/newFans?navhide=1&$webThemeQuery") }) { AppIcon(AppIcons.Outlined.PersonAdd, "新增粉丝") }
                         }
                         val visibleOutside = uiState.outside.filter { it.type in setOf(1, 2, 4, 8, 9) }.take(outsideActionLimit)
                         visibleOutside.forEach { item ->
                             val icon = when (item.type) {
-                                1 -> Icons.Outlined.DoneAll
-                                2 -> Icons.Outlined.Settings
-                                4 -> Icons.Outlined.SmartDisplay
-                                8 -> Icons.Outlined.Contacts
-                                else -> Icons.Outlined.DeleteSweep
+                                1 -> AppIcons.Outlined.DoneAll
+                                2 -> AppIcons.Outlined.Settings
+                                4 -> AppIcons.Outlined.SmartDisplay
+                                8 -> AppIcons.Outlined.Contacts
+                                else -> AppIcons.Outlined.DeleteSweep
                             }
                             AppIconButton(onClick = { openMenuItem(item) }, enabled = !uiState.isBatchOperating) { AppIcon(icon, item.title) }
                         }
@@ -183,7 +173,7 @@ fun InboxScreen(
                         var expanded by remember { mutableStateOf(false) }
                         if (overflow.isNotEmpty()) {
                             com.android.purebilibili.core.ui.components.AppGlassMenuAnchor(onOpen = { expanded = true }) {
-                                AppIconButton(onClick = { expanded = true }, enabled = !uiState.isBatchOperating) { AppIcon(Icons.Default.MoreVert, "更多") }
+                                AppIconButton(onClick = { expanded = true }, enabled = !uiState.isBatchOperating) { AppIcon(AppIcons.Filled.MoreVert, "更多") }
                                 AppDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                                     overflow.forEach { item -> AppDropdownMenuItem(text = { AppText(item.title) }, onClick = { expanded = false; openMenuItem(item) }) }
                                 }
@@ -452,10 +442,10 @@ private fun MessageCenterShortcutCard(
     onClick: () -> Unit
 ) {
     val icon = when (item.destination) {
-        MessageCenterDestination.ReplyMe -> androidx.compose.material.icons.Icons.Outlined.ChatBubbleOutline
-        MessageCenterDestination.AtMe -> androidx.compose.material.icons.Icons.Outlined.AlternateEmail
-        MessageCenterDestination.LikeMe -> androidx.compose.material.icons.Icons.Outlined.FavoriteBorder
-        MessageCenterDestination.SystemNotice -> androidx.compose.material.icons.Icons.Outlined.NotificationsNone
+        MessageCenterDestination.ReplyMe -> AppIcons.Outlined.ChatBubbleOutline
+        MessageCenterDestination.AtMe -> AppIcons.Outlined.AlternateEmail
+        MessageCenterDestination.LikeMe -> AppIcons.Outlined.FavoriteBorder
+        MessageCenterDestination.SystemNotice -> AppIcons.Outlined.NotificationsNone
     }
     Column(modifier.appActionClickable(onClick = onClick).padding(vertical = 10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         Box {

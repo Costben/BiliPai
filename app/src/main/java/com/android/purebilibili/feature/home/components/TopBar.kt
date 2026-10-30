@@ -1,6 +1,8 @@
 // 文件路径: feature/home/components/TopBar.kt
 package com.android.purebilibili.feature.home.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.navigation.isTabSelectionInProgress
 import com.android.purebilibili.navigation.tabSelectedPage
 import com.android.purebilibili.navigation.tabIndicatorPosition
@@ -22,26 +24,6 @@ import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.OpticalContrastPalette
 import com.android.purebilibili.feature.home.HomeVisualPalette
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.TrendingUp
-import androidx.compose.material.icons.automirrored.outlined.MenuOpen
-import androidx.compose.material.icons.automirrored.outlined.TrendingUp
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.CollectionsBookmark
-import androidx.compose.material.icons.filled.Lightbulb
-import androidx.compose.material.icons.filled.LiveTv
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.SmartToy
-import androidx.compose.material.icons.filled.SportsEsports
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.CollectionsBookmark
-import androidx.compose.material.icons.outlined.Lightbulb
-import androidx.compose.material.icons.outlined.LiveTv
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.SmartToy
-import androidx.compose.material.icons.outlined.SportsEsports
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.EaseOut
@@ -640,19 +622,19 @@ internal fun resolveTopTabCategoryIcon(
     val category = resolveTopTabCategoryForIcon(categoryKey)
     return when (iconFamily) {
         AppSemanticIconFamily.MATERIAL -> when (category) {
-            HomeCategory.RECOMMEND -> if (selected) Icons.Filled.Home else Icons.Outlined.Home
-            HomeCategory.FOLLOW -> if (selected) Icons.Filled.Person else Icons.Outlined.Person
+            HomeCategory.RECOMMEND -> if (selected) AppIcons.Filled.Home else AppIcons.Outlined.Home
+            HomeCategory.FOLLOW -> if (selected) AppIcons.Filled.Person else AppIcons.Outlined.Person
             HomeCategory.POPULAR -> if (selected) {
-                Icons.AutoMirrored.Filled.TrendingUp
+                AppIcons.AutoMirrored.Filled.TrendingUp
             } else {
-                Icons.AutoMirrored.Outlined.TrendingUp
+                AppIcons.AutoMirrored.Outlined.TrendingUp
             }
-            HomeCategory.LIVE -> if (selected) Icons.Filled.LiveTv else Icons.Outlined.LiveTv
-            HomeCategory.ANIME -> if (selected) Icons.Filled.CollectionsBookmark else Icons.Outlined.CollectionsBookmark
-            HomeCategory.GAME -> if (selected) Icons.Filled.SportsEsports else Icons.Outlined.SportsEsports
-            HomeCategory.KNOWLEDGE -> if (selected) Icons.Filled.Lightbulb else Icons.Outlined.Lightbulb
-            HomeCategory.TECH -> if (selected) Icons.Filled.SmartToy else Icons.Outlined.SmartToy
-            else -> Icons.AutoMirrored.Outlined.MenuOpen
+            HomeCategory.LIVE -> if (selected) AppIcons.Filled.LiveTv else AppIcons.Outlined.LiveTv
+            HomeCategory.ANIME -> if (selected) AppIcons.Filled.CollectionsBookmark else AppIcons.Outlined.CollectionsBookmark
+            HomeCategory.GAME -> if (selected) AppIcons.Filled.SportsEsports else AppIcons.Outlined.SportsEsports
+            HomeCategory.KNOWLEDGE -> if (selected) AppIcons.Filled.Lightbulb else AppIcons.Outlined.Lightbulb
+            HomeCategory.TECH -> if (selected) AppIcons.Filled.SmartToy else AppIcons.Outlined.SmartToy
+            else -> AppIcons.AutoMirrored.Outlined.MenuOpen
         }
         AppSemanticIconFamily.MIUIX -> resolveMiuixPreferredHomeNavigationIcon(
             tabId = category?.name ?: "PARTITION",
@@ -664,7 +646,7 @@ internal fun resolveTopTabCategoryIcon(
 @Composable
 internal fun resolveTopTabPartitionIcon(iconFamily: AppSemanticIconFamily): ImageVector {
     return if (iconFamily == AppSemanticIconFamily.MATERIAL) {
-        Icons.AutoMirrored.Outlined.MenuOpen
+        AppIcons.AutoMirrored.Outlined.MenuOpen
     } else {
         resolveMiuixPreferredHomeNavigationIcon(tabId = "PARTITION")
     }
@@ -874,7 +856,7 @@ fun FluidHomeTopBar(
                                 contentAlignment = Alignment.Center
                             ) {
                                 AppIcon(
-                                    imageVector = Icons.Filled.Person,
+                                    imageVector = AppIcons.Filled.Person,
                                     contentDescription = if (user.isLogin) "用户头像" else "未登录，点击登录",
                                     tint = AppContentColors.accent(),
                                     modifier = Modifier.fillMaxSize(0.6f),
@@ -910,7 +892,7 @@ fun FluidHomeTopBar(
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             AppIcon(
-                                Icons.Outlined.Search,
+                                AppIcons.Outlined.Search,
                                 null,
                                 tint = AppContentColors.secondaryText().copy(0.5f),
                                 modifier = Modifier.size(AppSpacingTokens.Large + AppSpacingTokens.Micro)
@@ -934,7 +916,7 @@ fun FluidHomeTopBar(
                     onClick = onSettingsClick
                 ) {
                     AppIcon(
-                        Icons.Outlined.Settings,
+                        AppIcons.Outlined.Settings,
                         contentDescription = "设置",
                         tint = AppContentColors.primaryText().copy(alpha = 0.7f),
                         modifier = Modifier.size(AppSpacingTokens.ExtraLarge - AppSpacingTokens.Micro)
@@ -1170,6 +1152,17 @@ private fun LightweightHomeTopTabs(
         hasSkinStickerIcons = hasSkinStickerIcons,
         showIcon = showIcon,
         showText = showText
+    )
+    // COUI 17 的纯文字分类栏直接交给 ColorOS 分段标签；玻璃指示器、
+    // 皮肤贴纸与图文 / 纯图标模式保留各自原有的渲染管线。
+    val useCouiTopTabRow = shouldUseCouiHomeTopTabRow(
+        uiStyle = LocalAppUiStyle.current,
+        liquidGlassEnabled = isLiquidGlassEnabled,
+        skinPlainStyle = skinPlainStyle,
+        hasSkinStickerIcons = hasSkinStickerIcons,
+        showIcon = showIcon,
+        showText = showText,
+        forceMaterialUnderline = forceMaterialUnderline,
     )
     val actionButtonSize = if (skinPlainStyle) {
         resolveHomeSkinTopTabActionButtonSize()
@@ -1452,6 +1445,24 @@ private fun LightweightHomeTopTabs(
                         .height(floatingDockHeight),
                 )
             }
+        } else if (useCouiTopTabRow) {
+            CouiHomeTopTabRow(
+                categories = categories,
+                selectedIndex = visualSelectedIndex,
+                height = rowHeight,
+                onTabSelected = { index ->
+                    performHomeTopBarTap(
+                        haptic = haptic,
+                        onClick = {
+                            when (resolveTopTabClickAction(index, visualSelectedIndex)) {
+                                TopTabClickAction.SELECT_TAB -> onCategorySelected(index)
+                                TopTabClickAction.SCROLL_TO_TOP -> reselectCurrentCategory()
+                            }
+                        },
+                    )
+                },
+                modifier = Modifier.fillMaxSize(),
+            )
         } else {
         // Match the bottom bar's actual app-surface luminance. The system theme can differ
         // from the active app theme and previously produced a dark gray capture on light pages.

@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.ui.platform.LocalDensity
@@ -8,8 +10,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.ui.window.Popup
@@ -374,7 +374,7 @@ internal fun PlayerNativeDropdownItem(
                 }
             },
             enabled = enabled,
-            trailingIcon = if (isSelected) { { Icon(Icons.Default.Check, contentDescription = null) } } else null,
+            trailingIcon = if (isSelected) { { Icon(AppIcons.Filled.Check, contentDescription = null) } } else null,
             onClick = { onSelectedIndexChange(index) },
         )
         return
@@ -403,7 +403,7 @@ internal fun PlayerNativeDropdownItem(
             },
             enabled = enabled,
             trailingIcon = if (isSelected) {
-                { Icon(Icons.Default.Check, contentDescription = null) }
+                { Icon(AppIcons.Filled.Check, contentDescription = null) }
             } else null,
             onClick = { onSelectedIndexChange(index) },
         )

@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.overlay
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -7,8 +9,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.MyLocation
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -126,7 +126,7 @@ fun PlayerSponsorSegmentsPanel(
                         ) {
                             val tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                             if (behaviorForCategory(marker.category) == SponsorBlockSegmentBehavior.MARKER_ONLY) {
-                                Icon(Icons.Outlined.MyLocation, null, Modifier.size(18.dp), tint)
+                                Icon(AppIcons.Outlined.MyLocation, null, Modifier.size(18.dp), tint)
                             } else SponsorStepOverIcon(tint)
                         }
                     } else Spacer(Modifier.width(10.dp))

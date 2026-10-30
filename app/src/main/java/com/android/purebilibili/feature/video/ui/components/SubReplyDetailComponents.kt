@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import android.widget.Toast
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
@@ -22,9 +24,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Sort
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -278,7 +277,7 @@ internal fun SubReplyInitialContent(
                 modifier = Modifier.weight(1f),
             )
             AppIconButton(onClick = onDismiss, modifier = Modifier.testTag(SUB_REPLY_DETAIL_CLOSE_TAG)) {
-                AppIcon(Icons.Outlined.Close, contentDescription = "关闭评论详情")
+                AppIcon(AppIcons.Outlined.Close, contentDescription = "关闭评论详情")
             }
         }
         AppHorizontalDivider(thickness = 0.5.dp, color = appearance.dividerColor)
@@ -704,7 +703,7 @@ internal fun SubReplyDetailContent(
                     modifier = Modifier.testTag(SUB_REPLY_DETAIL_CLOSE_TAG)
                 ) {
                     AppIcon(
-                        imageVector = Icons.Outlined.Close,
+                        imageVector = AppIcons.Outlined.Close,
                         contentDescription = "Close",
                         tint = appearance.primaryTextColor
                     )
@@ -853,7 +852,7 @@ internal fun SubReplyDetailContent(
                                         horizontalArrangement = Arrangement.spacedBy(6.dp)
                                     ) {
                                         AppIcon(
-                                            imageVector = Icons.AutoMirrored.Outlined.Sort,
+                                            imageVector = AppIcons.AutoMirrored.Outlined.Sort,
                                             contentDescription = "切换楼中楼排序",
                                             tint = appearance.sortTint,
                                             modifier = Modifier.size(16.dp)

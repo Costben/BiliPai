@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.search
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.compose.foundation.background
@@ -21,14 +23,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
-import androidx.compose.material.icons.outlined.ClearAll
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.Visibility
-import androidx.compose.material.icons.outlined.VisibilityOff
-import androidx.compose.material.icons.rounded.Refresh
-import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -302,7 +296,7 @@ fun SearchSuggestionDropdown(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     AppIcon(
-                        imageVector = Icons.Rounded.Search,
+                        imageVector = AppIcons.Rounded.Search,
                         contentDescription = null,
                         tint = AppContentColors.secondaryText().copy(alpha = 0.7f),
                         modifier = Modifier.size(18.dp)
@@ -515,7 +509,7 @@ private fun SearchKeywordSectionHeader(
                         overflow = TextOverflow.Ellipsis,
                     )
                     AppIcon(
-                        imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
+                        imageVector = AppIcons.AutoMirrored.Rounded.KeyboardArrowRight,
                         contentDescription = null,
                         modifier = Modifier.size(18.dp)
                     )
@@ -530,7 +524,7 @@ private fun SearchKeywordSectionHeader(
             if (useCompactActions && showTrendingAction && enabled && onOpenTrending != null) {
                 AppIconButton(onClick = onOpenTrending, modifier = Modifier.size(48.dp)) {
                     AppIcon(
-                        imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,
+                        imageVector = AppIcons.AutoMirrored.Rounded.KeyboardArrowRight,
                         contentDescription = "完整榜单",
                         tint = AppContentColors.secondaryText(),
                         modifier = Modifier.size(20.dp),
@@ -541,7 +535,7 @@ private fun SearchKeywordSectionHeader(
                 if (useCompactActions) {
                     AppIconButton(onClick = onRefresh, modifier = Modifier.size(48.dp)) {
                         AppIcon(
-                            imageVector = Icons.Rounded.Refresh,
+                            imageVector = AppIcons.Rounded.Refresh,
                             contentDescription = "刷新",
                             tint = AppContentColors.secondaryText(),
                             modifier = Modifier.size(18.dp),
@@ -550,7 +544,7 @@ private fun SearchKeywordSectionHeader(
                 } else {
                     AppTextButton(onClick = onRefresh) {
                         AppIcon(
-                            imageVector = Icons.Rounded.Refresh,
+                            imageVector = AppIcons.Rounded.Refresh,
                             contentDescription = "刷新",
                             modifier = Modifier.size(18.dp)
                         )
@@ -568,7 +562,7 @@ private fun SearchKeywordSectionHeader(
             if (showVisibilityToggle && onToggleEnabled != null) {
                 AppIconButton(onClick = onToggleEnabled, modifier = Modifier.size(48.dp)) {
                     AppIcon(
-                        imageVector = if (enabled) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
+                        imageVector = if (enabled) AppIcons.Outlined.VisibilityOff else AppIcons.Outlined.Visibility,
                         contentDescription = resolveSearchKeywordSectionToggleContentDescription(
                             enabled = enabled,
                             title = title,
@@ -745,7 +739,7 @@ private fun SearchHistorySectionModern(
                 ) {
                     val recording = shouldRecordSearchHistory(recordSearchHistory, globalPrivacyMode)
                     AppIcon(
-                        imageVector = if (recording) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
+                        imageVector = if (recording) AppIcons.Outlined.Visibility else AppIcons.Outlined.VisibilityOff,
                         contentDescription = if (recording) "关闭搜索历史记录" else "开启搜索历史记录",
                         modifier = Modifier.size(18.dp),
                     )
@@ -762,7 +756,7 @@ private fun SearchHistorySectionModern(
                 if (historyList.isNotEmpty()) {
                     AppTextButton(onClick = onClear) {
                         AppIcon(
-                            imageVector = Icons.Outlined.ClearAll,
+                            imageVector = AppIcons.Outlined.ClearAll,
                             contentDescription = "清空",
                             modifier = Modifier.size(18.dp),
                         )
@@ -812,7 +806,7 @@ private fun SearchHistorySectionModern(
                             contentAlignment = Alignment.Center,
                         ) {
                             AppIcon(
-                                imageVector = Icons.Outlined.Close,
+                                imageVector = AppIcons.Outlined.Close,
                                 contentDescription = "删除",
                                 tint = AppContentColors.secondaryText().copy(0.5f),
                                 modifier = Modifier.size(14.dp)

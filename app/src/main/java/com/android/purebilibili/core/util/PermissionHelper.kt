@@ -1,6 +1,8 @@
 // 文件路径: core/util/PermissionHelper.kt
 package com.android.purebilibili.core.util
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import android.Manifest
 import android.content.Context
 import android.content.Intent
@@ -11,8 +13,6 @@ import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 //  Material Icons
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -44,7 +44,7 @@ fun rememberPermissionState(
     permission: String,
     rationaleTitle: String,
     rationaleMessage: String,
-    rationaleIcon: androidx.compose.ui.graphics.vector.ImageVector = Icons.Outlined.Check,
+    rationaleIcon: androidx.compose.ui.graphics.vector.ImageVector = AppIcons.Outlined.Check,
     onPermissionResult: (Boolean) -> Unit = {}
 ): PermissionState {
     val context = LocalContext.current
@@ -103,7 +103,7 @@ fun rememberPermissionState(
             onDismissRequest = { showSettingsDialog = false },
             icon = {
                 AppIcon(
-                    Icons.Outlined.Check,
+                    AppIcons.Outlined.Check,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
                 )

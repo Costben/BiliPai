@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.audio.screen
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.compose.animation.AnimatedVisibility
@@ -26,11 +28,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Pause
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.outlined.QueueMusic
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.theme.LocalSettingsLiquidGlassEnabled
 import dev.chrisbanes.haze.HazeState
@@ -543,7 +540,7 @@ internal fun AudioNowPlayingBar(
                         ) {
                             AppIconButton(onClick = onPlayPause, modifier = Modifier.size(48.dp)) {
                                 AppIcon(
-                                    imageVector = if (state.isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow,
+                                    imageVector = if (state.isPlaying) AppIcons.Filled.Pause else AppIcons.Filled.PlayArrow,
                                     contentDescription = if (state.isPlaying) "暂停" else "播放",
                                     tint = immersiveContentColor ?: AppContentColors.primaryText()
                                 )
@@ -571,7 +568,7 @@ internal fun AudioNowPlayingBar(
                         ) {
                             AppIconButton(onClick = handleExpand, modifier = Modifier.size(48.dp)) {
                                 AppIcon(
-                                    Icons.Outlined.QueueMusic,
+                                    AppIcons.Outlined.QueueMusic,
                                     contentDescription = "打开$expandDestinationLabel",
                                     tint = immersiveContentColor ?: AppContentColors.primaryText(),
                                 )
@@ -603,7 +600,7 @@ internal fun AudioNowPlayingBar(
                                 modifier = Modifier.size(48.dp),
                             ) {
                                 AppIcon(
-                                    Icons.Filled.Close,
+                                    AppIcons.Filled.Close,
                                     contentDescription = "关闭听视频条",
                                     tint = immersiveContentColor ?: AppContentColors.primaryText(),
                                 )

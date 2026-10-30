@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.download
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppText
@@ -20,10 +22,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Folder
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import com.android.purebilibili.core.ui.appContentDialogWidth
 import com.android.purebilibili.core.ui.components.AppButton
 import com.android.purebilibili.core.ui.components.AppOutlinedButton
@@ -106,7 +104,7 @@ fun DirectorySelectionDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         AppIcon(
-                            imageVector = Icons.Filled.Folder,
+                            imageVector = AppIcons.Filled.Folder,
                             contentDescription = null,
                             tint = AppContentColors.accent(),
                             modifier = Modifier.size(20.dp)
@@ -132,7 +130,7 @@ fun DirectorySelectionDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         AppIcon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            imageVector = AppIcons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "上级目录",
                             tint = AppContentColors.accent()
                         )
@@ -172,7 +170,7 @@ fun DirectorySelectionDialog(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 AppIcon(
-                                    imageVector = Icons.Filled.Folder,
+                                    imageVector = AppIcons.Filled.Folder,
                                     contentDescription = null,
                                     tint = MaterialTheme.colorScheme.secondary
                                 )
@@ -184,7 +182,7 @@ fun DirectorySelectionDialog(
                                     modifier = Modifier.weight(1f)
                                 )
                                 AppIcon(
-                                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                                    imageVector = AppIcons.AutoMirrored.Filled.KeyboardArrowRight,
                                     contentDescription = null,
                                     tint = AppContentColors.secondaryText().copy(alpha = 0.3f),
                                     modifier = Modifier.size(16.dp)

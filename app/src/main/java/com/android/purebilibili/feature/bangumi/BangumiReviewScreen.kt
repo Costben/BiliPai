@@ -2,6 +2,8 @@
 
 package com.android.purebilibili.feature.bangumi
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.navigation.tabSelectedPage
 import com.android.purebilibili.navigation.tabIndicatorPosition
 import com.android.purebilibili.core.ui.AppContentColors
@@ -26,11 +28,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ThumbUp
-import androidx.compose.material.icons.outlined.ThumbDown
-import androidx.compose.material.icons.filled.ThumbUp
-import androidx.compose.material.icons.filled.ThumbDown
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -439,7 +436,7 @@ fun BangumiReviewScreen(
                                             busyReviews = busyReviews - item.review_id
                                         }
                                     }) {
-                                        AppIcon(if (item.stat?.disliked == 1) Icons.Filled.ThumbDown else Icons.Outlined.ThumbDown, contentDescription = if (item.stat?.disliked == 1) "取消点踩" else "点踩", tint = if (item.stat?.disliked == 1) AppContentColors.accent() else AppContentColors.secondaryText(), modifier = Modifier.size(20.dp))
+                                        AppIcon(if (item.stat?.disliked == 1) AppIcons.Filled.ThumbDown else AppIcons.Outlined.ThumbDown, contentDescription = if (item.stat?.disliked == 1) "取消点踩" else "点踩", tint = if (item.stat?.disliked == 1) AppContentColors.accent() else AppContentColors.secondaryText(), modifier = Modifier.size(20.dp))
                                     }
                                     AppTextButton(
                                         onClick = {
@@ -483,7 +480,7 @@ fun BangumiReviewScreen(
                                         enabled = item.review_id > 0 && item.review_id !in busyReviews,
                                     ) {
                                         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(AppSpacingTokens.ExtraSmall)) {
-                                            AppIcon(if (item.stat?.liked == 1) Icons.Filled.ThumbUp else Icons.Outlined.ThumbUp, contentDescription = if (item.stat?.liked == 1) "取消点赞" else "点赞", tint = if (item.stat?.liked == 1) AppContentColors.accent() else AppContentColors.secondaryText(), modifier = Modifier.size(20.dp))
+                                            AppIcon(if (item.stat?.liked == 1) AppIcons.Filled.ThumbUp else AppIcons.Outlined.ThumbUp, contentDescription = if (item.stat?.liked == 1) "取消点赞" else "点赞", tint = if (item.stat?.liked == 1) AppContentColors.accent() else AppContentColors.secondaryText(), modifier = Modifier.size(20.dp))
                                             item.stat?.let { AppText(it.likes.toString(), color = if (it.liked == 1) AppContentColors.accent() else AppContentColors.secondaryText()) }
                                         }
                                     }
@@ -605,12 +602,12 @@ private fun BangumiReviewTransitionPage(
                             AppTextButton(onClick = {}) { AppText("查看长评") }
                         } else if (reviewType == BangumiReviewType.SHORT && item.review_id > 0L) {
                             AppIconButton(onClick = {}) {
-                                AppIcon(if (item.stat?.disliked == 1) Icons.Filled.ThumbDown else Icons.Outlined.ThumbDown, contentDescription = null,
+                                AppIcon(if (item.stat?.disliked == 1) AppIcons.Filled.ThumbDown else AppIcons.Outlined.ThumbDown, contentDescription = null,
                                     tint = if (item.stat?.disliked == 1) AppContentColors.accent() else AppContentColors.secondaryText(), modifier = Modifier.size(20.dp))
                             }
                             AppTextButton(onClick = {}) {
                                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(AppSpacingTokens.ExtraSmall)) {
-                                    AppIcon(if (item.stat?.liked == 1) Icons.Filled.ThumbUp else Icons.Outlined.ThumbUp, contentDescription = null,
+                                    AppIcon(if (item.stat?.liked == 1) AppIcons.Filled.ThumbUp else AppIcons.Outlined.ThumbUp, contentDescription = null,
                                         tint = if (item.stat?.liked == 1) AppContentColors.accent() else AppContentColors.secondaryText(), modifier = Modifier.size(20.dp))
                                     item.stat?.let { AppText(it.likes.toString(), color = if (it.liked == 1) AppContentColors.accent() else AppContentColors.secondaryText()) }
                                 }

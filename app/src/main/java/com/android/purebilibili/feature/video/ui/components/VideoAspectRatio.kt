@@ -1,14 +1,13 @@
 // 文件路径: feature/video/ui/components/VideoAspectRatio.kt
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppText
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -392,7 +391,7 @@ fun AspectRatioButton(
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
         ) {
             AppIcon(
-                Icons.Outlined.Star,
+                AppIcons.Outlined.Star,
                 contentDescription = "画面比例",
                 tint = Color.White,
                 modifier = Modifier.size(16.dp)

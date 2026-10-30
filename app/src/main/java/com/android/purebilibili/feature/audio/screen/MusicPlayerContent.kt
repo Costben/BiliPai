@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.audio.screen
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.navigation.tabSelectedPage
 import com.android.purebilibili.navigation.tabIndicatorPosition
 import androidx.compose.foundation.clickable
@@ -209,26 +211,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.purebilibili.feature.video.playback.audio.AudioQualityOption
 import com.android.purebilibili.feature.video.player.PlayMode
 import com.android.purebilibili.feature.video.ui.components.AudioQualitySelectionMenu
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Comment
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Pause
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.SkipNext
-import androidx.compose.material.icons.filled.SkipPrevious
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.KeyboardArrowDown
-import androidx.compose.material.icons.outlined.DragHandle
-import androidx.compose.material.icons.outlined.MoreVert
-import androidx.compose.material.icons.outlined.MoreHoriz
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.MusicNote
-import androidx.compose.material.icons.outlined.QueueMusic
-import androidx.compose.material.icons.outlined.Repeat
-import androidx.compose.material.icons.outlined.RepeatOne
-import androidx.compose.material.icons.outlined.Shuffle
-import androidx.compose.material.icons.outlined.VolumeDown
-import androidx.compose.material.icons.outlined.VolumeUp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -1083,7 +1065,7 @@ internal fun MusicPlayerContent(
                                                     onClick = openCoverPage
                                                 )
                                                 PlaybackIconButton(
-                                                    icon = Icons.Filled.SkipPrevious,
+                                                    icon = AppIcons.Filled.SkipPrevious,
                                                     description = "上一首",
                                                     enabled = state.queueControls.hasPrevious && onPrevious != null,
                                                     onClick = onPrevious ?: {},
@@ -1099,7 +1081,7 @@ internal fun MusicPlayerContent(
                                                     isDarkEnvironment = isDarkEnvironment,
                                                 )
                                                 PlaybackIconButton(
-                                                    icon = Icons.Filled.SkipNext,
+                                                    icon = AppIcons.Filled.SkipNext,
                                                     description = "下一首",
                                                     enabled = state.queueControls.hasNext && onNext != null,
                                                     onClick = onNext ?: {},
@@ -1675,7 +1657,7 @@ internal fun MusicPlayerContent(
                                     }
                                 )
                                 GlassIconButton(
-                                    icon = Icons.Outlined.Search,
+                                    icon = AppIcons.Outlined.Search,
                                     description = "搜索歌词",
                                     glassEnabled = glassEnabled,
                                     miuixBackdrop = musicBackdrop,
@@ -2071,7 +2053,7 @@ private fun ImmersiveBottomQueueShelf(
                             modifier = Modifier.size(48.dp)
                         ) {
                             AppIcon(
-                                imageVector = androidx.compose.material.icons.Icons.Outlined.QueueMusic,
+                                imageVector = AppIcons.Outlined.QueueMusic,
                                 contentDescription = "导入外部歌单",
                                 tint = MusicContentColor.copy(alpha = 0.72f),
                                 modifier = Modifier.size(22.dp)
@@ -2083,7 +2065,7 @@ private fun ImmersiveBottomQueueShelf(
                         modifier = Modifier.size(48.dp)
                     ) {
                         AppIcon(
-                            imageVector = Icons.Outlined.KeyboardArrowDown,
+                            imageVector = AppIcons.Outlined.KeyboardArrowDown,
                             contentDescription = "收起待播清单",
                             tint = MusicContentColor.copy(alpha = 0.72f),
                             modifier = Modifier.size(22.dp)
@@ -2216,7 +2198,7 @@ private fun ImmersiveBottomQueueShelf(
                             }
                             if (index == currentIndex) {
                                 AppIcon(
-                                    Icons.Outlined.MusicNote,
+                                    AppIcons.Outlined.MusicNote,
                                     contentDescription = null,
                                     tint = MusicAccentColor,
                                     modifier = Modifier.size(20.dp)
@@ -2296,7 +2278,7 @@ private fun ImmersiveBottomQueueShelf(
                                             )
                                         },
                                     contentAlignment = Alignment.Center,
-                                ) { AppIcon(Icons.Outlined.DragHandle, null, tint = MusicContentColor) }
+                                ) { AppIcon(AppIcons.Outlined.DragHandle, null, tint = MusicContentColor) }
                             }
                         }
                     }
@@ -2361,7 +2343,7 @@ private fun MusicQueueActionButton(
     if (actions.isEmpty()) return
     com.android.purebilibili.core.ui.components.AppGlassMenuAnchor(onOpen = { expanded = true }) {
         AppIconButton(onClick = { expanded = true }) {
-            AppIcon(Icons.Outlined.MoreVert, "队列操作：${item.title}", tint = MusicContentColor)
+            AppIcon(AppIcons.Outlined.MoreVert, "队列操作：${item.title}", tint = MusicContentColor)
         }
         if (glassMenu) {
             com.android.purebilibili.core.ui.components.AppGlassMenu(
@@ -2686,7 +2668,7 @@ private fun PlayerPage(
                             .size(48.dp)
                     ) {
                         AppIcon(
-                            imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                            imageVector = if (isLiked) AppIcons.Filled.Favorite else AppIcons.Outlined.FavoriteBorder,
                             contentDescription = if (isLiked) "取消点赞" else "点赞",
                             tint = if (isLiked) MusicLikeColor else MusicContentColor.copy(alpha = 0.72f)
                         )
@@ -2696,7 +2678,7 @@ private fun PlayerPage(
                     // 同时不给用户一个会写入错误状态的入口。
                     Box(modifier = Modifier.size(48.dp)) {
                         AppIcon(
-                            imageVector = Icons.Outlined.FavoriteBorder,
+                            imageVector = AppIcons.Outlined.FavoriteBorder,
                             contentDescription = null,
                             tint = MusicContentColor.copy(alpha = 0.28f),
                             modifier = Modifier
@@ -2797,7 +2779,7 @@ private fun MusicSecondaryControls(
             modifier = Modifier.size(48.dp)
         ) {
             AppIcon(
-                Icons.Outlined.Shuffle,
+                AppIcons.Outlined.Shuffle,
                 contentDescription = "随机播放",
                 tint = if (transport.shuffleEnabled) active else inactive
             )
@@ -2808,9 +2790,9 @@ private fun MusicSecondaryControls(
         ) {
             AppIcon(
                 imageVector = if (transport.repeatGlyph == MusicRepeatGlyph.ONE) {
-                    Icons.Outlined.RepeatOne
+                    AppIcons.Outlined.RepeatOne
                 } else {
-                    Icons.Outlined.Repeat
+                    AppIcons.Outlined.Repeat
                 },
                 contentDescription = "循环模式",
                 tint = if (transport.repeatGlyph == MusicRepeatGlyph.OFF) inactive else active
@@ -2822,7 +2804,7 @@ private fun MusicSecondaryControls(
             modifier = Modifier.size(48.dp)
         ) {
             AppIcon(
-                Icons.AutoMirrored.Outlined.Comment,
+                AppIcons.AutoMirrored.Outlined.Comment,
                 contentDescription = "评论",
                 tint = if (onCommentsClick != null) inactive else inactive.copy(alpha = 0.28f)
             )
@@ -2833,7 +2815,7 @@ private fun MusicSecondaryControls(
             modifier = Modifier.size(48.dp)
         ) {
             AppIcon(
-                Icons.Outlined.QueueMusic,
+                AppIcons.Outlined.QueueMusic,
                 contentDescription = "播放队列",
                 tint = if (isQueueActive) active else if (showQueue) inactive else inactive.copy(alpha = 0.28f)
             )
@@ -2890,7 +2872,7 @@ private fun MusicArtwork(
                     contentScale = ContentScale.Crop
                 )
                 else -> AppIcon(
-                    Icons.Outlined.MusicNote,
+                    AppIcons.Outlined.MusicNote,
                     contentDescription = null,
                     tint = MusicContentColor.copy(alpha = 0.78f),
                     modifier = Modifier.size(48.dp)
@@ -2943,7 +2925,7 @@ private fun MusicArtwork(
                     contentAlignment = Alignment.Center
                 ) {
                     AppIcon(
-                        Icons.Outlined.MusicNote,
+                        AppIcons.Outlined.MusicNote,
                         contentDescription = null,
                         tint = MusicContentColor.copy(alpha = 0.78f),
                         modifier = Modifier.size(64.dp)
@@ -3015,7 +2997,7 @@ private fun MusicArtwork(
                     contentScale = ContentScale.Crop
                 )
                 else -> AppIcon(
-                    Icons.Outlined.MusicNote,
+                    AppIcons.Outlined.MusicNote,
                     contentDescription = null,
                     tint = MusicContentColor.copy(alpha = 0.78f),
                     modifier = Modifier.size(if (isCard) 64.dp else 96.dp)
@@ -3137,7 +3119,7 @@ private fun MusicVolumeSlider(
         verticalAlignment = Alignment.CenterVertically
     ) {
         AppIcon(
-            imageVector = Icons.Outlined.VolumeDown,
+            imageVector = AppIcons.Outlined.VolumeDown,
             contentDescription = "静音",
             tint = MusicContentColor.copy(alpha = 0.6f),
             modifier = Modifier.size(18.dp)
@@ -3169,7 +3151,7 @@ private fun MusicVolumeSlider(
             )
         }
         AppIcon(
-            imageVector = Icons.Outlined.VolumeUp,
+            imageVector = AppIcons.Outlined.VolumeUp,
             contentDescription = "最大音量",
             tint = MusicContentColor.copy(alpha = 0.6f),
             modifier = Modifier.size(18.dp)
@@ -3197,7 +3179,7 @@ private fun PlaybackControls(
         verticalAlignment = Alignment.CenterVertically
     ) {
         PlaybackIconButton(
-            icon = Icons.Filled.SkipPrevious,
+            icon = AppIcons.Filled.SkipPrevious,
             description = "上一首",
             enabled = state.queueControls.hasPrevious && onPrevious != null,
             onClick = onPrevious ?: {},
@@ -3213,7 +3195,7 @@ private fun PlaybackControls(
             isDarkEnvironment = isDarkEnvironment,
         )
         PlaybackIconButton(
-            icon = Icons.Filled.SkipNext,
+            icon = AppIcons.Filled.SkipNext,
             description = "下一首",
             enabled = state.queueControls.hasNext && onNext != null,
             onClick = onNext ?: {},
@@ -3353,7 +3335,7 @@ private fun PlayerLyricsPreview(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     AppIcon(
-                        Icons.Outlined.MusicNote,
+                        AppIcons.Outlined.MusicNote,
                         contentDescription = null,
                         tint = MusicContentColor.copy(alpha = 0.78f),
                         modifier = Modifier.size(16.dp)
@@ -4080,7 +4062,7 @@ private fun MusicPlayPauseButton(
             )
         } else {
             AppIcon(
-                imageVector = if (state.isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow,
+                imageVector = if (state.isPlaying) AppIcons.Filled.Pause else AppIcons.Filled.PlayArrow,
                 contentDescription = if (state.isPlaying) "暂停" else "播放",
                 tint = playButtonFg,
                 modifier = Modifier.size((sizeDp * 0.50f).dp)
@@ -4289,7 +4271,7 @@ private fun MusicTopBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         GlassIconButton(
-            icon = Icons.Outlined.KeyboardArrowDown,
+            icon = AppIcons.Outlined.KeyboardArrowDown,
             description = "返回",
             glassEnabled = glassEnabled,
             miuixBackdrop = miuixBackdrop,
@@ -4307,7 +4289,7 @@ private fun MusicTopBar(
             }
             if (onToggleLayout != null) {
                 GlassIconButton(
-                    icon = Icons.Outlined.QueueMusic,
+                    icon = AppIcons.Outlined.QueueMusic,
                     description = layoutActionLabel,
                     glassEnabled = glassEnabled,
                     miuixBackdrop = miuixBackdrop,
@@ -4319,7 +4301,7 @@ private fun MusicTopBar(
             }
             com.android.purebilibili.core.ui.components.AppGlassMenuAnchor(onOpen = onMore) {
                 GlassIconButton(
-                    icon = Icons.Outlined.MoreHoriz,
+                    icon = AppIcons.Outlined.MoreHoriz,
                     description = "更多操作",
                     glassEnabled = glassEnabled,
                     miuixBackdrop = miuixBackdrop,
@@ -4861,7 +4843,7 @@ private fun ExpandedQueuePane(
                             if (isPlayingItem) {
                                 Spacer(Modifier.width(8.dp))
                                 AppIcon(
-                                    Icons.Outlined.MusicNote,
+                                    AppIcons.Outlined.MusicNote,
                                     contentDescription = "正在播放",
                                     tint = MusicAccentColor,
                                     modifier = Modifier.size(20.dp)

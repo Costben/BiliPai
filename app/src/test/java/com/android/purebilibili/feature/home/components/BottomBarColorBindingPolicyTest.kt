@@ -231,7 +231,7 @@ class BottomBarColorBindingPolicyTest {
         assertFalse(watchLaterBlock.contains("Bookmark"))
         assertTrue(
             source.contains(
-                "BottomNavItem.WATCHLATER -> if (selected) Icons.Filled.WatchLater else Icons.Outlined.WatchLater"
+                "BottomNavItem.WATCHLATER -> if (selected) AppIcons.Filled.WatchLater else AppIcons.Outlined.WatchLater"
             )
         )
     }

@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.download
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import com.android.purebilibili.feature.video.ui.overlay.NextWatchOverlay
@@ -79,13 +81,6 @@ import com.android.purebilibili.feature.video.ui.gesture.rememberGestureLevelOve
 import com.android.purebilibili.feature.video.ui.section.VideoGestureMode
 import com.android.purebilibili.feature.video.ui.section.resolveHorizontalSeekDeltaMs
 import com.android.purebilibili.danmaku.engine.DanmakuRenderView
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.FastForward
-import androidx.compose.material.icons.outlined.Fullscreen
-import androidx.compose.material.icons.outlined.FullscreenExit
-import androidx.compose.material.icons.outlined.Pause
-import androidx.compose.material.icons.outlined.SkipNext
-import androidx.compose.material.icons.outlined.SkipPrevious
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -966,7 +961,7 @@ fun OfflineVideoPlayerScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         AppIcon(
-                            Icons.Outlined.FastForward,
+                            AppIcons.Outlined.FastForward,
                             contentDescription = null,
                             tint = Color.White,
                             modifier = Modifier.size(20.dp)
@@ -1123,7 +1118,7 @@ fun OfflineVideoPlayerScreen(
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     AppIcon(
-                                        Icons.Outlined.SkipPrevious,
+                                        AppIcons.Outlined.SkipPrevious,
                                         contentDescription = "上一集",
                                         tint = Color.White,
                                         modifier = Modifier.size(16.dp)
@@ -1153,7 +1148,7 @@ fun OfflineVideoPlayerScreen(
                                     AppText("下一集", color = Color.White, style = MaterialTheme.typography.labelMedium)
                                     Spacer(modifier = Modifier.width(AppSpacingTokens.ExtraSmall))
                                     AppIcon(
-                                        Icons.Outlined.SkipNext,
+                                        AppIcons.Outlined.SkipNext,
                                         contentDescription = "下一集",
                                         tint = Color.White,
                                         modifier = Modifier.size(16.dp)
@@ -1184,7 +1179,7 @@ fun OfflineVideoPlayerScreen(
                             modifier = Modifier.size(36.dp)
                         ) {
                             AppIcon(
-                                if (isPlaying) Icons.Outlined.Pause else playIcon,
+                                if (isPlaying) AppIcons.Outlined.Pause else playIcon,
                                 contentDescription = if (isPlaying) "暂停" else "播放",
                                 tint = Color.White,
                                 modifier = Modifier.size(24.dp)
@@ -1237,7 +1232,7 @@ fun OfflineVideoPlayerScreen(
                         ) {
                             Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                                 AppIcon(
-                                    if (isFullscreen) Icons.Outlined.FullscreenExit else Icons.Outlined.Fullscreen,
+                                    if (isFullscreen) AppIcons.Outlined.FullscreenExit else AppIcons.Outlined.Fullscreen,
                                     contentDescription = if (isFullscreen) "退出全屏" else "全屏",
                                     tint = if (!isFullscreen) activeControlColors.contentColor else Color.White,
                                     modifier = Modifier.size(22.dp)

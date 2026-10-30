@@ -2,6 +2,8 @@
 
 package com.android.purebilibili.core.ui.common
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import android.os.Build
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -21,11 +23,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.SelectAll
-import androidx.compose.material.icons.outlined.ContentCopy
-import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -150,7 +147,7 @@ fun TextSelectionBottomSheet(
                     modifier = Modifier.size(36.dp)
                 ) {
                     AppIcon(
-                        imageVector = Icons.Filled.Close,
+                        imageVector = AppIcons.Filled.Close,
                         contentDescription = "关闭",
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -219,7 +216,7 @@ fun TextSelectionBottomSheet(
                         modifier = Modifier.weight(1f)
                     ) {
                         AppIcon(
-                            imageVector = Icons.Outlined.ContentCopy,
+                            imageVector = AppIcons.Outlined.ContentCopy,
                             contentDescription = null,
                             modifier = Modifier.size(18.dp)
                         )
@@ -253,7 +250,7 @@ fun TextSelectionBottomSheet(
                         modifier = Modifier.weight(1f)
                     ) {
                         AppIcon(
-                            imageVector = Icons.Outlined.ContentCopy,
+                            imageVector = AppIcons.Outlined.ContentCopy,
                             contentDescription = null,
                             modifier = Modifier.size(18.dp)
                         )
@@ -270,7 +267,7 @@ fun TextSelectionBottomSheet(
                             }
                         ) {
                             AppIcon(
-                                imageVector = Icons.Filled.SelectAll,
+                                imageVector = AppIcons.Filled.SelectAll,
                                 contentDescription = null,
                                 modifier = Modifier.size(18.dp)
                             )
@@ -291,7 +288,7 @@ fun TextSelectionBottomSheet(
                     }
                 ) {
                     AppIcon(
-                        imageVector = Icons.Outlined.Share,
+                        imageVector = AppIcons.Outlined.Share,
                         contentDescription = "分享",
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )

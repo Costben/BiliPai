@@ -1,5 +1,7 @@
 package com.android.purebilibili.core.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,9 +16,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.UnfoldMore
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -221,7 +220,7 @@ fun <T> AppSingleChoicePreference(
                         )
                         if (enabled) {
                             Spacer(Modifier.width(6.dp))
-                            Icon(Icons.Default.UnfoldMore, contentDescription = null,
+                            Icon(AppIcons.Filled.UnfoldMore, contentDescription = null,
                                 tint = AppContentColors.secondaryText(), modifier = Modifier.size(16.dp))
                         }
                     }
@@ -345,7 +344,7 @@ fun <T> AppSingleChoicePreference(
                                     selected -> {
                                         {
                                             Icon(
-                                                imageVector = Icons.Default.Check,
+                                                imageVector = AppIcons.Filled.Check,
                                                 contentDescription = null,
                                                 tint = AppContentColors.link(),
                                             )
@@ -357,7 +356,7 @@ fun <T> AppSingleChoicePreference(
                                 trailingIcon = if (optionLeading != null && selected) {
                                     {
                                         Icon(
-                                            imageVector = Icons.Default.Check,
+                                            imageVector = AppIcons.Filled.Check,
                                             contentDescription = null,
                                             tint = AppContentColors.link(),
                                         )

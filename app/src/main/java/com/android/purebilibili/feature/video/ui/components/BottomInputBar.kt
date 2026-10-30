@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.components.appActionClickable
 import com.android.purebilibili.core.ui.components.appActionWithFeedback
 
@@ -31,8 +33,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Edit
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.appElasticPress
 import androidx.compose.material3.MaterialTheme
@@ -332,7 +332,7 @@ internal fun CommentEntryBarContent(
         horizontalArrangement = Arrangement.spacedBy(iconSpacing),
     ) {
         AppIcon(
-            imageVector = Icons.Outlined.Edit,
+            imageVector = AppIcons.Outlined.Edit,
             contentDescription = null,
             tint = textColor,
             modifier = Modifier.size(iconSize),

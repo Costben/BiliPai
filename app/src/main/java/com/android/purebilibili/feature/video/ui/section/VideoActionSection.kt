@@ -17,12 +17,6 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.StarBorder
-import androidx.compose.material.icons.outlined.ThumbUp
-import androidx.compose.material.icons.rounded.Star
-import androidx.compose.material.icons.rounded.ThumbUp
-import androidx.compose.material.icons.rounded.ThumbDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -48,8 +42,6 @@ import com.android.purebilibili.feature.video.ui.components.favoriteFolderMenuSo
 import com.android.purebilibili.core.util.HapticType
 import com.android.purebilibili.core.util.rememberHapticFeedback
 import com.android.purebilibili.data.model.response.ViewInfo
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
@@ -187,7 +179,7 @@ fun ActionButtonsRow(
                 // 图标/文案使用主题未激活色，状态回填后由 Crossfade 平滑切换。
                 // 这样首帧就是一个完整可读的按钮，避免空白→图标 pop-in 造成的闪烁。
                 TripleProgressActionButton(
-                    icon = if (isLiked) Icons.Rounded.ThumbUp else Icons.Outlined.ThumbUp,
+                    icon = if (isLiked) AppIcons.Rounded.ThumbUp else AppIcons.Outlined.ThumbUp,
                     text = FormatUtils.formatStat(info.stat.like.toLong()),
                     isActive = isLiked,
                     activeColor = activeColors.primaryAction,
@@ -237,7 +229,7 @@ fun ActionButtonsRow(
                 contentAlignment = Alignment.Center
             ) {
                 TripleProgressActionButton(
-                    icon = if (isDisliked) Icons.Rounded.ThumbDown else Icons.Outlined.ThumbDown,
+                    icon = if (isDisliked) AppIcons.Rounded.ThumbDown else AppIcons.Outlined.ThumbDown,
                     text = "点踩",
                     isActive = isDisliked,
                     activeColor = activeColors.primaryAction,
@@ -298,7 +290,7 @@ fun ActionButtonsRow(
                 contentAlignment = Alignment.Center
             ) {
                 TripleProgressActionButton(
-                    icon = if (isFavorited) Icons.Rounded.Star else Icons.Outlined.StarBorder,
+                    icon = if (isFavorited) AppIcons.Rounded.Star else AppIcons.Outlined.StarBorder,
                     text = FormatUtils.formatStat(info.stat.favorite.toLong()),
                     isActive = isFavorited,
                     activeColor = activeColors.primaryAction,
@@ -372,7 +364,7 @@ fun ActionButtonsRow(
             ) {
                 Box(modifier = Modifier.downloadActionAnchor()) {
                     BiliActionButton(
-                        icon = if (isDownloaded) Icons.Outlined.Check else downloadIcon,
+                        icon = if (isDownloaded) AppIcons.Outlined.Check else downloadIcon,
                         text = downloadText,
                         isActive = isDownloaded || isDownloading,
                         activeColor = if (isDownloaded) {
@@ -580,7 +572,7 @@ private fun TripleLikeActionButton(
     ) {
         // 点赞图标
         TripleProgressIcon(
-            icon = if (isLiked) Icons.Filled.ThumbUp else Icons.Outlined.ThumbUp,
+            icon = if (isLiked) AppIcons.Filled.ThumbUp else AppIcons.Outlined.ThumbUp,
             text = likeCount,
             progress = longPressProgress,
             progressColor = AppContentColors.accent(),
@@ -609,7 +601,7 @@ private fun TripleLikeActionButton(
             exit = androidx.compose.animation.fadeOut() + androidx.compose.animation.scaleOut()
         ) {
             TripleProgressIcon(
-                icon = if (isFavorited) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
+                icon = if (isFavorited) AppIcons.Filled.Bookmark else AppIcons.Outlined.BookmarkBorder,
                 text = favoriteCount,
                 progress = longPressProgress,
                 progressColor = AppContentColors.accent(),

@@ -1,10 +1,9 @@
 package com.android.purebilibili.core.ui.renderer.material3
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
@@ -66,7 +65,7 @@ internal fun AppMaterial3Switch(
         thumbContent = thumbContent ?: if (showThumbIcon) {
             {
                 Icon(
-                    imageVector = if (checked) Icons.Filled.Check else Icons.Filled.Close,
+                    imageVector = if (checked) AppIcons.Filled.Check else AppIcons.Filled.Close,
                     contentDescription = null,
                     modifier = Modifier.size(SwitchDefaults.IconSize),
                 )

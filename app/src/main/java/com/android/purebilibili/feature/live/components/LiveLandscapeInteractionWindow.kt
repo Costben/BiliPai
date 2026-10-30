@@ -1,14 +1,12 @@
 package com.android.purebilibili.feature.live.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.ExpandLess
-import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -160,11 +158,11 @@ private fun LiveInteractionWindowBody(
             ) { AppText("弹幕互动", color = AppContentColors.primaryText()) }
             if (!collapsed) headerAction()
             AppIconButton(onClick = onToggleCollapsed, modifier = Modifier.size(40.dp)) {
-                AppIcon(if (collapsed) Icons.Outlined.ExpandMore else Icons.Outlined.ExpandLess,
+                AppIcon(if (collapsed) AppIcons.Outlined.ExpandMore else AppIcons.Outlined.ExpandLess,
                     contentDescription = if (collapsed) "展开互动窗" else "收起互动窗")
             }
             AppIconButton(onClick = onClose, modifier = Modifier.size(40.dp)) {
-                AppIcon(Icons.Outlined.Close, contentDescription = "关闭互动窗")
+                AppIcon(AppIcons.Outlined.Close, contentDescription = "关闭互动窗")
             }
         }
         if (!collapsed) Box(Modifier.weight(1f).fillMaxWidth()) { content() }

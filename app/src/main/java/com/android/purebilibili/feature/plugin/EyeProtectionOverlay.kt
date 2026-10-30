@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.plugin
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.plugin.sdk.EyeCareReminder
 import com.android.purebilibili.plugin.sdk.EyeProtectionPluginApi
 
@@ -20,8 +22,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -157,7 +157,7 @@ private fun RestReminderDialog(
                 contentAlignment = Alignment.Center
             ) {
                 AppIcon(
-                    Icons.Outlined.Visibility,
+                    AppIcons.Outlined.Visibility,
                     contentDescription = null,
                     tint = accent,
                     modifier = Modifier.size(28.dp)

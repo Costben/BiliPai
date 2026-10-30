@@ -1,6 +1,8 @@
 // 文件路径: feature/bangumi/ui/player/BangumiPlayerComponents.kt
 package com.android.purebilibili.feature.bangumi.ui.player
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.plugin.BuiltinPluginIds
 
 import com.android.purebilibili.core.ui.AppSurfaceTokens
@@ -32,11 +34,6 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 // 🌈 Material Icons Extended - 亮度图标
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BrightnessLow
-import androidx.compose.material.icons.filled.BrightnessMedium
-import androidx.compose.material.icons.filled.BrightnessHigh
-import androidx.compose.material.icons.outlined.Check
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -1137,7 +1134,7 @@ fun BangumiQualityMenu(
 
                         if (isSelected) {
                             AppIcon(
-                                Icons.Outlined.Check,
+                                AppIcons.Outlined.Check,
                                 contentDescription = null,
                                 tint = AppContentColors.accent(),
                                 modifier = Modifier.size(18.dp)

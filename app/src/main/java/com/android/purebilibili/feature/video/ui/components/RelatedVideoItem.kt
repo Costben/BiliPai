@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import coil3.request.crossfade
@@ -22,8 +24,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppText
@@ -488,7 +488,7 @@ fun RelatedVideoItem(
                         contentAlignment = Alignment.Center,
                     ) {
                         AppIcon(
-                            imageVector = Icons.Filled.MoreVert,
+                            imageVector = AppIcons.Filled.MoreVert,
                             contentDescription = "更多操作",
                             tint = AppContentColors.secondaryText(),
                             modifier = Modifier.size(18.dp),

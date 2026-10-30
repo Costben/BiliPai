@@ -1,6 +1,8 @@
 // 文件路径: feature/dynamic/components/ActionButton.kt
 package com.android.purebilibili.feature.dynamic.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.appElasticPress
@@ -25,9 +27,6 @@ import androidx.compose.foundation.background
 import com.android.purebilibili.core.ui.components.appActionClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.IosShare
-import androidx.compose.material.icons.outlined.Sms
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -93,9 +92,9 @@ fun ActionButton(
         isLike && isActive -> rememberAppLikeFilledIcon()
         isLike -> rememberAppLikeIcon()
         // 动态底栏采用 PiliPlus 的“方框箭头 / 方框气泡”线性图标，而不是节点式 Share。
-        isForward -> Icons.Outlined.IosShare
-        isComment -> Icons.Outlined.Sms
-        else -> Icons.Outlined.Sms
+        isForward -> AppIcons.Outlined.IosShare
+        isComment -> AppIcons.Outlined.Sms
+        else -> AppIcons.Outlined.Sms
     }
     val countFadeAnimationSpec = AppMotionTokens.standardSpec<Float>()
     val countSlideAnimationSpec = AppMotionTokens.standardSpec<IntOffset>()

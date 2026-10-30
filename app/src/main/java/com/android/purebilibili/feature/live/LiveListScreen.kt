@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.live
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.border
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -17,16 +19,8 @@ import com.android.purebilibili.core.ui.components.AppLazyVerticalGrid as LazyVe
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.Apps
-import androidx.compose.material.icons.outlined.NotificationsNone
-import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.filled.Gamepad
-import androidx.compose.material.icons.filled.Widgets
 import com.android.purebilibili.core.ui.components.AppFilledIconButton
 import com.android.purebilibili.core.ui.components.AppIconButtonDefaults
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.snapshotFlow
@@ -904,7 +898,7 @@ private fun LiveListHeader(
                 ) {
                     Box(contentAlignment = Alignment.Center) {
                         AppIcon(
-                            imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+                            imageVector = AppIcons.AutoMirrored.Outlined.ArrowBack,
                             contentDescription = "返回",
                             tint = palette.primaryText
                         )
@@ -950,7 +944,7 @@ private fun LiveListHeader(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             AppIcon(
-                                imageVector = Icons.Outlined.Search,
+                                imageVector = AppIcons.Outlined.Search,
                                 contentDescription = null,
                                 tint = palette.secondaryText,
                             )
@@ -979,7 +973,7 @@ private fun LiveListHeader(
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     AppIcon(
-                        imageVector = Icons.Outlined.Apps,
+                        imageVector = AppIcons.Outlined.Apps,
                         contentDescription = "全部直播分区",
                         tint = palette.primaryText
                     )
@@ -1187,7 +1181,7 @@ private fun LiveAreaHomeChipRow(
                 imageVector = if (showFirstFrame) {
                     LiveFirstFrameIcon
                 } else {
-                    Icons.Filled.Image
+                    AppIcons.Filled.Image
                 },
                 contentDescription = if (showFirstFrame) "显示封面" else "显示首帧",
                 modifier = Modifier.size(18.dp),
@@ -1200,7 +1194,7 @@ private fun LiveAreaHomeChipRow(
             colors = quickActionColors,
         ) {
             AppIcon(
-                imageVector = Icons.Filled.Gamepad,
+                imageVector = AppIcons.Filled.Gamepad,
                 contentDescription = "游戏赛事",
                 modifier = Modifier.size(16.dp),
             )
@@ -1212,7 +1206,7 @@ private fun LiveAreaHomeChipRow(
             colors = quickActionColors,
         ) {
             AppIcon(
-                imageVector = Icons.Filled.Widgets,
+                imageVector = AppIcons.Filled.Widgets,
                 contentDescription = "全部标签",
                 modifier = Modifier.size(16.dp),
             )
@@ -1388,7 +1382,7 @@ private fun EmptyState(
             contentAlignment = Alignment.Center
         ) {
             AppIcon(
-                imageVector = Icons.Outlined.NotificationsNone,
+                imageVector = AppIcons.Outlined.NotificationsNone,
                 contentDescription = null,
                 tint = palette.secondaryText,
                 modifier = Modifier.size(visualSpec.emptyStateIconSizeDp.dp)

@@ -1,6 +1,8 @@
 // 文件路径: feature/watchlater/WatchLaterScreen.kt
 package com.android.purebilibili.feature.watchlater
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.navigation.tabSelectedPage
 import com.android.purebilibili.navigation.tabIndicatorPosition
 import com.android.purebilibili.feature.home.effectiveGridColumnCount
@@ -147,9 +149,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.rounded.Close
 import com.android.purebilibili.core.util.FormatUtils
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
@@ -1139,7 +1138,7 @@ fun WatchLaterScreen(
                             }
                         ) {
                             AppIcon(
-                                if (isBatchMode) Icons.Rounded.Close else rememberAppBackIcon(),
+                                if (isBatchMode) AppIcons.Rounded.Close else rememberAppBackIcon(),
                                 contentDescription = if (isBatchMode) "退出多选" else "返回",
                             )
                         }
@@ -1223,7 +1222,7 @@ fun WatchLaterScreen(
                                     ),
                                 ) {
                                     AppIcon(
-                                        imageVector = Icons.Filled.MoreVert,
+                                        imageVector = AppIcons.Filled.MoreVert,
                                         contentDescription = "更多管理",
                                     )
                                 }
@@ -1848,7 +1847,7 @@ private fun WatchLaterVideoCard(
                         )
                         if (!isBatchMode) {
                             AppIconButton(enabled = enabled, onClick = onDelete) {
-                                AppIcon(Icons.Rounded.Close, contentDescription = "删除")
+                                AppIcon(AppIcons.Rounded.Close, contentDescription = "删除")
                             }
                         }
                     }
@@ -1896,7 +1895,7 @@ private fun WatchLaterVideoCard(
                     enabled = enabled,
                     onClick = onDelete,
                 ) {
-                    AppIcon(Icons.Rounded.Close, contentDescription = "删除")
+                    AppIcon(AppIcons.Rounded.Close, contentDescription = "删除")
                 }
             }
         },

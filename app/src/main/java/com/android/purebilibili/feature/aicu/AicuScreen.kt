@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.aicu
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import android.content.ClipData
@@ -17,8 +19,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import com.android.purebilibili.core.ui.common.AppSelectionContainer as SelectionContainer
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
@@ -185,7 +185,7 @@ internal fun AicuScreen(
             AppTopBar(
                 title = "评论与弹幕查询",
                 navigationIcon = { AppIconButton(onClick = onBack, modifier = Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp)) {
-                    AppIcon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "返回")
+                    AppIcon(AppIcons.AutoMirrored.Outlined.ArrowBack, contentDescription = "返回")
                 } },
                 actions = {
                     AppTextButton(onClick = { showTrending = true; onLoadTrending() }, modifier = Modifier.heightIn(min = 48.dp)) { AppText("Aicu 热搜") }

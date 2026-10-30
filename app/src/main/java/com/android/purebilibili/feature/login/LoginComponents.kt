@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.login
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import coil3.request.crossfade
 
 import androidx.activity.compose.LocalActivity
@@ -84,8 +86,6 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import com.android.purebilibili.core.ui.LoadingAnimation
 import com.android.purebilibili.core.ui.SuccessAnimation
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.AppSpacingTokens
 import com.android.purebilibili.core.ui.ContainerLevel
@@ -333,7 +333,7 @@ fun BrandingHeader(isSmall: Boolean = false) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 AppIcon(
-                    imageVector = Icons.Filled.Star,
+                    imageVector = AppIcons.Filled.Star,
                     contentDescription = null,
                     tint = palette.buttonGradientStart,
                     modifier = Modifier.size(12.dp)
@@ -388,7 +388,7 @@ fun LoginMethodTabs(
     val palette = rememberLoginPalette()
     val methods = remember {
         resolveAvailableLoginMethods().map { method ->
-            Triple(method, "扫码登录", Icons.Filled.CameraAlt)
+            Triple(method, "扫码登录", AppIcons.Filled.CameraAlt)
         }
     }
 
@@ -537,7 +537,7 @@ fun QrCodeLoginContent(
                         )
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             AppIcon(
-                                imageVector = Icons.Filled.Phone,
+                                imageVector = AppIcons.Filled.Phone,
                                 contentDescription = null,
                                 tint = palette.success,
                                 modifier = Modifier.size(38.dp)
@@ -554,7 +554,7 @@ fun QrCodeLoginContent(
                     is LoginState.Error -> {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             AppIcon(
-                                imageVector = Icons.Filled.Error,
+                                imageVector = AppIcons.Filled.Error,
                                 contentDescription = null,
                                 tint = palette.error,
                                 modifier = Modifier.size(34.dp)
@@ -684,7 +684,7 @@ fun PhoneLoginContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 AppIcon(
-                    imageVector = Icons.Filled.Star,
+                    imageVector = AppIcons.Filled.Star,
                     contentDescription = null,
                     tint = palette.buttonGradientStart,
                     modifier = Modifier.size(14.dp)
@@ -718,7 +718,7 @@ fun PhoneLoginContent(
                     }
                 },
                 placeholder = "${selectedRegion.dialingCode} ${selectedRegion.name}手机号",
-                icon = Icons.Filled.Phone,
+                icon = AppIcons.Filled.Phone,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                 modifier = Modifier.weight(1f)
             )
@@ -760,7 +760,7 @@ fun PhoneLoginContent(
                     }
                 },
                 placeholder = "6 位短信验证码",
-                icon = Icons.Filled.Lock,
+                icon = AppIcons.Filled.Lock,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
         }
@@ -777,7 +777,7 @@ fun PhoneLoginContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 AppIcon(
-                    imageVector = Icons.Filled.Shield,
+                    imageVector = AppIcons.Filled.Shield,
                     contentDescription = null,
                     tint = palette.buttonGradientStart,
                     modifier = Modifier.size(14.dp)

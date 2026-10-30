@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.list
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.compose.foundation.background
@@ -10,10 +12,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.MenuBook
-import androidx.compose.material.icons.outlined.PersonOutline
-import androidx.compose.material.icons.outlined.SmartDisplay
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -159,7 +157,7 @@ private fun HistoryRecapCardContent(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
                             AppIcon(
-                                Icons.AutoMirrored.Outlined.MenuBook,
+                                AppIcons.AutoMirrored.Outlined.MenuBook,
                                 contentDescription = null,
                                 tint = AppContentColors.accent(),
                                 modifier = Modifier.size(22.dp),
@@ -191,7 +189,7 @@ private fun HistoryRecapCardContent(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
                             AppIcon(
-                                Icons.Outlined.SmartDisplay,
+                                AppIcons.Outlined.SmartDisplay,
                                 contentDescription = null,
                                 tint = AppContentColors.accent(),
                                 modifier = Modifier.size(22.dp),
@@ -284,7 +282,7 @@ private fun HistoryRecapCardContent(
                                             )
                                         } else {
                                             AppIcon(
-                                                Icons.Outlined.PersonOutline,
+                                                AppIcons.Outlined.PersonOutline,
                                                 contentDescription = null,
                                                 modifier = Modifier.size(22.dp),
                                             )

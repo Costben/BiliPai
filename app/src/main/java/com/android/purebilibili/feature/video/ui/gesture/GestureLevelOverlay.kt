@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.gesture
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.ui.res.colorResource
 import com.android.purebilibili.R
 import android.os.SystemClock
@@ -17,9 +19,6 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Fullscreen
-import androidx.compose.material.icons.rounded.FullscreenExit
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.background
@@ -714,9 +713,9 @@ fun BoxScope.SwipeToFullscreenHint(
         ) {
             AppIcon(
                 imageVector = if (isFullscreen) {
-                    Icons.Rounded.FullscreenExit
+                    AppIcons.Rounded.FullscreenExit
                 } else {
-                    Icons.Rounded.Fullscreen
+                    AppIcons.Rounded.Fullscreen
                 },
                 contentDescription = null,
                 tint = Color.White,

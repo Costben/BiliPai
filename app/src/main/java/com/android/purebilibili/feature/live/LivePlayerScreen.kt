@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.live
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.components.appGlassMenuSource
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -38,16 +40,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ForwardToInbox
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.outlined.Block
-import androidx.compose.material.icons.outlined.CardGiftcard
-import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.outlined.ContentCopy
-import androidx.compose.material.icons.outlined.OpenInBrowser
-import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material.icons.outlined.Refresh
 import com.android.purebilibili.core.ui.components.AppIcon
 import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppSlider
@@ -1864,29 +1856,29 @@ private fun LivePortraitOverlayAppBar(
                     listOf(
                         AppWindowAction(
                             label = "复制链接",
-                            icon = Icons.Outlined.ContentCopy,
+                            icon = AppIcons.Outlined.ContentCopy,
                             onClick = onCopyLink,
                         ),
                         AppWindowAction(
                             label = "分享直播间",
-                            icon = Icons.Outlined.Share,
+                            icon = AppIcons.Outlined.Share,
                             onClick = onShare,
                         ),
                         AppWindowAction(
                             label = "分享至消息",
-                            icon = Icons.AutoMirrored.Outlined.ForwardToInbox,
+                            icon = AppIcons.AutoMirrored.Outlined.ForwardToInbox,
                             onClick = onShareToMessage,
                         ),
                         AppWindowAction(
                             label = "浏览器打开",
-                            icon = Icons.Outlined.OpenInBrowser,
+                            icon = AppIcons.Outlined.OpenInBrowser,
                             onClick = onOpenBrowser,
                         ),
                     ),
                 ),
             ) {
                 AppIcon(
-                    Icons.Filled.MoreVert,
+                    AppIcons.Filled.MoreVert,
                     contentDescription = "更多直播间操作",
                     tint = roomColorTokens.inputOverlayColor
                 )

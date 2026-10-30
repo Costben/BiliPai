@@ -1,11 +1,11 @@
 package com.android.purebilibili.feature.settings
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -51,7 +51,7 @@ internal fun SettingsSearchHistorySection(
                         AppText(query, maxLines = 2, overflow = TextOverflow.Ellipsis)
                     }
                     AppIconButton(onClick = { onDelete(query) }, modifier = Modifier.size(48.dp)) {
-                        AppIcon(Icons.Rounded.Close, contentDescription = stringResource(R.string.settings_search_history_delete, query))
+                        AppIcon(AppIcons.Rounded.Close, contentDescription = stringResource(R.string.settings_search_history_delete, query))
                     }
                 }
                 if (index != history.lastIndex) AppPreferenceDivider()

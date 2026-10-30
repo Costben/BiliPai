@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.section
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppText
@@ -39,9 +41,6 @@ import com.android.purebilibili.data.model.response.AiSummaryData
 import com.android.purebilibili.feature.video.ui.VideoDetailShapes
 import com.android.purebilibili.feature.video.viewmodel.AiSummaryPromptState
 import com.android.purebilibili.feature.video.viewmodel.AiSummaryPromptTone
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.*
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import io.github.suqi8.coui.kmp.anim.folmeSpring
@@ -103,7 +102,7 @@ fun AiSummaryCard(
                     containerColor = AppContentColors.accent().copy(alpha = 0.12f),
                 ) {
                     AppIcon(
-                        imageVector = Icons.Filled.AutoAwesome,
+                        imageVector = AppIcons.Filled.AutoAwesome,
                         contentDescription = null,
                         tint = AppContentColors.accent(),
                         modifier = Modifier.size(18.dp),
@@ -125,7 +124,7 @@ fun AiSummaryCard(
                     )
                 }
                 AppIcon(
-                    imageVector = if (expanded) Icons.Outlined.KeyboardArrowUp else Icons.Outlined.KeyboardArrowDown,
+                    imageVector = if (expanded) AppIcons.Outlined.KeyboardArrowUp else AppIcons.Outlined.KeyboardArrowDown,
                     contentDescription = if (expanded) "收起" else "展开",
                     tint = AppContentColors.secondaryText(),
                     modifier = Modifier.size(20.dp),
@@ -183,7 +182,7 @@ fun AiSummaryCard(
                         modifier = Modifier.align(Alignment.End),
                     ) {
                         AppIcon(
-                            imageVector = Icons.Filled.AutoAwesome,
+                            imageVector = AppIcons.Filled.AutoAwesome,
                             contentDescription = null,
                             modifier = Modifier.size(16.dp),
                         )
@@ -218,7 +217,7 @@ private fun MiuixAiSummaryHeader(
         startAction = {
             LeadingIconBadge(containerColor = AppSurfaceTokens.primary().copy(alpha = 0.12f)) {
                 AppIcon(
-                    imageVector = Icons.Filled.AutoAwesome,
+                    imageVector = AppIcons.Filled.AutoAwesome,
                     contentDescription = null,
                     tint = AppSurfaceTokens.primary(),
                     modifier = Modifier.size(18.dp)
@@ -290,9 +289,9 @@ fun AiSummaryPromptCard(
                 } else {
                     AppIcon(
                         imageVector = if (promptState.tone == AiSummaryPromptTone.WARNING) {
-                            Icons.Outlined.ErrorOutline
+                            AppIcons.Outlined.ErrorOutline
                         } else {
-                            Icons.Outlined.Info
+                            AppIcons.Outlined.Info
                         },
                         contentDescription = null,
                         tint = accentColor,
@@ -412,7 +411,7 @@ private fun OutlineItemRow(
                     horizontalArrangement = Arrangement.Center,
                 ) {
                     AppIcon(
-                        imageVector = Icons.Outlined.Schedule,
+                        imageVector = AppIcons.Outlined.Schedule,
                         contentDescription = null,
                         tint = AppContentColors.accent(),
                         modifier = Modifier.size(12.dp),

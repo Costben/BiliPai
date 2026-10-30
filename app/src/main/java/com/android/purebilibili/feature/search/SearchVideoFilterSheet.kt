@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.search
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.util.LocalWindowSizeClass
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -21,8 +23,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -184,7 +184,7 @@ fun SearchVideoFilterActions(
                 contentAlignment = Alignment.Center
             ) {
                 AppIcon(
-                    imageVector = Icons.Outlined.FilterList,
+                    imageVector = AppIcons.Outlined.FilterList,
                     contentDescription = "筛选",
                     tint = if (filterActive) {
                         AppContentColors.accent()

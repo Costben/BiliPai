@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.overlay.glass
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.util.rememberHapticFeedback
 import com.android.purebilibili.core.util.HapticType
 
@@ -43,8 +45,6 @@ import com.android.purebilibili.core.store.PlaybackCompletionBehavior
 import com.android.purebilibili.core.ui.AppModalBottomSheet
 import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.components.AppSurface
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Check
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
 import com.android.purebilibili.feature.video.ui.components.PlayerListPopupPlacement
@@ -217,7 +217,7 @@ private fun PlaybackOrderSheetContent(
                 )
                 if (currentBehavior == behavior) {
                     AppIcon(
-                        imageVector = Icons.Outlined.Check,
+                        imageVector = AppIcons.Outlined.Check,
                         contentDescription = "已选择",
                         tint = AppContentColors.accent(),
                         modifier = Modifier.size(22.dp),

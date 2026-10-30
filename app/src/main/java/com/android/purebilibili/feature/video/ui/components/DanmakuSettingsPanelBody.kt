@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -10,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppTextButton
 
@@ -30,7 +31,7 @@ internal fun DanmakuSettingsPanelBody(
             if (onBack != null) {
                 com.android.purebilibili.core.ui.components.AppIconButton(onClick = onBack) {
                     com.android.purebilibili.core.ui.components.AppIcon(
-                        androidx.compose.material.icons.Icons.AutoMirrored.Outlined.ArrowBack,
+                        AppIcons.AutoMirrored.Outlined.ArrowBack,
                         contentDescription = "返回常用设置",
                         modifier = Modifier.size(20.dp),
                     )

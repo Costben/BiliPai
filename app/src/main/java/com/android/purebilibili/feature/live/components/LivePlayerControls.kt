@@ -1,4 +1,6 @@
 package com.android.purebilibili.feature.live.components
+
+import com.android.purebilibili.core.ui.AppIcons
 import com.android.purebilibili.core.ui.components.appElasticPress
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppText
@@ -44,10 +46,6 @@ import androidx.compose.ui.unit.sp
 import com.android.purebilibili.core.ui.components.AppWindowAction
 import com.android.purebilibili.core.ui.components.appGlassMenuSource
 import com.android.purebilibili.core.ui.components.AppWindowActionMenu
-import androidx.compose.material.icons.outlined.MusicNote
-import androidx.compose.material.icons.outlined.PlayCircleOutline
-import androidx.compose.material.icons.outlined.Timer
-import androidx.compose.material.icons.outlined.PictureInPictureAlt
 import com.android.purebilibili.core.ui.rememberAppBackIcon
 import com.android.purebilibili.core.ui.rememberAppCommentIcon
 import com.android.purebilibili.core.ui.rememberAppPlayerChromeProfile
@@ -66,21 +64,6 @@ import com.android.purebilibili.feature.video.ui.gesture.GestureLevelKind
 import com.android.purebilibili.feature.video.ui.gesture.GestureLevelOverlayHost
 import com.android.purebilibili.feature.video.ui.section.VideoGestureMode
 import android.app.Activity
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Send
-import androidx.compose.material.icons.outlined.AspectRatio
-import androidx.compose.material.icons.outlined.Block
-import androidx.compose.material.icons.outlined.Fullscreen
-import androidx.compose.material.icons.outlined.FullscreenExit
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Pause
-import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.LockOpen
-import androidx.compose.material.icons.outlined.PhotoCamera
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.SettingsInputComponent
-import androidx.compose.material.icons.outlined.Tune
-import androidx.compose.material.icons.outlined.ChatBubbleOutline
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.calculateZoom
@@ -517,16 +500,16 @@ fun LivePlayerControls(
                         LivePlayerStatus(Modifier.padding(end = 10.dp))
                     }
                     if (showInteractionToggle) LivePlayerIconButton(
-                        Icons.Outlined.ChatBubbleOutline, "弹幕互动窗", interactionWindowVisible, true,
+                        AppIcons.Outlined.ChatBubbleOutline, "弹幕互动窗", interactionWindowVisible, true,
                         onToggleInteractionWindow, stateDescription = if (interactionWindowVisible) "已打开" else "已关闭",
                         modifier = if (glass && interactionWindowSource != null) {
                             Modifier.appGlassMenuSource(interactionWindowSource, onToggleInteractionWindow)
                         } else Modifier,
                     )
-                    if (!compactTop && showPipButton) LivePlayerIconButton(Icons.Outlined.PictureInPictureAlt, "画中画", false, true, onEnterPip, glassShape = CircleShape)
-                    if (!compactTop) LivePlayerIconButton(Icons.Outlined.MusicNote, "仅播放音频", isAudioOnly, true, onToggleAudioOnly, if (isAudioOnly) "已开启" else "已关闭", glassShape = CircleShape)
-                    if (!compactTop) LivePlayerIconButton(Icons.Outlined.PlayCircleOutline, "后台播放", isBackgroundPlaybackEnabled, true, onToggleBackgroundPlayback, if (isBackgroundPlaybackEnabled) "已开启" else "已关闭", glassShape = CircleShape)
-                    if (!compactTop) LivePlayerIconButton(Icons.Outlined.Timer, "定时关闭", false, true, onOpenShutdownTimer, glassShape = CircleShape)
+                    if (!compactTop && showPipButton) LivePlayerIconButton(AppIcons.Outlined.PictureInPictureAlt, "画中画", false, true, onEnterPip, glassShape = CircleShape)
+                    if (!compactTop) LivePlayerIconButton(AppIcons.Outlined.MusicNote, "仅播放音频", isAudioOnly, true, onToggleAudioOnly, if (isAudioOnly) "已开启" else "已关闭", glassShape = CircleShape)
+                    if (!compactTop) LivePlayerIconButton(AppIcons.Outlined.PlayCircleOutline, "后台播放", isBackgroundPlaybackEnabled, true, onToggleBackgroundPlayback, if (isBackgroundPlaybackEnabled) "已开启" else "已关闭", glassShape = CircleShape)
+                    if (!compactTop) LivePlayerIconButton(AppIcons.Outlined.Timer, "定时关闭", false, true, onOpenShutdownTimer, glassShape = CircleShape)
                     LivePlayerActionMenu(
                         compact = true,
                         glassShape = CircleShape,
@@ -544,7 +527,7 @@ fun LivePlayerControls(
                                 add(AppWindowAction("定时关闭", onClick = onOpenShutdownTimer))
                             }
                         }),
-                    ) { AppIcon(Icons.Outlined.Settings, "播放设置", tint = Color.White, modifier = Modifier.size(18.dp)) }
+                    ) { AppIcon(AppIcons.Outlined.Settings, "播放设置", tint = Color.White, modifier = Modifier.size(18.dp)) }
                 }
             }
         }
@@ -567,10 +550,10 @@ fun LivePlayerControls(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(if (glass) 6.dp else 0.dp),
                 ) {
-                    LivePlayerIconButton(if (isPlaying) Icons.Outlined.Pause else playIcon, if (isPlaying) "暂停" else "播放", false, true, onPlayPause)
+                    LivePlayerIconButton(if (isPlaying) AppIcons.Outlined.Pause else playIcon, if (isPlaying) "暂停" else "播放", false, true, onPlayPause)
                     if (!collapseRefresh) LivePlayerIconButton(refreshIcon, "刷新", false, true, onRefresh)
                     Spacer(Modifier.weight(1f))
-                    if (!collapseTools) LivePlayerIconButton(Icons.Outlined.Block, "屏蔽", false, true, onOpenBlockSettings)
+                    if (!collapseTools) LivePlayerIconButton(AppIcons.Outlined.Block, "屏蔽", false, true, onOpenBlockSettings)
                     LivePlayerDanmakuControls(
                         enabled = isDanmakuEnabled,
                         showSettings = isFullscreen || !collapseTools,
@@ -616,15 +599,15 @@ fun LivePlayerControls(
                                 add(AppWindowAction("画面比例：$videoFitDesc", children = videoFitOptions))
                                 add(AppWindowAction("画质：$currentQualityDesc", children = qualityOptions))
                             }),
-                        ) { AppIcon(Icons.Outlined.Tune, if (collapseTools) "播放工具" else "画面比例与画质", tint = Color.White, modifier = Modifier.size(18.dp)) }
+                        ) { AppIcon(AppIcons.Outlined.Tune, if (collapseTools) "播放工具" else "画面比例与画质", tint = Color.White, modifier = Modifier.size(18.dp)) }
                     }
-                    LivePlayerIconButton(if (isFullscreen) Icons.Outlined.FullscreenExit else Icons.Outlined.Fullscreen, if (isFullscreen) "退出全屏" else "全屏", false, true, onToggleFullscreen)
+                    LivePlayerIconButton(if (isFullscreen) AppIcons.Outlined.FullscreenExit else AppIcons.Outlined.Fullscreen, if (isFullscreen) "退出全屏" else "全屏", false, true, onToggleFullscreen)
                 }
             }
         }
         if (effectiveControlsVisible && showLockButton) {
-            LivePlayerIconButton(Icons.Outlined.LockOpen, "锁定", false, true, { isLocked = true }, hapticType = HapticType.MEDIUM, glassShape = CircleShape, modifier = Modifier.align(Alignment.CenterStart).padding(start = AppSpacingTokens.Small))
-            LivePlayerIconButton(Icons.Outlined.PhotoCamera, "截图", false, true, onCaptureScreenshot, glassShape = CircleShape, modifier = Modifier.align(Alignment.CenterEnd).padding(end = AppSpacingTokens.Small))
+            LivePlayerIconButton(AppIcons.Outlined.LockOpen, "锁定", false, true, { isLocked = true }, hapticType = HapticType.MEDIUM, glassShape = CircleShape, modifier = Modifier.align(Alignment.CenterStart).padding(start = AppSpacingTokens.Small))
+            LivePlayerIconButton(AppIcons.Outlined.PhotoCamera, "截图", false, true, onCaptureScreenshot, glassShape = CircleShape, modifier = Modifier.align(Alignment.CenterEnd).padding(end = AppSpacingTokens.Small))
         }
         if (effectiveControlsVisible && videoScale != 1f) {
             LivePlayerGlassDock(
@@ -643,7 +626,7 @@ fun LivePlayerControls(
         // 4. 锁定状态解锁按钮（垂直居左，始终可见）
         if (isLocked) {
             LivePlayerIconButton(
-                icon = Icons.Outlined.Lock,
+                icon = AppIcons.Outlined.Lock,
                 label = "解锁",
                 glassShape = CircleShape,
                 selected = true,

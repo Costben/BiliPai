@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.download
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.AppSurfaceTokens
@@ -12,8 +14,6 @@ import androidx.compose.foundation.layout.*
 import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.lazy.items
 //  Material Icons
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -76,7 +76,7 @@ fun DownloadQualityDialog(
                     )
                     AppIconButton(onClick = onDismiss) {
                         AppIcon(
-                            imageVector = Icons.Outlined.Close,
+                            imageVector = AppIcons.Outlined.Close,
                             contentDescription = "取消",
                             tint = AppContentColors.secondaryText()
                         )

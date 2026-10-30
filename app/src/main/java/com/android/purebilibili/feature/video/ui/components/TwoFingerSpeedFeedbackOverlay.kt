@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.compose.animation.AnimatedVisibility
@@ -35,9 +37,6 @@ import com.android.purebilibili.core.ui.blur.unifiedBlur
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.feature.video.ui.gesture.TwoFingerSpeedGestureMode
 import dev.chrisbanes.haze.HazeState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.SwapHoriz
-import androidx.compose.material.icons.outlined.SwapVert
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
 
@@ -58,9 +57,9 @@ fun BoxScope.TwoFingerSpeedFeedbackOverlay(
         TwoFingerSpeedGestureMode.Off -> ""
     }
     val cueIcon = when (mode) {
-        TwoFingerSpeedGestureMode.Vertical -> Icons.Outlined.SwapVert
-        TwoFingerSpeedGestureMode.Horizontal -> Icons.Outlined.SwapHoriz
-        TwoFingerSpeedGestureMode.Off -> Icons.Outlined.SwapVert
+        TwoFingerSpeedGestureMode.Vertical -> AppIcons.Outlined.SwapVert
+        TwoFingerSpeedGestureMode.Horizontal -> AppIcons.Outlined.SwapHoriz
+        TwoFingerSpeedGestureMode.Off -> AppIcons.Outlined.SwapVert
     }
     val gradientColors = listOf(
         AppContentColors.accent().copy(alpha = 0.18f),

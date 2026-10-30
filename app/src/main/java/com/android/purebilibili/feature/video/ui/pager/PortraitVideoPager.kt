@@ -5,6 +5,8 @@
 
 package com.android.purebilibili.feature.video.ui.pager
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.feature.video.ui.gesture.detectPlayerTapGestures
 import com.android.purebilibili.feature.video.danmaku.resolvePortraitDanmakuUpperRegion
 import com.android.purebilibili.feature.video.danmaku.resolveDanmakuLayerLineHeightPx
@@ -47,9 +49,6 @@ import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.outlined.*
 import com.android.purebilibili.core.ui.components.AppButton
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -3729,7 +3728,7 @@ private fun VideoPageItem(
                         modifier = Modifier.size(36.dp * longPressSpeedHintScale),
                     ) {
                         AppIcon(
-                            imageVector = Icons.Outlined.Close,
+                            imageVector = AppIcons.Outlined.Close,
                             contentDescription = "关闭倍速提示",
                             tint = Color.White,
                             modifier = Modifier.size(14.dp * longPressSpeedHintScale),
@@ -3759,7 +3758,7 @@ private fun VideoPageItem(
                 shape = AppShapes.container(ContainerLevel.Floating)
             ) {
                 AppIcon(
-                    imageVector = Icons.Filled.Refresh,
+                    imageVector = AppIcons.Filled.Refresh,
                     contentDescription = "还原画面"
                 )
                 Spacer(modifier = Modifier.width(8.dp))

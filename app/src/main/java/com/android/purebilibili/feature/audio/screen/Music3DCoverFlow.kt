@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.audio.screen
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.compose.animation.core.Animatable
@@ -32,13 +34,6 @@ import com.android.purebilibili.core.ui.components.AppHorizontalPager as Horizon
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Pause
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.SkipNext
-import androidx.compose.material.icons.filled.SkipPrevious
-import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -621,7 +616,7 @@ internal fun Music3DCoverFlow(
                                 modifier = Modifier.size(48.dp)
                             ) {
                                 AppIcon(
-                                    imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                                    imageVector = if (isLiked) AppIcons.Filled.Favorite else AppIcons.Outlined.FavoriteBorder,
                                     contentDescription = if (isLiked) "取消喜欢" else "喜欢",
                                     tint = if (isLiked) MusicLikeColor else pillContentColor.copy(alpha = 0.82f),
                                     modifier = Modifier.size(17.dp)
@@ -631,7 +626,7 @@ internal fun Music3DCoverFlow(
                             // 交互状态未知时保留同尺寸中性占位，避免图标翻转，也不提供会写错状态的入口。
                             Box(modifier = Modifier.size(48.dp)) {
                                 AppIcon(
-                                    imageVector = Icons.Outlined.FavoriteBorder,
+                                    imageVector = AppIcons.Outlined.FavoriteBorder,
                                     contentDescription = null,
                                     tint = pillContentColor.copy(alpha = 0.28f),
                                     modifier = Modifier
@@ -648,7 +643,7 @@ internal fun Music3DCoverFlow(
                             modifier = Modifier.size(48.dp)
                         ) {
                             AppIcon(
-                                imageVector = Icons.Filled.SkipPrevious,
+                                imageVector = AppIcons.Filled.SkipPrevious,
                                 contentDescription = "上一首",
                                 tint = pillContentColor.copy(alpha = if (onPrevious != null) 0.88f else 0.28f),
                                 modifier = Modifier.size(19.dp)
@@ -661,7 +656,7 @@ internal fun Music3DCoverFlow(
                             modifier = Modifier.size(48.dp)
                         ) {
                             AppIcon(
-                                imageVector = if (isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow,
+                                imageVector = if (isPlaying) AppIcons.Filled.Pause else AppIcons.Filled.PlayArrow,
                                 contentDescription = if (isPlaying) "暂停" else "播放",
                                 tint = pillContentColor.copy(alpha = 0.95f),
                                 modifier = Modifier.size(21.dp)
@@ -675,7 +670,7 @@ internal fun Music3DCoverFlow(
                             modifier = Modifier.size(48.dp)
                         ) {
                             AppIcon(
-                                imageVector = Icons.Filled.SkipNext,
+                                imageVector = AppIcons.Filled.SkipNext,
                                 contentDescription = "下一首",
                                 tint = pillContentColor.copy(alpha = if (onNext != null) 0.88f else 0.28f),
                                 modifier = Modifier.size(19.dp)
@@ -689,7 +684,7 @@ internal fun Music3DCoverFlow(
                             modifier = Modifier.size(48.dp)
                         ) {
                             AppIcon(
-                                imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                                imageVector = if (isLiked) AppIcons.Filled.Favorite else AppIcons.Outlined.FavoriteBorder,
                                 contentDescription = if (isLiked) "取消喜欢" else "喜欢",
                                 tint = if (isLiked) MusicLikeColor else pillContentColor.copy(alpha = 0.82f),
                                 modifier = Modifier.size(17.dp)

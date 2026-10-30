@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.settings
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.appElasticPress
 
@@ -14,8 +16,6 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -72,7 +72,7 @@ internal fun Material3AppUpdateDialog(
                     modifier = Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp).appElasticPress(),
                 ) {
                     Icon(
-                        imageVector = Icons.Outlined.Close,
+                        imageVector = AppIcons.Outlined.Close,
                         contentDescription = "关闭",
                     )
                 }

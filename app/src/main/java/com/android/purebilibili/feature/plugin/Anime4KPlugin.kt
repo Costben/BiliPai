@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.plugin
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.plugin.BuiltinPluginIds
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -8,8 +10,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.HighQuality
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -66,7 +66,7 @@ class Anime4KPlugin : BuiltinPlugin, VideoEnhancementPluginApi {
     override val description: String = "提供 Anime4K 与 AMD FSR 1.0 实时画质增强"
     override val version: String = "0.4.0"
     override val author: String = "BiliPai项目组"
-    override val icon: ImageVector = Icons.Outlined.HighQuality
+    override val icon: ImageVector = AppIcons.Outlined.HighQuality
     override val capabilityManifest: PluginCapabilityManifest = PluginCapabilityManifest(
         pluginId = id,
         displayName = name,

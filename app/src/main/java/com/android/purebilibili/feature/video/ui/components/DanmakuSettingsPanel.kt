@@ -1,6 +1,8 @@
 // File: feature/video/ui/components/DanmakuSettingsPanel.kt
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.LocalAppThemeConfig
 import com.android.purebilibili.core.ui.liquidControlThemeColor
 import com.android.purebilibili.core.ui.AppContentColors
@@ -46,10 +48,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -536,7 +534,7 @@ fun DanmakuSettingsPanel(
                             ) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     AppIcon(
-                                        imageVector = Icons.Outlined.FormatListBulleted,
+                                        imageVector = AppIcons.Outlined.FormatListBulleted,
                                         contentDescription = null,
                                         modifier = Modifier.size(20.dp),
                                         tint = AppContentColors.accent()
@@ -1483,7 +1481,7 @@ private fun DanmakuBlockManagerDialog(
                             .background(panelColors.resetButtonBackgroundColor, CircleShape)
                     ) {
                         AppIcon(
-                            Icons.Outlined.Close,
+                            AppIcons.Outlined.Close,
                             contentDescription = "关闭",
                             tint = panelColors.resetButtonColor,
                             modifier = Modifier.size(18.dp)

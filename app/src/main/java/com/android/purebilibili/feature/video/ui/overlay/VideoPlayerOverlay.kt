@@ -1,6 +1,8 @@
 // 文件路径: feature/video/VideoPlayerOverlay.kt
 package com.android.purebilibili.feature.video.ui.overlay
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.components.rememberFollowActionWithConfirmation
 import com.android.purebilibili.core.ui.MediaContrastPalette
 
@@ -29,12 +31,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChatBubble
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -396,8 +392,8 @@ internal fun FullscreenLockButton(
 ) {
     PlayerSideButton(
         icon = when (visualState.icon) {
-            FullscreenLockButtonIcon.LOCKED -> Icons.Outlined.Lock
-            FullscreenLockButtonIcon.UNLOCKED -> Icons.Outlined.LockOpen
+            FullscreenLockButtonIcon.LOCKED -> AppIcons.Outlined.Lock
+            FullscreenLockButtonIcon.UNLOCKED -> AppIcons.Outlined.LockOpen
         },
         contentDescription = visualState.contentDescription,
         onClick = onClick,
@@ -1776,7 +1772,7 @@ private fun VideoPlayerOverlayContent(
                     .padding(end = 4.dp)
             ) {
                 PlayerSideButton(
-                    icon = Icons.Outlined.Camera,
+                    icon = AppIcons.Outlined.Camera,
                     contentDescription = "截图",
                     onClick = onCaptureScreenshot,
                 )
@@ -1953,7 +1949,7 @@ private fun VideoPlayerOverlayContent(
                             }
                         ) {
                             AppIcon(
-                                imageVector = Icons.Outlined.Close,
+                                imageVector = AppIcons.Outlined.Close,
                                 contentDescription = "关闭卡顿提示"
                             )
                         }
@@ -2698,7 +2694,7 @@ private fun PlaybackInsightPanel(
                 }
                 AppIconButton(onClick = onDismiss) {
                     AppIcon(
-                        imageVector = Icons.Outlined.Close,
+                        imageVector = AppIcons.Outlined.Close,
                         contentDescription = "关闭"
                     )
                 }
@@ -3427,7 +3423,7 @@ private fun LandscapeEpisodeItem(
             // 无封面时的占位 (或纯文本模式)
              if (isCurrent) {
                 AppIcon(
-                    imageVector = Icons.Outlined.PlayArrow,
+                    imageVector = AppIcons.Outlined.PlayArrow,
                     contentDescription = null,
                     tint = AppContentColors.accent(),
                     modifier = Modifier.size(layoutPolicy.metaIconSizeDp.dp)
@@ -3473,7 +3469,7 @@ private fun LandscapeEpisodeItem(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     // 播放量
                     AppIcon(
-                        imageVector = Icons.Outlined.PlayCircle,
+                        imageVector = AppIcons.Outlined.PlayCircle,
                         contentDescription = null,
                         tint = AppContentColors.secondaryText(),
                         modifier = Modifier.size(layoutPolicy.metaIconSizeDp.dp)
@@ -3489,7 +3485,7 @@ private fun LandscapeEpisodeItem(
 
                     // 弹幕
                     AppIcon(
-                        imageVector = Icons.Filled.ChatBubble,
+                        imageVector = AppIcons.Filled.ChatBubble,
                         contentDescription = null,
                         tint = AppContentColors.secondaryText(),
                         modifier = Modifier.size(layoutPolicy.metaIconSizeDp.dp)

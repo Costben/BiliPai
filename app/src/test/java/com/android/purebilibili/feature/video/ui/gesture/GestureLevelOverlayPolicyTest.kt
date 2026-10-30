@@ -1,17 +1,11 @@
 package com.android.purebilibili.feature.video.ui.gesture
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.VolumeDown
-import androidx.compose.material.icons.automirrored.filled.VolumeOff
-import androidx.compose.material.icons.automirrored.filled.VolumeUp
-import androidx.compose.material.icons.filled.BrightnessHigh
-import androidx.compose.material.icons.filled.BrightnessLow
-import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import com.android.purebilibili.core.theme.AppUiStyle
+import com.android.purebilibili.core.ui.AppIcons
 import com.android.purebilibili.core.ui.AppTopTabPresentation
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -158,39 +152,39 @@ class GestureLevelOverlayPolicyTest {
     @Test
     fun icons_resolveByLevelForAllStyles() {
         assertEquals(
-            Icons.AutoMirrored.Filled.VolumeOff,
+            AppIcons.AutoMirrored.Filled.VolumeOff,
             resolveGestureLevelIcon(GestureLevelOverlayStyle.Md3, GestureLevelKind.Volume, 0f)
         )
         assertEquals(
-            Icons.AutoMirrored.Filled.VolumeUp,
+            AppIcons.AutoMirrored.Filled.VolumeUp,
             resolveGestureLevelIcon(GestureLevelOverlayStyle.Md3, GestureLevelKind.Volume, 1f)
         )
         assertEquals(
-            Icons.AutoMirrored.Filled.VolumeOff,
+            AppIcons.AutoMirrored.Filled.VolumeOff,
             resolveGestureLevelIcon(GestureLevelOverlayStyle.Ios, GestureLevelKind.Volume, 0f)
         )
         assertEquals(
-            Icons.AutoMirrored.Filled.VolumeUp,
+            AppIcons.AutoMirrored.Filled.VolumeUp,
             resolveGestureLevelIcon(GestureLevelOverlayStyle.Ios, GestureLevelKind.Volume, 1f)
         )
         assertEquals(
-            Icons.AutoMirrored.Filled.VolumeOff,
+            AppIcons.AutoMirrored.Filled.VolumeOff,
             resolveGestureLevelIcon(GestureLevelOverlayStyle.Miuix, GestureLevelKind.Volume, 0f)
         )
         assertEquals(
-            Icons.AutoMirrored.Filled.VolumeUp,
+            AppIcons.AutoMirrored.Filled.VolumeUp,
             resolveGestureLevelIcon(GestureLevelOverlayStyle.Miuix, GestureLevelKind.Volume, 1f)
         )
         assertEquals(
-            Icons.Filled.BrightnessLow,
+            AppIcons.Filled.BrightnessLow,
             resolveGestureLevelIcon(GestureLevelOverlayStyle.Md3, GestureLevelKind.Brightness, 0.2f)
         )
         assertEquals(
-            Icons.Filled.LightMode,
+            AppIcons.Filled.LightMode,
             resolveGestureLevelIcon(GestureLevelOverlayStyle.Ios, GestureLevelKind.Brightness, 0.5f)
         )
         assertEquals(
-            Icons.Filled.BrightnessHigh,
+            AppIcons.Filled.BrightnessHigh,
             resolveGestureLevelIcon(GestureLevelOverlayStyle.Md3, GestureLevelKind.Brightness, 0.9f)
         )
     }

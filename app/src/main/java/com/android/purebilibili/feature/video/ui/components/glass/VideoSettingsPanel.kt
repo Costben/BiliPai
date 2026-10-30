@@ -1,6 +1,8 @@
 // 文件路径: feature/video/ui/components/VideoSettingsPanel.kt
 package com.android.purebilibili.feature.video.ui.components.glass
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.feature.video.ui.components.*
 
 import com.android.purebilibili.core.ui.components.AppSegmentOption
@@ -40,12 +42,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.TextUnit
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.Close
 import com.android.purebilibili.feature.video.ui.components.PanelAction
 import com.android.purebilibili.feature.video.ui.components.PlayerDetailPanel
-import androidx.compose.material.icons.filled.PhotoCamera
 import com.android.purebilibili.core.ui.AppModalBottomSheet
 import com.android.purebilibili.core.ui.rememberAppPlayerChromeProfile
 import com.android.purebilibili.core.ui.rememberAppCodecIcon
@@ -255,7 +253,7 @@ private fun VideoSettingsPanelHost(
             ) {
                 AppText("更多操作", fontSize = 16.sp)
                 Spacer(Modifier.weight(1f))
-                PanelAction(Icons.Default.Close, "关闭", requestDismiss)
+                PanelAction(AppIcons.Filled.Close, "关闭", requestDismiss)
             }
             content()
         }
@@ -651,7 +649,7 @@ fun VideoSettingsPanel(
                             policy = actionPolicy
                         )
                         SettingsActionPill(
-                            icon = Icons.Filled.PhotoCamera,
+                            icon = AppIcons.Filled.PhotoCamera,
                             label = "视频截图",
                             onClick = {
                                 onCaptureScreenshot()

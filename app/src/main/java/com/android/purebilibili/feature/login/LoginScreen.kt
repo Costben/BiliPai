@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.login
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import com.android.purebilibili.core.ui.components.appSearchElasticPress
@@ -25,15 +27,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.ContentPaste
-import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.Phone
-import androidx.compose.material.icons.outlined.QrCode2
-import androidx.compose.material.icons.outlined.Refresh
-import androidx.compose.material.icons.outlined.Visibility
-import androidx.compose.material.icons.outlined.VisibilityOff
 import com.android.purebilibili.core.ui.components.AppButton
 import com.android.purebilibili.core.ui.components.AppCard
 import com.android.purebilibili.core.ui.components.AppCardDefaults
@@ -270,7 +263,7 @@ internal fun LoginPage(
                     title = "登录",
                     actions = {
                         AppIconButton(onClick = onClose) {
-                            AppIcon(Icons.Outlined.Close, contentDescription = "关闭登录")
+                            AppIcon(AppIcons.Outlined.Close, contentDescription = "关闭登录")
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
@@ -825,14 +818,14 @@ private fun TvQrLoginContent(
                 }
                 LoginState.Loading -> AdaptiveLoadingIndicator(size = 48.dp)
                 else -> AppIcon(
-                    imageVector = Icons.Outlined.QrCode2,
+                    imageVector = AppIcons.Outlined.QrCode2,
                     contentDescription = null,
                     modifier = Modifier.size(232.dp),
                     tint = AppContentColors.secondaryText()
                 )
             }
             AppOutlinedButton(onClick = onRefresh, modifier = Modifier.fillMaxWidth()) {
-                AppIcon(Icons.Outlined.Refresh, contentDescription = null)
+                AppIcon(AppIcons.Outlined.Refresh, contentDescription = null)
                 Spacer(Modifier.size(8.dp))
                 AppText("刷新二维码")
             }
@@ -886,7 +879,7 @@ private fun PasswordLoginContent(
                     },
                     labelText = "短信验证码",
                     label = { AppText("短信验证码") },
-                    leadingIcon = { AppIcon(Icons.Outlined.Lock, contentDescription = null) },
+                    leadingIcon = { AppIcon(AppIcons.Outlined.Lock, contentDescription = null) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
@@ -942,7 +935,7 @@ private fun PasswordLoginContent(
                 onValueChange = { username = it.filterNot(Char::isWhitespace) },
                 labelText = "邮箱 / 手机号",
                 label = { AppText("邮箱 / 手机号") },
-                leadingIcon = { AppIcon(Icons.Outlined.Phone, contentDescription = null) },
+                leadingIcon = { AppIcon(AppIcons.Outlined.Phone, contentDescription = null) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
@@ -952,11 +945,11 @@ private fun PasswordLoginContent(
                 onValueChange = { password = it },
                 labelText = "密码",
                 label = { AppText("密码") },
-                leadingIcon = { AppIcon(Icons.Outlined.Lock, contentDescription = null) },
+                leadingIcon = { AppIcon(AppIcons.Outlined.Lock, contentDescription = null) },
                 trailingIcon = {
                     AppIconButton(onClick = { passwordVisible = !passwordVisible }) {
                         AppIcon(
-                            if (passwordVisible) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
+                            if (passwordVisible) AppIcons.Outlined.VisibilityOff else AppIcons.Outlined.Visibility,
                             contentDescription = if (passwordVisible) "隐藏密码" else "显示密码"
                         )
                     }
@@ -1020,7 +1013,7 @@ private fun SmsLoginContent(
             onClick = { showRegionPicker = true },
             modifier = Modifier.fillMaxWidth()
         ) {
-            AppIcon(Icons.Outlined.Phone, contentDescription = null)
+            AppIcon(AppIcons.Outlined.Phone, contentDescription = null)
             Spacer(modifier = Modifier.width(8.dp))
             AppText(
                 text = "${selectedRegion.dialingCode}  ${selectedRegion.name}",
@@ -1038,7 +1031,7 @@ private fun SmsLoginContent(
             labelText = "手机号",
             label = { AppText("手机号") },
             prefix = { AppText("${selectedRegion.dialingCode} ") },
-            leadingIcon = { AppIcon(Icons.Outlined.Phone, contentDescription = null) },
+            leadingIcon = { AppIcon(AppIcons.Outlined.Phone, contentDescription = null) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
             singleLine = true,
             supportingText = {
@@ -1059,7 +1052,7 @@ private fun SmsLoginContent(
                 onValueChange = { code = it.filter(Char::isDigit).take(6) },
                 labelText = "短信验证码",
                 label = { AppText("短信验证码") },
-                leadingIcon = { AppIcon(Icons.Outlined.Lock, contentDescription = null) },
+                leadingIcon = { AppIcon(AppIcons.Outlined.Lock, contentDescription = null) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
@@ -1264,7 +1257,7 @@ private fun CookieImportContent(
             onValueChange = { cookieHeader = it },
             labelText = "Cookie",
             label = { AppText("Cookie") },
-            leadingIcon = { AppIcon(Icons.Outlined.ContentPaste, contentDescription = null) },
+            leadingIcon = { AppIcon(AppIcons.Outlined.ContentPaste, contentDescription = null) },
             minLines = 5,
             modifier = Modifier.fillMaxWidth()
         )

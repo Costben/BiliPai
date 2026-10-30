@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.home.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.ProvideAppEntryIconColors
 import com.android.purebilibili.core.ui.components.AppIcon
@@ -53,8 +55,6 @@ import com.android.purebilibili.core.ui.blur.unifiedBlur
 import com.android.purebilibili.core.ui.rememberAppDrawerVisualPolicy
 import com.android.purebilibili.feature.home.UserState
 import dev.chrisbanes.haze.HazeState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.SwapHoriz
 import kotlinx.coroutines.launch
 import java.io.File
 import io.github.suqi8.coui.kmp.blur.Backdrop as MiuixBackdrop
@@ -148,7 +148,7 @@ fun MineSideDrawer(
     val inboxIcon = rememberAppInboxIcon()
     val logoutIcon = rememberAppLogoutIcon()
     val chevronForwardIcon = rememberAppChevronForwardIcon()
-    val accountSwitchIcon = Icons.Outlined.SwapHoriz
+    val accountSwitchIcon = AppIcons.Outlined.SwapHoriz
     val hasSkinBackground = !skinBackgroundImagePath.isNullOrBlank()
 
     // 动态文字颜色

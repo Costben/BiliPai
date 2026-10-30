@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.settings
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Arrangement
@@ -8,8 +10,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppIcon
 import androidx.compose.ui.Alignment
@@ -86,7 +86,7 @@ internal fun HapticScenePreference(enabled: Boolean) {
                     ) {
                         AppText(countLabel, color = AppContentColors.secondaryText(),
                             style = androidx.compose.material3.MaterialTheme.typography.bodyMedium)
-                        AppIcon(Icons.AutoMirrored.Filled.ArrowForwardIos, contentDescription = null,
+                        AppIcon(AppIcons.AutoMirrored.Filled.ArrowForwardIos, contentDescription = null,
                             tint = AppContentColors.secondaryText().copy(alpha = 0.72f), modifier = Modifier.size(14.dp))
                     }
                 }

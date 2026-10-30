@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.util.rememberHapticFeedback
 import com.android.purebilibili.core.util.HapticType
 
@@ -15,8 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.Icon
 import com.android.purebilibili.core.ui.components.AppIconButton as IconButton
 import androidx.compose.material3.MaterialTheme
@@ -120,24 +120,24 @@ fun PlayerEpisodeMenu(
             .padding(horizontal = 6.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(if (pages.size > 1) "分P" else "合集", fontSize = 16.sp)
             if (ugcSeason != null && isSubscribed != null && onSubscriptionChange != null) {
-                PanelAction(if (isSubscribed) Icons.Default.NotificationsOff else Icons.Default.NotificationsActive,
+                PanelAction(if (isSubscribed) AppIcons.Filled.NotificationsOff else AppIcons.Filled.NotificationsActive,
                     if (isSubscribed) "取消订阅" else "订阅") { onSubscriptionChange(!isSubscribed) }
             }
-            PanelAction(Icons.Default.VerticalAlignTop, "跳至顶部") { scope.launch { listState.animateScrollToItem(0) } }
-            PanelAction(Icons.Default.VerticalAlignBottom, "跳至底部") { scope.launch { if (entries.isNotEmpty()) listState.animateScrollToItem(entries.lastIndex) } }
-            PanelAction(Icons.Default.MyLocation, "跳至当前") {
+            PanelAction(AppIcons.Filled.VerticalAlignTop, "跳至顶部") { scope.launch { listState.animateScrollToItem(0) } }
+            PanelAction(AppIcons.Filled.VerticalAlignBottom, "跳至底部") { scope.launch { if (entries.isNotEmpty()) listState.animateScrollToItem(entries.lastIndex) } }
+            PanelAction(AppIcons.Filled.MyLocation, "跳至当前") {
                 if (content.currentSectionIndex >= 0) {
                     if (sectionIndex != content.currentSectionIndex) sectionIndex = content.currentSectionIndex
                     else scope.launch { val index = currentIndex(); if (index in entries.indices) listState.animateScrollToItem(index) }
                 }
             }
             if (onReverse != null && sectionIndex == content.currentSectionIndex) {
-                PanelAction(if (isReversed) Icons.Default.ArrowDownward else Icons.Default.ArrowUpward,
+                PanelAction(if (isReversed) AppIcons.Filled.ArrowDownward else AppIcons.Filled.ArrowUpward,
                     if (isReversed) "正序播放" else "倒序播放", onReverse)
             }
             Spacer(Modifier.weight(1f))
-            PanelAction(Icons.Default.Sort, if (reversed) "顺序" else "倒序") { reverseSections[sectionIndex] = !reversed }
-            PanelAction(Icons.Default.Close, "关闭", requestPanelDismiss)
+            PanelAction(AppIcons.Filled.Sort, if (reversed) "顺序" else "倒序") { reverseSections[sectionIndex] = !reversed }
+            PanelAction(AppIcons.Filled.Close, "关闭", requestPanelDismiss)
         }
         if (content.sections.size > 1) {
             // 玻璃分区复用共享 dock 与完整槽位指示器，原生保留原有文字轨道。

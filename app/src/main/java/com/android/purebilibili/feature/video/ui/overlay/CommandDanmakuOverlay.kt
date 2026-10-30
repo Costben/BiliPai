@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.overlay
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.motion.AppMotionEasing
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -29,13 +31,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.Star
-import androidx.compose.material.icons.rounded.StarBorder
-import androidx.compose.material.icons.rounded.ThumbUp
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppIconButton
 import com.android.purebilibili.core.ui.components.AppExactTouchTargets
@@ -448,7 +443,7 @@ private fun AttentionCommandCard(
                                 modifier = Modifier.size(24.dp).clip(CircleShape),
                             )
                         } else {
-                            AppIcon(Icons.Rounded.Person, contentDescription = null, tint = Color.White)
+                            AppIcon(AppIcons.Rounded.Person, contentDescription = null, tint = Color.White)
                         }
                     }
                 }
@@ -488,7 +483,7 @@ private fun CommandDanmakuCloseButton(
         )
     ) {
         AppIcon(
-            imageVector = Icons.Rounded.Close,
+            imageVector = AppIcons.Rounded.Close,
             contentDescription = "关闭提示",
             modifier = Modifier.size(16.dp)
         )
@@ -509,7 +504,7 @@ private fun AttentionCommandActions(
     val activeColor = AppContentColors.accent()
     Row(verticalAlignment = Alignment.CenterVertically) {
         AttentionCommandIconSlot(
-            icon = Icons.Rounded.ThumbUp,
+            icon = AppIcons.Rounded.ThumbUp,
             iconSize = 24.dp,
             enabled = likeStatusKnown && !isSubmitting,
             selected = likeStatusKnown && isLiked,
@@ -537,7 +532,7 @@ private fun AttentionCommandActions(
             onClick = onCoinClick,
         )
         AttentionCommandIconSlot(
-            icon = Icons.Rounded.Star,
+            icon = AppIcons.Rounded.Star,
             iconSize = 30.dp,
             enabled = !isSubmitting,
             selected = isFavorited,
@@ -598,7 +593,7 @@ private fun AttentionCommandFollowButton(
     ) {
         if (actionable) {
             AppIcon(
-                Icons.Rounded.Add,
+                AppIcons.Rounded.Add,
                 contentDescription = null,
                 tint = contentColor,
                 modifier = Modifier.size(14.dp),
@@ -861,7 +856,7 @@ private fun OutsideCommandDanmakuCloseButton(
         contentAlignment = Alignment.Center,
     ) {
         AppIcon(
-            imageVector = Icons.Rounded.Close,
+            imageVector = AppIcons.Rounded.Close,
             contentDescription = "关闭提示",
             tint = Color.White.copy(alpha = 0.8f),
             modifier = Modifier.size(12.dp),
@@ -1077,7 +1072,7 @@ private fun GradeStarRating(
                 contentAlignment = if (selectedScore == null) Alignment.Center else Alignment.CenterStart,
             ) {
                 AppIcon(
-                    imageVector = if (isFilled) Icons.Rounded.Star else Icons.Rounded.StarBorder,
+                    imageVector = if (isFilled) AppIcons.Rounded.Star else AppIcons.Rounded.StarBorder,
                     contentDescription = if (option == null) {
                         "${index + 1}星不可用"
                     } else {

@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.personal
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.components.appActionWithFeedback
 
 import com.android.purebilibili.core.ui.components.wallpaperMediaCardSurface
@@ -30,8 +32,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -214,7 +214,7 @@ internal fun PersonalCardSelectMask(
                 contentAlignment = Alignment.Center,
             ) {
                 AppIcon(
-                    Icons.Rounded.Check,
+                    AppIcons.Rounded.Check,
                     contentDescription = "已选择",
                     tint = AppContentColors.accent(),
                     modifier = Modifier.size(20.dp),

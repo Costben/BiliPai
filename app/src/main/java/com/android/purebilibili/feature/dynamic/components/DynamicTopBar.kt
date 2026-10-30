@@ -1,6 +1,8 @@
 // 文件路径: feature/dynamic/components/DynamicTopBar.kt
 package com.android.purebilibili.feature.dynamic.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppThemeAdaptiveTabRow
 import com.android.purebilibili.core.ui.components.AppSegmentOption
@@ -23,11 +25,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.MoreHoriz
-import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import com.android.purebilibili.core.ui.components.AppIcon
 import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppIconButton
@@ -206,7 +203,7 @@ fun DynamicTopBarWithTabs(
                     modifier = Modifier.size(tabHeight),
                 ) {
                     AppIcon(
-                        imageVector = Icons.Outlined.KeyboardArrowDown,
+                        imageVector = AppIcons.Outlined.KeyboardArrowDown,
                         modifier = Modifier.graphicsLayer {
                             rotationZ = collapseArrowRotation.value
                         },
@@ -253,7 +250,7 @@ fun DynamicTopBarWithTabs(
                                 } ?: Modifier,
                             ) {
                                 AppIcon(
-                                    imageVector = Icons.Outlined.Search,
+                                    imageVector = AppIcons.Outlined.Search,
                                     contentDescription = "搜索 UP 主动态",
                                 )
                             }
@@ -297,7 +294,7 @@ fun DynamicTopBarWithTabs(
                                             ),
                                     ) {
                                         AppIcon(
-                                            imageVector = Icons.Outlined.Edit,
+                                            imageVector = AppIcons.Outlined.Edit,
                                             contentDescription = "发布动态",
                                             tint = publishSkinDecoration?.iconTint
                                                 ?.takeUnless { it == Color.Unspecified }
@@ -325,7 +322,7 @@ fun DynamicTopBarWithTabs(
                             ),
                         ) {
                             AppIcon(
-                                imageVector = Icons.Outlined.MoreHoriz,
+                                imageVector = AppIcons.Outlined.MoreHoriz,
                                 contentDescription = "更多动态操作",
                             )
                         }

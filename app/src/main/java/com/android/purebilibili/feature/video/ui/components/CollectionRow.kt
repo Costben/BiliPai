@@ -1,6 +1,8 @@
 // 文件路径: feature/video/ui/components/CollectionRow.kt
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppText
@@ -18,8 +20,6 @@ import androidx.compose.ui.unit.dp
 
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.data.model.response.UgcSeason
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 
 /**
  *  视频合集展示行
@@ -127,7 +127,7 @@ fun CollectionRow(
 
             //  右侧箭头
             AppIcon(
-                Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                AppIcons.AutoMirrored.Outlined.KeyboardArrowRight,
                 contentDescription = "查看合集",
                 tint = secondaryColor.copy(alpha = if (immersive) 0.8f else 0.5f),
                 modifier = Modifier.size(14.dp)

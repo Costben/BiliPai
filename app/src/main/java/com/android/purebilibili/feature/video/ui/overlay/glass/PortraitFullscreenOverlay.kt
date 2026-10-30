@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.overlay.glass
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.feature.video.ui.overlay.*
 
 import com.android.purebilibili.core.ui.components.rememberFollowActionWithConfirmation
@@ -40,14 +42,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Share
-import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.MoreVert
 import com.android.purebilibili.feature.video.ui.components.PlaybackSpeed
 import com.android.purebilibili.feature.video.ui.components.glass.DolbyBadge
 import com.android.purebilibili.feature.video.ui.components.glass.HiResBadge
@@ -627,7 +621,7 @@ private fun PortraitTopControlBar(
                 modifier = Modifier.size(48.dp)
             ) {
                 AppIcon(
-                    imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowLeft,
+                    imageVector = AppIcons.AutoMirrored.Outlined.KeyboardArrowLeft,
                     contentDescription = "返回",
                     tint = Color.White,
                     modifier = Modifier.size(layoutPolicy.topBackIconSizeDp.dp)
@@ -638,7 +632,7 @@ private fun PortraitTopControlBar(
                 modifier = Modifier.size(48.dp)
             ) {
                 AppIcon(
-                    imageVector = Icons.Outlined.Home,
+                    imageVector = AppIcons.Outlined.Home,
                     contentDescription = "主界面",
                     tint = Color.White,
                     modifier = Modifier.size(layoutPolicy.topBackIconSizeDp.dp)
@@ -665,7 +659,7 @@ private fun PortraitTopControlBar(
         ) {
             PortraitGlassIconButton(onClick = onSearchClick) {
                 AppIcon(
-                    imageVector = Icons.Rounded.Search,
+                    imageVector = AppIcons.Rounded.Search,
                     contentDescription = "搜索",
                     tint = Color.White,
                     modifier = Modifier.size(layoutPolicy.topActionIconSizeDp.dp)
@@ -674,7 +668,7 @@ private fun PortraitTopControlBar(
             if (shouldShowPortraitTopMoreAction()) {
                 PortraitGlassIconButton(onClick = onMoreClick) {
                     AppIcon(
-                        imageVector = Icons.Rounded.MoreVert,
+                        imageVector = AppIcons.Rounded.MoreVert,
                         contentDescription = "菜单",
                         tint = Color.White,
                         modifier = Modifier.size(layoutPolicy.topActionIconSizeDp.dp)
@@ -824,7 +818,7 @@ private fun PortraitVideoInfo(
                     ) {
                         if (iconVisible) {
                             AppIcon(
-                                imageVector = Icons.Rounded.Add,
+                                imageVector = AppIcons.Rounded.Add,
                                 contentDescription = null,
                                 tint = contentColor,
                                 modifier = Modifier.size(layoutPolicy.followIconSizeDp.dp)
@@ -866,7 +860,7 @@ private fun PortraitVideoInfo(
                         horizontalArrangement = Arrangement.spacedBy(5.dp),
                     ) {
                         AppIcon(
-                            imageVector = Icons.Outlined.Info,
+                            imageVector = AppIcons.Outlined.Info,
                             contentDescription = null,
                             tint = Color.White.copy(alpha = 0.8f),
                             modifier = Modifier.size(14.dp),

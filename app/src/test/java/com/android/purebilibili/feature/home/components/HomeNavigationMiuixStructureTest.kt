@@ -26,12 +26,12 @@ class HomeNavigationMiuixStructureTest {
     }
 
     @Test
-    fun `bottom bar keeps Material pairs only for explicit MD3 style`() {
+    fun `bottom bar keeps explicit icon pairs for MD3 style`() {
         val source = sourceText("BottomBar.kt")
 
         assertTrue(source.contains("enum class BottomNavItem"))
         assertTrue(source.contains("internal fun resolveMaterialBottomBarIcon("))
-        assertTrue(source.contains("if (selected) Icons.Filled.Home else Icons.Outlined.Home"))
+        assertTrue(source.contains("if (selected) AppIcons.Filled.Home else AppIcons.Outlined.Home"))
         assertFalse(source.contains("CupertinoIcons"))
         assertFalse(source.contains("val selectedIcon:"))
         assertFalse(source.contains("val unselectedIcon:"))
@@ -55,11 +55,11 @@ class HomeNavigationMiuixStructureTest {
         assertTrue(source.contains("resolveHomeNavigationBarIcon("))
         assertTrue(floatingSource.contains("LocalFloatingBottomBarActiveContent provides true"))
         assertTrue(source.contains("resolveMiuixBottomNavigationIcon(item, selected)"))
-        assertTrue(iconPolicySource.contains("if (item == BottomNavItem.LIVE && !selected)"))
-        assertTrue(iconPolicySource.contains("ImageVector.vectorResource(R.drawable.ic_home_nav_live)"))
+        assertTrue(iconPolicySource.contains("resolveMiuixPreferredHomeNavigationIcon(item.name, selected = selected)"))
         assertTrue(iconPolicySource.contains("HomeNavigationIconRole.LIVE -> COUIIcons.Light.Recording"))
-        assertTrue(iconPolicySource.contains("HomeNavigationIconRole.HOME -> R.drawable.ms_home_fill_24"))
-        assertTrue(iconPolicySource.contains("HomeNavigationIconRole.HISTORY -> R.drawable.ms_history_fill_24"))
+        assertTrue(iconPolicySource.contains("HomeNavigationIconRole.LIVE -> COUIIcons.Medium.Recording"))
+        assertTrue(iconPolicySource.contains("HomeNavigationIconRole.HOME -> COUIIcons.Medium.Home"))
+        assertTrue(iconPolicySource.contains("HomeNavigationIconRole.HISTORY -> COUIIcons.Medium.Recent"))
         assertFalse(iconPolicySource.contains("HomeNavigationIconRole.DYNAMIC -> R.drawable.ms_notifications_fill_24"))
         assertTrue(iconPolicySource.contains("HomeNavigationIconRole.DYNAMIC -> COUIIcons.Light.Community"))
         assertFalse(iconPolicySource.contains("HomeNavigationIconRole.LISTEN_VIDEO -> R.drawable.ms_library_music_fill_24"))
@@ -68,9 +68,9 @@ class HomeNavigationMiuixStructureTest {
         assertFalse(iconPolicySource.contains("R.drawable.ms_settings"))
         assertFalse(iconPolicySource.contains("HomeNavigationIconRole.PARTITION -> R.drawable.ms_grid_view_fill_24"))
         assertTrue(iconPolicySource.contains("HomeNavigationIconRole.PARTITION -> COUIIcons.Light.GridView"))
-        assertTrue(iconPolicySource.contains("return ImageVector.vectorResource(filledResource)"))
-        assertTrue(iconPolicySource.contains("HomeNavigationIconRole.HOME -> ImageVector.vectorResource(R.drawable.bp_nav_home_outline_24)"))
-        assertTrue(iconPolicySource.contains("HomeNavigationIconRole.HISTORY -> ImageVector.vectorResource(R.drawable.bp_nav_history_outline_24)"))
+        assertTrue(iconPolicySource.contains("resolveMiuixNavigationFilledIcon(role)?.let { return it }"))
+        assertTrue(iconPolicySource.contains("HomeNavigationIconRole.HOME -> COUIIcons.Light.Home"))
+        assertTrue(iconPolicySource.contains("HomeNavigationIconRole.HISTORY -> COUIIcons.Light.Recent"))
     }
 
     @Test

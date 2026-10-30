@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppHorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -31,16 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Block
-import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.Report
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.ThumbUp
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.Reply
 import com.android.purebilibili.core.ui.common.AppSelectionContainer as SelectionContainer
-import androidx.compose.material.icons.filled.SelectAll
 import com.android.purebilibili.core.ui.common.copyPlainTextToClipboard
 import com.android.purebilibili.core.ui.common.TextSelectionBottomSheet
 import com.android.purebilibili.core.ui.AppShapes
@@ -294,7 +287,7 @@ private fun RecallConfirmMenu(
                 modifier = Modifier.align(Alignment.CenterStart),
             ) {
                 AppIcon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    imageVector = AppIcons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "返回",
                     tint = AppContentColors.neutralAction(),
                     modifier = Modifier.size(24.dp),
@@ -343,7 +336,7 @@ private fun RecallConfirmMenu(
 
         MenuItem(
             label = "撤回弹幕",
-            icon = Icons.AutoMirrored.Filled.Reply,
+            icon = AppIcons.AutoMirrored.Filled.Reply,
             color = AppContentColors.error(),
             onClick = onConfirm
         )
@@ -413,7 +406,7 @@ private fun MainMenu(
         }
         MenuItem(
             label = voteLabel,
-            icon = Icons.Filled.ThumbUp,
+            icon = AppIcons.Filled.ThumbUp,
             enabled = canVote && !voteLoading,
             onClick = onLike
         )
@@ -422,7 +415,7 @@ private fun MainMenu(
 
         MenuItem(
             label = "复制全部",
-            icon = Icons.Filled.ContentCopy,
+            icon = AppIcons.Filled.ContentCopy,
             onClick = onCopy
         )
 
@@ -431,7 +424,7 @@ private fun MainMenu(
         if (timestampJumpMs != null) {
             MenuItem(
                 label = "跳转到 ${formatDanmakuTimestampJumpLabel(timestampJumpMs)}",
-                icon = Icons.Filled.PlayArrow,
+                icon = AppIcons.Filled.PlayArrow,
                 onClick = { onSeekToTimestamp(timestampJumpMs) }
             )
             MenuSeparator()
@@ -439,7 +432,7 @@ private fun MainMenu(
 
         MenuItem(
             label = "选择内容",
-            icon = Icons.Filled.SelectAll,
+            icon = AppIcons.Filled.SelectAll,
             onClick = onSelectText
         )
 
@@ -447,7 +440,7 @@ private fun MainMenu(
 
         MenuItem(
             label = "加入屏蔽词",
-            icon = Icons.Filled.Block,
+            icon = AppIcons.Filled.Block,
             enabled = canBlockKeyword,
             onClick = onBlockKeyword
         )
@@ -458,7 +451,7 @@ private fun MainMenu(
             // 仅自己的弹幕才允许撤回
             MenuItem(
                 label = "撤回弹幕",
-                icon = Icons.AutoMirrored.Filled.Reply,
+                icon = AppIcons.AutoMirrored.Filled.Reply,
                 onClick = onRecall
             )
             MenuSeparator()
@@ -466,7 +459,7 @@ private fun MainMenu(
 
         MenuItem(
             label = "屏蔽发送者",
-            icon = Icons.Filled.Block,
+            icon = AppIcons.Filled.Block,
             enabled = canBlockUser,
             onClick = onBlockUser
         )
@@ -475,7 +468,7 @@ private fun MainMenu(
 
         MenuItem(
             label = "举报弹幕",
-            icon = Icons.Filled.Report,
+            icon = AppIcons.Filled.Report,
             color = AppContentColors.error(), // Red for Report
             onClick = onReportClick
         )

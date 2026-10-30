@@ -4,8 +4,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Bolt
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -149,7 +147,7 @@ fun OfficialVerifyAvatarBadge(
         shape = CircleShape,
     ) {
         Icon(
-            imageVector = Icons.Outlined.Bolt,
+            imageVector = AppIcons.Outlined.Bolt,
             contentDescription = badge.contentDescription,
             tint = officialVerifyColor(badge.tone),
             modifier = Modifier.size(14.dp),

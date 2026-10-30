@@ -1,15 +1,10 @@
 package com.android.purebilibili.feature.video.ui.overlay
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.components.appGlassMenuSource
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
-import androidx.compose.material.icons.automirrored.filled.ViewList
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.ClosedCaptionOff
-import androidx.compose.material.icons.outlined.Fullscreen
-import androidx.compose.material.icons.outlined.FullscreenExit
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -311,12 +306,12 @@ fun BottomControlBar(
                     }
                     if (hasEpisodeEntry) {
                         PlayerControlIconAction(
-                            icon = Icons.Filled.SkipPrevious, description = "上一集",
+                            icon = AppIcons.Filled.SkipPrevious, description = "上一集",
                             width = slotWidth, height = 30.dp, onClick = onPreviousEpisodeClick,
                             modifier = Modifier.testTag("player_previous_episode"),
                         )
                         PlayerControlIconAction(
-                            icon = Icons.Filled.SkipNext, description = "下一集",
+                            icon = AppIcons.Filled.SkipNext, description = "下一集",
                             width = slotWidth, height = 30.dp, onClick = onNextEpisodeClick,
                             modifier = Modifier.testTag("player_next_episode"),
                         )
@@ -325,7 +320,7 @@ fun BottomControlBar(
                 right = {
                     if (pbpRidgeSamples.isNotEmpty()) {
                         PlayerControlIconAction(
-                            icon = Icons.Filled.ShowChart, description = "高能进度条",
+                            icon = AppIcons.Filled.ShowChart, description = "高能进度条",
                             width = slotWidth, height = 30.dp, onClick = onHeatmapToggle,
                             selected = heatmapEnabled, dimmed = !heatmapEnabled,
                             modifier = Modifier.testTag("player_heatmap_action"),
@@ -341,7 +336,7 @@ fun BottomControlBar(
                     }
                     if (viewPoints.isNotEmpty()) {
                         PlayerControlIconAction(
-                            icon = Icons.AutoMirrored.Filled.ViewList, description = "分段信息",
+                            icon = AppIcons.AutoMirrored.Filled.ViewList, description = "分段信息",
                             width = slotWidth, height = 30.dp, onClick = onChapterClick,
                             onLongClick = onViewPointsToggle,
                             dimmed = !showViewPoints, selected = showViewPoints,
@@ -350,7 +345,7 @@ fun BottomControlBar(
                     }
                     if (hasEpisodeEntry) {
                         PlayerControlIconAction(
-                            icon = Icons.AutoMirrored.Filled.PlaylistPlay, description = "选集",
+                            icon = AppIcons.AutoMirrored.Filled.PlaylistPlay, description = "选集",
                             width = slotWidth, height = 30.dp, onClick = onEpisodeClick,
                             modifier = anchor(PlayerControlAnchor.EPISODES, "player_episode_action"),
                         )
@@ -363,7 +358,7 @@ fun BottomControlBar(
                     }
                     if (!aiAudioInfo?.items.isNullOrEmpty()) {
                         PlayerControlIconAction(
-                            icon = Icons.Filled.Translate, description = "翻译",
+                            icon = AppIcons.Filled.Translate, description = "翻译",
                             width = slotWidth, height = 30.dp, iconSize = 18.dp,
                             onClick = { localMenu = PlayerControlAnchor.TRANSLATION },
                             modifier = anchor(PlayerControlAnchor.TRANSLATION, "player_translation_action"),
@@ -371,7 +366,7 @@ fun BottomControlBar(
                     }
                     if (subtitleControlState.trackAvailable) {
                         PlayerControlIconAction(
-                            icon = if (subtitleControlState.enabled) Icons.Filled.ClosedCaption else Icons.Outlined.ClosedCaptionOff,
+                            icon = if (subtitleControlState.enabled) AppIcons.Filled.ClosedCaption else AppIcons.Outlined.ClosedCaptionOff,
                             description = "字幕", width = slotWidth, height = 30.dp,
                             selected = subtitleControlState.enabled,
                             selectedTint = com.android.purebilibili.core.ui.AppContentColors.accent(),
@@ -399,7 +394,7 @@ fun BottomControlBar(
                         )
                     }
                     PlayerControlIconAction(
-                        icon = if (isFullscreen) Icons.Outlined.FullscreenExit else Icons.Outlined.Fullscreen,
+                        icon = if (isFullscreen) AppIcons.Outlined.FullscreenExit else AppIcons.Outlined.Fullscreen,
                         description = if (isFullscreen) "退出全屏" else "全屏",
                         width = slotWidth, height = 30.dp, iconSize = 24.dp,
                         onClick = onToggleFullscreen, modifier = Modifier.testTag("player_fullscreen_toggle"),

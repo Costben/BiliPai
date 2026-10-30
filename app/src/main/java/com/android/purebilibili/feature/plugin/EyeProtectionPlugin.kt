@@ -1,10 +1,10 @@
 package com.android.purebilibili.feature.plugin
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.plugin.BuiltinPluginIds
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -94,7 +94,7 @@ class EyeProtectionPlugin : BuiltinPlugin, EyeProtectionPluginApi {
     override val description = "柔和降蓝光、定时护眼与休息提醒"
     override val version = "2.2.0"
     override val author = "BiliPai项目组"
-    override val icon: ImageVector = Icons.Outlined.DarkMode
+    override val icon: ImageVector = AppIcons.Outlined.DarkMode
 
     private var config: EyeProtectionConfig = EyeProtectionConfig()
     private val ioScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)

@@ -2,6 +2,8 @@
 
 package com.android.purebilibili.core.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppChromeSizeTokens
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.LocalAppEntryIconColorCursor
@@ -14,11 +16,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.rememberTextFieldState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.*
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
@@ -66,8 +63,6 @@ import com.android.purebilibili.core.ui.AppIconStyle
 import com.android.purebilibili.core.ui.AppListItemStyle
 import com.android.purebilibili.core.ui.rememberResolvedAppIconStyle
 import com.android.purebilibili.core.ui.rememberResolvedAppListItemStyle
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.*
 import com.android.purebilibili.core.ui.AppSurfaceTokens
 import io.github.suqi8.coui.kmp.basic.BasicComponent
 import io.github.suqi8.coui.kmp.basic.BasicComponentDefaults
@@ -964,7 +959,7 @@ private fun Md3NativeListItemContent(
                 }
                 if (showChevron && onClick != null) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        imageVector = AppIcons.AutoMirrored.Filled.KeyboardArrowRight,
                         contentDescription = null,
                         tint = valueColor,
                         modifier = Modifier.size(20.dp),
@@ -1225,7 +1220,7 @@ internal fun AdaptivePreferenceContent(
                     if (onClick != null && showChevron) {
                         Spacer(modifier = Modifier.width(6.dp))
                         Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
+                            imageVector = AppIcons.AutoMirrored.Filled.ArrowForwardIos,
                             contentDescription = null,
                             tint = chevronTint,
                             modifier = Modifier.size(rowSpec.trailingIconSizeDp.dp)
@@ -1315,7 +1310,7 @@ internal fun AdaptivePreferenceContent(
                 }
                 if (onClick != null && showChevron) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
+                        imageVector = AppIcons.AutoMirrored.Filled.ArrowForwardIos,
                         contentDescription = null,
                         tint = AppSurfaceTokens.onSurfaceVariantActions(),
                         modifier = Modifier.size(rowSpec.trailingIconSizeDp.dp)
@@ -1442,7 +1437,7 @@ internal fun AdaptivePreferenceContent(
                 if (onClick != null && showChevron) {
                     Spacer(modifier = Modifier.width(6.dp))
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
+                        imageVector = AppIcons.AutoMirrored.Filled.ArrowForwardIos,
                         contentDescription = null,
                         tint = chevronTint,
                         modifier = Modifier.size(16.dp)
@@ -1568,12 +1563,12 @@ fun AdaptiveSearchFieldRenderer(
         keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(imeAction = androidx.compose.ui.text.input.ImeAction.Search),
         keyboardActions = androidx.compose.foundation.text.KeyboardActions(onSearch = { onSearch() }),
         leadingIcon = {
-            AppIcon(Icons.Default.Search, contentDescription = null,
+            AppIcon(AppIcons.Filled.Search, contentDescription = null,
                 modifier = Modifier.padding(start = leadingIconHorizontalOffset).size(22.dp))
         },
         trailingIcon = if (showClearAction && query.isNotEmpty()) {
             { AppIconButton(onClick = onClear, modifier = Modifier.size(32.dp)) {
-                AppIcon(Icons.Default.Clear, contentDescription = "清除搜索内容")
+                AppIcon(AppIcons.Filled.Clear, contentDescription = "清除搜索内容")
             } }
         } else null,
     )
@@ -1606,7 +1601,7 @@ fun AppSearchEntry(
         horizontalArrangement = if (centeredContent) Arrangement.Center else Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        AppIcon(Icons.Default.Search, contentDescription = null, tint = hintColor, modifier = Modifier.size(22.dp))
+        AppIcon(AppIcons.Filled.Search, contentDescription = null, tint = hintColor, modifier = Modifier.size(22.dp))
         Spacer(Modifier.width(8.dp))
         AppText(placeholder, color = hintColor, style = MaterialTheme.typography.bodyMedium,
             maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis)

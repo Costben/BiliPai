@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.overlay
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import android.os.SystemClock
 import com.android.purebilibili.core.player.SeekTickHapticPolicy
 import com.android.purebilibili.core.ui.AppHapticScene
@@ -10,8 +12,6 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ViewList
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -308,7 +308,7 @@ fun VideoProgressBar(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             AppIcon(
-                                Icons.Outlined.ViewList,
+                                AppIcons.Outlined.ViewList,
                                 contentDescription = "Chapter",
                                 tint = Color.White.copy(alpha = 0.8f),
                                 modifier = Modifier.size(layoutPolicy.chapterIconSizeDp.dp)

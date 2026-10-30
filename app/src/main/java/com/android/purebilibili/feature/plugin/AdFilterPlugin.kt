@@ -1,6 +1,8 @@
 // 文件路径: feature/plugin/AdFilterPlugin.kt
 package com.android.purebilibili.feature.plugin
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.plugin.BuiltinPluginIds
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -18,8 +20,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 //  Material Icons
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -127,7 +127,7 @@ class AdFilterPlugin : BuiltinPlugin, FeedPlugin<VideoItem> {
     override val description = "过滤广告、拉黑UP主、屏蔽关键词"
     override val version = "2.0.1"
     override val author = "BiliPai项目组"
-    override val icon: ImageVector = Icons.Outlined.Close
+    override val icon: ImageVector = AppIcons.Outlined.Close
     override val capabilityManifest: PluginCapabilityManifest = PluginCapabilityManifest(
         pluginId = id,
         displayName = name,
@@ -497,7 +497,7 @@ class AdFilterPlugin : BuiltinPlugin, FeedPlugin<VideoItem> {
 
             // 商业合作过滤
             AppSwitchPreference(
-                icon = Icons.Outlined.Close,
+                icon = AppIcons.Outlined.Close,
                 title = "过滤广告推广",
                 subtitle = "隐藏商业合作、恰饭、推广等内容",
                 checked = filterSponsored,
@@ -513,7 +513,7 @@ class AdFilterPlugin : BuiltinPlugin, FeedPlugin<VideoItem> {
 
             // 标题党过滤
             AppSwitchPreference(
-                icon = Icons.Outlined.Star,
+                icon = AppIcons.Outlined.Star,
                 title = "过滤标题党",
                 subtitle = "隐藏震惊体、夸张标题视频",
                 checked = filterClickbait,
@@ -529,7 +529,7 @@ class AdFilterPlugin : BuiltinPlugin, FeedPlugin<VideoItem> {
 
             // 低质量过滤
             AppSwitchPreference(
-                icon = Icons.Outlined.Close,
+                icon = AppIcons.Outlined.Close,
                 title = "过滤低播放量",
                 subtitle = "隐藏播放量低于1000的视频",
                 checked = filterLowQuality,
@@ -553,7 +553,7 @@ class AdFilterPlugin : BuiltinPlugin, FeedPlugin<VideoItem> {
                 blockedUpProfiles = insightSummary.blockedUpProfiles,
                 emptyText = "暂无拉黑的UP主",
                 expanded = upListExpanded,
-                icon = Icons.Outlined.Person,
+                icon = AppIcons.Outlined.Person,
                 itemIconTint = AppContentColors.error(),
                 addButtonText = "添加UP主拉黑",
                 onExpandedChange = { upListExpanded = it },
@@ -571,7 +571,7 @@ class AdFilterPlugin : BuiltinPlugin, FeedPlugin<VideoItem> {
                 items = blockedKeywords,
                 emptyText = "暂无自定义屏蔽词",
                 expanded = keywordListExpanded,
-                icon = Icons.Outlined.Tag,
+                icon = AppIcons.Outlined.Tag,
                 itemIconTint = AppContentColors.error(),
                 addButtonText = "添加屏蔽关键词",
                 onExpandedChange = { keywordListExpanded = it },
@@ -1166,9 +1166,9 @@ private fun AdFilterCustomListSection(
             }
             AppIcon(
                 imageVector = if (expanded) {
-                    Icons.Outlined.KeyboardArrowUp
+                    AppIcons.Outlined.KeyboardArrowUp
                 } else {
-                    Icons.Outlined.KeyboardArrowDown
+                    AppIcons.Outlined.KeyboardArrowDown
                 },
                 contentDescription = if (expanded) "收起$title" else "展开$title",
                 tint = AppContentColors.secondaryText().copy(alpha = 0.68f),
@@ -1232,7 +1232,7 @@ private fun AdFilterCustomListSection(
                             modifier = Modifier.size(32.dp)
                         ) {
                             AppIcon(
-                                Icons.Outlined.Close,
+                                AppIcons.Outlined.Close,
                                 contentDescription = "移除$item",
                                 tint = AppContentColors.secondaryText(),
                                 modifier = Modifier.size(16.dp)
@@ -1247,7 +1247,7 @@ private fun AdFilterCustomListSection(
             onClick = onAddClick,
             modifier = Modifier.fillMaxWidth()
         ) {
-            AppIcon(Icons.Outlined.Add, contentDescription = null, modifier = Modifier.size(18.dp))
+            AppIcon(AppIcons.Outlined.Add, contentDescription = null, modifier = Modifier.size(18.dp))
             Spacer(modifier = Modifier.width(8.dp))
             AppText(addButtonText)
         }

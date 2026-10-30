@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components.glass
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.feature.video.ui.components.*
 
 import androidx.compose.runtime.rememberUpdatedState
@@ -35,10 +37,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -399,7 +397,7 @@ internal fun LandscapeDanmakuComposerEditor(
                     )
                 } else {
                     AppIcon(
-                        imageVector = Icons.Outlined.Send,
+                        imageVector = AppIcons.Outlined.Send,
                         contentDescription = "发送弹幕",
                         tint = if (text.isNotBlank()) Color.White else secondaryText,
                         modifier = Modifier.size(28.dp),
@@ -482,7 +480,7 @@ internal fun LandscapeDanmakuComposerEditor(
                             }
                             if (selected) {
                                 AppIcon(
-                                    Icons.Outlined.Check,
+                                    AppIcons.Outlined.Check,
                                     contentDescription = "已选",
                                     tint = accent,
                                     modifier = Modifier.size(22.dp).background(Color.Black.copy(alpha = 0.6f), RoundedCornerShape(12.dp)),
@@ -496,7 +494,7 @@ internal fun LandscapeDanmakuComposerEditor(
                         onClick = { showCustomColorPicker = true },
                         accent = accent,
                     ) { tint ->
-                        AppIcon(Icons.Outlined.Palette, contentDescription = null, tint = tint, modifier = Modifier.size(20.dp))
+                        AppIcon(AppIcons.Outlined.Palette, contentDescription = null, tint = tint, modifier = Modifier.size(20.dp))
                     }
                 }
 

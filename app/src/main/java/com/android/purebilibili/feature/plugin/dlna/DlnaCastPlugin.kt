@@ -1,10 +1,10 @@
 package com.android.purebilibili.feature.plugin.dlna
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.plugin.BuiltinPluginIds
 
 import android.content.Context
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Tv
 import com.android.purebilibili.plugin.sdk.CastPluginApi
 import com.android.purebilibili.core.plugin.BuiltinPlugin
 import com.android.purebilibili.plugin.sdk.CastDiscoveryRequirement
@@ -45,7 +45,7 @@ class DlnaCastPlugin : BuiltinPlugin, CastPluginApi {
     override val version = "0.1.1"
     override val author = "BiliPai项目组, Leko (lekoOwO)"
     override val discoveryRequirement = CastDiscoveryRequirement.RAW_LOCAL_NETWORK
-    override val icon = Icons.Rounded.Tv
+    override val icon = AppIcons.Rounded.Tv
     override val capabilityManifest = PluginCapabilityManifest(
         pluginId = id,
         displayName = name,

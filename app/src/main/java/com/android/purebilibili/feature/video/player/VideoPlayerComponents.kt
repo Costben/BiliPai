@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.player
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.components.rememberFollowActionWithConfirmation
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.resolveButtonContentColor
@@ -15,9 +17,6 @@ import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -83,7 +82,7 @@ fun VideoTitleSection(
             )
             Spacer(Modifier.width(4.dp))
             AppIcon(
-                imageVector = if (expanded) Icons.Outlined.KeyboardArrowUp else Icons.Outlined.KeyboardArrowDown,
+                imageVector = if (expanded) AppIcons.Outlined.KeyboardArrowUp else AppIcons.Outlined.KeyboardArrowDown,
                 contentDescription = null,
                 tint = AppContentColors.secondaryText().copy(alpha = 0.5f),
                 modifier = Modifier.size(18.dp)
@@ -135,7 +134,7 @@ fun VideoTitleWithDesc(
             )
             Spacer(Modifier.width(4.dp))
             AppIcon(
-                imageVector = if (expanded) Icons.Outlined.KeyboardArrowUp else Icons.Outlined.KeyboardArrowDown,
+                imageVector = if (expanded) AppIcons.Outlined.KeyboardArrowUp else AppIcons.Outlined.KeyboardArrowDown,
                 contentDescription = null,
                 tint = AppContentColors.secondaryText().copy(alpha = 0.5f),
                 modifier = Modifier.size(16.dp)
@@ -239,7 +238,7 @@ fun UpInfoSection(
             ) {
                 if (!isFollowing) {
                     AppIcon(
-                        Icons.Outlined.Add,
+                        AppIcons.Outlined.Add,
                         contentDescription = null,
                         tint = followContent,
                         modifier = Modifier.size(14.dp)
@@ -527,7 +526,7 @@ fun DescriptionSection(desc: String) {
                     )
                     Spacer(modifier = Modifier.width(2.dp))
                     AppIcon(
-                        imageVector = if (expanded) Icons.Outlined.KeyboardArrowUp else Icons.Outlined.KeyboardArrowDown,
+                        imageVector = if (expanded) AppIcons.Outlined.KeyboardArrowUp else AppIcons.Outlined.KeyboardArrowDown,
                         contentDescription = null,
                         tint = AppContentColors.accent(),
                         modifier = Modifier.size(18.dp)
@@ -641,7 +640,7 @@ fun RelatedVideoItem(video: RelatedVideo, onClick: () -> Unit) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     AppIcon(
-                        Icons.Outlined.PlayArrow,
+                        AppIcons.Outlined.PlayArrow,
                         contentDescription = null,
                         tint = Color.White.copy(alpha = 0.9f),
                         modifier = Modifier.size(12.dp)
@@ -698,7 +697,7 @@ fun RelatedVideoItem(video: RelatedVideo, onClick: () -> Unit) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         AppIcon(
-                            Icons.Outlined.PlayArrow,
+                            AppIcons.Outlined.PlayArrow,
                             contentDescription = null,
                             tint = AppContentColors.secondaryText().copy(alpha = 0.6f),
                             modifier = Modifier.size(12.dp)

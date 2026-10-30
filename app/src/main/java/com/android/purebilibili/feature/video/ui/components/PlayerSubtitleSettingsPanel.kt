@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.components.AppTextButton as TextButton
 import com.android.purebilibili.core.ui.components.AppIconButton as IconButton
 import com.android.purebilibili.core.ui.components.AppSlider as Slider
@@ -12,8 +14,6 @@ import com.android.purebilibili.core.ui.AppAlertDialog as AlertDialog
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -144,7 +144,7 @@ private fun SubtitleAppearanceSlider(
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text("$label ${format(value)}", Modifier.weight(1f), fontSize = 14.sp)
             IconButton({ onChange(default) }, Modifier.size(24.dp)) {
-                Icon(Icons.Outlined.Refresh, "默认值: ${format(default)}", Modifier.size(24.dp))
+                Icon(AppIcons.Outlined.Refresh, "默认值: ${format(default)}", Modifier.size(24.dp))
             }
         }
         Slider(value.coerceIn(range), onChange, valueRange = range, steps = steps, modifier = Modifier.padding(vertical = 16.dp))

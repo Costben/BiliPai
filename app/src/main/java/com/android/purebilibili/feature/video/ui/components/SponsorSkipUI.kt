@@ -1,6 +1,8 @@
 // 文件路径: feature/video/SponsorSkipUI.kt
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppFilterChip
 import com.android.purebilibili.core.ui.components.AppIcon
@@ -14,10 +16,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -94,7 +92,7 @@ fun SponsorSkipButton(
                             horizontalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
                             AppIcon(
-                                imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                                imageVector = AppIcons.AutoMirrored.Outlined.KeyboardArrowRight,
                                 contentDescription = "跳过",
                                 tint = AppContentColors.onAccent(),
                                 modifier = Modifier.size(16.dp)
@@ -291,7 +289,7 @@ fun SponsorSkipToast(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     AppIcon(
-                        imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                        imageVector = AppIcons.AutoMirrored.Outlined.KeyboardArrowRight,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onTertiaryContainer,
                         modifier = Modifier.size(16.dp)

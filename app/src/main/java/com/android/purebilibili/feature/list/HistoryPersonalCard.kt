@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.list
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.components.VideoStatusBadges
 import com.android.purebilibili.core.ui.components.wallpaperAwareMediaCardBackground
 import com.android.purebilibili.core.ui.AppContentColors
@@ -21,11 +23,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.MoreVert
-import androidx.compose.material.icons.outlined.DeleteOutline
-import androidx.compose.material.icons.outlined.PersonOutline
-import androidx.compose.material.icons.outlined.WatchLater
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -268,14 +265,14 @@ internal fun HistoryPersonalCard(
                             if (onUpClick != null) {
                                 add(AppWindowAction(
                                     label = "访问UP主",
-                                    icon = Icons.Outlined.PersonOutline,
+                                    icon = AppIcons.Outlined.PersonOutline,
                                     onClick = onUpClick,
                                 ))
                             }
                             if (onAddToWatchLater != null) {
                                 add(AppWindowAction(
                                     label = "加入稍后再看",
-                                    icon = Icons.Outlined.WatchLater,
+                                    icon = AppIcons.Outlined.WatchLater,
                                     onClick = onAddToWatchLater,
                                 ))
                             }
@@ -283,7 +280,7 @@ internal fun HistoryPersonalCard(
                         listOf(
                             AppWindowAction(
                                 label = "删除记录",
-                                icon = Icons.Outlined.DeleteOutline,
+                                icon = AppIcons.Outlined.DeleteOutline,
                                 iconTint = AppContentColors.error(),
                                 onClick = onDelete,
                             ),
@@ -292,7 +289,7 @@ internal fun HistoryPersonalCard(
                     modifier = Modifier.size(48.dp),
                 ) {
                     AppIcon(
-                        Icons.Outlined.MoreVert,
+                        AppIcons.Outlined.MoreVert,
                         contentDescription = "历史记录操作",
                         tint = AppContentColors.secondaryText(),
                         modifier = Modifier.size(18.dp),

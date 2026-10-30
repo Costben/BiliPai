@@ -19,12 +19,6 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.filled.ThumbUp
-import androidx.compose.material.icons.filled.ThumbDown
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
@@ -62,7 +56,6 @@ import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import androidx.compose.material.icons.outlined.Home
 
 /**
  * Shared Android PiliPlus HeaderControl for inline/fullscreen and portrait/landscape.
@@ -185,9 +178,9 @@ fun TopControlBar(
                 allowSeparateTitleRow = isFullscreen && !isPortrait,
                 left = {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(buttonSpacing)) {
-                        HeaderIcon(Icons.AutoMirrored.Outlined.ArrowBack, "返回", onBack, iconSize = if (glass) 15 else 20)
+                        HeaderIcon(AppIcons.AutoMirrored.Outlined.ArrowBack, "返回", onBack, iconSize = if (glass) 15 else 20)
                         if (policy.showHome && onHomeClick != null) {
-                            HeaderIcon(Icons.Outlined.Home, "返回首页", onHomeClick)
+                            HeaderIcon(AppIcons.Outlined.Home, "返回首页", onHomeClick)
                         }
                     }
                 },
@@ -217,10 +210,10 @@ fun TopControlBar(
                             if (clockVisible) HeaderStatusText(currentTime)
                         }
                         if (policy.showAudio && onAudioClick != null) {
-                            HeaderIcon(Icons.Outlined.Headphones, "听音频", onAudioClick)
+                            HeaderIcon(AppIcons.Outlined.Headphones, "听音频", onAudioClick)
                         }
                         if (policy.showCast && showCastButton && onCastClick != null) {
-                            HeaderIcon(Icons.Outlined.Cast, "投屏", onCastClick)
+                            HeaderIcon(AppIcons.Outlined.Cast, "投屏", onCastClick)
                         }
                         if (!isFileSource && showSponsorSubmitButton && onSponsorSubmitClick != null) {
                             HeaderButton(sponsorSubmitDescription, onSponsorSubmitClick) {
@@ -254,10 +247,10 @@ fun TopControlBar(
                             }
                         }
                         if (showPipButton && onPipClick != null) {
-                            HeaderIcon(Icons.Outlined.PictureInPicture, "画中画", onPipClick)
+                            HeaderIcon(AppIcons.Outlined.PictureInPicture, "画中画", onPipClick)
                         }
                         if (onMoreClick != null) {
-                            HeaderIcon(Icons.Outlined.MoreVert, "更多设置", onMoreClick, modifier = moreMenuSource?.let { Modifier.appGlassMenuSource(it, onOpen = onMoreClick) } ?: Modifier)
+                            HeaderIcon(AppIcons.Outlined.MoreVert, "更多设置", onMoreClick, modifier = moreMenuSource?.let { Modifier.appGlassMenuSource(it, onOpen = onMoreClick) } ?: Modifier)
                         }
                     }
                 },
@@ -307,19 +300,19 @@ fun TopControlBar(
                     horizontalArrangement = if (glass) Arrangement.spacedBy(buttonSpacing, Alignment.End) else Arrangement.End,
                 ) {
                     if (onCommentClick != null) {
-                        HeaderIcon(Icons.Outlined.Forum, "评论", onCommentClick,
+                        HeaderIcon(AppIcons.Outlined.Forum, "评论", onCommentClick,
                             active = commentsVisible, iconSize = 18,
                             count = visibleCount(com.android.purebilibili.core.store.FullscreenActionCount.COMMENT, commentCount))
                     }
                     if (onRelatedVideosClick != null) {
-                        HeaderIcon(Icons.Outlined.VideoLibrary, "相关推荐", onRelatedVideosClick,
+                        HeaderIcon(AppIcons.Outlined.VideoLibrary, "相关推荐", onRelatedVideosClick,
                             active = relatedVideosVisible, iconSize = 18)
                     }
                     if (policy.showEngagement) {
                         if (onLikeClick != null) {
                             Box(Modifier.likeBurstAnchor()) {
                                 HeaderIcon(
-                                    if (likeStatusKnown && isLiked) Icons.Filled.ThumbUp else Icons.Outlined.ThumbUp,
+                                    if (likeStatusKnown && isLiked) AppIcons.Filled.ThumbUp else AppIcons.Outlined.ThumbUp,
                                     if (likeStatusKnown) "点赞" else "点赞状态尚未确认",
                                     requireNotNull(likeClick), active = likeStatusKnown && isLiked, iconSize = 18,
                                     gestureModifier = likeGesture, progress = triplePress.progress,
@@ -329,7 +322,7 @@ fun TopControlBar(
                         }
                         if (policy.showDislike && allowDislikeAction && onDislikeClick != null) {
                             HeaderIcon(
-                                if (isDisliked) Icons.Filled.ThumbDown else Icons.Outlined.ThumbDown,
+                                if (isDisliked) AppIcons.Filled.ThumbDown else AppIcons.Outlined.ThumbDown,
                                 "点踩", onDislikeClick, active = isDisliked, iconSize = 18,
                             )
                         }
@@ -339,14 +332,14 @@ fun TopControlBar(
                         )
                         if (onFavoriteClick != null) {
                             HeaderIcon(
-                                if (isFavorited) Icons.Filled.Star else Icons.Outlined.StarBorder,
+                                if (isFavorited) AppIcons.Filled.Star else AppIcons.Outlined.StarBorder,
                                 "收藏", { haptic(HapticType.LIGHT); onFavoriteClick() }, active = isFavorited, iconSize = 18,
                                 onLongClick = onFavoriteLongClick, progress = triplePress.progress,
                                 modifier = Modifier.favoriteFolderMenuSource(),
                                 count = visibleCount(com.android.purebilibili.core.store.FullscreenActionCount.FAVORITE, favoriteCount),
                             )
                         }
-                        if (onShareClick != null) HeaderIcon(Icons.Outlined.Share, "分享", onShareClick, iconSize = 18, modifier = shareMenuSource?.let { Modifier.appGlassMenuSource(it, onOpen = onShareClick) } ?: Modifier)
+                        if (onShareClick != null) HeaderIcon(AppIcons.Outlined.Share, "分享", onShareClick, iconSize = 18, modifier = shareMenuSource?.let { Modifier.appGlassMenuSource(it, onOpen = onShareClick) } ?: Modifier)
                     }
                 }
             }

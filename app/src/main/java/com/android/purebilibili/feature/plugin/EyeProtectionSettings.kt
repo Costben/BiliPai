@@ -2,6 +2,8 @@
 
 package com.android.purebilibili.feature.plugin
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.plugin.BuiltinPluginIds
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -18,17 +20,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LightMode
-import androidx.compose.material.icons.outlined.AutoAwesome
-import androidx.compose.material.icons.outlined.DarkMode
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.Lightbulb
-import androidx.compose.material.icons.outlined.LightMode
-import androidx.compose.material.icons.outlined.Movie
-import androidx.compose.material.icons.outlined.NotificationsNone
-import androidx.compose.material.icons.outlined.Schedule
-import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -127,7 +118,7 @@ internal fun EyeProtectionSettings(
 
         Spacer(modifier = Modifier.height(8.dp))
         AppSwitchPreference(
-            icon = Icons.Outlined.Lightbulb,
+            icon = AppIcons.Outlined.Lightbulb,
             title = "立即开启护眼",
             subtitle = "手动开启，不受时间段限制",
             checked = uiConfig.forceEnabled,
@@ -141,7 +132,7 @@ internal fun EyeProtectionSettings(
             color = AppSurfaceTokens.divider()
         )
         AppSwitchPreference(
-            icon = Icons.Outlined.DarkMode,
+            icon = AppIcons.Outlined.DarkMode,
             title = "定时护眼",
             subtitle = "${formatClockHour(uiConfig.nightModeStartHour)} - ${formatClockHour(uiConfig.nightModeEndHour)} 自动开启",
             checked = uiConfig.nightModeEnabled,
@@ -216,7 +207,7 @@ internal fun EyeProtectionSettings(
             color = AppSurfaceTokens.divider()
         )
         AppSwitchPreference(
-            icon = Icons.Outlined.Movie,
+            icon = AppIcons.Outlined.Movie,
             title = "播放时减弱滤镜",
             subtitle = "看视频时降低暖色和降亮，减少画面偏色",
             checked = uiConfig.weakenDuringPlayback,
@@ -225,7 +216,7 @@ internal fun EyeProtectionSettings(
             }
         )
         AppSwitchPreference(
-            icon = Icons.Outlined.Visibility,
+            icon = AppIcons.Outlined.Visibility,
             title = "生效时轻提示",
             subtitle = "滤镜真正开始工作时，顶部短暂提示一次",
             checked = uiConfig.showEffectHint,
@@ -239,7 +230,7 @@ internal fun EyeProtectionSettings(
             color = AppSurfaceTokens.divider()
         )
         AppSwitchPreference(
-            icon = Icons.Outlined.Schedule,
+            icon = AppIcons.Outlined.Schedule,
             title = "关怀提醒",
             subtitle = "定时提醒休息、看远处、放松肩颈",
             checked = uiConfig.usageReminderEnabled,
@@ -250,7 +241,7 @@ internal fun EyeProtectionSettings(
         )
         if (uiConfig.usageReminderEnabled) {
             AppSwitchPreference(
-                icon = Icons.Outlined.NotificationsNone,
+                icon = AppIcons.Outlined.NotificationsNone,
                 title = "仅夜间提醒",
                 subtitle = "白天减少打扰，护眼开启时再提醒",
                 checked = uiConfig.remindOnlyDuringNight,
@@ -333,7 +324,7 @@ internal fun EyeProtectionSettings(
         )
 
         SliderRow(
-            icon = Icons.Filled.LightMode,
+            icon = AppIcons.Filled.LightMode,
             title = "亮度",
             valueLabel = "${(uiConfig.brightnessLevel * 100).toInt()}%",
             value = uiConfig.brightnessLevel,
@@ -347,7 +338,7 @@ internal fun EyeProtectionSettings(
             onValueChangeFinished = { plugin.commitConfig(uiConfig) }
         )
         SliderRow(
-            icon = Icons.Outlined.LightMode,
+            icon = AppIcons.Outlined.LightMode,
             title = "暖色",
             valueLabel = "${(uiConfig.warmFilterStrength * 100).toInt()}%",
             value = uiConfig.warmFilterStrength,
@@ -373,7 +364,7 @@ internal fun EyeProtectionSettings(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             AppIcon(
-                imageVector = Icons.Outlined.FavoriteBorder,
+                imageVector = AppIcons.Outlined.FavoriteBorder,
                 contentDescription = null,
                 tint = AppContentColors.error(),
                 modifier = Modifier.size(16.dp)
@@ -406,7 +397,7 @@ private fun EyeProtectionStatusCard(status: EyeProtectionStatusCopy) {
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             AppIcon(
-                imageVector = if (status.isActive) Icons.Outlined.DarkMode else Icons.Outlined.AutoAwesome,
+                imageVector = if (status.isActive) AppIcons.Outlined.DarkMode else AppIcons.Outlined.AutoAwesome,
                 contentDescription = null,
                 tint = if (status.isActive) content else AppContentColors.accent(),
                 modifier = Modifier.size(22.dp)
@@ -571,7 +562,7 @@ private fun TimePickerDropdown(
                     )
                 }
                 AppIcon(
-                    imageVector = Icons.Outlined.Schedule,
+                    imageVector = AppIcons.Outlined.Schedule,
                     contentDescription = null
                 )
             }

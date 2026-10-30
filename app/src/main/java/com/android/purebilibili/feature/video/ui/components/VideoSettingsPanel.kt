@@ -1,6 +1,8 @@
 // 文件路径: feature/video/ui/components/VideoSettingsPanel.kt
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.components.AppTextButton as TextButton
 import com.android.purebilibili.core.ui.components.AppSlider as Slider
 import com.android.purebilibili.core.ui.AppAlertDialog as AlertDialog
@@ -40,10 +42,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.TextUnit
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.PlayCircle
-import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.PhotoCamera
 import com.android.purebilibili.core.ui.AppModalBottomSheet
 import com.android.purebilibili.core.ui.rememberAppPlayerChromeProfile
 import com.android.purebilibili.core.ui.rememberAppCodecIcon
@@ -653,7 +651,7 @@ fun VideoSettingsPanel(
                         horizontalArrangement = Arrangement.spacedBy(actionPolicy.rowItemSpacingDp.dp)
                     ) {
                         SettingsActionPill(
-                            icon = Icons.Filled.PhotoCamera,
+                            icon = AppIcons.Filled.PhotoCamera,
                             label = "视频截图",
                             onClick = {
                                 onCaptureScreenshot()

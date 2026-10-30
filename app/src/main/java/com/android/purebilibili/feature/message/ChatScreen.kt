@@ -1,6 +1,8 @@
 // 聊天详情页面
 package com.android.purebilibili.feature.message
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import android.os.Build
 
@@ -30,14 +32,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.material.icons.outlined.Keyboard
-import androidx.compose.material.icons.outlined.EmojiEmotions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Send
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.AddPhotoAlternate
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -313,7 +307,7 @@ fun ChatScreen(
                         if (sessionType == 1) {
                             val face = uiState.userInfo?.face?.takeIf { it.isNotBlank() } ?: userFace
                             AppIconButton(onClick = { onOpenBilibiliLink("bilibili://space/$talkerId") }) {
-                                if (face.isBlank()) AppIcon(Icons.Default.Person, "对方资料")
+                                if (face.isBlank()) AppIcon(AppIcons.Filled.Person, "对方资料")
                                 else AsyncImage(model = face, contentDescription = "对方头像", modifier = Modifier.size(32.dp).clip(CircleShape), contentScale = ContentScale.Crop)
                             }
                         }
@@ -334,9 +328,9 @@ fun ChatScreen(
                                 if (info.isLimit == true) add(AppWindowAction(label = "会话受限", enabled = false))
                                 if (info.reportLimit == true) add(AppWindowAction(label = "举报受限", enabled = false))
                                 add(AppWindowAction(label = "刷新状态", enabled = enabled, onClick = viewModel::loadSessionControlInfo))
-                            })) { AppIcon(Icons.Default.Settings, "聊天设置") }
+                            })) { AppIcon(AppIcons.Filled.Settings, "聊天设置") }
                         } else {
-                            AppIconButton(onClick = { showSettings = true }) { AppIcon(Icons.Default.Settings, "聊天设置") }
+                            AppIconButton(onClick = { showSettings = true }) { AppIcon(AppIcons.Filled.Settings, "聊天设置") }
                         }
                     } else ChatSessionControlMenu(
                         sessionType = sessionType,
@@ -722,7 +716,7 @@ private fun ChatSessionControlMenu(
             }
         ),
     ) {
-        AppIcon(Icons.Default.MoreVert, contentDescription = "会话设置")
+        AppIcon(AppIcons.Filled.MoreVert, contentDescription = "会话设置")
     }
 }
 
@@ -774,7 +768,7 @@ fun ChatInputBar(
             onToggleEmotes()
             if (showEmotes) { inputFocus.requestFocus(); keyboard?.show() }
         }, enabled = !isBusy) {
-            AppIcon(if (showEmotes) Icons.Outlined.Keyboard else Icons.Outlined.EmojiEmotions, if (showEmotes) "键盘" else "表情")
+            AppIcon(if (showEmotes) AppIcons.Outlined.Keyboard else AppIcons.Outlined.EmojiEmotions, if (showEmotes) "键盘" else "表情")
         }
         BottomBarMatchedReusableLiquidDock(
             shape = dockShape,
@@ -877,9 +871,9 @@ fun ChatInputBar(
                 } else {
                     AppIcon(
                         imageVector = if (showSendAction) {
-                            Icons.AutoMirrored.Filled.Send
+                            AppIcons.AutoMirrored.Filled.Send
                         } else {
-                            Icons.Outlined.AddPhotoAlternate
+                            AppIcons.Outlined.AddPhotoAlternate
                         },
                         contentDescription = if (showSendAction) "发送" else "图片",
                         tint = if (showSendAction) {

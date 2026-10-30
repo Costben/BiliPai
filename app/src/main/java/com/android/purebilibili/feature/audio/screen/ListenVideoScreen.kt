@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.audio.screen
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.navigation.tabSelectedPage
 import com.android.purebilibili.navigation.tabIndicatorPosition
 import com.android.purebilibili.core.ui.AppContentColors
@@ -33,15 +35,6 @@ import androidx.compose.foundation.lazy.grid.items
 import com.android.purebilibili.core.ui.components.AppHorizontalPager as HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Album
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.LibraryMusic
-import androidx.compose.material.icons.filled.MusicNote
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Refresh
 import com.android.purebilibili.core.ui.components.AppButton
 import com.android.purebilibili.core.ui.components.AppCircularProgressIndicator
 import com.android.purebilibili.core.ui.AdaptiveLoadingIndicator
@@ -344,11 +337,11 @@ private fun ListenVideoHeader(
                 )
             }
             AppIconButton(onClick = onOpenHistory, modifier = Modifier.size(40.dp)) {
-                AppIcon(Icons.Filled.History, contentDescription = "最近播放")
+                AppIcon(AppIcons.Filled.History, contentDescription = "最近播放")
             }
             Spacer(modifier = Modifier.width(4.dp))
             AppIconButton(onClick = onRefresh, modifier = Modifier.size(40.dp)) {
-                AppIcon(Icons.Filled.Refresh, contentDescription = "刷新音乐资料")
+                AppIcon(AppIcons.Filled.Refresh, contentDescription = "刷新音乐资料")
             }
         }
         nowPlaying?.let { item ->
@@ -380,7 +373,7 @@ private fun ListenVideoHeader(
                     Column(modifier = Modifier.weight(1f)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             AppIcon(
-                                Icons.Filled.MusicNote,
+                                AppIcons.Filled.MusicNote,
                                 contentDescription = null,
                                 tint = AppContentColors.accent(),
                                 modifier = Modifier.size(12.dp)
@@ -501,7 +494,7 @@ private fun ListenVideoPlaylistPage(
                     title = playlist.title,
                     subtitle = "${playlist.trackCount} 首 · 播放列表",
                     coverUrl = playlist.coverUrl,
-                    fallbackIcon = Icons.Filled.LibraryMusic,
+                    fallbackIcon = AppIcons.Filled.LibraryMusic,
                     onClick = { onSelected(playlist) },
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -518,7 +511,7 @@ private fun ListenVideoPlaylistPage(
                     title = playlist.title,
                     subtitle = "${playlist.trackCount} 首 · 播放列表",
                     coverUrl = playlist.coverUrl,
-                    fallbackIcon = Icons.Filled.LibraryMusic,
+                    fallbackIcon = AppIcons.Filled.LibraryMusic,
                     onClick = { onSelected(playlist) },
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -556,7 +549,7 @@ private fun ListenVideoAlbumPage(
                         title = album.title,
                         subtitle = album.artistName.ifBlank { "${album.trackCount} 首 · 专辑" },
                         coverUrl = album.coverUrl,
-                        fallbackIcon = Icons.Filled.Album,
+                        fallbackIcon = AppIcons.Filled.Album,
                         onClick = { onSelected(album) },
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -573,7 +566,7 @@ private fun ListenVideoAlbumPage(
                         title = album.title,
                         subtitle = album.artistName.ifBlank { "${album.trackCount} 首 · 专辑" },
                         coverUrl = album.coverUrl,
-                        fallbackIcon = Icons.Filled.Album,
+                        fallbackIcon = AppIcons.Filled.Album,
                         onClick = { onSelected(album) },
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -619,7 +612,7 @@ private fun ListenVideoArtistPage(
                         title = artist.name,
                         subtitle = "${artist.tracks.size} 首 · 歌手",
                         coverUrl = artist.avatarUrl,
-                        fallbackIcon = Icons.Filled.Person,
+                        fallbackIcon = AppIcons.Filled.Person,
                         circularCover = true,
                         onClick = { onSelected(artist) },
                         modifier = Modifier.fillMaxWidth()
@@ -637,7 +630,7 @@ private fun ListenVideoArtistPage(
                         title = artist.name,
                         subtitle = "${artist.tracks.size} 首 · 歌手",
                         coverUrl = artist.avatarUrl,
-                        fallbackIcon = Icons.Filled.Person,
+                        fallbackIcon = AppIcons.Filled.Person,
                         circularCover = true,
                         onClick = { onSelected(artist) },
                         modifier = Modifier.fillMaxWidth()
@@ -739,7 +732,7 @@ private fun MusicEntityCard(
                     color = AppContentColors.secondaryText()
                 )
             }
-            AppIcon(Icons.Filled.PlayArrow, contentDescription = null)
+            AppIcon(AppIcons.Filled.PlayArrow, contentDescription = null)
         }
     }
 }
@@ -757,7 +750,7 @@ private fun ListenVideoMessage(
         verticalArrangement = Arrangement.Center
     ) {
         AppIcon(
-            Icons.Filled.LibraryMusic,
+            AppIcons.Filled.LibraryMusic,
             contentDescription = null,
             modifier = Modifier.size(48.dp),
             tint = AppContentColors.accent()
@@ -800,7 +793,7 @@ private fun ListenVideoTrackSheet(
                 overflow = TextOverflow.Ellipsis
             )
             AppIconButton(onClick = onClose) {
-                AppIcon(Icons.Filled.Close, contentDescription = "关闭曲目列表")
+                AppIcon(AppIcons.Filled.Close, contentDescription = "关闭曲目列表")
             }
         }
         when {
@@ -865,7 +858,7 @@ private fun ListenVideoTrackSheet(
                                 color = AppContentColors.secondaryText()
                             )
                         }
-                        AppIcon(Icons.Filled.PlayArrow, contentDescription = "播放 ${track.title}")
+                        AppIcon(AppIcons.Filled.PlayArrow, contentDescription = "播放 ${track.title}")
                     }
                 }
             }

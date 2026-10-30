@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.list
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.navigation.tabIndicatorPosition
 import com.android.purebilibili.feature.home.effectiveGridColumnCount
 import com.android.purebilibili.feature.home.effectiveGridColumnCountCompact
@@ -106,12 +108,6 @@ import com.android.purebilibili.core.ui.components.AppIcon
 import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.rounded.CheckCircle
-import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.RadioButtonUnchecked
-import androidx.compose.material.icons.rounded.Search
 import com.android.purebilibili.core.ui.components.AppFloatingToolbar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -1878,7 +1874,7 @@ fun CommonListScreen(
                                 }
                             ) {
                                 AppIcon(
-                                    if (isBatchActionMode) Icons.Rounded.Close else rememberAppBackIcon(),
+                                    if (isBatchActionMode) AppIcons.Rounded.Close else rememberAppBackIcon(),
                                     contentDescription = if (isBatchActionMode) "退出多选" else "Back",
                                 )
                             }
@@ -1891,7 +1887,7 @@ fun CommonListScreen(
                                 if (!isBatchActionMode) {
                                     onOpenSearchDestination?.let { openSearch ->
                                         AppIconButton(onClick = { openSearch(searchQuery, isSubscribedBrowse) }) {
-                                            AppIcon(Icons.Rounded.Search, contentDescription = "搜索")
+                                            AppIcon(AppIcons.Rounded.Search, contentDescription = "搜索")
                                         }
                                     }
                                 }
@@ -1936,7 +1932,7 @@ fun CommonListScreen(
                                             },
                                         ) {
                                             AppIcon(
-                                                imageVector = Icons.Filled.MoreVert,
+                                                imageVector = AppIcons.Filled.MoreVert,
                                                 contentDescription = "更多管理"
                                             )
                                         }
@@ -2000,7 +1996,7 @@ fun CommonListScreen(
                                         },
                                     ) {
                                         AppIcon(
-                                            imageVector = Icons.Filled.MoreVert,
+                                            imageVector = AppIcons.Filled.MoreVert,
                                             contentDescription = "收藏夹管理",
                                         )
                                     }
@@ -2031,7 +2027,7 @@ fun CommonListScreen(
                                             ),
                                         ) {
                                             AppIcon(
-                                                imageVector = Icons.Filled.MoreVert,
+                                                imageVector = AppIcons.Filled.MoreVert,
                                                 contentDescription = "更多管理"
                                             )
                                         }
@@ -3247,7 +3243,7 @@ internal fun CommonListContent(
                                             )
                                     )
                                     AppIcon(
-                                        imageVector = if (isSelected) Icons.Rounded.CheckCircle else Icons.Rounded.RadioButtonUnchecked,
+                                        imageVector = if (isSelected) AppIcons.Rounded.CheckCircle else AppIcons.Rounded.RadioButtonUnchecked,
                                         contentDescription = if (isSelected) "已选择" else "未选择",
                                         tint = if (isSelected) {
                                             AppContentColors.accent()

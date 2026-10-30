@@ -1,13 +1,11 @@
 package com.android.purebilibili.feature.following
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.MoreVert
-import androidx.compose.material.icons.outlined.People
-import androidx.compose.material.icons.outlined.PersonRemove
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -94,14 +92,14 @@ private fun FansListContent(
                     }
                     if (state.canManage && user.mid != state.identity.mid) {
                         AppWindowActionMenu(groups = listOf(listOf(
-                            AppWindowAction(label = "查看粉丝", icon = Icons.Outlined.People, onClick = { onFansClick(user.mid) }),
+                            AppWindowAction(label = "查看粉丝", icon = AppIcons.Outlined.People, onClick = { onFansClick(user.mid) }),
                             AppWindowAction(
                                 label = if (state.removingMid == user.mid) "移除中…" else "移除粉丝",
-                                icon = Icons.Outlined.PersonRemove,
+                                icon = AppIcons.Outlined.PersonRemove,
                                 enabled = state.removingMid == null,
                                 onClick = { confirmTarget = user },
                             ),
-                        ))) { AppIcon(Icons.Outlined.MoreVert, "粉丝操作") }
+                        ))) { AppIcon(AppIcons.Outlined.MoreVert, "粉丝操作") }
                     } else {
                         AppTextButton(onClick = { onFansClick(user.mid) }) { AppText("粉丝") }
                     }

@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.home.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import coil3.request.crossfade
@@ -23,8 +25,6 @@ import androidx.compose.foundation.shape.CircleShape
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppPressShiftContent
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -76,7 +76,7 @@ internal fun HomeTopAvatarContent(
             contentAlignment = Alignment.Center
         ) {
             AppIcon(
-                imageVector = Icons.Filled.Person,
+                imageVector = AppIcons.Filled.Person,
                 contentDescription = if (user.isLogin) "用户头像" else "未登录，点击登录",
                 tint = AppContentColors.accent(),
                 modifier = Modifier.fillMaxSize(0.6f),

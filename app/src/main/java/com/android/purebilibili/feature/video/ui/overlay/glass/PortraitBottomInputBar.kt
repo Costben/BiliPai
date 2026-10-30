@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.overlay.glass
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.feature.video.ui.overlay.*
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -28,8 +30,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ScreenRotation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.remember
 import com.android.purebilibili.feature.video.ui.components.NativeDanmakuToggleButton
@@ -115,7 +115,7 @@ fun PortraitBottomInputBar(
                 )
             }
             PortraitInputIconButton(
-                icon = Icons.Rounded.ScreenRotation,
+                icon = AppIcons.Rounded.ScreenRotation,
                 desc = "切换横屏",
                 layoutPolicy = layoutPolicy,
                 onClick = onRotateClick

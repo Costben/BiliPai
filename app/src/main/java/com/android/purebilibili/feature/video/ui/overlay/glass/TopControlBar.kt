@@ -61,22 +61,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.currentStateAsState
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
 import com.android.purebilibili.core.ui.AppIcons
 import com.android.purebilibili.feature.video.ui.feedback.likeBurstAnchor
 import com.android.purebilibili.core.ui.components.AppIconButton
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ThumbUp
-import androidx.compose.material.icons.outlined.ThumbUp
-import androidx.compose.material.icons.outlined.ThumbDown
-import androidx.compose.material.icons.rounded.Share
-import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material.icons.rounded.MoreVert
-import androidx.compose.material.icons.outlined.MoreVert
-import androidx.compose.material.icons.outlined.Cast
-import androidx.compose.material.icons.outlined.Comment
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -369,7 +356,7 @@ fun TopControlBar(
                         modifier = Modifier.size(layoutPolicy.buttonSizeDp.dp)
                     ) {
                         AppIcon(
-                            imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowLeft,
+                            imageVector = AppIcons.AutoMirrored.Outlined.KeyboardArrowLeft,
                             contentDescription = "Back",
                             tint = Color.White,
                             modifier = Modifier.size(layoutPolicy.iconSizeDp.dp)
@@ -388,7 +375,7 @@ fun TopControlBar(
                             modifier = Modifier.size(layoutPolicy.buttonSizeDp.dp),
                         ) {
                             AppIcon(
-                                imageVector = Icons.Outlined.Home,
+                                imageVector = AppIcons.Outlined.Home,
                                 contentDescription = "返回首页",
                                 tint = Color.White,
                                 modifier = Modifier.size(layoutPolicy.iconSizeDp.dp),
@@ -464,7 +451,7 @@ fun TopControlBar(
                         Box(modifier = Modifier.likeBurstAnchor()) {
                             ActionIcon(
                                 glassEnabled = isFullscreen || glassControls,
-                                icon = if (likeStatusKnown && isLiked) Icons.Rounded.ThumbUp else Icons.Outlined.ThumbUp,
+                                icon = if (likeStatusKnown && isLiked) AppIcons.Rounded.ThumbUp else AppIcons.Outlined.ThumbUp,
                                 contentDescription = if (likeStatusKnown) "点赞" else "点赞状态尚未确认",
                                 count = visibleCount(com.android.purebilibili.core.store.FullscreenActionCount.LIKE, likeCount),
                                 isActive = likeStatusKnown && isLiked,
@@ -478,7 +465,7 @@ fun TopControlBar(
                             // Dislike
                             ActionIcon(
                                 glassEnabled = isFullscreen || glassControls,
-                                icon = Icons.Outlined.ThumbDown,
+                                icon = AppIcons.Outlined.ThumbDown,
                                 contentDescription = "不喜欢",
                                 isActive = false,
                                 onClick = onDislikeClick,
@@ -517,7 +504,7 @@ fun TopControlBar(
                             // Dislike
                             ActionIcon(
                                 glassEnabled = isFullscreen || glassControls,
-                                icon = Icons.Outlined.ThumbDown,
+                                icon = AppIcons.Outlined.ThumbDown,
                                 contentDescription = "不喜欢",
                                 isActive = false,
                                 onClick = onDislikeClick,
@@ -529,7 +516,7 @@ fun TopControlBar(
                         // Share
                         ActionIcon(
                             glassEnabled = isFullscreen || glassControls,
-                            icon = Icons.Outlined.Share,
+                            icon = AppIcons.Outlined.Share,
                             contentDescription = "分享",
                             modifier = shareMenuSource?.let { Modifier.appGlassMenuSource(it, onOpen = onShareClick) } ?: Modifier,
                             isActive = false,
@@ -542,7 +529,7 @@ fun TopControlBar(
                     if (showCastButton) {
                         ActionIcon(
                             glassEnabled = isFullscreen || glassControls,
-                            icon = Icons.Outlined.Cast,
+                            icon = AppIcons.Outlined.Cast,
                             contentDescription = "投屏",
                             isActive = false,
                             onClick = onCastClick,
@@ -553,7 +540,7 @@ fun TopControlBar(
 
                     ActionIcon(
                         glassEnabled = isFullscreen || glassControls,
-                        icon = Icons.Outlined.Comment,
+                        icon = AppIcons.Outlined.Comment,
                         contentDescription = "评论区",
                         count = visibleCount(com.android.purebilibili.core.store.FullscreenActionCount.COMMENT, commentCount),
                         isActive = false,
@@ -570,7 +557,7 @@ fun TopControlBar(
                                 modifier = Modifier.size(layoutPolicy.buttonSizeDp.dp)
                             ) {
                                 AppIcon(
-                                    imageVector = Icons.Outlined.MoreVert,
+                                    imageVector = AppIcons.Outlined.MoreVert,
                                     contentDescription = "更多",
                                     tint = Color.White,
                                     modifier = Modifier.size(layoutPolicy.iconSizeDp.dp)
@@ -602,7 +589,7 @@ fun TopControlBar(
                         modifier = Modifier.size(layoutPolicy.buttonSizeDp.dp),
                     ) {
                         AppIcon(
-                            imageVector = Icons.Outlined.MoreVert,
+                            imageVector = AppIcons.Outlined.MoreVert,
                             contentDescription = "更多",
                             tint = Color.White,
                             modifier = Modifier.size(layoutPolicy.iconSizeDp.dp),
@@ -786,7 +773,7 @@ private fun AdaptivePlayerTitleInfoDock(
                     contentAlignment = Alignment.Center,
                 ) {
                     AppIcon(
-                        imageVector = Icons.Outlined.MoreHoriz,
+                        imageVector = AppIcons.Outlined.MoreHoriz,
                         contentDescription = "视频标题",
                         tint = Color.White.copy(alpha = 0.82f),
                         modifier = Modifier.size(24.dp),

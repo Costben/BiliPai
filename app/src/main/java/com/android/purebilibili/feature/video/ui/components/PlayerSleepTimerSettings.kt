@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.components.AppTextButton as TextButton
 import com.android.purebilibili.core.ui.components.AppSwitch as Switch
 import com.android.purebilibili.core.ui.components.AppFilterChip as FilterChip
@@ -10,8 +12,6 @@ import com.android.purebilibili.core.ui.AppAlertDialog as AlertDialog
 import android.widget.NumberPicker
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Done
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -36,7 +36,7 @@ internal fun PlayerSleepTimerSettings(
     presets.forEach { value ->
         ListItem(
             headlineContent = { Text(if (value == 0) "禁用" else "$value 分钟", fontSize = 14.sp) },
-            trailingContent = { if ((minutes ?: 0) == value) Icon(Icons.Outlined.Done, null, tint = MaterialTheme.colorScheme.primary) },
+            trailingContent = { if ((minutes ?: 0) == value) Icon(AppIcons.Outlined.Done, null, tint = MaterialTheme.colorScheme.primary) },
             modifier = Modifier.fillMaxWidth().clickable {
                 onMinutesChange(value.takeIf { it > 0 }); onPresetSelected()
             },

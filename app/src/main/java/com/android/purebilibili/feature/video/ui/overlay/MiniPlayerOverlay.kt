@@ -1,6 +1,8 @@
 // 文件路径: feature/video/MiniPlayerOverlay.kt
 package com.android.purebilibili.feature.video.ui.overlay
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.MediaContrastPalette
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -27,11 +29,6 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChevronLeft
-import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -1049,7 +1046,7 @@ private fun MiniPlayerSessionOverlay(
                             } else Spacer(Modifier.weight(1f))
                             com.android.purebilibili.core.ui.components.AppGlassMenuAnchor(onOpen = { moreExpanded = true }) {
                                 AppIconButton(onClick = { moreExpanded = true }, modifier = Modifier.size(48.dp)) {
-                                    AppIcon(Icons.Outlined.MoreVert, "小窗更多操作", tint = Color.White, modifier = Modifier.size(20.dp))
+                                    AppIcon(AppIcons.Outlined.MoreVert, "小窗更多操作", tint = Color.White, modifier = Modifier.size(20.dp))
                                 }
                                 AppDropdownMenu(expanded = moreExpanded, onDismissRequest = {
                                     moreExpanded = false
@@ -1114,7 +1111,7 @@ private fun MiniPlayerSessionOverlay(
                         color = if (isBuffering) Color.Transparent else Color.Black.copy(alpha = 0.55f)
                     ) {
                         AppIcon(
-                            imageVector = if (isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow,
+                            imageVector = if (isPlaying) AppIcons.Filled.Pause else AppIcons.Filled.PlayArrow,
                             contentDescription = if (isPlaying) "暂停" else "播放",
                             tint = Color.White,
                             modifier = Modifier
@@ -1213,7 +1210,7 @@ private fun MiniPlayerSessionOverlay(
                         color = Color.Black.copy(alpha = 0.35f)
                     ) {
                         AppIcon(
-                            imageVector = Icons.Outlined.OpenInFull,
+                            imageVector = AppIcons.Outlined.OpenInFull,
                             contentDescription = "拖动调整小窗大小",
                             tint = Color.White.copy(alpha = 0.9f),
                             modifier = Modifier.padding(15.dp)

@@ -2,6 +2,8 @@
 
 package com.android.purebilibili.feature.home.subscription
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.compose.foundation.background
@@ -16,11 +18,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Redo
-import androidx.compose.material.icons.automirrored.outlined.Undo
-import androidx.compose.material.icons.outlined.AutoAwesome
-import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -153,7 +150,7 @@ internal fun ArticleNoteEditorSheet(
                     enabled = summaryDraft != null,
                 ) {
                     AppIcon(
-                        Icons.Outlined.AutoAwesome,
+                        AppIcons.Outlined.AutoAwesome,
                         contentDescription = "生成摘要草稿",
                         modifier = Modifier.size(18.dp),
                     )
@@ -244,7 +241,7 @@ internal fun ArticleNoteEditorSheet(
                 if (savedNoteContent != null) {
                     AppIconButton(onClick = { confirmDelete = true }) {
                         AppIcon(
-                            Icons.Outlined.Delete,
+                            AppIcons.Outlined.Delete,
                             contentDescription = "删除笔记",
                             modifier = Modifier.size(18.dp),
                         )

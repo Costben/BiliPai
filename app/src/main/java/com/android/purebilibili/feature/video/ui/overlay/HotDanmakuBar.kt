@@ -1,13 +1,11 @@
 package com.android.purebilibili.feature.video.ui.overlay
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Send
-import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -205,7 +203,7 @@ fun HotDanmakuBar(
                                 contentAlignment = Alignment.Center,
                             ) {
                                 AppIcon(
-                                    imageVector = if (liked) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                                    imageVector = if (liked) AppIcons.Filled.Favorite else AppIcons.Outlined.FavoriteBorder,
                                     contentDescription = if (liked) "取消点赞" else "点赞弹幕",
                                     tint = if (liked) AppContentColors.accent() else Color.White,
                                     modifier = Modifier.size(18.dp),
@@ -219,7 +217,7 @@ fun HotDanmakuBar(
                                     .padding(1.dp),
                                 contentAlignment = Alignment.Center,
                             ) {
-                                AppIcon(Icons.Filled.Send, contentDescription = "发一条同款弹幕",
+                                AppIcon(AppIcons.Filled.Send, contentDescription = "发一条同款弹幕",
                                     tint = Color.White, modifier = Modifier.size(18.dp))
                             }
                         }

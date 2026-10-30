@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.settings
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.ui.AppContentColors
@@ -17,9 +19,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import kotlinx.coroutines.launch
@@ -1312,7 +1311,7 @@ private fun FeedDynamicTabVisibilityItem(
                     }
                 ) {
                     AppIcon(
-                        androidx.compose.material.icons.Icons.Default.KeyboardArrowUp,
+                        AppIcons.Filled.KeyboardArrowUp,
                         contentDescription = "上移${tab.title}"
                     )
                 }
@@ -1327,7 +1326,7 @@ private fun FeedDynamicTabVisibilityItem(
                     }
                 ) {
                     AppIcon(
-                        androidx.compose.material.icons.Icons.Default.KeyboardArrowDown,
+                        AppIcons.Filled.KeyboardArrowDown,
                         contentDescription = "下移${tab.title}"
                     )
                 }

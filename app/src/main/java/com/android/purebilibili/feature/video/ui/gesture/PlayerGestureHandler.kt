@@ -13,10 +13,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 // 🌈 Material Icons Extended - 亮度图标
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BrightnessLow
-import androidx.compose.material.icons.filled.BrightnessMedium
-import androidx.compose.material.icons.filled.BrightnessHigh
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier

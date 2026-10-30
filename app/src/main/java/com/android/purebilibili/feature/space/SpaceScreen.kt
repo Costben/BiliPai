@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.space
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.navigation.tabIndicatorPosition
 import com.android.purebilibili.navigation.isTabSelectionInProgress
 import com.android.purebilibili.feature.home.effectiveGridColumnCount
@@ -7,7 +9,6 @@ import com.android.purebilibili.feature.home.effectiveGridColumnCountCompact
 import com.android.purebilibili.feature.home.gridColumnPinchEnabled
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import androidx.compose.material.icons.outlined.PersonRemove
 import com.android.purebilibili.feature.following.FanManagementState
 import com.android.purebilibili.feature.following.FanManagementViewModel
 import com.android.purebilibili.feature.following.RemoveFanConfirmDialog
@@ -92,26 +93,6 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
-import androidx.compose.material.icons.automirrored.outlined.Sort
-import androidx.compose.material.icons.outlined.Bolt
-import androidx.compose.material.icons.outlined.ChatBubbleOutline
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.ContentCopy
-import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.GridView
-import androidx.compose.material.icons.outlined.Menu
-import androidx.compose.material.icons.outlined.MoreVert
-import androidx.compose.material.icons.outlined.PlayCircleOutline
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material.icons.outlined.Subtitles
-import androidx.compose.material.icons.outlined.VisibilityOff
-import androidx.compose.material.icons.outlined.Visibility
-import androidx.compose.material.icons.outlined.ViewAgenda
 import com.android.purebilibili.core.ui.AppAlertDialog
 import com.android.purebilibili.core.ui.components.AppButton
 import com.android.purebilibili.core.ui.components.resolveUpNameColor
@@ -584,7 +565,7 @@ fun SpaceScreen(
                         CompositionLocalProvider(LocalAppTopBarIconBackdrop provides spaceTopBarIconBackdrop) {
                             AppIconButton(onClick = onBack) {
                                 AppIcon(
-                                    imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+                                    imageVector = AppIcons.AutoMirrored.Outlined.ArrowBack,
                                     contentDescription = backLabel
                                 )
                             }
@@ -615,7 +596,7 @@ fun SpaceScreen(
                                         } else Modifier,
                                     ) {
                                         AppIcon(
-                                            imageVector = if (isSearchMode) Icons.Outlined.Close else Icons.Outlined.Search,
+                                            imageVector = if (isSearchMode) AppIcons.Outlined.Close else AppIcons.Outlined.Search,
                                             contentDescription = if (isSearchMode) "关闭搜索" else "搜索"
                                         )
                                     }
@@ -637,7 +618,7 @@ fun SpaceScreen(
                                                     ),
                                                     AppWindowAction(
                                                         label = "排序：${resolveSpaceVideoSortCompactLabel(currentSuccessState?.sortOrder ?: VideoSortOrder.PUBDATE)}",
-                                                        icon = Icons.AutoMirrored.Outlined.Sort,
+                                                        icon = AppIcons.AutoMirrored.Outlined.Sort,
                                                         children = VideoSortOrder.entries.map { order ->
                                                             AppWindowAction(
                                                                 label = order.displayName,
@@ -664,7 +645,7 @@ fun SpaceScreen(
                                         if (queryAicu != null && mid > 0) {
                                             add(listOf(AppWindowAction(
                                                 label = "评论与弹幕查询",
-                                                icon = Icons.Outlined.Search,
+                                                icon = AppIcons.Outlined.Search,
                                                 onClick = { queryAicu(mid) },
                                             )))
                                         }
@@ -672,7 +653,7 @@ fun SpaceScreen(
                                             listOf(
                                                 AppWindowAction(
                                                     label = "复制空间链接",
-                                                    icon = Icons.Outlined.ContentCopy,
+                                                    icon = AppIcons.Outlined.ContentCopy,
                                                     onClick = {
                                                         copyToClipboard(
                                                             "https://space.bilibili.com/$mid",
@@ -682,12 +663,12 @@ fun SpaceScreen(
                                                 ),
                                                 AppWindowAction(
                                                     label = "复制 UID",
-                                                    icon = Icons.Outlined.ContentCopy,
+                                                    icon = AppIcons.Outlined.ContentCopy,
                                                     onClick = { copyToClipboard(mid.toString(), "UID") },
                                                 ),
                                                 AppWindowAction(
                                                     label = "分享",
-                                                    icon = Icons.Outlined.Share,
+                                                    icon = AppIcons.Outlined.Share,
                                                     onClick = {
                                                         val shareIntent = Intent(Intent.ACTION_SEND).apply {
                                                             type = "text/plain"
@@ -701,7 +682,7 @@ fun SpaceScreen(
                                         if (fanState.isFan == true && mid != fanIdentity.mid) {
                                             add(listOf(AppWindowAction(
                                                 label = if (fanState.removing) "移除中…" else "移除粉丝",
-                                                icon = Icons.Outlined.PersonRemove,
+                                                icon = AppIcons.Outlined.PersonRemove,
                                                 enabled = !fanState.removing,
                                                 onClick = { showRemoveFanConfirm = true },
                                             )))
@@ -710,7 +691,7 @@ fun SpaceScreen(
                                             listOf(
                                                 AppWindowAction(
                                                     label = "举报",
-                                                    icon = Icons.Outlined.VisibilityOff,
+                                                    icon = AppIcons.Outlined.VisibilityOff,
                                                     iconTint = AppContentColors.error(),
                                                     onClick = {
                                                         onWebClick(
@@ -721,7 +702,7 @@ fun SpaceScreen(
                                                 ),
                                                 AppWindowAction(
                                                     label = if (isBlocked) unblockUserLabel else blockUserLabel,
-                                                    icon = if (isBlocked) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
+                                                    icon = if (isBlocked) AppIcons.Outlined.Visibility else AppIcons.Outlined.VisibilityOff,
                                                     iconTint = if (isBlocked) {
                                                         AppContentColors.accent()
                                                     } else {
@@ -734,7 +715,7 @@ fun SpaceScreen(
                                     },
                                 ) {
                                     AppIcon(
-                                        imageVector = Icons.Outlined.MoreVert,
+                                        imageVector = AppIcons.Outlined.MoreVert,
                                         contentDescription = moreLabel,
                                     )
                                 }
@@ -3672,7 +3653,7 @@ private fun SpaceSearchEntryChip(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             AppIcon(
-                imageVector = Icons.Outlined.Search,
+                imageVector = AppIcons.Outlined.Search,
                 contentDescription = null,
                 tint = AppContentColors.secondaryText(),
                 modifier = Modifier.size(18.dp)
@@ -3895,7 +3876,7 @@ private fun SpaceContributionVideoSummaryBar(
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 AppIcon(
-                    imageVector = Icons.AutoMirrored.Outlined.Sort,
+                    imageVector = AppIcons.AutoMirrored.Outlined.Sort,
                     contentDescription = "排序",
                     modifier = Modifier.size(16.dp),
                     tint = AppContentColors.secondaryText()
@@ -3966,7 +3947,7 @@ private fun SpaceChargeGuardRow(
                     color = AppContentColors.secondaryText()
                 )
                 AppIcon(
-                    imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                    imageVector = AppIcons.AutoMirrored.Outlined.KeyboardArrowRight,
                     contentDescription = null,
                     modifier = Modifier.size(14.dp),
                     tint = MaterialTheme.colorScheme.outline
@@ -4609,7 +4590,7 @@ private fun contributionLayoutToggleAction(
     val isSingleColumn = layoutMode == SpaceContributionVideoLayoutMode.SINGLE_COLUMN
     return AppWindowAction(
         label = if (isSingleColumn) "切换为双列" else "切换为单列",
-        icon = if (isSingleColumn) Icons.Outlined.GridView else Icons.Outlined.ViewAgenda,
+        icon = if (isSingleColumn) AppIcons.Outlined.GridView else AppIcons.Outlined.ViewAgenda,
         onClick = onToggle,
     )
 }
@@ -4909,7 +4890,7 @@ private fun SpaceArchiveListItemRow(
         trailingContent = if (showTrailingMore) {
             {
                 AppIcon(
-                    imageVector = Icons.Outlined.MoreVert,
+                    imageVector = AppIcons.Outlined.MoreVert,
                     contentDescription = null,
                     tint = AppContentColors.secondaryText().copy(alpha = 0.72f),
                     modifier = Modifier
@@ -4977,7 +4958,7 @@ private fun SpaceAudioListItem(
             )
         }
         AppIcon(
-            imageVector = Icons.Outlined.PlayCircleOutline,
+            imageVector = AppIcons.Outlined.PlayCircleOutline,
             contentDescription = null,
             tint = AppContentColors.accent(),
             modifier = Modifier.size(28.dp)
@@ -5509,7 +5490,7 @@ private fun SpaceOfficialTag(
                 color = MaterialTheme.colorScheme.surface,
             ) {
                 AppIcon(
-                    imageVector = Icons.Outlined.Bolt,
+                    imageVector = AppIcons.Outlined.Bolt,
                     contentDescription = null,
                     tint = when (badge.tone) {
                         OfficialVerifyBadgeTone.PERSONAL -> Color(0xFFFFCC00)
@@ -5582,7 +5563,7 @@ private fun SpaceHeaderRelationActions(
                     contentAlignment = Alignment.Center
                 ) {
                     AppIcon(
-                        imageVector = Icons.Outlined.Email,
+                        imageVector = AppIcons.Outlined.Email,
                         contentDescription = "私信",
                         tint = AppContentColors.secondaryText(),
                         modifier = Modifier.size(18.dp)
@@ -5615,7 +5596,7 @@ private fun SpaceHeaderRelationActions(
             ) {
                 if (isFollowed && !isOwner) {
                     AppIcon(
-                        imageVector = Icons.AutoMirrored.Outlined.Sort,
+                        imageVector = AppIcons.AutoMirrored.Outlined.Sort,
                         contentDescription = null,
                         tint = followButtonColors.textColor,
                         modifier = Modifier.size(16.dp)
@@ -5980,7 +5961,7 @@ private fun SpaceFollowedUpSection(
             maxLines = 1
         )
         AppIcon(
-            imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+            imageVector = AppIcons.AutoMirrored.Outlined.KeyboardArrowRight,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.outline,
             modifier = Modifier.size(16.dp)
@@ -6003,7 +5984,7 @@ private fun SpaceBanBanner(
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             AppIcon(
-                imageVector = Icons.Outlined.Info,
+                imageVector = AppIcons.Outlined.Info,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onErrorContainer,
                 modifier = Modifier.size(16.dp)

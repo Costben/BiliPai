@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.live.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.compose.foundation.layout.Arrangement
@@ -13,8 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.SettingsInputComponent
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
@@ -150,7 +150,7 @@ private fun LiveSourceRow(
         modifier = Modifier.fillMaxWidth()
     ) {
             AppIcon(
-                imageVector = Icons.Outlined.SettingsInputComponent,
+                imageVector = AppIcons.Outlined.SettingsInputComponent,
                 contentDescription = null,
                 tint = AppSurfaceTokens.onSurfaceVariantActions()
             )

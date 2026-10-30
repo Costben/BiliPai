@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.home.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import com.android.purebilibili.core.ui.AppSpacingTokens
@@ -66,9 +68,6 @@ import com.android.purebilibili.core.util.LocalWindowSizeClass
 import com.android.purebilibili.core.util.shouldUseExpandedNavigationRailForLayout
 import com.android.purebilibili.core.util.rememberHapticFeedback
 import dev.chrisbanes.haze.HazeState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.SwapHoriz
-import androidx.compose.material.icons.outlined.ViewSidebar
 
 /**
  * 平板端侧边导航栏 - 垂直版本的 FrostedBottomBar
@@ -304,7 +303,7 @@ private fun MiuixSideBar(
             AppPlatformNavigationRailItem(
                 selected = false,
                 onClick = { haptic(HapticType.LIGHT); onAccountSwitchClick() },
-                icon = Icons.Outlined.SwapHoriz,
+                icon = AppIcons.Outlined.SwapHoriz,
                 label = "切换账号",
             )
         }
@@ -312,7 +311,7 @@ private fun MiuixSideBar(
             AppPlatformNavigationRailItem(
                 selected = false,
                 onClick = { haptic(HapticType.LIGHT); onToggleSidebar() },
-                icon = Icons.Outlined.ViewSidebar,
+                icon = AppIcons.Outlined.ViewSidebar,
                 label = "切换到底栏",
             )
         }
@@ -598,7 +597,7 @@ private fun FrostedSideBarContent(
                     contentAlignment = Alignment.Center
                 ) {
                     AppIcon(
-                        Icons.Outlined.ViewSidebar,
+                        AppIcons.Outlined.ViewSidebar,
                         contentDescription = sidebarLabel,
                         tint = AppContentColors.secondaryText().copy(alpha = 0.7f),
                         modifier = Modifier.size(AppSpacingTokens.ExtraLarge - AppSpacingTokens.Micro)
@@ -628,7 +627,7 @@ private fun SideBarAccountSwitchButton(
         contentAlignment = Alignment.Center,
     ) {
         AppIcon(
-            Icons.Outlined.SwapHoriz,
+            AppIcons.Outlined.SwapHoriz,
             contentDescription = "切换账号",
             tint = tint,
             modifier = Modifier.size(AppSpacingTokens.ExtraLarge - AppSpacingTokens.Micro),

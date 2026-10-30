@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.plugin
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.plugin.BuiltinPluginIds
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -44,8 +46,6 @@ import com.android.purebilibili.plugin.sdk.PluginCapabilityManifest
 import com.android.purebilibili.core.plugin.PluginManager
 import com.android.purebilibili.core.plugin.PluginStore
 import com.android.purebilibili.core.util.Logger
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Dns
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.currentCoroutineContext
@@ -91,7 +91,7 @@ class CdnRegionPlugin : BuiltinPlugin, PlaybackCdnPlugin, CdnTransferControls {
     override val description: String = "在 B 站当前授权的签名 CDN 候选中选线，并可选预缓存未来 DASH 分片"
     override val version: String = "1.5.0"
     override val author: String = "BiliPai项目组"
-    override val icon: ImageVector = Icons.Outlined.Dns
+    override val icon: ImageVector = AppIcons.Outlined.Dns
     override val capabilityManifest: PluginCapabilityManifest = PluginCapabilityManifest(
         pluginId = id,
         displayName = name,

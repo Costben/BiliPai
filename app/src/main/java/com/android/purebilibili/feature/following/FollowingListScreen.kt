@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.following
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import coil3.request.crossfade
@@ -26,10 +28,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 //  Cupertino Icons - iOS SF Symbols 风格图标
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.MoreVert
-import androidx.compose.material.icons.outlined.People
-import androidx.compose.material.icons.outlined.Sort
 import com.android.purebilibili.core.ui.components.AppWindowAction
 import com.android.purebilibili.core.ui.components.AppWindowActionMenu
 import com.android.purebilibili.core.store.AccountSessionIdentity
@@ -766,13 +764,13 @@ fun FollowingListScreen(
                     if (!isEditMode) {
                         if (mid > 0L && mid == accountIdentity.mid) {
                             AppWindowActionMenu(groups = listOf(listOf(
-                                AppWindowAction(label = "粉丝列表", icon = Icons.Outlined.People, onClick = { onFansClick(mid) }),
+                                AppWindowAction(label = "粉丝列表", icon = AppIcons.Outlined.People, onClick = { onFansClick(mid) }),
                                 AppWindowAction(
-                                    label = "关注分组排序", icon = Icons.Outlined.Sort,
+                                    label = "关注分组排序", icon = AppIcons.Outlined.Sort,
                                     enabled = !isBatchUnfollowing,
                                     onClick = { showGroupOrder = true },
                                 ),
-                            ))) { AppIcon(Icons.Outlined.MoreVert, "关注管理") }
+                            ))) { AppIcon(AppIcons.Outlined.MoreVert, "关注管理") }
                         } else {
                             AppTextButton(onClick = { onFansClick(mid) }) { AppText("粉丝") }
                         }

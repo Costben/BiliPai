@@ -1,8 +1,8 @@
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -71,7 +71,7 @@ internal fun DanmakuSettingsSlider(
                     contentDescription = "恢复${label}默认值 ${valueText(defaultValue)}"
                 },
             ) {
-                AppIcon(Icons.Outlined.Refresh, contentDescription = null, modifier = Modifier.size(18.dp))
+                AppIcon(AppIcons.Outlined.Refresh, contentDescription = null, modifier = Modifier.size(18.dp))
             }
         }
         AppSlider(

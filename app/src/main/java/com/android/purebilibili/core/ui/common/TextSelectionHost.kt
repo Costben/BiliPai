@@ -2,6 +2,8 @@
 
 package com.android.purebilibili.core.ui.common
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.components.AppSurface
 
 import android.widget.Toast
@@ -16,10 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.SelectAll
-import androidx.compose.material.icons.outlined.ContentCopy
-import androidx.compose.material.icons.outlined.Share
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.text.selection.SelectionState
@@ -178,7 +176,7 @@ internal fun AppFloatingSelectionToolbar(
                         }
                     ) {
                         AppIcon(
-                            imageVector = Icons.Outlined.ContentCopy,
+                            imageVector = AppIcons.Outlined.ContentCopy,
                             contentDescription = "复制",
                             modifier = Modifier.size(16.dp),
                             tint = MaterialTheme.colorScheme.primary
@@ -230,7 +228,7 @@ internal fun AppFloatingSelectionToolbar(
                         }
                     ) {
                         AppIcon(
-                            imageVector = Icons.Filled.SelectAll,
+                            imageVector = AppIcons.Filled.SelectAll,
                             contentDescription = "全选",
                             modifier = Modifier.size(16.dp),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
@@ -266,7 +264,7 @@ internal fun AppFloatingSelectionToolbar(
                     }
                 ) {
                     AppIcon(
-                        imageVector = Icons.Outlined.Share,
+                        imageVector = AppIcons.Outlined.Share,
                         contentDescription = "分享",
                         modifier = Modifier.size(16.dp),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant

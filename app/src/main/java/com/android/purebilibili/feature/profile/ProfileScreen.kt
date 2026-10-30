@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.profile
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.navigation.tabIndicatorPosition
 import com.android.purebilibili.data.model.AccountLedgerKind
 import com.android.purebilibili.core.ui.motion.AppMotionEasing
@@ -39,11 +41,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.DarkMode
-import androidx.compose.material.icons.rounded.MoreVert
-import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.QrCodeScanner
 import com.android.purebilibili.feature.login.OfficialQrAuthorizationDialog
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -1857,7 +1854,7 @@ private fun ProfilePinnedSpaceTopBar(
             OfficialQrAuthorizationDialog(onDismiss = { showQrAuthorization = false })
         }
         AppIconButton(onClick = { showQrAuthorization = true }) {
-            ProfilePhotoToolbarIcon(Icons.Rounded.QrCodeScanner, "扫码授权登录", topBarIconColor, photoFractionProvider)
+            ProfilePhotoToolbarIcon(AppIcons.Rounded.QrCodeScanner, "扫码授权登录", topBarIconColor, photoFractionProvider)
         }
         Spacer(modifier = Modifier.weight(1f))
         AppWindowActionMenu(
@@ -1887,7 +1884,7 @@ private fun ProfilePinnedSpaceTopBar(
                 ),
             ),
         ) {
-            ProfilePhotoToolbarIcon(Icons.Rounded.MoreVert, "更多", topBarIconColor, photoFractionProvider)
+            ProfilePhotoToolbarIcon(AppIcons.Rounded.MoreVert, "更多", topBarIconColor, photoFractionProvider)
         }
     }
 }
@@ -2014,10 +2011,10 @@ private fun ProfileTopActions(
         OfficialQrAuthorizationDialog(onDismiss = { showQrAuthorization = false })
     }
     AppIconButton(onClick = { showQrAuthorization = true }) {
-        AppIcon(Icons.Rounded.QrCodeScanner, contentDescription = "扫码授权登录", tint = tint)
+        AppIcon(AppIcons.Rounded.QrCodeScanner, contentDescription = "扫码授权登录", tint = tint)
     }
     AppIconButton(onClick = onSearchClick) {
-        AppIcon(Icons.Rounded.Search, contentDescription = "搜索", tint = tint)
+        AppIcon(AppIcons.Rounded.Search, contentDescription = "搜索", tint = tint)
     }
     AppIconButton(onClick = onInboxClick) {
         AppIcon(rememberAppInboxIcon(), contentDescription = "消息", tint = tint)
@@ -2034,7 +2031,7 @@ private fun ProfileTopActions(
             AppIcon(rememberAppProfileAddIcon(), contentDescription = "切换账号", tint = tint)
         }
         AppIconButton(onClick = onThemeClick) {
-            AppIcon(Icons.Rounded.DarkMode, contentDescription = "切换主题", tint = tint)
+            AppIcon(AppIcons.Rounded.DarkMode, contentDescription = "切换主题", tint = tint)
         }
         AppIconButton(onClick = onSettingsClick) {
             AppIcon(rememberAppSettingsIcon(), contentDescription = "设置", tint = tint)
@@ -2059,12 +2056,12 @@ private fun ProfileTopActions(
                 }
             ),
         ) {
-                AppIcon(Icons.Rounded.MoreVert, contentDescription = "更多", tint = tint)
+                AppIcon(AppIcons.Rounded.MoreVert, contentDescription = "更多", tint = tint)
         }
     }
     if (!compact && openLedger != null) {
         AppWindowActionMenu(groups = listOf(ledgerMenuActions(openLedger))) {
-            AppIcon(Icons.Rounded.MoreVert, contentDescription = "硬币与经验明细", tint = tint)
+            AppIcon(AppIcons.Rounded.MoreVert, contentDescription = "硬币与经验明细", tint = tint)
         }
     }
 

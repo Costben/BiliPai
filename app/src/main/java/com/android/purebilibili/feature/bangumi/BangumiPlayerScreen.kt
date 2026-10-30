@@ -1,6 +1,8 @@
 // 文件路径: feature/bangumi/BangumiPlayerScreen.kt
 package com.android.purebilibili.feature.bangumi
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.motion.AppMotionEasing
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.appElasticPress
@@ -80,7 +82,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import androidx.compose.ui.layout.ContentScale
 import com.android.purebilibili.core.util.FormatUtils
-import androidx.compose.material.icons.Icons
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
@@ -98,7 +99,6 @@ import com.android.purebilibili.feature.video.screen.rememberInlinePortraitPlaye
 import com.android.purebilibili.feature.video.screen.shouldAutoPauseOnPlayerCollapse
 import com.android.purebilibili.feature.video.screen.shouldAutoResumeOnPlayerExpand
 import kotlin.math.abs
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import com.android.purebilibili.core.ui.components.AppButton
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppIcon
@@ -1531,7 +1531,7 @@ private fun BangumiPlayNoticeOverlay(
             ) {
                 IconButton(onClick = onBack, modifier = Modifier.appElasticPress()) {
                     AppIcon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        imageVector = AppIcons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "返回",
                         tint = Color.White
                     )

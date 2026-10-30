@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.home.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
@@ -9,9 +11,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.ui.Alignment
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.SwapHoriz
-import androidx.compose.material.icons.outlined.ViewSidebar
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.NavigationDrawerItem
@@ -74,13 +73,13 @@ internal fun MaterialSideBar(
         ) {
             AdaptivePlainTooltipBox(text = if (expanded) "收起导航" else "展开导航") {
                 AppIconButton(onClick = { onExpandedChange(!expanded) }) {
-                    AppIcon(Icons.Outlined.ViewSidebar, contentDescription = if (expanded) "收起导航" else "展开导航")
+                    AppIcon(AppIcons.Outlined.ViewSidebar, contentDescription = if (expanded) "收起导航" else "展开导航")
                 }
             }
             if (onAccountSwitchClick != null) {
                 AdaptivePlainTooltipBox(text = "切换账号") {
                     AppIconButton(onClick = onAccountSwitchClick) {
-                        AppIcon(Icons.Outlined.SwapHoriz, contentDescription = "切换账号")
+                        AppIcon(AppIcons.Outlined.SwapHoriz, contentDescription = "切换账号")
                     }
                 }
             }

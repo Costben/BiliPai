@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.plugin
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.compose.animation.AnimatedVisibility
@@ -16,11 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ChatBubbleOutline
-import androidx.compose.material.icons.outlined.DarkMode
-import androidx.compose.material.icons.outlined.Extension
-import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -137,9 +134,9 @@ private fun PluginEffectHintChip(
 
 private fun iconForHint(kind: PluginEffectHintKind): ImageVector {
     return when (kind) {
-        PluginEffectHintKind.EYE_CARE -> Icons.Outlined.DarkMode
-        PluginEffectHintKind.FEED_FILTER -> Icons.Outlined.FilterList
-        PluginEffectHintKind.DANMAKU -> Icons.Outlined.ChatBubbleOutline
-        PluginEffectHintKind.GENERIC -> Icons.Outlined.Extension
+        PluginEffectHintKind.EYE_CARE -> AppIcons.Outlined.DarkMode
+        PluginEffectHintKind.FEED_FILTER -> AppIcons.Outlined.FilterList
+        PluginEffectHintKind.DANMAKU -> AppIcons.Outlined.ChatBubbleOutline
+        PluginEffectHintKind.GENERIC -> AppIcons.Outlined.Extension
     }
 }

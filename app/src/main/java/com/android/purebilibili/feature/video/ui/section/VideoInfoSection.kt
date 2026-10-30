@@ -1,6 +1,8 @@
 // File: feature/video/ui/section/VideoInfoSection.kt
 package com.android.purebilibili.feature.video.ui.section
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.components.rememberFollowActionWithConfirmation
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -27,9 +29,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.Composable
@@ -355,7 +354,7 @@ fun VideoTitleSection(
                 modifier = Modifier.size(40.dp),
             ) {
                 AppIcon(
-                    imageVector = if (expanded) Icons.Outlined.KeyboardArrowUp else Icons.Outlined.KeyboardArrowDown,
+                    imageVector = if (expanded) AppIcons.Outlined.KeyboardArrowUp else AppIcons.Outlined.KeyboardArrowDown,
                     contentDescription = if (expanded) "收起标题" else "展开标题",
                     tint = AppContentColors.secondaryText(),
                     modifier = Modifier.size(18.dp),
@@ -430,12 +429,12 @@ fun VideoDetailSponsorLabelChip(
         ) {
             Box(contentAlignment = Alignment.Center) {
                 AppIcon(
-                    imageVector = Icons.Outlined.Shield,
+                    imageVector = AppIcons.Outlined.Shield,
                     contentDescription = null,
                     modifier = Modifier.size(14.dp)
                 )
                 AppIcon(
-                    imageVector = Icons.Filled.PlayArrow,
+                    imageVector = AppIcons.Filled.PlayArrow,
                     contentDescription = null,
                     modifier = Modifier.size(9.dp)
                 )
@@ -669,7 +668,7 @@ fun VideoTitleWithDesc(
                 }
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = viewsModifier) {
                     AppIcon(
-                        imageVector = Icons.Outlined.PlayCircleOutline,
+                        imageVector = AppIcons.Outlined.PlayCircleOutline,
                         contentDescription = null,
                         tint = AppContentColors.secondaryText(),
                         modifier = Modifier.size(13.dp)
@@ -708,7 +707,7 @@ fun VideoTitleWithDesc(
                 }
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = danmakuModifier) {
                     AppIcon(
-                        imageVector = Icons.Outlined.Subtitles,
+                        imageVector = AppIcons.Outlined.Subtitles,
                         contentDescription = null,
                         tint = AppContentColors.secondaryText(),
                         modifier = Modifier.size(13.dp)
@@ -1011,7 +1010,7 @@ private fun VideoArgueMsgRow(argueMsg: String) {
         horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(4.dp)
     ) {
         androidx.compose.material3.Icon(
-            imageVector = Icons.Outlined.ErrorOutline,
+            imageVector = AppIcons.Outlined.ErrorOutline,
             contentDescription = null,
             tint = AppContentColors.secondaryText(),
             modifier = Modifier.size(13.dp)
@@ -1186,7 +1185,7 @@ fun UpInfoSection(
                         contentAlignment = Alignment.Center
                     ) {
                         AppIcon(
-                            imageVector = Icons.Outlined.AccountCircle,
+                            imageVector = AppIcons.Outlined.AccountCircle,
                             contentDescription = "UP主标识",
                             tint = AppContentColors.accent(),
                             modifier = Modifier.size(20.dp)
@@ -1706,7 +1705,7 @@ fun DescriptionSection(desc: String) {
                     )
                     Spacer(modifier = Modifier.width(2.dp))
                     AppIcon(
-                        imageVector = if (expanded) Icons.Outlined.KeyboardArrowUp else Icons.Outlined.KeyboardArrowDown,
+                        imageVector = if (expanded) AppIcons.Outlined.KeyboardArrowUp else AppIcons.Outlined.KeyboardArrowDown,
                         contentDescription = null,
                         tint = AppContentColors.accent(),
                         modifier = Modifier.size(18.dp)
@@ -1800,7 +1799,7 @@ fun BgmInfoRow(
             verticalAlignment = Alignment.CenterVertically
         ) {
             AppIcon(
-                imageVector = Icons.Outlined.MusicNote,
+                imageVector = AppIcons.Outlined.MusicNote,
                 contentDescription = "BGM",
                 tint = AppContentColors.accent().copy(alpha = 0.8f),
                 modifier = Modifier.size(14.dp)
@@ -1829,7 +1828,7 @@ fun BgmInfoRow(
             }
             if (showIndicator) {
                 AppIcon(
-                    imageVector = Icons.Outlined.KeyboardArrowDown,
+                    imageVector = AppIcons.Outlined.KeyboardArrowDown,
                     contentDescription = null,
                     tint = AppContentColors.accent().copy(alpha = 0.72f),
                     modifier = Modifier
@@ -1970,7 +1969,7 @@ private fun BgmSelectionSheet(
                     )
                     AppIconButton(onClick = onDismiss) {
                         AppIcon(
-                            imageVector = Icons.Outlined.Close,
+                            imageVector = AppIcons.Outlined.Close,
                             contentDescription = "关闭",
                             modifier = Modifier.size(20.dp)
                         )
@@ -2262,7 +2261,7 @@ private fun BgmSelectionStrip(
                         )
                     } else {
                         AppIcon(
-                            imageVector = Icons.Outlined.MusicNote,
+                            imageVector = AppIcons.Outlined.MusicNote,
                             contentDescription = null,
                             tint = AppContentColors.accent().copy(alpha = 0.78f),
                             modifier = Modifier.size(24.dp)
@@ -2344,7 +2343,7 @@ internal fun BgmDetailCard(
                     Spacer(modifier = Modifier.height(10.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         AppIcon(
-                            imageVector = Icons.Outlined.Star,
+                            imageVector = AppIcons.Outlined.Star,
                             contentDescription = null,
                             tint = AppContentColors.accent(),
                             modifier = Modifier.size(16.dp)
@@ -2488,7 +2487,7 @@ private fun BgmDetailCover(
             )
         } else {
             AppIcon(
-                imageVector = Icons.Outlined.MusicNote,
+                imageVector = AppIcons.Outlined.MusicNote,
                 contentDescription = title,
                 tint = AppContentColors.accent().copy(alpha = 0.8f),
                 modifier = Modifier.size(34.dp)

@@ -1,13 +1,13 @@
 package com.android.purebilibili.feature.comment
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.OpenInBrowser
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -142,7 +142,7 @@ fun CommentDetailScreen(
                             onClick = { onOpenLink(enterUri) }
                         ) {
                             AppIcon(
-                                imageVector = Icons.Outlined.OpenInBrowser,
+                                imageVector = AppIcons.Outlined.OpenInBrowser,
                                 contentDescription = "前往"
                             )
                         }

@@ -45,7 +45,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import com.android.purebilibili.core.store.SettingsManager
-import androidx.compose.material.icons.Icons
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.purebilibili.core.ui.AdaptiveLoadingIndicator
 import com.android.purebilibili.core.ui.rememberAppClearIcon

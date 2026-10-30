@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
@@ -11,9 +13,6 @@ import com.android.purebilibili.core.ui.components.AppThemeAdaptiveTabRow
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Sort
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import com.android.purebilibili.core.ui.components.AppIconButton
@@ -179,7 +178,7 @@ fun CommentSortHeader(
                     modifier = Modifier.size(spec.heightDp.dp),
                 ) {
                     AppIcon(
-                        imageVector = Icons.Outlined.Search,
+                        imageVector = AppIcons.Outlined.Search,
                         contentDescription = "搜索评论",
                         modifier = Modifier.size(18.dp),
                         tint = AppContentColors.secondaryText(),
@@ -216,7 +215,7 @@ fun CommentSortHeader(
                     },
                 ) {
                     AppIcon(
-                        imageVector = Icons.AutoMirrored.Outlined.Sort,
+                        imageVector = AppIcons.AutoMirrored.Outlined.Sort,
                         contentDescription = "切换评论排序",
                         modifier = Modifier.size(18.dp),
                     )
@@ -257,7 +256,7 @@ fun CommentSortFilterBar(
                 modifier = Modifier.size(spec.heightDp.dp),
             ) {
                 AppIcon(
-                    imageVector = Icons.Outlined.Search,
+                    imageVector = AppIcons.Outlined.Search,
                     contentDescription = "搜索评论",
                     modifier = Modifier.size(18.dp),
                     tint = AppContentColors.secondaryText(),

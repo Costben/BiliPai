@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.live.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -22,8 +24,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -125,7 +125,7 @@ fun LiveSuperChatFlashOverlay(
                         .clickable { current = null },
                     contentAlignment = Alignment.Center,
                 ) {
-                    AppIcon(Icons.Filled.Close, "关闭", tint = Color.Black, modifier = Modifier.size(14.dp))
+                    AppIcon(AppIcons.Filled.Close, "关闭", tint = Color.Black, modifier = Modifier.size(14.dp))
                 }
             }
         }

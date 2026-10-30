@@ -1,15 +1,13 @@
 package com.android.purebilibili.feature.following
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.DragHandle
-import androidx.compose.material.icons.outlined.KeyboardArrowDown
-import androidx.compose.material.icons.outlined.KeyboardArrowUp
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -116,11 +114,11 @@ internal fun FollowGroupOrderContent(
                                         AppIconButton(
                                             onClick = { onMove(tag.tagid, state.draft[index - 1].tagid) },
                                             enabled = !busy && draggedId == null && index > 0,
-                                        ) { AppIcon(Icons.Outlined.KeyboardArrowUp, "上移${tag.name}") }
+                                        ) { AppIcon(AppIcons.Outlined.KeyboardArrowUp, "上移${tag.name}") }
                                         AppIconButton(
                                             onClick = { onMove(tag.tagid, state.draft[index + 1].tagid) },
                                             enabled = !busy && draggedId == null && index < state.draft.lastIndex,
-                                        ) { AppIcon(Icons.Outlined.KeyboardArrowDown, "下移${tag.name}") }
+                                        ) { AppIcon(AppIcons.Outlined.KeyboardArrowDown, "下移${tag.name}") }
                                         Box(
                                             modifier = Modifier
                                                 .size(48.dp)
@@ -168,7 +166,7 @@ internal fun FollowGroupOrderContent(
                                                     )
                                                 },
                                             contentAlignment = Alignment.Center,
-                                        ) { AppIcon(Icons.Outlined.DragHandle, null) }
+                                        ) { AppIcon(AppIcons.Outlined.DragHandle, null) }
                                     }
                                 },
                             )

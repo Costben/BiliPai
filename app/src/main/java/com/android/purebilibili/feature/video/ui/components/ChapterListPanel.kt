@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.util.rememberHapticFeedback
 import com.android.purebilibili.core.util.HapticType
 
@@ -7,8 +9,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import com.android.purebilibili.core.ui.components.AppSwitch as Switch
 import com.android.purebilibili.core.ui.components.AppText as Text
 import androidx.compose.runtime.*
@@ -41,7 +41,7 @@ fun ChapterListPanel(
         Row(modifier.fillMaxWidth().height(45.dp).padding(horizontal = 16.dp), verticalAlignment = Alignment.CenterVertically) {
             Text("分段信息", fontSize = 16.sp, modifier = Modifier.weight(1f))
             if (onShowViewPointsChange != null) Switch(checked = showViewPoints, onCheckedChange = onShowViewPointsChange)
-            PanelAction(Icons.Default.Close, "关闭", requestDismiss)
+            PanelAction(AppIcons.Filled.Close, "关闭", requestDismiss)
         }
         LazyColumn(state = state, modifier = Modifier.weight(1f).fillMaxWidth(), overscrollEffect = null,
             contentPadding = PaddingValues(top = 7.dp, bottom = 100.dp)) {

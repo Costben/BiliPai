@@ -1,6 +1,8 @@
 // 文件路径: feature/plugin/BiliPaiFeedFilterPlugin.kt
 package com.android.purebilibili.feature.plugin
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.plugin.BuiltinPluginIds
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -12,8 +14,6 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -61,7 +61,7 @@ class BiliPaiFeedFilterPlugin : BuiltinPlugin, FeedPlugin<VideoItem> {
     override val description = "移植自 BiliPai 的推荐流过滤: 时长/播放量/点赞率/标题关键词/屏蔽用户/白名单"
     override val version = "1.0.0"
     override val author = "qyo123oyq"
-    override val icon: ImageVector = Icons.Outlined.FilterList
+    override val icon: ImageVector = AppIcons.Outlined.FilterList
 
     private var config = BiliPaiFeedFilterConfig()
 

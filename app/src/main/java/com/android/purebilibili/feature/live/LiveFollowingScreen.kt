@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.live
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.aspectRatio
@@ -19,9 +21,6 @@ import com.android.purebilibili.core.ui.AdaptivePullToRefreshBox
 import androidx.compose.foundation.lazy.grid.GridCells
 import com.android.purebilibili.core.ui.components.AppLazyVerticalGrid as LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.Refresh
 import com.android.purebilibili.core.ui.ImmersiveAppScaffold as AppScaffold
 import com.android.purebilibili.core.ui.AppTopBar
 import com.android.purebilibili.core.ui.AppSpacingTokens
@@ -175,7 +174,7 @@ fun LiveFollowingScreen(
                 navigationIcon = {
                     AppIconButton(onClick = onBack) {
                         AppIcon(
-                            imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+                            imageVector = AppIcons.AutoMirrored.Outlined.ArrowBack,
                             contentDescription = "返回",
                         )
                     }

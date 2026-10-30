@@ -1,6 +1,8 @@
 // 文件路径: feature/video/ui/components/CommentInputDialog.kt
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import com.android.purebilibili.core.ui.components.appSearchElasticPress
@@ -38,17 +40,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.outlined.AlternateEmail
-import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.Fullscreen
-import androidx.compose.material.icons.filled.FullscreenExit
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.Image
-import androidx.compose.material.icons.outlined.RadioButtonUnchecked
-import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.saveable.listSaver
@@ -646,7 +637,7 @@ fun CommentInputDialog(
                                                     }
                                             ) {
                                                 AppIcon(
-                                                    imageVector = Icons.Outlined.Close,
+                                                    imageVector = AppIcons.Outlined.Close,
                                                     contentDescription = "移除",
                                                     modifier = Modifier
                                                         .size(14.dp)
@@ -691,7 +682,7 @@ fun CommentInputDialog(
                                         ) {
                                             // 模拟 RadioButton/Checkbox
                                             AppIcon(
-                                                imageVector = if (isForwardToDynamic) Icons.Filled.CheckCircle else Icons.Outlined.RadioButtonUnchecked,
+                                                imageVector = if (isForwardToDynamic) AppIcons.Filled.CheckCircle else AppIcons.Outlined.RadioButtonUnchecked,
                                                 contentDescription = null,
                                                 tint = if (isForwardToDynamic) AppContentColors.accent() else AppContentColors.secondaryText(),
                                                 modifier = Modifier.size(18.dp)
@@ -721,7 +712,7 @@ fun CommentInputDialog(
                                         modifier = Modifier.size(layoutPolicy.toolbarToolButtonSizeDp.dp)
                                     ) {
                                         AppIcon(
-                                            imageVector = Icons.Filled.Face,
+                                            imageVector = AppIcons.Filled.Face,
                                             contentDescription = "表情",
                                             tint = if (showEmojiPanel) AppContentColors.accent() else AppContentColors.secondaryText(),
                                             modifier = Modifier.size(26.dp)
@@ -740,7 +731,7 @@ fun CommentInputDialog(
                                         modifier = Modifier.size(layoutPolicy.toolbarToolButtonSizeDp.dp)
                                     ) {
                                         AppIcon(
-                                            imageVector = Icons.Outlined.AlternateEmail,
+                                            imageVector = AppIcons.Outlined.AlternateEmail,
                                             contentDescription = "提及用户",
                                             tint = AppContentColors.secondaryText(),
                                             modifier = Modifier.size(26.dp)
@@ -758,7 +749,7 @@ fun CommentInputDialog(
                                             modifier = Modifier.size(layoutPolicy.toolbarToolButtonSizeDp.dp)
                                         ) {
                                             AppIcon(
-                                                imageVector = Icons.Outlined.Schedule,
+                                                imageVector = AppIcons.Outlined.Schedule,
                                                 contentDescription = "插入当前播放进度",
                                                 tint = AppContentColors.secondaryText(),
                                                 modifier = Modifier.size(26.dp)
@@ -778,7 +769,7 @@ fun CommentInputDialog(
                                             modifier = Modifier.size(layoutPolicy.toolbarToolButtonSizeDp.dp)
                                         ) {
                                             AppIcon(
-                                                imageVector = Icons.Outlined.Image,
+                                                imageVector = AppIcons.Outlined.Image,
                                                 contentDescription = "图片",
                                                 tint = AppContentColors.secondaryText(),
                                                 modifier = Modifier.size(26.dp)
@@ -1024,7 +1015,7 @@ fun CommentInputDialog(
                                 contentAlignment = Alignment.TopEnd
                             ) {
                                 AppIcon(
-                                    imageVector = if (inputExpanded) Icons.Filled.FullscreenExit else Icons.Filled.Fullscreen,
+                                    imageVector = if (inputExpanded) AppIcons.Filled.FullscreenExit else AppIcons.Filled.Fullscreen,
                                     contentDescription = if (inputExpanded) "收起输入区" else "展开输入区",
                                     modifier = Modifier
                                         .padding(
@@ -1115,7 +1106,7 @@ private fun CommentMentionSearchPanel(
                 singleLine = true,
                 leadingIcon = {
                     AppIcon(
-                        imageVector = Icons.Filled.Search,
+                        imageVector = AppIcons.Filled.Search,
                         contentDescription = null,
                         modifier = Modifier.size(18.dp)
                     )

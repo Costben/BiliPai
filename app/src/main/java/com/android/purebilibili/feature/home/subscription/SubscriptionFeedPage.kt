@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.home.subscription
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.motion.AppMotionEasing
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -62,11 +64,6 @@ import com.android.purebilibili.core.util.animateScrollToTop
 import com.android.purebilibili.core.util.Logger
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Wallpaper
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.outlined.EditNote
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -1050,7 +1047,7 @@ private fun SubscriptionArticleScreen(
                 if (!glassReaderChrome) {
                     AppIconButton(onClick = openArticleWallpaperPicker) {
                         AppIcon(
-                            Icons.Outlined.Wallpaper,
+                            AppIcons.Outlined.Wallpaper,
                             contentDescription = "选择正文壁纸",
                         )
                     }
@@ -1061,7 +1058,7 @@ private fun SubscriptionArticleScreen(
                         noteEditorVisible = true
                     }) {
                         AppIcon(
-                            Icons.Outlined.EditNote,
+                            AppIcons.Outlined.EditNote,
                             contentDescription = if (savedArticleNote != null) "编辑笔记" else "写笔记"
                         )
                     }
@@ -1084,11 +1081,11 @@ private fun SubscriptionArticleScreen(
                     AppIconButton(onClick = {
                         shareFeedArticle(context, item)
                     }) {
-                        AppIcon(Icons.Default.Share, contentDescription = "分享文章")
+                        AppIcon(AppIcons.Filled.Share, contentDescription = "分享文章")
                     }
                     com.android.purebilibili.core.ui.components.AppGlassMenuAnchor(onOpen = { actionsExpanded = true }) {
                         AppIconButton(onClick = { actionsExpanded = true }) {
-                            AppIcon(Icons.Default.MoreVert, contentDescription = "阅读选项")
+                            AppIcon(AppIcons.Filled.MoreVert, contentDescription = "阅读选项")
                         }
                         AppDropdownMenu(
                             expanded = actionsExpanded,

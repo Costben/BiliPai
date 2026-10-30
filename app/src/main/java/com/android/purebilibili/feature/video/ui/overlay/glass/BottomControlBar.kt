@@ -1,6 +1,8 @@
 // File: feature/video/ui/overlay/BottomControlBar.kt
 package com.android.purebilibili.feature.video.ui.overlay.glass
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.clickable
 import com.android.purebilibili.core.ui.components.appActionClickable
 
@@ -41,10 +43,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.RadioButtonUnchecked
 import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.appGlassMenuSource
 import androidx.compose.runtime.*
@@ -956,7 +954,7 @@ fun BottomControlBar(
                                         modifier = Modifier.size(PlayerChromeLayout.CircularButtonSizeDp.dp),
                                     ) {
                                         AppIcon(
-                                            imageVector = Icons.Filled.SkipNext,
+                                            imageVector = AppIcons.Filled.SkipNext,
                                             contentDescription = "下一集",
                                             tint = Color.White,
                                             modifier = Modifier.size(22.dp),
@@ -1953,7 +1951,7 @@ fun BottomControlBar(
                     contentAlignment = Alignment.Center
                 ) {
                     AppIcon(
-                        imageVector = if (isFullscreen) Icons.Outlined.FullscreenExit else Icons.Outlined.Fullscreen,
+                        imageVector = if (isFullscreen) AppIcons.Outlined.FullscreenExit else AppIcons.Outlined.Fullscreen,
                         contentDescription = if (isFullscreen) "退出横屏" else "横屏",
                         tint = Color.White,
                         modifier = Modifier.size(layoutPolicy.fullscreenIconSizeDp.dp)
@@ -2198,7 +2196,7 @@ private fun PlayerPlayPauseButton(
                 .testTag("player_play_pause"),
         ) {
             AppIcon(
-                imageVector = if (isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow,
+                imageVector = if (isPlaying) AppIcons.Filled.Pause else AppIcons.Filled.PlayArrow,
                 contentDescription = if (isPlaying) "暂停" else "播放",
                 tint = Color.White,
                 modifier = Modifier.size(iconSizeDp.dp),
@@ -2823,7 +2821,7 @@ fun VideoProgressBar(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             AppIcon(
-                                Icons.Outlined.ViewList,
+                                AppIcons.Outlined.ViewList,
                                 contentDescription = "Chapter",
                                 tint = Color.White.copy(alpha = 0.8f),
                                 modifier = Modifier.size(layoutPolicy.chapterIconSizeDp.dp)

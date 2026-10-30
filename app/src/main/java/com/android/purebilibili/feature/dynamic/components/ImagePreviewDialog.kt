@@ -1,6 +1,8 @@
 // 文件路径: feature/dynamic/components/ImagePreviewDialog.kt
 package com.android.purebilibili.feature.dynamic.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import kotlinx.coroutines.ensureActive
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -101,9 +103,6 @@ import com.android.purebilibili.core.ui.rememberAppLikeFilledIcon
 import com.android.purebilibili.core.ui.rememberAppLikeIcon
 import androidx.compose.ui.geometry.Offset
 import androidx.media3.common.Player
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.VolumeUp
-import androidx.compose.material.icons.automirrored.filled.VolumeOff
 import com.android.purebilibili.core.ui.rememberAppRefreshIcon
 import com.android.purebilibili.core.ui.rememberAppChevronDownIcon
 import com.android.purebilibili.core.ui.rememberAppChevronUpIcon
@@ -1984,9 +1983,9 @@ private fun ImagePreviewOverlayContent(
                     ) {
                         AppIcon(
                             imageVector = if (isLivePhotoMuted) {
-                                Icons.AutoMirrored.Filled.VolumeOff
+                                AppIcons.AutoMirrored.Filled.VolumeOff
                             } else {
-                                Icons.AutoMirrored.Filled.VolumeUp
+                                AppIcons.AutoMirrored.Filled.VolumeUp
                             },
                             contentDescription = if (isLivePhotoMuted) "开启声音" else "静音",
                             tint = Color.White,

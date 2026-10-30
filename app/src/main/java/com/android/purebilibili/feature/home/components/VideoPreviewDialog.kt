@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.home.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import coil3.request.crossfade
@@ -44,7 +46,6 @@ import com.android.purebilibili.core.ui.ContainerLevel
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.util.FormatUtils
 import com.android.purebilibili.data.model.response.VideoItem
-import androidx.compose.material.icons.Icons
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.util.HapticType
 import com.android.purebilibili.core.util.rememberHapticFeedback
@@ -57,7 +58,6 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.media3.common.Player
 
-import androidx.compose.material.icons.rounded.Fullscreen
 import com.android.purebilibili.core.ui.blur.unifiedBlur
 import com.android.purebilibili.core.ui.blur.shouldAllowRenderEffectBackedHazeEffect
 import com.android.purebilibili.core.ui.performance.isLowBlurBudgetForced
@@ -276,7 +276,7 @@ fun VideoPreviewDialog(
                             // Play Immediately / Fullscreen
                             PreviewMenuItem(
                                 text = if (isPlaying) "全屏播放" else "立即播放",
-                                icon = if (isPlaying) Icons.Rounded.Fullscreen else playIcon,
+                                icon = if (isPlaying) AppIcons.Rounded.Fullscreen else playIcon,
                                 onClick = {
                                     haptic(HapticType.MEDIUM)
                                     onPlay() // Go to Full Screen

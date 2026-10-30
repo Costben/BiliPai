@@ -1,6 +1,8 @@
 // 文件路径: feature/video/screen/VideoDetailScreen.kt
 package com.android.purebilibili.feature.video.screen
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.motion.AppMotionEasing
 import com.android.purebilibili.core.ui.components.appElasticPress
@@ -73,11 +75,6 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -345,7 +342,7 @@ private fun CollapsedPlayerNavigationBar(
                                 modifier = Modifier.size(AppChromeSizeTokens.MinimumTouchTarget),
                             ) {
                                 AppIcon(
-                                    Icons.Filled.ArrowBack,
+                                    AppIcons.Filled.ArrowBack,
                                     contentDescription = "返回",
                                     tint = AppContentColors.primaryText(),
                                 )
@@ -353,7 +350,7 @@ private fun CollapsedPlayerNavigationBar(
                         } else {
                             IconButton(onClick = onBack, modifier = Modifier.size(width = 42.dp, height = 34.dp).appElasticPress()) {
                                 Icon(
-                                    Icons.Filled.ArrowBack,
+                                    AppIcons.Filled.ArrowBack,
                                     contentDescription = "返回",
                                     tint = AppContentColors.primaryText(),
                                 )
@@ -365,7 +362,7 @@ private fun CollapsedPlayerNavigationBar(
                                 modifier = Modifier.size(AppChromeSizeTokens.MinimumTouchTarget),
                             ) {
                                 AppIcon(
-                                    Icons.Filled.Home,
+                                    AppIcons.Filled.Home,
                                     contentDescription = "首页",
                                     tint = AppContentColors.primaryText(),
                                 )
@@ -373,7 +370,7 @@ private fun CollapsedPlayerNavigationBar(
                         } else {
                             IconButton(onClick = onHomeClick, modifier = Modifier.size(width = 42.dp, height = 34.dp).appElasticPress()) {
                                 Icon(
-                                    Icons.Filled.Home,
+                                    AppIcons.Filled.Home,
                                     contentDescription = "首页",
                                     tint = AppContentColors.primaryText(),
                                 )
@@ -387,14 +384,14 @@ private fun CollapsedPlayerNavigationBar(
                     ) {
                         if (useMiuixNonGlassChrome) {
                             AppIcon(
-                                imageVector = Icons.Filled.PlayArrow,
+                                imageVector = AppIcons.Filled.PlayArrow,
                                 contentDescription = null,
                                 tint = AppContentColors.accent(),
                             )
                             AppText("立即播放", color = AppContentColors.accent())
                         } else {
                             Icon(
-                                imageVector = Icons.Filled.PlayArrow,
+                                imageVector = AppIcons.Filled.PlayArrow,
                                 contentDescription = null,
                                 tint = AppContentColors.accent(),
                             )
@@ -409,7 +406,7 @@ private fun CollapsedPlayerNavigationBar(
                                 .size(AppChromeSizeTokens.MinimumTouchTarget),
                         ) {
                             AppIcon(
-                                Icons.Filled.MoreVert,
+                                AppIcons.Filled.MoreVert,
                                 contentDescription = "更多设置",
                                 tint = AppContentColors.primaryText(),
                             )
@@ -422,7 +419,7 @@ private fun CollapsedPlayerNavigationBar(
                                 .size(width = 42.dp, height = 34.dp).appElasticPress(),
                         ) {
                             Icon(
-                                Icons.Filled.MoreVert,
+                                AppIcons.Filled.MoreVert,
                                 contentDescription = "更多设置",
                                 tint = AppContentColors.primaryText(),
                             )

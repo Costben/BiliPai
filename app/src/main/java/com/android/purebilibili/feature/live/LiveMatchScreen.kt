@@ -1,16 +1,12 @@
 package com.android.purebilibili.feature.live
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
-import androidx.compose.material.icons.outlined.Public
-import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import com.android.purebilibili.core.ui.LocalAppThemeConfig
@@ -125,15 +121,15 @@ private fun LiveMatchContent(
                     title = "游戏赛事",
                     navigationIcon = {
                         AppIconButton(onClick = onBack) {
-                            AppIcon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "返回")
+                            AppIcon(AppIcons.AutoMirrored.Outlined.ArrowBack, contentDescription = "返回")
                         }
                     },
                     actions = {
                         AppIconButton(onClick = onEsportsHomeClick) {
-                            AppIcon(Icons.Outlined.Public, contentDescription = "官方赛事主页")
+                            AppIcon(AppIcons.Outlined.Public, contentDescription = "官方赛事主页")
                         }
                         AppIconButton(onClick = onRefresh, enabled = !state.loading) {
-                            AppIcon(Icons.Outlined.Refresh, contentDescription = "刷新赛程与分类")
+                            AppIcon(AppIcons.Outlined.Refresh, contentDescription = "刷新赛程与分类")
                         }
                     },
                 )
@@ -187,7 +183,7 @@ private fun LiveMatchContent(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     AppIconButton(onClick = { onSelectDate(state.date.minusDays(1)) }) {
-                        AppIcon(Icons.AutoMirrored.Outlined.KeyboardArrowLeft, contentDescription = "前一天")
+                        AppIcon(AppIcons.AutoMirrored.Outlined.KeyboardArrowLeft, contentDescription = "前一天")
                     }
                     AppText(
                         state.date.format(DateTimeFormatter.ofPattern("MM月dd日 E", Locale.SIMPLIFIED_CHINESE)),
@@ -198,7 +194,7 @@ private fun LiveMatchContent(
                         AppText("今天")
                     }
                     AppIconButton(onClick = { onSelectDate(state.date.plusDays(1)) }) {
-                        AppIcon(Icons.AutoMirrored.Outlined.KeyboardArrowRight, contentDescription = "后一天")
+                        AppIcon(AppIcons.AutoMirrored.Outlined.KeyboardArrowRight, contentDescription = "后一天")
                     }
                 }
             }

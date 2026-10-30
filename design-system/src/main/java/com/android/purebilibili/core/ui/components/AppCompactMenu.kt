@@ -1,5 +1,7 @@
 package com.android.purebilibili.core.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,8 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -158,7 +158,7 @@ fun AppCompactMenuItem(
                             if (trailingIcon != null) {
                                 trailingIcon()
                             } else {
-                                AppIcon(Icons.Default.Check, contentDescription = null)
+                                AppIcon(AppIcons.Filled.Check, contentDescription = null)
                             }
                         }
                     }

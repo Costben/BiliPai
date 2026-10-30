@@ -1,16 +1,7 @@
 package com.android.purebilibili.feature.video.ui.section
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.VolumeDown
-import androidx.compose.material.icons.automirrored.filled.VolumeMute
-import androidx.compose.material.icons.automirrored.filled.VolumeOff
-import androidx.compose.material.icons.automirrored.filled.VolumeUp
-import androidx.compose.material.icons.filled.Brightness4
-import androidx.compose.material.icons.filled.Brightness7
-import androidx.compose.material.icons.filled.BrightnessHigh
-import androidx.compose.material.icons.filled.BrightnessLow
-import androidx.compose.material.icons.filled.BrightnessMedium
 import androidx.compose.ui.graphics.Color
+import com.android.purebilibili.core.ui.AppIcons
 import com.android.purebilibili.core.ui.AppTopTabPresentation
 import com.android.purebilibili.feature.video.ui.components.GesturePercentTransitionDirection
 import com.android.purebilibili.feature.video.ui.components.resolveGesturePercentTransitionDirection
@@ -66,7 +57,7 @@ class VideoGestureFeedbackPolicyTest {
     @Test
     fun `resolveGestureDisplayIcon maps brightness level for md3`() {
         assertEquals(
-            Icons.Filled.BrightnessLow,
+            AppIcons.Filled.BrightnessLow,
             resolveGestureDisplayIcon(
                 mode = VideoGestureMode.Brightness,
                 percent = 0.2f,
@@ -75,7 +66,7 @@ class VideoGestureFeedbackPolicyTest {
             )
         )
         assertEquals(
-            Icons.Filled.BrightnessMedium,
+            AppIcons.Filled.BrightnessMedium,
             resolveGestureDisplayIcon(
                 mode = VideoGestureMode.Brightness,
                 percent = 0.52f,
@@ -84,7 +75,7 @@ class VideoGestureFeedbackPolicyTest {
             )
         )
         assertEquals(
-            Icons.Filled.BrightnessHigh,
+            AppIcons.Filled.BrightnessHigh,
             resolveGestureDisplayIcon(
                 mode = VideoGestureMode.Brightness,
                 percent = 0.92f,
@@ -97,7 +88,7 @@ class VideoGestureFeedbackPolicyTest {
     @Test
     fun `resolveGestureDisplayIcon maps volume level for md3`() {
         assertEquals(
-            Icons.AutoMirrored.Filled.VolumeOff,
+            AppIcons.AutoMirrored.Filled.VolumeOff,
             resolveGestureDisplayIcon(
                 mode = VideoGestureMode.Volume,
                 percent = 0f,
@@ -106,7 +97,7 @@ class VideoGestureFeedbackPolicyTest {
             )
         )
         assertEquals(
-            Icons.AutoMirrored.Filled.VolumeMute,
+            AppIcons.AutoMirrored.Filled.VolumeMute,
             resolveGestureDisplayIcon(
                 mode = VideoGestureMode.Volume,
                 percent = 0.2f,
@@ -115,7 +106,7 @@ class VideoGestureFeedbackPolicyTest {
             )
         )
         assertEquals(
-            Icons.AutoMirrored.Filled.VolumeDown,
+            AppIcons.AutoMirrored.Filled.VolumeDown,
             resolveGestureDisplayIcon(
                 mode = VideoGestureMode.Volume,
                 percent = 0.5f,
@@ -124,7 +115,7 @@ class VideoGestureFeedbackPolicyTest {
             )
         )
         assertEquals(
-            Icons.AutoMirrored.Filled.VolumeUp,
+            AppIcons.AutoMirrored.Filled.VolumeUp,
             resolveGestureDisplayIcon(
                 mode = VideoGestureMode.Volume,
                 percent = 0.9f,
@@ -137,28 +128,28 @@ class VideoGestureFeedbackPolicyTest {
     @Test
     fun `resolveGestureDisplayIcon maps miuix volume and brightness ladders`() {
         assertEquals(
-            Icons.AutoMirrored.Filled.VolumeOff,
+            AppIcons.AutoMirrored.Filled.VolumeOff,
             resolveVolumeGestureIcon(
                 percent = 0f,
                 iconStyle = GestureLevelIconStyle.Miuix
             )
         )
         assertEquals(
-            Icons.AutoMirrored.Filled.VolumeUp,
+            AppIcons.AutoMirrored.Filled.VolumeUp,
             resolveVolumeGestureIcon(
                 percent = 0.9f,
                 iconStyle = GestureLevelIconStyle.Miuix
             )
         )
         assertEquals(
-            Icons.Filled.Brightness4,
+            AppIcons.Filled.Brightness4,
             resolveBrightnessGestureIcon(
                 percent = 0.1f,
                 iconStyle = GestureLevelIconStyle.Miuix
             )
         )
         assertEquals(
-            Icons.Filled.Brightness7,
+            AppIcons.Filled.Brightness7,
             resolveBrightnessGestureIcon(
                 percent = 0.9f,
                 iconStyle = GestureLevelIconStyle.Miuix
@@ -169,7 +160,7 @@ class VideoGestureFeedbackPolicyTest {
     @Test
     fun `resolveGestureDisplayIcon falls back for unsupported mode`() {
         assertEquals(
-            Icons.Filled.BrightnessHigh,
+            AppIcons.Filled.BrightnessHigh,
             resolveGestureDisplayIcon(
                 mode = VideoGestureMode.Seek,
                 percent = 0.5f,

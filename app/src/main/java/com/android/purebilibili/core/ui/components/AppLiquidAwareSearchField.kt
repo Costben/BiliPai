@@ -1,5 +1,7 @@
 package com.android.purebilibili.core.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -8,9 +10,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.focus.focusRequester
@@ -120,12 +119,12 @@ fun AppLiquidAwareSearchField(
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                 keyboardActions = KeyboardActions(onSearch = { onSearch() }),
                 leadingIcon = {
-                    AppIcon(Icons.Default.Search, contentDescription = null,
+                    AppIcon(AppIcons.Filled.Search, contentDescription = null,
                         modifier = Modifier.padding(start = leadingIconHorizontalOffset).size(22.dp))
                 },
                 trailingIcon = if (presentation != AppSearchFieldPresentation.TOP_BAR && query.isNotEmpty()) {
                     { AppIconButton(onClick = onClear, modifier = Modifier.size(32.dp)) {
-                        AppIcon(Icons.Default.Clear, contentDescription = "清除搜索内容")
+                        AppIcon(AppIcons.Filled.Clear, contentDescription = "清除搜索内容")
                     } }
                 } else null,
             )
@@ -162,7 +161,7 @@ private fun CompactLiquidSearchInput(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         AppIcon(
-            Icons.Default.Search,
+            AppIcons.Filled.Search,
             contentDescription = null,
             tint = hintColor,
             modifier = Modifier.padding(start = leadingIconHorizontalOffset).size(24.dp),
@@ -194,7 +193,7 @@ private fun CompactLiquidSearchInput(
         )
         if (showClearAction && query.isNotEmpty()) {
             AppIconButton(onClick = onClear, modifier = Modifier.size(32.dp)) {
-                AppIcon(Icons.Default.Clear, contentDescription = "清除搜索内容", tint = hintColor)
+                AppIcon(AppIcons.Filled.Clear, contentDescription = "清除搜索内容", tint = hintColor)
             }
         }
     }

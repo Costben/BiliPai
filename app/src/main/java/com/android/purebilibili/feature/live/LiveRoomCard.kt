@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.live
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -33,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.size
 import com.android.purebilibili.core.ui.components.appGlassMenuSource
-import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.platform.LocalDensity
 import coil3.compose.AsyncImage
@@ -211,7 +212,7 @@ internal fun LiveRoomCard(
                 .appGlassMenuSource(feedbackSource, onOpen = { onFeedback(feedbackSource) }),
         ) {
             com.android.purebilibili.core.ui.components.AppIcon(
-                androidx.compose.material.icons.Icons.Outlined.MoreVert,
+                AppIcons.Outlined.MoreVert,
                 contentDescription = "不感兴趣与推荐反馈",
                 tint = AppContentColors.secondaryText(),
                 modifier = Modifier.size(17.dp),

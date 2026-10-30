@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.pager
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -28,8 +30,6 @@ import androidx.compose.ui.unit.sp
 import com.android.purebilibili.data.model.response.ViewInfo
 import com.android.purebilibili.data.model.response.RelatedVideo
 import com.android.purebilibili.core.util.FormatUtils
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Close
 import androidx.compose.ui.platform.LocalContext
 import coil3.compose.AsyncImage
 import androidx.compose.ui.layout.ContentScale
@@ -143,7 +143,7 @@ fun PortraitDetailSheet(
                             }
                             AppIconButton(onClick = onDismiss) {
                                 AppIcon(
-                                    imageVector = Icons.Rounded.Close,
+                                    imageVector = AppIcons.Rounded.Close,
                                     contentDescription = "Close",
                                     tint = AppContentColors.secondaryText()
                                 )

@@ -1,6 +1,8 @@
 // 文件路径: feature/bangumi/BangumiDetailScreen.kt
 package com.android.purebilibili.feature.bangumi
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.resolveFilledButtonContainerColor
 import com.android.purebilibili.core.ui.resolveFilledButtonContentColor
@@ -23,8 +25,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 //  Material Icons
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -293,7 +293,7 @@ private fun TabletBangumiDetailContent(
                                 if (rating.score > 0) {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         AppIcon(
-                                            Icons.Outlined.Star,
+                                            AppIcons.Outlined.Star,
                                             contentDescription = null,
                                             tint = AppContentColors.rating(), // Assuming this is available
                                             modifier = Modifier.size(16.dp)
@@ -402,7 +402,7 @@ private fun TabletBangumiDetailContent(
                                 )
                             ) {
                                 AppIcon(
-                                    Icons.Outlined.PlayArrow,
+                                    AppIcons.Outlined.PlayArrow,
                                     contentDescription = null,
                                     modifier = Modifier.size(18.dp)
                                 )
@@ -440,7 +440,7 @@ private fun TabletBangumiDetailContent(
                                 .heightIn(min = 48.dp),
                         ) {
                             AppIcon(
-                                if (isFollowing) Icons.Outlined.Check else Icons.Outlined.Add,
+                                if (isFollowing) AppIcons.Outlined.Check else AppIcons.Outlined.Add,
                                 contentDescription = null,
                                 modifier = Modifier.size(18.dp)
                             )
@@ -855,7 +855,7 @@ private fun MobileBangumiDetailContent(
                                 if (rating.score > 0) {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
                                         AppIcon(
-                                            Icons.Outlined.Star,
+                                            AppIcons.Outlined.Star,
                                             contentDescription = null,
                                             tint = AppContentColors.rating(),
                                             modifier = Modifier.size(16.dp)
@@ -981,7 +981,7 @@ private fun MobileBangumiDetailContent(
                             )
                         ) {
                             AppIcon(
-                                Icons.Outlined.PlayArrow,
+                                AppIcons.Outlined.PlayArrow,
                                 contentDescription = null,
                                 modifier = Modifier.size(18.dp)
                             )
@@ -1020,7 +1020,7 @@ private fun MobileBangumiDetailContent(
                                 .heightIn(min = 48.dp)
                         ) {
                             AppIcon(
-                                Icons.Outlined.Check,
+                                AppIcons.Outlined.Check,
                                 contentDescription = null,
                                 modifier = Modifier.size(18.dp)
                             )
@@ -1049,7 +1049,7 @@ private fun MobileBangumiDetailContent(
                                 .heightIn(min = 48.dp)
                         ) {
                             AppIcon(
-                                Icons.Outlined.Add,
+                                AppIcons.Outlined.Add,
                                 contentDescription = null,
                                 modifier = Modifier.size(18.dp)
                             )
@@ -1287,7 +1287,7 @@ private fun MobileBangumiDetailContent(
                                             horizontalAlignment = Alignment.CenterHorizontally
                                         ) {
                                             AppIcon(
-                                                Icons.Outlined.MoreHoriz,
+                                                AppIcons.Outlined.MoreHoriz,
                                                 contentDescription = "更多",
                                                 tint = AppContentColors.secondaryText()
                                             )
@@ -1772,7 +1772,7 @@ private fun EpisodeSelectionSheet(
                     }
                     AppIconButton(onClick = onDismiss) {
                         AppIcon(
-                            Icons.Outlined.Close,
+                            AppIcons.Outlined.Close,
                             contentDescription = "关闭",
                             tint = AppContentColors.secondaryText()
                         )

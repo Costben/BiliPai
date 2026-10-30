@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.home
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.layout.offset
 
 import com.android.purebilibili.core.util.LocalWindowSizeClass
@@ -18,10 +20,6 @@ import com.android.purebilibili.core.ui.AppChromeSizeTokens
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.purebilibili.core.ui.AppSpacingTokens
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ExpandLess
-import androidx.compose.material.icons.rounded.ExpandMore
-import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.FlowRow
@@ -36,7 +34,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import com.android.purebilibili.core.ui.components.AppCard
 import com.android.purebilibili.core.ui.components.AppCardDefaults
 import com.android.purebilibili.core.ui.AdaptiveLoadingIndicator
-import androidx.compose.material.icons.outlined.Close
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppTextButton
 import com.android.purebilibili.core.ui.components.AppText
@@ -990,7 +987,7 @@ internal fun HomeCategoryPageContent(
                         contentAlignment = Alignment.Center
                     ) {
                         AppIcon(
-                            imageVector = Icons.Outlined.Close,
+                            imageVector = AppIcons.Outlined.Close,
                             contentDescription = "关闭",
                             modifier = Modifier.size(14.dp)
                         )
@@ -1185,7 +1182,7 @@ private fun TodayWatchPlanCard(
                         onClick = onRefresh
                     ) {
                         AppIcon(
-                            imageVector = Icons.Rounded.Refresh,
+                            imageVector = AppIcons.Rounded.Refresh,
                             contentDescription = null,
                             modifier = Modifier.size(AppSpacingTokens.Large)
                         )
@@ -1196,7 +1193,7 @@ private fun TodayWatchPlanCard(
                         onClick = { onCollapsedChange(!collapsed) }
                     ) {
                         AppIcon(
-                            imageVector = if (collapsed) Icons.Rounded.ExpandMore else Icons.Rounded.ExpandLess,
+                            imageVector = if (collapsed) AppIcons.Rounded.ExpandMore else AppIcons.Rounded.ExpandLess,
                             contentDescription = null,
                             modifier = Modifier.size(AppSpacingTokens.Large)
                         )

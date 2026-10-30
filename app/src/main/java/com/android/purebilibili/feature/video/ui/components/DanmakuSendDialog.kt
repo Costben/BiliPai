@@ -1,6 +1,8 @@
 // 文件路径: feature/video/ui/components/DanmakuSendDialog.kt
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import com.android.purebilibili.core.ui.components.AppColorPicker
@@ -36,8 +38,6 @@ import com.android.purebilibili.core.ui.components.AppCircularProgressIndicator
 import com.android.purebilibili.core.ui.components.AppFilterChip
 import com.android.purebilibili.core.ui.components.AppIconButton
 import com.android.purebilibili.core.ui.components.AppTextButton
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Close
 import kotlinx.coroutines.delay
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
@@ -267,7 +267,7 @@ internal fun DanmakuSendDialogContent(
                     modifier = Modifier.size(32.dp)
                 ) {
                     AppIcon(
-                        imageVector = Icons.Outlined.Close,
+                        imageVector = AppIcons.Outlined.Close,
                         contentDescription = "关闭",
                         tint = AppContentColors.secondaryText(),
                         modifier = Modifier.size(20.dp)
@@ -294,7 +294,7 @@ internal fun DanmakuSendDialogContent(
                         AppIconButton(onClick = {
                             text = ""
                             onDraftChange("", attentionCommandChecked)
-                        }) { AppIcon(Icons.Outlined.Close, contentDescription = "清空") }
+                        }) { AppIcon(AppIcons.Outlined.Close, contentDescription = "清空") }
                     }
                 },
                 keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(imeAction = androidx.compose.ui.text.input.ImeAction.Send),

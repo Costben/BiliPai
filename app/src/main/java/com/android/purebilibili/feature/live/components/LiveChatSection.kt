@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.live.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppText
@@ -31,10 +33,6 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.EmojiEmotions
-import androidx.compose.material.icons.outlined.KeyboardArrowDown
-import androidx.compose.material.icons.outlined.ThumbUpOffAlt
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.*
@@ -63,8 +61,6 @@ import com.android.purebilibili.feature.live.LiveStatusPalette
 import com.android.purebilibili.feature.live.resolveLiveLevelColor
 import com.android.purebilibili.feature.live.resolveLiveSuperChatColor
 import com.android.purebilibili.feature.live.shouldRenderLiveDanmaku
-import androidx.compose.material.icons.filled.ChatBubble
-import androidx.compose.material.icons.filled.Send
 import coil3.compose.AsyncImage
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -189,7 +185,7 @@ fun LiveChatSection(
                         )
                     ) {
                         AppIcon(
-                            imageVector = Icons.Outlined.KeyboardArrowDown,
+                            imageVector = AppIcons.Outlined.KeyboardArrowDown,
                             contentDescription = null,
                             tint = if (darkOverlay) LiveStatusPalette.MediaContent else palette.primaryText,
                             modifier = Modifier.size(16.dp)
@@ -556,7 +552,7 @@ internal fun LiveChatInputBar(
             AppText("发送弹幕", modifier = Modifier.weight(1f).padding(top = if (compact) 0.dp else 6.dp), maxLines = 1, overflow = TextOverflow.Ellipsis, color = foreground.copy(alpha = 0.8f), style = MaterialTheme.typography.bodyMedium)
             LiveLikeButton(tint = foreground, onLike = onLike, modifier = Modifier.size(34.dp), canLike = canLike, onUnavailable = onLikeUnavailable)
             AppIconButton(onClick = onOpenEmote, modifier = Modifier.size(34.dp)) {
-                AppIcon(Icons.Outlined.EmojiEmotions, "表情", tint = foreground)
+                AppIcon(AppIcons.Outlined.EmojiEmotions, "表情", tint = foreground)
             }
         }
         }
@@ -632,7 +628,7 @@ internal fun LiveLikeButton(
             modifier = Modifier.size(34.dp),
         ) {
             AppIcon(
-                imageVector = Icons.Outlined.ThumbUpOffAlt,
+                imageVector = AppIcons.Outlined.ThumbUpOffAlt,
                 contentDescription = "点赞",
                 tint = tint,
                 modifier = Modifier.size(visualSpec.iconSizeDp.dp)

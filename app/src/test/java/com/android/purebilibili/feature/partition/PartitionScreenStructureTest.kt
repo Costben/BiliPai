@@ -1,12 +1,10 @@
 package com.android.purebilibili.feature.partition
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.SmartToy
-import androidx.compose.material.icons.outlined.SportsEsports
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.android.purebilibili.core.ui.AppIcons
 import com.android.purebilibili.core.ui.AppSemanticIconFamily
 import com.android.purebilibili.core.util.resolveReplaceRefreshPage
 import com.android.purebilibili.data.model.response.BangumiType
@@ -233,11 +231,11 @@ class PartitionScreenStructureTest {
     @Test
     fun `side rail icons follow the active top chrome icon family`() {
         assertSameVectorAsset(
-            Icons.Outlined.SportsEsports,
+            AppIcons.Outlined.SportsEsports,
             resolvePartitionSideRailIcon(4, AppSemanticIconFamily.MATERIAL, selected = false)
         )
         assertSameVectorAsset(
-            Icons.Filled.SmartToy,
+            AppIcons.Filled.SmartToy,
             resolvePartitionSideRailIcon(188, AppSemanticIconFamily.MATERIAL, selected = true)
         )
     }

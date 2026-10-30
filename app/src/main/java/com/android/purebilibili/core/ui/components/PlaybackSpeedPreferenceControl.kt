@@ -1,5 +1,7 @@
 package com.android.purebilibili.core.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -13,8 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -298,7 +298,7 @@ fun PlaybackSpeedOptionsPreferenceControl(
                             modifier = Modifier.size(48.dp)
                         ) {
                             AppIcon(
-                                imageVector = Icons.Default.Close,
+                                imageVector = AppIcons.Filled.Close,
                                 contentDescription = "删除 ${formatPlaybackSpeed(speed)} 倍速"
                             )
                         }

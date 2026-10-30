@@ -1,14 +1,11 @@
 package com.android.purebilibili.feature.live.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Send
-import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material.icons.outlined.ClearAll
-import androidx.compose.material.icons.outlined.EmojiEmotions
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -81,7 +78,7 @@ fun LiveSendDanmakuSheet(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     AppIconButton(onClick = { onOpenEmote?.invoke() }, enabled = !isSending) {
-                        AppIcon(Icons.Outlined.EmojiEmotions, if (showingEmoticons) "切换键盘" else "表情",
+                        AppIcon(AppIcons.Outlined.EmojiEmotions, if (showingEmoticons) "切换键盘" else "表情",
                             tint = if (showingEmoticons) AppContentColors.accent() else AppContentColors.secondaryText())
                     }
                     Spacer(Modifier.width(12.dp))
@@ -98,17 +95,17 @@ fun LiveSendDanmakuSheet(
                     )
                     if (replyTarget != null) {
                         AppIconButton(onClick = onClearReply, enabled = !isSending, modifier = Modifier.size(30.dp)) {
-                            AppIcon(Icons.Outlined.Close, "取消回复，保留正文")
+                            AppIcon(AppIcons.Outlined.Close, "取消回复，保留正文")
                         }
                     }
                     if (message.text.isNotEmpty()) {
                         AppIconButton(onClick = { onMessageChange(TextFieldValue("")) }, enabled = !isSending) {
-                            AppIcon(Icons.Outlined.ClearAll, "清空正文，保留回复对象")
+                            AppIcon(AppIcons.Outlined.ClearAll, "清空正文，保留回复对象")
                         }
                     }
                     Spacer(Modifier.width(12.dp))
                     AppIconButton(onClick = { send(message.text) }, enabled = canSend) {
-                        AppIcon(Icons.AutoMirrored.Outlined.Send, if (isSending) "发送中" else "发送",
+                        AppIcon(AppIcons.AutoMirrored.Outlined.Send, if (isSending) "发送中" else "发送",
                             tint = if (canSend) AppContentColors.accent() else AppContentColors.secondaryText())
                     }
                 }

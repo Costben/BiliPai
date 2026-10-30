@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.section
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.compose.foundation.Image
@@ -22,18 +24,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Redo
-import androidx.compose.material.icons.automirrored.outlined.Undo
-import androidx.compose.material.icons.outlined.AccessTime
-import androidx.compose.material.icons.outlined.BookmarkBorder
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.FormatColorFill
-import androidx.compose.material.icons.outlined.FormatListBulleted
-import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material.icons.outlined.Visibility
-import androidx.compose.material.icons.outlined.VisibilityOff
 import com.android.purebilibili.core.ui.AppAlertDialog
 import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.components.AppAssistChip
@@ -199,7 +189,7 @@ fun VideoNoteCard(
                             onClick = { onShareClick(privateDocument) },
                         ) {
                             AppIcon(
-                                Icons.Outlined.Share,
+                                AppIcons.Outlined.Share,
                                 contentDescription = null,
                                 modifier = Modifier.size(16.dp),
                             )
@@ -211,7 +201,7 @@ fun VideoNoteCard(
                             enabled = !noteState.deleting,
                         ) {
                             AppIcon(
-                                Icons.Outlined.Delete,
+                                AppIcons.Outlined.Delete,
                                 contentDescription = null,
                                 modifier = Modifier.size(16.dp),
                             )
@@ -290,7 +280,7 @@ private fun VideoNotePrimaryActionButton(
     ) {
         if (label != "新建") {
             AppIcon(
-                imageVector = Icons.Outlined.Edit,
+                imageVector = AppIcons.Outlined.Edit,
                 contentDescription = null,
                 modifier = Modifier.size(16.dp)
             )
@@ -469,7 +459,7 @@ fun VideoNoteEditorSheet(
                     },
                     enabled = !noteState.saving
                 ) {
-                    AppIcon(Icons.Outlined.Share, contentDescription = null, modifier = Modifier.size(16.dp))
+                    AppIcon(AppIcons.Outlined.Share, contentDescription = null, modifier = Modifier.size(16.dp))
                     Spacer(modifier = Modifier.width(6.dp))
                     AppText("分享")
                 }
@@ -669,7 +659,7 @@ private fun VideoNoteTimestampList(
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         AppIcon(
-                            imageVector = Icons.Outlined.AccessTime,
+                            imageVector = AppIcons.Outlined.AccessTime,
                             contentDescription = null,
                             modifier = Modifier.size(14.dp)
                         )
@@ -792,7 +782,7 @@ internal fun VideoNoteEditorToolbar(
             active = isHighlighted,
             content = {
                 AppIcon(
-                    Icons.Outlined.FormatColorFill,
+                    AppIcons.Outlined.FormatColorFill,
                     contentDescription = "高亮",
                     tint = if (isHighlighted) AppContentColors.onAccent()
                     else AppContentColors.secondaryText(),
@@ -804,7 +794,7 @@ internal fun VideoNoteEditorToolbar(
             active = isBulletList,
             content = {
                 AppIcon(
-                    Icons.Outlined.FormatListBulleted,
+                    AppIcons.Outlined.FormatListBulleted,
                     contentDescription = "无序列表",
                     tint = if (isBulletList) AppContentColors.onAccent()
                     else AppContentColors.secondaryText(),
@@ -816,7 +806,7 @@ internal fun VideoNoteEditorToolbar(
                 onClick = onTimestampClick,
                 active = false,
                 content = {
-                    AppIcon(Icons.Outlined.AccessTime, contentDescription = "插入时间点")
+                    AppIcon(AppIcons.Outlined.AccessTime, contentDescription = "插入时间点")
                 }
             )
         }
@@ -825,7 +815,7 @@ internal fun VideoNoteEditorToolbar(
             active = previewMode,
             content = {
                 AppIcon(
-                    if (previewMode) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
+                    if (previewMode) AppIcons.Outlined.VisibilityOff else AppIcons.Outlined.Visibility,
                     contentDescription = if (previewMode) "返回编辑" else "实时预览"
                 )
             }
@@ -834,14 +824,14 @@ internal fun VideoNoteEditorToolbar(
             onClick = onUndoClick,
             active = false,
             content = {
-                AppIcon(Icons.AutoMirrored.Outlined.Undo, contentDescription = "撤销")
+                AppIcon(AppIcons.AutoMirrored.Outlined.Undo, contentDescription = "撤销")
             }
         )
         VideoNoteToolbarToggle(
             onClick = onRedoClick,
             active = false,
             content = {
-                AppIcon(Icons.AutoMirrored.Outlined.Redo, contentDescription = "重做")
+                AppIcon(AppIcons.AutoMirrored.Outlined.Redo, contentDescription = "重做")
             }
         )
     }
@@ -990,7 +980,7 @@ private fun IconBox() {
         contentAlignment = Alignment.Center,
     ) {
         AppIcon(
-            imageVector = Icons.Outlined.BookmarkBorder,
+            imageVector = AppIcons.Outlined.BookmarkBorder,
             contentDescription = null,
             tint = AppContentColors.accent(),
             modifier = Modifier.size(18.dp),
@@ -1010,17 +1000,17 @@ private fun VideoNoteEditorToolbar(
     Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
         AppIconButton(onClick = onBoldClick) { AppText("B", fontWeight = FontWeight.Bold) }
         AppIconButton(onClick = onHighlightClick) {
-            AppIcon(Icons.Outlined.FormatColorFill, contentDescription = "高亮")
+            AppIcon(AppIcons.Outlined.FormatColorFill, contentDescription = "高亮")
         }
         AppIconButton(onClick = onBulletClick) { AppText("-") }
         AppIconButton(onClick = onTimestampClick) {
-            AppIcon(Icons.Outlined.AccessTime, contentDescription = "插入时间点")
+            AppIcon(AppIcons.Outlined.AccessTime, contentDescription = "插入时间点")
         }
         AppIconButton(onClick = onUndoClick) {
-            AppIcon(Icons.AutoMirrored.Outlined.Undo, contentDescription = "撤销")
+            AppIcon(AppIcons.AutoMirrored.Outlined.Undo, contentDescription = "撤销")
         }
         AppIconButton(onClick = onRedoClick) {
-            AppIcon(Icons.AutoMirrored.Outlined.Redo, contentDescription = "重做")
+            AppIcon(AppIcons.AutoMirrored.Outlined.Redo, contentDescription = "重做")
         }
     }
 }
@@ -1040,7 +1030,7 @@ private fun VideoNoteTimestampChips(
                     onClick = { onTimestampClick(timestamp.seconds * 1000L) }
                 ) {
                     AppIcon(
-                        imageVector = Icons.Outlined.AccessTime,
+                        imageVector = AppIcons.Outlined.AccessTime,
                         contentDescription = null,
                         modifier = Modifier.size(14.dp)
                     )
@@ -1053,7 +1043,7 @@ private fun VideoNoteTimestampChips(
                     label = { AppText(timestamp.label) },
                     leadingIcon = {
                         AppIcon(
-                            imageVector = Icons.Outlined.AccessTime,
+                            imageVector = AppIcons.Outlined.AccessTime,
                             contentDescription = null,
                             modifier = Modifier.size(14.dp)
                         )

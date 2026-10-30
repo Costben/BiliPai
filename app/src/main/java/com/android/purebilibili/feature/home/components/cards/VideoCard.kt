@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.home.components.cards
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.common.copyPlainTextToClipboard
 import com.android.purebilibili.core.ui.components.VideoStatusBadges
 import com.android.purebilibili.core.ui.AppContentColors
@@ -45,9 +47,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.luminance
 import com.android.purebilibili.core.store.HomeWallpaperEffectMode
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.ContentScale
@@ -724,7 +723,7 @@ internal fun ElegantVideoCard(
             onLongClick = if (isLongPressEnabled) onLongClick?.let { callback -> { callback(video) } } else null,
             trailingContent = if (actions.isEmpty()) null else ({
                 com.android.purebilibili.core.ui.components.AppWindowActionMenu(groups = listOf(actions)) {
-                    AppIcon(Icons.Outlined.MoreVert, contentDescription = "更多操作")
+                    AppIcon(AppIcons.Outlined.MoreVert, contentDescription = "更多操作")
                 }
             }),
         )
@@ -1647,7 +1646,7 @@ internal fun ElegantVideoCard(
                             borderColor = coverPillColors.borderColor
                         ) {
                             AppIcon(
-                                imageVector = Icons.Outlined.PlayCircle,
+                                imageVector = AppIcons.Outlined.PlayCircle,
                                 contentDescription = null,
                                 modifier = Modifier.size(AppSpacingTokens.Small + AppSpacingTokens.Micro),
                                 tint = MediaContrastPalette.Foreground.copy(alpha = 0.94f)
@@ -1675,7 +1674,7 @@ internal fun ElegantVideoCard(
                                 borderColor = coverPillColors.borderColor
                             ) {
                                 AppIcon(
-                                    imageVector = Icons.Outlined.Subtitles,
+                                    imageVector = AppIcons.Outlined.Subtitles,
                                     contentDescription = null,
                                     modifier = Modifier.size(AppSpacingTokens.Small + AppSpacingTokens.Micro),
                                     tint = MediaContrastPalette.Foreground.copy(alpha = 0.90f)
@@ -1703,7 +1702,7 @@ internal fun ElegantVideoCard(
                                 borderColor = coverPillColors.borderColor
                             ) {
                                 AppIcon(
-                                    imageVector = Icons.Outlined.Visibility,
+                                    imageVector = AppIcons.Outlined.Visibility,
                                     contentDescription = null,
                                     modifier = Modifier.size(AppSpacingTokens.Small + AppSpacingTokens.Micro),
                                     tint = MediaContrastPalette.Foreground.copy(alpha = 0.90f)
@@ -1731,7 +1730,7 @@ internal fun ElegantVideoCard(
                                 borderColor = coverPillColors.borderColor
                             ) {
                                 AppIcon(
-                                    imageVector = Icons.Outlined.Alarm,
+                                    imageVector = AppIcons.Outlined.Alarm,
                                     contentDescription = null,
                                     modifier = Modifier.size(AppSpacingTokens.Small + AppSpacingTokens.Micro),
                                     tint = MediaContrastPalette.Foreground.copy(alpha = 0.90f)
@@ -2081,7 +2080,7 @@ internal fun ElegantVideoCard(
                         borderColor = inlinePillColors.borderColor
                     ) {
                         AppIcon(
-                            imageVector = Icons.Outlined.Visibility,
+                            imageVector = AppIcons.Outlined.Visibility,
                             contentDescription = null,
                             modifier = Modifier.size(AppSpacingTokens.Medium),
                             tint = adaptiveContentColors.subtitleColor
@@ -2135,7 +2134,7 @@ internal fun ElegantVideoCard(
                         // 语义是“从收藏夹移除”，用 ✕ 而不是 ThumbUp——
                         // 后者会被理解为点赞，与行为不符。
                         AppIcon(
-                            imageVector = Icons.Outlined.Close,
+                            imageVector = AppIcons.Outlined.Close,
                             contentDescription = "从收藏夹移除",
                             modifier = Modifier.size(AppSpacingTokens.Large),
                             tint = adaptiveContentColors.subtitleColor.copy(alpha = 0.7f)
@@ -2210,7 +2209,7 @@ internal fun ElegantVideoCard(
                     if (video.bvid.isNotBlank()) {
                         AppDropdownMenuItem(
                             text = { AppText(video.bvid, color = AppContentColors.primaryText()) },
-                            leadingIcon = { AppIcon(Icons.Outlined.ContentCopy, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
+                            leadingIcon = { AppIcon(AppIcons.Outlined.ContentCopy, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
                             onClick = {
                                 showDismissMenu = false
                                 copyPlainTextToClipboard(context, video.bvid, "BV号")
@@ -2222,7 +2221,7 @@ internal fun ElegantVideoCard(
                     // 稍后再看
                     if (onWatchLater != null) {
                         AppDropdownMenuItem(
-                            leadingIcon = { AppIcon(Icons.Outlined.WatchLater, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
+                            leadingIcon = { AppIcon(AppIcons.Outlined.WatchLater, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
                             text = {
                                 AppText(
                                     "稍后再看",
@@ -2239,7 +2238,7 @@ internal fun ElegantVideoCard(
                     // AI 总结（需要 cid 才能请求）
                     if (video.cid > 0L && video.bvid.isNotBlank()) {
                         AppDropdownMenuItem(
-                            leadingIcon = { AppIcon(Icons.Outlined.AutoAwesome, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
+                            leadingIcon = { AppIcon(AppIcons.Outlined.AutoAwesome, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
                             text = { AppText("AI总结", color = AppContentColors.primaryText()) },
                             onClick = {
                                 showDismissMenu = false
@@ -2251,7 +2250,7 @@ internal fun ElegantVideoCard(
                     // 访问 UP 主
                     if (onUpClick != null && video.owner.mid > 0L) {
                         AppDropdownMenuItem(
-                            leadingIcon = { AppIcon(Icons.Outlined.Person, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
+                            leadingIcon = { AppIcon(AppIcons.Outlined.Person, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
                             text = { AppText("访问：${video.owner.name}", color = AppContentColors.primaryText()) },
                             onClick = {
                                 showDismissMenu = false
@@ -2263,7 +2262,7 @@ internal fun ElegantVideoCard(
                     // 不感兴趣
                     if (onDismiss != null) {
                         AppDropdownMenuItem(
-                            leadingIcon = { AppIcon(Icons.Outlined.NotInterested, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
+                            leadingIcon = { AppIcon(AppIcons.Outlined.NotInterested, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
                             text = {
                                 AppText(
                                     dismissMenuText,
@@ -2280,7 +2279,7 @@ internal fun ElegantVideoCard(
                     // 取消收藏 (仅在收藏页显示)
                     if (onUnfavorite != null) {
                          AppDropdownMenuItem(
-                            leadingIcon = { AppIcon(Icons.Outlined.BookmarkRemove, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.error()) },
+                            leadingIcon = { AppIcon(AppIcons.Outlined.BookmarkRemove, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.error()) },
                             text = {
                                 AppText(
                                     "取消收藏",
@@ -2298,7 +2297,7 @@ internal fun ElegantVideoCard(
                     // 拉黑 UP 主：本地屏蔽并同步 B 站关系
                     if (video.owner.mid > 0L) {
                         AppDropdownMenuItem(
-                            leadingIcon = { AppIcon(Icons.Outlined.PersonOff, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
+                            leadingIcon = { AppIcon(AppIcons.Outlined.PersonOff, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
                             text = { AppText("拉黑：${video.owner.name}", color = AppContentColors.primaryText()) },
                             onClick = {
                                 showDismissMenu = false
@@ -2313,7 +2312,7 @@ internal fun ElegantVideoCard(
                     }.collectAsStateWithLifecycle(initialValue = false)
                     AppDropdownMenuItem(
                         leadingIcon = {
-                            AppIcon(if (privacyModeEnabled) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
+                            AppIcon(if (privacyModeEnabled) AppIcons.Outlined.Visibility else AppIcons.Outlined.VisibilityOff,
                                 contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText())
                         },
                         text = {

@@ -1,57 +1,31 @@
 package com.android.purebilibili.core.ui
 
+import io.github.suqi8.coui.kmp.icon.COUIIcons
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.outlined.Comment
-import androidx.compose.material.icons.automirrored.outlined.ExitToApp
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.AutoAwesome
+import androidx.compose.material.icons.filled.Brightness4
+import androidx.compose.material.icons.filled.Brightness5
+import androidx.compose.material.icons.filled.Brightness6
+import androidx.compose.material.icons.filled.Brightness7
+import androidx.compose.material.icons.filled.BrightnessHigh
+import androidx.compose.material.icons.filled.BrightnessLow
+import androidx.compose.material.icons.filled.BrightnessMedium
+import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material.icons.filled.Subtitles
+import androidx.compose.material.icons.filled.ThumbDown
 import androidx.compose.material.icons.filled.ThumbUp
-import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.Download
-import androidx.compose.material.icons.outlined.DynamicFeed
-import androidx.compose.material.icons.outlined.FolderCopy
-import androidx.compose.material.icons.outlined.Headphones
-import androidx.compose.material.icons.outlined.History
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.KeyboardArrowDown
-import androidx.compose.material.icons.outlined.LiveTv
-import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.MailOutline
-import androidx.compose.material.icons.outlined.Memory
-import androidx.compose.material.icons.outlined.MusicNote
-import androidx.compose.material.icons.outlined.PersonAddAlt1
-import androidx.compose.material.icons.outlined.PlayArrow
-import androidx.compose.material.icons.outlined.PlayCircleOutline
-import androidx.compose.material.icons.outlined.Refresh
-import androidx.compose.material.icons.outlined.Restore
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material.icons.outlined.Speed
-import androidx.compose.material.icons.outlined.SwapHoriz
-import androidx.compose.material.icons.outlined.SwapVert
-import androidx.compose.material.icons.outlined.Timer
-import androidx.compose.material.icons.outlined.ThumbUpOffAlt
-import androidx.compose.material.icons.outlined.TouchApp
-import androidx.compose.material.icons.outlined.Visibility
-import androidx.compose.material.icons.outlined.VisibilityOff
-import androidx.compose.material.icons.outlined.WatchLater
-import androidx.compose.material.icons.outlined.WarningAmber
-import androidx.compose.material.icons.outlined.BookmarkBorder
-import androidx.compose.material.icons.outlined.BarChart
 import androidx.compose.material.icons.outlined.AutoAwesome
+import androidx.compose.material.icons.outlined.Bolt
+import androidx.compose.material.icons.outlined.LightMode
+import androidx.compose.material.icons.outlined.Subtitles
+import androidx.compose.material.icons.outlined.ThumbDown
+import androidx.compose.material.icons.outlined.ThumbUp
+import androidx.compose.material.icons.outlined.ThumbUpOffAlt
 import androidx.compose.material.icons.outlined.Wifi
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.DeleteOutline
-import androidx.compose.material.icons.outlined.GridView
-import androidx.compose.material.icons.outlined.KeyboardArrowUp
-import androidx.compose.material.icons.outlined.Link
-import androidx.compose.material.icons.automirrored.outlined.ViewList
-import androidx.compose.material.icons.outlined.NotificationsNone
-import androidx.compose.material.icons.outlined.Folder as MaterialFolder
-import androidx.compose.material.icons.outlined.Photo as MaterialPhoto
+import androidx.compose.material.icons.rounded.ThumbDown
+import androidx.compose.material.icons.rounded.ThumbUp
+import io.github.suqi8.coui.kmp.icon.extended.*
+
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathFillType
@@ -327,6 +301,363 @@ object AppIcons {
             return _biliCoin!!
         }
     private var _biliCoin: ImageVector? = null
+
+    object Filled {
+        val Album: ImageVector get() = COUIIcons.Medium.Album
+        val Animation: ImageVector get() = COUIIcons.Medium.Play
+        val ArrowBack: ImageVector get() = COUIIcons.Medium.Back
+        val ArrowDownward: ImageVector get() = COUIIcons.Medium.Sort
+        val ArrowUpward: ImageVector get() = COUIIcons.Medium.Sort
+        val AutoAwesome: ImageVector get() = Icons.Filled.AutoAwesome
+        val Block: ImageVector get() = COUIIcons.Medium.Blocklist
+        val Bookmark: ImageVector get() = COUIIcons.Medium.Pin
+        val Brightness4: ImageVector get() = Icons.Filled.Brightness4
+        val Brightness5: ImageVector get() = Icons.Filled.Brightness5
+        val Brightness6: ImageVector get() = Icons.Filled.Brightness6
+        val Brightness7: ImageVector get() = Icons.Filled.Brightness7
+        val BrightnessHigh: ImageVector get() = Icons.Filled.BrightnessHigh
+        val BrightnessLow: ImageVector get() = Icons.Filled.BrightnessLow
+        val BrightnessMedium: ImageVector get() = Icons.Filled.BrightnessMedium
+        val CameraAlt: ImageVector get() = COUIIcons.Medium.Photos
+        val ChatBubble: ImageVector get() = COUIIcons.Medium.Messages
+        val Check: ImageVector get() = COUIIcons.Medium.Ok
+        val CheckCircle: ImageVector get() = COUIIcons.Medium.Ok
+        val Checkroom: ImageVector get() = COUIIcons.Medium.Theme
+        val Clear: ImageVector get() = COUIIcons.Medium.Clear
+        val Close: ImageVector get() = COUIIcons.Medium.Close
+        val ClosedCaption: ImageVector get() = COUIIcons.Medium.Notes
+        val CollectionsBookmark: ImageVector get() = COUIIcons.Medium.Favorites
+        val ContentCopy: ImageVector get() = COUIIcons.Medium.Copy
+        val DirectionsCar: ImageVector get() = COUIIcons.Medium.Location
+        val DirectionsRun: ImageVector get() = COUIIcons.Medium.Stopwatch
+        val Error: ImageVector get() = COUIIcons.Medium.Report
+        val Extension: ImageVector get() = COUIIcons.Medium.Layers
+        val Face: ImageVector get() = COUIIcons.Medium.ContactsCircle
+        val Favorite: ImageVector get() = COUIIcons.Medium.FavoritesFill
+        val Flag: ImageVector get() = COUIIcons.Medium.Pin
+        val Folder: ImageVector get() = COUIIcons.Medium.Folder
+        val Fullscreen: ImageVector get() = COUIIcons.Medium.ExpandMore
+        val FullscreenExit: ImageVector get() = COUIIcons.Medium.ZoomOut
+        val Gamepad: ImageVector get() = COUIIcons.Medium.Store
+        val GridView: ImageVector get() = COUIIcons.Medium.GridView
+        val History: ImageVector get() = COUIIcons.Medium.Recent
+        val Home: ImageVector get() = COUIIcons.Medium.Home
+        val Image: ImageVector get() = COUIIcons.Medium.Image
+        val KeyboardArrowDown: ImageVector get() = COUIIcons.Medium.ExpandMore
+        val KeyboardArrowUp: ImageVector get() = COUIIcons.Medium.ExpandLess
+        val LibraryMusic: ImageVector get() = COUIIcons.Medium.Playlist
+        val LightMode: ImageVector get() = Icons.Filled.LightMode
+        val Lightbulb: ImageVector get() = COUIIcons.Medium.Notes
+        val LiveTv: ImageVector get() = COUIIcons.Medium.Recording
+        val LocalMovies: ImageVector get() = COUIIcons.Medium.Play
+        val Lock: ImageVector get() = COUIIcons.Medium.Lock
+        val MoreHoriz: ImageVector get() = COUIIcons.Medium.MoreCircle
+        val MoreVert: ImageVector get() = COUIIcons.Medium.More
+        val Movie: ImageVector get() = COUIIcons.Medium.Play
+        val MusicNote: ImageVector get() = COUIIcons.Medium.Music
+        val MyLocation: ImageVector get() = COUIIcons.Medium.Location
+        val Newspaper: ImageVector get() = COUIIcons.Medium.Notes
+        val Notifications: ImageVector get() = COUIIcons.Medium.Messages
+        val NotificationsActive: ImageVector get() = COUIIcons.Medium.Messages
+        val NotificationsOff: ImageVector get() = COUIIcons.Medium.Messages
+        val OndemandVideo: ImageVector get() = COUIIcons.Medium.Play
+        val Pause: ImageVector get() = COUIIcons.Medium.Pause
+        val Person: ImageVector get() = COUIIcons.Medium.Contacts
+        val Pets: ImageVector get() = COUIIcons.Medium.Favorites
+        val Phone: ImageVector get() = COUIIcons.Medium.Phone
+        val PhotoCamera: ImageVector get() = COUIIcons.Medium.Photos
+        val PlayArrow: ImageVector get() = COUIIcons.Medium.Play
+        val PlayCircle: ImageVector get() = COUIIcons.Medium.Play
+        val Refresh: ImageVector get() = COUIIcons.Medium.Refresh
+        val Report: ImageVector get() = COUIIcons.Medium.Report
+        val Restaurant: ImageVector get() = COUIIcons.Medium.Store
+        val Search: ImageVector get() = COUIIcons.Medium.Search
+        val SelectAll: ImageVector get() = COUIIcons.Medium.SelectAll
+        val Send: ImageVector get() = COUIIcons.Medium.Send
+        val Settings: ImageVector get() = COUIIcons.Medium.Settings
+        val Share: ImageVector get() = COUIIcons.Medium.Share
+        val Shield: ImageVector get() = COUIIcons.Medium.Lock
+        val ShowChart: ImageVector get() = COUIIcons.Medium.TopDownloads
+        val SkipNext: ImageVector get() = COUIIcons.Medium.ChevronForward
+        val SkipPrevious: ImageVector get() = COUIIcons.Medium.ChevronBackward
+        val SmartToy: ImageVector get() = COUIIcons.Medium.Theme
+        val Sort: ImageVector get() = COUIIcons.Medium.Sort
+        val SportsEsports: ImageVector get() = COUIIcons.Medium.Store
+        val SportsSoccer: ImageVector get() = COUIIcons.Medium.Favorites
+        val Star: ImageVector get() = COUIIcons.Medium.FavoritesFill
+        val TheaterComedy: ImageVector get() = COUIIcons.Medium.Play
+        val ThumbDown: ImageVector get() = Icons.Filled.ThumbDown
+        val ThumbUp: ImageVector get() = Icons.Filled.ThumbUp
+        val Translate: ImageVector get() = COUIIcons.Medium.Translate
+        val Tv: ImageVector get() = COUIIcons.Medium.ScreenMirroring
+        val UnfoldMore: ImageVector get() = COUIIcons.Medium.Sort
+        val VerticalAlignBottom: ImageVector get() = COUIIcons.Medium.ExpandMore
+        val VerticalAlignTop: ImageVector get() = COUIIcons.Medium.ExpandLess
+        val WatchLater: ImageVector get() = COUIIcons.Medium.Stopwatch
+        val Widgets: ImageVector get() = COUIIcons.Medium.All
+    }
+
+    object Outlined {
+        val AccessTime: ImageVector get() = COUIIcons.Timer
+        val AccountCircle: ImageVector get() = COUIIcons.ContactsCircle
+        val Add: ImageVector get() = COUIIcons.Add
+        val AddPhotoAlternate: ImageVector get() = COUIIcons.Photos
+        val Alarm: ImageVector get() = COUIIcons.Alarm
+        val Album: ImageVector get() = COUIIcons.Album
+        val AlternateEmail: ImageVector get() = COUIIcons.Email
+        val Animation: ImageVector get() = COUIIcons.Play
+        val Apps: ImageVector get() = COUIIcons.GridView
+        val ArrowBack: ImageVector get() = COUIIcons.Back
+        val ArrowDownward: ImageVector get() = COUIIcons.Sort
+        val ArrowUpward: ImageVector get() = COUIIcons.Sort
+        val AutoAwesome: ImageVector get() = Icons.Outlined.AutoAwesome
+        val AvTimer: ImageVector get() = COUIIcons.Timer
+        val BarChart: ImageVector get() = COUIIcons.TopDownloads
+        val Block: ImageVector get() = COUIIcons.Blocklist
+        val Bolt: ImageVector get() = Icons.Outlined.Bolt
+        val BookmarkBorder: ImageVector get() = COUIIcons.Pin
+        val BookmarkRemove: ImageVector get() = COUIIcons.Unpin
+        val BugReport: ImageVector get() = COUIIcons.Report
+        val Camera: ImageVector get() = COUIIcons.Photos
+        val Campaign: ImageVector get() = COUIIcons.Promotions
+        val Cast: ImageVector get() = COUIIcons.ScreenMirroring
+        val ChatBubble: ImageVector get() = COUIIcons.Messages
+        val ChatBubbleOutline: ImageVector get() = COUIIcons.Messages
+        val Check: ImageVector get() = COUIIcons.Ok
+        val CheckBox: ImageVector get() = COUIIcons.Tasks
+        val CheckBoxOutlineBlank: ImageVector get() = COUIIcons.Tasks
+        val CheckCircle: ImageVector get() = COUIIcons.Ok
+        val Checkroom: ImageVector get() = COUIIcons.Theme
+        val ClearAll: ImageVector get() = COUIIcons.Clear
+        val Close: ImageVector get() = COUIIcons.Close
+        val ClosedCaptionOff: ImageVector get() = COUIIcons.Notes
+        val Cloud: ImageVector get() = COUIIcons.CloudFill
+        val Code: ImageVector get() = COUIIcons.Notes
+        val CollectionsBookmark: ImageVector get() = COUIIcons.Favorites
+        val Comment: ImageVector get() = COUIIcons.Messages
+        val Contacts: ImageVector get() = COUIIcons.ContactsBook
+        val ContentCopy: ImageVector get() = COUIIcons.Copy
+        val ContentPaste: ImageVector get() = COUIIcons.Paste
+        val DarkMode: ImageVector get() = COUIIcons.Theme
+        val Delete: ImageVector get() = COUIIcons.Delete
+        val DeleteOutline: ImageVector get() = COUIIcons.Delete
+        val DeleteSweep: ImageVector get() = COUIIcons.Delete
+        val DirectionsCar: ImageVector get() = COUIIcons.Location
+        val DirectionsRun: ImageVector get() = COUIIcons.Stopwatch
+        val Dns: ImageVector get() = COUIIcons.Layers
+        val Done: ImageVector get() = COUIIcons.Ok
+        val DoneAll: ImageVector get() = COUIIcons.Ok
+        val Download: ImageVector get() = COUIIcons.Download
+        val DragHandle: ImageVector get() = COUIIcons.Sort
+        val DynamicFeed: ImageVector get() = COUIIcons.Messages
+        val Edit: ImageVector get() = COUIIcons.Edit
+        val EditNote: ImageVector get() = COUIIcons.Edit
+        val Email: ImageVector get() = COUIIcons.Email
+        val EmojiEmotions: ImageVector get() = COUIIcons.ContactsCircle
+        val ErrorOutline: ImageVector get() = COUIIcons.Report
+        val ExpandLess: ImageVector get() = COUIIcons.ExpandLess
+        val ExpandMore: ImageVector get() = COUIIcons.ExpandMore
+        val Extension: ImageVector get() = COUIIcons.Layers
+        val FastForward: ImageVector get() = COUIIcons.ChevronForward
+        val FavoriteBorder: ImageVector get() = COUIIcons.Favorites
+        val FileOpen: ImageVector get() = COUIIcons.File
+        val FilterList: ImageVector get() = COUIIcons.Filter
+        val Flag: ImageVector get() = COUIIcons.Pin
+        val Flip: ImageVector get() = COUIIcons.Replace
+        val FolderZip: ImageVector get() = COUIIcons.Folder
+        val FormatColorFill: ImageVector get() = COUIIcons.Theme
+        val FormatListBulleted: ImageVector get() = COUIIcons.ListView
+        val Forum: ImageVector get() = COUIIcons.Messages
+        val Fullscreen: ImageVector get() = COUIIcons.ExpandMore
+        val FullscreenExit: ImageVector get() = COUIIcons.ZoomOut
+        val GridView: ImageVector get() = COUIIcons.GridView
+        val Groups: ImageVector get() = COUIIcons.ContactsBook
+        val Headphones: ImageVector get() = COUIIcons.Music
+        val HelpOutline: ImageVector get() = COUIIcons.Help
+        val HighQuality: ImageVector get() = COUIIcons.Play
+        val History: ImageVector get() = COUIIcons.Recent
+        val Home: ImageVector get() = COUIIcons.Home
+        val HourglassTop: ImageVector get() = COUIIcons.Timer
+        val Image: ImageVector get() = COUIIcons.Image
+        val Info: ImageVector get() = COUIIcons.Info
+        val IosShare: ImageVector get() = COUIIcons.Share
+        val Keyboard: ImageVector get() = COUIIcons.ListView
+        val KeyboardArrowDown: ImageVector get() = COUIIcons.ExpandMore
+        val KeyboardArrowUp: ImageVector get() = COUIIcons.ExpandLess
+        val KeyboardDoubleArrowLeft: ImageVector get() = COUIIcons.ChevronBackward
+        val KeyboardDoubleArrowRight: ImageVector get() = COUIIcons.ChevronForward
+        val LibraryMusic: ImageVector get() = COUIIcons.Playlist
+        val LightMode: ImageVector get() = Icons.Outlined.LightMode
+        val Lightbulb: ImageVector get() = COUIIcons.Notes
+        val Link: ImageVector get() = COUIIcons.Link
+        val LiveTv: ImageVector get() = COUIIcons.Recording
+        val LocalMovies: ImageVector get() = COUIIcons.Play
+        val Lock: ImageVector get() = COUIIcons.Lock
+        val LockOpen: ImageVector get() = COUIIcons.Unlock
+        val Menu: ImageVector get() = COUIIcons.Sidebar
+        val MoreHoriz: ImageVector get() = COUIIcons.MoreCircle
+        val MoreVert: ImageVector get() = COUIIcons.More
+        val Movie: ImageVector get() = COUIIcons.Play
+        val MusicNote: ImageVector get() = COUIIcons.Music
+        val MyLocation: ImageVector get() = COUIIcons.Location
+        val Newspaper: ImageVector get() = COUIIcons.Notes
+        val NotInterested: ImageVector get() = COUIIcons.Blocklist
+        val Notifications: ImageVector get() = COUIIcons.Messages
+        val NotificationsNone: ImageVector get() = COUIIcons.Messages
+        val OndemandVideo: ImageVector get() = COUIIcons.Play
+        val OpenInBrowser: ImageVector get() = COUIIcons.Forward
+        val OpenInFull: ImageVector get() = COUIIcons.ExpandMore
+        val OpenInNew: ImageVector get() = COUIIcons.Forward
+        val Palette: ImageVector get() = COUIIcons.Theme
+        val Pause: ImageVector get() = COUIIcons.Pause
+        val People: ImageVector get() = COUIIcons.ContactsBook
+        val Person: ImageVector get() = COUIIcons.Contacts
+        val PersonAdd: ImageVector get() = COUIIcons.AddCircle
+        val PersonOff: ImageVector get() = COUIIcons.RemoveContact
+        val PersonOutline: ImageVector get() = COUIIcons.Contacts
+        val PersonRemove: ImageVector get() = COUIIcons.RemoveContact
+        val Pets: ImageVector get() = COUIIcons.Favorites
+        val Phone: ImageVector get() = COUIIcons.Phone
+        val Photo: ImageVector get() = COUIIcons.Photos
+        val PhotoCamera: ImageVector get() = COUIIcons.Photos
+        val PictureInPicture: ImageVector get() = COUIIcons.ScreenMirroring
+        val PictureInPictureAlt: ImageVector get() = COUIIcons.ScreenMirroring
+        val PlayArrow: ImageVector get() = COUIIcons.Play
+        val PlayCircle: ImageVector get() = COUIIcons.Play
+        val PlayCircleOutline: ImageVector get() = COUIIcons.Play
+        val Policy: ImageVector get() = COUIIcons.Report
+        val Public: ImageVector get() = COUIIcons.WorldClock
+        val QrCode2: ImageVector get() = COUIIcons.Scan
+        val QueueMusic: ImageVector get() = COUIIcons.Playlist
+        val RadioButtonUnchecked: ImageVector get() = COUIIcons.Tasks
+        val Refresh: ImageVector get() = COUIIcons.Refresh
+        val Repeat: ImageVector get() = COUIIcons.Refresh
+        val RepeatOne: ImageVector get() = COUIIcons.Refresh
+        val Report: ImageVector get() = COUIIcons.Report
+        val Restaurant: ImageVector get() = COUIIcons.Store
+        val Restore: ImageVector get() = COUIIcons.Reset
+        val Schedule: ImageVector get() = COUIIcons.Timer
+        val Search: ImageVector get() = COUIIcons.Search
+        val Send: ImageVector get() = COUIIcons.Send
+        val Settings: ImageVector get() = COUIIcons.Settings
+        val SettingsInputComponent: ImageVector get() = COUIIcons.Tune
+        val Share: ImageVector get() = COUIIcons.Share
+        val Shield: ImageVector get() = COUIIcons.Lock
+        val Shuffle: ImageVector get() = COUIIcons.Replace
+        val SkipNext: ImageVector get() = COUIIcons.ChevronForward
+        val SkipPrevious: ImageVector get() = COUIIcons.ChevronBackward
+        val SmartDisplay: ImageVector get() = COUIIcons.ScreenMirroring
+        val SmartToy: ImageVector get() = COUIIcons.Theme
+        val Sms: ImageVector get() = COUIIcons.Messages
+        val Sort: ImageVector get() = COUIIcons.Sort
+        val SportsEsports: ImageVector get() = COUIIcons.Store
+        val SportsSoccer: ImageVector get() = COUIIcons.Favorites
+        val Star: ImageVector get() = COUIIcons.FavoritesFill
+        val StarBorder: ImageVector get() = COUIIcons.Favorites
+        val StayCurrentLandscape: ImageVector get() = COUIIcons.RotateLeft
+        val Subtitles: ImageVector get() = Icons.Outlined.Subtitles
+        val SwapHoriz: ImageVector get() = COUIIcons.Replace
+        val SwapVert: ImageVector get() = COUIIcons.Sort
+        val Tag: ImageVector get() = COUIIcons.Pin
+        val TheaterComedy: ImageVector get() = COUIIcons.Play
+        val ThumbDown: ImageVector get() = Icons.Outlined.ThumbDown
+        val ThumbUp: ImageVector get() = Icons.Outlined.ThumbUp
+        val ThumbUpOffAlt: ImageVector get() = Icons.Outlined.ThumbUpOffAlt
+        val Timer: ImageVector get() = COUIIcons.Timer
+        val Translate: ImageVector get() = COUIIcons.Translate
+        val Tune: ImageVector get() = COUIIcons.Tune
+        val Tv: ImageVector get() = COUIIcons.ScreenMirroring
+        val VerticalAlignBottom: ImageVector get() = COUIIcons.ExpandMore
+        val VerticalAlignTop: ImageVector get() = COUIIcons.ExpandLess
+        val VideoLibrary: ImageVector get() = COUIIcons.Playlist
+        val ViewAgenda: ImageVector get() = COUIIcons.ListView
+        val ViewList: ImageVector get() = COUIIcons.ListView
+        val ViewSidebar: ImageVector get() = COUIIcons.Sidebar
+        val Visibility: ImageVector get() = COUIIcons.Show
+        val VisibilityOff: ImageVector get() = COUIIcons.Hide
+        val VolumeDown: ImageVector get() = COUIIcons.VolumeUp
+        val VolumeUp: ImageVector get() = COUIIcons.VolumeUp
+        val Wallpaper: ImageVector get() = COUIIcons.Background
+        val WatchLater: ImageVector get() = COUIIcons.Stopwatch
+    }
+
+    object Rounded {
+        val Add: ImageVector get() = COUIIcons.Add
+        val Cast: ImageVector get() = COUIIcons.ScreenMirroring
+        val Check: ImageVector get() = COUIIcons.Ok
+        val CheckCircle: ImageVector get() = COUIIcons.Ok
+        val Close: ImageVector get() = COUIIcons.Close
+        val CollectionsBookmark: ImageVector get() = COUIIcons.Favorites
+        val DarkMode: ImageVector get() = COUIIcons.Theme
+        val ExpandLess: ImageVector get() = COUIIcons.ExpandLess
+        val ExpandMore: ImageVector get() = COUIIcons.ExpandMore
+        val Fullscreen: ImageVector get() = COUIIcons.ExpandMore
+        val FullscreenExit: ImageVector get() = COUIIcons.ZoomOut
+        val GridView: ImageVector get() = COUIIcons.GridView
+        val Home: ImageVector get() = COUIIcons.Home
+        val LiveTv: ImageVector get() = COUIIcons.Recording
+        val Memory: ImageVector get() = COUIIcons.Layers
+        val MoreVert: ImageVector get() = COUIIcons.More
+        val North: ImageVector get() = COUIIcons.ExpandLess
+        val People: ImageVector get() = COUIIcons.ContactsBook
+        val Person: ImageVector get() = COUIIcons.Contacts
+        val PlayArrow: ImageVector get() = COUIIcons.Play
+        val QrCodeScanner: ImageVector get() = COUIIcons.Scan
+        val RadioButtonUnchecked: ImageVector get() = COUIIcons.Tasks
+        val Refresh: ImageVector get() = COUIIcons.Refresh
+        val School: ImageVector get() = COUIIcons.Notes
+        val ScreenRotation: ImageVector get() = COUIIcons.RotateLeft
+        val Search: ImageVector get() = COUIIcons.Search
+        val Share: ImageVector get() = COUIIcons.Share
+        val SportsEsports: ImageVector get() = COUIIcons.Store
+        val Star: ImageVector get() = COUIIcons.FavoritesFill
+        val StarBorder: ImageVector get() = COUIIcons.Favorites
+        val ThumbDown: ImageVector get() = Icons.Rounded.ThumbDown
+        val ThumbUp: ImageVector get() = Icons.Rounded.ThumbUp
+        val Tv: ImageVector get() = COUIIcons.ScreenMirroring
+        val Whatshot: ImageVector get() = COUIIcons.TopDownloads
+    }
+
+    object AutoMirrored {
+        object Filled {
+            val ArrowBack: ImageVector get() = COUIIcons.Medium.Back
+            val ArrowForward: ImageVector get() = COUIIcons.Medium.Forward
+            val ArrowForwardIos: ImageVector get() = COUIIcons.Medium.ChevronForward
+            val KeyboardArrowRight: ImageVector get() = COUIIcons.Medium.ChevronForward
+            val PlaylistPlay: ImageVector get() = COUIIcons.Medium.Playlist
+            val Reply: ImageVector get() = COUIIcons.Medium.Reply
+            val Send: ImageVector get() = COUIIcons.Medium.Send
+            val TrendingUp: ImageVector get() = COUIIcons.Medium.TopDownloads
+            val ViewList: ImageVector get() = COUIIcons.Medium.ListView
+            val VolumeDown: ImageVector get() = COUIIcons.Medium.VolumeUp
+            val VolumeMute: ImageVector get() = COUIIcons.Medium.VolumeOff
+            val VolumeOff: ImageVector get() = COUIIcons.Medium.VolumeOff
+            val VolumeUp: ImageVector get() = COUIIcons.Medium.VolumeUp
+        }
+
+        object Outlined {
+            val ArrowBack: ImageVector get() = COUIIcons.Back
+            val Comment: ImageVector get() = COUIIcons.Messages
+            val ForwardToInbox: ImageVector get() = COUIIcons.Forward
+            val KeyboardArrowLeft: ImageVector get() = COUIIcons.ChevronBackward
+            val KeyboardArrowRight: ImageVector get() = COUIIcons.ChevronForward
+            val MenuBook: ImageVector get() = COUIIcons.Notes
+            val MenuOpen: ImageVector get() = COUIIcons.Sidebar
+            val PlaylistPlay: ImageVector get() = COUIIcons.Playlist
+            val Redo: ImageVector get() = COUIIcons.Redo
+            val Reply: ImageVector get() = COUIIcons.Reply
+            val Send: ImageVector get() = COUIIcons.Send
+            val Sort: ImageVector get() = COUIIcons.Sort
+            val TrendingUp: ImageVector get() = COUIIcons.TopDownloads
+            val Undo: ImageVector get() = COUIIcons.Undo
+        }
+
+        object Rounded {
+            val ArrowBack: ImageVector get() = COUIIcons.Back
+            val Comment: ImageVector get() = COUIIcons.Messages
+            val KeyboardArrowRight: ImageVector get() = COUIIcons.ChevronForward
+        }
+    }
 }
 
 @Composable
@@ -493,109 +824,109 @@ fun rememberAppCheckCircleIcon(): ImageVector = resolveAppCheckCircleIcon()
  */
 fun resolvePlatformIcon(materialIcon: ImageVector): ImageVector = materialIcon
 
-fun resolveAppBackIcon(): ImageVector = Icons.AutoMirrored.Filled.ArrowBack
+fun resolveAppBackIcon(): ImageVector = COUIIcons.Back
 
-fun resolveAppSettingsIcon(): ImageVector = Icons.Outlined.Settings
+fun resolveAppSettingsIcon(): ImageVector = COUIIcons.Settings
 
-fun resolveAppMoreIcon(): ImageVector = Icons.Filled.MoreVert
+fun resolveAppMoreIcon(): ImageVector = COUIIcons.More
 
-fun resolveAppPhotoIcon(): ImageVector = Icons.Outlined.MaterialPhoto
+fun resolveAppPhotoIcon(): ImageVector = COUIIcons.Photos
 
-fun resolveAppFolderIcon(): ImageVector = Icons.Outlined.MaterialFolder
+fun resolveAppFolderIcon(): ImageVector = COUIIcons.Folder
 
-fun resolveAppRestoreIcon(): ImageVector = Icons.Outlined.Restore
+fun resolveAppRestoreIcon(): ImageVector = COUIIcons.Reset
 
-fun resolveAppWarningIcon(): ImageVector = Icons.Outlined.WarningAmber
+fun resolveAppWarningIcon(): ImageVector = COUIIcons.Report
 
-fun resolveAppRefreshIcon(): ImageVector = Icons.Outlined.Refresh
+fun resolveAppRefreshIcon(): ImageVector = COUIIcons.Refresh
 
-fun resolveAppDownloadIcon(): ImageVector = Icons.Outlined.Download
+fun resolveAppDownloadIcon(): ImageVector = COUIIcons.Download
 
-fun resolveAppSearchIcon(): ImageVector = Icons.Filled.Search
+fun resolveAppSearchIcon(): ImageVector = COUIIcons.Search
 
-fun resolveAppClearIcon(): ImageVector = Icons.Filled.Clear
+fun resolveAppClearIcon(): ImageVector = COUIIcons.Clear
 
-fun resolveAppHistoryIcon(): ImageVector = Icons.Outlined.History
+fun resolveAppHistoryIcon(): ImageVector = COUIIcons.Recent
 
-fun resolveAppBookmarkIcon(): ImageVector = Icons.Outlined.BookmarkBorder
+fun resolveAppBookmarkIcon(): ImageVector = COUIIcons.Pin
 
-fun resolveAppInboxIcon(): ImageVector = Icons.Outlined.MailOutline
+fun resolveAppInboxIcon(): ImageVector = COUIIcons.Messages
 
 /** Empty list / no-results chrome — not mail (inbox is separate). */
-fun resolveAppEmptyIcon(): ImageVector = Icons.Filled.Search
+fun resolveAppEmptyIcon(): ImageVector = COUIIcons.Search
 
-fun resolveAppTvIcon(): ImageVector = Icons.Outlined.LiveTv
+fun resolveAppTvIcon(): ImageVector = COUIIcons.ScreenMirroring
 
-fun resolveAppLogoutIcon(): ImageVector = Icons.AutoMirrored.Outlined.ExitToApp
+fun resolveAppLogoutIcon(): ImageVector = COUIIcons.Forward
 
-fun resolveAppTimerIcon(): ImageVector = Icons.Outlined.Timer
+fun resolveAppTimerIcon(): ImageVector = COUIIcons.Timer
 
-fun resolveAppMusicIcon(): ImageVector = Icons.Outlined.MusicNote
+fun resolveAppMusicIcon(): ImageVector = COUIIcons.Music
 
-fun resolveAppFlipHorizontalIcon(): ImageVector = Icons.Outlined.SwapHoriz
+fun resolveAppFlipHorizontalIcon(): ImageVector = COUIIcons.Replace
 
-fun resolveAppFlipVerticalIcon(): ImageVector = Icons.Outlined.SwapVert
+fun resolveAppFlipVerticalIcon(): ImageVector = COUIIcons.Sort
 
-fun resolveAppHeadphonesIcon(): ImageVector = Icons.Outlined.Headphones
+fun resolveAppHeadphonesIcon(): ImageVector = COUIIcons.Music
 
-fun resolveAppQualityIcon(): ImageVector = Icons.Outlined.PlayCircleOutline
+fun resolveAppQualityIcon(): ImageVector = COUIIcons.Play
 
-fun resolveAppCodecIcon(): ImageVector = Icons.Outlined.Memory
+fun resolveAppCodecIcon(): ImageVector = COUIIcons.Tasks
 
-fun resolveAppSpeedIcon(): ImageVector = Icons.Outlined.Speed
+fun resolveAppSpeedIcon(): ImageVector = COUIIcons.Stopwatch
 
-fun resolveAppGestureTapIcon(): ImageVector = Icons.Outlined.TouchApp
+fun resolveAppGestureTapIcon(): ImageVector = COUIIcons.SearchDevice
 
 fun resolveAppWifiIcon(): ImageVector = Icons.Outlined.Wifi
 
-fun resolveAppChevronForwardIcon(): ImageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight
+fun resolveAppChevronForwardIcon(): ImageVector = COUIIcons.ChevronForward
 
-fun resolveAppChevronDownIcon(): ImageVector = Icons.Outlined.KeyboardArrowDown
+fun resolveAppChevronDownIcon(): ImageVector = COUIIcons.ExpandMore
 
-fun resolveAppChevronUpIcon(): ImageVector = Icons.Outlined.KeyboardArrowUp
+fun resolveAppChevronUpIcon(): ImageVector = COUIIcons.ExpandLess
 
-fun resolveAppProfileAddIcon(): ImageVector = Icons.Outlined.PersonAddAlt1
+fun resolveAppProfileAddIcon(): ImageVector = COUIIcons.Contacts
 
-fun resolveAppLockIcon(): ImageVector = Icons.Outlined.Lock
+fun resolveAppLockIcon(): ImageVector = COUIIcons.Lock
 
-fun resolveAppHomeIcon(): ImageVector = Icons.Outlined.Home
+fun resolveAppHomeIcon(): ImageVector = COUIIcons.Home
 
-fun resolveAppDynamicIcon(): ImageVector = Icons.Outlined.DynamicFeed
+fun resolveAppDynamicIcon(): ImageVector = COUIIcons.Community
 
-fun resolveAppPlayIcon(): ImageVector = Icons.Outlined.PlayArrow
+fun resolveAppPlayIcon(): ImageVector = COUIIcons.Play
 
-fun resolveAppCollectionIcon(): ImageVector = Icons.Outlined.FolderCopy
+fun resolveAppCollectionIcon(): ImageVector = COUIIcons.Folder
 
-fun resolveAppCommentIcon(): ImageVector = Icons.AutoMirrored.Outlined.Comment
+fun resolveAppCommentIcon(): ImageVector = COUIIcons.Messages
 
-fun resolveAppLikeIcon(): ImageVector = Icons.Outlined.ThumbUpOffAlt
+fun resolveAppLikeIcon(): ImageVector = Icons.Outlined.ThumbUp
 
 fun resolveAppLikeFilledIcon(): ImageVector = Icons.Filled.ThumbUp
 
-fun resolveAppShareIcon(): ImageVector = Icons.Outlined.Share
+fun resolveAppShareIcon(): ImageVector = COUIIcons.Share
 
-fun resolveAppVisibilityOnIcon(): ImageVector = Icons.Outlined.Visibility
+fun resolveAppVisibilityOnIcon(): ImageVector = COUIIcons.Show
 
-fun resolveAppVisibilityOffIcon(): ImageVector = Icons.Outlined.VisibilityOff
+fun resolveAppVisibilityOffIcon(): ImageVector = COUIIcons.Hide
 
-fun resolveAppAnalyticsIcon(): ImageVector = Icons.Outlined.BarChart
+fun resolveAppAnalyticsIcon(): ImageVector = COUIIcons.TopDownloads
 
-fun resolveAppInfoIcon(): ImageVector = Icons.Outlined.Info
+fun resolveAppInfoIcon(): ImageVector = COUIIcons.Info
 
-fun resolveAppNotificationIcon(): ImageVector = Icons.Outlined.NotificationsNone
+fun resolveAppNotificationIcon(): ImageVector = COUIIcons.Messages
 
 fun resolveAppSparklesIcon(): ImageVector = Icons.Outlined.AutoAwesome
 
-fun resolveAppWatchLaterIcon(): ImageVector = Icons.Outlined.WatchLater
+fun resolveAppWatchLaterIcon(): ImageVector = COUIIcons.Stopwatch
 
 fun resolveAppCoinIcon(): ImageVector = AppIcons.BiliCoin
 
-fun resolveAppLinkIcon(): ImageVector = Icons.Outlined.Link
+fun resolveAppLinkIcon(): ImageVector = COUIIcons.Link
 
-fun resolveAppDeleteIcon(): ImageVector = Icons.Outlined.DeleteOutline
+fun resolveAppDeleteIcon(): ImageVector = COUIIcons.Delete
 
-fun resolveAppListLayoutIcon(): ImageVector = Icons.AutoMirrored.Outlined.ViewList
+fun resolveAppListLayoutIcon(): ImageVector = COUIIcons.ListView
 
-fun resolveAppGridLayoutIcon(): ImageVector = Icons.Outlined.GridView
+fun resolveAppGridLayoutIcon(): ImageVector = COUIIcons.GridView
 
-fun resolveAppCheckCircleIcon(): ImageVector = Icons.Outlined.CheckCircle
+fun resolveAppCheckCircleIcon(): ImageVector = COUIIcons.Ok

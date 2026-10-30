@@ -1,6 +1,8 @@
 // 文件路径: feature/plugin/DanmakuEnhancePlugin.kt
 package com.android.purebilibili.feature.plugin
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.plugin.BuiltinPluginIds
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -8,8 +10,6 @@ import com.android.purebilibili.core.ui.AppContentColors
 import android.content.Context
 import androidx.compose.foundation.layout.*
 //  Material Icons
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppOutlinedTextField
 import com.android.purebilibili.core.ui.components.AppSwitch
@@ -53,7 +53,7 @@ class DanmakuEnhancePlugin : BuiltinPlugin, DanmakuPluginApi {
     override val description = "关键词屏蔽、按用户ID屏蔽、同传弹幕高亮"
     override val version = "1.1.1"
     override val author = "BiliPai项目组"
-    override val icon: ImageVector = Icons.Outlined.ChatBubble
+    override val icon: ImageVector = AppIcons.Outlined.ChatBubble
     override val capabilityManifest: PluginCapabilityManifest = PluginCapabilityManifest(
         pluginId = id,
         displayName = name,

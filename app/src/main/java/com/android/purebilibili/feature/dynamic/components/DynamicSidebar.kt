@@ -1,6 +1,8 @@
 // 文件路径: feature/dynamic/components/DynamicSidebar.kt
 package com.android.purebilibili.feature.dynamic.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.components.appActionWithFeedback
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -24,8 +26,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 //  Material Icons
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Person
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppTextButton
 import androidx.compose.material3.MaterialTheme
@@ -613,7 +613,7 @@ internal fun DynamicSelfAvatar(face: String, isSelected: Boolean) {
         // 本地图标仅作加载/失败占位，资料刷新后以真实头像替换。
         if (!avatarLoaded) {
             AppIcon(
-                imageVector = Icons.Outlined.Person,
+                imageVector = AppIcons.Outlined.Person,
                 contentDescription = null,
                 tint = if (isSelected) AppContentColors.accent() else AppContentColors.secondaryText(),
                 modifier = Modifier.size(AppSpacingTokens.ExtraLarge)

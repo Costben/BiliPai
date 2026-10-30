@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.LinearEasing
@@ -13,9 +15,6 @@ import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CheckBox
-import androidx.compose.material.icons.outlined.CheckBoxOutlineBlank
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -299,7 +298,7 @@ internal fun CoinTossDialog(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         AppIcon(
-                            if (effectiveLike) Icons.Outlined.CheckBox else Icons.Outlined.CheckBoxOutlineBlank,
+                            if (effectiveLike) AppIcons.Outlined.CheckBox else AppIcons.Outlined.CheckBoxOutlineBlank,
                             contentDescription = "同时点赞", tint = Color.White, modifier = Modifier.size(20.dp),
                         )
                         AppText(" 同时点赞", color = Color.White, fontSize = 14.sp)

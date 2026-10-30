@@ -1,6 +1,8 @@
 // 文件路径: feature/partition/PartitionScreen.kt
 package com.android.purebilibili.feature.partition
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.LocalGlobalWallpaperBackdropVisible
 import com.android.purebilibili.core.ui.wallpaper.LocalGlobalWallpaperBackdropSource
@@ -36,47 +38,6 @@ import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.drawscope.clipRect
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Animation
-import androidx.compose.material.icons.filled.Checkroom
-import androidx.compose.material.icons.filled.DirectionsCar
-import androidx.compose.material.icons.filled.DirectionsRun
-import androidx.compose.material.icons.filled.Flag
-import androidx.compose.material.icons.filled.GridView
-import androidx.compose.material.icons.filled.LocalMovies
-import androidx.compose.material.icons.filled.Movie
-import androidx.compose.material.icons.filled.MusicNote
-import androidx.compose.material.icons.filled.Newspaper
-import androidx.compose.material.icons.filled.OndemandVideo
-import androidx.compose.material.icons.filled.Pets
-import androidx.compose.material.icons.filled.Restaurant
-import androidx.compose.material.icons.filled.SportsSoccer
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Lightbulb
-import androidx.compose.material.icons.filled.SmartToy
-import androidx.compose.material.icons.filled.SportsEsports
-import androidx.compose.material.icons.filled.TheaterComedy
-import androidx.compose.material.icons.filled.Tv
-import androidx.compose.material.icons.outlined.Animation
-import androidx.compose.material.icons.outlined.Checkroom
-import androidx.compose.material.icons.outlined.DirectionsCar
-import androidx.compose.material.icons.outlined.DirectionsRun
-import androidx.compose.material.icons.outlined.Flag
-import androidx.compose.material.icons.outlined.GridView
-import androidx.compose.material.icons.outlined.LocalMovies
-import androidx.compose.material.icons.outlined.Movie
-import androidx.compose.material.icons.outlined.MusicNote
-import androidx.compose.material.icons.outlined.Newspaper
-import androidx.compose.material.icons.outlined.OndemandVideo
-import androidx.compose.material.icons.outlined.Pets
-import androidx.compose.material.icons.outlined.Restaurant
-import androidx.compose.material.icons.outlined.SportsSoccer
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Lightbulb
-import androidx.compose.material.icons.outlined.SmartToy
-import androidx.compose.material.icons.outlined.SportsEsports
-import androidx.compose.material.icons.outlined.TheaterComedy
-import androidx.compose.material.icons.outlined.Tv
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -279,29 +240,29 @@ internal fun resolvePartitionSideRailIcon(
 ): ImageVector = when (iconFamily) {
     AppSemanticIconFamily.MATERIAL,
     AppSemanticIconFamily.MIUIX -> when (partitionId) {
-        0 -> if (selected) Icons.Filled.GridView else Icons.Outlined.GridView
-        1 -> if (selected) Icons.Filled.Animation else Icons.Outlined.Animation
-        13 -> if (selected) Icons.Filled.Tv else Icons.Outlined.Tv
-        167 -> if (selected) Icons.Filled.Flag else Icons.Outlined.Flag
-        3 -> if (selected) Icons.Filled.MusicNote else Icons.Outlined.MusicNote
-        129 -> if (selected) Icons.Filled.DirectionsRun else Icons.Outlined.DirectionsRun
-        4 -> if (selected) Icons.Filled.SportsEsports else Icons.Outlined.SportsEsports
-        36 -> if (selected) Icons.Filled.Lightbulb else Icons.Outlined.Lightbulb
-        188 -> if (selected) Icons.Filled.SmartToy else Icons.Outlined.SmartToy
-        234 -> if (selected) Icons.Filled.SportsSoccer else Icons.Outlined.SportsSoccer
-        223 -> if (selected) Icons.Filled.DirectionsCar else Icons.Outlined.DirectionsCar
-        160 -> if (selected) Icons.Filled.Home else Icons.Outlined.Home
-        211 -> if (selected) Icons.Filled.Restaurant else Icons.Outlined.Restaurant
-        217 -> if (selected) Icons.Filled.Pets else Icons.Outlined.Pets
-        119, 5 -> if (selected) Icons.Filled.TheaterComedy else Icons.Outlined.TheaterComedy
-        155 -> if (selected) Icons.Filled.Checkroom else Icons.Outlined.Checkroom
-        202 -> if (selected) Icons.Filled.Newspaper else Icons.Outlined.Newspaper
-        23 -> if (selected) Icons.Filled.Movie else Icons.Outlined.Movie
-        11 -> if (selected) Icons.Filled.Tv else Icons.Outlined.Tv
-        -7 -> if (selected) Icons.Filled.TheaterComedy else Icons.Outlined.TheaterComedy
-        177 -> if (selected) Icons.Filled.OndemandVideo else Icons.Outlined.OndemandVideo
-        181 -> if (selected) Icons.Filled.LocalMovies else Icons.Outlined.LocalMovies
-        else -> if (selected) Icons.Filled.GridView else Icons.Outlined.GridView
+        0 -> if (selected) AppIcons.Filled.GridView else AppIcons.Outlined.GridView
+        1 -> if (selected) AppIcons.Filled.Animation else AppIcons.Outlined.Animation
+        13 -> if (selected) AppIcons.Filled.Tv else AppIcons.Outlined.Tv
+        167 -> if (selected) AppIcons.Filled.Flag else AppIcons.Outlined.Flag
+        3 -> if (selected) AppIcons.Filled.MusicNote else AppIcons.Outlined.MusicNote
+        129 -> if (selected) AppIcons.Filled.DirectionsRun else AppIcons.Outlined.DirectionsRun
+        4 -> if (selected) AppIcons.Filled.SportsEsports else AppIcons.Outlined.SportsEsports
+        36 -> if (selected) AppIcons.Filled.Lightbulb else AppIcons.Outlined.Lightbulb
+        188 -> if (selected) AppIcons.Filled.SmartToy else AppIcons.Outlined.SmartToy
+        234 -> if (selected) AppIcons.Filled.SportsSoccer else AppIcons.Outlined.SportsSoccer
+        223 -> if (selected) AppIcons.Filled.DirectionsCar else AppIcons.Outlined.DirectionsCar
+        160 -> if (selected) AppIcons.Filled.Home else AppIcons.Outlined.Home
+        211 -> if (selected) AppIcons.Filled.Restaurant else AppIcons.Outlined.Restaurant
+        217 -> if (selected) AppIcons.Filled.Pets else AppIcons.Outlined.Pets
+        119, 5 -> if (selected) AppIcons.Filled.TheaterComedy else AppIcons.Outlined.TheaterComedy
+        155 -> if (selected) AppIcons.Filled.Checkroom else AppIcons.Outlined.Checkroom
+        202 -> if (selected) AppIcons.Filled.Newspaper else AppIcons.Outlined.Newspaper
+        23 -> if (selected) AppIcons.Filled.Movie else AppIcons.Outlined.Movie
+        11 -> if (selected) AppIcons.Filled.Tv else AppIcons.Outlined.Tv
+        -7 -> if (selected) AppIcons.Filled.TheaterComedy else AppIcons.Outlined.TheaterComedy
+        177 -> if (selected) AppIcons.Filled.OndemandVideo else AppIcons.Outlined.OndemandVideo
+        181 -> if (selected) AppIcons.Filled.LocalMovies else AppIcons.Outlined.LocalMovies
+        else -> if (selected) AppIcons.Filled.GridView else AppIcons.Outlined.GridView
     }
 }
 

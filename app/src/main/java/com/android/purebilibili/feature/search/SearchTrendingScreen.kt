@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.search
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppHorizontalDivider
 import com.android.purebilibili.core.ui.components.AppIcon
@@ -24,11 +26,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.North
-import androidx.compose.material.icons.rounded.Refresh
-import androidx.compose.material.icons.rounded.Search
 import com.android.purebilibili.core.ui.skeleton.TrendingListSkeleton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -73,7 +70,7 @@ fun SearchTrendingScreen(
                 navigationIcon = {
                     AppIconButton(onClick = onBack) {
                         AppIcon(
-                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                            imageVector = AppIcons.AutoMirrored.Rounded.ArrowBack,
                             contentDescription = "返回"
                         )
                     }
@@ -81,7 +78,7 @@ fun SearchTrendingScreen(
                 actions = {
                     AppIconButton(onClick = viewModel::refresh) {
                         AppIcon(
-                            imageVector = Icons.Rounded.Refresh,
+                            imageVector = AppIcons.Rounded.Refresh,
                             contentDescription = "刷新"
                         )
                     }
@@ -197,7 +194,7 @@ private fun SearchTrendingHero() {
             }
         }
         AppIcon(
-            imageVector = Icons.Rounded.Search,
+            imageVector = AppIcons.Rounded.Search,
             contentDescription = null,
             tint = Color.White.copy(alpha = 0.18f),
             modifier = Modifier
@@ -292,7 +289,7 @@ private fun SearchTrendingRank(
 ) {
     if (index < pinnedCount) {
         AppIcon(
-            imageVector = Icons.Rounded.North,
+            imageVector = AppIcons.Rounded.North,
             contentDescription = null,
             tint = AppContentColors.error(),
             modifier = Modifier.size(20.dp)

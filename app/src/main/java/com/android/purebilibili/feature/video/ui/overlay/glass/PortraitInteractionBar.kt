@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.overlay.glass
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.feature.video.ui.overlay.*
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -17,14 +19,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ThumbUp
-import androidx.compose.material.icons.rounded.Share
-import androidx.compose.material.icons.automirrored.rounded.Comment
 import com.android.purebilibili.core.ui.components.AppIcon
-import androidx.compose.material.icons.rounded.Star
-import androidx.compose.material.icons.rounded.StarBorder
-import androidx.compose.material.icons.rounded.ThumbUp
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -122,7 +117,7 @@ fun PortraitInteractionBar(
 
         // 点赞
         InteractionButton(
-            icon = if (likeStatusKnown && isLiked) Icons.Rounded.ThumbUp else Icons.Outlined.ThumbUp,
+            icon = if (likeStatusKnown && isLiked) AppIcons.Rounded.ThumbUp else AppIcons.Outlined.ThumbUp,
             countText = if (!likeStatusKnown) "待确认" else if (likeCount > 0) FormatUtils.formatStat(likeCount.toLong()) else "点赞",
             isActive = likeStatusKnown && isLiked,
             contentDescription = if (likeStatusKnown) "点赞" else "重新确认状态并点赞",
@@ -170,7 +165,7 @@ fun PortraitInteractionBar(
 
         // 评论
         InteractionButton(
-            icon = Icons.AutoMirrored.Rounded.Comment,
+            icon = AppIcons.AutoMirrored.Rounded.Comment,
             countText = if (commentCount > 0) FormatUtils.formatStat(commentCount.toLong()) else "评论",
             isActive = false,
             layoutPolicy = layoutPolicy,
@@ -179,7 +174,7 @@ fun PortraitInteractionBar(
 
         // 收藏
         InteractionButton(
-            icon = if (isFavorited) Icons.Rounded.Star else Icons.Rounded.StarBorder,
+            icon = if (isFavorited) AppIcons.Rounded.Star else AppIcons.Rounded.StarBorder,
             countText = if (favoriteCount > 0) FormatUtils.formatStat(favoriteCount.toLong()) else "收藏",
             isActive = isFavorited,
             activeColor = AppContentColors.accent(),
@@ -199,7 +194,7 @@ fun PortraitInteractionBar(
 
         // 分享
         InteractionButton(
-            icon = Icons.Rounded.Share,
+            icon = AppIcons.Rounded.Share,
             countText = if (shareCount > 0) FormatUtils.formatStat(shareCount.toLong()) else "分享",
             isActive = false,
             layoutPolicy = layoutPolicy,

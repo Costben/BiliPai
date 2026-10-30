@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.live.components
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -7,10 +9,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ContentCopy
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Report
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -68,16 +66,16 @@ internal fun LiveDanmakuActionToolbar(
         ) {
             Row(Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = 2.dp)) {
                 AppIconButton(onClick = onUserClick, enabled = item.uid > 0L, modifier = Modifier.size(40.dp)) {
-                    AppIcon(Icons.Outlined.Person, "个人空间", Modifier.size(20.dp))
+                    AppIcon(AppIcons.Outlined.Person, "个人空间", Modifier.size(20.dp))
                 }
                 AppIconButton(onClick = {
                     clipboard.setText(AnnotatedString(item.text))
                     onDismiss()
                 }, modifier = Modifier.size(40.dp)) {
-                    AppIcon(Icons.Outlined.ContentCopy, "复制弹幕", Modifier.size(20.dp))
+                    AppIcon(AppIcons.Outlined.ContentCopy, "复制弹幕", Modifier.size(20.dp))
                 }
                 AppIconButton(onClick = onReport, modifier = Modifier.size(40.dp)) {
-                    AppIcon(Icons.Outlined.Report, "举报弹幕", Modifier.size(20.dp))
+                    AppIcon(AppIcons.Outlined.Report, "举报弹幕", Modifier.size(20.dp))
                 }
             }
         }

@@ -1,6 +1,8 @@
 // 文件路径: feature/dynamic/DynamicScreen.kt
 package com.android.purebilibili.feature.dynamic
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.navigation.tabIndicatorPosition
 import com.android.purebilibili.core.ui.components.appActionWithFeedback
 
@@ -43,8 +45,6 @@ import com.android.purebilibili.core.ui.rememberCompatibleStaggeredGridState
 import com.android.purebilibili.core.ui.components.AppHorizontalPager as HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Close
 import com.android.purebilibili.feature.dynamic.components.DynamicSelfAvatar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import com.android.purebilibili.core.ui.components.AppIcon
@@ -1309,7 +1309,7 @@ fun DynamicScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         AppIcon(
-                            imageVector = Icons.Outlined.Close,
+                            imageVector = AppIcons.Outlined.Close,
                             contentDescription = "关闭",
                             modifier = Modifier.size(14.dp)
                         )

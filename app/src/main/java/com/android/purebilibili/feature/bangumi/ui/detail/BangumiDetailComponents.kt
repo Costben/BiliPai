@@ -1,6 +1,8 @@
 // 文件路径: feature/bangumi/ui/detail/BangumiDetailComponents.kt
 package com.android.purebilibili.feature.bangumi.ui.detail
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.resolveFilledButtonContainerColor
 import com.android.purebilibili.core.ui.resolveFilledButtonContentColor
@@ -29,11 +31,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.outlined.MoreHoriz
-import androidx.compose.material.icons.outlined.Star
 import androidx.compose.ui.platform.LocalContext
 import com.android.purebilibili.core.theme.resolveAdaptivePrimaryAccentColors
 import com.android.purebilibili.core.theme.resolveAdaptiveTertiaryAccentColors
@@ -181,7 +178,7 @@ fun RatingRow(
         modifier = modifier
     ) {
         AppIcon(
-            Icons.Outlined.Star,
+            AppIcons.Outlined.Star,
             contentDescription = null,
             tint = AppContentColors.rating(),
             modifier = Modifier.size(16.dp)
@@ -223,7 +220,7 @@ fun FollowButton(
             modifier = modifier
         ) {
             AppIcon(
-                Icons.Outlined.Check,
+                AppIcons.Outlined.Check,
                 contentDescription = null,
                 modifier = Modifier.size(18.dp)
             )
@@ -241,7 +238,7 @@ fun FollowButton(
             modifier = modifier
         ) {
             AppIcon(
-                Icons.Outlined.Add,
+                AppIcons.Outlined.Add,
                 contentDescription = null,
                 modifier = Modifier.size(18.dp)
             )
@@ -468,7 +465,7 @@ fun EpisodePreviewRow(
                     Box(contentAlignment = Alignment.Center) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             AppIcon(
-                                Icons.Outlined.MoreHoriz,
+                                AppIcons.Outlined.MoreHoriz,
                                 contentDescription = "更多",
                                 tint = AppContentColors.secondaryText()
                             )

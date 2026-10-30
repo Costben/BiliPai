@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.video.ui.overlay
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.activity.compose.LocalActivity
@@ -10,8 +12,6 @@ import androidx.compose.animation.core.tween
 import com.android.purebilibili.core.ui.motion.rememberSystemReduceMotion
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
@@ -153,7 +153,7 @@ private fun NextWatchCard(
                 }
             }
             Box(modifier = Modifier.size(48.dp).clickable(onClick = onDismiss), contentAlignment = Alignment.Center) {
-                AppIcon(imageVector = Icons.Filled.Close, contentDescription = "关闭接下来观看提示", tint = content, modifier = Modifier.size(18.dp))
+                AppIcon(imageVector = AppIcons.Filled.Close, contentDescription = "关闭接下来观看提示", tint = content, modifier = Modifier.size(18.dp))
             }
         }
     }

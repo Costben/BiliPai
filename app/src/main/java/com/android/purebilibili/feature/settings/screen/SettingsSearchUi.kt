@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.settings
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.AppChromeSizeTokens
 import com.android.purebilibili.core.ui.components.appElasticPress
@@ -11,8 +13,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.draw.clip
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -120,7 +120,7 @@ internal fun SettingsHomeSearchEntry(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             AppIcon(
-                Icons.Default.Search,
+                AppIcons.Filled.Search,
                 contentDescription = null,
                 tint = AppContentColors.secondaryText(),
                 modifier = Modifier.size(24.dp),

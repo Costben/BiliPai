@@ -2,6 +2,8 @@
 
 package com.android.purebilibili.feature.video.ui.section
 
+import com.android.purebilibili.core.ui.AppIcons
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import com.android.purebilibili.core.ui.components.AppIconButton
@@ -14,9 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.AutoAwesome
-import androidx.compose.material.icons.outlined.EditNote
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -54,14 +53,14 @@ fun VideoSupplementStatsActions(
     ) {
         if (showAiSummary) {
             SupplementEntryIcon(
-                icon = Icons.Outlined.AutoAwesome,
+                icon = AppIcons.Outlined.AutoAwesome,
                 label = "AI 总结",
                 onClick = onAiSummaryClick,
             )
         }
         if (showNote) {
             SupplementEntryIcon(
-                icon = Icons.Outlined.EditNote,
+                icon = AppIcons.Outlined.EditNote,
                 label = "视频笔记",
                 onClick = onNoteClick,
             )
