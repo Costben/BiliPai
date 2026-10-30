@@ -1487,7 +1487,7 @@ fun AdaptivePreferenceDividerRenderer(
                 end = rowSpec.insideHorizontalPaddingDp.dp,
             )
             .height(0.5.dp)
-            .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
+            .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.25f)),
     )
 }
 

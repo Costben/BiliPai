@@ -23,9 +23,11 @@ internal fun resolvePreferenceFallbackIcon(title: String): ImageVector {
     val key = title.substringBefore('：').substringBefore(':').trim()
     fun has(vararg words: String) = words.any { key.contains(it) }
     return when {
-        has("深色", "夜间", "暗色") -> AppIcons.Outlined.DarkMode
+        has("深色", "夜间", "暗色", "主题模式") -> AppIcons.Outlined.DarkMode
         has("时间", "定时", "开始", "结束", "停留", "自动退出", "分钟", "小时") -> AppIcons.Outlined.Schedule
         has("图标") -> AppIcons.Outlined.Apps
+        has("条目", "列表") -> AppIcons.Outlined.ViewAgenda
+        has("菜单", "单选") -> AppIcons.Outlined.Sort
         has("主题", "外观", "风格", "样式", "预设", "颜色", "色彩", "取色", "调色", "色板") -> AppIcons.Outlined.Palette
         has("动画", "过渡", "动效") -> AppIcons.Outlined.Animation
         has("振动", "触感", "震动", "反馈", "玻璃", "模糊", "透明") -> AppIcons.Outlined.Tune

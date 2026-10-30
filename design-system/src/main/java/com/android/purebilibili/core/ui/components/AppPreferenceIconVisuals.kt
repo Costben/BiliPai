@@ -163,15 +163,14 @@ fun AppPreferenceLeadingIcon(
         return
     }
     val color = colorfulPreferenceIconColor(title, AppPreferenceIconPalette.first())
+    val plain = LocalAppPreferenceIconTreatment.current == AppPreferenceIconTreatment.PLAIN
     // PLAIN 不铺彩色底，白色字形会与白卡同色，改用彩色样式分配的色值。
-    val glyphColor = if (LocalAppPreferenceIconTreatment.current == AppPreferenceIconTreatment.PLAIN) {
-        color
-    } else {
-        Color.White
-    }
+    val glyphColor = if (plain) color else Color.White
+    // 纯字形槽补齐到 38dp：COUI 行内边距 8dp 后与 32dp + 14dp 的普通行同一起点。
+    val containerSize = if (plain) 38.dp else 32.dp
     Box(
         modifier = modifier
-            .size(32.dp)
+            .size(containerSize)
             .appPreferenceIconBackground(color, 10.dp),
         contentAlignment = Alignment.Center,
     ) {
