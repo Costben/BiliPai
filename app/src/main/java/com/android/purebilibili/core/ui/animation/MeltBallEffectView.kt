@@ -21,7 +21,7 @@ import android.view.animation.PathInterpolator
 import kotlin.math.min
 
 /** 收起动画的落点：底栏胶囊，或屏幕侧边。 */
-internal enum class MeltBallMergeTarget {
+enum class MeltBallMergeTarget {
     BOTTOM_BAR,
     SCREEN_EDGE,
 }
@@ -55,7 +55,6 @@ internal class MeltBallEffectView private constructor(
     }
     private val destination = RectF()
     private val clipPath = Path()
-    private val origin = RectF()
     private val animator = ValueAnimator.ofFloat(0f, 1f).apply {
         duration = 560L
         // COUI 的收起曲线：先快后慢，末段几乎停住，像是被目标吸住。
@@ -79,7 +78,6 @@ internal class MeltBallEffectView private constructor(
     private var started = false
 
     init {
-        isOpaque = false
         isClickable = false
         isFocusable = false
         importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
@@ -144,8 +142,7 @@ internal class MeltBallEffectView private constructor(
         clipPath.addRoundRect(destination, corner, corner, Path.Direction.CW)
         val checkpoint = canvas.save()
         canvas.clipPath(clipPath)
-        origin.set(0f, 0f, bitmap.width.toFloat(), bitmap.height.toFloat())
-        canvas.drawBitmap(bitmap, origin, destination, paint)
+        canvas.drawBitmap(bitmap, null, destination, paint)
         canvas.restoreToCount(checkpoint)
 
         canvas.drawCircle(centerX, centerY, radius - rimPaint.strokeWidth / 2f, rimPaint)
@@ -217,15 +214,17 @@ internal class MeltBallEffectView private constructor(
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return
         val p = progress.coerceIn(0f, 1f)
         val blurDp = if (p < 0.42f) 0f else ((p - 0.42f) / 0.58f) * 9f
-        renderEffect = if (blurDp <= 0.05f) {
-            null
-        } else {
-            RenderEffect.createBlurEffect(
-                blurDp * density,
-                blurDp * density,
-                Shader.TileMode.CLAMP,
-            )
-        }
+        setRenderEffect(
+            if (blurDp <= 0.05f) {
+                null
+            } else {
+                RenderEffect.createBlurEffect(
+                    blurDp * density,
+                    blurDp * density,
+                    Shader.TileMode.CLAMP,
+                )
+            },
+        )
     }
 
     private fun navigationBarInset(): Int {
@@ -245,7 +244,7 @@ internal class MeltBallEffectView private constructor(
         onFirstFrame = null
         onComplete = null
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            renderEffect = null
+            setRenderEffect(null)
         }
         (parent as? ViewGroup)?.removeView(this)
         if (!bitmap.isRecycled) bitmap.recycle()
