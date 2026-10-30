@@ -163,6 +163,10 @@ internal fun SettingsPageScaffold(
     val headerBlurEnabled = topBarBlurEnabled ?: appThemeConfig.headerBlurEnabled
     val lowBlurBudget = isLowBlurBudgetForced()
     val nonGlassMiuix = isMiuixNonGlassEnabled()
+    // COUI 17 顶栏材质由 COUI 自己的渐变模糊层（AppBarBlurOverlay）绘制：从顶边不透明向下
+    // 淡出，并延伸到栏下 24dp。再叠加项目的渐进模糊或纯色渐隐会变成另一套材质，还会在
+    // 栏底留下硬边，因此 COUI 皮肤下只保留 COUI 这一条路径。
+    val couiNativeChrome = LocalAppUiStyle.current == AppUiStyle.COUI17
     val collapseBehavior = if (
         nonGlassMiuix &&
         topBarStyle == AppTopBarStyle.LARGE &&
@@ -172,17 +176,18 @@ internal fun SettingsPageScaffold(
     } else {
         null
     }
-    val progressiveBlurEnabled = shouldUseBiliPaiProgressiveTopBlur(
+    val progressiveBlurEnabled = !couiNativeChrome && shouldUseBiliPaiProgressiveTopBlur(
         enabled = appThemeConfig.progressiveTopBlurEnabled && !headerBlurEnabled,
         hasBackdrop = true,
     ) && !lowBlurBudget
-    val fadeActive = appThemeConfig.progressiveTopFadeEnabled && !headerBlurEnabled
+    val fadeActive = !couiNativeChrome &&
+        appThemeConfig.progressiveTopFadeEnabled && !headerBlurEnabled
     // Keep this backdrop in the scaffold chrome. The scroll content is its source,
     // so passing it into a search dock inside that content would create a render-layer cycle.
     val chromeSource = if (progressiveBlurEnabled) rememberChromeBackdropSource() else null
     val backdrop = chromeSource?.takeIf { it.isReady }?.backdrop
     val hazeState = if (
-        headerBlurEnabled && !lowBlurBudget &&
+        !couiNativeChrome && headerBlurEnabled && !lowBlurBudget &&
         shouldAllowRenderEffectBackedHazeEffect(android.os.Build.VERSION.SDK_INT)
     ) rememberRecoverableHazeState().takeIf { recoverableBlurEnabled(it) } else null
     val hazeReady = hazeState != null
@@ -217,6 +222,8 @@ internal fun SettingsPageScaffold(
                     headerBlurActive = hazeReady,
                     surfaceColor = pageContainerColor,
                     fadeEnabled = fadeActive,
+                    // COUI 皮肤下这条栏由 COUI 的渐变模糊材质自己上色，不再垫一层实色。
+                    opaqueBackgroundFallback = !couiNativeChrome,
                 ) {
                     AppTopBar(
                         title = title,
@@ -260,6 +267,8 @@ internal fun SettingsPageScaffold(
                         ),
                         style = topBarStyle,
                         collapseBehavior = collapseBehavior,
+                        // COUI 的渐变模糊材质自带下沿淡出，底边细线会横切这条渐变。
+                        showDivider = !couiNativeChrome,
                     )
                 }
             },

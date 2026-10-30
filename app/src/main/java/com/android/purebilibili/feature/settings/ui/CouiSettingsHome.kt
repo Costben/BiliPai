@@ -1,23 +1,33 @@
 package com.android.purebilibili.feature.settings
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.dp
 import com.android.purebilibili.R
-import io.github.suqi8.coui.kmp.basic.BasicComponent
 import io.github.suqi8.coui.kmp.basic.Card
 import io.github.suqi8.coui.kmp.basic.HorizontalDivider
 import io.github.suqi8.coui.kmp.basic.Icon
+import io.github.suqi8.coui.kmp.basic.SearchBarDefaults
+import io.github.suqi8.coui.kmp.basic.Text
+import io.github.suqi8.coui.kmp.basic.materialShadowEdge
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.basic.Search
 import io.github.suqi8.coui.kmp.preference.ArrowPreference
 import io.github.suqi8.coui.kmp.theme.COUITheme
 
@@ -64,21 +74,40 @@ internal fun CouiSettingsHomeContent(
     }
 }
 
+/**
+ * 设置首页的搜索入口。
+ *
+ * COUI 的搜索栏在收起态就是一颗胶囊：圆角等于半高，材质色与描边都来自
+ * `SearchBarDefaults`。这里只画收起态外观，点击仍然进入搜索页，因此不像
+ * `InputField` 那样接管焦点与键盘。
+ */
 @Composable
 private fun CouiSettingsSearchEntry(onClick: () -> Unit) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        BasicComponent(
-            title = stringResource(R.string.settings_search_placeholder),
-            titleColor = io.github.suqi8.coui.kmp.basic.BasicComponentDefaults.summaryColor(),
-            startAction = {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = null,
-                    tint = COUITheme.colorScheme.onSurfaceSecondary,
-                    modifier = Modifier.size(20.dp),
-                )
-            },
-            onClick = onClick,
+    val colors = SearchBarDefaults.searchBarColors()
+    val stroke = SearchBarDefaults.searchBarStroke()
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = SearchBarDefaults.InputFieldMinHeight)
+            .clip(CircleShape)
+            .background(color = colors.backgroundColor)
+            .materialShadowEdge(stroke = stroke)
+            .clickable(onClick = onClick),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            imageVector = COUIIcons.Basic.Search,
+            contentDescription = null,
+            tint = colors.iconColor,
+            modifier = Modifier.padding(
+                start = SearchBarDefaults.LeadingIconStartPadding,
+                end = SearchBarDefaults.LeadingIconEndPadding,
+            ),
+        )
+        Text(
+            text = stringResource(R.string.settings_search_placeholder),
+            color = colors.labelColor,
+            style = TextStyle(fontSize = SearchBarDefaults.InputFieldFontSize),
         )
     }
 }

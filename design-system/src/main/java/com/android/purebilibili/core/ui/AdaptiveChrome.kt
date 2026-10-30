@@ -330,6 +330,7 @@ fun AdaptiveTopAppBar(
     scrollBehavior: TopAppBarScrollBehavior? = null,
     collapseBehavior: AppTopBarCollapseBehavior? = null,
     smallTitleColor: Color = Color.Unspecified,
+    showDivider: Boolean = true,
 ) {
     val scaffoldHaze = LocalAdaptiveScaffoldHaze.current
     val hazeModifier = if (scaffoldHaze != null) {
@@ -368,6 +369,7 @@ fun AdaptiveTopAppBar(
             scrollBehavior = scrollBehavior,
             collapseBehavior = collapseBehavior,
             smallTitleColor = smallTitleColor,
+            showDivider = showDivider,
         )
     }
 }
@@ -391,6 +393,7 @@ private fun NativeAdaptiveTopAppBar(
     scrollBehavior: TopAppBarScrollBehavior? = null,
     collapseBehavior: AppTopBarCollapseBehavior? = null,
     smallTitleColor: Color = Color.Unspecified,
+    showDivider: Boolean = true,
 ) {
     // Keep crowded phone chrome readable: long dynamic titles must not collapse into
     // one-character-per-line text when actions consume the remaining width.
@@ -501,6 +504,7 @@ private fun NativeAdaptiveTopAppBar(
                     actions = actionsContent,
                     scrollBehavior = collapseBehavior?.miuixScrollBehavior,
                     gradientGlass = couiGradientGlass,
+                    showDivider = showDivider,
                     // Large titles share titlePadding with the collapsed title. Keep upstream
                     // insets so the expanded heading does not touch the window edge.
                 )
@@ -518,6 +522,7 @@ private fun NativeAdaptiveTopAppBar(
                         navigationIcon = navigationContent,
                         actions = actionsContent,
                         gradientGlass = couiGradientGlass,
+                        showDivider = showDivider,
                         titlePadding = 0.dp,
                         navigationIconPadding = nativeIconPadding,
                         actionIconPadding = nativeActionPadding,
@@ -543,6 +548,7 @@ private fun NativeAdaptiveTopAppBar(
                     navigationIcon = navigationContent,
                     actions = actionsContent,
                     gradientGlass = couiGradientGlass,
+                    showDivider = showDivider,
                     titlePadding = 0.dp,
                     navigationIconPadding = nativeIconPadding,
                     actionIconPadding = nativeActionPadding,
@@ -711,6 +717,8 @@ fun AppTopBar(
     collapseBehavior: AppTopBarCollapseBehavior? = null,
     // 仅显式调用方控制小标题的状态色；未指定时保留各原生样式的默认标题颜色。
     smallTitleColor: Color = Color.Unspecified,
+    // 折叠时底边细线；COUI 渐变模糊材质自带下沿淡出，调用方可关掉这条线。
+    showDivider: Boolean = true,
 ) = AdaptiveTopAppBar(
     title = title,
     modifier = modifier,
@@ -727,4 +735,5 @@ fun AppTopBar(
     scrollBehavior = scrollBehavior,
     collapseBehavior = collapseBehavior,
     smallTitleColor = smallTitleColor,
+    showDivider = showDivider,
 )
