@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -28,16 +27,19 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.AppShapes
+import com.android.purebilibili.core.ui.AppSpacingTokens
 import com.android.purebilibili.core.ui.AppSurfaceTokens
+import com.android.purebilibili.core.ui.ContainerLevel
+import com.android.purebilibili.core.ui.MediaContrastPalette
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.feature.search.SearchViewModel
@@ -47,7 +49,7 @@ import io.github.suqi8.coui.kmp.icon.COUIIcons
 import io.github.suqi8.coui.kmp.icon.basic.Search
 
 /**
- * 首页原地位移搜索：覆盖在首页之上，输入时直接展示联想词；
+ * 首页原地搜索：覆盖在首页之上，输入时直接展示联想词；
  * 回车或点联想词才带着关键词进入搜索页。
  */
 @Composable
@@ -60,7 +62,6 @@ internal fun HomeInlineSearchOverlay(
     var query by rememberSaveable { mutableStateOf("") }
     val keyboard = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
-    val consumeClickInteraction = remember { MutableInteractionSource() }
 
     fun submit(keyword: String) {
         val trimmed = keyword.trim()
@@ -82,9 +83,9 @@ internal fun HomeInlineSearchOverlay(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.32f))
+            .background(MediaContrastPalette.Scrim.copy(alpha = 0.32f))
             .clickable(
-                interactionSource = consumeClickInteraction,
+                interactionSource = remember { MutableInteractionSource() },
                 indication = null,
                 onClick = onDismiss,
             ),
@@ -93,7 +94,10 @@ internal fun HomeInlineSearchOverlay(
             modifier = Modifier
                 .fillMaxWidth()
                 .statusBarsPadding()
-                .padding(horizontal = 16.dp, vertical = 10.dp)
+                .padding(
+                    horizontal = AppSpacingTokens.Large,
+                    vertical = AppSpacingTokens.Small,
+                )
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
@@ -111,7 +115,7 @@ internal fun HomeInlineSearchOverlay(
                     label = "搜索视频、番剧、影视、UP主",
                     glowColor = SearchBarDefaults.causticGlowColor(),
                 )
-                Spacer(Modifier.width(10.dp))
+                Spacer(Modifier.width(AppSpacingTokens.Small))
                 AppText(
                     text = "取消",
                     style = MaterialTheme.typography.bodyLarge,
@@ -122,16 +126,21 @@ internal fun HomeInlineSearchOverlay(
                             indication = null,
                             onClick = onDismiss,
                         )
-                        .padding(horizontal = 4.dp, vertical = 10.dp),
+                        .padding(
+                            horizontal = AppSpacingTokens.ExtraSmall,
+                            vertical = AppSpacingTokens.Small,
+                        ),
                 )
             }
-            Spacer(Modifier.height(10.dp))
-            val panelShape = RoundedCornerShape(20.dp)
+            Spacer(Modifier.height(AppSpacingTokens.Small))
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(AppSurfaceTokens.surfaceContainer(), panelShape)
-                    .padding(vertical = 6.dp),
+                    .background(
+                        AppSurfaceTokens.surfaceContainer(),
+                        AppShapes.container(ContainerLevel.Card),
+                    )
+                    .padding(vertical = AppSpacingTokens.Small),
             ) {
                 val suggestions = state.suggestions
                 if (query.isNotBlank()) {
@@ -181,7 +190,7 @@ internal fun HomeInlineSearchOverlay(
 private fun InlineSearchSuggestionRow(
     text: String,
     onClick: () -> Unit,
-    icon: androidx.compose.ui.graphics.vector.ImageVector = COUIIcons.Basic.Search,
+    icon: ImageVector = COUIIcons.Basic.Search,
 ) {
     Row(
         modifier = Modifier
@@ -191,15 +200,18 @@ private fun InlineSearchSuggestionRow(
                 indication = null,
                 onClick = onClick,
             )
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+            .padding(
+                horizontal = AppSpacingTokens.Large,
+                vertical = AppSpacingTokens.Medium,
+            ),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(AppSpacingTokens.Medium),
     ) {
         AppIcon(
             imageVector = icon,
             contentDescription = null,
             tint = AppContentColors.secondaryText(),
-            modifier = Modifier.size(18.dp),
+            modifier = Modifier.size(AppSpacingTokens.Large + AppSpacingTokens.Micro),
         )
         AppText(
             text = text,
@@ -219,7 +231,10 @@ private fun InlineSearchSectionTitle(title: String) {
         style = MaterialTheme.typography.labelMedium,
         fontWeight = FontWeight.Medium,
         color = AppContentColors.secondaryText(),
-        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        modifier = Modifier.padding(
+            horizontal = AppSpacingTokens.Large,
+            vertical = AppSpacingTokens.Small,
+        ),
     )
 }
 
@@ -229,6 +244,9 @@ private fun InlineSearchHint(text: String) {
         text = text,
         style = MaterialTheme.typography.bodyMedium,
         color = AppContentColors.secondaryText(),
-        modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
+        modifier = Modifier.padding(
+            horizontal = AppSpacingTokens.Large,
+            vertical = AppSpacingTokens.Medium + AppSpacingTokens.Micro,
+        ),
     )
 }
