@@ -72,6 +72,9 @@ internal fun HomeInlineSearchOverlay(
         onDismiss()
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.ensureLandingBootstrap()
+    }
     LaunchedEffect(query) {
         viewModel.onQueryChange(query)
     }
