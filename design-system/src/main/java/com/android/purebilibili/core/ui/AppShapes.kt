@@ -15,6 +15,7 @@ import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.theme.resolveAndroidNativeChromeTokens
 import com.android.purebilibili.core.theme.resolveCornerRadiusScale
 import io.github.suqi8.coui.kmp.squircle.addSquircleRect
+import io.github.suqi8.coui.kmp.squircle.addSquircleRoundRect
 import com.android.purebilibili.core.theme.usesMiuixFamilySkin
 
 /** Uses the same upstream path geometry as native Miuix controls. */
@@ -32,8 +33,40 @@ internal data class MiuixContainerShape(val radius: Dp) : Shape {
  */
 object AppShapes {
 
-    /** 导航与分类选中态共用胶囊轮廓，随实际槽位高度适配字体与窗口尺寸。 */
-    val SelectionIndicator: Shape = RoundedCornerShape(percent = 50)
+/**
+ * ColorOS 17 连续曲率胶囊（squircle capsule）。
+ *
+ * 半径由实际高度在绘制时推导，所以任何高度的胶囊（底栏、播放条、输入条…）都用同一条
+ * 轮廓：端点先走圆弧再以零曲率并入直边，而不是 `RoundedCornerShape(percent = 50)`
+ * 那种"正圆接两条直线"的几何。
+ */
+internal object AppCapsuleShape : Shape {
+    override fun createOutline(
+        size: Size,
+        layoutDirection: LayoutDirection,
+        density: Density,
+    ): Outline {
+        if (size.width <= 0f || size.height <= 0f) return Outline.Generic(Path())
+        val radius = size.minDimension / 2f
+        return Outline.Generic(
+            Path().apply {
+                addSquircleRoundRect(
+                    rect = androidx.compose.ui.geometry.Rect(0f, 0f, size.width, size.height),
+                    topLeft = radius,
+                    topRight = radius,
+                    bottomRight = radius,
+                    bottomLeft = radius,
+                    capsuleCircleBlend = true,
+                )
+            },
+        )
+    }
+
+    override fun toString(): String = "AppCapsuleShape(continuous)"
+}
+
+/** 导航与分类选中态共用胶囊轮廓，随实际槽位高度适配字体与窗口尺寸。 */
+val SelectionIndicator: Shape = AppCapsuleShape
 
     fun resolveContainerCornerDp(
         level: ContainerLevel,

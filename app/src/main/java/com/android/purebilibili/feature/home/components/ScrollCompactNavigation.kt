@@ -21,9 +21,6 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.dp
-import com.android.purebilibili.core.theme.LocalAppUiStyle
-import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.motion.scrollCompactExpansionSpring
@@ -70,85 +67,72 @@ internal fun ScrollCompactNavigation(
     val accent = com.android.purebilibili.core.ui.AppInteractionColors.nativeNavigation(
         com.android.purebilibili.core.ui.AppNavigationColorRole.BAR,
     )?.selectedContent ?: AppContentColors.selectionAccent(glassEnabled)
-    val isCoui17 = LocalAppUiStyle.current == AppUiStyle.COUI17
     Box(Modifier.fillMaxSize()) {
         Box(
             Modifier.fillMaxSize()
                 .layout { measurable, constraints ->
                     val placeable = measurable.measure(constraints)
                     layout(placeable.width, placeable.height) {
-                        if (isCoui17 || progress.value < 0.999f) placeable.placeRelative(0, 0)
+                        if (progress.value < 0.999f) placeable.placeRelative(0, 0)
                     }
                 }
                 .graphicsLayer {
                     val amount = progress.value.coerceIn(0f, 1f)
-                    if (isCoui17) {
-                        // ColorOS 17: 上滑时底栏作为一个整体向上平移并微缩小，不折叠裁切内部项
-                        translationY = -amount * 12.dp.toPx()
-                        val s = 1f - 0.08f * amount
-                        scaleX = s
-                        scaleY = s
-                        alpha = 1f - 0.15f * amount
-                        clip = false
-                    } else {
-                        alpha = 1f - amount
-                        shape = GenericShape { _, _ ->
-                            val width = resolveScrollCompactExtent(expandedWidthPx, buttonSizePx, amount).toFloat()
-                            val height = resolveScrollCompactExtent(expandedHeightPx, buttonSizePx, amount).toFloat()
-                            val top = (expandedHeightPx - height) / 2f
-                            addRoundRect(RoundRect(Rect(0f, top, width, top + height), CornerRadius(height / 2f)))
-                        }
-                        clip = shouldClipScrollCompactNavigation(progress.value)
-                        val rebound = (-progress.value).coerceIn(0f, 0.03f)
-                        scaleX = 1f + rebound * 0.55f
+                    alpha = 1f - amount
+                    shape = GenericShape { _, _ ->
+                        val width = resolveScrollCompactExtent(expandedWidthPx, buttonSizePx, amount).toFloat()
+                        val height = resolveScrollCompactExtent(expandedHeightPx, buttonSizePx, amount).toFloat()
+                        val top = (expandedHeightPx - height) / 2f
+                        addRoundRect(RoundRect(Rect(0f, top, width, top + height), CornerRadius(height / 2f)))
                     }
+                    clip = shouldClipScrollCompactNavigation(progress.value)
+                    val rebound = (-progress.value).coerceIn(0f, 0.03f)
+                    scaleX = 1f + rebound * 0.55f
                 }
-                .then(if (compact && !isCoui17) Modifier.clearAndSetSemantics {} else Modifier)
+                .then(if (compact) Modifier.clearAndSetSemantics {} else Modifier)
                 .pointerInput(compact) {
-                    if (compact && !isCoui17) awaitPointerEventScope {
+                    if (compact) awaitPointerEventScope {
                         while (true) awaitPointerEvent(PointerEventPass.Initial).changes.forEach { it.consume() }
                     }
                 },
         ) { content() }
-        if (!isCoui17) {
-            Box(
-                Modifier
-                    .layout { measurable, _ ->
-                        val width = resolveScrollCompactExtent(expandedWidthPx, buttonSizePx, progress.value)
-                        val height = resolveScrollCompactExtent(expandedHeightPx, buttonSizePx, progress.value)
-                        val placeable = measurable.measure(Constraints.fixed(width, height))
-                        layout(expandedWidthPx, expandedHeightPx) {
-                            if (progress.value > 0f) {
-                                placeable.placeRelative(0, (expandedHeightPx - height) / 2)
-                            }
+        Box(
+            Modifier
+                .layout { measurable, _ ->
+                    val width = resolveScrollCompactExtent(expandedWidthPx, buttonSizePx, progress.value)
+                    val height = resolveScrollCompactExtent(expandedHeightPx, buttonSizePx, progress.value)
+                    val placeable = measurable.measure(Constraints.fixed(width, height))
+                    layout(expandedWidthPx, expandedHeightPx) {
+                        if (progress.value > 0f) {
+                            placeable.placeRelative(0, (expandedHeightPx - height) / 2)
                         }
                     }
-                    .graphicsLayer { alpha = progress.value.coerceIn(0f, 1f) }
-                    .biliPaiFloatingDockShell(
-                        backdrop = backdrop,
-                        containerColor = containerColor,
-                        pressProgress = 0f,
-                        shape = CircleShape,
-                        enabled = glassEnabled,
-                        blurEnabled = blurEnabled,
-                        hazeState = hazeState,
-                        liquidGlassTuning = liquidGlassTuning,
-                    )
-                    .then(if (compact) Modifier.clickable(role = Role.Button, onClick = onExpand)
-                        else Modifier.clearAndSetSemantics {}),
-                contentAlignment = Alignment.Center,
-            ) {
-                AppIcon(
-                    imageVector = if (iconStyle == SharedFloatingBottomBarIconStyle.MIUIX) {
-                        resolveHomeNavigationBarIcon(currentItem, true)
-                    } else resolveMaterialBottomBarIcon(currentItem, true),
-                    contentDescription = "$currentLabel，展开底栏",
-                    tint = accent,
-                    modifier = Modifier.graphicsLayer {
-                        alpha = ((progress.value - 0.2f) / 0.8f).coerceIn(0f, 1f)
-                    },
+                }
+                .graphicsLayer { alpha = progress.value.coerceIn(0f, 1f) }
+                .biliPaiFloatingDockShell(
+                    backdrop = backdrop,
+                    containerColor = containerColor,
+                    pressProgress = 0f,
+                    shape = CircleShape,
+                    enabled = glassEnabled,
+                    blurEnabled = blurEnabled,
+                    hazeState = hazeState,
+                    liquidGlassTuning = liquidGlassTuning,
                 )
-            }
+                .then(if (compact) Modifier.clickable(role = Role.Button, onClick = onExpand)
+                    else Modifier.clearAndSetSemantics {}),
+            contentAlignment = Alignment.Center,
+        ) {
+            AppIcon(
+                imageVector = if (iconStyle == SharedFloatingBottomBarIconStyle.MIUIX) {
+                    resolveHomeNavigationBarIcon(currentItem, true)
+                } else resolveMaterialBottomBarIcon(currentItem, true),
+                contentDescription = "$currentLabel，展开底栏",
+                tint = accent,
+                modifier = Modifier.graphicsLayer {
+                    alpha = ((progress.value - 0.2f) / 0.8f).coerceIn(0f, 1f)
+                },
+            )
         }
     }
 }

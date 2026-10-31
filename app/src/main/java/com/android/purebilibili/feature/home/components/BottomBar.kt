@@ -484,8 +484,15 @@ internal fun resolveBiliPaiFloatingBottomBarWidth(
     val preferredItemWidth = maxOf(contentPreferredItemWidth, minimumItemWidth)
     val preferredWidth = (preferredItemWidth * safeItemCount) + (contentPadding * 2)
     val minimumWidth = (minimumItemWidth * safeItemCount) + (contentPadding * 2)
-    val widthCap = (containerWidth - (minEdgePadding * 2)).coerceAtLeast(minimumWidth)
-    return minOf(preferredWidth, widthCap).coerceAtMost(containerWidth)
+    // 内容优先：放得下就用内容宽度；放不下时收到"最小内容宽度"，而不是撑满可用宽度。
+    // 撑满会让胶囊两端多出一截空白（截图里按下态高光才是真实宽度），
+    // ColorOS 17 的底栏是贴着内容的胶囊，不铺满屏宽。
+    val availableWidth = (containerWidth - (minEdgePadding * 2)).coerceAtLeast(AppSpacingTokens.None)
+    return if (preferredWidth <= availableWidth) {
+        preferredWidth
+    } else {
+        minimumWidth.coerceAtMost(availableWidth)
+    }.coerceAtMost(containerWidth)
 }
 
 internal fun resolveBiliPaiBottomBarItemSlotWidth(
@@ -4103,9 +4110,18 @@ private fun BiliPaiFloatingBottomBarChrome(
                         if (useNativeMiuixNavigation && LocalAppUiStyle.current == AppUiStyle.COUI17) {
                             // ColorOS 17 的主导航是悬浮胶囊而非贴边导航栏；外层搜索布局仍决定 Dock 的位置与动画，
                             // 胶囊自身按 COUI 的条目宽度规则排布。未读数沿用 COUI 的数字红点。
+                            //
+                            // 材质归属：融合球（LinkedBottomDock）承担材质时，这里只保留图标行。
+                            // 否则同一块区域会叠两层玻璃——外层是 COUI 胶囊（COUITheme 在本 App 里恒为浅色，
+                            // 深色模式下会露出一圈发白的外壳和更大的胶囊边），内层才是融合球。
+                            val dockOwnsMaterial = LocalLinkedDockShellSuppressed.current
                             io.github.suqi8.coui.kmp.basic.BottomFloatingNavigationBar(
                                 modifier = dockModifier,
-                                backdrop = miuixBackdrop,
+                                // 未接管时也要跟随 App 的深色容器色，不能用 COUI 默认的浅色 bar。
+                                containerColor = if (dockOwnsMaterial) Color.Transparent else containerColor,
+                                backdrop = if (dockOwnsMaterial) null else miuixBackdrop,
+                                shadow = if (dockOwnsMaterial) null
+                                else io.github.suqi8.coui.kmp.basic.BottomFloatingNavigationBarDefaults.BarShadow,
                             ) {
                                 visibleItems.forEachIndexed { index, item ->
                                     BottomFloatingNavigationBarItem(
@@ -4179,6 +4195,9 @@ private fun BiliPaiFloatingBottomBarChrome(
                                     tabsCount = totalItems,
                                     modifier = dockModifier,
                                     mode = floatingMode,
+                                    // COUI17 的底栏材质由 LinkedBottomDock 的融合球统一承担，
+                                    // 这里只保留内容层，避免同一块区域叠两层玻璃。
+                                    drawShell = !LocalLinkedDockShellSuppressed.current,
                                     // Glass-only breathing room; preserve the native 4dp default.
                                     contentHorizontalPadding = com.android.purebilibili.core.ui.resolveLiquidGlassIndicatorHorizontalInsetDp(
                                         requestedInsetDp = 4f,

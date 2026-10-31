@@ -410,7 +410,8 @@ internal fun BiliPaiNavDisplayHost(
                 progress = videoCardTransitionProgress,
                 contentScale = videoCardContentScale,
                 gestureFollowEnabled = videoSharedReturnGestureFollowEnabled,
-                gestureTranslationEnabled = videoSharedReturnGestureTranslationEnabled,
+                // 返回路径固定：手指只驱动返回进度，不改变卡片轨迹。
+                gestureTranslationEnabled = false,
                 heroMotionSpec = heroMotion,
                 returningProvider = returningProvider,
                 deviceCornerDp = effectiveDeviceCornerDp,
@@ -442,7 +443,8 @@ internal fun BiliPaiNavDisplayHost(
                 progress = videoCardTransitionProgress,
                 contentScale = MiuixVideoCardContentScale.CropCenter,
                 gestureFollowEnabled = videoSharedReturnGestureFollowEnabled,
-                gestureTranslationEnabled = videoSharedReturnGestureTranslationEnabled,
+                // 返回路径固定：手指只驱动返回进度，不改变卡片轨迹。
+                gestureTranslationEnabled = false,
                 heroMotionSpec = heroMotion,
                 returningProvider = returningProvider,
                 deviceCornerDp = effectiveDeviceCornerDp,

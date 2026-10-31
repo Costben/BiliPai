@@ -66,7 +66,8 @@ class BottomBarLayoutPolicyTest {
             labelMode = 0
         )
 
-        assertEquals(353.dp, width)
+        // 内容放不下时收到最小内容宽度（5 × 64dp + 8dp），不再撑满可用宽度。
+        assertEquals(328.dp, width)
     }
 
     @Test
@@ -91,7 +92,7 @@ class BottomBarLayoutPolicyTest {
         )
 
         assertEquals(328.dp, iconOnlyWidth)
-        assertEquals(353.dp, iconAndTextWidth)
+        assertEquals(328.dp, iconAndTextWidth)
         assertEquals(348.dp, textOnlyWidth)
     }
 
@@ -162,9 +163,9 @@ class BottomBarLayoutPolicyTest {
             searchExpanded = false,
         )
 
-        assertEquals(329.dp, layout.dockWidth)
+        assertEquals(328.dp, layout.dockWidth)
         assertEquals(0.dp, layout.minimumIndicatorWidth)
-        assertEquals(69.dp, layout.indicatorReferenceWidth)
+        assertEquals(64.dp, layout.indicatorReferenceWidth)
         assertTrue(
             resolveBiliPaiBottomBarItemSlotWidth(
                 dockWidth = layout.dockWidth,

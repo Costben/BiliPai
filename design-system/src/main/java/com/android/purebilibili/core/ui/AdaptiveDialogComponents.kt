@@ -233,58 +233,17 @@ internal fun AdaptiveAlertDialog(
     }
     when (renderer) {
         AppAlertDialogRenderer.LOCAL_DIALOG -> {
-            if (isMiuixNonGlassEnabled() && shape == null) {
-                // 原生窗口负责表面、圆角、边距和动画；自定义材质继续走下方路径。
-                WindowDialog(
-                    show = true,
-                    modifier = modifier,
-                    onDismissRequest = onDismissRequest,
-                    maxWidth = contentLayout.maxWidthDp.dp,
-                    backgroundColor = containerColor ?: io.github.suqi8.coui.kmp.layout.DialogDefaults.backgroundColor(),
-                ) {
-                    NativeMiuixAlertDialogBody(icon, title, text, confirmButton, dismissButton)
-                }
-                return
-            }
-            val dialogShape = shape ?: AppShapes.resolveContainerShape(
-                level = ContainerLevel.Dialog,
-                uiStyle = uiStyle,
-                liquidGlassEnabled = false,
-            )
-            val dialogColor = containerColor ?: AppSurfaceTokens.cardContainer()
-            val dialogBody: @Composable () -> Unit = {
-                MiuixAlertDialogBody(
-                    icon = icon,
-                    title = title,
-                    text = text,
-                    confirmButton = confirmButton,
-                    dismissButton = dismissButton,
-                    confirmContentColor = confirmContentColor,
-                    dismissContentColor = dismissContentColor,
-                )
-            }
+            // 完全复用 COUI 的对话框组件：表面、圆角、24dp 内边距、按钮布局和进出动画
+            // 都由 WindowDialog 自己负责。此前用 `insideMargin = 0 / cornerRadius = 0`
+            // 抹掉内边距再自绘 AppPopupSurface，标题正文和按钮会直接贴到圆角边界上。
             WindowDialog(
                 show = true,
+                modifier = modifier,
                 onDismissRequest = onDismissRequest,
                 maxWidth = contentLayout.maxWidthDp.dp,
-                // WindowDialog 自带背景、圆角和 24dp 内边距。这里只用其窗口/动画，
-                // 外观由 AppPopupSurface 负责，避免内外两张圆角卡片叠加。
-                backgroundColor = Color.Transparent,
-                insideMargin = DpSize(0.dp, 0.dp),
-                cornerRadius = 0.dp,
+                backgroundColor = containerColor ?: io.github.suqi8.coui.kmp.layout.DialogDefaults.backgroundColor(),
             ) {
-                com.android.purebilibili.core.ui.ModalWindowBlurBehindEffect()
-                AppPopupSurface(
-                    type = AppPopupSurfaceType.DIALOG,
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .widthIn(min = contentLayout.minWidthDp.dp, max = contentLayout.maxWidthDp.dp),
-                    shape = dialogShape,
-                    containerColor = dialogColor,
-                    tonalElevation = tonalElevation ?: 0.dp,
-                ) {
-                    dialogBody()
-                }
+                NativeMiuixAlertDialogBody(icon, title, text, confirmButton, dismissButton)
             }
             return
         }
@@ -409,7 +368,14 @@ private fun NativeMiuixAlertDialogBody(
     dismissButton: @Composable (() -> Unit)?,
 ) {
     val typography = io.github.suqi8.coui.kmp.theme.COUITheme.textStyles
-    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+    // COUI 的 DialogContentLayout 只给内置标题/正文加 insideMargin(24dp)，自定义 content
+    // 槽位是不加内边距的（留给按钮条铺满面板）。我们自绘正文，所以自己补上同一条边距，
+    // 否则标题正文会直接贴到圆角上。
+    val insideMargin = io.github.suqi8.coui.kmp.layout.DialogDefaults.insideMargin
+    Column(
+        Modifier.fillMaxWidth().padding(top = insideMargin.height),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
         icon?.let {
             Box(Modifier.padding(bottom = 12.dp), contentAlignment = Alignment.Center) { it() }
         }
@@ -417,6 +383,7 @@ private fun NativeMiuixAlertDialogBody(
             NativeMiuixDialogTextSlot(
                 style = typography.title4.copy(fontWeight = FontWeight.Medium),
                 color = io.github.suqi8.coui.kmp.layout.DialogDefaults.titleColor(),
+                horizontalPadding = insideMargin.width,
                 content = it,
             )
         }
@@ -424,12 +391,19 @@ private fun NativeMiuixAlertDialogBody(
             NativeMiuixDialogTextSlot(
                 style = typography.body1,
                 color = io.github.suqi8.coui.kmp.layout.DialogDefaults.summaryColor(),
+                horizontalPadding = insideMargin.width,
                 content = it,
             )
         }
         if (confirmButton != null || dismissButton != null) {
             androidx.compose.runtime.CompositionLocalProvider(LocalNativeMiuixDialogActionRow provides true) {
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                // COUI 按钮条的 cell 内缩 12dp，底边再留 16dp（ButtonBarInsideMargin /
+                // ButtonBarPaddingBottom），胶囊不贴面板边缘。
+                Row(
+                    Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 0.dp)
+                        .padding(bottom = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
                     dismissButton?.let { action ->
                         Box(Modifier.weight(1f), contentAlignment = Alignment.Center) { action() }
                     }
@@ -448,10 +422,15 @@ private fun NativeMiuixAlertDialogBody(
 private fun NativeMiuixDialogTextSlot(
     style: androidx.compose.ui.text.TextStyle,
     color: Color,
+    horizontalPadding: androidx.compose.ui.unit.Dp = 0.dp,
     content: @Composable () -> Unit,
 ) {
     val centeredStyle = style.copy(textAlign = androidx.compose.ui.text.style.TextAlign.Center)
-    Box(Modifier.fillMaxWidth().padding(bottom = 12.dp), contentAlignment = Alignment.Center) {
+    Box(
+        Modifier.fillMaxWidth().padding(horizontal = horizontalPadding, vertical = 0.dp)
+            .padding(bottom = 12.dp),
+        contentAlignment = Alignment.Center,
+    ) {
         androidx.compose.runtime.CompositionLocalProvider(LocalAppTextStyleOverride provides centeredStyle) {
             ProvideTextStyle(centeredStyle) { ProvideAppActionContentColor(color, content) }
         }
