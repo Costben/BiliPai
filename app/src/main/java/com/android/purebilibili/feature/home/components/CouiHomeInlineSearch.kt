@@ -120,7 +120,12 @@ internal fun CouiHomeInlineSearchRow(
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = horizontalPadding),
+                .padding(horizontal = horizontalPadding)
+                // 展开时吞掉空白区域点击，避免落到下面已淡出的头像/操作键上。
+                .clickable(
+                    interactionSource = interaction,
+                    indication = null,
+                ) {},
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
