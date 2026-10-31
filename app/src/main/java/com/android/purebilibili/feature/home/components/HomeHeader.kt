@@ -1495,6 +1495,7 @@ fun HomeHeader(
     onInboxClick: () -> Unit = {},
     topRightUnreadCount: Int = 0,
     onSearchClick: () -> Unit,
+    onSearchSubmit: (String) -> Unit = {},
     topCategories: List<String> = resolveHomeTopCategories().map { it.label },
     topCategoryKeys: List<String> = resolveHomeTopCategories().map { it.name },
     categoryIndex: Int,
@@ -1624,6 +1625,8 @@ fun HomeHeader(
         !uiSkinDecoration?.topTabBackgroundImagePath.isNullOrBlank()
     // COUI 17：顶栏材质改为 ColorOS 渐变模糊，第一行只放头像与光影图标按钮，不再显示搜索框。
     val couiHeader = LocalAppUiStyle.current == AppUiStyle.COUI17 && !hasIllustratedHeader
+    // 点搜索键后在顶栏内向左展开透明搜索框，左缘对齐头像左缘。
+    var couiInlineSearchExpanded by remember { mutableStateOf(false) }
     val useUnifiedTopPanel = !hasIllustratedHeader && shouldUseUnifiedHomeTopPanel(topChromePolicy)
     val useDetachedTopTabDock = shouldUseDetachedHomeTopTabDock(
         presentation = topChromePolicy.tabPresentation,
@@ -2669,6 +2672,7 @@ fun HomeHeader(
                                 .height(searchBarHeightDp)
                                 .graphicsLayer {
                                     translationY = searchContentTranslationProvider.value()
+                                    alpha = if (couiInlineSearchExpanded) 0f else 1f
                                 }
                                 .padding(
                                     horizontal = if (embedTopTabsInUnifiedPanel) {
@@ -2792,7 +2796,7 @@ fun HomeHeader(
                                     contentDescription = "搜索",
                                     onClick = {
                                         haptic(HapticType.LIGHT)
-                                        onSearchClick()
+                                        couiInlineSearchExpanded = true
                                     },
                                 )
                             } else if (bottomBarSearchEnabled) {
@@ -2978,6 +2982,21 @@ fun HomeHeader(
                                     )
                                 }
                             }
+                        }
+                        if (couiHeader) {
+                            CouiHomeInlineSearchRow(
+                                expanded = couiInlineSearchExpanded,
+                                onExpandedChange = { couiInlineSearchExpanded = it },
+                                onSubmit = onSearchSubmit,
+                                rowHeight = searchBarHeightDp,
+                                horizontalPadding = if (embedTopTabsInUnifiedPanel) {
+                                    AppSpacingTokens.None
+                                } else {
+                                    resolveHomeTopSearchRowHorizontalPadding(topChromePolicy)
+                                },
+                                contentColor = topForegroundColor,
+                                modifier = Modifier.align(Alignment.TopStart),
+                            )
                         }
                     }
 

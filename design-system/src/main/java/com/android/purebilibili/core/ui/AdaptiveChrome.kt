@@ -4,6 +4,7 @@ import com.android.purebilibili.core.ui.wallpaper.LocalGlobalWallpaperBackdropSo
 import com.android.purebilibili.core.ui.wallpaper.sharedGlobalWallpaperBackground
 import com.android.purebilibili.core.ui.blur.ChromeBackdropSource
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Box
@@ -361,7 +362,21 @@ fun AdaptiveTopAppBar(
                         com.android.purebilibili.core.ui.components.LocalAppTopBarIconDecorationEnabled provides true,
                         com.android.purebilibili.core.ui.components.LocalAppActionContentColor provides LocalContentColor.current,
                         io.github.suqi8.coui.kmp.theme.LocalContentColor provides LocalContentColor.current,
-                    ) { Row(verticalAlignment = Alignment.CenterVertically, content = actions) }
+                    ) {
+                        // COUI 的光影按钮是 40dp 正圆；操作键之间必须保留
+                        // TopAppBarDefaults.ActionMenuItemSpacing（10dp），否则会贴在一起。
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(
+                                if (LocalAppUiStyle.current == AppUiStyle.COUI17) {
+                                    io.github.suqi8.coui.kmp.basic.TopAppBarDefaults.ActionMenuItemSpacing
+                                } else {
+                                    0.dp
+                                }
+                            ),
+                            content = actions,
+                        )
+                    }
                 }
             },
             colors = colors,
