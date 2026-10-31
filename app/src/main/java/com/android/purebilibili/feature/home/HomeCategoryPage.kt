@@ -195,6 +195,8 @@ internal fun HomeCategoryPageContent(
     category: HomeCategory,
     categoryState: CategoryContent,
     isActive: Boolean,
+    /** 页面是否在屏幕上。图片加载只看这个，不看数据同步是否就绪。 */
+    pageOnScreen: Boolean = isActive,
     visibleDuringNavigation: Boolean = false,
     gridState: LazyStaggeredGridState,
     gridColumns: Int,
@@ -473,7 +475,7 @@ internal fun HomeCategoryPageContent(
             resolveHomeCoverLoadRange(first, last, videoGridKeys.size, gridColumns, isDataSaverActive)
         }
     }
-    val coverLoadingActive = isActive || visibleDuringNavigation
+    val coverLoadingActive = pageOnScreen || visibleDuringNavigation
     val pageImageWorkAllowed = LocalPageImageLoadingAllowed.current && isActive
     val visualWorkActive = rememberVisualWorkActive()
     val reduceMotion = com.android.purebilibili.core.ui.LocalSystemReduceMotion.current
