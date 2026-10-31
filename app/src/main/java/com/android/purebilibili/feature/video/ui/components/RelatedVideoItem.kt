@@ -261,7 +261,7 @@ fun RelatedVideoItem(
     val stationaryCoverUrl = remember(video.pic) {
         FormatUtils.resolveVideoCoverUrl(video.pic, useLowQuality = false)
     }
-    val coverRequest = remember(stationaryCoverUrl) {
+    val coverRequest = remember(context, stationaryCoverUrl) {
         ImageRequest.Builder(context)
             .data(stationaryCoverUrl)
             .crossfade(false)
@@ -272,6 +272,10 @@ fun RelatedVideoItem(
     val relatedVideoNavigationAllowed = LocalRelatedVideoNavigationAllowed.current
     val triggerRelatedVideoClick = relatedClick@{
         if (!relatedVideoNavigationAllowed()) return@relatedClick
+        if (CardPositionManager.isVideoNavigationDebounceActive()) {
+            // 防抖窗口内的点击注定被导航层拒绝；不得覆写在飞转场的全局记录与冻结像素。
+            return@relatedClick
+        }
         cardCoordinatesRef.value
             ?.takeIf { it.isAttached }
             ?.videoCardSourceBoundsInRoot()
@@ -436,13 +440,14 @@ fun RelatedVideoItem(
                                 video.owner.face.isNotEmpty()
                             ) {
                                 {
-                                    AsyncImage(
-                                        model = ImageRequest.Builder(context)
-                                            .data(FormatUtils.fixImageUrl(
-                                                video.owner.face
-                                            ))
+                                    val avatarRequest = remember(context, video.owner.face) {
+                                        ImageRequest.Builder(context)
+                                            .data(FormatUtils.fixImageUrl(video.owner.face))
                                             .crossfade(false)
-                                            .build(),
+                                            .build()
+                                    }
+                                    AsyncImage(
+                                        model = avatarRequest,
                                         contentDescription = null,
                                         contentScale = ContentScale.Crop,
                                         modifier = Modifier
@@ -467,7 +472,6 @@ fun RelatedVideoItem(
                     HorizontalVideoStatRow(
                         playText = FormatUtils.formatStat(video.stat.view.toLong()),
                         danmakuText = FormatUtils.formatStat(video.stat.danmaku.toLong()),
-                        modifier = Modifier.padding(end = if (onMoreClick != null) 48.dp else 0.dp),
                     )
                 }
             },

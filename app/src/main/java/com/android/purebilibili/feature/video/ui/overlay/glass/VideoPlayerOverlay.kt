@@ -1773,8 +1773,9 @@ private fun VideoPlayerOverlayContent(
         // 玻璃横竖屏统一由中央入口控制播放与暂停，随控制栏显隐。
         if ((isFullscreen || configuration.orientation == android.content.res.Configuration.ORIENTATION_PORTRAIT) &&
             com.android.purebilibili.core.ui.LocalAppThemeConfig.current.liquidGlassEnabled) {
+            val hideCenterPlayback = rememberHideGlassCenterPlayback()
             CenterPlaybackControl(
-                visible = isVisible &&
+                visible = !hideCenterPlayback && isVisible &&
                     (pluginPlaybackStatus.first || player.playbackState == Player.STATE_READY || player.playbackState == Player.STATE_ENDED) &&
                     centerLoadingUiState == null &&
                     !isScreenLocked && !isSeekScrubbing && !danmakuComposerVisible &&
@@ -2310,6 +2311,16 @@ private fun VideoPlayerOverlayContent(
 
         if (showVideoSettings) {
             VideoSettingsPanel(
+                playerDiagnosticsEnabled = insightMode != PlayerSettingsStore.PlayerInsightMode.OFF,
+                onPlayerDiagnosticsChange = { enabled ->
+                    if (!enabled) showInsightDetails = false
+                    scope.launch {
+                        SettingsManager.setPlayerInsightMode(
+                            context,
+                            if (enabled) PlayerSettingsStore.PlayerInsightMode.ALWAYS else PlayerSettingsStore.PlayerInsightMode.OFF,
+                        )
+                    }
+                },
                 chapterDisplayMode = chapterDisplayMode,
                 onChapterDisplayModeChange = { mode ->
                     scope.launch { SettingsManager.setChapterDisplayMode(context, mode) }

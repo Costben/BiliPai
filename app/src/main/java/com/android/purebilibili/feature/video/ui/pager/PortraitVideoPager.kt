@@ -5,6 +5,8 @@
 
 package com.android.purebilibili.feature.video.ui.pager
 
+import com.android.purebilibili.core.player.withAppVideoDecoderDiagnostics
+import com.android.purebilibili.core.player.withAppVideoDecoderPreference
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.feature.video.ui.gesture.detectPlayerTapGestures
@@ -804,6 +806,7 @@ fun PortraitVideoPager(
                     .setExtensionRendererMode(
                         androidx.media3.exoplayer.DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON
                     )
+                    .withAppVideoDecoderPreference(context)
             )
             .setAudioAttributes(
                 androidx.media3.common.AudioAttributes.Builder()
@@ -812,7 +815,7 @@ fun PortraitVideoPager(
                     .build(),
                 resolveHandleAudioFocusByPolicy(audioFocusEnabled = audioFocusEnabled)
             )
-            .build()
+            .build().withAppVideoDecoderDiagnostics(context)
             .apply {
                 repeatMode = resolvePortraitPagerRepeatMode()
                 volume = com.android.purebilibili.core.player.PlayerVolumeController

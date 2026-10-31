@@ -201,8 +201,11 @@ class VideoActivity : ComponentActivity() {
             // 与主界面一致：COUI 17 下液态玻璃只在运行时屏蔽，用户开关保持原值。
             val liquidGlassEnabled = storedLiquidGlassEnabled &&
                 videoThemeSettings.uiStyle != com.android.purebilibili.core.theme.AppUiStyle.COUI17
+            val liquidSwitchThumbMode by SettingsManager.getLiquidSwitchThumbMode(this@VideoActivity)
+                .collectAsStateWithLifecycle(initialValue = com.android.purebilibili.core.ui.LiquidSwitchThumbMode.THEME)
             val appThemeConfig = remember(
                 liquidGlassEnabled,
+                liquidSwitchThumbMode,
                 blurIntensity,
                 headerBlurEnabled,
                 bottomBarBlurEnabled,
@@ -217,6 +220,7 @@ class VideoActivity : ComponentActivity() {
             ) {
                 AppThemeConfig(
                     liquidGlassEnabled = liquidGlassEnabled,
+                    liquidSwitchThumbMode = liquidSwitchThumbMode,
                     blurIntensity = blurIntensity,
                     headerBlurEnabled = headerBlurEnabled,
                     bottomBarBlurEnabled = bottomBarBlurEnabled,

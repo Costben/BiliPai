@@ -46,6 +46,7 @@ fun AppLiquidAwareSearchField(
     presentation: AppSearchFieldPresentation = AppSearchFieldPresentation.STANDARD,
     compactHeight: Dp = Dp.Unspecified,
     inheritPopupGlass: Boolean = false,
+    captureShellForContent: Boolean = true,
 ) {
     val liquidHeight = if (compactHeight.isSpecified && compactHeight > 0.dp) {
         compactHeight
@@ -88,6 +89,7 @@ fun AppLiquidAwareSearchField(
             liquidHeight.value
         ),
         isScrollInProgressProvider = isScrollInProgressProvider,
+        captureShellForContent = captureShellForContent,
     ) { liquidChromeActive ->
         if (liquidChromeActive) {
             CompactLiquidSearchInput(

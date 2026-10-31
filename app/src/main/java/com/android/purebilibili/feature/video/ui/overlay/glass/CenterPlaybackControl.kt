@@ -13,6 +13,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
@@ -22,6 +26,16 @@ import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppIconButton
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.motion.AppMotionEasing
+
+@Composable
+internal fun rememberHideGlassCenterPlayback(): Boolean {
+    val context = LocalContext.current
+    val preference = remember(context) {
+        com.android.purebilibili.core.store.player.PlayerSettingsStore.getHideGlassCenterPlayback(context)
+    }
+    val hidden by preference.collectAsStateWithLifecycle(initialValue = false)
+    return hidden
+}
 
 /** The central play/pause target follows the visibility of the rest of the player controls. */
 @Composable

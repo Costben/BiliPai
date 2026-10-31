@@ -41,6 +41,7 @@ import com.android.purebilibili.core.ui.components.AppIconButton
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.motion.rememberSystemReduceMotion
 import com.android.purebilibili.core.ui.animation.MeltBallEffectView
+import com.android.purebilibili.core.ui.animation.gl.isThanosEffectSupported
 import com.android.purebilibili.core.ui.animation.MeltBallMergeTarget
 import com.android.purebilibili.core.ui.findHostActivity
 import com.android.purebilibili.core.ui.transition.captureNativeVideoCardImage
@@ -50,6 +51,7 @@ import com.android.purebilibili.core.ui.transition.rememberNativeVideoCardLayer
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
@@ -65,6 +67,7 @@ import com.android.purebilibili.core.util.CardPositionManager
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
@@ -122,6 +125,7 @@ internal fun AudioNowPlayingBar(
     onExpand: () -> Unit,
     onCompactClick: (() -> Unit)? = null,
     isLayoutStable: Boolean = true,
+    captureCardSourceOnExpand: Boolean = true,
     pauseArtworkRotation: Boolean = false,
     onPlayPause: () -> Unit,
     onSkipNext: () -> Unit,
@@ -164,6 +168,9 @@ internal fun AudioNowPlayingBar(
         val barCoordsRef = remember { arrayOfNulls<LayoutCoordinates>(1) }
         val coverCoordsRef = remember { arrayOfNulls<LayoutCoordinates>(1) }
         val dissolveContext = LocalContext.current
+        val artworkGate = com.android.purebilibili.core.ui.rememberDecorativeAnimationGate()
+        val reduceMotion = rememberSystemReduceMotion()
+        val cancelCaptureJob = remember { arrayOfNulls<kotlinx.coroutines.Job>(1) }
 
         // 从窗口已绘制的像素截取横条，避免离屏重绘实时模糊/旋转图层。
         // 点按取消立即暂停；绒球首帧隐藏本体，吸进底栏后再关闭会话。
@@ -186,10 +193,10 @@ internal fun AudioNowPlayingBar(
                 cancelDissolving = true
                 onCancelPlayback()
                 val hostWindow = dissolveContext.findHostActivity()?.window
-                if (hostWindow == null) {
+                if (hostWindow == null || !artworkGate.active || !isThanosEffectSupported(dissolveContext)) {
                     dismissAfterCancel()
                 } else {
-                    snapshotScope.launch {
+                    cancelCaptureJob[0] = snapshotScope.launch {
                         try {
                             withFrameNanos { }
                             val windowBounds = barCoordsRef[0]?.takeIf { it.isAttached }?.boundsInWindow()
@@ -237,17 +244,41 @@ internal fun AudioNowPlayingBar(
             }
         }
 
-        DisposableEffect(Unit) {
+        LaunchedEffect(artworkGate.active, cancelDissolving, state.bvid) {
+            // 关闭已开始而窗口不再呈现时，直接结束粒子和截图任务，不能在后台逐帧运行。
+            if (!artworkGate.active && cancelDissolving) {
+                cancelCaptureJob[0]?.cancel()
+                finishCancelDissolveCleanup()
+                dismissAfterCancel()
+            }
+        }
+        DisposableEffect(state.bvid) {
             onDispose {
+                cancelCaptureJob[0]?.cancel()
                 dissolveEffectView?.dispose()
                 dissolveEffectView = null
             }
         }
 
-        val handleExpand = {
+        val handleExpand = nowPlayingBarExpand@{
             if (onCompactClick != null) {
                 onCompactClick()
-            } else if (!captureInProgress && canOpenAudioNowPlayingBarSource(isLayoutStable)) {
+            } else if (!captureCardSourceOnExpand && !captureInProgress &&
+                canOpenAudioNowPlayingBarSource(isLayoutStable)
+            ) {
+                if (CardPositionManager.isVideoNavigationDebounceActive()) {
+                    // 防抖窗口内的点击注定被导航层拒绝；不得覆写在飞转场的全局记录与冻结像素。
+                    return@nowPlayingBarExpand
+                }
+                // 听视频页使用普通导航，不等待仅供视频详情形变使用的来源快照。
+                onExpand()
+            } else if (captureCardSourceOnExpand && !captureInProgress &&
+                canOpenAudioNowPlayingBarSource(isLayoutStable)
+            ) {
+                if (CardPositionManager.isVideoNavigationDebounceActive()) {
+                    // 防抖窗口内的点击注定被导航层拒绝；不得覆写在飞转场的全局记录与冻结像素。
+                    return@nowPlayingBarExpand
+                }
                 barCoordsRef[0]?.takeIf { it.isAttached }?.boundsInRoot()?.let { bounds ->
                     val sourceCoverBounds = coverCoordsRef[0]?.takeIf { it.isAttached }?.boundsInRoot()
                     val effectiveSourceLayout = if (iconOnlyProgress() >= 0.99f) {
@@ -305,11 +336,11 @@ internal fun AudioNowPlayingBar(
                 }
             }
         }
-        val reduceMotion = rememberSystemReduceMotion()
-        val sourceInActiveReturn = resolveNowPlayingBarReturnVisibility(
-            handoff = handoff,
-            currentBvid = state.bvid,
-        ) <= 0f
+        val sourceInActiveReturn by remember(handoff, state.bvid) {
+            derivedStateOf {
+                resolveNowPlayingBarReturnVisibility(handoff = handoff, currentBvid = state.bvid) <= 0f
+            }
+        }
 
         val chrome = resolveMusicPlayerChromeSpec(
             uiStyle = LocalAppUiStyle.current,
@@ -353,8 +384,10 @@ internal fun AudioNowPlayingBar(
         }
         // 各材质共用的旋转调度：卡片过渡时停止请求旋转帧，保留角度供结束后续转。
         // 只暂停装饰动画，不改变播放状态，也不改变液态玻璃 / MD3 / Miuix 的布局与样式。
+        val decorativeMotionAllowed = artworkGate.active && isLayoutStable &&
+            !pauseArtworkRotation && !captureInProgress && !cancelDissolving && !sourceInActiveReturn
         val coverRotationDegrees = rememberMusicArtworkRotationDegrees(
-            active = !pauseArtworkRotation && shouldRotateMusicArtwork(
+            active = decorativeMotionAllowed && shouldRotateMusicArtwork(
                 isPlaying = state.isPlaying,
                 reduceMotion = reduceMotion
             ),
@@ -365,6 +398,7 @@ internal fun AudioNowPlayingBar(
         val glassMotion = glassActive && miuixBackdrop != null
         Box(
             modifier = modifier
+                .then(artworkGate.modifier)
                 .appElasticPress(
                     enabled = !sourceInActiveReturn && !captureInProgress && !cancelDissolving,
                     state = elasticState,
@@ -435,11 +469,11 @@ internal fun AudioNowPlayingBar(
                 )
                 .then(if (sourceInActiveReturn) Modifier.clearAndSetSemantics {} else Modifier),
         ) {
-            if (isCoui17) {
-                Box(
-                    Modifier.matchParentSize()
-                        .graphicsLayer { alpha = 1f - surfaceMergeProgress().coerceIn(0f, 1f) }
-                        .then(
+            if (!dissolveContentHidden) Box(
+                Modifier.matchParentSize()
+                    .graphicsLayer { alpha = 1f - surfaceMergeProgress().coerceIn(0f, 1f) }
+                    .then(
+                        if (isCoui17) {
                             if (miuixBackdrop != null) {
                                 Modifier.couiGlassSurface(
                                     backdrop = miuixBackdrop,
@@ -464,27 +498,25 @@ internal fun AudioNowPlayingBar(
                                         shape = shape,
                                     )
                             }
-                        )
-                )
-            } else {
-                Box(
-                    Modifier.matchParentSize()
-                        .graphicsLayer { alpha = 1f - surfaceMergeProgress().coerceIn(0f, 1f) }
-                        .biliPaiFloatingDockShell(
-                            backdrop = miuixBackdrop,
-                            interactionLayerBlock = elasticState.layerBlock.takeIf { glassMotion },
-                            interactionState = elasticState.takeIf { glassMotion },
-                            containerColor = containerColor,
-                            pressProgress = 0f,
-                            shape = shape,
-                            enabled = glassActive,
-                            blurEnabled = blurEnabled,
-                            hazeState = hazeState,
-                            liquidGlassTuning = liquidGlassTuning,
-                            readabilitySurfaceColor = AppSurfaceTokens.background(),
-                        )
-                )
-            }
+                        } else {
+                            Modifier.biliPaiFloatingDockShell(
+                                backdrop = miuixBackdrop,
+                                interactionLayerBlock = elasticState.layerBlock.takeIf { glassMotion },
+                                interactionState = elasticState.takeIf { glassMotion },
+                                containerColor = containerColor,
+                                pressProgress = 0f,
+                                shape = shape,
+                                enabled = glassActive,
+                                blurEnabled = blurEnabled,
+                                hazeState = hazeState,
+                                liquidGlassTuning = liquidGlassTuning,
+                                // Use the app's current animated palette directly: a luminance
+                                // threshold would flip this scrim halfway through a theme change.
+                                readabilitySurfaceColor = AppSurfaceTokens.background(),
+                            )
+                        }
+                    )
+            )
             CompositionLocalProvider(LocalElasticPressEnabled provides false) {
                 AudioNowPlayingBarContentRow(
                     modifier = if (glassMotion) Modifier.graphicsLayer(elasticState.layerBlock).clip(shape) else Modifier.clip(shape),
@@ -521,7 +553,7 @@ internal fun AudioNowPlayingBar(
                         ) {
                             AppText(
                                 text = state.title,
-                                modifier = if (state.isPlaying && isLayoutStable) {
+                                modifier = if (state.isPlaying && decorativeMotionAllowed) {
                                     Modifier.basicMarquee(iterations = Int.MAX_VALUE)
                                 } else {
                                     Modifier
@@ -776,6 +808,7 @@ internal fun AudioNowPlayingBarPresenceHost(
     content: @Composable () -> Unit,
 ) {
     val reduceMotion = rememberSystemReduceMotion()
+    val parentVisualWorkAllowed = com.android.purebilibili.core.ui.LocalVisualWorkAllowed.current
     val alphaEnterSpec = resolveAudioNowPlayingPresenceAnimationSpec(
         active = true,
         reduceMotion = reduceMotion,
@@ -809,6 +842,9 @@ internal fun AudioNowPlayingBarPresenceHost(
         },
         modifier = modifier,
     ) {
-        content()
+        CompositionLocalProvider(
+            com.android.purebilibili.core.ui.LocalVisualWorkAllowed provides
+                (parentVisualWorkAllowed && visible && !transition.isRunning),
+        ) { content() }
     }
 }

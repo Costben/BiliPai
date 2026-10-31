@@ -746,18 +746,23 @@ object VideoRepository {
         }
     }
     
-    // 推荐使用主账号凭证；HD 授权只走兼容通道，其他授权保留独立手机端请求。
+    // 推荐凭证在签名前固定；HD 授权走兼容通道，其他授权使用手机端请求。
     private suspend fun fetchMobileFeed(idx: Int, refreshCount: Int): Result<List<VideoItem>> {
         TokenManager.awaitRestore()
-        val token = TokenManager.accessTokenCache?.takeIf { it.isNotBlank() }
-            ?: return Result.failure(IllegalStateException("需要登录才能使用移动端推荐流"))
-        val platform = TokenManager.accessTokenPlatformCache
+        val account = try {
+            com.android.purebilibili.core.network.purposeAccount(com.android.purebilibili.core.store.AccountPurpose.RECOMMENDATION)
+        } catch (e: java.io.IOException) { return Result.failure(e) }
+        val token = (if (account != null) account.accessToken else TokenManager.accessTokenCache)?.takeIf { it.isNotBlank() }
+            ?: return Result.failure(IllegalStateException("推荐账号需要移动端登录凭证，可重新登录或使用网页推荐"))
+        val platform = account?.accessTokenPlatform ?: TokenManager.accessTokenPlatformCache
+        val session = account?.let { com.android.purebilibili.core.network.AccountCookieSession.from(it) }
+            ?: com.android.purebilibili.core.network.AccountCookieSession.main()
         if (platform == TokenManager.ACCESS_TOKEN_PLATFORM_ANDROID_HD) {
-            return fetchHdMobileFeed(idx, token)
+            return fetchHdMobileFeed(idx, token, session)
         }
         return try {
             val params = buildSignedHomePhoneFeedParams(idx, refreshCount, token, platform)
-            val response = api.getMobileFeed(params)
+            val response = api.getMobileFeed(params, session)
             if (response.code != 0) throw ContentRequestException(response.code, response.message)
             Result.success(response.data?.items.orEmpty()
                 .filter { it.isSupportedRecommendation }
@@ -802,7 +807,7 @@ object VideoRepository {
     }
 
     // HD 授权使用匹配的请求身份及签名，禁止匿名调用。
-    private suspend fun fetchHdMobileFeed(idx: Int, accessToken: String): Result<List<VideoItem>> {
+    private suspend fun fetchHdMobileFeed(idx: Int, accessToken: String, session: com.android.purebilibili.core.network.AccountCookieSession): Result<List<VideoItem>> {
         try {
             // app 取流依赖 buvid 会话, 缺失时先通过 SPI 获取
             // 先等会话备份异步恢复完成，避免启动窗口内误判 buvid 缺失而多打一次 SPI。
@@ -848,7 +853,7 @@ object VideoRepository {
             val encodedParams = signedParams.mapValues { (_, value) -> AppSignUtils.percentEncode(value) }
 
             com.android.purebilibili.core.util.Logger.d("VideoRepo", " Merged Mobile feed request: idx=$idx")
-            val feedResp = api.getMobileFeedEncoded(encodedParams)
+            val feedResp = api.getMobileFeedEncoded(encodedParams, session)
 
             if (feedResp.code != 0) {
                 com.android.purebilibili.core.util.Logger.d("VideoRepo", " Merged Mobile feed error: code=${feedResp.code}, msg=${feedResp.message}")
@@ -991,6 +996,7 @@ object VideoRepository {
     }
 
     suspend fun getCreatorCardStats(mid: Long): Result<CreatorCardStats> = VideoCatalogRepository.getCreatorCardStats(mid)
+    fun getCachedCreatorCardStats(mid: Long): CreatorCardStats? = VideoCatalogRepository.getCachedCreatorCardStats(mid)
 
     suspend fun isVerticalVideo(bvid: String, aid: Long = 0L): Boolean = withContext(Dispatchers.IO) {
         val normalizedBvid = bvid.trim()
@@ -1189,7 +1195,7 @@ object VideoRepository {
             targetQn = qn,
             audioLang = audioLang,
             requestKind = PlayUrlRequestKind.EXPLICIT
-        )?.data
+        )?.data?.withPreferredCdnTracks()
     }
 
     /**
@@ -1212,7 +1218,7 @@ object VideoRepository {
             targetQn = qn,
             audioLang = audioLang,
             requestKind = PlayUrlRequestKind.INITIAL
-        )?.data
+        )?.data?.withPreferredCdnTracks()
     }
 
     /**
@@ -1228,6 +1234,7 @@ object VideoRepository {
         audioLang: String? = null
     ): PlayUrlData? = withContext(Dispatchers.IO) {
         getInitialPlayUrlData(bvid, cid, targetQuality = qn, audioLang = audioLang)
+            ?.withPreferredCdnTracks()
     }
 
     /** 自动升级只查询目标高级画质，沿用当前播放账号的 Web Cookie。 */
@@ -1247,7 +1254,46 @@ object VideoRepository {
             null
         } ?: return@withContext null
         payload.takeIf { hasExactPlayableRequestedTrack(targetQn, it.dash?.video.orEmpty()) }
+            ?.withPreferredCdnTracks()
     }
+
+    /**
+     * 把 DASH 轨的地址过一次选线。
+     *
+     * 这些入口（画质升级、听视频、Story、下载兜底、分 P 切换）都是独立 fetch 的，
+     * 不经过播放器的 applyPlaybackCdnPreference，B 站下发 PCDN 地址时会解析失败，
+     * 表现为「播放地址未应用」或直接卡住。
+     */
+    internal fun PlayUrlData.withPreferredCdnTracks(): PlayUrlData {
+        val dash = dash ?: return this
+        return copy(
+            dash = dash.copy(
+                video = dash.video.map { track ->
+                    track.copy(baseUrl = pickNonPcdnUrl(track.baseUrl, track.backupUrl))
+                },
+                audio = dash.audio?.map { track ->
+                    track.copy(baseUrl = pickNonPcdnUrl(track.baseUrl, track.backupUrl))
+                },
+            )
+        )
+    }
+
+    /** 从 baseUrl + backupUrl 里挑一个可用的地址，全 PCDN 时换成常规 CDN 域名。 */
+    private fun pickNonPcdnUrl(baseUrl: String, backupUrl: List<String>?): String {
+        val candidates = (listOf(baseUrl) + backupUrl.orEmpty()).filter { it.isNotEmpty() }
+        candidates.firstOrNull { candidate ->
+            !com.android.purebilibili.feature.plugin.isRiskyCdnHost(
+                com.android.purebilibili.feature.plugin.hostFromCdnUrl(candidate)
+            )
+        }?.let { return it }
+        val pcdn = candidates.firstOrNull() ?: return baseUrl
+        return com.android.purebilibili.feature.plugin.rewriteBilivideoHost(
+            pcdn,
+            PREMIUM_UPGRADE_FALLBACK_CDN_HOST,
+        ) ?: pcdn
+    }
+
+    private const val PREMIUM_UPGRADE_FALLBACK_CDN_HOST = "upos-sz-mirrorali.bilivideo.com"
 
     suspend fun getTvCastPlayData(
         aid: Long,

@@ -129,6 +129,7 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.ui.text.TextStyle
@@ -979,22 +980,22 @@ private fun VideoPlayerSectionContent(
     val audioManager = remember { context.getSystemService(Context.AUDIO_SERVICE) as AudioManager }
     val settingsScope = rememberCoroutineScope()
 
-    val playerInsightMode by com.android.purebilibili.core.store.SettingsManager
-        .getPlayerInsightMode(context)
-        .collectAsStateWithLifecycle(
+    val playerInsightMode by remember(context) {
+        com.android.purebilibili.core.store.SettingsManager.getPlayerInsightMode(context)
+    }.collectAsStateWithLifecycle(
             initialValue = com.android.purebilibili.core.store.SettingsManager.getPlayerInsightModeSync(context),
             lifecycle = lifecycleOwner.lifecycle
         )
 
-    val playbackSpeedOptions by SettingsManager
-        .getPlaybackSpeedOptions(context)
-        .collectAsStateWithLifecycle(
+    val playbackSpeedOptions by remember(context) {
+        SettingsManager.getPlaybackSpeedOptions(context)
+    }.collectAsStateWithLifecycle(
             initialValue = emptyList(),
             lifecycle = lifecycleOwner.lifecycle
         )
-    val playerInteractionSettings by com.android.purebilibili.core.store.SettingsManager
-        .getPlayerInteractionSettings(context)
-        .collectAsStateWithLifecycle(
+    val playerInteractionSettings by remember(context) {
+        com.android.purebilibili.core.store.SettingsManager.getPlayerInteractionSettings(context)
+    }.collectAsStateWithLifecycle(
             initialValue = com.android.purebilibili.core.store.PlayerInteractionSettings(
                 longPressSpeedLockEnabled = com.android.purebilibili.core.store.SettingsManager
                     .getLongPressSpeedLockEnabledSync(context),
@@ -1042,9 +1043,9 @@ private fun VideoPlayerSectionContent(
             hasValidWindow = configuration.screenWidthDp > 0
         )
     }
-    val playbackCompletionBehavior by com.android.purebilibili.core.store.SettingsManager
-        .getPlaybackCompletionBehavior(context)
-        .collectAsStateWithLifecycle(
+    val playbackCompletionBehavior by remember(context) {
+        com.android.purebilibili.core.store.SettingsManager.getPlaybackCompletionBehavior(context)
+    }.collectAsStateWithLifecycle(
             initialValue = com.android.purebilibili.core.store.PlaybackCompletionBehavior.CONTINUE_CURRENT_LOGIC,
             lifecycle = lifecycleOwner.lifecycle
         )
@@ -1442,9 +1443,9 @@ private fun VideoPlayerSectionContent(
 
     // 「播放页沉浸状态栏」开启时，实时采样播放画面作为状态栏背景模糊源；
     // 关闭（默认）时背景为纯黑，不采样，零开销。
-    val statusBarHazeEnabled by SettingsManager
-        .getHideVideoPageStatusBar(context)
-        .collectAsStateWithLifecycle(
+    val statusBarHazeEnabled by remember(context) {
+        SettingsManager.getHideVideoPageStatusBar(context)
+    }.collectAsStateWithLifecycle(
             initialValue = SettingsManager.getHideVideoPageStatusBarSync(context),
         )
     val shouldCaptureStatusBarAmbientFrame = shouldCaptureInlineStatusBarAmbientFrame(
@@ -2195,11 +2196,13 @@ private fun VideoPlayerSectionContent(
         if (pageGlassSupported) hasUsedPageGlassTexture = true
     }
     // Keep page recording through chrome/paused-center exits without a polling job.
-    val pageGlassRequested = showControls || !observedIsPlaying ||
-        (isGestureVisible && (gestureMode == VideoGestureMode.Brightness || gestureMode == VideoGestureMode.Volume))
+    val pageGlassRequested = !suppressTransientOverlaysForTransition && (
+        showControls || !observedIsPlaying ||
+            (isGestureVisible && (gestureMode == VideoGestureMode.Brightness || gestureMode == VideoGestureMode.Volume))
+        )
     val pageGlassVisibility = animateFloatAsState(
         targetValue = if (pageGlassRequested) 1f else 0f,
-        animationSpec = tween<Float>(
+        animationSpec = if (suppressTransientOverlaysForTransition) snap() else tween<Float>(
             com.android.purebilibili.feature.video.ui.overlay.PLAYER_GLASS_VISIBILITY_DURATION_MS,
             easing = com.android.purebilibili.core.ui.motion.AppMotionEasing.Continuity,
         ),
@@ -2208,8 +2211,14 @@ private fun VideoPlayerSectionContent(
     val pageGlassCaptureVisible by remember(pageGlassVisibility) {
         derivedStateOf { pageGlassVisibility.value > 0f }
     }
-    val capturePlayerPage = pageGlassSupported && (pageGlassRequested || pageGlassCaptureVisible) && hostLifecycleStarted &&
-        !MiniPlayerManager.getInstance(context).isMiniMode
+    val capturePlayerPage = shouldCapturePlayerPageBackdrop(
+        glassSupported = pageGlassSupported,
+        controlsRequestCapture = pageGlassRequested,
+        controlsExitVisible = pageGlassCaptureVisible,
+        hostStarted = hostLifecycleStarted,
+        miniMode = MiniPlayerManager.getInstance(context).isMiniMode,
+        overlaysSuppressed = suppressTransientOverlaysForTransition,
+    )
     // 应用共享元素
     val livePlayerSharedElementEnabled = shouldEnableLivePlayerSharedElement(
             transitionEnabled = transitionEnabled,
@@ -2456,7 +2465,10 @@ private fun VideoPlayerSectionContent(
                             if (isScreenLocked) {
                                 return@detectDragGestures
                             }
-                            if (isLongPressing || longPressSpeedLocked) {
+                            // 长按倍速进行中禁用拖拽：此时竖移在调倍速值。
+                            // 仅锁定（手指已松开、倍速固定）不阻断音量/亮度/进度滑动，
+                            // 否则锁定 2x 后侧边滑动调音量会完全失效。
+                            if (isLongPressing) {
                                 return@detectDragGestures
                             }
                             //  [新增] 边缘防误触检测
@@ -3125,9 +3137,9 @@ private fun VideoPlayerSectionContent(
             )
         }
 
-        val danmakuSettings by com.android.purebilibili.core.store.SettingsManager
-            .getDanmakuSettings(context, activeDanmakuScope)
-            .collectAsStateWithLifecycle(
+        val danmakuSettings by remember(context, activeDanmakuScope) {
+            com.android.purebilibili.core.store.SettingsManager.getDanmakuSettings(context, activeDanmakuScope)
+        }.collectAsStateWithLifecycle(
                 initialValue = com.android.purebilibili.core.store.DanmakuSettings(),
                 lifecycle = lifecycleOwner.lifecycle
             )
@@ -3161,23 +3173,23 @@ private fun VideoPlayerSectionContent(
         val danmakuAllowColorful = danmakuSettings.allowColorful
         val danmakuAllowSpecial = danmakuSettings.allowSpecial
         val danmakuHideInteractiveCommands = danmakuSettings.hideInteractiveCommands
-        val danmakuHotBarEnabled by com.android.purebilibili.core.store.SettingsManager
-            .getDanmakuHotBarEnabled(context)
-            .collectAsStateWithLifecycle(initialValue = true)
+        val danmakuHotBarEnabled by remember(context) {
+            com.android.purebilibili.core.store.SettingsManager.getDanmakuHotBarEnabled(context)
+        }.collectAsStateWithLifecycle(initialValue = true)
         val danmakuSmartOcclusion = danmakuSettings.smartOcclusion
         val portraitDanmakuDisplayAreaMode = danmakuSettings.portraitDisplayAreaMode
-        val danmakuFullscreenPanelWidthMode by com.android.purebilibili.core.store.SettingsManager
-            .getDanmakuFullscreenPanelWidthMode(context)
-            .collectAsStateWithLifecycle(
+        val danmakuFullscreenPanelWidthMode by remember(context) {
+            com.android.purebilibili.core.store.SettingsManager.getDanmakuFullscreenPanelWidthMode(context)
+        }.collectAsStateWithLifecycle(
                 initialValue = com.android.purebilibili.core.store.DanmakuPanelWidthMode.THIRD,
                 lifecycle = lifecycleOwner.lifecycle
             )
         val danmakuBlockRulesRaw = danmakuSettings.blockRulesRaw
         val danmakuBlockRules = danmakuSettings.blockRules
         val isLoggedIn = (uiState as? VideoPlaybackUiState.Success)?.isLoggedIn == true
-        val danmakuCloudSyncEnabled by com.android.purebilibili.core.store.SettingsManager
-            .getDanmakuCloudSyncEnabled(context)
-            .collectAsStateWithLifecycle(initialValue = true)
+        val danmakuCloudSyncEnabled by remember(context) {
+            com.android.purebilibili.core.store.SettingsManager.getDanmakuCloudSyncEnabled(context)
+        }.collectAsStateWithLifecycle(initialValue = true)
         val canSyncDanmakuCloud = com.android.purebilibili.feature.video.danmaku
             .shouldSyncDanmakuSettingsToCloud(
                 isLoggedIn = isLoggedIn,
@@ -3776,9 +3788,9 @@ private fun VideoPlayerSectionContent(
 
         // --- [优化] 视频封面逻辑 ---
         // 使用 isFirstFrameRendered + smooth reveal 确保只有在首帧稳定后才揭开封面，避免黑屏和硬切。
-        val autoPlayOnOpenEnabled by SettingsManager
-            .getClickToPlay(context)
-            .collectAsStateWithLifecycle(initialValue = SettingsManager.getClickToPlaySync(context))
+        val autoPlayOnOpenEnabled by remember(context) {
+            SettingsManager.getClickToPlay(context)
+        }.collectAsStateWithLifecycle(initialValue = SettingsManager.getClickToPlaySync(context))
         var hasManualStartPlaybackIntent by remember(bvid, (uiState as? VideoPlaybackUiState.Success)?.info?.cid) {
             mutableStateOf(
                 autoPlayOnOpenEnabled && playerState.player.mediaItemCount > 0 &&
@@ -3880,9 +3892,9 @@ private fun VideoPlayerSectionContent(
             colorTransfer = videoInputFormat?.colorInfo?.colorTransfer ?: 0
         )
         // 诊断日志开关变化频率极低；在此局部收集，只影响本区域的重组。
-        val playerDiagnosticLoggingEnabled by SettingsManager
-            .getPlayerDiagnosticLoggingEnabled(context)
-            .collectAsStateWithLifecycle(initialValue = true)
+        val playerDiagnosticLoggingEnabled by remember(context) {
+            SettingsManager.getPlayerDiagnosticLoggingEnabled(context)
+        }.collectAsStateWithLifecycle(initialValue = true)
         BindPlayerAmbient(
             player = playerState.player,
             playerView = playerViewRef,
@@ -4435,7 +4447,6 @@ private fun VideoPlayerSectionContent(
         sourceRouteForSharedElement,
         transitionSourceCornerDp,
         forceCoverDuringReturnAnimation,
-        playerState.player.currentPosition,
         isFullscreen,
         isPortraitFullscreen,
         isVerticalVideo,
@@ -5459,9 +5470,9 @@ private fun VideoPlayerSectionContent(
                 val debugInfo by playerState.debugInfo.collectAsStateWithLifecycle()
                 val diagnosticEvents by playerState.diagnosticEvents.collectAsStateWithLifecycle()
                 val pendingUserAction by playerState.pendingUserAction.collectAsStateWithLifecycle()
-                val playerDiagnosticLoggingEnabled by SettingsManager
-                    .getPlayerDiagnosticLoggingEnabled(context)
-                    .collectAsStateWithLifecycle(initialValue = true)
+                val playerDiagnosticLoggingEnabled by remember(context) {
+                    SettingsManager.getPlayerDiagnosticLoggingEnabled(context)
+                }.collectAsStateWithLifecycle(initialValue = true)
                 val displayedCommentCount by remember(
                     state.commentStateHandle, uiState.info.aid, uiState.info.stat.reply,
                 ) {

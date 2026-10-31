@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.profile
 
 import com.android.purebilibili.core.ui.AppIcons
+import com.android.purebilibili.core.util.responsiveContentWidth
 
 import com.android.purebilibili.navigation.tabIndicatorPosition
 import com.android.purebilibili.data.model.AccountLedgerKind
@@ -170,6 +171,8 @@ import com.android.purebilibili.core.ui.rememberAppDeleteIcon
 import com.android.purebilibili.core.ui.rememberAppLinkIcon
 import com.android.purebilibili.core.ui.rememberAppSemanticVisualPolicy
 import com.android.purebilibili.core.ui.AppSemanticAccentRole
+import com.android.purebilibili.core.ui.UserAvatarCornerMarkBadge
+import com.android.purebilibili.core.ui.resolveUserAvatarCornerMark
 import com.android.purebilibili.core.ui.components.UserLevelBadge
 import com.android.purebilibili.core.ui.rememberAppWarningIcon
 import com.android.purebilibili.core.ui.rememberAppWatchLaterIcon
@@ -342,6 +345,7 @@ fun ProfileScreen(
     onAccountSwitchSuccess: () -> Unit = {},
     onSettingsClick: () -> Unit,
     onAccountLedgerClick: ((AccountLedgerKind) -> Unit)? = null,
+    onCommentSourceClick: (String) -> Unit = {},
     onSearchClick: () -> Unit = {},
     onHistoryClick: () -> Unit,
     showHistoryService: Boolean = true,
@@ -364,7 +368,20 @@ fun ProfileScreen(
     scrollToTopChannel: kotlinx.coroutines.channels.Channel<Unit>? = null
     // [注意] 移除了 globalHazeState - 双 hazeSource 模式与 Haze 库冲突
 ) {
-    CompositionLocalProvider(LocalProfileLedgerNavigation provides onAccountLedgerClick) {
+    var showMyComments by androidx.compose.runtime.saveable.rememberSaveable { mutableStateOf(false) }
+    androidx.activity.compose.BackHandler(enabled = showMyComments && isCurrentPage) { showMyComments = false }
+    if (showMyComments) {
+        com.android.purebilibili.feature.settings.screen.CommentFraudHistoryScreen(
+            onBack = { showMyComments = false },
+            archiveMode = true,
+            onOpenSource = onCommentSourceClick,
+        )
+        return
+    }
+    CompositionLocalProvider(
+        LocalProfileLedgerNavigation provides onAccountLedgerClick,
+        LocalProfileCommentsNavigation provides { showMyComments = true },
+    ) {
         ProfileScreenContent(
             viewModel = viewModel,
             isCurrentPage = isCurrentPage,
@@ -438,6 +455,7 @@ private fun ProfileScreenContent(
     val accounts by viewModel.accounts.collectAsStateWithLifecycle()
     val activeAccountMid by viewModel.activeAccountMid.collectAsStateWithLifecycle()
     val playbackAccountMid by viewModel.playbackAccountMid.collectAsStateWithLifecycle()
+    val purposeAccountMids by viewModel.purposeAccountMids.collectAsStateWithLifecycle()
     val view = LocalView.current
     var showAccountSwitchDialog by remember { mutableStateOf(false) }
     val windowSizeClass = LocalWindowSizeClass.current
@@ -572,6 +590,16 @@ private fun ProfileScreenContent(
             accounts = accounts,
             activeAccountMid = activeAccountMid,
             playbackAccountMid = playbackAccountMid,
+            purposeAccountMids = purposeAccountMids,
+            onSetPurpose = { purpose, mid ->
+                viewModel.setPurposeAccount(purpose, mid,
+                    onSuccess = {
+                        onAccountSwitchSuccess()
+                        Toast.makeText(context, "账号用途已更新，下次请求生效", Toast.LENGTH_SHORT).show()
+                    },
+                    onFailure = { Toast.makeText(context, it, Toast.LENGTH_SHORT).show() },
+                )
+            },
             onDismiss = { showAccountSwitchDialog = false },
             onAddAccount = {
                 showAccountSwitchDialog = false
@@ -1828,6 +1856,7 @@ private fun ProfilePinnedSpaceTopBar(
     photoFractionProvider: () -> Float = { 0f },
 ) {
     val openLedger = LocalProfileLedgerNavigation.current
+    val openComments = LocalProfileCommentsNavigation.current
     val topChromeScrim = remember(listState) {
         derivedStateOf {
             resolveProfilePinnedTopChromeScrim(
@@ -1864,10 +1893,10 @@ private fun ProfilePinnedSpaceTopBar(
                     AppWindowAction(label = "消息", onClick = onInboxClick),
                     AppWindowAction(label = "编辑资料", onClick = onEditClick),
                     AppWindowAction(
-                        label = "账号与资产",
+                        label = "账号与记录",
                         children = listOf(
                             AppWindowAction(label = "切换账号", onClick = onAccountManageClick),
-                        ) + ledgerMenuActions(openLedger),
+                        ) + ledgerMenuActions(openLedger, openComments),
                     ),
                 ),
                 listOf(
@@ -2006,6 +2035,7 @@ private fun ProfileTopActions(
     onWallpaperClick: (() -> Unit)? = null,
 ) {
     val openLedger = LocalProfileLedgerNavigation.current
+    val openComments = LocalProfileCommentsNavigation.current
     var showQrAuthorization by remember { mutableStateOf(false) }
     if (showQrAuthorization) {
         OfficialQrAuthorizationDialog(onDismiss = { showQrAuthorization = false })
@@ -2047,7 +2077,7 @@ private fun ProfileTopActions(
                         )
                     )
                     add(AppWindowAction(label = "切换账号", onClick = onAccountClick))
-                    addAll(ledgerMenuActions(openLedger))
+                    addAll(ledgerMenuActions(openLedger, openComments))
                     add(AppWindowAction(label = "切换主题", onClick = onThemeClick))
                     onWallpaperClick?.let { action ->
                         add(AppWindowAction(label = "更换背景", onClick = action))
@@ -2059,9 +2089,9 @@ private fun ProfileTopActions(
                 AppIcon(AppIcons.Rounded.MoreVert, contentDescription = "更多", tint = tint)
         }
     }
-    if (!compact && openLedger != null) {
-        AppWindowActionMenu(groups = listOf(ledgerMenuActions(openLedger))) {
-            AppIcon(AppIcons.Rounded.MoreVert, contentDescription = "硬币与经验明细", tint = tint)
+    if (!compact && (openLedger != null || openComments != null)) {
+        AppWindowActionMenu(groups = listOf(ledgerMenuActions(openLedger, openComments))) {
+            AppIcon(AppIcons.Rounded.MoreVert, contentDescription = "评论与账号明细", tint = tint)
         }
     }
 
@@ -3089,7 +3119,11 @@ private fun ProfileVideoList(
                 onClick = listLayout.toggle,
             )
         }
-        BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+        BoxWithConstraints(
+            modifier = if (columns == 1) {
+                Modifier.responsiveContentWidth(com.android.purebilibili.core.util.resolveSingleColumnFeedMaxWidth())
+            } else Modifier.fillMaxWidth(),
+        ) {
             val cardWidth = (maxWidth - 10.dp * (columns - 1)) / columns
             LookaheadScope {
                 FlowRow(
@@ -3105,6 +3139,7 @@ private fun ProfileVideoList(
                             )) {
                                 if (columns == 1) {
                                     PersonalMediaCardFrame(
+                                        horizontalCoverMaxWidthDp = com.android.purebilibili.feature.home.components.cards.WIDE_LIST_COVER_MAX_WIDTH_DP,
                                         headlineContent = {
                                             AppText(
                                                 video.title,
@@ -4381,15 +4416,26 @@ fun UserInfoSection(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = if (centered) Arrangement.Center else Arrangement.Start
     ) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current).data(FormatUtils.fixImageUrl(user.face)).crossfade(true).placeholder(android.R.color.darker_gray).build(),
-            contentDescription = null,
-            modifier = Modifier
-                .size(72.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surfaceVariant),
-            contentScale = ContentScale.Crop
-        )
+        // 自身头像与评论区头像对齐：右下角叠加认证/大会员角标（对齐 PiliPlus 我的页）。
+        Box {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current).data(FormatUtils.fixImageUrl(user.face)).crossfade(true).placeholder(android.R.color.darker_gray).build(),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(72.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                contentScale = ContentScale.Crop
+            )
+            UserAvatarCornerMarkBadge(
+                mark = resolveUserAvatarCornerMark(
+                    officialType = user.officialVerifyType,
+                    vipStatus = if (user.isVip) 1 else 0,
+                ),
+                modifier = Modifier.align(Alignment.BottomEnd),
+                badgeSize = 20.dp,
+            )
+        }
         if (!centered) {
             Spacer(modifier = Modifier.width(16.dp))
             Column {
@@ -4757,7 +4803,12 @@ private fun ProfileWallpaperActionButton(
 @Composable
 fun UserInfoText(user: UserState, centered: Boolean = false, forceWhite: Boolean = false) {
     //  修复：用户名颜色 + 阴影
-    val contentColor = if (forceWhite) Color.White else AppContentColors.primaryText()
+    // 对齐 PiliPlus 我的页：年度大会员用户名染 VIP 粉色（透明表头保持白色保证可读）。
+    val contentColor = when {
+        forceWhite -> Color.White
+        user.isVip && user.vipType == 2 -> com.android.purebilibili.core.ui.components.userVipPink()
+        else -> AppContentColors.primaryText()
+    }
     val shadow = if (forceWhite) Shadow(color = Color.Black.copy(alpha = 0.5f), blurRadius = 4f) else null
 
     AppText(
@@ -5468,8 +5519,12 @@ internal fun AccountSwitchDialog(
     onAddAccount: () -> Unit,
     onSwitch: (Long) -> Unit,
     onSetPlayback: (Long?) -> Unit,
-    onRemove: (Long) -> Unit
+    onRemove: (Long) -> Unit,
+    purposeAccountMids: Map<com.android.purebilibili.core.store.AccountPurpose, Long?>? = null,
+    onSetPurpose: ((com.android.purebilibili.core.store.AccountPurpose, Long?) -> Unit)? = null,
 ) {
+    val useGlassPurposeControls = com.android.purebilibili.core.ui.LocalAppThemeConfig.current.liquidGlassEnabled &&
+        android.os.Build.VERSION.SDK_INT >= 33 && com.android.purebilibili.core.ui.components.appGlassMenuAvailable()
     val activeAccount = accounts.firstOrNull { it.mid == activeAccountMid }
     val playbackAccount = accounts.firstOrNull { it.mid == playbackAccountMid }
     val activeIsVip = activeAccount?.isVip == true
@@ -5494,9 +5549,9 @@ internal fun AccountSwitchDialog(
         ),
     )
 
-    AppAlertDialog(
+    AccountPurposeDialogSurface(
         onDismissRequest = onDismiss,
-        title = { AppText("账号与播放", fontWeight = FontWeight.Bold) },
+        title = "账号与用途",
         contentLayout = resolveAppContentDialogLayoutPolicy(maxWidthDp = 440, minWidthDp = 320),
         text = {
             Column(
@@ -5507,10 +5562,40 @@ internal fun AccountSwitchDialog(
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 AppText(
-                    text = "播放视频时，可以用另一个账号的大会员权限。",
+                    text = "主账号用于点赞、收藏、评论和个人数据；可分别指定推荐、记录观看和视频取流账号。未指定时跟随主账号，指定账号失效时请重新登录。",
                     style = MaterialTheme.typography.bodySmall,
                     color = AppContentColors.secondaryText()
                 )
+
+                if (onSetPurpose != null && purposeAccountMids == null) {
+                    AppText("正在读取账号用途…", style = MaterialTheme.typography.bodySmall)
+                }
+                if (onSetPurpose != null && purposeAccountMids != null) {
+                    listOf(
+                        com.android.purebilibili.core.store.AccountPurpose.RECOMMENDATION to "推荐与搜索",
+                        com.android.purebilibili.core.store.AccountPurpose.WATCH_HISTORY to "记录观看",
+                        com.android.purebilibili.core.store.AccountPurpose.PLAYBACK to "视频取流",
+                    ).forEach { (purpose, title) ->
+                        val selectedMid = if (purpose == com.android.purebilibili.core.store.AccountPurpose.PLAYBACK) playbackAccountMid else purposeAccountMids[purpose]
+                        val selected = accounts.firstOrNull { it.mid == selectedMid }
+                        val label = if (selectedMid == null) "跟随主账号" else selected?.name?.ifBlank { "UID $selectedMid" } ?: "账号不可用"
+                        val actions = listOf(AppWindowAction(label = "跟随主账号", selected = useGlassPurposeControls && selectedMid == null, onClick = { onSetPurpose(purpose, null) })) +
+                            accounts.filter { it.sessData.isNotBlank() }.map { account ->
+                                AppWindowAction(label = account.name.ifBlank { "UID ${account.mid}" }, selected = useGlassPurposeControls && selectedMid == account.mid, onClick = { onSetPurpose(purpose, account.mid) })
+                            }
+                        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                            AppText(title, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
+                            if (useGlassPurposeControls) {
+                                AccountPurposeGlassAnchor(label, actions)
+                            } else {
+                                AppWindowActionMenu(groups = listOf(actions)) {
+                                    AppText(label, modifier = Modifier.widthIn(max = 180.dp).padding(12.dp), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                                }
+                            }
+                        }
+                    }
+                    AppText("推荐与搜索覆盖推荐流、热门、相关视频及网页搜索；记录观看只改变视频/专栏上报，不改变历史列表、互动账号和隐私模式。", style = MaterialTheme.typography.bodySmall, color = AppContentColors.secondaryText())
+                }
 
                 if (playbackAccount != null) {
                     AppSurface(
@@ -5685,32 +5770,33 @@ internal fun AccountSwitchDialog(
                                     horizontalArrangement = Arrangement.End,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    if (isPlayback) {
-                                        AppTextButton(
-                                            onClick = { onSetPlayback(null) }
-                                        ) {
-                                            AppText(
-                                                text = "取消播放账号",
-                                                style = MaterialTheme.typography.labelMedium,
-                                                color = AppContentColors.secondaryText()
-                                            )
-                                        }
-                                    } else {
-                                        AppTextButton(
-                                            onClick = { onSetPlayback(account.mid) }
-                                        ) {
-                                            AppText(
-                                                text = if (account.isVip) "设为播放(大会员)" else "设为播放",
-                                                style = MaterialTheme.typography.labelMedium,
-                                                color = if (account.isVip) {
-                                                    AppContentColors.accent()
-                                                } else {
-                                                    AppContentColors.secondaryText()
-                                                }
-                                            )
+                                    if (onSetPurpose == null) {
+                                        if (isPlayback) {
+                                            AppTextButton(
+                                                onClick = { onSetPlayback(null) }
+                                            ) {
+                                                AppText(
+                                                    text = "取消播放账号",
+                                                    style = MaterialTheme.typography.labelMedium,
+                                                    color = AppContentColors.secondaryText()
+                                                )
+                                            }
+                                        } else {
+                                            AppTextButton(
+                                                onClick = { onSetPlayback(account.mid) }
+                                            ) {
+                                                AppText(
+                                                    text = if (account.isVip) "设为播放(大会员)" else "设为播放",
+                                                    style = MaterialTheme.typography.labelMedium,
+                                                    color = if (account.isVip) {
+                                                        AppContentColors.accent()
+                                                    } else {
+                                                        AppContentColors.secondaryText()
+                                                    }
+                                                )
+                                            }
                                         }
                                     }
-
                                     if (!isActive) {
                                         Spacer(modifier = Modifier.width(4.dp))
                                         AppTextButton(

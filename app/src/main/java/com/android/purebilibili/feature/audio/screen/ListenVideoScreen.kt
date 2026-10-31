@@ -496,6 +496,7 @@ private fun ListenVideoPlaylistPage(
                     coverUrl = playlist.coverUrl,
                     fallbackIcon = AppIcons.Filled.LibraryMusic,
                     onClick = { onSelected(playlist) },
+                    alignTitleLines = true,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -551,6 +552,7 @@ private fun ListenVideoAlbumPage(
                         coverUrl = album.coverUrl,
                         fallbackIcon = AppIcons.Filled.Album,
                         onClick = { onSelected(album) },
+                        alignTitleLines = true,
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -615,6 +617,7 @@ private fun ListenVideoArtistPage(
                         fallbackIcon = AppIcons.Filled.Person,
                         circularCover = true,
                         onClick = { onSelected(artist) },
+                        alignTitleLines = true,
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -673,7 +676,8 @@ private fun MusicEntityCard(
     fallbackIcon: ImageVector,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    circularCover: Boolean = false
+    circularCover: Boolean = false,
+    alignTitleLines: Boolean = false,
 ) {
     AppSurface(
         modifier = modifier
@@ -719,6 +723,7 @@ private fun MusicEntityCard(
             Column(modifier = Modifier.weight(1f)) {
                 AppText(
                     text = title,
+                    minLines = if (alignTitleLines) 2 else 1,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.titleMedium,

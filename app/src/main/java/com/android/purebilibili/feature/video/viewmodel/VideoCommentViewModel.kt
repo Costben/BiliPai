@@ -105,6 +105,7 @@ internal fun shouldApplyConversationReplyResult(
 data class CommentUiState(
     val replies: ImmutableList<ReplyItem> = persistentListOf(),
     val voteCard: ReplyVoteCard? = null,
+    val pageControl: com.android.purebilibili.data.model.response.ReplyPageControl? = null,
     val isRepliesLoading: Boolean = false,
     val isRepliesRefreshing: Boolean = false,
     val replyCount: Int = 0,
@@ -311,6 +312,7 @@ class VideoCommentViewModel : ViewModel() {
                 upMid = state.upMid,
                 pinnedReplyIds = state.pinnedReplyIds,
                 subject = subject,
+                pageControl = state.pageControl,
                 cachedAtMs = System.currentTimeMillis(),
             ),
         )
@@ -486,6 +488,7 @@ class VideoCommentViewModel : ViewModel() {
             allReplies = sentReplies.merge(cached.replies)
             _commentState.value = _commentState.value.copy(
                 replies = allReplies.toImmutableList(),
+                pageControl = cached.pageControl,
                 replyCount = maxOf(cached.replyCount, currentState.replyCount),
                 replyCountSubject = requestSubject,
                 isRepliesEnd = cached.isEnd,
@@ -556,6 +559,7 @@ class VideoCommentViewModel : ViewModel() {
                 _commentState.value = current.copy(
                     replies = combinedReplies.toImmutableList(),
                     voteCard = if (pageToLoad == 1) data.voteCard else current.voteCard,
+                    pageControl = if (pageToLoad == 1) data.control else current.pageControl,
                     likedComments = (current.likedComments + combinedReplies.flatMap { root ->
                         (listOf(root) + root.replies.orEmpty()).filter { it.action == 1 }.map { it.rpid }
                     }).toImmutableSet(),
@@ -1224,20 +1228,9 @@ class VideoCommentViewModel : ViewModel() {
                 // [新增] 启动评论反诈检测（后台协程，不阻塞 UI）
                 val rpidToCheck = newReply?.rpid ?: 0L
                 if (rpidToCheck > 0L) {
-                    // 💾 发评成功瞬间立即在本地数据库记一笔
-                    viewModelScope.launch {
-                        com.android.purebilibili.data.repository.CommentFraudRepository.saveRecord(
-                            rpid = rpidToCheck,
-                            oid = sendSubject.oid,
-                            type = sendSubject.type,
-                            root = root,
-                            message = message,
-                            status = com.android.purebilibili.data.model.CommentFraudStatus.NORMAL
-                        )
-                    }
-                    
+                    // 成功发布的元数据由宿主回调统一保存，这里只发起可见性检测。
                     val sentAtSeconds = newReply?.ctime?.takeIf { it > 0L } ?: (System.currentTimeMillis() / 1000L)
-                    launchFraudDetection(
+                    if (sendSubject.type == 1) launchFraudDetection(
                         aid = sendCurrentAid,
                         rpid = rpidToCheck,
                         rootId = root,

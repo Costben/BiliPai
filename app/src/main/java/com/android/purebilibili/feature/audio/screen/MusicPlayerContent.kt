@@ -10,10 +10,10 @@ import com.android.purebilibili.core.ui.components.appActionClickable
 import com.android.purebilibili.core.ui.AppContentColors
 
 import com.android.purebilibili.core.ui.components.appSearchElasticPress
-import io.github.suqi8.coui.kmp.window.WindowListPopup
 import io.github.suqi8.coui.kmp.basic.ListPopupColumn
 import io.github.suqi8.coui.kmp.basic.ListPopupDefaults
 import io.github.suqi8.coui.kmp.basic.PopupPositionProvider
+import io.github.suqi8.coui.kmp.window.WindowListPopup
 
 import com.android.purebilibili.navigation.animatePagerSelection
 
@@ -190,6 +190,7 @@ import com.android.purebilibili.feature.audio.lyrics.halcyon.AppleMusicLyricsVie
 import com.android.purebilibili.feature.audio.lyrics.halcyon.mapToHalcyonLyrics
 import com.android.purebilibili.feature.audio.lyrics.halcyon.currentLyricIndexAt
 import com.android.purebilibili.feature.audio.lyrics.halcyon.playerLyricPerspective
+import com.android.purebilibili.core.ui.popup.appGlassDrawerSurface
 import com.android.purebilibili.feature.audio.lyrics.resolveActiveLyricIndex
 import com.android.purebilibili.feature.audio.lyrics.resolveDisplaySecondaryRows
 import com.android.purebilibili.feature.audio.lyrics.resolveLastStartedLyricIndex
@@ -986,7 +987,7 @@ internal fun MusicPlayerContent(
                                     showMusicChrome()
                                 },
                                 showBottomControls = false,
-                                onPageTap = openCoverPage,
+                                fullScreenLyrics = true,
                                 lyricsUiStyle = lyricsUiStyle,
                                 showTranslations = lyricsShowTranslations,
                                 onToggleTranslations = { toggleLyricsTranslations() },
@@ -1614,7 +1615,12 @@ internal fun MusicPlayerContent(
                                 enableWindowDim = false,
                                 maxHeight = 440.dp,
                             ) {
-                                ListPopupColumn { actionsContent() }
+                                Column(
+                                    modifier = Modifier
+                                        .widthIn(max = 288.dp)
+                                        .heightIn(max = 440.dp)
+                                        .verticalScroll(rememberScrollState()),
+                                ) { actionsContent() }
                             }
                         }
                     }
@@ -1851,7 +1857,7 @@ internal fun MusicPlayerContent(
  *
  * 核心设计：
  * 1. 悬浮浮层：浮于播放器底层舞台之上，无全屏暗色遮罩 (scrim)，保持上半部封面与歌词通透沉浸。
- * 2. 质感材质：RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp) + biliPaiFloatingDockShell 流体毛玻璃。
+ * 2. 质感材质：玻璃开启时复用玻璃面板材质，关闭时保留原生背景。
  * 3. 极简导览：待播清单 (数量) + [切换列表 / 3D 唱片架] 模式胶囊 + [v] 优雅下推收起按钮，支持顶部下推手势收起。
  * 4. 模式无缝切换：3D 实体 CD 唱片架 (Cover Flow) 与 高级毛玻璃清单双模态切换。
  */
@@ -1912,7 +1918,7 @@ private fun ImmersiveBottomQueueShelf(
         color = if (glassEnabled && miuixBackdrop != null) Color.Transparent
         else if (coverFlowMode) panelColor else if (miuixBackdrop != null) Color.Transparent else panelColor,
         contentColor = MusicContentColor,
-        border = BorderStroke(1.dp, resolveMusicGlassBorderColor(glassTintColor, isDarkEnvironment)),
+        border = if (glassEnabled && miuixBackdrop != null) null else BorderStroke(1.dp, resolveMusicGlassBorderColor(glassTintColor, isDarkEnvironment)),
         shadowElevation = 16.dp,
         modifier = modifier
             .offset { IntOffset(0, dragOffsetY.value.roundToInt()) }
@@ -1933,7 +1939,15 @@ private fun ImmersiveBottomQueueShelf(
             ) {}
             .then(
                 // 唱片架与列表在玻璃开启时共享采样；关闭时保留各自的原生材质。
-                if (coverFlowMode && !glassEnabled) {
+                if (glassEnabled && miuixBackdrop != null) {
+                    Modifier.appGlassDrawerSurface(
+                        backdrop = miuixBackdrop,
+                        shape = panelShape,
+                        darkTheme = isDarkEnvironment,
+                        tuning = liquidGlassTuning,
+                        forceLowBlurBudget = false,
+                    )
+                } else if (coverFlowMode && !glassEnabled) {
                     Modifier
                 } else {
                     Modifier.biliPaiFloatingDockShell(
@@ -2025,9 +2039,27 @@ private fun ImmersiveBottomQueueShelf(
                         AppSurface(
                             onClick = onToggleQueueCoverFlow,
                             shape = AppShapes.container(ContainerLevel.Pill),
-                            color = resolveMusicGlassContainerColor(glassTintColor, isDarkEnvironment),
-                            border = BorderStroke(0.8.dp, resolveMusicGlassBorderColor(glassTintColor, isDarkEnvironment)),
-                            modifier = Modifier.height(48.dp)
+                            color = if (glassEnabled && miuixBackdrop != null) Color.Transparent
+                                else resolveMusicGlassContainerColor(glassTintColor, isDarkEnvironment),
+                            border = if (glassEnabled && miuixBackdrop != null) null
+                                else BorderStroke(0.8.dp, resolveMusicGlassBorderColor(glassTintColor, isDarkEnvironment)),
+                            modifier = Modifier
+                                .height(48.dp)
+                                .then(
+                                    if (glassEnabled && miuixBackdrop != null) {
+                                        Modifier.biliPaiFloatingDockShell(
+                                            backdrop = miuixBackdrop,
+                                            containerColor = resolveBiliPaiBottomBarContainerColor(
+                                                darkTheme = isDarkEnvironment,
+                                                liquidGlassTuning = liquidGlassTuning,
+                                            ),
+                                            pressProgress = 0f,
+                                            shape = AppShapes.container(ContainerLevel.Pill),
+                                            liquidGlassTuning = liquidGlassTuning,
+                                            darkTheme = isDarkEnvironment,
+                                        )
+                                    } else Modifier
+                                )
                         ) {
                             Box(
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
@@ -3393,7 +3425,7 @@ private fun LyricsPage(
     showTranslations: Boolean = true,
     onToggleTranslations: () -> Unit = {},
     showBottomControls: Boolean = true,
-    onPageTap: (() -> Unit)? = null,
+    fullScreenLyrics: Boolean = false,
     isDarkEnvironment: Boolean = true,
     lyricsUiStyle: SettingsManager.MusicLyricsUiStyle = SettingsManager.MusicLyricsUiStyle.CLASSIC,
     pageVisible: Boolean = true,
@@ -3404,7 +3436,6 @@ private fun LyricsPage(
         com.android.purebilibili.core.ui.rememberVisualWorkActive()
     val document = state.lyrics
     val immersiveLyrics = lyricsUiStyle == SettingsManager.MusicLyricsUiStyle.IMMERSIVE
-    val fullScreenLyrics = onPageTap != null
     var stableCurrentIndex by remember(document) {
         mutableIntStateOf(
             document?.let {
@@ -3430,6 +3461,12 @@ private fun LyricsPage(
     val isLyricsDragged by listState.interactionSource.collectIsDraggedAsState()
     var showLyricsSettings by remember { mutableStateOf(false) }
     var isAutoFollowPaused by remember(document) { mutableStateOf(false) }
+    fun seekToLyric(timeMs: Long) {
+        val lyrics = document ?: return
+        val positionMs = (timeMs + lyrics.offsetMs).coerceAtLeast(0L)
+        isAutoFollowPaused = false
+        onSeek(if (state.durationMs > 0L) positionMs.coerceAtMost(state.durationMs) else positionMs)
+    }
     LaunchedEffect(progressSeekRevision) {
         if (progressSeekRevision > 0) {
             isAutoFollowPaused = false
@@ -3567,13 +3604,7 @@ private fun LyricsPage(
                         contentColor = MusicContentColor,
                         wordLiftEnabled = true,
                         onLineClick = { line ->
-                            if (onPageTap != null) {
-                                onPageTap()
-                            } else {
-                                isAutoFollowPaused = false
-                                val seekMs = line.words.firstOrNull()?.startMs ?: line.timeMs
-                                onSeek(seekMs + document.offsetMs)
-                            }
+                            seekToLyric(line.timeMs)
                         },
                         onLineLongClick = {},
                         topContentPadding = 72.dp,
@@ -3608,13 +3639,7 @@ private fun LyricsPage(
                         reduceMotion = reduceMotion,
                         centerAligned = fullScreenLyrics,
                         onClick = {
-                            if (onPageTap != null) {
-                                onPageTap()
-                            } else {
-                                isAutoFollowPaused = false
-                                val seekMs = line.spans.firstOrNull()?.startTimeMs ?: line.startTimeMs
-                                onSeek(seekMs + document.offsetMs)
-                            }
+                            seekToLyric(line.spans.firstOrNull()?.startTimeMs ?: line.startTimeMs)
                         }
                     )
                 }

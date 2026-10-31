@@ -76,79 +76,20 @@ typealias LinkedDockNowPlayingSlot = @Composable (
 ) -> Unit
 
 /**
- * 当底栏材质由 [CouiDockMetaBall] 承担时，导航内容必须停止绘制自己的外壳，
+ * 当底栏材质由外层（融合球或 COUI 原生胶囊）承担时，导航内容必须停止绘制自己的外壳，
  * 否则同一块区域会叠两层玻璃（高光翻倍、边缘出现硬切）。
  */
 internal val LocalLinkedDockShellSuppressed = androidx.compose.runtime.compositionLocalOf { false }
 
 /**
- * COUI 17 底栏的唯一材质层：胶囊与首页球是同一块 [MetaBallSurface] 的两个端点。
+ * 底栏「整条胶囊 → 首页球」的合并进度（0 = 完全展开，1 = 只剩一颗球）。
  *
- * 合并进度只改变粒子几何（宽度 / 圆心 / 圆角），不经过任何 graphicsLayer 位移或缩放，
- * 因此模糊采样始终落在正确位置；收缩过程中轮廓由胶囊连续形变为圆球，
- * 两个端点天然共享同一层模糊、同一道高光描边与同一份透明度。
+ * ColorOS 17 下由 COUI 原生胶囊自己收窄承担形变，导航内容只读取这个进度做淡出，
+ * 不再参与任何外壳绘制。
  */
-@Composable
-private fun CouiDockMetaBall(
-    progress: () -> Float,
-    navWidth: Int,
-    button: Int,
-    barHeight: Int,
-    navigationX: Int,
-    centerY: Float,
-    backdrop: Backdrop,
-    isDarkTheme: Boolean,
-    /** 播放条的实时矩形（px）；它和导航胶囊属于同一块融合球。 */
-    stripRect: (() -> androidx.compose.ui.unit.IntRect)? = null,
-    stripAlpha: () -> Float = { 0f },
-    modifier: Modifier = Modifier,
-) {
-    val density = LocalDensity.current
-    val collapse = progress().coerceIn(0f, 1f)
-    val widthPx = navWidth + (button - navWidth) * collapse
-    val centerXPx = (navigationX + navWidth / 2f) + (button / 2f - (navigationX + navWidth / 2f)) * collapse
-    // 高度同步收到球径，圆角始终取半高：胶囊一路连续形变成正圆，而不是被裁成椭圆。
-    val heightPx = barHeight + (button - barHeight) * collapse
-    val strip = stripRect?.invoke()
-    val stripPresence = stripAlpha().coerceIn(0f, 1f)
-    MetaBallSurface(
-        particles = buildList {
-            // 播放条与首页球是两个独立元素：融合球只负责导航胶囊 ↔ 球的形变，
-            // 播放条保持自己的轮廓，不参与融合（不并成一条"球头 + 长身"的连体）。
-            if (strip != null && stripPresence > 0.001f && strip.width > 0) {
-                add(
-                    MetaBallParticle(
-                        centerX = with(density) { (strip.left + strip.width / 2f).toDp() },
-                        centerY = with(density) { (strip.top + strip.height / 2f).toDp() },
-                        width = with(density) { strip.width.toDp() },
-                        height = with(density) { strip.height.toDp() },
-                        cornerRadius = with(density) { (strip.height / 2f).toDp() },
-                        alpha = stripPresence,
-                    ),
-                )
-            }
-            add(
-                MetaBallParticle(
-                    centerX = with(density) { centerXPx.toDp() },
-                    centerY = with(density) { centerY.toDp() },
-                    width = with(density) { widthPx.toDp() },
-                    height = with(density) { heightPx.toDp() },
-                    cornerRadius = with(density) { (heightPx / 2f).toDp() },
-                ),
-            )
-        },
-        backdrop = backdrop,
-        // 用 COUI 自己的 bar 色（深色主题下就是深色玻璃），而不是底栏的"玻璃白"容器色：
-        // 后者在深色模式下仍是一层近白的 tint，融合球会被画成一块白板。
-        color = io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.bar,
-        blurRadius = BottomFloatingNavigationBarDefaults.blurRadius(),
-        rimColor = Color.White.copy(
-            alpha = if (isDarkTheme) BottomFloatingNavigationBarDefaults.RIM_ALPHA_DARK
-            else BottomFloatingNavigationBarDefaults.RIM_ALPHA_LIGHT
-        ),
-        modifier = modifier,
-    )
-}
+internal val LocalLinkedDockCollapseProgress =
+    androidx.compose.runtime.compositionLocalOf<() -> Float> { { 0f } }
+
 
 @Composable
 internal fun LinkedBottomDock(
@@ -333,7 +274,6 @@ internal fun LinkedBottomDock(
         ) { if (it == LinkedDockPhase.Search || it == LinkedDockPhase.Compact) 1f else 0f }
         val imeSettled = WindowInsets.ime
             .getBottom(LocalDensity.current) == 0
-        val nowPlayingLayoutStable = !transition.isRunning && imeSettled
         val mergeProgressProvider = remember(merge) {
             { merge.value.coerceIn(0f, 1f) }
         }
@@ -347,6 +287,7 @@ internal fun LinkedBottomDock(
         // handoff alpha hides it; replaying an entrance spring causes a second landing.
         val presence = remember { Animatable(if (hasAudio) 1f else 0f) }
         val slotEntering = remember { mutableStateOf(false) }
+        val nowPlayingLayoutStable = !transition.isRunning && !presence.isRunning && imeSettled
         LaunchedEffect(hasAudio, animateNowPlayingPresence, reduceMotion) {
             val target = if (hasAudio) 1f else 0f
             when {
@@ -487,47 +428,19 @@ internal fun LinkedBottomDock(
             val isCoui17 = LocalAppUiStyle.current == AppUiStyle.COUI17
             val isDarkTheme = com.android.purebilibili.core.ui.isAppInDarkTheme()
             val couiSmallHighlight = rememberGlassHighlight(GlassContainer.Small, backdrop)
-            // ColorOS 17: 整条底栏（胶囊 + 首页球）由同一块 MetaBallSurface 承担材质。
-            // 材质只有一份、几何随合并进度连续形变，因此收缩时不会出现"材质交接"的闪断，
-            // 球与底栏天然共享同一层模糊与同一道高光描边。
-            val metaBallMaterial = isCoui17 && backdrop != null
             val ballSize = button
-            // 播放条与导航胶囊共用同一块融合球：材质在合并的最初 18% 内完成交接，
-            // 交接时两者轮廓完全重合，所以看不到任何材质跳变，之后整块一起融进球。
-            val stripSurfaceProgressProvider: () -> Float = if (metaBallMaterial) {
-                { ((merge.value - 0.02f) / 0.16f).coerceIn(0f, 1f) }
-            } else {
-                zeroProgressProvider
-            }
-            val dockStripRectProvider: (() -> androidx.compose.ui.unit.IntRect)? =
-                if (metaBallMaterial && nowPlayingSlot != null) {
-                    {
-                        val geometry = resolveLinkedDockGeometry(
-                            width = maximumWidth,
-                            button = button,
-                            barHeight = barHeight,
-                            gap = gap,
-                            hasAudio = true,
-                            searchEnabled = searchEnabled,
-                            mergeProgress = merge.value,
-                            searchProgress = search.value,
-                            verticalGap = verticalGap,
-                            presenceProgress = slotGeometryPresenceProvider(),
-                            expandedAudioWidth = bottomBarClusterWidth,
-                            expandedAudioX = navigationX,
-                        )
-                        val top = navRowY - verticalGap - barHeight +
-                            ((barHeight + verticalGap) * merge.value).roundToInt()
-                        androidx.compose.ui.unit.IntRect(
-                            left = geometry.audioX,
-                            top = top,
-                            right = geometry.audioX + geometry.audioWidth,
-                            bottom = top + barHeight,
-                        )
-                    }
-                } else {
-                    null
-                }
+            // ColorOS 17 的材质完全由 COUI 原生胶囊（BottomFloatingNavigationBar）承担：
+            // 不再叠加任何自绘外壳或融合球背景，收缩时只让胶囊自身收窄成圆，
+            // 玻璃采样始终落在真实几何上，不会出现"多套一层宽背景"或"一动就失去模糊"。
+            val couiNativeCapsule = isCoui17
+            // COUI 胶囊在窄屏上左右各留 16dp 外边距，收窄到「球」时必须把这段算进去，
+            // 否则胶囊永远收不成正圆。
+            val couiCapsuleHorizontalInset =
+                BottomFloatingNavigationBarDefaults.PaddingHorizontal * 2
+            val ballRowWidth = with(density) { (ballSize.toDp() + couiCapsuleHorizontalInset).roundToPx() }
+            val collapsedNavWidth = if (couiNativeCapsule) ballRowWidth else navWidth
+            // 播放条与导航胶囊是两个独立元素，不参与任何融合球合并。
+            val stripSurfaceProgressProvider: () -> Float = zeroProgressProvider
 
             Box(
                 modifier = Modifier.size(
@@ -535,36 +448,33 @@ internal fun LinkedBottomDock(
                     with(density) { containerHeight.toDp() },
                 )
             ) {
-                if (metaBallMaterial) {
-                    CouiDockMetaBall(
-                        progress = mergeProgressProvider,
-                        navWidth = navWidth,
-                        button = ballSize,
-                        barHeight = barHeight,
-                        navigationX = navigationX,
-                        centerY = navRowY + barHeight / 2f,
-                        backdrop = backdrop,
-                        isDarkTheme = isDarkTheme,
-                        stripRect = dockStripRectProvider,
-                        stripAlpha = stripSurfaceProgressProvider,
-                        modifier = Modifier.matchParentSize(),
-                    )
-                }
-                if (metaBallMaterial || glassEnabled || !collapsedAtRest) {
+                // ColorOS 17：收拢态的那颗球就是收窄后的 COUI 原生胶囊本身。
+                // 如果在这里把它整个卸载，胶囊会先缩成圆再"闪一下消失"，球也就丢了玻璃材质。
+                // 所以 COUI17 永远保留这一行，只让它的宽度收成球径。
+                if (glassEnabled || !collapsedAtRest || couiNativeCapsule) {
                     Box(
                         modifier = Modifier
                             .offset {
-                                // 融合球承担材质时，导航行随进度向左滑向首页球，
-                                // 用布局偏移（而非 graphicsLayer 位移）保证玻璃采样位置正确。
-                                val collapse = if (metaBallMaterial) merge.value.coerceIn(0f, 1f) else 0f
-                                IntOffset((navigationX * (1f - collapse)).roundToInt(), navRowY)
+                                // 底栏固定在原位，绝不随滚动上移/位移。
+                                IntOffset(navigationX, navRowY)
                             }
-                            .size(
-                                with(density) { navWidth.toDp() },
-                                with(density) { barHeight.toDp() },
-                            )
+                            .layout { measurable, _ ->
+                                // ColorOS 17：胶囊随合并进度真实收窄（整条胶囊 → 首页球）。
+                                // 宽度每帧重新测量，玻璃、高光、圆角都贴在真实轮廓上，
+                                // 所以不会出现"一形变就失去模糊"。
+                                val collapse = if (couiNativeCapsule) {
+                                    merge.value.coerceIn(0f, 1f)
+                                } else {
+                                    0f
+                                }
+                                val width = (
+                                    navWidth + (collapsedNavWidth - navWidth) * collapse
+                                    ).roundToInt().coerceAtLeast(0)
+                                val placeable = measurable.measure(Constraints.fixed(width, barHeight))
+                                layout(width, barHeight) { placeable.placeRelative(0, 0) }
+                            }
                             .then(
-                                if (metaBallMaterial || glassEnabled) Modifier.layout { measurable, constraints ->
+                                if (!couiNativeCapsule && glassEnabled) Modifier.layout { measurable, constraints ->
                                     val placeable = measurable.measure(constraints)
                                     layout(placeable.width, placeable.height) {
                                         if (merge.value < 1f) {
@@ -574,19 +484,8 @@ internal fun LinkedBottomDock(
                                 } else Modifier
                             )
                             .graphicsLayer {
-                                if (metaBallMaterial) {
-                                    // 外壳已交给融合球：这里只做"内容随胶囊一起缩小"的
-                                    // 连续形变，并在后半程淡出，避免 5 个入口被挤成一条缝。
-                                    val collapse = merge.value.coerceIn(0f, 1f)
-                                    val targetScale = if (navWidth > 0) ballSize.toFloat() / navWidth else 1f
-                                    val contentScale = 1f + (targetScale - 1f) * collapse
-                                    scaleX = contentScale
-                                    scaleY = contentScale
-                                    transformOrigin = TransformOrigin(0f, 0.5f)
-                                    alpha = 1f - ((collapse - 0.42f) / 0.33f).coerceIn(0f, 1f)
-                                } else {
-                                    // 退出窗口（前 34%）ease-in 淡出；全程向左侧圆钮方向
-                                    // 轻微收拢缩放，读作"并入圆钮"而非原地溶解。
+                                // 非 COUI17 皮肤保留原有的退出淡出与轻微收拢。
+                                if (!couiNativeCapsule) {
                                     val exitProgress = (merge.value / 0.34f).coerceIn(0f, 1f)
                                     alpha = if (glassEnabled) {
                                         1f - resolveLinkedDockGlassHandoffProgress(merge.value)
@@ -597,8 +496,10 @@ internal fun LinkedBottomDock(
                                     transformOrigin = TransformOrigin(0f, 0.5f)
                                 }
                             }
-                            .pointerInput(phase) {
-                                if (phase != LinkedDockPhase.Expanded) {
+                            .pointerInput(phase, couiNativeCapsule) {
+                                // COUI17 收拢态仍然显示胶囊（它本身就是那颗球），
+                                // 所以不能吞事件，否则首页球按钮点不动。
+                                if (!couiNativeCapsule && phase != LinkedDockPhase.Expanded) {
                                     awaitPointerEventScope {
                                         while (true) {
                                             awaitPointerEvent(PointerEventPass.Initial)
@@ -615,7 +516,10 @@ internal fun LinkedBottomDock(
                                 }
                             ),
                     ) {
-                        CompositionLocalProvider(LocalLinkedDockShellSuppressed provides metaBallMaterial) {
+                        CompositionLocalProvider(
+                            LocalLinkedDockShellSuppressed provides false,
+                            LocalLinkedDockCollapseProgress provides mergeProgressProvider,
+                        ) {
                             if (compactOnScrollEnabled && !isCoui17) {
                                 ScrollCompactNavigation(
                                     compact = useNavigationCompact && compactNavigation && phase == LinkedDockPhase.Expanded,
@@ -648,7 +552,16 @@ internal fun LinkedBottomDock(
                 var homeDragActive by remember { mutableStateOf(false) }
                 Box(
                     modifier = Modifier
-                        .offset { IntOffset(0, controlRowY + (controlHeight - ballSize) / 2) }
+                        .offset {
+                            // ColorOS 17 下这颗球就是收窄后的 COUI 原生胶囊本身，
+                            // 圆心必须与胶囊圆心严格重合；其它皮肤仍在最左侧。
+                            val x = if (couiNativeCapsule) {
+                                navigationX + with(density) {
+                                    BottomFloatingNavigationBarDefaults.PaddingHorizontal.roundToPx()
+                                }
+                            } else 0
+                            IntOffset(x, navRowY + (barHeight - ballSize) / 2)
+                        }
                         .size(
                             with(density) { ballSize.toDp() },
                             with(density) { ballSize.toDp() },
@@ -663,7 +576,7 @@ internal fun LinkedBottomDock(
                             .appElasticPress(
                                 enabled = phase != LinkedDockPhase.Expanded,
                                 state = homeElasticState,
-                                transformInBackdrop = homeGlassMotion && !metaBallMaterial,
+                                transformInBackdrop = homeGlassMotion && !couiNativeCapsule,
                                 allowConsumedDrag = { homeDragActive },
                             )
                             .then(
@@ -685,11 +598,10 @@ internal fun LinkedBottomDock(
                                 } else Modifier
                             )
                             .graphicsLayer {
-                                if (metaBallMaterial) {
-                                    // 材质由融合球承担：图标只在胶囊快收拢成球时浮现，
-                                    // 落点与融合球圆心完全重合，不产生第二次落位。
+                                if (couiNativeCapsule) {
+                                    // 胶囊收窄成球时图标才浮现，落点与球心重合，无第二次落位。
                                     val collapse = merge.value.coerceIn(0f, 1f)
-                                    val appear = ((collapse - 0.55f) / 0.30f).coerceIn(0f, 1f)
+                                    val appear = ((collapse - 0.45f) / 0.35f).coerceIn(0f, 1f)
                                     alpha = appear
                                     val scale = 0.86f + 0.14f * appear
                                     scaleX = scale
@@ -717,40 +629,9 @@ internal fun LinkedBottomDock(
                             ),
                         contentAlignment = Alignment.Center,
                     ) {
-                        // 材质归属：融合球承担材质时，球不再画任何外壳——它自己就是融合球的
-                        // 一个端点，再叠一层就会在深色下露出一块发白的内壳。
-                        if (isCoui17 && !metaBallMaterial) {
-                            Box(
-                                Modifier
-                                    .fillMaxSize()
-                                    .then(
-                                        if (backdrop != null) {
-                                            Modifier.couiGlassSurface(
-                                                backdrop = backdrop,
-                                                shape = CircleShape,
-                                                containerColor = io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.bar,
-                                                fallback = Modifier.background(containerColor, CircleShape),
-                                                blurRadius = BottomFloatingNavigationBarDefaults.blurRadius(),
-                                                blendColors = BottomFloatingNavigationBarDefaults.blurColors(isDarkTheme),
-                                                highlight = couiSmallHighlight,
-                                            )
-                                        } else {
-                                            Modifier
-                                                .background(containerColor, CircleShape)
-                                                .border(
-                                                    width = 1.dp,
-                                                    brush = androidx.compose.ui.graphics.Brush.verticalGradient(
-                                                        listOf(
-                                                            Color.White.copy(alpha = if (isDarkTheme) 0.35f else 0.65f),
-                                                            Color.White.copy(alpha = if (isDarkTheme) 0.08f else 0.15f),
-                                                        )
-                                                    ),
-                                                    shape = CircleShape,
-                                                )
-                                        }
-                                    )
-                            )
-                        } else if (!metaBallMaterial) {
+                        // ColorOS 17：球的外壳就是收窄后的 COUI 原生胶囊，这里绝不能再叠一层，
+                        // 否则深色下会露出第二圈发白的内壳。
+                        if (!couiNativeCapsule) {
                             Box(
                                 Modifier
                                     .fillMaxSize()
@@ -842,24 +723,29 @@ internal fun LinkedBottomDock(
                                 )
                             },
                     ) {
-                        nowPlayingSlot.invoke(
-                            Modifier.fillMaxSize(),
-                            mergeProgressProvider,
-                            searchProgressProvider,
-                            stripSurfaceProgressProvider,
-                            if (shouldExpandPlaybackFromSearch(phase, hasAudio)) {
-                                {
-                                    if (!transition.isRunning) {
-                                        focusManager.clearFocus()
-                                        keyboardController?.hide()
-                                        updatePhase(LinkedDockPhase.Playback)
+                        androidx.compose.runtime.CompositionLocalProvider(
+                            com.android.purebilibili.core.ui.LocalVisualWorkAllowed provides
+                                (com.android.purebilibili.core.ui.LocalVisualWorkAllowed.current && hasAudio),
+                        ) {
+                            nowPlayingSlot.invoke(
+                                Modifier.fillMaxSize(),
+                                mergeProgressProvider,
+                                searchProgressProvider,
+                                stripSurfaceProgressProvider,
+                                if (shouldExpandPlaybackFromSearch(phase, hasAudio)) {
+                                    {
+                                        if (!transition.isRunning) {
+                                            focusManager.clearFocus()
+                                            keyboardController?.hide()
+                                            updatePhase(LinkedDockPhase.Playback)
+                                        }
                                     }
-                                }
-                            } else {
-                                null
-                            },
-                            nowPlayingLayoutStable,
-                        )
+                                } else {
+                                    null
+                                },
+                                nowPlayingLayoutStable,
+                            )
+                        }
                     }
                 }
                 Box(

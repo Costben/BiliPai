@@ -1508,62 +1508,7 @@ private fun SpaceContent(
                 (if (state.isSearchMode && currentSearchScope == SpaceSearchScope.VIDEO) 1 else 0)
         }
     }
-    LaunchedEffect(
-        state.pendingLocateBvid,
-        selectedMainTab,
-        selectedContributionTab,
-        contributionVideoItemStartIndex,
-        state.videos,
-        state.hasMoreVideos,
-        state.videoPageLoadCompletionVersion,
-    ) {
-        val targetBvid = state.pendingLocateBvid ?: return@LaunchedEffect
-        if (
-            selectedMainTab == SpaceMainTab.CONTRIBUTION &&
-            selectedContributionTab.subTab == SpaceSubTab.VIDEO
-        ) {
-            val targetVideoIndex = when (
-                val action = resolveSpaceLocateTargetPageAction(
-                    targetBvid = targetBvid,
-                    videos = state.videos,
-                    isLoading = state.isLoadingMore,
-                    hasMore = state.hasMoreVideos,
-                    lastLoadFailed = state.lastVideoPageLoadFailed,
-                )
-            ) {
-                is SpaceLocateTargetPageAction.Found -> action.index
-                SpaceLocateTargetPageAction.Wait -> return@LaunchedEffect
-                SpaceLocateTargetPageAction.LoadMore -> {
-                    onLoadMoreVideos()
-                    return@LaunchedEffect
-                }
-                SpaceLocateTargetPageAction.LoadFailed -> {
-                    onLocateTargetLoadFailed(targetBvid)
-                    return@LaunchedEffect
-                }
-                SpaceLocateTargetPageAction.Missing -> {
-                    onLocateTargetMissing(targetBvid)
-                    return@LaunchedEffect
-                }
-            }
 
-            gridState.animateScrollToItem(
-                contributionVideoItemStartIndex + targetVideoIndex,
-                scrollOffset = if (pinContentTabs) {
-                    -gridState.measureSpacePinnedTabsHeightPx()
-                } else 0,
-            )
-            highlightedLocateBvid = targetBvid
-            repeat(3) {
-                isLocateHighlightVisible = true
-                kotlinx.coroutines.delay(220)
-                isLocateHighlightVisible = false
-                kotlinx.coroutines.delay(140)
-            }
-            highlightedLocateBvid = null
-            onLocateTargetConsumed(targetBvid)
-        }
-    }
 
     // 遮挡铰链时整页内容落入最大安全区，软折痕允许跨越（与首页/动态/搜索一致）。
     com.android.purebilibili.core.ui.adaptive.AppHingeSafeContent(
@@ -1739,6 +1684,68 @@ private fun SpaceContent(
             adaptiveLayoutSpec.dynamicColumns
         } else {
             effectivePreferredColumns
+        }
+        LaunchedEffect(
+            state.pendingLocateBvid,
+            selectedMainTab,
+            selectedContributionTab,
+            contributionVideoItemStartIndex,
+            state.videos,
+            state.hasMoreVideos,
+            state.videoPageLoadCompletionVersion,
+            gridColumns,
+            contributionVideoLayoutMode,
+            homeSettings.showFullVideoCardContent,
+        ) {
+            val targetBvid = state.pendingLocateBvid ?: return@LaunchedEffect
+            if (
+                selectedMainTab == SpaceMainTab.CONTRIBUTION &&
+                selectedContributionTab.subTab == SpaceSubTab.VIDEO
+            ) {
+                val targetVideoIndex = when (
+                    val action = resolveSpaceLocateTargetPageAction(
+                        targetBvid = targetBvid,
+                        videos = state.videos,
+                        isLoading = state.isLoadingMore,
+                        hasMore = state.hasMoreVideos,
+                        lastLoadFailed = state.lastVideoPageLoadFailed,
+                    )
+                ) {
+                    is SpaceLocateTargetPageAction.Found -> action.index
+                    SpaceLocateTargetPageAction.Wait -> return@LaunchedEffect
+                    SpaceLocateTargetPageAction.LoadMore -> {
+                        onLoadMoreVideos()
+                        return@LaunchedEffect
+                    }
+                    SpaceLocateTargetPageAction.LoadFailed -> {
+                        onLocateTargetLoadFailed(targetBvid)
+                        return@LaunchedEffect
+                    }
+                    SpaceLocateTargetPageAction.Missing -> {
+                        onLocateTargetMissing(targetBvid)
+                        return@LaunchedEffect
+                    }
+                }
+
+                gridState.animateScrollToItem(
+                    contributionVideoItemStartIndex + if (
+                        contributionVideoLayoutMode == SpaceContributionVideoLayoutMode.GRID &&
+                        gridColumns > 1 && !homeSettings.showFullVideoCardContent
+                    ) targetVideoIndex / gridColumns else targetVideoIndex,
+                    scrollOffset = if (pinContentTabs) {
+                        -gridState.measureSpacePinnedTabsHeightPx()
+                    } else 0,
+                )
+                highlightedLocateBvid = targetBvid
+                repeat(3) {
+                    isLocateHighlightVisible = true
+                    kotlinx.coroutines.delay(220)
+                    isLocateHighlightVisible = false
+                    kotlinx.coroutines.delay(140)
+                }
+                highlightedLocateBvid = null
+                onLocateTargetConsumed(targetBvid)
+            }
         }
         val pinchColumnBounds = remember(windowSizeClass.widthSizeClass, windowWidthDp) {
             resolveHomeFeedPinchColumnBounds(
@@ -2004,10 +2011,15 @@ private fun SpaceContent(
                             }
                         )
                     }
-                    items(state.videos.take(4), key = { "home_video_${it.bvid}" }) { video ->
+                    val homeVideos = state.videos.take(4)
+                    val homeVideoKeys = homeVideos.map { "home_video_${it.bvid}" }
+                    val alignHomeVideos = gridColumns > 1 && !homeSettings.showFullVideoCardContent
+                    val renderHomeVideo: @Composable (Int, Modifier) -> Unit = { index, cardModifier ->
+                        val video = homeVideos[index]
                         val localProgressMs = videoProgressLookup(video.bvid)
                         SpaceHomeVideoCard(
                             video = video,
+                            modifier = cardModifier,
                             progressState = resolveSpaceVideoProgressState(
                                 video = video,
                                 localPositionMs = localProgressMs,
@@ -2019,6 +2031,25 @@ private fun SpaceContent(
                             sharedTransitionScope = lazyGridSharedTransitionScope,
                             animatedVisibilityScope = lazyGridAnimatedVisibilityScope
                         )
+                    }
+                    if (!alignHomeVideos) {
+                        itemsIndexed(homeVideos, key = { index, _ -> homeVideoKeys[index] }) { index, _ ->
+                            renderHomeVideo(index, Modifier)
+                        }
+                    } else {
+                        com.android.purebilibili.feature.home.resolveHomeFeedAlignedRows(homeVideos.size, gridColumns)
+                            .forEach { row ->
+                                item(key = "space_home_video_row_${homeVideoKeys[row.first]}", span = StaggeredGridItemSpan.FullLine) {
+                                    com.android.purebilibili.feature.home.HomeAlignedVideoRow(
+                                        indices = row,
+                                        itemKeys = homeVideoKeys,
+                                        columns = gridColumns,
+                                        horizontalArrangement = Arrangement.spacedBy(spaceFeedCardLayout.itemSpacingDp.dp),
+                                        modifier = Modifier.fillMaxWidth(),
+                                        content = renderHomeVideo,
+                                    )
+                                }
+                            }
                     }
                 }
 
@@ -2069,14 +2100,14 @@ private fun SpaceContent(
                             }
                         )
                     }
-                    itemsIndexed(
-                        items = state.homeCoinVideos.take(2),
-                        key = { index, item ->
-                            resolveSpaceAggregateLazyItemKey("coin", index, item)
-                        }
-                    ) { _, item ->
+                    val aggregateItems = state.homeCoinVideos.take(2)
+                    val aggregateKeys = aggregateItems.mapIndexed { index, item -> resolveSpaceAggregateLazyItemKey("coin", index, item) }
+                    val alignAggregate = gridColumns > 1 && !homeSettings.showFullVideoCardContent
+                    val renderAggregate: @Composable (Int, Modifier) -> Unit = { index, cardModifier ->
+                        val item = aggregateItems[index]
                         SpaceAggregateMediaCard(
                             item = item,
+                            modifier = cardModifier,
                             onClick = {
                                 handleAggregateArchiveClick(
                                     item = item,
@@ -2090,6 +2121,25 @@ private fun SpaceContent(
                             sharedTransitionScope = lazyGridSharedTransitionScope,
                             animatedVisibilityScope = lazyGridAnimatedVisibilityScope
                         )
+                    }
+                    if (!alignAggregate) {
+                        itemsIndexed(aggregateItems, key = { index, _ -> aggregateKeys[index] }) { index, _ ->
+                            renderAggregate(index, Modifier)
+                        }
+                    } else {
+                        com.android.purebilibili.feature.home.resolveHomeFeedAlignedRows(aggregateItems.size, gridColumns)
+                            .forEach { row ->
+                                item(key = "space_coin_row_${aggregateKeys[row.first]}", span = StaggeredGridItemSpan.FullLine) {
+                                    com.android.purebilibili.feature.home.HomeAlignedVideoRow(
+                                        indices = row,
+                                        itemKeys = aggregateKeys,
+                                        columns = gridColumns,
+                                        horizontalArrangement = Arrangement.spacedBy(spaceFeedCardLayout.itemSpacingDp.dp),
+                                        modifier = Modifier.fillMaxWidth(),
+                                        content = renderAggregate,
+                                    )
+                                }
+                            }
                     }
                 }
 
@@ -2114,14 +2164,14 @@ private fun SpaceContent(
                             }
                         )
                     }
-                    itemsIndexed(
-                        items = state.homeLikeVideos.take(2),
-                        key = { index, item ->
-                            resolveSpaceAggregateLazyItemKey("like", index, item)
-                        }
-                    ) { _, item ->
+                    val aggregateItems = state.homeLikeVideos.take(2)
+                    val aggregateKeys = aggregateItems.mapIndexed { index, item -> resolveSpaceAggregateLazyItemKey("like", index, item) }
+                    val alignAggregate = gridColumns > 1 && !homeSettings.showFullVideoCardContent
+                    val renderAggregate: @Composable (Int, Modifier) -> Unit = { index, cardModifier ->
+                        val item = aggregateItems[index]
                         SpaceAggregateMediaCard(
                             item = item,
+                            modifier = cardModifier,
                             onClick = {
                                 handleAggregateArchiveClick(
                                     item = item,
@@ -2135,6 +2185,25 @@ private fun SpaceContent(
                             sharedTransitionScope = lazyGridSharedTransitionScope,
                             animatedVisibilityScope = lazyGridAnimatedVisibilityScope
                         )
+                    }
+                    if (!alignAggregate) {
+                        itemsIndexed(aggregateItems, key = { index, _ -> aggregateKeys[index] }) { index, _ ->
+                            renderAggregate(index, Modifier)
+                        }
+                    } else {
+                        com.android.purebilibili.feature.home.resolveHomeFeedAlignedRows(aggregateItems.size, gridColumns)
+                            .forEach { row ->
+                                item(key = "space_like_row_${aggregateKeys[row.first]}", span = StaggeredGridItemSpan.FullLine) {
+                                    com.android.purebilibili.feature.home.HomeAlignedVideoRow(
+                                        indices = row,
+                                        itemKeys = aggregateKeys,
+                                        columns = gridColumns,
+                                        horizontalArrangement = Arrangement.spacedBy(spaceFeedCardLayout.itemSpacingDp.dp),
+                                        modifier = Modifier.fillMaxWidth(),
+                                        content = renderAggregate,
+                                    )
+                                }
+                            }
                     }
                 }
 
@@ -2406,29 +2475,20 @@ private fun SpaceContent(
                             }
                         }
 
-                        items(
-                            items = state.videos,
-                            key = {
-                                resolveSpaceContributionVideoItemKey(
-                                    layoutMode = contributionVideoLayoutMode,
-                                    bvid = it.bvid,
-                                    aid = it.aid
-                                )
-                            },
-                            span = {
-                                if (contributionVideoLayoutMode == SpaceContributionVideoLayoutMode.GRID) {
-                                    StaggeredGridItemSpan.SingleLane
-                                } else {
-                                    StaggeredGridItemSpan.FullLine
-                                }
-                            }
-                        ) { video ->
+                        val contributionVideoKeys = state.videos.map {
+                            resolveSpaceContributionVideoItemKey(contributionVideoLayoutMode, it.bvid, it.aid)
+                        }
+                        val alignContributionVideos = contributionVideoLayoutMode == SpaceContributionVideoLayoutMode.GRID &&
+                            gridColumns > 1 && !homeSettings.showFullVideoCardContent
+                        val renderContributionVideo: @Composable (Int, Modifier) -> Unit = { index, cardModifier ->
+                            val video = state.videos[index]
                             val localProgressMs = videoProgressLookup(video.bvid)
-                            AnimatedVideoListItem(modifier = videoListItemModifier(enabled = homeSettings.cardAnimationEnabled), enabled = homeSettings.cardAnimationEnabled) {
+                            AnimatedVideoListItem(modifier = cardModifier, enabled = homeSettings.cardAnimationEnabled) {
                                 when (contributionVideoLayoutMode) {
                                     SpaceContributionVideoLayoutMode.GRID -> {
                                         SpaceHomeVideoCard(
                                             video = video,
+                                            modifier = if (alignContributionVideos) Modifier.fillMaxHeight() else Modifier,
                                             progressState = resolveSpaceVideoProgressState(
                                                 video = video,
                                                 localPositionMs = localProgressMs,
@@ -2468,6 +2528,29 @@ private fun SpaceContent(
                                     }
                                 }
                             }
+                        }
+                        if (!alignContributionVideos) {
+                            itemsIndexed(
+                                state.videos,
+                                key = { index, _ -> contributionVideoKeys[index] },
+                                span = { _, _ -> if (contributionVideoLayoutMode == SpaceContributionVideoLayoutMode.GRID) StaggeredGridItemSpan.SingleLane else StaggeredGridItemSpan.FullLine },
+                            ) { index, _ ->
+                                renderContributionVideo(index, videoListItemModifier(enabled = homeSettings.cardAnimationEnabled))
+                            }
+                        } else {
+                            com.android.purebilibili.feature.home.resolveHomeFeedAlignedRows(state.videos.size, gridColumns)
+                                .forEach { row ->
+                                    item(key = "space_contribution_row_${contributionVideoKeys[row.first]}", span = StaggeredGridItemSpan.FullLine) {
+                                        com.android.purebilibili.feature.home.HomeAlignedVideoRow(
+                                            indices = row,
+                                            itemKeys = contributionVideoKeys,
+                                            columns = gridColumns,
+                                            horizontalArrangement = Arrangement.spacedBy(spaceFeedCardLayout.itemSpacingDp.dp),
+                                            modifier = videoListItemModifier(enabled = homeSettings.cardAnimationEnabled).fillMaxWidth(),
+                                            content = renderContributionVideo,
+                                        )
+                                    }
+                                }
                         }
 
                         if (state.isLoadingMore) {
@@ -2580,19 +2663,14 @@ private fun SpaceContent(
                                 )
                             }
                         }
-                        items(
-                            items = archives,
-                            key = { "season_video_${it.aid}_${it.bvid}" },
-                            span = {
-                                if (contributionVideoLayoutMode == SpaceContributionVideoLayoutMode.GRID) {
-                                    StaggeredGridItemSpan.SingleLane
-                                } else {
-                                    StaggeredGridItemSpan.FullLine
-                                }
-                            }
-                        ) { archive ->
+                        val archiveKeys = archives.map { "season_video_${it.aid}_${it.bvid}" }
+                        val alignArchives = contributionVideoLayoutMode == SpaceContributionVideoLayoutMode.GRID &&
+                            gridColumns > 1 && !homeSettings.showFullVideoCardContent
+                        val renderArchive: @Composable (Int, Modifier) -> Unit = { index, cardModifier ->
+                            val archive = archives[index]
                             SpaceContributionArchiveVideoItem(
                                 video = archive.toSpaceVideoItem(),
+                                modifier = cardModifier,
                                 layoutMode = contributionVideoLayoutMode,
                                 coverAspectRatio = spaceFeedCoverAspectRatio,
                                 boundedListModifier = boundedListModifier,
@@ -2601,6 +2679,27 @@ private fun SpaceContent(
                                 sharedTransitionScope = lazyGridSharedTransitionScope,
                                 animatedVisibilityScope = lazyGridAnimatedVisibilityScope,
                             )
+                        }
+                        if (!alignArchives) {
+                            itemsIndexed(
+                                archives,
+                                key = { index, _ -> archiveKeys[index] },
+                                span = { _, _ -> if (contributionVideoLayoutMode == SpaceContributionVideoLayoutMode.GRID) StaggeredGridItemSpan.SingleLane else StaggeredGridItemSpan.FullLine },
+                            ) { index, _ -> renderArchive(index, Modifier) }
+                        } else {
+                            com.android.purebilibili.feature.home.resolveHomeFeedAlignedRows(archives.size, gridColumns)
+                                .forEach { row ->
+                                    item(key = "space_season_row_${archiveKeys[row.first]}", span = StaggeredGridItemSpan.FullLine) {
+                                        com.android.purebilibili.feature.home.HomeAlignedVideoRow(
+                                            indices = row,
+                                            itemKeys = archiveKeys,
+                                            columns = gridColumns,
+                                            horizontalArrangement = Arrangement.spacedBy(spaceFeedCardLayout.itemSpacingDp.dp),
+                                            modifier = Modifier.fillMaxWidth(),
+                                            content = renderArchive,
+                                        )
+                                    }
+                                }
                         }
                     }
 
@@ -2633,19 +2732,14 @@ private fun SpaceContent(
                                 )
                             }
                         }
-                        items(
-                            items = archives,
-                            key = { "series_video_${it.aid}_${it.bvid}" },
-                            span = {
-                                if (contributionVideoLayoutMode == SpaceContributionVideoLayoutMode.GRID) {
-                                    StaggeredGridItemSpan.SingleLane
-                                } else {
-                                    StaggeredGridItemSpan.FullLine
-                                }
-                            }
-                        ) { archive ->
+                        val archiveKeys = archives.map { "series_video_${it.aid}_${it.bvid}" }
+                        val alignArchives = contributionVideoLayoutMode == SpaceContributionVideoLayoutMode.GRID &&
+                            gridColumns > 1 && !homeSettings.showFullVideoCardContent
+                        val renderArchive: @Composable (Int, Modifier) -> Unit = { index, cardModifier ->
+                            val archive = archives[index]
                             SpaceContributionArchiveVideoItem(
                                 video = archive.toSpaceVideoItem(),
+                                modifier = cardModifier,
                                 layoutMode = contributionVideoLayoutMode,
                                 coverAspectRatio = spaceFeedCoverAspectRatio,
                                 boundedListModifier = boundedListModifier,
@@ -2654,6 +2748,27 @@ private fun SpaceContent(
                                 sharedTransitionScope = lazyGridSharedTransitionScope,
                                 animatedVisibilityScope = lazyGridAnimatedVisibilityScope,
                             )
+                        }
+                        if (!alignArchives) {
+                            itemsIndexed(
+                                archives,
+                                key = { index, _ -> archiveKeys[index] },
+                                span = { _, _ -> if (contributionVideoLayoutMode == SpaceContributionVideoLayoutMode.GRID) StaggeredGridItemSpan.SingleLane else StaggeredGridItemSpan.FullLine },
+                            ) { index, _ -> renderArchive(index, Modifier) }
+                        } else {
+                            com.android.purebilibili.feature.home.resolveHomeFeedAlignedRows(archives.size, gridColumns)
+                                .forEach { row ->
+                                    item(key = "space_series_row_${archiveKeys[row.first]}", span = StaggeredGridItemSpan.FullLine) {
+                                        com.android.purebilibili.feature.home.HomeAlignedVideoRow(
+                                            indices = row,
+                                            itemKeys = archiveKeys,
+                                            columns = gridColumns,
+                                            horizontalArrangement = Arrangement.spacedBy(spaceFeedCardLayout.itemSpacingDp.dp),
+                                            modifier = Modifier.fillMaxWidth(),
+                                            content = renderArchive,
+                                        )
+                                    }
+                                }
                         }
                     }
 
@@ -4195,7 +4310,11 @@ private fun SpaceHomeVideoCard(
             .onGloballyPositioned { coordinates ->
                 cardBounds = coordinates.boundsInRoot()
             }
-            .appActionClickable {
+            .appActionClickable spaceCardClick@{
+                if (CardPositionManager.isVideoNavigationDebounceActive()) {
+                    // 防抖窗口内的点击注定被导航层拒绝；不得覆写在飞转场的全局记录与冻结像素。
+                    return@spaceCardClick
+                }
                 cardBounds?.let { bounds ->
                     CardPositionManager.recordVideoCardPosition(
                         bvid = sharedTransitionKey.orEmpty(),
@@ -4361,6 +4480,7 @@ private fun SpaceHomeVideoCard(
 private fun SpaceAggregateMediaCard(
     item: SpaceAggregateArchiveItem,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     sharedTransitionKey: String? = null,
     sharedTransitionScope: SharedTransitionScope? = null,
     animatedVisibilityScope: AnimatedVisibilityScope? = null
@@ -4402,14 +4522,18 @@ private fun SpaceAggregateMediaCard(
     )
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = 8.dp)
             .then(nativeCardSnapshot.modifier)
             .clip(coverShape)
             .onGloballyPositioned { coordinates ->
                 cardBounds = coordinates.boundsInRoot()
             }
-            .appActionClickable {
+            .appActionClickable spaceCardClick@{
+                if (CardPositionManager.isVideoNavigationDebounceActive()) {
+                    // 防抖窗口内的点击注定被导航层拒绝；不得覆写在飞转场的全局记录与冻结像素。
+                    return@spaceCardClick
+                }
                 cardBounds?.let { bounds ->
                     CardPositionManager.recordVideoCardPosition(
                         bvid = sharedTransitionKey.orEmpty(),
@@ -4599,6 +4723,7 @@ private fun contributionLayoutToggleAction(
 @Composable
 private fun SpaceContributionArchiveVideoItem(
     video: SpaceVideoItem,
+    modifier: Modifier = Modifier,
     layoutMode: SpaceContributionVideoLayoutMode,
     coverAspectRatio: Float,
     boundedListModifier: Modifier,
@@ -4611,6 +4736,7 @@ private fun SpaceContributionArchiveVideoItem(
         SpaceContributionVideoLayoutMode.GRID -> {
             SpaceHomeVideoCard(
                 video = video,
+                modifier = modifier,
                 progressState = resolveSpaceVideoProgressState(
                     video = video,
                     localPositionMs = 0L,
@@ -4750,6 +4876,7 @@ private fun SpaceArchiveListItemRow(
     )
 
     HorizontalVideoCardFrame(
+        horizontalCoverMaxWidthDp = com.android.purebilibili.feature.home.components.cards.WIDE_LIST_COVER_MAX_WIDTH_DP,
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
@@ -4770,7 +4897,11 @@ private fun SpaceArchiveListItemRow(
             .onGloballyPositioned { coordinates ->
                 cardBounds = coordinates.boundsInRoot()
             }
-            .appActionClickable {
+            .appActionClickable spaceCardClick@{
+                if (CardPositionManager.isVideoNavigationDebounceActive()) {
+                    // 防抖窗口内的点击注定被导航层拒绝；不得覆写在飞转场的全局记录与冻结像素。
+                    return@spaceCardClick
+                }
                 cardBounds?.let { bounds ->
                     CardPositionManager.recordVideoCardPosition(
                         bvid = sharedTransitionKey.orEmpty(),
@@ -5728,7 +5859,7 @@ private fun SpaceHeaderBanner(
                         .fillMaxWidth()
                         .height(3.5.dp)
                         .align(Alignment.BottomCenter),
-                    color = Color.White,
+                    color = AppContentColors.accent(),
                     trackColor = MediaContrastPalette.Track,
                 )
             }
@@ -5791,7 +5922,7 @@ private fun SpaceHeaderBanner(
                     .fillMaxWidth()
                     .height(3.5.dp)
                     .align(Alignment.BottomCenter),
-                color = Color.White,
+                color = AppContentColors.accent(),
                 trackColor = MediaContrastPalette.Track
             )
         }

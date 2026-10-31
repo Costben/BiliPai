@@ -320,6 +320,7 @@ internal fun BoxScope.VideoDetailReturnSourceCardChrome(
     val frozenInfoAnchorYPx = layout.infoAnchorYInViewportPx * layout.sourceScale
     val frozenCardAnchorXPx = layout.cardAnchorXInViewportPx * layout.sourceScale
     val frozenCardAnchorYPx = layout.cardAnchorYInViewportPx * layout.sourceScale
+    val preserveNativeViewport = miuixHost.enabled && miuixHost.motionSpec?.reducedMotion != true
 
     // FillWidthTop compensation cancels the outer scale on both axes. Source-pixel
     // reconstruction is therefore constant (1 / sourceScale), even while depth changes.
@@ -342,7 +343,7 @@ internal fun BoxScope.VideoDetailReturnSourceCardChrome(
             detailContentLoading = detailContentLoading,
             followProgressEnabled = followProgressEnabledProvider(),
             isCommittedCardReturn = isCommittedCardReturn,
-            preserveNativeViewport = miuixHost.enabled && miuixHost.motionSpec?.reducedMotion != true,
+            preserveNativeViewport = preserveNativeViewport,
         )
         return resolveVideoDetailHorizontalInfoClipLeftPx(
             viewportWidthPx = viewportWidthPx,
@@ -400,7 +401,7 @@ internal fun BoxScope.VideoDetailReturnSourceCardChrome(
             isNowPlayingBar = isNowPlayingBar,
             followProgressEnabled = followProgressEnabledProvider(),
             isCommittedCardReturn = isCommittedCardReturn,
-            preserveNativeViewport = miuixHost.enabled && miuixHost.motionSpec?.reducedMotion != true,
+            preserveNativeViewport = preserveNativeViewport,
         )
     }
 
@@ -437,6 +438,7 @@ internal fun BoxScope.VideoDetailReturnSourceCardChrome(
                 isNowPlayingBar = isNowPlayingBar,
                 followProgressEnabled = followProgressEnabledProvider(),
                 isCommittedCardReturn = isCommittedCardReturn,
+                preserveNativeViewport = preserveNativeViewport,
             )
         }.drawWithContent {
             if (CardPositionManager.nativeVideoCardLayerFor(sourceChromeSnapshot) !== nativeCardLayer) {
@@ -963,17 +965,13 @@ private fun BoxScope.LandingInfoContent(
         LandingInfoTexts(model = model, sourceLayout = sourceLayout)
     }
     if (model.infoPresentation.showOverflowMenu) {
-        AppText(
-            text = "⋮",
-            color = AppContentColors.secondaryText(),
-            style = MaterialTheme.typography.labelMedium,
-            fontWeight = FontWeight.Bold,
+        AppIcon(
+            imageVector = AppIcons.Outlined.MoreVert,
+            contentDescription = null,
+            tint = AppContentColors.secondaryText(),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(
-                    end = AppSpacingTokens.ExtraSmall,
-                    bottom = AppSpacingTokens.ExtraSmall,
-                ),
+                .size(AppSpacingTokens.Medium + AppSpacingTokens.Micro),
         )
     }
 }

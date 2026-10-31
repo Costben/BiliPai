@@ -155,6 +155,9 @@ fun BangumiPlayerContent(
     // Seed geometry from detail metadata, not from later comment-state emissions.
     val commentMeasurementTitle = if (showCommentCount && detailReplyCount != null) {
         "评论 ${FormatUtils.formatStat(detailReplyCount.toLong())}"
+    } else if (isCourse && showCommentCount) {
+        // Reserve space while the count is unknown, independently of later comment updates.
+        "评论 9999.9万"
     } else commentTabTitle
     val tabs = if (commentsOnly) listOf(commentTabTitle) else listOf("简介", commentTabTitle)
     val commentListState = key(currentEpisode.id) { rememberLazyListState() }
@@ -198,6 +201,7 @@ fun BangumiPlayerContent(
         VideoContentTabBar(
             tabs = tabs,
             measurementLabels = if (commentsOnly) listOf(commentMeasurementTitle) else listOf("简介", commentMeasurementTitle),
+            liquidGlassAdaptIndicatorToLabel = isCourse,
             replyCount = displayedReplyCount ?: 0,
             selectedTabIndex = pagerState.tabSelectedPage,
             onTabSelected = { index ->

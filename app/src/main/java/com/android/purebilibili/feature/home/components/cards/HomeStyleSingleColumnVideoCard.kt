@@ -49,7 +49,7 @@ import androidx.compose.ui.layout.onVisibilityChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.font.FontWeight
+import com.android.purebilibili.core.ui.components.AppIcon
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -85,6 +85,7 @@ import com.android.purebilibili.core.util.HapticType
 import com.android.purebilibili.core.util.rememberHapticFeedback
 import com.android.purebilibili.data.model.response.VideoItem
 import com.android.purebilibili.feature.home.resolveHomeCoverRequestSpec
+import com.android.purebilibili.core.ui.AppIcons
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -186,6 +187,10 @@ internal fun HomeStyleSingleColumnVideoCard(
             .build()
     }
     val triggerClick by rememberUpdatedState(appActionWithFeedback {
+        if (CardPositionManager.isVideoNavigationDebounceActive()) {
+            // 防抖窗口内的点击注定被导航层拒绝；不得覆写在飞转场的全局记录与冻结像素。
+            return@appActionWithFeedback
+        }
         cardBounds.value?.let { bounds ->
             val sourceCoverBounds = coverBounds.value
             CardPositionManager.recordVideoCardPosition(
@@ -422,7 +427,6 @@ internal fun HomeStyleSingleColumnVideoCard(
             HorizontalVideoStatRow(
                 playText = FormatUtils.formatStat(video.stat.view.toLong()),
                 danmakuText = FormatUtils.formatStat(video.stat.danmaku.toLong()),
-                modifier = Modifier.padding(end = if (!compactPartition && (trailingContent != null || onMoreClick != null)) 48.dp else 0.dp),
             )
         },
         trailingContent = when {
@@ -447,11 +451,11 @@ internal fun HomeStyleSingleColumnVideoCard(
                             },
                         contentAlignment = Alignment.Center,
                     ) {
-                        AppText(
-                            text = "⋮",
-                            color = AppContentColors.secondaryText(),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
+                        AppIcon(
+                            imageVector = AppIcons.Outlined.MoreVert,
+                            contentDescription = null,
+                            tint = AppContentColors.secondaryText(),
+                            modifier = Modifier.size(18.dp),
                         )
                     }
                 }

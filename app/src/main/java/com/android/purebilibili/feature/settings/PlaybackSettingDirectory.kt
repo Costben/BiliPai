@@ -34,7 +34,7 @@ internal fun settingItemTitle(settingId: String, context: Context): String = whe
 
 internal val playbackSettingDirectory = listOf(
     PlaybackSettingItem("playback.native_miuix_player_popups", "使用小米风格弹窗", SettingsRootCategory.VIDEO_DECODER, SettingsSearchFocusIds.PLAYBACK_DECODER, { context -> com.android.purebilibili.core.store.player.PlayerSettingsStore .getNativeMiuixPlayerPopups(context).map { if (it) "开启" else "关闭" } }),
-    PlaybackSettingItem("playback.hw_decode", "启用硬件解码", SettingsRootCategory.VIDEO_DECODER, SettingsSearchFocusIds.PLAYBACK_DECODER, null),
+    PlaybackSettingItem("playback.hw_decode", "优先硬件解码", SettingsRootCategory.VIDEO_DECODER, SettingsSearchFocusIds.PLAYBACK_DECODER, null, aliases = listOf("启用硬件解码", "软解", "软件解码", "硬解")),
     PlaybackSettingItem("playback.remember_last_playback_speed", "记住上次倍速", SettingsRootCategory.PLAYBACK_QUALITY, SettingsSearchFocusIds.PLAYBACK_SPEED, { context -> com.android.purebilibili.core.store.SettingsManager .getRememberLastPlaybackSpeed(context).map { if (it) "开启" else "关闭" } }),
     PlaybackSettingItem("playback.long_press_speed_hint_hidden", "隐藏长按倍速提示", SettingsRootCategory.PLAYBACK_QUALITY, SettingsSearchFocusIds.PLAYBACK_SPEED, { context -> com.android.purebilibili.core.store.SettingsManager .getLongPressSpeedHintHidden(context).map { if (it) "开启" else "关闭" } }),
     PlaybackSettingItem("playback.stop_playback_on_exit", "离开播放页后停止", SettingsRootCategory.PLAYBACK_QUALITY, SettingsSearchFocusIds.PLAYBACK_MINI_PLAYER, { context -> com.android.purebilibili.core.store.SettingsManager .getStopPlaybackOnExit(context).map { if (it) "开启" else "关闭" } }),
@@ -108,6 +108,7 @@ internal val playbackSettingDirectory = listOf(
         aliases = listOf("进度百分比", "快进比例", "快退比例", "滑动范围", "总时长比例", "25%", "50%", "90%", "100%")
     ),
     PlaybackSettingItem("playback.auto_rotate_enabled", "自动横竖屏切换", SettingsRootCategory.FULLSCREEN_GESTURE, SettingsSearchFocusIds.PLAYBACK_FULLSCREEN, { context -> com.android.purebilibili.core.store.SettingsManager .getAutoRotateEnabled(context).map { if (it) "开启" else "关闭" } }),
+    PlaybackSettingItem("playback.landscape_hold_enabled", "横屏保持", SettingsRootCategory.FULLSCREEN_GESTURE, SettingsSearchFocusIds.PLAYBACK_FULLSCREEN, { context -> com.android.purebilibili.core.store.SettingsManager .getLandscapeHoldEnabled(context).map { if (it) "开启" else "关闭" } }),
     PlaybackSettingItem("playback.horizontal_adaptation_enabled", "横屏适配", SettingsRootCategory.FULLSCREEN_GESTURE, SettingsSearchFocusIds.PLAYBACK_FULLSCREEN, { context -> com.android.purebilibili.core.store.SettingsManager .getHorizontalAdaptationEnabled(context).map { if (it) "开启" else "关闭" } }),
     PlaybackSettingItem("playback.player_control_visibility.show_cast_button", "显示投屏按钮", SettingsRootCategory.FULLSCREEN_GESTURE, SettingsSearchFocusIds.PLAYBACK_FULLSCREEN, { context -> com.android.purebilibili.core.store.SettingsManager.getPlayerControlVisibilitySettings(context).map { if (it.showCastButton) "开启" else "关闭" } }),
     PlaybackSettingItem("playback.player_control_visibility.show_follow_button", "显示关注按钮", SettingsRootCategory.FULLSCREEN_GESTURE, SettingsSearchFocusIds.PLAYBACK_FULLSCREEN, { context -> com.android.purebilibili.core.store.SettingsManager.getPlayerControlVisibilitySettings(context).map { if (it.showFollowButton) "开启" else "关闭" } }),
@@ -134,7 +135,7 @@ internal fun playbackSettingTitle(settingId: String): String =
     playbackSettingDirectory.first { it.settingId == settingId }.title
 
 internal fun playbackSettingStateValue(settingId: String, state: SettingsUiState): String = when (settingId) {
-    "playback.hw_decode" -> if (state.hwDecode) "开启" else "关闭"
+    "playback.hw_decode" -> if (state.hwDecode) "硬件优先" else "软件优先"
     "playback.double_tap_like" -> if (state.doubleTapLike) "开启" else "关闭"
     "playback.auto_skip_op_ed" -> if (state.autoSkipOpEd) "开启" else "关闭"
     else -> ""
