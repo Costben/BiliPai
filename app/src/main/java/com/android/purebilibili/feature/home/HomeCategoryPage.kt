@@ -2,7 +2,6 @@ package com.android.purebilibili.feature.home
 
 import androidx.compose.foundation.layout.offset
 
-import com.android.purebilibili.core.util.LocalWindowSizeClass
 import com.android.purebilibili.core.ui.AppContentColors
 
 import com.android.purebilibili.core.ui.components.AppButton
@@ -759,6 +758,7 @@ internal fun HomeCategoryPageContent(
                                 HomeHeroCarouselImmersive(
                                     videos = carouselVideos,
                                     autoAdvanceAllowed = heroMotionAllowed,
+                                    onGestureActiveChange = onHeroCarouselGestureActiveChange,
                                     horizontalEscapeDp = contentPadding.calculateLeftPadding(LocalLayoutDirection.current),
                                     onVideoClick = { video ->
                                         onVideoClick(
@@ -1105,9 +1105,8 @@ private fun TodayWatchModeSegmentedControl(
     BottomBarLiquidSegmentedControl(
         // Glass indicator fills the measured slot; native geometry keeps its defaults.
         liquidGlassAdaptIndicatorToLabel = !com.android.purebilibili.core.ui.LocalAppThemeConfig.current.liquidGlassEnabled,
-        // Wide-device placement is requested separately for native and glass; compact windows keep their layout.
-        centerGlassContent = LocalWindowSizeClass.current.let { it.isTabletDevice && it.isTablet },
-        centerNativeContent = LocalWindowSizeClass.current.let { it.isTabletDevice && it.isTablet },
+        centerGlassContent = true,
+        centerNativeContent = true,
         items = labels,
         selectedIndex = selectedIndex,
         onSelected = { index ->
