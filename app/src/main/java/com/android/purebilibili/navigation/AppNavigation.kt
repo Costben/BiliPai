@@ -404,6 +404,9 @@ private fun BiliPaiNavKey.toPrivacyNavigationTarget(): PrivacyNavigationTarget {
 
 @androidx.media3.common.util.UnstableApi
 // @OptIn(ExperimentalMaterial3WindowSizeClassApi::class) (Removed)
+// 转场时钟卡住多久后强制当作空闲，避免整页后台工作被永久挡掉。
+private const val CARD_TRANSITION_STUCK_TIMEOUT_MS = 1_500L
+
 @Composable
 fun AppNavigation(
     //  小窗管理器
@@ -2072,11 +2075,24 @@ fun AppNavigation(
         }
         // [New] Global Scroll Offset State
         val homeFeedScrollInProgressState = remember { androidx.compose.runtime.mutableStateOf(false) }
+        // 转场时钟卡在非 IDLE 超过 1.5s 就当作空闲。
+        // 卡片转场一旦没回到 IDLE（平板多卡片时更容易发生），
+        // 整页的后台工作会被永久挡住，封面也不再加载。
+        val cardTransitionIdleNow = videoCardTransitionClock.phase ==
+            com.android.purebilibili.core.ui.transition.VideoCardTransitionBackgroundPhase.IDLE &&
+            videoCardTransitionClock.settleState == VideoCardTransitionSettleState.Idle
+        var cardTransitionTimedOut by remember { androidx.compose.runtime.mutableStateOf(false) }
+        LaunchedEffect(cardTransitionIdleNow) {
+            if (cardTransitionIdleNow) {
+                cardTransitionTimedOut = false
+                return@LaunchedEffect
+            }
+            kotlinx.coroutines.delay(CARD_TRANSITION_STUCK_TIMEOUT_MS)
+            cardTransitionTimedOut = true
+        }
         fun bottomPagerBackgroundWorkAllowedNow() = shouldAllowBottomPagerBackgroundWork(
             isMainHostTop = navigation3BackStack.lastOrNull() == BiliPaiNavKey.MainHost,
-            isCardTransitionIdle = videoCardTransitionClock.phase ==
-                com.android.purebilibili.core.ui.transition.VideoCardTransitionBackgroundPhase.IDLE &&
-                videoCardTransitionClock.settleState == VideoCardTransitionSettleState.Idle,
+            isCardTransitionIdle = cardTransitionIdleNow || cardTransitionTimedOut,
             isPagerNavigating = mainBottomPagerState.isNavigating || bottomPagerState.isScrollInProgress,
         )
         val bottomPagerBackgroundWorkAllowed = bottomPagerBackgroundWorkAllowedNow()
@@ -2969,9 +2985,11 @@ fun AppNavigation(
                                                 (mainHostStillExposed &&
                                                     currentNavigation3Key == BiliPaiNavKey.Settings &&
                                                     page == bottomPagerState.currentPage)
+                                        // 图片加载只看页面是否真的在屏幕上。
+                                        // 之前挂着 bottomPagerBackgroundWorkAllowed（转场时钟 + pager 导航），
+                                        // 那个门一旦卡住，整页封面就一个都不加载。
                                         val pageImageLoadingAllowed =
-                                            (page == bottomPagerState.settledPage &&
-                                                bottomPagerBackgroundWorkAllowed) ||
+                                            page == bottomPagerState.settledPage ||
                                                 pageVisibleDuringNavigation
                                         val slotContentReady by remember(slotItem) {
                                             derivedStateOf(androidx.compose.runtime.structuralEqualityPolicy()) {
@@ -3123,6 +3141,8 @@ fun AppNavigation(
                                 // 玻璃与原生材质共用活跃门控，不改变各自布局和视觉参数。
                                 isTopLevelActive = isBottomPagerPageActive &&
                                     currentNavigation3Key == BiliPaiNavKey.MainHost &&
+                                    currentBottomNavItem == BottomNavItem.HOME,
+                                pageOnScreen = currentNavigation3Key == BiliPaiNavKey.MainHost &&
                                     currentBottomNavItem == BottomNavItem.HOME,
                                 visibleDuringNavigation = isBottomPagerPageVisibleDuringNavigation,
                                 isReturningFromVideoDetail = navigation3ReturnSession.isReturningFromDetail,
