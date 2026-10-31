@@ -6850,7 +6850,11 @@ private val KEY_APP_FONT_WEIGHT = intPreferencesKey("app_font_weight")
     // --- 更新检测渠道 (默认正式版) ---
     fun getAppUpdateChannel(context: Context): Flow<AppUpdateChannel> = context.settingsDataStore.data
         .map { preferences ->
-            AppUpdateChannel.fromValue(preferences[KEY_APP_UPDATE_CHANNEL] ?: AppUpdateChannel.STABLE.value)
+            // 本仓库的发行全是 -coui17-pre* 预发布：默认走测试版通道，
+            // 否则正式版通道会把这些 release 过滤掉，永远检不到更新。
+            AppUpdateChannel.fromValue(
+                preferences[KEY_APP_UPDATE_CHANNEL] ?: AppUpdateChannel.BETA.value
+            )
         }
 
     suspend fun setAppUpdateChannel(context: Context, channel: AppUpdateChannel) {
