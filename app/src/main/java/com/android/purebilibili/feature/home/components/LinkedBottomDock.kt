@@ -446,7 +446,6 @@ internal fun LinkedBottomDock(
                         backdrop = backdrop,
                         color = containerColor,
                         blurRadius = BottomFloatingNavigationBarDefaults.blurRadius(),
-                        blurColors = BottomFloatingNavigationBarDefaults.blurColors(isDarkTheme),
                         rimColor = Color.White.copy(
                             alpha = if (isDarkTheme) BottomFloatingNavigationBarDefaults.RIM_ALPHA_DARK
                             else BottomFloatingNavigationBarDefaults.RIM_ALPHA_LIGHT
