@@ -526,7 +526,10 @@ fun AppNavigation(
             debounceWindowMillis = 300L,
             bypassDebounce = bypassDebounce
         )
-        if (canNav) lastNavigationTime.longValue = currentTime
+        if (canNav) {
+            lastNavigationTime.longValue = currentTime
+            CardPositionManager.recordNavigationDebounceGrant(currentTime)
+        }
         canNav
     }
     var inAppSearchKeyword by remember { mutableStateOf<String?>(null) }
@@ -739,8 +742,8 @@ fun AppNavigation(
         var navigationHostOriginInRoot by remember { mutableStateOf(Offset.Zero) }
         var sidebarAccountSwitcherVisible by rememberSaveable { mutableStateOf(false) }
         var sidebarAccountSessionGeneration by remember { mutableIntStateOf(0) }
-        val sidebarAccountSnapshot by produceState(
-            initialValue = com.android.purebilibili.core.store.AccountSessionSnapshot(),
+        val sidebarAccountSnapshot by produceState<com.android.purebilibili.core.store.AccountSessionSnapshot?>(
+            initialValue = null,
             key1 = context,
             key2 = accountSessionRefreshGeneration,
             key3 = sidebarAccountSessionGeneration,
@@ -749,9 +752,9 @@ fun AppNavigation(
                 AccountSessionStore.readSnapshot(context)
             }
         }
-        val sidebarAccounts = sidebarAccountSnapshot.accounts
-        val sidebarActiveAccountMid = sidebarAccountSnapshot.activeAccountMid
-        val sidebarPlaybackAccountMid = sidebarAccountSnapshot.playbackAccountMid
+        val sidebarAccounts = sidebarAccountSnapshot?.accounts.orEmpty()
+        val sidebarActiveAccountMid = sidebarAccountSnapshot?.activeAccountMid
+        val sidebarPlaybackAccountMid = sidebarAccountSnapshot?.playbackAccountMid
         val playerInteractionSettings by remember(context) { SettingsManager.getPlayerInteractionSettings(context) }
             .collectAsStateWithLifecycle(
                 initialValue = com.android.purebilibili.core.store.PlayerInteractionSettings(),
@@ -2303,11 +2306,33 @@ fun AppNavigation(
                     AppSystemBackAction.FINISH_ACTIVITY -> context.findActivity()?.finish()
                 }
             }
+            com.android.purebilibili.core.ui.popup.AppGlassPopupHost(
+                glassAvailable = com.android.purebilibili.core.ui.LocalAppThemeConfig.current.liquidGlassEnabled &&
+                    com.android.purebilibili.core.ui.blur.shouldAllowHomeChromeLiquidGlass(android.os.Build.VERSION.SDK_INT),
+                tuning = liquidGlassRenderConfig.tuning,
+            ) {
+            Box(modifier = Modifier.fillMaxSize()) {
+            // 账号弹层必须在同窗宿主内组合，才能取得玻璃容器和菜单锚点的 presenter。
             if (sidebarAccountSwitcherVisible) {
                 AccountSwitchDialog(
                     accounts = sidebarAccounts,
                     activeAccountMid = sidebarActiveAccountMid,
                     playbackAccountMid = sidebarPlaybackAccountMid,
+                    purposeAccountMids = sidebarAccountSnapshot?.purposeAccountMids,
+                    onSetPurpose = { purpose, mid ->
+                        coroutineScope.launch(Dispatchers.IO) {
+                            val updated = AccountSessionStore.setPurposeAccountMid(context, purpose, mid)
+                            withContext(Dispatchers.Main.immediate) {
+                                if (updated) {
+                                    sidebarAccountSessionGeneration += 1
+                                    accountSessionRefreshGeneration += 1
+                                    com.android.purebilibili.data.repository.VideoRepository.clearVideoDetailCaches()
+                                    homeViewModel.refresh()
+                                    Toast.makeText(context, "账号用途已更新，下次请求生效", Toast.LENGTH_SHORT).show()
+                                } else Toast.makeText(context, "账号不可用，请重新登录后再试", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    },
                     onDismiss = { sidebarAccountSwitcherVisible = false },
                     onAddAccount = {
                         sidebarAccountSwitcherVisible = false
@@ -2364,12 +2389,6 @@ fun AppNavigation(
                     },
                 )
             }
-            com.android.purebilibili.core.ui.popup.AppGlassPopupHost(
-                glassAvailable = com.android.purebilibili.core.ui.LocalAppThemeConfig.current.liquidGlassEnabled &&
-                    com.android.purebilibili.core.ui.blur.shouldAllowHomeChromeLiquidGlass(android.os.Build.VERSION.SDK_INT),
-                tuning = liquidGlassRenderConfig.tuning,
-            ) {
-            Box(modifier = Modifier.fillMaxSize()) {
             Row(modifier = Modifier.fillMaxSize()) {
                 // Remove the whole slot on video detail so an exit animation cannot reserve width.
                 if (windowSizeClass.shouldUseSideNavigation && sideBarMountGate) {
@@ -3583,6 +3602,7 @@ fun AppNavigation(
                                 onAccountSwitchSuccess = { homeViewModel.refresh() },
                                 onSettingsClick = { navigateFromProfile(ScreenRoutes.Settings.route) },
                                 onAccountLedgerClick = { kind -> pushNavigation3Key(BiliPaiNavKey.AccountLedger(kind)) },
+                                onCommentSourceClick = { url -> openBilibiliLinkInNavigation3(url) },
                                 onSearchClick = { navigateFromProfile(ScreenRoutes.Search.route) },
                                 onHistoryClick = { navigateFromProfile(ScreenRoutes.History.route) },
                                 showHistoryService = shouldShowProfileHistoryService(
