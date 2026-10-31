@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -38,6 +39,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
@@ -92,8 +94,19 @@ internal fun CouiHomeInlineSearchRow(
         onExpandedChange(false)
     }
 
+    val progress by androidx.compose.animation.core.animateFloatAsState(
+        targetValue = if (expanded) 1f else 0f,
+        animationSpec = androidx.compose.animation.core.tween(
+            durationMillis = 280,
+            easing = androidx.compose.animation.core.CubicBezierEasing(0.25f, 0.1f, 0.25f, 1f),
+        ),
+        label = "CouiHomeInlineSearchProgress",
+    )
+
     LaunchedEffect(expanded) {
         if (expanded) {
+            // 稍等动画展开一部分后再聚焦并弹键盘，体验更平滑
+            kotlinx.coroutines.delay(120)
             focusRequester.requestFocus()
             keyboard?.show()
         } else {
@@ -111,88 +124,125 @@ internal fun CouiHomeInlineSearchRow(
     }
     BackHandler(enabled = expanded) { onExpandedChange(false) }
 
-    AnimatedVisibility(
-        visible = expanded,
-        enter = expandHorizontally(expandFrom = Alignment.End) + fadeIn(),
-        exit = shrinkHorizontally(shrinkTowards = Alignment.End) + fadeOut(),
-        modifier = modifier.fillMaxWidth().height(rowHeight),
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = horizontalPadding)
-                // 展开时吞掉空白区域点击，避免落到下面已淡出的头像/操作键上。
+    if (progress > 0.001f) {
+        androidx.compose.foundation.layout.BoxWithConstraints(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(rowHeight)
+                // 展开时拦截整个顶栏范围点击，防止穿透到底层原顶栏元素
                 .clickable(
                     interactionSource = interaction,
                     indication = null,
                 ) {},
-            verticalAlignment = Alignment.CenterVertically,
         ) {
+            val contentWidth = maxWidth - horizontalPadding * 2
+            val ballSize = TopAppBarDefaults.ActionItemMinWidth // 40.dp
+            val spacing = TopAppBarDefaults.ActionMenuItemSpacing // 10.dp
+            val maxSearchWidth = (contentWidth - ballSize - spacing).coerceAtLeast(ballSize)
+            val currentSearchWidth = androidx.compose.ui.unit.lerp(ballSize, maxSearchWidth, progress)
+
             Box(
                 modifier = Modifier
-                    .size(TopAppBarDefaults.ActionItemMinWidth)
-                    .clickable(
-                        interactionSource = interaction,
-                        indication = null,
-                    ) { onExpandedChange(false) },
-                contentAlignment = Alignment.Center,
+                    .fillMaxSize()
+                    .padding(horizontal = horizontalPadding),
             ) {
-                AppIcon(
-                    imageVector = COUIIcons.Back,
-                    contentDescription = "关闭搜索",
-                    tint = contentColor,
-                    modifier = Modifier.size(AppSpacingTokens.ExtraLarge - AppSpacingTokens.Micro),
-                )
-            }
-            Spacer(Modifier.width(AppSpacingTokens.Small))
-            AppIcon(
-                imageVector = COUIIcons.Basic.Search,
-                contentDescription = null,
-                tint = contentColor.copy(alpha = 0.7f),
-                modifier = Modifier.size(AppSpacingTokens.Large + AppSpacingTokens.Micro),
-            )
-            Spacer(Modifier.width(AppSpacingTokens.Small))
-            Box(modifier = Modifier.weight(1f)) {
-                if (query.isEmpty()) {
-                    AppText(
-                        text = "搜索视频、番剧、UP主",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = contentColor.copy(alpha = 0.55f),
-                        maxLines = 1,
-                    )
-                }
-                BasicTextField(
-                    value = query,
-                    onValueChange = { query = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .focusRequester(focusRequester),
-                    singleLine = true,
-                    textStyle = TextStyle(
-                        color = contentColor,
-                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                    ),
-                    cursorBrush = SolidColor(contentColor),
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                    keyboardActions = KeyboardActions(onSearch = { submit(query) }),
-                )
-            }
-            if (query.isNotEmpty()) {
+                // 左侧返回按钮：同步变成标准的 40dp 高亮圆球
                 Box(
                     modifier = Modifier
-                        .size(TopAppBarDefaults.ActionItemMinWidth)
-                        .clickable(
-                            interactionSource = interaction,
-                            indication = null,
-                        ) { query = "" },
-                    contentAlignment = Alignment.Center,
+                        .align(Alignment.CenterStart)
+                        .graphicsLayer {
+                            alpha = progress
+                            scaleX = 0.5f + 0.5f * progress
+                            scaleY = 0.5f + 0.5f * progress
+                        },
                 ) {
-                    AppIcon(
-                        imageVector = COUIIcons.Clear,
-                        contentDescription = "清空",
-                        tint = contentColor.copy(alpha = 0.7f),
-                        modifier = Modifier.size(AppSpacingTokens.Large + AppSpacingTokens.Micro),
+                    CouiHomeTopActionButton(
+                        icon = COUIIcons.Back,
+                        contentDescription = "返回",
+                        onClick = { onExpandedChange(false) },
                     )
+                }
+
+                // 右侧搜索框：从右侧圆形（40dp）原地向左平滑拉长为透明胶囊搜索框
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .width(currentSearchWidth)
+                        .height(ballSize)
+                        .background(
+                            color = contentColor.copy(alpha = 0.08f),
+                            shape = androidx.compose.foundation.shape.RoundedCornerShape(ballSize / 2),
+                        )
+                        .border(
+                            width = 1.dp,
+                            color = contentColor.copy(alpha = 0.14f),
+                            shape = androidx.compose.foundation.shape.RoundedCornerShape(ballSize / 2),
+                        ),
+                    contentAlignment = Alignment.CenterStart,
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        AppIcon(
+                            imageVector = COUIIcons.Basic.Search,
+                            contentDescription = null,
+                            tint = contentColor.copy(alpha = 0.75f),
+                            modifier = Modifier.size(20.dp),
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .graphicsLayer {
+                                    alpha = ((progress - 0.35f) / 0.65f).coerceIn(0f, 1f)
+                                },
+                        ) {
+                            if (query.isEmpty()) {
+                                AppText(
+                                    text = "搜索视频、番剧、UP主",
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = contentColor.copy(alpha = 0.55f),
+                                    maxLines = 1,
+                                )
+                            }
+                            BasicTextField(
+                                value = query,
+                                onValueChange = { query = it },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .focusRequester(focusRequester),
+                                singleLine = true,
+                                textStyle = TextStyle(
+                                    color = contentColor,
+                                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                ),
+                                cursorBrush = SolidColor(contentColor),
+                                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                                keyboardActions = KeyboardActions(onSearch = { submit(query) }),
+                            )
+                        }
+                        if (query.isNotEmpty() && progress > 0.7f) {
+                            Box(
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .clickable(
+                                        interactionSource = interaction,
+                                        indication = null,
+                                    ) { query = "" },
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                AppIcon(
+                                    imageVector = COUIIcons.Clear,
+                                    contentDescription = "清空",
+                                    tint = contentColor.copy(alpha = 0.7f),
+                                    modifier = Modifier.size(18.dp),
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }

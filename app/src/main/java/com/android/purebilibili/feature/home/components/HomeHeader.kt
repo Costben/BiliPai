@@ -1627,6 +1627,11 @@ fun HomeHeader(
     val couiHeader = LocalAppUiStyle.current == AppUiStyle.COUI17 && !hasIllustratedHeader
     // 点搜索键后在顶栏内向左展开透明搜索框，左缘对齐头像左缘。
     var couiInlineSearchExpanded by remember { mutableStateOf(false) }
+    val couiHeaderAlpha by androidx.compose.animation.core.animateFloatAsState(
+        targetValue = if (couiInlineSearchExpanded) 0f else 1f,
+        animationSpec = androidx.compose.animation.core.tween(durationMillis = 200),
+        label = "CouiHomeHeaderAlpha",
+    )
     val useUnifiedTopPanel = !hasIllustratedHeader && shouldUseUnifiedHomeTopPanel(topChromePolicy)
     val useDetachedTopTabDock = shouldUseDetachedHomeTopTabDock(
         presentation = topChromePolicy.tabPresentation,
@@ -2672,7 +2677,7 @@ fun HomeHeader(
                                 .height(searchBarHeightDp)
                                 .graphicsLayer {
                                     translationY = searchContentTranslationProvider.value()
-                                    alpha = if (couiInlineSearchExpanded) 0f else 1f
+                                    alpha = if (couiHeader) couiHeaderAlpha else (if (couiInlineSearchExpanded) 0f else 1f)
                                 }
                                 .padding(
                                     horizontal = if (embedTopTabsInUnifiedPanel) {

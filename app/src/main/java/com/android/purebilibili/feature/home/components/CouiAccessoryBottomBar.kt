@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.home.components
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
@@ -47,7 +48,9 @@ internal fun CouiAccessoryBottomBar(
     val galleryDensity = rememberGalleryDensity()
     CompositionLocalProvider(LocalDensity provides galleryDensity) {
         BottomFloatingNavigationBar(
-            modifier = modifier.padding(bottom = BottomFloatingNavigationBarDefaults.navigationBarPadding()),
+            modifier = modifier
+                .padding(bottom = BottomFloatingNavigationBarDefaults.MenuToScreenNaviDistance)
+                .requiredHeight(BottomFloatingNavigationBarDefaults.BarHeight),
             backdrop = backdrop,
         ) {
             visibleItems.forEach { item ->
