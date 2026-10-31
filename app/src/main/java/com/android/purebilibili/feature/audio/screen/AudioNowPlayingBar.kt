@@ -9,6 +9,8 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import com.android.purebilibili.core.ui.components.appElasticPress
 import com.android.purebilibili.core.ui.components.rememberAppElasticPressState
@@ -98,6 +100,10 @@ import com.android.purebilibili.feature.home.components.resolveBiliPaiBottomBarS
 import com.android.purebilibili.feature.home.components.resolveBottomBarDarkTheme
 import com.android.purebilibili.feature.home.components.resolveSharedBottomBarCapsuleShape
 import kotlin.math.abs
+import io.github.suqi8.coui.kmp.basic.BottomFloatingNavigationBarDefaults
+import io.github.suqi8.coui.kmp.basic.GlassContainer
+import io.github.suqi8.coui.kmp.basic.couiGlassSurface
+import io.github.suqi8.coui.kmp.basic.rememberGlassHighlight
 import io.github.suqi8.coui.kmp.blur.Backdrop as MiuixBackdrop
 
 internal data class AudioNowPlayingBarState(
@@ -309,17 +315,25 @@ internal fun AudioNowPlayingBar(
             uiStyle = LocalAppUiStyle.current,
             glassEnabled = glassEnabled
         )
+        val isCoui17 = LocalAppUiStyle.current == com.android.purebilibili.core.theme.AppUiStyle.COUI17
+        val isDarkTheme = resolveBottomBarDarkTheme(AppSurfaceTokens.background())
+        val couiHighlight = rememberGlassHighlight(GlassContainer.Medium, miuixBackdrop)
         val shape = resolveSharedBottomBarCapsuleShape()
-        val glassActive = glassEnabled && miuixBackdrop != null
+        val glassActive = (glassEnabled || isCoui17) && miuixBackdrop != null
         val immersiveBackdrop: Color? =
             com.android.purebilibili.feature.audio.player.AudioNowPlayingSession
                 .immersiveBackdropColor.collectAsState().value
-        val defaultContainerColor = resolveBiliPaiBottomBarShellColor(
-            containerColor = AppSurfaceTokens.surfaceContainer(),
-            liquidGlassEnabled = glassEnabled,
-            darkTheme = resolveBottomBarDarkTheme(AppSurfaceTokens.background()),
-            liquidGlassTuning = liquidGlassTuning,
-        )
+        val defaultContainerColor = if (isCoui17) {
+            val baseColor = io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.bar
+            baseColor.copy(alpha = if (isDarkTheme) 0.8f else 0.85f)
+        } else {
+            resolveBiliPaiBottomBarShellColor(
+                containerColor = AppSurfaceTokens.surfaceContainer(),
+                liquidGlassEnabled = glassEnabled,
+                darkTheme = isDarkTheme,
+                liquidGlassTuning = liquidGlassTuning,
+            )
+        }
         // 悬浮在沉浸式音乐页上时，容器取封面主色的暗化版本，避免主题中性灰与
         // 封面氛围色冲突。玻璃材质保留外壳的半透明度，仅替换 RGB 为氛围色调。
         val containerColor = if (immersiveBackdrop != null) {
@@ -421,25 +435,56 @@ internal fun AudioNowPlayingBar(
                 )
                 .then(if (sourceInActiveReturn) Modifier.clearAndSetSemantics {} else Modifier),
         ) {
-            Box(
-                Modifier.matchParentSize()
-                    .graphicsLayer { alpha = 1f - surfaceMergeProgress().coerceIn(0f, 1f) }
-                    .biliPaiFloatingDockShell(
-                        backdrop = miuixBackdrop,
-                        interactionLayerBlock = elasticState.layerBlock.takeIf { glassMotion },
-                        interactionState = elasticState.takeIf { glassMotion },
-                        containerColor = containerColor,
-                        pressProgress = 0f,
-                        shape = shape,
-                        enabled = glassActive,
-                        blurEnabled = blurEnabled,
-                        hazeState = hazeState,
-                        liquidGlassTuning = liquidGlassTuning,
-                        // Use the app's current animated palette directly: a luminance
-                        // threshold would flip this scrim halfway through a theme change.
-                        readabilitySurfaceColor = AppSurfaceTokens.background(),
-                    )
-            )
+            if (isCoui17) {
+                Box(
+                    Modifier.matchParentSize()
+                        .graphicsLayer { alpha = 1f - surfaceMergeProgress().coerceIn(0f, 1f) }
+                        .then(
+                            if (miuixBackdrop != null) {
+                                Modifier.couiGlassSurface(
+                                    backdrop = miuixBackdrop,
+                                    shape = shape,
+                                    containerColor = containerColor,
+                                    fallback = Modifier.background(containerColor, shape),
+                                    blurRadius = BottomFloatingNavigationBarDefaults.blurRadius(),
+                                    blendColors = BottomFloatingNavigationBarDefaults.blurColors(isDarkTheme),
+                                    highlight = couiHighlight,
+                                )
+                            } else {
+                                Modifier
+                                    .background(containerColor, shape)
+                                    .border(
+                                        width = 1.dp,
+                                        brush = androidx.compose.ui.graphics.Brush.verticalGradient(
+                                            listOf(
+                                                Color.White.copy(alpha = if (isDarkTheme) 0.35f else 0.65f),
+                                                Color.White.copy(alpha = if (isDarkTheme) 0.08f else 0.15f),
+                                            )
+                                        ),
+                                        shape = shape,
+                                    )
+                            }
+                        )
+                )
+            } else {
+                Box(
+                    Modifier.matchParentSize()
+                        .graphicsLayer { alpha = 1f - surfaceMergeProgress().coerceIn(0f, 1f) }
+                        .biliPaiFloatingDockShell(
+                            backdrop = miuixBackdrop,
+                            interactionLayerBlock = elasticState.layerBlock.takeIf { glassMotion },
+                            interactionState = elasticState.takeIf { glassMotion },
+                            containerColor = containerColor,
+                            pressProgress = 0f,
+                            shape = shape,
+                            enabled = glassActive,
+                            blurEnabled = blurEnabled,
+                            hazeState = hazeState,
+                            liquidGlassTuning = liquidGlassTuning,
+                            readabilitySurfaceColor = AppSurfaceTokens.background(),
+                        )
+                )
+            }
             CompositionLocalProvider(LocalElasticPressEnabled provides false) {
                 AudioNowPlayingBarContentRow(
                     modifier = if (glassMotion) Modifier.graphicsLayer(elasticState.layerBlock).clip(shape) else Modifier.clip(shape),

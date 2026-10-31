@@ -35,11 +35,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.shadow.Shadow
+import com.android.purebilibili.core.ui.isAppInDarkTheme
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
@@ -163,20 +167,42 @@ internal fun CouiHomeInlineSearchRow(
                     )
                 }
 
-                // 右侧搜索框：从右侧圆形（40dp）原地向左平滑拉长为透明胶囊搜索框
+                val isDark = isAppInDarkTheme()
+                val capsuleShape = androidx.compose.foundation.shape.RoundedCornerShape(ballSize / 2)
+
+                // 右侧搜索框：从右侧圆形（40dp）原地向左平滑拉长为 COUI 17 原生高光透明胶囊搜索框
                 Box(
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
                         .width(currentSearchWidth)
                         .height(ballSize)
+                        .dropShadow(
+                            shape = capsuleShape,
+                            shadow = Shadow(
+                                radius = 8.dp,
+                                color = Color.Black,
+                                alpha = if (isDark) 0.22f else 0.08f,
+                            ),
+                        )
                         .background(
-                            color = contentColor.copy(alpha = 0.08f),
-                            shape = androidx.compose.foundation.shape.RoundedCornerShape(ballSize / 2),
+                            brush = Brush.verticalGradient(
+                                listOf(
+                                    if (isDark) Color.White.copy(alpha = 0.14f) else Color.White.copy(alpha = 0.55f),
+                                    if (isDark) Color.White.copy(alpha = 0.05f) else Color.White.copy(alpha = 0.25f),
+                                )
+                            ),
+                            shape = capsuleShape,
                         )
                         .border(
-                            width = 1.dp,
-                            color = contentColor.copy(alpha = 0.14f),
-                            shape = androidx.compose.foundation.shape.RoundedCornerShape(ballSize / 2),
+                            width = 1.25.dp,
+                            brush = Brush.verticalGradient(
+                                listOf(
+                                    Color.White.copy(alpha = if (isDark) 0.55f else 0.85f),
+                                    Color.White.copy(alpha = if (isDark) 0.18f else 0.32f),
+                                    Color.White.copy(alpha = if (isDark) 0.06f else 0.14f),
+                                )
+                            ),
+                            shape = capsuleShape,
                         ),
                     contentAlignment = Alignment.CenterStart,
                 ) {

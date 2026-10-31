@@ -3,6 +3,9 @@ package com.android.purebilibili.feature.home.components
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.snap
@@ -53,6 +56,14 @@ import com.android.purebilibili.feature.home.LocalHomeScrollOffset
 import kotlinx.coroutines.flow.collect
 import dev.chrisbanes.haze.HazeState
 import io.github.suqi8.coui.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.basic.MetaBallSurface
+import io.github.suqi8.coui.kmp.basic.MetaBallParticle
+import io.github.suqi8.coui.kmp.basic.BottomFloatingNavigationBarDefaults
+import io.github.suqi8.coui.kmp.basic.GlassContainer
+import io.github.suqi8.coui.kmp.basic.couiGlassSurface
+import io.github.suqi8.coui.kmp.basic.rememberGlassHighlight
+import com.android.purebilibili.core.theme.LocalAppUiStyle
+import com.android.purebilibili.core.theme.AppUiStyle
 import kotlin.math.roundToInt
 
 typealias LinkedDockNowPlayingSlot = @Composable (
@@ -390,12 +401,59 @@ internal fun LinkedBottomDock(
             // Native toolbars retain their original composition and motion behavior.
             val collapsedAtRest = phase != LinkedDockPhase.Expanded && !transition.isRunning
 
+            val isCoui17 = LocalAppUiStyle.current == AppUiStyle.COUI17
+            val isDarkTheme = com.android.purebilibili.core.ui.isAppInDarkTheme()
+            val couiSmallHighlight = rememberGlassHighlight(GlassContainer.Small, backdrop)
+            val couiBarHighlight = rememberGlassHighlight(GlassContainer.Medium, backdrop)
+
             Box(
                 modifier = Modifier.size(
                     with(density) { maximumWidth.toDp() },
                     with(density) { containerHeight.toDp() },
                 )
             ) {
+                // ColorOS 17: 在底栏向左收缩融合成首页球的过渡中，通过 MetaBallSurface 产生原生流体融合球桥接动画
+                if (isCoui17 && backdrop != null && merge.value > 0.01f && merge.value < 0.99f) {
+                    val mVal = merge.value
+                    val currentNavWidth = androidx.compose.ui.unit.lerp(
+                        with(density) { navWidth.toDp() },
+                        with(density) { button.toDp() },
+                        mVal,
+                    )
+                    val currentNavCenterX = androidx.compose.ui.unit.lerp(
+                        with(density) { (navigationX + navWidth / 2).toDp() },
+                        with(density) { (button / 2).toDp() },
+                        mVal,
+                    )
+                    MetaBallSurface(
+                        particles = listOf(
+                            MetaBallParticle(
+                                centerX = currentNavCenterX,
+                                centerY = with(density) { (navRowY + barHeight / 2).toDp() },
+                                width = currentNavWidth,
+                                height = with(density) { barHeight.toDp() },
+                                cornerRadius = with(density) { (barHeight / 2).toDp() },
+                            ),
+                            MetaBallParticle(
+                                centerX = with(density) { (button / 2).toDp() },
+                                centerY = with(density) { (controlRowY + controlHeight / 2).toDp() },
+                                width = with(density) { button.toDp() },
+                                height = with(density) { controlHeight.toDp() },
+                                cornerRadius = with(density) { (button / 2).toDp() },
+                                alpha = mVal,
+                            ),
+                        ),
+                        backdrop = backdrop,
+                        color = containerColor,
+                        blurRadius = BottomFloatingNavigationBarDefaults.blurRadius(),
+                        blurColors = BottomFloatingNavigationBarDefaults.blurColors(isDarkTheme),
+                        rimColor = Color.White.copy(
+                            alpha = if (isDarkTheme) BottomFloatingNavigationBarDefaults.RIM_ALPHA_DARK
+                            else BottomFloatingNavigationBarDefaults.RIM_ALPHA_LIGHT
+                        ),
+                        modifier = Modifier.matchParentSize(),
+                    )
+                }
                 if (glassEnabled || !collapsedAtRest) {
                     Box(
                         modifier = Modifier
@@ -533,22 +591,55 @@ internal fun LinkedBottomDock(
                             ),
                         contentAlignment = Alignment.Center,
                     ) {
-                        Box(
-                            Modifier
-                                .fillMaxSize()
-                                .biliPaiFloatingDockShell(
-                                    backdrop = backdrop,
-                                    interactionLayerBlock = homeElasticState.layerBlock.takeIf { homeGlassMotion },
-                                    interactionState = homeElasticState.takeIf { homeGlassMotion },
-                                    containerColor = containerColor,
-                                    pressProgress = 0f,
-                                    shape = shape,
-                                    enabled = glassEnabled,
-                                    blurEnabled = blurEnabled,
-                                    hazeState = hazeState,
-                                    liquidGlassTuning = liquidGlassTuning,
-                                )
-                        )
+                        if (isCoui17) {
+                            Box(
+                                Modifier
+                                    .fillMaxSize()
+                                    .then(
+                                        if (backdrop != null) {
+                                            Modifier.couiGlassSurface(
+                                                backdrop = backdrop,
+                                                shape = CircleShape,
+                                                containerColor = containerColor,
+                                                fallback = Modifier.background(containerColor, CircleShape),
+                                                blurRadius = BottomFloatingNavigationBarDefaults.blurRadius(),
+                                                blendColors = BottomFloatingNavigationBarDefaults.blurColors(isDarkTheme),
+                                                highlight = couiSmallHighlight,
+                                            )
+                                        } else {
+                                            Modifier
+                                                .background(containerColor, CircleShape)
+                                                .border(
+                                                    width = 1.dp,
+                                                    brush = androidx.compose.ui.graphics.Brush.verticalGradient(
+                                                        listOf(
+                                                            Color.White.copy(alpha = if (isDarkTheme) 0.35f else 0.65f),
+                                                            Color.White.copy(alpha = if (isDarkTheme) 0.08f else 0.15f),
+                                                        )
+                                                    ),
+                                                    shape = CircleShape,
+                                                )
+                                        }
+                                    )
+                            )
+                        } else {
+                            Box(
+                                Modifier
+                                    .fillMaxSize()
+                                    .biliPaiFloatingDockShell(
+                                        backdrop = backdrop,
+                                        interactionLayerBlock = homeElasticState.layerBlock.takeIf { homeGlassMotion },
+                                        interactionState = homeElasticState.takeIf { homeGlassMotion },
+                                        containerColor = containerColor,
+                                        pressProgress = 0f,
+                                        shape = shape,
+                                        enabled = glassEnabled,
+                                        blurEnabled = blurEnabled,
+                                        hazeState = hazeState,
+                                        liquidGlassTuning = liquidGlassTuning,
+                                    )
+                            )
+                        }
                         AppIcon(
                             imageVector = if (iconStyle == SharedFloatingBottomBarIconStyle.MIUIX) {
                                 resolveHomeNavigationBarIcon(firstItem, currentItem == firstItem)

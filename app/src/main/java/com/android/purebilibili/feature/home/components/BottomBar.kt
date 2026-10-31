@@ -3051,24 +3051,7 @@ private fun MiuixBottomBar(
             blurIntensity = blurIntensity
         )
     }
-    // ColorOS 17 的底栏常驻显示：不随滚动收起，也不承载底栏搜索；播放条仍走联动 Dock。
-    if (isFloating && LocalAppUiStyle.current == AppUiStyle.COUI17 && uiSkinDecoration == null &&
-        nowPlayingContent == null
-    ) {
-        CouiAccessoryBottomBar(
-            currentItem = currentItem,
-            onItemClick = onItemClick,
-            visibleItems = visibleItems,
-            itemLabels = itemLabels,
-            dynamicUnreadCount = dynamicUnreadCount,
-            iconStyle = sharedBarIconStyle,
-            backdrop = miuixBackdrop,
-            haptic = haptic,
-            modifier = modifier,
-            onToggleSidebar = onToggleSidebar.takeIf { isTablet },
-        )
-        return
-    }
+    // ColorOS 17 与 BiliPai 统一使用 LinkedBottomDock 管理底栏及其联动展开/收缩形态。
     if (isFloating) {
         BiliPaiFloatingBottomBar(
             currentItem = currentItem,
@@ -3560,7 +3543,8 @@ private fun BiliPaiFloatingBottomBar(
     SideEffect {
         if (nowPlayingContent != null) hasHostedNowPlaying = true
     }
-    if (bottomBarSearchEnabled || nowPlayingContent != null || hasHostedNowPlaying || compactOnScrollEnabled) {
+    val isCoui17 = LocalAppUiStyle.current == AppUiStyle.COUI17
+    if (bottomBarSearchEnabled || nowPlayingContent != null || hasHostedNowPlaying || compactOnScrollEnabled || isCoui17) {
         LinkedBottomDock(
             currentItem = currentItem,
             firstItem = visibleItems.firstOrNull() ?: BottomNavItem.HOME,
