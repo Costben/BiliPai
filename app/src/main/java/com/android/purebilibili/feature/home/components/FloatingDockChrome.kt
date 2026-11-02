@@ -8,6 +8,7 @@ import com.android.purebilibili.core.ui.animation.liquidWobbleScaleX
 import com.android.purebilibili.core.ui.animation.liquidWobbleScaleY
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.height
@@ -51,6 +52,10 @@ import io.github.suqi8.coui.kmp.blur.Backdrop
 import io.github.suqi8.coui.kmp.blur.BackdropEffectScope
 import io.github.suqi8.coui.kmp.blur.blur
 import io.github.suqi8.coui.kmp.blur.drawBackdrop
+import io.github.suqi8.coui.kmp.basic.BottomFloatingNavigationBarDefaults
+import io.github.suqi8.coui.kmp.basic.GlassContainer
+import io.github.suqi8.coui.kmp.basic.couiGlassSurface
+import io.github.suqi8.coui.kmp.basic.rememberGlassHighlight
 import io.github.suqi8.coui.kmp.blur.highlight.BloomStroke
 import io.github.suqi8.coui.kmp.blur.highlight.Highlight
 import io.github.suqi8.coui.kmp.blur.highlight.LightPosition
@@ -618,4 +623,75 @@ internal fun BoxScope.BiliPaiFloatingDockIndicator(
                 }
             )
     )
+}
+
+/**
+ * 一条「底栏」的材质。导航胶囊和播放条是同一套东西，只是内容不同：
+ *
+ * - 液态玻璃开启时走 BiliPai 自绘外壳（vibrancy / 折射 / 重力高光）；
+ * - ColorOS 17 走 COUI 原生胶囊用的同一份玻璃配方
+ *   （`TYPE_FRAMEWORK_BOTTOM_BAR` 的模糊半径、混合色与定向高光）。
+ *
+ * [deformBlock] 是按压/拖动的形变。玻璃必须自己吃这段变换、采样侧再反向抵消，
+ * 否则只有内容在动、背景纹丝不动 —— 这正是播放条曾经和底栏对不上的地方。
+ */
+@Composable
+internal fun Modifier.biliPaiDockRowSurface(
+    backdrop: Backdrop?,
+    containerColor: Color,
+    shape: Shape,
+    darkTheme: Boolean,
+    glassEnabled: Boolean,
+    blurEnabled: Boolean,
+    hazeState: HazeState?,
+    liquidGlassTuning: LiquidGlassTuning,
+    couiSurface: Boolean,
+    deformBlock: (GraphicsLayerScope.() -> Unit)? = null,
+    interactionState: com.android.purebilibili.core.ui.components.AppElasticPressState? = null,
+    readabilitySurfaceColor: Color = Color.Unspecified,
+): Modifier {
+    if (!couiSurface) {
+        return biliPaiFloatingDockShell(
+            backdrop = backdrop,
+            interactionLayerBlock = deformBlock,
+            interactionState = interactionState,
+            containerColor = containerColor,
+            pressProgress = 0f,
+            shape = shape,
+            enabled = glassEnabled,
+            blurEnabled = blurEnabled,
+            hazeState = hazeState,
+            liquidGlassTuning = liquidGlassTuning,
+            readabilitySurfaceColor = readabilitySurfaceColor,
+        )
+    }
+    if (backdrop == null) {
+        return this
+            .then(if (deformBlock != null) Modifier.graphicsLayer(deformBlock) else Modifier)
+            .background(containerColor, shape)
+            .border(
+                width = 1.dp,
+                brush = androidx.compose.ui.graphics.Brush.verticalGradient(
+                    listOf(
+                        Color.White.copy(alpha = if (darkTheme) 0.35f else 0.65f),
+                        Color.White.copy(alpha = if (darkTheme) 0.08f else 0.15f),
+                    ),
+                ),
+                shape = shape,
+            )
+    }
+    val highlight = rememberGlassHighlight(GlassContainer.Medium, backdrop)
+    return this
+        .then(if (deformBlock != null) Modifier.graphicsLayer(deformBlock) else Modifier)
+        .couiGlassSurface(
+            backdrop = backdrop,
+            shape = shape,
+            containerColor = containerColor,
+            fallback = Modifier.background(containerColor, shape),
+            blurRadius = BottomFloatingNavigationBarDefaults.blurRadius(),
+            blendColors = BottomFloatingNavigationBarDefaults.blurColors(darkTheme),
+            highlight = highlight,
+            // 采样侧抵消同一段形变，页面保持静止、玻璃才在动。
+            enclosingLayerBlock = deformBlock,
+        )
 }

@@ -105,7 +105,7 @@ internal fun ThemeCustomColorPickerDialog(
     val previewScheme = previewPalette.material
     val previewIssues = remember(previewScheme) { assessThemeContrast(previewScheme).filterNot { it.passes } }
     val previewMiuixController = remember(previewPalette, previewDark) {
-        val previewColors = previewPalette.miuix.toCouiColors()
+        val previewColors = previewPalette.miuix.toCouiColors(previewDark)
         ThemeController(
             colorSchemeMode = io.github.suqi8.coui.kmp.theme.ColorSchemeMode.valueOf(
                 resolveMiuixColorSchemeMode(

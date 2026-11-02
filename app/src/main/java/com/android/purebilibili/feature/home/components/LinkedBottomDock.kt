@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -29,21 +30,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.boundsInParent
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.android.purebilibili.core.ui.components.AppIcon
+import com.android.purebilibili.core.ui.components.AppElasticPressState
 import com.android.purebilibili.core.ui.components.appElasticPress
 import com.android.purebilibili.core.ui.components.rememberAppElasticPressState
+import io.github.suqi8.coui.kmp.basic.spotLight as couiSpotLight
 import androidx.compose.animation.core.EaseInCubic
 import androidx.compose.animation.core.EaseOutCubic
 import androidx.compose.ui.graphics.TransformOrigin
@@ -56,6 +63,7 @@ import com.android.purebilibili.feature.home.LocalHomeScrollOffset
 import kotlinx.coroutines.flow.collect
 import dev.chrisbanes.haze.HazeState
 import io.github.suqi8.coui.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.basic.MetaBallDefaults
 import io.github.suqi8.coui.kmp.basic.MetaBallSurface
 import io.github.suqi8.coui.kmp.basic.MetaBallParticle
 import io.github.suqi8.coui.kmp.basic.BottomFloatingNavigationBarDefaults
@@ -89,6 +97,24 @@ internal val LocalLinkedDockShellSuppressed = androidx.compose.runtime.compositi
  */
 internal val LocalLinkedDockCollapseProgress =
     androidx.compose.runtime.compositionLocalOf<() -> Float> { { 0f } }
+
+/**
+ * 收起态首页球与播放条之间的间距。
+ *
+ * 融合球的场域向外扩 [MetaBallDefaults.Extension] × [MetaBallDefaults.EXTENSION_FACTOR_X]
+ * （4dp × 1.5 = 6dp 每侧），两球中心距因此至少要留 12dp 才不会在静止时焊成一块；
+ * 取 14dp 留 2dp 余量 —— 静止时是两颗分开的球，运动靠近时才连成一块胶体。
+ * 播放条的收起宽度由「右缘对称贴边」反算，间距变宽它自然窄一点。
+ */
+private val COMPACT_MELT_GAP = 14.dp
+
+/**
+ * 按住/拖动时融合球额外扩张的场域。
+ *
+ * 静止时两球间隔 14dp，需要每侧 7dp 的场域才连得起来（基础 4dp × 1.5 = 7dp 刚好不够），
+ * 按住时补到 10dp，两块玻璃之间就拉出一条真实的颈。
+ */
+private const val MELT_PULL_EXTENSION_DP = 6f
 
 
 @Composable
@@ -280,7 +306,6 @@ internal fun LinkedBottomDock(
         val searchProgressProvider = remember(search) {
             { search.value.coerceIn(0f, 1f) }
         }
-        val zeroProgressProvider = remember { { 0f } }
         val identityIconScaleProvider = remember { { 1f } }
 
         // Shared morph owns both directions. Keep the real slot at its endpoint while
@@ -379,7 +404,7 @@ internal fun LinkedBottomDock(
                 ).roundToPx()
                 controlHeight = barHeight
                 gap = 8.dp.roundToPx()
-                verticalGap = 4.dp.roundToPx()
+                verticalGap = 8.dp.roundToPx()
             }
             val searchHeight = button
             val expandedGlassSearchHeight = with(density) { 48.dp.roundToPx() }
@@ -404,11 +429,26 @@ internal fun LinkedBottomDock(
                     cornerRadius = 28.dp,
                 ).roundToPx()
             }
+            val isCoui17 = LocalAppUiStyle.current == AppUiStyle.COUI17
+            // ColorOS 17 的材质完全由 COUI 原生胶囊（BottomFloatingNavigationBar）承担：
+            // 不再叠加任何自绘外壳或融合球背景，收缩时只让胶囊自身收窄成圆，
+            // 玻璃采样始终落在真实几何上，不会出现"多套一层宽背景"或"一动就失去模糊"。
+            val couiNativeCapsule = isCoui17
+            // COUI 胶囊在窄屏上左右各留 16dp 外边距，可见表面因此比槽位窄两圈。
+            val couiCapsuleInsetPx = with(density) {
+                BottomFloatingNavigationBarDefaults.PaddingHorizontal.roundToPx()
+            }
             val reservedSearchWidth = if (searchEnabled) button + gap else 0
             val expandedNavigationWidth = preferredNavigationWidth.coerceAtMost(
                 (maximumWidth - reservedSearchWidth).coerceAtLeast(0)
             )
-            val navWidth = expandedNavigationWidth.coerceAtMost(maximumWidth)
+            // 槽位把这两圈补回来：可见胶囊和上方播放条一样宽（256dp），两行左右边缘对齐。
+            // 不补的话槽位 256dp 只画出 224dp 的胶囊，球的左缘永远够不到展开态的左缘。
+            val navWidth = if (couiNativeCapsule && !searchEnabled) {
+                (expandedNavigationWidth + couiCapsuleInsetPx * 2).coerceAtMost(maximumWidth)
+            } else {
+                expandedNavigationWidth.coerceAtMost(maximumWidth)
+            }
             val navigationX = resolveLinkedDockNavigationX(
                 maximumWidth = maximumWidth,
                 navigationWidth = navWidth,
@@ -416,31 +456,109 @@ internal fun LinkedBottomDock(
                 gap = gap,
                 searchEnabled = searchEnabled,
             )
-            // 小横条展开态与底栏整簇（导航胶囊 + 搜索圆钮）同宽同起点：
-            // 两行胶囊长度一致、左右边缘对齐。
-            val bottomBarClusterWidth = (navWidth + reservedSearchWidth).coerceAtMost(maximumWidth)
+            // 展开态播放条对齐导航胶囊的**可见表面**，而不是槽位。
+            // 收起态「球 + 条」整组居中后，球的可见左缘恰好落在展开态可见左缘上：
+            // 展开时左缘一动不动，胶囊只从球的右边长开。
+            val stripExpandedX = navigationX + if (couiNativeCapsule) couiCapsuleInsetPx else 0
+            val stripExpandedWidth = if (couiNativeCapsule) {
+                (navWidth - couiCapsuleInsetPx * 2).coerceAtLeast(0)
+            } else {
+                // 其它皮肤没有内缩，播放条仍与底栏整簇（导航胶囊 + 搜索圆钮）同宽同起点。
+                (navWidth + reservedSearchWidth).coerceAtMost(maximumWidth)
+            }
 
             // Glass keeps the navigation/backdrop mounted across both endpoints. At the compact
             // endpoint skip placement so the hidden row neither draws nor intercepts touches.
             // Native toolbars retain their original composition and motion behavior.
             val collapsedAtRest = phase != LinkedDockPhase.Expanded && !transition.isRunning
 
-            val isCoui17 = LocalAppUiStyle.current == AppUiStyle.COUI17
-            val isDarkTheme = com.android.purebilibili.core.ui.isAppInDarkTheme()
+            // 与播放条的玻璃取同一个暗色判定：两行共用一份底栏背景，
+            // 主题判断不同源会让暗色下球和条一个是深玻璃、一个是白玻璃。
+            val isDarkTheme = resolveBottomBarDarkTheme(
+                com.android.purebilibili.core.ui.AppSurfaceTokens.background(),
+            )
             val couiSmallHighlight = rememberGlassHighlight(GlassContainer.Small, backdrop)
             val ballSize = button
-            // ColorOS 17 的材质完全由 COUI 原生胶囊（BottomFloatingNavigationBar）承担：
-            // 不再叠加任何自绘外壳或融合球背景，收缩时只让胶囊自身收窄成圆，
-            // 玻璃采样始终落在真实几何上，不会出现"多套一层宽背景"或"一动就失去模糊"。
-            val couiNativeCapsule = isCoui17
-            // COUI 胶囊在窄屏上左右各留 16dp 外边距，收窄到「球」时必须把这段算进去，
-            // 否则胶囊永远收不成正圆。
+            // 收窄到「球」时必须把胶囊内边距算进去，否则胶囊永远收不成正圆。
             val couiCapsuleHorizontalInset =
                 BottomFloatingNavigationBarDefaults.PaddingHorizontal * 2
             val ballRowWidth = with(density) { (ballSize.toDp() + couiCapsuleHorizontalInset).roundToPx() }
             val collapsedNavWidth = if (couiNativeCapsule) ballRowWidth else navWidth
-            // 播放条与导航胶囊是两个独立元素，不参与任何融合球合并。
-            val stripSurfaceProgressProvider: () -> Float = zeroProgressProvider
+            // 收起态「球 + 播放条」贴着容器左右内缘对称落位：
+            // 球的可见左缘到屏幕左边界、播放条的右缘到屏幕右边界，两段距离恒等。
+            // 12dp 容器内边距 + 2dp = 屏幕两侧各 14dp 留白。
+            val compactEdgeInsetPx = with(density) { 2.dp.roundToPx() }
+            // 但贴左不能无限贴：竖屏容器和胶囊一样宽，球只差十几个 dp；
+            // 横屏/平板上容器比胶囊宽得多，展开态胶囊是居中的，若仍把球钉在容器左缘，
+            // 球就得横穿小半个屏幕才能落到展开态左缘上，观感就是"球先飞到中间再展开"。
+            // 因此限制球的左缘最多比展开态胶囊左缘靠左 [compactDriftLimitDp]，
+            // 超出就贴着展开态左缘落位，整段动画里球只微移、宽度同步向右长开。
+            val compactDriftLimitPx = with(density) { 16.dp.roundToPx() }
+            val expandedCapsuleLeft = navigationX + if (couiNativeCapsule) couiCapsuleInsetPx else 0
+            val compactBallLeftPx = maxOf(compactEdgeInsetPx, expandedCapsuleLeft - compactDriftLimitPx)
+            val compactGroup = resolveLinkedDockCompactGroup(
+                width = maximumWidth,
+                expandedAudioX = stripExpandedX,
+                expandedAudioWidth = stripExpandedWidth,
+                capsuleInset = if (couiNativeCapsule) couiCapsuleInsetPx else 0,
+                button = button,
+                gap = gap,
+                centered = couiNativeCapsule && !searchEnabled,
+                fallbackCapsuleLeft = if (couiNativeCapsule) navigationX else 0,
+                compactBallLeft = if (couiNativeCapsule && !searchEnabled) {
+                    compactBallLeftPx
+                } else {
+                    null
+                },
+                compactAudioRight = if (couiNativeCapsule && !searchEnabled) {
+                    (maximumWidth - compactBallLeftPx).coerceAtLeast(0)
+                } else {
+                    null
+                },
+                // 收起态两颗球之间留出更宽的缝：融合球的表面张力会把贴太近的两块轮廓焊在一起。
+                compactGap = if (couiNativeCapsule && !searchEnabled) {
+                    with(density) { COMPACT_MELT_GAP.roundToPx() }
+                } else {
+                    gap
+                },
+            )
+            // 收起态槽位左缘比展开态更靠左（球贴左、展开归一屏居中），
+            // 所以整段动画里横向位置按 merge 平滑过渡，收起↔展开两端各自落在自己的位置上。
+            val capsuleLeft = compactGroup.capsuleLeft
+            val capsuleLeftExpanded = if (couiNativeCapsule) navigationX else 0
+            fun capsuleSlotLeft(mergeValue: Float): Int {
+                if (!couiNativeCapsule) return capsuleLeft
+                val m = mergeValue.coerceIn(0f, 1f)
+                return (capsuleLeft + (capsuleLeftExpanded - capsuleLeft) * (1f - m)).roundToInt()
+            }
+            // 导航胶囊和播放条共用同一块融合球表面：收起态那颗球就是收窄后的胶囊，
+            // 它和旁边的播放条是同一块胶体上的两颗粒子，按压/拖动时整块轮廓一起形变。
+            // 判据用 derivedStateOf 收敛成布尔量，避免整条底栏逐帧重组。
+            val mergePastExpanded by remember {
+                derivedStateOf { merge.value > 0.02f }
+            }
+            val metaballEligible = couiNativeCapsule && nowPlayingSlot != null && backdrop != null &&
+                mergePastExpanded && !reduceMotion
+            // 融合球和原生胶囊是同一块材质，交接必须是同一帧完成的硬切。
+            // 这段原本是 90/170ms 的淡入淡出，但胶囊的抑制（透明 + 去掉 backdrop + 去掉阴影）
+            // 是当帧生效的：折叠/展开各会有几十毫秒「两边都没有玻璃」的空档，
+            // 表现就是背景突然消失几帧。材质同源，硬切看不到跳变。
+            val metaballActive = metaballEligible
+            val metaballWeight = if (metaballEligible) 1f else 0f
+            var capsuleShellBounds by remember { mutableStateOf(Rect.Zero) }
+            var stripShellBounds by remember { mutableStateOf(Rect.Zero) }
+            // 融合球接管期间，播放条把自己的玻璃交给融合球，只保留内容。
+            val stripSurfaceProgressProvider: () -> Float = { metaballWeight }
+            val homeElasticState = rememberAppElasticPressState(
+                visualSize = with(density) { ballSize.toDp() },
+            )
+            val homeGlassMotion = glassEnabled && backdrop != null
+            val homeDragEnabled = phase != LinkedDockPhase.Expanded &&
+                com.android.purebilibili.core.ui.LocalComponentMotionEnabled.current &&
+                com.android.purebilibili.core.ui.LocalAppThemeConfig.current.globalDragFeedbackEnabled
+            var homeDragActive by remember { mutableStateOf(false) }
+            // 播放条自己不再记一份形变：融合球要读到同一组数值，整块胶体才会一起动。
+            val stripElasticState = rememberAppElasticPressState()
 
             Box(
                 modifier = Modifier.size(
@@ -448,6 +566,45 @@ internal fun LinkedBottomDock(
                     with(density) { containerHeight.toDp() },
                 )
             ) {
+                if (metaballActive) {
+                    // 融合球和播放条各画一段各自的原生玻璃，只有运动到彼此贴近时才由这里
+                    // 把两块轮廓焊成一块；静止时两者之间留出 [COMPACT_MELT_GAP]，是两颗分开的球。
+                    // 材质必须和 COUI 原生胶囊完全同源（bar 色 + 同一组混合层），
+                    // 否则暗色下融合球是平铺的灰壳，和旁边的深玻璃对不上。
+                    DockMeltBallSurface(
+                        ballBounds = capsuleShellBounds,
+                        ballInsetPx = couiCapsuleInsetPx.toFloat(),
+                        stripBounds = stripShellBounds,
+                        ballElastic = homeElasticState,
+                        stripElastic = stripElasticState,
+                        stripAlpha = presence.value.coerceIn(0f, 1f),
+                        progress = metaballWeight,
+                        extension = MetaBallDefaults.Extension,
+                        containerColor = if (couiNativeCapsule) {
+                            io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.bar
+                        } else {
+                            containerColor
+                        },
+                        backdrop = backdrop,
+                        blurRadius = BottomFloatingNavigationBarDefaults.blurRadius(),
+                        containerAlpha = if (isDarkTheme) 0.8f else 0.85f,
+                        blurColors = if (couiNativeCapsule) {
+                            BottomFloatingNavigationBarDefaults.blurColors(isDarkTheme)
+                        } else {
+                            null
+                        },
+                        continuousCurve = couiNativeCapsule,
+                        rimColor = Color.White.copy(
+                            alpha = if (isDarkTheme) {
+                                BottomFloatingNavigationBarDefaults.RIM_ALPHA_DARK
+                            } else {
+                                BottomFloatingNavigationBarDefaults.RIM_ALPHA_LIGHT
+                            },
+                        ),
+                        modifier = Modifier.matchParentSize(),
+                    )
+                }
+
                 // ColorOS 17：收拢态的那颗球就是收窄后的 COUI 原生胶囊本身。
                 // 如果在这里把它整个卸载，胶囊会先缩成圆再"闪一下消失"，球也就丢了玻璃材质。
                 // 所以 COUI17 永远保留这一行，只让它的宽度收成球径。
@@ -455,8 +612,12 @@ internal fun LinkedBottomDock(
                     Box(
                         modifier = Modifier
                             .offset {
-                                // 底栏固定在原位，绝不随滚动上移/位移。
-                                IntOffset(navigationX, navRowY)
+                                // 底栏固定不随滚动上移；横向位置在收起/展开两端不同，
+                                // 按 merge 在「贴左的槽位」和「居中后的槽位」之间平滑过渡。
+                                IntOffset(capsuleSlotLeft(merge.value), navRowY)
+                            }
+                            .onGloballyPositioned { coordinates ->
+                                capsuleShellBounds = coordinates.boundsInParent()
                             }
                             .layout { measurable, _ ->
                                 // ColorOS 17：胶囊随合并进度真实收窄（整条胶囊 → 首页球）。
@@ -494,6 +655,12 @@ internal fun LinkedBottomDock(
                                     scaleX = 1f - 0.10f * collapse
                                     scaleY = 1f - 0.10f * collapse
                                     transformOrigin = TransformOrigin(0f, 0.5f)
+                                } else if (!metaballEligible) {
+                                    // 收起态那颗球就是这条胶囊本身：按压/拖动的形变必须作用到
+                                    // 玻璃上，否则只有手指下的高光在动、球本身纹丝不动。
+                                    // 融合球接管时胶囊已经透明，改由融合球的粒子承担这段形变，
+                                    // 这里必须让开，否则位移会被算两次。
+                                    homeElasticState.layerBlock(this)
                                 }
                             }
                             .pointerInput(phase, couiNativeCapsule) {
@@ -517,7 +684,7 @@ internal fun LinkedBottomDock(
                             ),
                     ) {
                         CompositionLocalProvider(
-                            LocalLinkedDockShellSuppressed provides false,
+                            LocalLinkedDockShellSuppressed provides metaballActive,
                             LocalLinkedDockCollapseProgress provides mergeProgressProvider,
                         ) {
                             if (compactOnScrollEnabled && !isCoui17) {
@@ -542,23 +709,13 @@ internal fun LinkedBottomDock(
                         }
                     }
                 }
-                val homeElasticState = rememberAppElasticPressState(
-                    visualSize = with(density) { ballSize.toDp() },
-                )
-                val homeGlassMotion = glassEnabled && backdrop != null
-                val homeDragEnabled = phase != LinkedDockPhase.Expanded &&
-                    com.android.purebilibili.core.ui.LocalComponentMotionEnabled.current &&
-                    com.android.purebilibili.core.ui.LocalAppThemeConfig.current.globalDragFeedbackEnabled
-                var homeDragActive by remember { mutableStateOf(false) }
                 Box(
                     modifier = Modifier
                         .offset {
                             // ColorOS 17 下这颗球就是收窄后的 COUI 原生胶囊本身，
                             // 圆心必须与胶囊圆心严格重合；其它皮肤仍在最左侧。
                             val x = if (couiNativeCapsule) {
-                                navigationX + with(density) {
-                                    BottomFloatingNavigationBarDefaults.PaddingHorizontal.roundToPx()
-                                }
+                                capsuleSlotLeft(merge.value) + couiCapsuleInsetPx
                             } else 0
                             IntOffset(x, navRowY + (barHeight - ballSize) / 2)
                         }
@@ -577,6 +734,9 @@ internal fun LinkedBottomDock(
                                 enabled = phase != LinkedDockPhase.Expanded,
                                 state = homeElasticState,
                                 transformInBackdrop = homeGlassMotion && !couiNativeCapsule,
+                                // COUI17 那颗球是收窄后的原生胶囊，高光改用底栏同一束聚光，
+                                // 不再叠这层白光，否则和底栏的观感对不上。
+                                highlightEnabled = !couiNativeCapsule,
                                 allowConsumedDrag = { homeDragActive },
                             )
                             .then(
@@ -621,6 +781,11 @@ internal fun LinkedBottomDock(
                                 }
                             }
                             .then(
+                                if (couiNativeCapsule) {
+                                    Modifier.couiDockSpotLight(homeElasticState, isDarkTheme)
+                                } else Modifier
+                            )
+                            .then(
                                 if (phase != LinkedDockPhase.Expanded) {
                                     Modifier.clickable(role = Role.Button) { expand() }
                                 } else {
@@ -655,7 +820,13 @@ internal fun LinkedBottomDock(
                             } else resolveMaterialBottomBarIcon(firstItem, currentItem == firstItem),
                             contentDescription = "$firstLabel，展开底栏",
                             tint = navigationColor,
-                            modifier = if (homeGlassMotion) Modifier.graphicsLayer(homeElasticState.layerBlock) else Modifier,
+                            // COUI17 的形变已经由外层 appElasticPress 加在整颗球上，
+                            // 这里再叠一层就会把图标放大两次。
+                            modifier = if (homeGlassMotion && !couiNativeCapsule) {
+                                Modifier.graphicsLayer(homeElasticState.layerBlock)
+                            } else {
+                                Modifier
+                            },
                         )
                     }
                 }
@@ -687,8 +858,10 @@ internal fun LinkedBottomDock(
                                     searchProgress = search.value,
                                     verticalGap = verticalGap,
                                     presenceProgress = slotGeometryPresenceProvider(),
-                                    expandedAudioWidth = bottomBarClusterWidth,
-                                    expandedAudioX = navigationX,
+                                    expandedAudioWidth = stripExpandedWidth,
+                                    expandedAudioX = stripExpandedX,
+                                    compactAudioLeft = compactGroup.audioLeft,
+                                    compactAudioRight = compactGroup.audioRight,
                                 )
                                 // 槽高与导航行同为 barHeight：两行胶囊圆角（percent=50）
                                 // 严格一致，不会因槽更矮而出现更小的圆角。
@@ -711,8 +884,10 @@ internal fun LinkedBottomDock(
                                     searchProgress = search.value,
                                     verticalGap = verticalGap,
                                     presenceProgress = slotGeometryPresenceProvider(),
-                                    expandedAudioWidth = bottomBarClusterWidth,
-                                    expandedAudioX = navigationX,
+                                    expandedAudioWidth = stripExpandedWidth,
+                                    expandedAudioX = stripExpandedX,
+                                    compactAudioLeft = compactGroup.audioLeft,
+                                    compactAudioRight = compactGroup.audioRight,
                                 )
                                 // 槽高已与导航行同为 barHeight：展开时槽底贴导航行上方
                                 // verticalGap 处；收合时槽与导航行完全重合（圆心同中心）。
@@ -721,11 +896,17 @@ internal fun LinkedBottomDock(
                                     navRowY - verticalGap - barHeight +
                                         ((barHeight + verticalGap) * merge.value).roundToInt(),
                                 )
+                            }
+                            .onGloballyPositioned { coordinates ->
+                                stripShellBounds = coordinates.boundsInParent()
                             },
                     ) {
                         androidx.compose.runtime.CompositionLocalProvider(
                             com.android.purebilibili.core.ui.LocalVisualWorkAllowed provides
                                 (com.android.purebilibili.core.ui.LocalVisualWorkAllowed.current && hasAudio),
+                            // 播放条的按压形变交给底栏这一份，融合球才能读到同一组数值。
+                            com.android.purebilibili.feature.audio.screen
+                                .LocalAudioNowPlayingElasticState provides stripElasticState,
                         ) {
                             nowPlayingSlot.invoke(
                                 Modifier.fillMaxSize(),
@@ -888,4 +1069,111 @@ internal fun LinkedBottomDock(
             }
         }
     }
+}
+
+/**
+ * 底栏的融合球表面：导航胶囊（收起时就是那颗球）和播放条是同一块胶体上的两颗粒子。
+ *
+ * 粒子取两者当帧真实外框，形变取各自 [AppElasticPressState] 的实时数值 —— 于是按压或拖动
+ * 那颗球时，拉伸与位移发生在胶体轮廓上，而不是只有手指下的一层高光在动。
+ *
+ * 形变数值只在这里读取，重组范围因此收敛到这一块表面：收起态静止时它不会跟着底栏一起重组。
+ */
+@Composable
+private fun DockMeltBallSurface(
+    ballBounds: Rect,
+    ballInsetPx: Float,
+    stripBounds: Rect,
+    ballElastic: AppElasticPressState,
+    stripElastic: AppElasticPressState,
+    stripAlpha: Float,
+    progress: Float,
+    extension: Dp,
+    containerColor: Color,
+    backdrop: Backdrop?,
+    blurRadius: Float,
+    containerAlpha: Float,
+    blurColors: List<io.github.suqi8.coui.kmp.blur.BlendColorEntry>? = null,
+    continuousCurve: Boolean = false,
+    rimColor: Color,
+    modifier: Modifier = Modifier,
+) {
+    val density = LocalDensity.current
+    // 导航槽位左右各留一圈 COUI 内缩，可见胶囊比槽位窄；粒子要贴着可见轮廓。
+    val ball = ballBounds.run { Rect(left + ballInsetPx, top, right - ballInsetPx, bottom) }
+    if (ball.isEmpty || stripBounds.isEmpty) return
+    val ballTranslation = ballElastic.translation
+    val ballScaleX = ballElastic.scaleX
+    val ballScaleY = ballElastic.scaleY
+    val stripTranslation = stripElastic.translation
+    val stripScaleX = stripElastic.scaleX
+    val stripScaleY = stripElastic.scaleY
+    // 按住或拖动任何一颗球时，两块轮廓的场域一起向外扩：两颗之间真的拉出一条颈，
+    // 就是「融在一起」的那一下；松手回到 4dp，静止时仍然是两颗分开的球。
+    val meltPull = maxOf(ballElastic.pressProgress, stripElastic.pressProgress).coerceIn(0f, 1f)
+    val pullExtension = extension + (MELT_PULL_EXTENSION_DP * meltPull).dp
+    MetaBallSurface(
+        particles = listOf(
+            MetaBallParticle(
+                centerX = with(density) { (ball.center.x + ballTranslation.x).toDp() },
+                centerY = with(density) { (ball.center.y + ballTranslation.y).toDp() },
+                width = with(density) { ball.width.toDp() },
+                height = with(density) { ball.height.toDp() },
+                scaleX = ballScaleX,
+                scaleY = ballScaleY,
+            ),
+            MetaBallParticle(
+                centerX = with(density) { (stripBounds.center.x + stripTranslation.x).toDp() },
+                centerY = with(density) { (stripBounds.center.y + stripTranslation.y).toDp() },
+                width = with(density) { stripBounds.width.toDp() },
+                height = with(density) { stripBounds.height.toDp() },
+                scaleX = stripScaleX,
+                scaleY = stripScaleY,
+                alpha = stripAlpha,
+            ),
+        ),
+        modifier = modifier.graphicsLayer { alpha = progress.coerceIn(0f, 1f) },
+        color = containerColor,
+        backdrop = backdrop,
+        blurRadius = blurRadius,
+        containerAlpha = containerAlpha,
+        blurColors = blurColors,
+        continuousCurve = continuousCurve,
+        extension = pullExtension,
+        rimColor = rimColor,
+        rimBottomScale = 1f,
+    )
+}
+
+/**
+ * 底栏那颗球的按压高光，直接复用 COUI 胶囊自己的聚光配方（同一套 shader、同一组参数、
+ * 同一种混合模式），所以收起态的球和展开态的底栏是同一束光。
+ *
+ * 球是独立的一层，原生胶囊的 `couiTouchMotion` 收不到这里的触摸（球盖在上层赢得了命中测试），
+ * 所以由这里把聚光补在球自己的节点上：位置取归一化的指尖坐标，半径/强度按按压进度生长，
+ * 和 COUI 的 `couiSpotlightRadius` 一致。
+ */
+@Composable
+private fun Modifier.couiDockSpotLight(
+    state: AppElasticPressState,
+    darkTheme: Boolean,
+): Modifier {
+    val density = LocalDensity.current
+    val params = io.github.suqi8.coui.kmp.basic.SpotLightDefaults.opaqueMedium2(darkTheme)
+    val progress = state.pressProgress.coerceIn(0f, 1f)
+    val radius = with(density) {
+        (params.startRadius + (params.endRadius - params.startRadius) * progress).toDp()
+    }
+    return this.couiSpotLight(
+        position = state.highlightCenter,
+        radius = radius,
+        intensity = params.endIntensity * progress,
+        lightHeight = with(density) { params.lightHeight.toDp() },
+        ambientStrength = params.ambientStrength,
+        diffuseStrength = params.diffuseStrength,
+        noise = params.noise,
+        dither = params.ditherN,
+        blendMode = params.blendMode,
+        clipShape = CircleShape,
+    )
 }

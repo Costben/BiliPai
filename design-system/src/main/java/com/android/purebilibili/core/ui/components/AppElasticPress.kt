@@ -13,6 +13,7 @@ import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -78,30 +79,67 @@ class AppElasticPressState internal constructor(
         }
     }
 
-    val layerBlock: GraphicsLayerScope.() -> Unit = {
-        if (motionEnabled) {
-            // A shared state may drive sibling surface/content layers. Geometry belongs
-            // to the observed control, never to an icon or text layer's smaller bounds.
-            val width = visibleSizePx ?: gestureSize.width.takeIf { it > 0f } ?: size.width
-            val height = visibleSizePx ?: gestureSize.height.takeIf { it > 0f } ?: size.height
-            if (width > 0f && height > 0f) {
-                // 大面积弹窗把扩展随短边放大，保持与小型控件一致的可感知形变。
-                val expansion = if (sizeScaledExpansion) {
-                    appPopupElasticExpansionPx(minOf(width, height), expansionPx)
-                } else expansionPx
-                val transform = resolveAppElasticTransform(
-                    Size(width, height), press.value, position.value - startPosition, expansion, feedbackStrength,
-                    normalizeToShortSide = sizeScaledExpansion,
-                    dragReferencePx = if (sizeScaledExpansion && feedbackStrength > 0f) {
-                        expansionPx / feedbackStrength / 4f * APP_POPUP_ELASTIC_DRAG_REFERENCE_DP
-                    } else null,
-                )
-                translationX = transform.translation.x
-                translationY = transform.translation.y
-                scaleX = transform.scaleX
-                scaleY = transform.scaleY
-            }
+    /**
+     * 当前这一帧的形变比例。给「表面画在别处」的宿主用：融合球把整块材质画在外层，
+     * 它必须读到和玻璃层完全相同的数值，否则按压时只有高光在动、背景纹丝不动。
+     */
+    val scaleX: Float get() = resolveTransform(fallbackWidth = null, fallbackHeight = null)?.scaleX ?: 1f
+
+    /** 见 [scaleX]。 */
+    val scaleY: Float get() = resolveTransform(fallbackWidth = null, fallbackHeight = null)?.scaleY ?: 1f
+
+    /** 当前这一帧的按压进度（0 = 松开，1 = 完全按下）。给融合球做「拉扯」用。 */
+    val pressProgress: Float get() = press.value
+
+    /**
+     * 归一化的按压中心（0..1，相对观察到的控件尺寸）。
+     * 给「把高光画在别处」的宿主用：底栏那颗球改用 COUI 原生聚光时，光点必须落在指尖上。
+     */
+    val highlightCenter: Offset
+        get() {
+            val width = gestureSize.width
+            val height = gestureSize.height
+            if (width <= 0f || height <= 0f) return Offset(0.5f, 0.5f)
+            return Offset(
+                (position.value.x / width).coerceIn(0f, 1f),
+                (position.value.y / height).coerceIn(0f, 1f),
+            )
         }
+
+    /** 当前这一帧的位移（像素）。见 [scaleX]。 */
+    val translation: Offset
+        get() = resolveTransform(fallbackWidth = null, fallbackHeight = null)?.translation ?: Offset.Zero
+
+    val layerBlock: GraphicsLayerScope.() -> Unit = {
+        // A shared state may drive sibling surface/content layers. Geometry belongs
+        // to the observed control, never to an icon or text layer's smaller bounds.
+        resolveTransform(fallbackWidth = size.width, fallbackHeight = size.height)?.let { transform ->
+            translationX = transform.translation.x
+            translationY = transform.translation.y
+            scaleX = transform.scaleX
+            scaleY = transform.scaleY
+        }
+    }
+
+    private fun resolveTransform(
+        fallbackWidth: Float?,
+        fallbackHeight: Float?,
+    ): AppElasticTransform? {
+        if (!motionEnabled) return null
+        val width = visibleSizePx ?: gestureSize.width.takeIf { it > 0f } ?: fallbackWidth ?: return null
+        val height = visibleSizePx ?: gestureSize.height.takeIf { it > 0f } ?: fallbackHeight ?: return null
+        if (width <= 0f || height <= 0f) return null
+        // 大面积弹窗把扩展随短边放大，保持与小型控件一致的可感知形变。
+        val expansion = if (sizeScaledExpansion) {
+            appPopupElasticExpansionPx(minOf(width, height), expansionPx)
+        } else expansionPx
+        return resolveAppElasticTransform(
+            Size(width, height), press.value, position.value - startPosition, expansion, feedbackStrength,
+            normalizeToShortSide = sizeScaledExpansion,
+            dragReferencePx = if (sizeScaledExpansion && feedbackStrength > 0f) {
+                expansionPx / feedbackStrength / 4f * APP_POPUP_ELASTIC_DRAG_REFERENCE_DP
+            } else null,
+        )
     }
 }
 
@@ -163,10 +201,19 @@ fun Modifier.appElasticPress(
 ): Modifier {
     if (foldIn(false) { found, element -> found || element === ElasticPressMarker }) return this
     return Modifier.then(ElasticPressMarker).composed {
-        if (!enabled || !LocalComponentMotionEnabled.current || !LocalElasticPressEnabled.current ||
-            com.android.purebilibili.core.ui.blur.LocalAppGlassContainer.current?.ownsDeformation == true
-        ) return@composed this
         val elasticState = state ?: rememberAppElasticPressState(visualSize)
+        // 收起↔展开的相位切换会把这一段整体卸掉，in-flight 的按压动画来不及收尾：
+        // 松手那一步没有执行，press 就停在 1，切回来时高光和形变会一直挂着。
+        // 停用期间补一次归零，恢复时是干净的静止态。
+        val active = enabled && LocalComponentMotionEnabled.current && LocalElasticPressEnabled.current &&
+            com.android.purebilibili.core.ui.blur.LocalAppGlassContainer.current?.ownsDeformation != true
+        LaunchedEffect(active, elasticState) {
+            if (!active) {
+                elasticState.press.snapTo(0f)
+                elasticState.position.snapTo(elasticState.startPosition)
+            }
+        }
+        if (!active) return@composed this
         val effectiveDragEnabled = dragEnabled && LocalAppThemeConfig.current.globalDragFeedbackEnabled
         val press = elasticState.press
         val position = elasticState.position

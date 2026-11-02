@@ -202,6 +202,226 @@ class LinkedDockPolicyTest {
     }
 
     @Test
+    fun compactPlaybackAnchorsPastTheInsetHomeBall() {
+        // COUI 原生胶囊收窄成球时左右各留 16dp 内边距，球的可见右缘比 slot 起点更靠右。
+        // dock 传入球的实际右缘后，播放条必须从球右侧接出并留出 gap，否则会压住半个球。
+        val ballLeft = 20
+        val ballInset = 16
+        val button = 56
+        val gap = 8
+        val compactLeft = ballLeft + ballInset + button + gap
+        val geometry = resolveLinkedDockGeometry(
+            width = 296,
+            button = button,
+            barHeight = 56,
+            gap = gap,
+            hasAudio = true,
+            searchEnabled = false,
+            mergeProgress = 1f,
+            searchProgress = 0f,
+            expandedAudioWidth = 256,
+            expandedAudioX = ballLeft,
+            compactAudioLeft = compactLeft,
+        )
+        assertEquals(compactLeft, geometry.audioX)
+        assertEquals(296 - compactLeft, geometry.audioWidth)
+        // 球右缘 + gap 之后才开始，任何一帧都不会压到球上。
+        assertTrue(geometry.audioX >= ballLeft + ballInset + button + gap)
+    }
+
+    @Test
+    fun insetHomeBallStillSettlesOnTheExpandedCluster() {
+        val expanded = resolveLinkedDockGeometry(
+            width = 296,
+            button = 56,
+            barHeight = 56,
+            gap = 8,
+            hasAudio = true,
+            searchEnabled = false,
+            mergeProgress = 0f,
+            searchProgress = 0f,
+            expandedAudioWidth = 256,
+            expandedAudioX = 20,
+            compactAudioLeft = 100,
+        )
+        assertEquals(20, expanded.audioX)
+        assertEquals(256, expanded.audioWidth)
+    }
+
+    @Test
+    fun compactGroupSitsCenteredWithItsRightEdgePinnedToTheExpandedStrip() {
+        // 收起态「球 + 条」整组在容器里对称留白，右缘钉在展开态小横条的右缘：
+        // 展开动画里条的右端因此完全不动，只由左缘向左铺开。
+        val width = 296
+        val expandedX = 20
+        val expandedWidth = 256
+        val inset = 16
+        val button = 56
+        val gap = 8
+        val group = resolveLinkedDockCompactGroup(
+            width = width,
+            expandedAudioX = expandedX,
+            expandedAudioWidth = expandedWidth,
+            capsuleInset = inset,
+            button = button,
+            gap = gap,
+            centered = true,
+        )
+        val ballLeft = group.capsuleLeft + inset
+        val audioRight = requireNotNull(group.audioRight)
+        assertEquals(expandedX + expandedWidth, audioRight)
+        assertEquals(ballLeft + button + gap, group.audioLeft)
+        // 球的可见左缘与展开态播放条的左缘落在同一点：展开时左缘一动不动，
+        // 胶囊只从球的右边长开，不存在「先挪一段再展开」。
+        assertEquals(expandedX, ballLeft)
+        // 可见整组 [球左缘, 条右缘] 居中：两侧留白相等。
+        assertEquals(ballLeft, width - audioRight)
+        // 条右缘在收拢/展开两端重合，动画中不会整体横移。
+        val compact = resolveLinkedDockGeometry(
+            width = width,
+            button = button,
+            barHeight = 56,
+            gap = gap,
+            hasAudio = true,
+            searchEnabled = false,
+            mergeProgress = 1f,
+            searchProgress = 0f,
+            expandedAudioWidth = expandedWidth,
+            expandedAudioX = expandedX,
+            compactAudioLeft = group.audioLeft,
+            compactAudioRight = group.audioRight,
+        )
+        assertEquals(group.audioLeft, compact.audioX)
+        assertEquals(audioRight, compact.audioX + compact.audioWidth)
+        val expanded = resolveLinkedDockGeometry(
+            width = width,
+            button = button,
+            barHeight = 56,
+            gap = gap,
+            hasAudio = true,
+            searchEnabled = false,
+            mergeProgress = 0f,
+            searchProgress = 0f,
+            expandedAudioWidth = expandedWidth,
+            expandedAudioX = expandedX,
+            compactAudioLeft = group.audioLeft,
+            compactAudioRight = group.audioRight,
+        )
+        assertEquals(expandedX, expanded.audioX)
+        assertEquals(expandedWidth, expanded.audioWidth)
+        assertEquals(audioRight, expanded.audioX + expanded.audioWidth)
+    }
+
+    @Test
+    fun rightEdgeStaysPinnedAndLeftEdgeOnlyAdvancesAcrossTheWholeMergeRange() {
+        // 展开是一段连续形变，不能出现"先把球挪到位、再让条铺开"的两段感：
+        // 对整个 merge 区间采样，条的右缘必须钉住不动，左缘只能单向朝展开位移动，
+        // 宽度只能单向增长。任何一处反向都会让动画看起来停顿或回弹。
+        // 参数取导航胶囊的可见表面（296dp 容器内 256dp，左缘 20dp）。
+        val width = 296
+        val expandedX = 20
+        val expandedWidth = 256
+        val inset = 16
+        val button = 56
+        val gap = 8
+        val group = resolveLinkedDockCompactGroup(
+            width = width,
+            expandedAudioX = expandedX,
+            expandedAudioWidth = expandedWidth,
+            capsuleInset = inset,
+            button = button,
+            gap = gap,
+            centered = true,
+        )
+        val audioRight = requireNotNull(group.audioRight)
+        var previousLeft = Int.MIN_VALUE
+        var previousWidth = Int.MAX_VALUE
+        for (step in 0..100) {
+            val merge = step / 100f
+            val geometry = resolveLinkedDockGeometry(
+                width = width,
+                button = button,
+                barHeight = 56,
+                gap = gap,
+                hasAudio = true,
+                searchEnabled = false,
+                mergeProgress = merge,
+                searchProgress = 0f,
+                expandedAudioWidth = expandedWidth,
+                expandedAudioX = expandedX,
+                compactAudioLeft = group.audioLeft,
+                compactAudioRight = group.audioRight,
+            )
+            // 右缘只允许有 1px 的四舍五入抖动，视觉上是同一个位置。
+            assertEquals(
+                audioRight.toFloat(),
+                (geometry.audioX + geometry.audioWidth).toFloat(),
+                1f,
+                "merge=$merge right edge",
+            )
+            // merge 0 = 展开，1 = 收拢；从左向右采样时左缘只右移、宽度只收窄，
+            // 中途折返就会看出"停顿—再跳"的两段感。
+            assertTrue(geometry.audioX >= previousLeft, "merge=$merge left edge")
+            assertTrue(geometry.audioWidth <= previousWidth, "merge=$merge width")
+            previousLeft = geometry.audioX
+            previousWidth = geometry.audioWidth
+        }
+        assertEquals(group.audioLeft, previousLeft)
+        assertEquals(audioRight - group.audioLeft, previousWidth)
+    }
+
+    @Test
+    fun capsuleLeftLandsOnTheExpandedVisibleLeftEdgeSoTheBallOnlyGrowsRightward() {
+        // 按 dock 的真实参数复算：296dp 容器、导航槽位 288dp、COUI 胶囊左右各内缩 16dp。
+        // 槽位补回两圈内缩后，可见胶囊和播放条都是 256dp；
+        // 整组居中 ⇒ 球的可见左缘必然等于展开态可见左缘，展开时左缘一动不动。
+        val width = 296
+        val inset = 16
+        val navSlotWidth = 288
+        val navigationX = (width - navSlotWidth) / 2
+        val stripExpandedX = navigationX + inset
+        val stripExpandedWidth = navSlotWidth - inset * 2
+        assertEquals(4, navigationX)
+        assertEquals(20, stripExpandedX)
+        assertEquals(256, stripExpandedWidth)
+        val group = resolveLinkedDockCompactGroup(
+            width = width,
+            expandedAudioX = stripExpandedX,
+            expandedAudioWidth = stripExpandedWidth,
+            capsuleInset = inset,
+            button = 56,
+            gap = 8,
+            centered = true,
+        )
+        // 槽位左缘两端重合：动画里没有任何横向位移。
+        assertEquals(navigationX, group.capsuleLeft)
+        // 球的可见左缘 == 展开态播放条左缘。
+        assertEquals(stripExpandedX, group.capsuleLeft + inset)
+        // 整组 [球可见左缘, 条右缘] 在容器里对称留白。
+        val audioRight = requireNotNull(group.audioRight)
+        assertEquals(stripExpandedX, width - audioRight)
+        assertEquals(stripExpandedX + stripExpandedWidth, audioRight)
+    }
+
+    @Test
+    fun uncenteredCompactGroupFallsBackToTheSearchAwareLayout() {
+        // 搜索圆钮占右侧时必须退回旧布局：条右缘交给几何函数按圆钮退位。
+        val group = resolveLinkedDockCompactGroup(
+            width = 296,
+            expandedAudioX = 20,
+            expandedAudioWidth = 256,
+            capsuleInset = 16,
+            button = 56,
+            gap = 8,
+            centered = false,
+            fallbackCapsuleLeft = 20,
+        )
+        assertEquals(20, group.capsuleLeft)
+        assertEquals(100, group.audioLeft)
+        assertEquals(null, group.audioRight)
+    }
+
+    @Test
     fun intermediateMergeKeepsAudioYZeroToAvoidQuadraticDropDistortion() {
         val half = geometry(merge = 0.5f, search = 0f)
         assertEquals(0, half.audioY)

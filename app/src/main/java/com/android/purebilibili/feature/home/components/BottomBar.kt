@@ -4195,13 +4195,24 @@ private fun BiliPaiFloatingBottomBarChrome(
                             // 这里不再叠加任何自绘外壳，也不做"透明化交接"，
                             // 因此同一块区域只有一层玻璃，深色下不会露出第二圈白壳。
                             val collapseProgress = LocalLinkedDockCollapseProgress.current
+                            // 融合球接管时这一行只剩内容：外壳由 LinkedBottomDock 的 metaball 统一绘制，
+                            // 否则同一块区域会叠出两层玻璃。
+                            val shellOwnedByMetaball = LocalLinkedDockShellSuppressed.current
                             io.github.suqi8.coui.kmp.basic.BottomFloatingNavigationBar(
                                 modifier = dockModifier,
                                 // 跟随 App 调色板（深色主题下就是深色玻璃），不用 COUI 默认浅色 bar。
-                                containerColor = io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.bar,
-                                backdrop = miuixBackdrop,
-                                shadow = io.github.suqi8.coui.kmp.basic
-                                    .BottomFloatingNavigationBarDefaults.BarShadow,
+                                containerColor = if (shellOwnedByMetaball) {
+                                    Color.Transparent
+                                } else {
+                                    io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.bar
+                                },
+                                backdrop = miuixBackdrop.takeUnless { shellOwnedByMetaball },
+                                shadow = if (shellOwnedByMetaball) {
+                                    null
+                                } else {
+                                    io.github.suqi8.coui.kmp.basic
+                                        .BottomFloatingNavigationBarDefaults.BarShadow
+                                },
                             ) {
                                 val itemAlpha = 1f - ((collapseProgress() - 0.12f) / 0.45f).coerceIn(0f, 1f)
                                 visibleItems.forEachIndexed { index, item ->

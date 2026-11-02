@@ -19,15 +19,15 @@ internal fun <T> bottomBarSearchMorphSpring(): SpringSpec<T> = spring(
 )
 
 /**
- * COUI 17 整栏收拢成首页球的融合球弹簧。
+ * COUI 17 整栏收拢成首页球的弹簧。
  *
- * 对齐 COUI 原生 melt ball 的 response 0.55 / bounce 0.35 手感（略软一点），
- * 让"缩小 → 融进球"走完整段轨迹，而不是在交叉淡出窗口里一闪而过。
- * stiffness 从 240 降到 150：约 0.62s 走完，肉眼能看清胶囊一路收成正圆。
+ * 原先是 stiffness 150（约 0.62s）：起步 100ms 只走三成，加上横条宽度变化很小，
+ * 展开/收起会被读成"停在中间一帧再滑上去"。收窄到约 0.3s 后，
+ * 胶囊和播放条在同一段连续形变里完成，不再有拖尾。
  */
 internal fun <T> bottomBarDockMeltSpring(): SpringSpec<T> = spring(
-    dampingRatio = 0.88f,
-    stiffness = 150f,
+    dampingRatio = 0.86f,
+    stiffness = 320f,
 )
 
 internal fun <T> bottomBarContentVisibilityMotionSpec(): TweenSpec<T> = tween(

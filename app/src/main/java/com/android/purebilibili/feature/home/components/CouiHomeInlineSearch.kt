@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -68,8 +69,8 @@ import io.github.suqi8.coui.kmp.icon.extended.Back
 import io.github.suqi8.coui.kmp.icon.extended.Clear
 
 /**
- * 首页顶栏内联搜索：点搜索键后从右侧向左展开一条透明搜索框，
- * 左边缘与前排头像左缘对齐；回车或点联想词才带着关键词进入搜索页。
+ * 首页顶栏内联搜索：点搜索键后从搜索键原位向右展开成一条透明搜索框，
+ * 右缘停在设置按钮左侧，设置按钮原地保留；回车或点联想词才带着关键词进入搜索页。
  */
 @Composable
 internal fun CouiHomeInlineSearchRow(
@@ -132,18 +133,29 @@ internal fun CouiHomeInlineSearchRow(
         androidx.compose.foundation.layout.BoxWithConstraints(
             modifier = modifier
                 .fillMaxWidth()
-                .height(rowHeight)
-                // 展开时拦截整个顶栏范围点击，防止穿透到底层原顶栏元素
-                .clickable(
-                    interactionSource = interaction,
-                    indication = null,
-                ) {},
+                .height(rowHeight),
         ) {
             val contentWidth = maxWidth - horizontalPadding * 2
             val ballSize = TopAppBarDefaults.ActionItemMinWidth // 40.dp
             val spacing = TopAppBarDefaults.ActionMenuItemSpacing // 10.dp
-            val maxSearchWidth = (contentWidth - ballSize - spacing).coerceAtLeast(ballSize)
+            // 搜索胶囊占「搜索按钮」那一格：右侧让出设置按钮的宽度和间距，
+            // 它就从搜索键的位置向右长成一条，设置按钮原地不动。
+            val trailingReserve = ballSize + spacing
+            val maxSearchWidth = (contentWidth - trailingReserve - ballSize - spacing)
+                .coerceAtLeast(ballSize)
             val currentSearchWidth = androidx.compose.ui.unit.lerp(ballSize, maxSearchWidth, progress)
+
+            // 只拦截搜索区这一段的点击，防止穿透到底层原顶栏元素；
+            // 设置按钮那一格留出来，展开搜索时它仍然是活的。
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(end = trailingReserve)
+                    .clickable(
+                        interactionSource = interaction,
+                        indication = null,
+                    ) {},
+            )
 
             Box(
                 modifier = Modifier
@@ -170,10 +182,12 @@ internal fun CouiHomeInlineSearchRow(
                 val isDark = isAppInDarkTheme()
                 val capsuleShape = androidx.compose.foundation.shape.RoundedCornerShape(ballSize / 2)
 
-                // 右侧搜索框：从右侧圆形（40dp）原地向左平滑拉长为 COUI 17 原生高光透明胶囊搜索框
+                // 右侧搜索框：从搜索键原位（40dp 圆）向右拉长为 COUI 17 原生高光透明胶囊搜索框，
+                // 右缘停在设置按钮左侧，设置按钮保持可见。
                 Box(
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
+                        .offset(x = -trailingReserve)
                         .width(currentSearchWidth)
                         .height(ballSize)
                         .dropShadow(

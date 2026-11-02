@@ -1128,7 +1128,7 @@ fun PureBiliBiliTheme(
                     // COUI 组件在所有皮肤下都可能出现（共享门面直接调用），因此始终提供 COUITheme；
                     // 色板与动画帧同源，非 COUI 皮肤读到的就是原先 Miuix 的那一份颜色。
                     val couiColors = remember(animatedPalette.miuix, uiStyle, darkTheme) {
-                        val bridged = animatedPalette.miuix.toCouiColors()
+                        val bridged = animatedPalette.miuix.toCouiColors(darkTheme)
                         if (uiStyle == AppUiStyle.COUI17) bridged.withNativeNavigationRoles(darkTheme) else bridged
                     }
                     val outerOverscroll = androidx.compose.foundation.LocalOverscrollFactory.current

@@ -10,14 +10,13 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import com.android.purebilibili.core.ui.components.appElasticPress
 import com.android.purebilibili.core.ui.components.rememberAppElasticPressState
 import com.android.purebilibili.core.ui.components.LocalElasticPressEnabled
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.foundation.basicMarquee
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -98,15 +97,11 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.android.purebilibili.feature.home.components.LiquidGlassTuning
 import com.android.purebilibili.feature.home.components.LocalLiquidGlassRenderConfig
-import com.android.purebilibili.feature.home.components.biliPaiFloatingDockShell
+import com.android.purebilibili.feature.home.components.biliPaiDockRowSurface
 import com.android.purebilibili.feature.home.components.resolveBiliPaiBottomBarShellColor
 import com.android.purebilibili.feature.home.components.resolveBottomBarDarkTheme
 import com.android.purebilibili.feature.home.components.resolveSharedBottomBarCapsuleShape
 import kotlin.math.abs
-import io.github.suqi8.coui.kmp.basic.BottomFloatingNavigationBarDefaults
-import io.github.suqi8.coui.kmp.basic.GlassContainer
-import io.github.suqi8.coui.kmp.basic.couiGlassSurface
-import io.github.suqi8.coui.kmp.basic.rememberGlassHighlight
 import io.github.suqi8.coui.kmp.blur.Backdrop as MiuixBackdrop
 
 internal data class AudioNowPlayingBarState(
@@ -118,6 +113,13 @@ internal data class AudioNowPlayingBarState(
     val isPlaying: Boolean,
     val playbackSpeed: Float = 1f
 )
+
+/**
+ * 底栏把播放条写进同一块融合球表面时，按压/拖动的形变必须由双方共享：
+ * 播放条不能再自己记一份，否则融合球读到的是 0，整块胶体不会动。
+ */
+internal val LocalAudioNowPlayingElasticState =
+    androidx.compose.runtime.compositionLocalOf<com.android.purebilibili.core.ui.components.AppElasticPressState?> { null }
 
 @Composable
 internal fun AudioNowPlayingBar(
@@ -348,7 +350,6 @@ internal fun AudioNowPlayingBar(
         )
         val isCoui17 = LocalAppUiStyle.current == com.android.purebilibili.core.theme.AppUiStyle.COUI17
         val isDarkTheme = resolveBottomBarDarkTheme(AppSurfaceTokens.background())
-        val couiHighlight = rememberGlassHighlight(GlassContainer.Medium, miuixBackdrop)
         val shape = resolveSharedBottomBarCapsuleShape()
         val glassActive = (glassEnabled || isCoui17) && miuixBackdrop != null
         val immersiveBackdrop: Color? =
@@ -394,7 +395,12 @@ internal fun AudioNowPlayingBar(
             contentKey = state.coverUrl,
             playbackSpeed = state.playbackSpeed
         )
-        val elasticState = rememberAppElasticPressState()
+        val ownElasticState = rememberAppElasticPressState()
+        // 底栏宿主会提供它自己那一份：融合球用它来驱动整块胶体的形变。
+        val elasticState = LocalAudioNowPlayingElasticState.current ?: ownElasticState
+        // 拖动一旦越过触摸阈值就由自己接管并消费，形变要继续跟手、点击要被取消，
+        // 所以要把「此刻是拖动」告诉 appElasticPress。
+        var stripDragActive by remember { mutableStateOf(false) }
         val glassMotion = glassActive && miuixBackdrop != null
         Box(
             modifier = modifier
@@ -403,6 +409,7 @@ internal fun AudioNowPlayingBar(
                     enabled = !sourceInActiveReturn && !captureInProgress && !cancelDissolving,
                     state = elasticState,
                     transformInBackdrop = glassMotion,
+                    allowConsumedDrag = { stripDragActive },
                 )
                 .fillMaxWidth()
                 .then(if (consumeNavigationBarsPadding) Modifier.navigationBarsPadding() else Modifier)
@@ -459,9 +466,10 @@ internal fun AudioNowPlayingBar(
                 )
                 .then(
                     if (!sourceInActiveReturn && !cancelDissolving) {
-                        Modifier.audioNowPlayingSkipGesture(
+                        Modifier.audioNowPlayingBarGesture(
                             onSkipNext = onSkipNext,
                             onSkipPrevious = onSkipPrevious,
+                            onDragActiveChange = { stripDragActive = it },
                         )
                     } else {
                         Modifier
@@ -472,49 +480,24 @@ internal fun AudioNowPlayingBar(
             if (!dissolveContentHidden) Box(
                 Modifier.matchParentSize()
                     .graphicsLayer { alpha = 1f - surfaceMergeProgress().coerceIn(0f, 1f) }
-                    .then(
-                        if (isCoui17) {
-                            if (miuixBackdrop != null) {
-                                Modifier.couiGlassSurface(
-                                    backdrop = miuixBackdrop,
-                                    shape = shape,
-                                    containerColor = containerColor,
-                                    fallback = Modifier.background(containerColor, shape),
-                                    blurRadius = BottomFloatingNavigationBarDefaults.blurRadius(),
-                                    blendColors = BottomFloatingNavigationBarDefaults.blurColors(isDarkTheme),
-                                    highlight = couiHighlight,
-                                )
-                            } else {
-                                Modifier
-                                    .background(containerColor, shape)
-                                    .border(
-                                        width = 1.dp,
-                                        brush = androidx.compose.ui.graphics.Brush.verticalGradient(
-                                            listOf(
-                                                Color.White.copy(alpha = if (isDarkTheme) 0.35f else 0.65f),
-                                                Color.White.copy(alpha = if (isDarkTheme) 0.08f else 0.15f),
-                                            )
-                                        ),
-                                        shape = shape,
-                                    )
-                            }
-                        } else {
-                            Modifier.biliPaiFloatingDockShell(
-                                backdrop = miuixBackdrop,
-                                interactionLayerBlock = elasticState.layerBlock.takeIf { glassMotion },
-                                interactionState = elasticState.takeIf { glassMotion },
-                                containerColor = containerColor,
-                                pressProgress = 0f,
-                                shape = shape,
-                                enabled = glassActive,
-                                blurEnabled = blurEnabled,
-                                hazeState = hazeState,
-                                liquidGlassTuning = liquidGlassTuning,
-                                // Use the app's current animated palette directly: a luminance
-                                // threshold would flip this scrim halfway through a theme change.
-                                readabilitySurfaceColor = AppSurfaceTokens.background(),
-                            )
-                        }
+                    // 底栏和播放条共用同一份「底栏背景」：ColorOS 17 走 COUI 原生胶囊的
+                    // 玻璃配方，其它皮肤走 BiliPai 液态玻璃外壳。形变由玻璃自己承担，
+                    // 采样侧反向抵消 —— 否则只有内容在动、背景纹丝不动。
+                    .biliPaiDockRowSurface(
+                        backdrop = miuixBackdrop,
+                        containerColor = containerColor,
+                        shape = shape,
+                        darkTheme = isDarkTheme,
+                        glassEnabled = glassActive,
+                        blurEnabled = blurEnabled,
+                        hazeState = hazeState,
+                        liquidGlassTuning = liquidGlassTuning,
+                        couiSurface = isCoui17,
+                        deformBlock = elasticState.layerBlock.takeIf { glassMotion },
+                        interactionState = elasticState.takeIf { glassMotion },
+                        // Use the app's current animated palette directly: a luminance
+                        // threshold would flip this scrim halfway through a theme change.
+                        readabilitySurfaceColor = AppSurfaceTokens.background(),
                     )
             )
             CompositionLocalProvider(LocalElasticPressEnabled provides false) {
@@ -691,23 +674,42 @@ internal fun AudioNowPlayingBar(
     }
 }
 
-private fun Modifier.audioNowPlayingSkipGesture(
+/**
+ * 播放条的手势归属：**拖动 / 上下左右形变优先于点击**。
+ *
+ * 越过触摸阈值就由这里接管并消费位移 —— `clickable` 的抬手判定随之取消，
+ * 所以只是想拖动、拉扯一下这块玻璃时不会误入播放页；形变靠
+ * `allowConsumedDrag` 继续跟手。松手时横向位移超过 [SKIP_THRESHOLD_PX] 才算切歌。
+ */
+private fun Modifier.audioNowPlayingBarGesture(
     onSkipNext: () -> Unit,
-    onSkipPrevious: () -> Unit
+    onSkipPrevious: () -> Unit,
+    onDragActiveChange: (Boolean) -> Unit,
 ): Modifier = pointerInput(onSkipNext, onSkipPrevious) {
     var totalDrag = 0f
-    detectHorizontalDragGestures(
+    detectDragGestures(
+        onDragStart = {
+            totalDrag = 0f
+            onDragActiveChange(true)
+        },
         onDragEnd = {
-            if (abs(totalDrag) > 64f) {
+            if (abs(totalDrag) > SKIP_THRESHOLD_PX) {
                 if (totalDrag < 0f) onSkipNext() else onSkipPrevious()
             }
             totalDrag = 0f
+            onDragActiveChange(false)
         },
-        onDragCancel = { totalDrag = 0f }
-    ) { _, dragAmount ->
-        totalDrag += dragAmount
+        onDragCancel = {
+            totalDrag = 0f
+            onDragActiveChange(false)
+        },
+    ) { change, dragAmount ->
+        change.consume()
+        totalDrag += dragAmount.x
     }
 }
+
+private const val SKIP_THRESHOLD_PX = 64f
 
 @Composable
 private fun AudioNowPlayingBarContentRow(

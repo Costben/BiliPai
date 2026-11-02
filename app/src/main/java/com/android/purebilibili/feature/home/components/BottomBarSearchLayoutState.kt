@@ -70,11 +70,20 @@ internal fun rememberBiliPaiBottomBarSearchLayoutState(
     } else resolvedSearchLayout
     val emptySize = remember { mutableStateOf(AppSpacingTokens.None) }
     if (!searchEnabled) {
-        val dockWidth = animateDpAsState(
-            targetValue = targetSearchLayout.dockWidth,
-            animationSpec = bottomBarDockWidthMotionSpec(),
-            label = "bottomBarDockWidth"
-        )
+        // 嵌入底栏的宽度由 LinkedBottomDock 每帧逐帧算好后传给这里，它已经是动画值。
+        // 再套一层 animateDpAsState 会多出一根更慢的弹簧：胶囊宽度落后于整栏动画，
+        // 而 BoxWithConstraints 会把最小约束放宽到 0、外层 Row 又是 align(Center)，
+        // 于是落后的宽度被居中显示 —— 观感就是「球先移到中间再从中间向两边长开」。
+        // 嵌入时直接跟随容器宽度，让宽度和位置走同一帧。
+        val dockWidth: State<Dp> = if (fillAllocatedDockWidth) {
+            remember(containerWidth) { mutableStateOf(containerWidth) }
+        } else {
+            animateDpAsState(
+                targetValue = targetSearchLayout.dockWidth,
+                animationSpec = bottomBarDockWidthMotionSpec(),
+                label = "bottomBarDockWidth"
+            )
+        }
         val dockHeight = animateDpAsState(
             targetValue = targetDockHeight,
             animationSpec = bottomBarChromeHeightMotionSpec(),
