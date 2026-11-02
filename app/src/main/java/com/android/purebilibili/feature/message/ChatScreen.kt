@@ -715,9 +715,9 @@ private fun ChatSessionControlMenu(
                 )
             }
         ),
-    ) {
-        AppIcon(AppIcons.Filled.MoreVert, contentDescription = "会话设置")
-    }
+        couiMore = true,
+        moreDescription = "会话设置",
+    )
 }
 
 @Composable

@@ -2374,9 +2374,12 @@ private fun MusicQueueActionButton(
     }
     if (actions.isEmpty()) return
     com.android.purebilibili.core.ui.components.AppGlassMenuAnchor(onOpen = { expanded = true }) {
-        AppIconButton(onClick = { expanded = true }) {
-            AppIcon(AppIcons.Outlined.MoreVert, "队列操作：${item.title}", tint = MusicContentColor)
-        }
+        com.android.purebilibili.core.ui.components.CouiMoreButton(
+            onClick = { expanded = true },
+            contentDescription = "队列操作：${item.title}",
+            tint = MusicContentColor,
+            forceDark = true,
+        )
         if (glassMenu) {
             com.android.purebilibili.core.ui.components.AppGlassMenu(
                 expanded = expanded,

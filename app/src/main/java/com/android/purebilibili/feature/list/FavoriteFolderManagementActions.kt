@@ -13,7 +13,7 @@ internal fun FavoriteFolderOverviewMenu(
     canSelect: Boolean,
     onCreate: () -> Unit,
     onSelect: () -> Unit,
-    content: @Composable () -> Unit,
+    content: @Composable () -> Unit = {},
 ) {
     AppWindowActionMenu(
         enabled = !busy,
@@ -21,6 +21,8 @@ internal fun FavoriteFolderOverviewMenu(
             AppWindowAction(label = "新建收藏夹", onClick = onCreate),
             AppWindowAction(label = "多选/批量管理", enabled = canSelect, onClick = onSelect),
         )),
+        couiMore = true,
+        moreDescription = "更多管理",
         content = content,
     )
 }

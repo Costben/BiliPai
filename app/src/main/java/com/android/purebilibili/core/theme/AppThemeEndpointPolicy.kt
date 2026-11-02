@@ -40,7 +40,21 @@ internal fun resolveAppThemeEndpointPalette(
         val coui = resolveCouiColorsFromAccent(accent, resolveReadableForeground(accent), darkTheme).toMiuixColors()
         // COUI 的 secondary 是中性控件底色而不是强调色，Material 侧的 secondary/tertiary 必须保留生成的强调族，
         // 否则用它着色的图标会变成浅灰、几乎看不见。
-        val material = alignMaterialSurfacesWithMiuix(configured, coui, preserveMaterialAccentRoles = true)
+        val aligned = alignMaterialSurfacesWithMiuix(configured, coui, preserveMaterialAccentRoles = true)
+        // COUI 的 surface 在深色下是纯黑，直接当画布会整页发黑；页面底色改用 COUI 的 background
+        // （深色 #1E1E1E），卡片与面板的明度层次继续由 surfaceContainer 系列给出。
+        // 纯黑模式是用户显式选择，保持黑色。
+        val material = if (darkTheme && !amoledDarkTheme) {
+            aligned.copy(
+                background = coui.background,
+                onBackground = coui.onBackground,
+                surface = coui.background,
+                surfaceDim = coui.background,
+                surfaceContainerLowest = coui.background,
+            )
+        } else {
+            aligned
+        }
         return AppThemePalette(material, coui, accent)
     }
     // Miuix 内容色板不随玻璃开关切换；玻璃控件的强调色单独提供。

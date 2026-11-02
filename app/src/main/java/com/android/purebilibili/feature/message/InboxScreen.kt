@@ -173,7 +173,11 @@ fun InboxScreen(
                         var expanded by remember { mutableStateOf(false) }
                         if (overflow.isNotEmpty()) {
                             com.android.purebilibili.core.ui.components.AppGlassMenuAnchor(onOpen = { expanded = true }) {
-                                AppIconButton(onClick = { expanded = true }, enabled = !uiState.isBatchOperating) { AppIcon(AppIcons.Filled.MoreVert, "更多") }
+                                com.android.purebilibili.core.ui.components.CouiMoreButton(
+                                    onClick = { expanded = true },
+                                    enabled = !uiState.isBatchOperating,
+                                    contentDescription = "更多",
+                                )
                                 AppDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                                     overflow.forEach { item -> AppDropdownMenuItem(text = { AppText(item.title) }, onClick = { expanded = false; openMenuItem(item) }) }
                                 }

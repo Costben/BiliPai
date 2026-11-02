@@ -22,10 +22,14 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Column
@@ -38,6 +42,8 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.snap
 import androidx.compose.material3.Button
@@ -53,7 +59,6 @@ import androidx.compose.material3.DropdownMenuItem
 import com.android.purebilibili.core.ui.LocalAppThemeConfig
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.verticalScroll
-import io.github.suqi8.coui.kmp.basic.ListPopupColumn
 import io.github.suqi8.coui.kmp.window.WindowListPopup
 import top.yukonga.miuix.kmp.window.WindowListPopup
 import androidx.compose.material3.FilterChip
@@ -91,6 +96,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
@@ -116,6 +123,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.PopupProperties
 import io.github.suqi8.coui.kmp.basic.TextField as MiuixTextField
 import io.github.suqi8.coui.kmp.basic.TextFieldDefaults as MiuixTextFieldDefaults
@@ -928,6 +936,27 @@ fun AppOutlinedTextField(
     )
 }
 
+/** 弹窗内容当前由 COUI 窗口列表承载，行要按 COUI 动作行绘制。 */
+internal val LocalAppCouiMenuRow = staticCompositionLocalOf { false }
+
+/**
+ * 当前组合是否处在 COUI 同窗弹窗宿主内（见 `CouiWindowPopupHost`）。
+ *
+ * 只有在宿主里，COUI 的 overlay 弹窗才拿得到页面 backdrop，画得出模糊与光效；
+ * 宿主之外退回 Dialog 弹窗，菜单至少还在。
+ */
+val LocalCouiPopupHostAvailable = staticCompositionLocalOf { false }
+
+// COUI 弹窗列表的度量（coui_popup_list_window_item.xml）：行高 40dp、左右内边距 20dp、
+// 标题 15sp、图标与文字相距 12dp。这里全部按原生值收，弹窗才不会比系统菜单胖一圈。
+private val AppCouiPopupMenuMinWidth = 152.dp
+private val AppCouiPopupMenuMaxWidth = 208.dp
+private val AppCouiPopupMenuHorizontalPadding = 20.dp
+private val AppCouiPopupMenuVerticalPadding = 8.dp
+private val AppCouiPopupMenuTextSize = 15.sp
+private val AppCouiPopupMenuLineHeight = 20.sp
+private val AppCouiPopupMenuIconTextGap = 12.dp
+
 @Composable
 fun AppDropdownMenu(
     expanded: Boolean,
@@ -945,6 +974,41 @@ fun AppDropdownMenu(
     glassAnchorBounds: androidx.compose.ui.geometry.Rect? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
+    // COUI 17 一律用 ColorOS 的窗口列表弹窗，玻璃同窗菜单只在其它皮肤保留。
+    if (LocalAppUiStyle.current == AppUiStyle.COUI17) {
+        // 不用 ListPopupColumn：它自带 height(IntrinsicSize.Min)，固有尺寸测量时会给行
+        // 一个无限宽约束，COUI 的 BasicComponent 会直接抛 IllegalArgumentException。
+        // 弹窗底板与出入场仍由 COUI 负责，这里只需要一个滚动的列。
+        val popupContent: @Composable () -> Unit = {
+            CompositionLocalProvider(
+                LocalAppCouiMenuRow provides true,
+                com.android.purebilibili.core.ui.LocalAppTextStyleOverride provides
+                    COUITheme.textStyles.main.copy(fontSize = AppCouiPopupMenuTextSize, lineHeight = AppCouiPopupMenuLineHeight),
+            ) {
+                Column(
+                    modifier = Modifier
+                        .widthIn(min = AppCouiPopupMenuMinWidth, max = AppCouiPopupMenuMaxWidth)
+                        .verticalScroll(rememberScrollState()),
+                    content = content,
+                )
+            }
+        }
+        if (LocalCouiPopupHostAvailable.current) {
+            // 同窗 overlay：底板能采到页面 backdrop，才有模糊、描边和内阴影。
+            io.github.suqi8.coui.kmp.overlay.OverlayListPopup(
+                show = expanded,
+                popupModifier = modifier,
+                onDismissRequest = onDismissRequest,
+            ) { popupContent() }
+        } else {
+            io.github.suqi8.coui.kmp.window.WindowListPopup(
+                show = expanded,
+                popupModifier = modifier,
+                onDismissRequest = onDismissRequest,
+            ) { popupContent() }
+        }
+        return
+    }
     if (properties.focusable && AppGlassMenu(
             expanded = expanded,
             onDismissRequest = onDismissRequest,
@@ -1001,8 +1065,21 @@ fun AppDropdownMenuItem(
     val resolvedInteractionSource = interactionSource ?: remember { MutableInteractionSource() }
     // MD3 弹窗查询菜单项固有宽度，原生行在无限宽度测量时会产生无效约束。
     // 原生弹窗保留原生行；其他弹窗使用下方可计算固有尺寸的布局。
-    if (glassScope == null && com.android.purebilibili.core.ui.isMiuixNonGlassEnabled() &&
-        LocalAppThemeConfig.current.nativeMiuixPopupsEnabled
+    if (glassScope == null && LocalAppCouiMenuRow.current) {
+        CouiPopupMenuRow(
+            modifier = menuModifier.semantics { if (!enabled) disabled() },
+            enabled = enabled,
+            selected = selected == true,
+            interactionSource = resolvedInteractionSource,
+            onClick = menuClick,
+            leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon,
+            text = text,
+        )
+        return
+    }
+    if (glassScope == null && (com.android.purebilibili.core.ui.isMiuixNonGlassEnabled() &&
+                LocalAppThemeConfig.current.nativeMiuixPopupsEnabled)
     ) {
         io.github.suqi8.coui.kmp.basic.BasicComponent(
             modifier = menuModifier.semantics { if (!enabled) disabled() },
@@ -1054,6 +1131,58 @@ fun AppDropdownMenuItem(
         contentPadding = contentPadding,
         interactionSource = resolvedInteractionSource,
     )
+}
+
+/**
+ * COUI 弹窗列表的一行：40dp 行高、左右 20dp 内边距、图标与文字相距 12dp，
+ * 按下时整行浮起一层 surfaceContainerHigh —— 和系统弹窗列表的度量一致。
+ */
+@Composable
+private fun CouiPopupMenuRow(
+    modifier: Modifier,
+    enabled: Boolean,
+    selected: Boolean,
+    interactionSource: MutableInteractionSource,
+    onClick: () -> Unit,
+    leadingIcon: (@Composable () -> Unit)?,
+    trailingIcon: (@Composable () -> Unit)?,
+    text: @Composable () -> Unit,
+) {
+    val scheme = COUITheme.colorScheme
+    val pressed by interactionSource.collectIsPressedAsState()
+    val highlighted = selected || (enabled && pressed)
+    val background by animateColorAsState(
+        targetValue = if (highlighted) scheme.surfaceContainerHigh else Color.Transparent,
+        animationSpec = tween(durationMillis = if (pressed) 60 else 180),
+        label = "couiPopupMenuRowBackground",
+    )
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .heightIn(min = 40.dp)
+            .background(background)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                enabled = enabled,
+                onClick = onClick,
+            )
+            .padding(
+                horizontal = AppCouiPopupMenuHorizontalPadding,
+                vertical = AppCouiPopupMenuVerticalPadding,
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(AppCouiPopupMenuIconTextGap),
+    ) {
+        leadingIcon?.invoke()
+        Box(modifier = Modifier.weight(1f)) {
+            ProvideAppActionContentColor(
+                if (enabled) scheme.onSurface else scheme.disabledOnSurface,
+                text,
+            )
+        }
+        trailingIcon?.invoke()
+    }
 }
 
 @Composable

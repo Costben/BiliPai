@@ -1285,12 +1285,9 @@ fun WatchLaterScreen(
                                             ),
                                         ),
                                     ),
-                                ) {
-                                    AppIcon(
-                                        imageVector = AppIcons.Filled.MoreVert,
-                                        contentDescription = "更多管理",
-                                    )
-                                }
+                                    couiMore = true,
+                                    moreDescription = "更多管理",
+                                )
                             }
                         }
                     },

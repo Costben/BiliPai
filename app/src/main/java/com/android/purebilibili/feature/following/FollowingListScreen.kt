@@ -763,14 +763,20 @@ fun FollowingListScreen(
                 actions = {
                     if (!isEditMode) {
                         if (mid > 0L && mid == accountIdentity.mid) {
-                            AppWindowActionMenu(groups = listOf(listOf(
-                                AppWindowAction(label = "粉丝列表", icon = AppIcons.Outlined.People, onClick = { onFansClick(mid) }),
-                                AppWindowAction(
-                                    label = "关注分组排序", icon = AppIcons.Outlined.Sort,
-                                    enabled = !isBatchUnfollowing,
-                                    onClick = { showGroupOrder = true },
+                            AppWindowActionMenu(
+                                groups = listOf(
+                                    listOf(
+                                        AppWindowAction(label = "粉丝列表", icon = AppIcons.Outlined.People, onClick = { onFansClick(mid) }),
+                                        AppWindowAction(
+                                            label = "关注分组排序", icon = AppIcons.Outlined.Sort,
+                                            enabled = !isBatchUnfollowing,
+                                            onClick = { showGroupOrder = true },
+                                        ),
+                                    ),
                                 ),
-                            ))) { AppIcon(AppIcons.Outlined.MoreVert, "关注管理") }
+                                couiMore = true,
+                                moreDescription = "关注管理",
+                            )
                         } else {
                             AppTextButton(onClick = { onFansClick(mid) }) { AppText("粉丝") }
                         }

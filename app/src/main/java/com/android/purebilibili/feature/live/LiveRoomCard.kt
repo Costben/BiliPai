@@ -205,20 +205,17 @@ internal fun LiveRoomCard(
     }
     if (model.feedback.isNotEmpty() && onFeedback != null) {
         val feedbackSource = com.android.purebilibili.core.ui.components.rememberAppGlassMenuSource()
-        com.android.purebilibili.core.ui.components.AppIconButton(
+        com.android.purebilibili.core.ui.components.CouiMoreButton(
             onClick = { onFeedback(feedbackSource) },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .size(29.dp)
                 .appGlassMenuSource(feedbackSource, onOpen = { onFeedback(feedbackSource) }),
-        ) {
-            com.android.purebilibili.core.ui.components.AppIcon(
-                AppIcons.Outlined.MoreVert,
-                contentDescription = "不感兴趣与推荐反馈",
-                tint = AppContentColors.secondaryText(),
-                modifier = Modifier.size(17.dp),
-            )
-        }
+            contentDescription = "不感兴趣与推荐反馈",
+            tint = AppContentColors.secondaryText(),
+            size = 29.dp,
+            iconSize = 17.dp,
+        )
     }
     }
 }

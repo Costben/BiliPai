@@ -713,12 +713,9 @@ fun SpaceScreen(
                                             )
                                         )
                                     },
-                                ) {
-                                    AppIcon(
-                                        imageVector = AppIcons.Outlined.MoreVert,
-                                        contentDescription = moreLabel,
-                                    )
-                                }
+                                    couiMore = true,
+                                    moreDescription = moreLabel,
+                                )
                             }
                         }
                     }
@@ -5020,12 +5017,10 @@ private fun SpaceArchiveListItemRow(
         },
         trailingContent = if (showTrailingMore) {
             {
-                AppIcon(
-                    imageVector = AppIcons.Outlined.MoreVert,
-                    contentDescription = null,
+                com.android.purebilibili.core.ui.components.CouiMoreDisc(
                     tint = AppContentColors.secondaryText().copy(alpha = 0.72f),
-                    modifier = Modifier
-                        .size(24.dp),
+                    size = 32.dp,
+                    iconSize = 18.dp,
                 )
             }
         } else {

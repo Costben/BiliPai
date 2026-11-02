@@ -79,9 +79,20 @@ fun AppWindowActionMenu(
     // 独立玻璃胶囊由父层捕获完整材质；内部按钮只保留打开手势。
     source: AppGlassMenuSource? = null,
     sourceCapturedByParent: Boolean = false,
-    content: @Composable () -> Unit,
+    // 锚点是“更多”三点按钮时改用 COUI 17 圆盘，忽略 [content]。
+    couiMore: Boolean = false,
+    // 锚点用 COUI 圆盘，但仍绘制调用方的内容（例如会随背景变色的图标）。
+    couiHighlighted: Boolean = false,
+    moreDescription: String = "更多",
+    moreTint: Color = Color.Unspecified,
+    moreSize: androidx.compose.ui.unit.Dp? = null,
+    moreIconSize: androidx.compose.ui.unit.Dp? = null,
+    moreForceDark: Boolean = false,
+    content: @Composable () -> Unit = {},
 ) {
-    if (compact) {
+    // COUI 17 的紧凑弹窗内容是一层真 Column，套进 COUI 列表列会被固有尺寸测量打崩，
+    // 所以这条皮肤一律走级联弹窗，紧凑行只给其它皮肤保留。
+    if (compact && LocalAppUiStyle.current != AppUiStyle.COUI17) {
         AppCompactWindowActionMenu(
             groups = groups,
             modifier = modifier,
@@ -91,20 +102,31 @@ fun AppWindowActionMenu(
             onActionSource = onActionSource,
             source = source,
             sourceCapturedByParent = sourceCapturedByParent,
+            couiMore = couiMore,
+            couiHighlighted = couiHighlighted,
+            moreDescription = moreDescription,
+            moreTint = moreTint,
+            moreSize = moreSize,
+            moreIconSize = moreIconSize,
+            moreForceDark = moreForceDark,
             content = content,
         )
         return
     }
 
+    // COUI 17 直接用 ColorOS 的级联列表弹窗，玻璃同窗菜单只留给其它皮肤。
+    val preferCouiPopup = LocalAppUiStyle.current == AppUiStyle.COUI17
     val glassSource = source ?: rememberAppGlassMenuSource()
     val glassMenuAvailable = appGlassMenuAvailable()
-    if (glassMenuAvailable || !LocalAppUiStyle.current.usesMiuixFamilySkin || !LocalAppThemeConfig.current.nativeMiuixPopupsEnabled) {
+    if (!preferCouiPopup &&
+        (glassMenuAvailable || !LocalAppUiStyle.current.usesMiuixFamilySkin || !LocalAppThemeConfig.current.nativeMiuixPopupsEnabled)
+    ) {
         var expanded by remember { mutableStateOf(false) }
         var parentActions by remember { mutableStateOf(emptyList<AppWindowAction>()) }
         val visibleGroups = if (glassMenuAvailable) flattenGlassWindowActionGroups(groups)
             else parentActions.lastOrNull()?.let { listOf(it.children) } ?: groups.filter { it.isNotEmpty() }
         Box(modifier = modifier) {
-            AppIconButton(
+            WindowActionMenuAnchor(
                 modifier = anchorModifier.appGlassMenuSource(glassSource, enabled = enabled, captureSurface = !sourceCapturedByParent, onOpen = {
                     parentActions = emptyList()
                     expanded = true
@@ -116,7 +138,15 @@ fun AppWindowActionMenu(
                     onExpandedChange?.invoke(true)
                 },
                 enabled = enabled,
-            ) { content() }
+                couiMore = couiMore,
+                couiHighlighted = couiHighlighted,
+                moreDescription = moreDescription,
+                moreTint = moreTint,
+                moreSize = moreSize,
+                moreIconSize = moreIconSize,
+                moreForceDark = moreForceDark,
+                content = content,
+            )
             AppDropdownMenu(
                 glassSource = glassSource,
                 expanded = expanded,
@@ -184,26 +214,45 @@ fun AppWindowActionMenu(
         }
     }
     Box(modifier = modifier) {
-        AppIconButton(
+        WindowActionMenuAnchor(
             modifier = anchorModifier,
             enabled = enabled && groups.any { it.isNotEmpty() },
             onClick = { expanded = true; onExpandedChange?.invoke(true) },
-        ) { content() }
-        WindowCascadingListPopup(
-            show = expanded,
-            entries = groups.filter { it.isNotEmpty() }.map { actions ->
-                DropdownEntry(items = actions.map { action ->
-                    action.toDropdownItem { selected ->
-                        if (expanded) {
-                            dismiss()
-                            selected.onClick?.invoke()
-                        }
-                    }
-                })
-            },
-            alignment = PopupPositionProvider.Align.End,
-            onDismissRequest = ::dismiss,
+            couiMore = couiMore,
+            couiHighlighted = couiHighlighted,
+            moreDescription = moreDescription,
+            moreTint = moreTint,
+            moreSize = moreSize,
+            moreIconSize = moreIconSize,
+            moreForceDark = moreForceDark,
+            content = content,
         )
+        val entries = groups.filter { it.isNotEmpty() }.map { actions ->
+            DropdownEntry(items = actions.map { action ->
+                action.toDropdownItem { selected ->
+                    if (expanded) {
+                        dismiss()
+                        selected.onClick?.invoke()
+                    }
+                }
+            })
+        }
+        if (LocalCouiPopupHostAvailable.current) {
+            // 同窗 overlay 才能采到页面 backdrop，才有模糊、描边与内阴影。
+            io.github.suqi8.coui.kmp.overlay.OverlayCascadingListPopup(
+                show = expanded,
+                entries = entries,
+                alignment = PopupPositionProvider.Align.End,
+                onDismissRequest = ::dismiss,
+            )
+        } else {
+            WindowCascadingListPopup(
+                show = expanded,
+                entries = entries,
+                alignment = PopupPositionProvider.Align.End,
+                onDismissRequest = ::dismiss,
+            )
+        }
     }
 }
 
@@ -217,6 +266,13 @@ private fun AppCompactWindowActionMenu(
     onActionSource: ((AppGlassMenuSource) -> Unit)?,
     source: AppGlassMenuSource?,
     sourceCapturedByParent: Boolean,
+    couiMore: Boolean,
+    couiHighlighted: Boolean,
+    moreDescription: String,
+    moreTint: Color,
+    moreSize: androidx.compose.ui.unit.Dp?,
+    moreIconSize: androidx.compose.ui.unit.Dp?,
+    moreForceDark: Boolean,
     content: @Composable () -> Unit,
 ) {
     val glassSource = source ?: rememberAppGlassMenuSource()
@@ -293,7 +349,7 @@ private fun AppCompactWindowActionMenu(
         }
     }
     Box(modifier = modifier) {
-        AppIconButton(
+        WindowActionMenuAnchor(
             modifier = anchorModifier.appGlassMenuSource(glassSource, enabled = enabled, captureSurface = !sourceCapturedByParent, onOpen = {
                     parentActions = emptyList()
                     expanded = true
@@ -305,7 +361,15 @@ private fun AppCompactWindowActionMenu(
                 expanded = true
                 onExpandedChange?.invoke(true)
             },
-        ) { content() }
+            couiMore = couiMore,
+            couiHighlighted = couiHighlighted,
+            moreDescription = moreDescription,
+            moreTint = moreTint,
+            moreSize = moreSize,
+            moreIconSize = moreIconSize,
+            moreForceDark = moreForceDark,
+            content = content,
+        )
         if (LocalAppUiStyle.current.usesMiuixFamilySkin &&
             LocalAppThemeConfig.current.nativeMiuixPopupsEnabled && !appGlassMenuAvailable()
         ) {
@@ -322,6 +386,44 @@ private fun AppCompactWindowActionMenu(
                 onDismissRequest = ::dismiss,
             ) { menuContent(false) }
         }
+    }
+}
+
+@Composable
+private fun WindowActionMenuAnchor(
+    onClick: () -> Unit,
+    modifier: Modifier,
+    enabled: Boolean,
+    couiMore: Boolean,
+    couiHighlighted: Boolean,
+    moreDescription: String,
+    moreTint: Color,
+    moreSize: androidx.compose.ui.unit.Dp?,
+    moreIconSize: androidx.compose.ui.unit.Dp?,
+    moreForceDark: Boolean,
+    content: @Composable () -> Unit,
+) {
+    when {
+        couiMore -> CouiMoreButton(
+            onClick = onClick,
+            modifier = modifier,
+            enabled = enabled,
+            contentDescription = moreDescription,
+            tint = moreTint,
+            size = moreSize ?: io.github.suqi8.coui.kmp.basic.HighlightedIconButtonDefaults.Size,
+            iconSize = moreIconSize ?: 24.dp,
+            forceDark = moreForceDark,
+        )
+        couiHighlighted -> CouiHighlightedIconButton(
+            onClick = onClick,
+            modifier = modifier,
+            enabled = enabled,
+            contentDescription = moreDescription,
+            size = moreSize ?: io.github.suqi8.coui.kmp.basic.HighlightedIconButtonDefaults.Size,
+            forceDark = moreForceDark,
+            content = { content() },
+        )
+        else -> AppIconButton(onClick = onClick, modifier = modifier, enabled = enabled) { content() }
     }
 }
 

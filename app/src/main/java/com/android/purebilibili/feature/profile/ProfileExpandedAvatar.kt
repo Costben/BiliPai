@@ -56,7 +56,9 @@ internal fun ProfileExpandedAvatar(
     val request = remember(context, user.face, decodeWidth) {
         ImageRequest.Builder(context).data(user.face).size(decodeWidth.coerceAtLeast(1)).build()
     }
-    val visible by remember(fractionProvider) { derivedStateOf { fractionProvider() > 0f } }
+    val visible by remember(fractionProvider) {
+        derivedStateOf { fractionProvider() > PROFILE_EXPANDED_AVATAR_HIDDEN_PROGRESS }
+    }
     val blurCache = remember { com.android.purebilibili.core.ui.transition.BlurRenderEffectCache() }
     val blurEnabled = com.android.purebilibili.core.ui.LocalComponentMotionEnabled.current &&
         !com.android.purebilibili.core.ui.motion.rememberSystemReduceMotion() &&
@@ -69,8 +71,9 @@ internal fun ProfileExpandedAvatar(
                 modifier = Modifier
                     .graphicsLayer {
                         val progress = fractionProvider()
-                        val circularSize = (96f + (138f - 96f) * min(1f, progress * 3f))
-                        alpha = if (progress > 0f) 1f else 0f
+                        val circularSize = PROFILE_EXPANDED_AVATAR_DIAMETER_DP * progress
+                        // 收起时整块必须淡到 0，否则最后几帧会剩一块缩小的照片贴在前摄下面。
+                        alpha = profileExpandedAvatarAlpha(progress)
                         shadowElevation = 16.dp.toPx() * progress * (1f - progress)
                         shape = RoundedCornerShape((circularSize / 2f * (1f - progress)).dp)
                         clip = true
@@ -125,7 +128,7 @@ internal fun ProfileExpandedAvatar(
                         modifier = Modifier
                             .matchParentSize()
                             .graphicsLayer {
-                                alpha = fractionProvider()
+                                alpha = profileExpandedAvatarAlpha(fractionProvider())
                                 compositingStrategy = CompositingStrategy.Offscreen
                             }
                             .drawWithContent {
@@ -148,9 +151,14 @@ internal fun ProfileExpandedAvatar(
         },
     ) { measurables, constraints ->
         val progress = fractionProvider()
-        val circularSize = (96f + (138f - 96f) * min(1f, progress * 3f)).dp.toPx()
-        val imageWidth = (circularSize + (constraints.maxWidth - circularSize) * progress).roundToInt().coerceAtLeast(1)
-        val imageHeight = (circularSize + (photoBottomProvider() - circularSize) * progress).roundToInt().coerceAtLeast(1)
+        // 完全收起：不测量、不放置任何内容，杜绝最后一帧残留像素。
+        if (progress <= PROFILE_EXPANDED_AVATAR_HIDDEN_PROGRESS) {
+            return@Layout layout(constraints.maxWidth, constraints.maxHeight) {}
+        }
+        // 收起方向的终点必须是「一个点」：从 0dp 长到满幅，反向就是缩回前摄位置并消失。
+        val collapsedSize = (PROFILE_EXPANDED_AVATAR_DIAMETER_DP * progress).dp.toPx()
+        val imageWidth = (collapsedSize + (constraints.maxWidth - collapsedSize) * progress).roundToInt().coerceAtLeast(1)
+        val imageHeight = (collapsedSize + (photoBottomProvider() - collapsedSize) * progress).roundToInt().coerceAtLeast(1)
         val image = measurables.single().measure(Constraints.fixed(imageWidth, imageHeight))
         val imageY = ((statusBarTopPadding + PROFILE_EXPANDED_AVATAR_TOP_DP.dp).toPx() * (1f - progress)).roundToInt()
         layout(constraints.maxWidth, constraints.maxHeight) {
@@ -158,6 +166,16 @@ internal fun ProfileExpandedAvatar(
         }
     }
 }
+
+/** 满幅头像的直径；收起态是它的 0 倍，也就是缩成一点。 */
+private const val PROFILE_EXPANDED_AVATAR_DIAMETER_DP = 138f
+
+/** 低于这个进度直接不绘制，避免收缩末段留下 1px 的贴片。 */
+internal const val PROFILE_EXPANDED_AVATAR_HIDDEN_PROGRESS = 0.02f
+
+/** 前 12% 保持全透明，55% 之后完全实心；中间这一段随收起一起淡出。 */
+internal fun profileExpandedAvatarAlpha(progress: Float): Float =
+    ((progress - 0.12f) / 0.43f).coerceIn(0f, 1f)
 
 /** Draw-phase toolbar color crossfade to white over the expanded photo. */
 @Composable

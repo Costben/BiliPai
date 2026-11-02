@@ -29,6 +29,8 @@ import androidx.core.math.MathUtils;
 public class ProfileAvatarFusionView extends FrameLayout {
     private static final float AVATAR_SIZE_DP = 100;
     private static final float BLACK_KING_BAR = 32;
+    /** 头像在头部收起完成之前就应完全吸收；到这一进度后不允许再留下任何黑色。 */
+    private static final float AVATAR_ABSORB_END = 0.85f;
 
     private final Paint blackPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Path path = new Path();
@@ -196,6 +198,17 @@ public class ProfileAvatarFusionView extends FrameLayout {
 
     }
 
+    /**
+     * 1 = 仍在融合，0 = 头像已被完全吸收。
+     *
+     * <p>收尾阶段挖孔轮廓必须一起收掉：头像照片此时已经淡到看不见，剩下的黑色轮廓
+     * 会变成一块贴在前摄下方的黑影，看起来就像头像缩到一半卡住了。
+     */
+    private float absorbTail() {
+        final float end = rectangularContent ? 1f : AVATAR_ABSORB_END;
+        return MathUtils.clamp((end - pullProgress) / 0.25f, 0f, 1f);
+    }
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
@@ -295,18 +308,24 @@ public class ProfileAvatarFusionView extends FrameLayout {
                 bitmapCanvas.save();
                 bitmapCanvas.scale((float) bitmap.getWidth() / bitmapOrigW, (float) bitmap.getHeight() / bitmapOrigH);
                 if (notchInfo != null) {
-                    bitmapCanvas.save();
-                    bitmapCanvas.translate(-optimizedOffsetX, dp(BLACK_KING_BAR));
-                    if (notchInfo.isLikelyCircle) {
-                        float rad = Math.min(notchInfo.bounds.width(), notchInfo.bounds.height()) / 2f;
-                        bitmapCanvas.drawCircle(notchInfo.bounds.centerX(), notchInfo.bounds.bottom - notchInfo.bounds.width() / 2f, rad, blackPaint);
-                    } else if (notchInfo.isAccurate) {
-                        bitmapCanvas.drawPath(notchInfo.path, blackPaint);
-                    } else {
-                        float rad = Math.max(notchInfo.bounds.width(), notchInfo.bounds.height()) / 2f;
-                        bitmapCanvas.drawRoundRect(notchInfo.bounds, rad, rad, blackPaint);
+                    final int notchAlpha = Math.round(absorbTail() * 255f);
+                    if (notchAlpha > 0) {
+                        final int paintAlpha = blackPaint.getAlpha();
+                        blackPaint.setAlpha(notchAlpha);
+                        bitmapCanvas.save();
+                        bitmapCanvas.translate(-optimizedOffsetX, dp(BLACK_KING_BAR));
+                        if (notchInfo.isLikelyCircle) {
+                            float rad = Math.min(notchInfo.bounds.width(), notchInfo.bounds.height()) / 2f;
+                            bitmapCanvas.drawCircle(notchInfo.bounds.centerX(), notchInfo.bounds.bottom - notchInfo.bounds.width() / 2f, rad, blackPaint);
+                        } else if (notchInfo.isAccurate) {
+                            bitmapCanvas.drawPath(notchInfo.path, blackPaint);
+                        } else {
+                            float rad = Math.max(notchInfo.bounds.width(), notchInfo.bounds.height()) / 2f;
+                            bitmapCanvas.drawRoundRect(notchInfo.bounds, rad, rad, blackPaint);
+                        }
+                        bitmapCanvas.restore();
+                        blackPaint.setAlpha(paintAlpha);
                     }
-                    bitmapCanvas.restore();
                 } else {
                     bitmapCanvas.drawRect(0, 0, optimizedW, dp(BLACK_KING_BAR), blackPaint);
                 }
@@ -316,13 +335,16 @@ public class ProfileAvatarFusionView extends FrameLayout {
                 ProfileAvatarBitmapBlur.blur(bitmap, (int) (intensity * 2 / scaleConst));
 
                 // Filter alpha + fade, then draw
+                final int silhouetteAlpha = Math.round(absorbTail() * 255f);
                 canvas.save();
                 canvas.translate(optimizedOffsetX, 0);
-                canvas.saveLayer(0, 0, bitmapOrigW, bitmapOrigH, null);
-                canvas.scale((float) bitmapOrigW / bitmap.getWidth(), (float) bitmapOrigH / bitmap.getHeight());
-                canvas.drawBitmap(bitmap, 0, 0, bitmapPaint);
-                canvas.drawBitmap(bitmap, 0, 0, bitmapPaint2);
-                canvas.restore();
+                if (silhouetteAlpha > 0) {
+                    canvas.saveLayerAlpha(0, 0, bitmapOrigW, bitmapOrigH, silhouetteAlpha);
+                    canvas.scale((float) bitmapOrigW / bitmap.getWidth(), (float) bitmapOrigH / bitmap.getHeight());
+                    canvas.drawBitmap(bitmap, 0, 0, bitmapPaint);
+                    canvas.drawBitmap(bitmap, 0, 0, bitmapPaint2);
+                    canvas.restore();
+                }
                 canvas.restore();
             }
 
@@ -436,7 +458,10 @@ public class ProfileAvatarFusionView extends FrameLayout {
             // Record everything into buffer
             c = node.beginRecording();
             c.translate(-left, -top);
-            final int imageAlphaNoClamp = (int) ((1f - ilerp(pullProgress, rectangularContent ? 0.85f : 0.5f, 1.0f)) * 255);
+            final int imageAlphaNoClamp = (int) ((1f - ilerp(
+                    pullProgress,
+                    rectangularContent ? 0.85f : 0.5f,
+                    rectangularContent ? 1.0f : AVATAR_ABSORB_END)) * 255);
             // Photos retain their colour as they contract; the avatar's black absorption
             // silhouette looks like a large grey block when applied to a wide banner.
             final int imageAlpha = MathUtils.clamp(imageAlphaNoClamp, 0, 255);
@@ -452,6 +477,8 @@ public class ProfileAvatarFusionView extends FrameLayout {
 
             // Blur + filter buffer
             float gooScaleFactor = 2f + factorMult;
+            // 吸收剪影必须和照片一起淡出，否则照片已经透明了它还铺着一层纯黑。
+            blackNodePaint.setAlpha(Math.round(absorbTail() * 255f));
             c = effectNode.beginRecording();
             c.scale(1f / gooScaleFactor, 1f / gooScaleFactor, 0, 0);
             if (imageAlpha < 255) {
@@ -460,7 +487,7 @@ public class ProfileAvatarFusionView extends FrameLayout {
                 c.drawRect(wholeOptimized, blackNodePaint);
                 c.restore();
             }
-            final float h = lerp(0, dp(7) * gooScaleFactor, 0, 0.5f, pullProgress);
+            final float h = lerp(0, dp(7) * gooScaleFactor, 0, 0.5f, pullProgress) * absorbTail();
             if (getChildCount() > 0) {
                 final View child = getChildAt(0);
                 final float cx = child.getX() + child.getWidth() * child.getScaleX() / 2.0f - left;
@@ -492,6 +519,8 @@ public class ProfileAvatarFusionView extends FrameLayout {
             if (notchInfo != null) {
                 c.translate(-left, -top);
                 c.translate(0, dp(BLACK_KING_BAR));
+                final int notchPaintAlpha = blackPaint.getAlpha();
+                blackPaint.setAlpha(Math.round(absorbTail() * 255f));
                 if (notchInfo.isLikelyCircle) {
                     float rad = Math.min(notchInfo.bounds.width(), notchInfo.bounds.height()) / 2f;
                     final float cy = notchInfo.bounds.bottom - notchInfo.bounds.width() / 2f;
@@ -517,6 +546,7 @@ public class ProfileAvatarFusionView extends FrameLayout {
                     path.close();
                     c.drawPath(path, blackPaint);
                 }
+                blackPaint.setAlpha(notchPaintAlpha);
             } else {
                 c.drawRect(0, 0, width, dp(BLACK_KING_BAR), blackPaint);
 

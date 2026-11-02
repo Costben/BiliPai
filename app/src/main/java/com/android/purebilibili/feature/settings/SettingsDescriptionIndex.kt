@@ -39,6 +39,7 @@ internal val settingsStaticDescriptionIndex: Map<String, String> = mapOf(
     "appearance.home_card_frosted_glass_enabled" to "模糊卡片文字背后的壁纸，全局壁纸下同步到追番等列表；卡片不使用实时模糊",
     "appearance.home_duration_style" to "选择视频时长的显示方式",
     "appearance.home_feed_card_style" to "（首页、搜索、列表、相关推荐等同步）",
+    "appearance.related_video_card_style" to "视频详情「更多推荐」的排布；紧凑横卡行高更小，大封面占满整行",
     "appearance.home_feed_card_width_preset" to "自动列数时控制首页推荐卡片的最小宽度",
     "appearance.home_hero_carousel_autoplay_enabled" to "轮播视频出现在屏幕上时静音循环播放；默认只展示封面，点开后进入视频详情",
     "appearance.home_hero_carousel_enabled" to "推荐页顶部显示官方比例的视频封面轮播；推荐页直接显示普通视频流",

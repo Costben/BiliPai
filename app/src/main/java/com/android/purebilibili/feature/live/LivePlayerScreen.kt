@@ -1908,13 +1908,13 @@ private fun LivePortraitOverlayAppBar(
                         ),
                     ),
                 ),
-            ) {
-                AppIcon(
-                    AppIcons.Filled.MoreVert,
-                    contentDescription = "更多直播间操作",
-                    tint = roomColorTokens.inputOverlayColor
-                )
-            }
+                couiMore = true,
+                moreDescription = "更多直播间操作",
+                moreTint = roomColorTokens.inputOverlayColor,
+                moreSize = if (glass) 34.dp else 30.dp,
+                moreIconSize = if (glass) 20.dp else 18.dp,
+                moreForceDark = true,
+            )
         }
     }
 }

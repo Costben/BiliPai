@@ -883,13 +883,9 @@ fun DynamicCardV2(
                             }
                         },
                     ),
-                ) {
-                    AppIcon(
-                        moreIcon,
-                        contentDescription = "更多",
-                        tint = AppContentColors.secondaryText().copy(0.5f)
-                    )
-                }
+                    couiMore = true,
+                    moreTint = AppContentColors.secondaryText().copy(0.5f),
+                )
             }
             Spacer(modifier = Modifier.height(AppSpacingTokens.Medium))
         }

@@ -399,31 +399,23 @@ private fun CollapsedPlayerNavigationBar(
                         }
                     }
                     if (useMiuixNonGlassChrome) {
-                        AppIconButton(
+                        com.android.purebilibili.core.ui.components.CouiMoreButton(
                             onClick = onMoreClick,
                             modifier = Modifier
                                 .align(Alignment.CenterEnd)
                                 .size(AppChromeSizeTokens.MinimumTouchTarget),
-                        ) {
-                            AppIcon(
-                                AppIcons.Filled.MoreVert,
-                                contentDescription = "更多设置",
-                                tint = AppContentColors.primaryText(),
-                            )
-                        }
+                            contentDescription = "更多设置",
+                            tint = AppContentColors.primaryText(),
+                        )
                     } else {
-                        IconButton(
+                        com.android.purebilibili.core.ui.components.CouiMoreButton(
                             onClick = onMoreClick,
-                            modifier = Modifier
-                                .align(Alignment.CenterEnd)
-                                .size(width = 42.dp, height = 34.dp).appElasticPress(),
-                        ) {
-                            Icon(
-                                AppIcons.Filled.MoreVert,
-                                contentDescription = "更多设置",
-                                tint = AppContentColors.primaryText(),
-                            )
-                        }
+                            modifier = Modifier.align(Alignment.CenterEnd),
+                            contentDescription = "更多设置",
+                            tint = AppContentColors.primaryText(),
+                            size = 32.dp,
+                            iconSize = 18.dp,
+                        )
                     }
                 }
             }

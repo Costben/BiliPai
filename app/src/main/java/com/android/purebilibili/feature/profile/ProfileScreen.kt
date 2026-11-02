@@ -30,6 +30,9 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.widget.Toast
+import io.github.suqi8.coui.kmp.icon.COUIIcons
+import io.github.suqi8.coui.kmp.icon.extended.More
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -108,6 +111,8 @@ import java.io.File
 import com.android.purebilibili.core.theme.DarkBackground
 import com.android.purebilibili.core.theme.DarkSurface
 import com.android.purebilibili.core.theme.DarkSurfaceVariant
+import com.android.purebilibili.core.theme.AppUiStyle
+import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.theme.resolveAccessibleContainerColors
 import com.android.purebilibili.core.util.FormatUtils
 import com.android.purebilibili.core.util.PickGalleryVisualMedia
@@ -130,6 +135,7 @@ import com.android.purebilibili.core.ui.components.AppDropdownMenuItem
 import com.android.purebilibili.core.ui.components.AppWindowAction
 import com.android.purebilibili.core.ui.components.AppWindowActionMenu
 import com.android.purebilibili.core.ui.components.AppIconButton
+import com.android.purebilibili.core.ui.components.CouiHighlightedIconButton
 import com.android.purebilibili.core.ui.components.AppLinearProgressIndicator
 import com.android.purebilibili.core.ui.components.AppOutlinedButton
 import com.android.purebilibili.core.ui.components.AppOutlinedTextField
@@ -1870,6 +1876,19 @@ private fun ProfilePinnedSpaceTopBar(
         contentColor,
         topChromeScrim.value,
     )
+    // COUI 17 下这排手写按钮要跟 AppTopBar 一样用光影圆盘：圆盘自带背景与按压缩放。
+    val couiDisc = LocalAppUiStyle.current == AppUiStyle.COUI17
+    val photoCovering by remember(photoFractionProvider) {
+        derivedStateOf { photoFractionProvider() > 0.05f }
+    }
+    val toolbarIconTint = if (couiDisc) {
+        // COUI 的 Icon 把 Unspecified 当成「不染色」，会直接画出图标自带的黑色填充。
+        // 圆盘按页面深浅挑一种能读的图标色：深色皮肤 / 压在大图上一律白，浅色一律黑。
+        val discIsDark = photoCovering || COUITheme.colorScheme.background.luminance() < 0.5f
+        if (discIsDark) Color.White else Color.Black
+    } else {
+        topBarIconColor
+    }
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -1882,8 +1901,12 @@ private fun ProfilePinnedSpaceTopBar(
         if (showQrAuthorization) {
             OfficialQrAuthorizationDialog(onDismiss = { showQrAuthorization = false })
         }
-        AppIconButton(onClick = { showQrAuthorization = true }) {
-            ProfilePhotoToolbarIcon(AppIcons.Rounded.QrCodeScanner, "扫码授权登录", topBarIconColor, photoFractionProvider)
+        CouiHighlightedIconButton(
+            onClick = { showQrAuthorization = true },
+            contentDescription = "扫码授权登录",
+            forceDark = couiDisc && photoCovering,
+        ) {
+            ProfilePhotoToolbarIcon(AppIcons.Rounded.QrCodeScanner, "扫码授权登录", toolbarIconTint, photoFractionProvider)
         }
         Spacer(modifier = Modifier.weight(1f))
         AppWindowActionMenu(
@@ -1912,8 +1935,11 @@ private fun ProfilePinnedSpaceTopBar(
                     AppWindowAction(label = "返回", onClick = onBack),
                 ),
             ),
+            couiHighlighted = true,
+            moreDescription = "更多",
+            moreForceDark = couiDisc && photoCovering,
         ) {
-            ProfilePhotoToolbarIcon(AppIcons.Rounded.MoreVert, "更多", topBarIconColor, photoFractionProvider)
+            ProfilePhotoToolbarIcon(COUIIcons.More, "更多", toolbarIconTint, photoFractionProvider)
         }
     }
 }
@@ -2085,14 +2111,18 @@ private fun ProfileTopActions(
                     add(AppWindowAction(label = "设置", onClick = onSettingsClick))
                 }
             ),
-        ) {
-                AppIcon(AppIcons.Rounded.MoreVert, contentDescription = "更多", tint = tint)
-        }
+            couiMore = true,
+            moreDescription = "更多",
+            moreTint = tint,
+        )
     }
     if (!compact && (openLedger != null || openComments != null)) {
-        AppWindowActionMenu(groups = listOf(ledgerMenuActions(openLedger, openComments))) {
-            AppIcon(AppIcons.Rounded.MoreVert, contentDescription = "评论与账号明细", tint = tint)
-        }
+        AppWindowActionMenu(
+            groups = listOf(ledgerMenuActions(openLedger, openComments)),
+            couiMore = true,
+            moreDescription = "评论与账号明细",
+            moreTint = tint,
+        )
     }
 
 }

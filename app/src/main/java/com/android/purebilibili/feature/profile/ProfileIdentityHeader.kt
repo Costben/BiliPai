@@ -65,7 +65,9 @@ internal fun ProfileIdentityHeader(
             photoScrollConnection = photoScrollConnection,
             modifier = Modifier
                 .matchParentSize()
-                .graphicsLayer { alpha = if (photoFractionProvider() > 0f) 0f else 1f },
+                .graphicsLayer {
+                    alpha = if (photoFractionProvider() > PROFILE_EXPANDED_AVATAR_HIDDEN_PROGRESS) 0f else 1f
+                },
         )
         if (photoState != null) {
             ProfileExpandedAvatar(

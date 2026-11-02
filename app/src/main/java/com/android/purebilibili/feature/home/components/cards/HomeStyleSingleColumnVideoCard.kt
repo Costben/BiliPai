@@ -451,11 +451,10 @@ internal fun HomeStyleSingleColumnVideoCard(
                             },
                         contentAlignment = Alignment.Center,
                     ) {
-                        AppIcon(
-                            imageVector = AppIcons.Outlined.MoreVert,
-                            contentDescription = null,
+                        com.android.purebilibili.core.ui.components.CouiMoreDisc(
                             tint = AppContentColors.secondaryText(),
-                            modifier = Modifier.size(18.dp),
+                            size = 32.dp,
+                            iconSize = 18.dp,
                         )
                     }
                 }

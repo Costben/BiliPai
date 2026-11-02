@@ -551,19 +551,14 @@ fun TopControlBar(
 
                     // More (Three dots)
                     if (!separateGlassMore) {
-                        PlayerControlGlassDock(enabled = glassControls, shape = androidx.compose.foundation.shape.CircleShape) {
-                            AppIconButton(
-                                onClick = onMoreClick,
-                                modifier = Modifier.size(layoutPolicy.buttonSizeDp.dp)
-                            ) {
-                                AppIcon(
-                                    imageVector = AppIcons.Outlined.MoreVert,
-                                    contentDescription = "更多",
-                                    tint = Color.White,
-                                    modifier = Modifier.size(layoutPolicy.iconSizeDp.dp)
-                                )
-                            }
-                        }
+                        com.android.purebilibili.core.ui.components.CouiMoreButton(
+                            onClick = onMoreClick,
+                            modifier = Modifier.size(layoutPolicy.buttonSizeDp.dp),
+                            contentDescription = "更多",
+                            tint = Color.White,
+                            iconSize = layoutPolicy.iconSizeDp.dp,
+                            forceDark = true,
+                        )
                     }
                 }
             }
@@ -580,22 +575,14 @@ fun TopControlBar(
                     val gap = maxOf(defaultGap, actionEndGap).coerceIn(0, constraints.maxWidth)
                     layout(gap, 0) {}
                 })
-                PlayerControlGlassDock(
-                    enabled = true,
-                    shape = androidx.compose.foundation.shape.CircleShape,
-                ) {
-                    AppIconButton(
-                        onClick = onMoreClick,
-                        modifier = Modifier.size(layoutPolicy.buttonSizeDp.dp),
-                    ) {
-                        AppIcon(
-                            imageVector = AppIcons.Outlined.MoreVert,
-                            contentDescription = "更多",
-                            tint = Color.White,
-                            modifier = Modifier.size(layoutPolicy.iconSizeDp.dp),
-                        )
-                    }
-                }
+                com.android.purebilibili.core.ui.components.CouiMoreButton(
+                    onClick = onMoreClick,
+                    modifier = Modifier.size(layoutPolicy.buttonSizeDp.dp),
+                    contentDescription = "更多",
+                    tint = Color.White,
+                    iconSize = layoutPolicy.iconSizeDp.dp,
+                    forceDark = true,
+                )
             }
         }
 

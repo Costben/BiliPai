@@ -2231,21 +2231,17 @@ fun ReplyItemView(
             )
         }
 
-        AppIconButton(
+        com.android.purebilibili.core.ui.components.CouiMoreButton(
             onClick = openButtonActions,
             modifier = Modifier
                 .appGlassMenuSource(actionButtonSource, onOpen = openButtonActions)
                 .align(Alignment.TopEnd)
                 .size(layoutPolicy.actionButtonSizeDp.dp)
-                .testTag("$COMMENT_ACTION_BUTTON_TAG_PREFIX${item.rpid}")
-        ) {
-            AppIcon(
-                imageVector = AppIcons.Filled.MoreVert,
-                contentDescription = "评论操作",
-                tint = appearance.actionTint,
-                modifier = Modifier.size(18.dp)
-            )
-        }
+                .testTag("$COMMENT_ACTION_BUTTON_TAG_PREFIX${item.rpid}"),
+            contentDescription = "评论操作",
+            tint = appearance.actionTint,
+            iconSize = 18.dp,
+        )
 
         AppHorizontalDivider(
             modifier = Modifier.padding(

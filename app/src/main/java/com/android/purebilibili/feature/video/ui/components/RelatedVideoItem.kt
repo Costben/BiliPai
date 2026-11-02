@@ -94,6 +94,8 @@ import com.android.purebilibili.feature.home.HomeFeedCardLayout
 import com.android.purebilibili.feature.home.components.cards.HorizontalVideoCardFrame
 import com.android.purebilibili.feature.home.components.cards.HorizontalVideoStatRow
 import com.android.purebilibili.feature.home.resolveHomeFeedCardLayout
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import com.android.purebilibili.feature.video.ui.FollowBadgeTone
 import com.android.purebilibili.feature.video.ui.resolveVideoFollowVisualPolicy
 import com.android.purebilibili.navigation.VideoRoute
@@ -202,6 +204,7 @@ fun RelatedVideoItem(
     showUpBadge: Boolean = true,
     coverAspectRatio: Float = com.android.purebilibili.core.ui.videoCardCoverAspectRatio(),
     stacked: Boolean = false,
+    compact: Boolean = true,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     onMoreClick: (() -> Unit)? = null,
@@ -331,11 +334,12 @@ fun RelatedVideoItem(
     // 排版对齐首页单列卡片:标题用 feed 紧凑级,统计用 labelSmall。
     val contentTypography = com.android.purebilibili.feature.home.components.cards.horizontalVideoCardTypography()
     val moreHaptic = rememberHapticFeedback(com.android.purebilibili.core.ui.AppHapticScene.MENUS)
+    val compactRow = compact && !stacked
 
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 5.dp)
+            .padding(vertical = if (compactRow) 3.dp else 5.dp)
             .onGloballyPositioned { coordinates ->
                 cardCoordinatesRef.value = coordinates
             }
@@ -357,7 +361,13 @@ fun RelatedVideoItem(
             plainHorizontal = true,
             coverAspectRatio = coverAspectRatio,
             stacked = stacked,
-            fillInfoHeight = true,
+            fillInfoHeight = !compactRow,
+            plainCoverHeightDp = if (compactRow) {
+                RELATED_VIDEO_COMPACT_COVER_HEIGHT_DP
+            } else {
+                com.android.purebilibili.feature.home.components.cards
+                    .HORIZONTAL_VIDEO_CARD_COVER_HEIGHT_DP
+            },
             coverModifier = Modifier.onGloballyPositioned { coordinates ->
                 coverCoordinatesRef.value = coordinates
             },
@@ -385,12 +395,12 @@ fun RelatedVideoItem(
                     text = video.title,
                     style = contentTypography.title,
                     maxLines = videoCardTitleMaxLines(),
-                    minLines = if (stacked) 1 else minOf(2, videoCardTitleMaxLines()),
+                    minLines = if (stacked || compactRow) 1 else minOf(2, videoCardTitleMaxLines()),
                     overflow = videoCardTitleOverflow(),
                     color = AppContentColors.primaryText(),
                     modifier = Modifier.fillMaxWidth(),
                 )
-                if (!stacked) {
+                if (!stacked && !compactRow) {
                     Spacer(Modifier.weight(1f))
                 }
                 Column(verticalArrangement = Arrangement.spacedBy(AppSpacingTokens.ExtraSmall)) {
@@ -482,6 +492,7 @@ fun RelatedVideoItem(
                             .size(48.dp)
                             .then(moreMenuSource?.let { Modifier.appGlassMenuSource(it, onOpen = moreClick) } ?: Modifier)
                             .clip(CircleShape)
+                            .semantics { contentDescription = "更多操作" }
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = null,
@@ -491,11 +502,10 @@ fun RelatedVideoItem(
                             },
                         contentAlignment = Alignment.Center,
                     ) {
-                        AppIcon(
-                            imageVector = AppIcons.Filled.MoreVert,
-                            contentDescription = "更多操作",
+                        com.android.purebilibili.core.ui.components.CouiMoreDisc(
                             tint = AppContentColors.secondaryText(),
-                            modifier = Modifier.size(18.dp),
+                            size = 32.dp,
+                            iconSize = 18.dp,
                         )
                     }
                 }
@@ -523,6 +533,8 @@ internal fun RelatedVideoGridRow(
     }
     var isBlockingCreator by remember { mutableStateOf(false) }
     val blockedUpRepository = remember { BlockedUpRepository.getInstance(context) }
+    val compactRow = LocalRelatedVideoCardStyle.current ==
+        com.android.purebilibili.core.store.RelatedVideoCardStyle.COMPACT
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -538,6 +550,7 @@ internal fun RelatedVideoGridRow(
                 showUpBadge = showUpBadge,
                 coverAspectRatio = cardLayout.coverAspectRatio,
                 stacked = cardPresentation == RelatedVideoCardLayout.STACKED,
+                compact = compactRow,
                 modifier = Modifier.fillMaxWidth(),
                 onClick = { onVideoClick(video) },
                 onMoreClick = { actionVideo = video },

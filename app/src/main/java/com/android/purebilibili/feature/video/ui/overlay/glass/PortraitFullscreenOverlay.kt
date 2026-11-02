@@ -666,14 +666,13 @@ private fun PortraitTopControlBar(
                 )
             }
             if (shouldShowPortraitTopMoreAction()) {
-                PortraitGlassIconButton(onClick = onMoreClick) {
-                    AppIcon(
-                        imageVector = AppIcons.Rounded.MoreVert,
-                        contentDescription = "菜单",
-                        tint = Color.White,
-                        modifier = Modifier.size(layoutPolicy.topActionIconSizeDp.dp)
-                    )
-                }
+                com.android.purebilibili.core.ui.components.CouiMoreButton(
+                    onClick = onMoreClick,
+                    contentDescription = "菜单",
+                    tint = Color.White,
+                    iconSize = layoutPolicy.topActionIconSizeDp.dp,
+                    forceDark = true,
+                )
             }
         }
     }

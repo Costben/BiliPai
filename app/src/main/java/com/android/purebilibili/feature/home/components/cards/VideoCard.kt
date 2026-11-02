@@ -722,9 +722,11 @@ internal fun ElegantVideoCard(
             onClick = { onClick(video.bvid, video.cid) },
             onLongClick = if (isLongPressEnabled) onLongClick?.let { callback -> { callback(video) } } else null,
             trailingContent = if (actions.isEmpty()) null else ({
-                com.android.purebilibili.core.ui.components.AppWindowActionMenu(groups = listOf(actions)) {
-                    AppIcon(AppIcons.Outlined.MoreVert, contentDescription = "更多操作")
-                }
+                com.android.purebilibili.core.ui.components.AppWindowActionMenu(
+                    groups = listOf(actions),
+                    couiMore = true,
+                    moreDescription = "更多操作",
+                )
             }),
         )
         return
@@ -2173,13 +2175,14 @@ internal fun ElegantVideoCard(
                         // 触控区 48dp，但图标光学上贴卡片右下角，与发布时间行对齐。
                         contentAlignment = Alignment.BottomEnd
                     ) {
-                        AppIcon(
-                            imageVector = AppIcons.Outlined.MoreVert,
-                            contentDescription = null,
+                        com.android.purebilibili.core.ui.components.CouiMoreDisc(
                             tint = adaptiveContentColors.subtitleColor,
-                            modifier = Modifier
-                                .size(18.dp)
-                                .padding(end = AppSpacingTokens.ExtraSmall, bottom = AppSpacingTokens.ExtraSmall)
+                            size = 32.dp,
+                            iconSize = 18.dp,
+                            modifier = Modifier.padding(
+                                end = AppSpacingTokens.ExtraSmall,
+                                bottom = AppSpacingTokens.ExtraSmall,
+                            ),
                         )
                     }
                 }

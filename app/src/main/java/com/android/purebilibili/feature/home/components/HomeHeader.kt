@@ -2677,7 +2677,9 @@ fun HomeHeader(
                                 .height(searchBarHeightDp)
                                 .graphicsLayer {
                                     translationY = searchContentTranslationProvider.value()
-                                    alpha = if (couiHeader) couiHeaderAlpha else (if (couiInlineSearchExpanded) 0f else 1f)
+                                    // COUI 17 展开内联搜索时只淡出头像与搜索键，
+                                    // 设置按钮留在原位，展开后依旧可见可点。
+                                    alpha = if (couiHeader) 1f else (if (couiInlineSearchExpanded) 0f else 1f)
                                 }
                                 .padding(
                                     horizontal = if (embedTopTabsInUnifiedPanel) {
@@ -2691,6 +2693,7 @@ fun HomeHeader(
                             Box(
                                 modifier = Modifier
                                     .size(resolveHomeTopAvatarOuterSize())
+                                    .graphicsLayer { alpha = couiHeaderAlpha }
                                     .appElasticPress(visualSize = resolveHomeTopAvatarInnerSize())
                                     .appActionClickable {
                                         performHomeTopBarTap(haptic = haptic, onClick = onAvatarClick)
@@ -2796,14 +2799,16 @@ fun HomeHeader(
                             // this row still owns the avatar and settings in both materials.
                             if (couiHeader) {
                                 Spacer(modifier = Modifier.weight(1f))
-                                CouiHomeTopActionButton(
-                                    icon = topActionIcons.search,
-                                    contentDescription = "搜索",
-                                    onClick = {
-                                        haptic(HapticType.LIGHT)
-                                        couiInlineSearchExpanded = true
-                                    },
-                                )
+                                Box(modifier = Modifier.graphicsLayer { alpha = couiHeaderAlpha }) {
+                                    CouiHomeTopActionButton(
+                                        icon = topActionIcons.search,
+                                        contentDescription = "搜索",
+                                        onClick = {
+                                            haptic(HapticType.LIGHT)
+                                            couiInlineSearchExpanded = true
+                                        },
+                                    )
+                                }
                             } else if (bottomBarSearchEnabled) {
                                 Spacer(modifier = Modifier.weight(1f))
                             } else {
@@ -2999,7 +3004,6 @@ fun HomeHeader(
                                 } else {
                                     resolveHomeTopSearchRowHorizontalPadding(topChromePolicy)
                                 },
-                                contentColor = topForegroundColor,
                                 modifier = Modifier.align(Alignment.TopStart),
                             )
                         }

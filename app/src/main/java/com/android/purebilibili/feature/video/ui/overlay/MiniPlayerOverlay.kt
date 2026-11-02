@@ -1045,9 +1045,14 @@ private fun MiniPlayerSessionOverlay(
                                 )
                             } else Spacer(Modifier.weight(1f))
                             com.android.purebilibili.core.ui.components.AppGlassMenuAnchor(onOpen = { moreExpanded = true }) {
-                                AppIconButton(onClick = { moreExpanded = true }, modifier = Modifier.size(48.dp)) {
-                                    AppIcon(AppIcons.Outlined.MoreVert, "小窗更多操作", tint = Color.White, modifier = Modifier.size(20.dp))
-                                }
+                                com.android.purebilibili.core.ui.components.CouiMoreButton(
+                                    onClick = { moreExpanded = true },
+                                    modifier = Modifier.size(48.dp),
+                                    contentDescription = "小窗更多操作",
+                                    tint = Color.White,
+                                    iconSize = 20.dp,
+                                    forceDark = true,
+                                )
                                 AppDropdownMenu(expanded = moreExpanded, onDismissRequest = {
                                     moreExpanded = false
                                     lastInteractionTime = System.currentTimeMillis()

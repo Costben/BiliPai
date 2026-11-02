@@ -47,6 +47,7 @@ internal fun HorizontalVideoCardFrame(
     allowPortraitCover: Boolean = false,
     fillInfoHeight: Boolean = compactPartition,
     plainHorizontal: Boolean = false,
+    plainCoverHeightDp: Float = HORIZONTAL_VIDEO_CARD_COVER_HEIGHT_DP,
     horizontalCoverMaxWidthDp: Float? = null,
 ) {
     // 普通列表使用透明横卡；玻璃、MD3、Miuix 共用几何，紧凑分区保留独立布局。
@@ -152,9 +153,12 @@ internal fun HorizontalVideoCardFrame(
                         (width - gap - minOf(92.dp.roundToPx(), (width - gap).coerceAtLeast(0) / 2)).coerceAtLeast(0),
                     )
                 } else if (plainRow) {
-                    // 标准封面以 100dp 高度计算，窄窗口只收缩封面，不随单条文字增高而放大。
-                    resolvePlainHorizontalVideoCoverWidthDp(widthDp, effectiveAspectRatio)
-                        .dp.toPx().toInt().coerceAtMost(width - gap)
+                    // 标准封面按调用方给定的高度计算，窄窗口只收缩封面，不随单条文字增高而放大。
+                    resolvePlainHorizontalVideoCoverWidthDp(
+                        widthDp,
+                        effectiveAspectRatio,
+                        plainCoverHeightDp,
+                    ).dp.toPx().toInt().coerceAtMost(width - gap)
                 } else {
                     (width * widthFraction).toInt().coerceAtMost(width - gap)
                 }

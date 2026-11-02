@@ -1792,6 +1792,8 @@ class MainActivity : AppCompatActivity() {
                                         )
                                     },
                                 ) {
+                                // COUI 17 的同窗弹窗宿主：菜单要有实时模糊和光效，必须落在同一个窗口里。
+                                com.android.purebilibili.core.ui.popup.CouiWindowPopupHost {
                                 AppNavigation(
                                 miniPlayerManager = miniPlayerManager,
                                 isInPipMode = isPipRenderingActive,
@@ -1846,7 +1848,8 @@ class MainActivity : AppCompatActivity() {
                                 onBrandFeedbackBottomInsetChanged = { brandFeedbackBottomInset = it }
                                 )
                                 }
-                            }
+                                }
+                                }
                             
                             //  OnboardingBottomSheet 等其他 overlay 组件
 

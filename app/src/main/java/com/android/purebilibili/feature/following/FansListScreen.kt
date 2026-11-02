@@ -91,15 +91,21 @@ private fun FansListContent(
                         }
                     }
                     if (state.canManage && user.mid != state.identity.mid) {
-                        AppWindowActionMenu(groups = listOf(listOf(
-                            AppWindowAction(label = "查看粉丝", icon = AppIcons.Outlined.People, onClick = { onFansClick(user.mid) }),
-                            AppWindowAction(
-                                label = if (state.removingMid == user.mid) "移除中…" else "移除粉丝",
-                                icon = AppIcons.Outlined.PersonRemove,
-                                enabled = state.removingMid == null,
-                                onClick = { confirmTarget = user },
+                        AppWindowActionMenu(
+                            groups = listOf(
+                                listOf(
+                                    AppWindowAction(label = "查看粉丝", icon = AppIcons.Outlined.People, onClick = { onFansClick(user.mid) }),
+                                    AppWindowAction(
+                                        label = if (state.removingMid == user.mid) "移除中…" else "移除粉丝",
+                                        icon = AppIcons.Outlined.PersonRemove,
+                                        enabled = state.removingMid == null,
+                                        onClick = { confirmTarget = user },
+                                    ),
+                                ),
                             ),
-                        ))) { AppIcon(AppIcons.Outlined.MoreVert, "粉丝操作") }
+                            couiMore = true,
+                            moreDescription = "粉丝操作",
+                        )
                     } else {
                         AppTextButton(onClick = { onFansClick(user.mid) }) { AppText("粉丝") }
                     }

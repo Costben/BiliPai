@@ -9,6 +9,7 @@ package com.android.purebilibili.feature.home.components.cards
  */
 internal const val HORIZONTAL_VIDEO_CARD_COVER_ASPECT_RATIO = 16f / 10f
 internal const val HORIZONTAL_VIDEO_CARD_COVER_WIDTH_DP = 140
+internal const val HORIZONTAL_VIDEO_CARD_COVER_HEIGHT_DP = 100f
 internal const val WIDE_LIST_COVER_MAX_WIDTH_DP = 220f
 internal const val HORIZONTAL_VIDEO_CARD_COVER_INFO_GAP_DP = 10
 internal const val HORIZONTAL_VIDEO_CARD_MIN_HEIGHT_DP = 90f
@@ -25,11 +26,12 @@ internal const val HORIZONTAL_VIDEO_STAT_ICON_TEXT_GAP_DP = 2
 internal fun resolvePlainHorizontalVideoCoverWidthDp(
     availableWidthDp: Float,
     coverAspectRatio: Float,
+    coverHeightDp: Float = HORIZONTAL_VIDEO_CARD_COVER_HEIGHT_DP,
 ): Float {
     val width = availableWidthDp.coerceAtLeast(0f)
     val fraction = 0.55f - 0.10f * ((width - 320f) / 160f).coerceIn(0f, 1f)
     return minOf(
-        100f * coverAspectRatio,
+        coverHeightDp.coerceAtLeast(1f) * coverAspectRatio,
         width * fraction,
         (width - HORIZONTAL_VIDEO_CARD_COVER_INFO_GAP_DP).coerceAtLeast(0f),
     )

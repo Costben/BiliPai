@@ -68,6 +68,7 @@ import com.android.purebilibili.core.store.DEFAULT_BACK_TO_TOP_BUTTON_ENABLED
 import com.android.purebilibili.core.store.HomeDurationStyle
 import com.android.purebilibili.core.store.HomeFeedCardWidthPreset
 import com.android.purebilibili.core.store.HomeFeedCardStyle
+import com.android.purebilibili.core.store.RelatedVideoCardStyle
 import com.android.purebilibili.core.store.HomeWallpaperEffectMode
 import com.android.purebilibili.core.store.CommonListHeaderCollapseMode
 import com.android.purebilibili.core.store.HomeWallpaperEffectScope
@@ -503,6 +504,7 @@ fun AppearanceSettingsContent(
     val homeCardFrostedGlassEnabled = homeConfiguration.homeCardFrostedGlassEnabled
     val homeDurationStyle = homeConfiguration.homeDurationStyle
     val homeFeedCardStyle = homeConfiguration.homeFeedCardStyle
+    val relatedVideoCardStyle = homeConfiguration.relatedVideoCardStyle
     val homeHeroCarouselEnabled = homeConfiguration.homeHeroCarouselEnabled
     val homeHeroCarouselAutoplayEnabled = homeConfiguration.homeHeroCarouselAutoplayEnabled
     val storedThemeRoleOverrides = themeConfiguration.themeRoleOverrides
@@ -1902,6 +1904,31 @@ fun AppearanceSettingsContent(
                                 onSelectionChange = {
                                     scope.launch {
                                         SettingsManager.setHomeFeedCardStyle(context, it)
+                                    }
+                                }
+                            )
+                        }
+
+                        AppPreferenceDivider(modifier = Modifier.padding(start = 16.dp))
+                        SettingsItemAnchor("appearance.related_video_card_style") {
+                            SettingsSingleChoicePreference(
+                                title = context.getString(R.string.related_video_card_style_title),
+                                subtitle = context.getString(R.string.related_video_card_style_subtitle),
+                                options = RelatedVideoCardStyle.entries.map {
+                                    AppSegmentOption(
+                                        it,
+                                        context.getString(when (it) {
+                                            RelatedVideoCardStyle.COMPACT ->
+                                                R.string.related_video_card_style_compact
+                                            RelatedVideoCardStyle.LARGE ->
+                                                R.string.related_video_card_style_large
+                                        }),
+                                    )
+                                },
+                                selectedValue = relatedVideoCardStyle,
+                                onSelectionChange = {
+                                    scope.launch {
+                                        SettingsManager.setRelatedVideoCardStyle(context, it)
                                     }
                                 }
                             )

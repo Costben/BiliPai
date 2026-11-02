@@ -320,12 +320,9 @@ fun DynamicTopBarWithTabs(
                             groups = if (useGlassPositionMenu) listOf(positionActions) else listOf(
                                 listOf(AppWindowAction(label = "关注列表位置", children = positionActions)),
                             ),
-                        ) {
-                            AppIcon(
-                                imageVector = AppIcons.Outlined.MoreHoriz,
-                                contentDescription = "更多动态操作",
-                            )
-                        }
+                            couiMore = true,
+                            moreDescription = "更多动态操作",
+                        )
                     }
             }
         }

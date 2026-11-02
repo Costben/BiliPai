@@ -1,20 +1,17 @@
 package com.android.purebilibili.feature.home.components
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandHorizontally
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.core.CubicBezierEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,9 +19,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -36,22 +30,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.dropShadow
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.shadow.Shadow
-import com.android.purebilibili.core.ui.isAppInDarkTheme
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.lerp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.android.purebilibili.core.ui.AppContentColors
@@ -62,11 +46,11 @@ import com.android.purebilibili.core.ui.ContainerLevel
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.feature.search.SearchViewModel
+import io.github.suqi8.coui.kmp.basic.InputField
 import io.github.suqi8.coui.kmp.basic.TopAppBarDefaults
 import io.github.suqi8.coui.kmp.icon.COUIIcons
 import io.github.suqi8.coui.kmp.icon.basic.Search
 import io.github.suqi8.coui.kmp.icon.extended.Back
-import io.github.suqi8.coui.kmp.icon.extended.Clear
 
 /**
  * 首页顶栏内联搜索：点搜索键后从搜索键原位向右展开成一条透明搜索框，
@@ -79,13 +63,11 @@ internal fun CouiHomeInlineSearchRow(
     onSubmit: (String) -> Unit,
     rowHeight: Dp,
     horizontalPadding: Dp,
-    contentColor: Color,
     modifier: Modifier = Modifier,
     viewModel: SearchViewModel = viewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     var query by rememberSaveable { mutableStateOf("") }
-    val focusRequester = remember { FocusRequester() }
     val keyboard = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     val interaction = remember { MutableInteractionSource() }
@@ -99,26 +81,30 @@ internal fun CouiHomeInlineSearchRow(
         onExpandedChange(false)
     }
 
-    val progress by androidx.compose.animation.core.animateFloatAsState(
+    val progress by animateFloatAsState(
         targetValue = if (expanded) 1f else 0f,
-        animationSpec = androidx.compose.animation.core.tween(
-            durationMillis = 280,
-            easing = androidx.compose.animation.core.CubicBezierEasing(0.25f, 0.1f, 0.25f, 1f),
-        ),
+        animationSpec = if (expanded) {
+            tween(durationMillis = 280, easing = CubicBezierEasing(0.2f, 0f, 0f, 1f))
+        } else {
+            // 收起比展开快一点、起始就动，缩回去的过程才看得见。
+            tween(durationMillis = 220, easing = CubicBezierEasing(0.4f, 0f, 0.2f, 1f))
+        },
         label = "CouiHomeInlineSearchProgress",
     )
 
     LaunchedEffect(expanded) {
         if (expanded) {
-            // 稍等动画展开一部分后再聚焦并弹键盘，体验更平滑
-            kotlinx.coroutines.delay(120)
-            focusRequester.requestFocus()
+            // 焦点由库内部的 InputField 负责；这里只兜底把键盘弹出来，
+            // 避免展开到一半输入法才出现。
+            kotlinx.coroutines.delay(150)
             keyboard?.show()
         } else {
-            query = ""
+            // 清空与文字淡出交给 InputField 自己做，收起时不会突然跳成提示语。
             focusManager.clearFocus()
             keyboard?.hide()
             viewModel.dismissSuggestions()
+            kotlinx.coroutines.delay(320)
+            query = ""
         }
     }
     LaunchedEffect(query, expanded) {
@@ -130,20 +116,21 @@ internal fun CouiHomeInlineSearchRow(
     BackHandler(enabled = expanded) { onExpandedChange(false) }
 
     if (progress > 0.001f) {
-        androidx.compose.foundation.layout.BoxWithConstraints(
+        BoxWithConstraints(
             modifier = modifier
                 .fillMaxWidth()
                 .height(rowHeight),
         ) {
             val contentWidth = maxWidth - horizontalPadding * 2
-            val ballSize = TopAppBarDefaults.ActionItemMinWidth // 40.dp
+            val actionWidth = TopAppBarDefaults.ActionItemMinWidth // 40.dp
             val spacing = TopAppBarDefaults.ActionMenuItemSpacing // 10.dp
-            // 搜索胶囊占「搜索按钮」那一格：右侧让出设置按钮的宽度和间距，
+            // 搜索条占「搜索按钮」那一格：右侧让出设置按钮的宽度和间距，
             // 它就从搜索键的位置向右长成一条，设置按钮原地不动。
-            val trailingReserve = ballSize + spacing
-            val maxSearchWidth = (contentWidth - trailingReserve - ballSize - spacing)
-                .coerceAtLeast(ballSize)
-            val currentSearchWidth = androidx.compose.ui.unit.lerp(ballSize, maxSearchWidth, progress)
+            val trailingReserve = actionWidth + spacing
+            val maxSearchWidth = (contentWidth - trailingReserve - actionWidth - spacing)
+                .coerceAtLeast(actionWidth)
+            // 库里的搜索框本身不带宽度动画，这里用同一个 progress 让它随展开/收起收放。
+            val currentSearchWidth = lerp(actionWidth, maxSearchWidth, progress)
 
             // 只拦截搜索区这一段的点击，防止穿透到底层原顶栏元素；
             // 设置按钮那一格留出来，展开搜索时它仍然是活的。
@@ -179,110 +166,24 @@ internal fun CouiHomeInlineSearchRow(
                     )
                 }
 
-                val isDark = isAppInDarkTheme()
-                val capsuleShape = androidx.compose.foundation.shape.RoundedCornerShape(ballSize / 2)
-
-                // 右侧搜索框：从搜索键原位（40dp 圆）向右拉长为 COUI 17 原生高光透明胶囊搜索框，
-                // 右缘停在设置按钮左侧，设置按钮保持可见。
+                // 搜索框直接用 COUI 原生 InputField：胶囊、描边、外发光、清空键、
+                // 焦点与键盘行为全部由前端库自己绘制；这里只给它一个随进度收放的宽度。
                 Box(
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
                         .offset(x = -trailingReserve)
                         .width(currentSearchWidth)
-                        .height(ballSize)
-                        .dropShadow(
-                            shape = capsuleShape,
-                            shadow = Shadow(
-                                radius = 8.dp,
-                                color = Color.Black,
-                                alpha = if (isDark) 0.22f else 0.08f,
-                            ),
-                        )
-                        .background(
-                            brush = Brush.verticalGradient(
-                                listOf(
-                                    if (isDark) Color.White.copy(alpha = 0.14f) else Color.White.copy(alpha = 0.55f),
-                                    if (isDark) Color.White.copy(alpha = 0.05f) else Color.White.copy(alpha = 0.25f),
-                                )
-                            ),
-                            shape = capsuleShape,
-                        )
-                        .border(
-                            width = 1.25.dp,
-                            brush = Brush.verticalGradient(
-                                listOf(
-                                    Color.White.copy(alpha = if (isDark) 0.55f else 0.85f),
-                                    Color.White.copy(alpha = if (isDark) 0.18f else 0.32f),
-                                    Color.White.copy(alpha = if (isDark) 0.06f else 0.14f),
-                                )
-                            ),
-                            shape = capsuleShape,
-                        ),
-                    contentAlignment = Alignment.CenterStart,
+                        .height(actionWidth),
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 10.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        AppIcon(
-                            imageVector = COUIIcons.Basic.Search,
-                            contentDescription = null,
-                            tint = contentColor.copy(alpha = 0.75f),
-                            modifier = Modifier.size(20.dp),
-                        )
-                        Spacer(Modifier.width(8.dp))
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .graphicsLayer {
-                                    alpha = ((progress - 0.35f) / 0.65f).coerceIn(0f, 1f)
-                                },
-                        ) {
-                            if (query.isEmpty()) {
-                                AppText(
-                                    text = "搜索视频、番剧、UP主",
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    color = contentColor.copy(alpha = 0.55f),
-                                    maxLines = 1,
-                                )
-                            }
-                            BasicTextField(
-                                value = query,
-                                onValueChange = { query = it },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .focusRequester(focusRequester),
-                                singleLine = true,
-                                textStyle = TextStyle(
-                                    color = contentColor,
-                                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                                ),
-                                cursorBrush = SolidColor(contentColor),
-                                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                                keyboardActions = KeyboardActions(onSearch = { submit(query) }),
-                            )
-                        }
-                        if (query.isNotEmpty() && progress > 0.7f) {
-                            Box(
-                                modifier = Modifier
-                                    .size(24.dp)
-                                    .clickable(
-                                        interactionSource = interaction,
-                                        indication = null,
-                                    ) { query = "" },
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                AppIcon(
-                                    imageVector = COUIIcons.Clear,
-                                    contentDescription = "清空",
-                                    tint = contentColor.copy(alpha = 0.7f),
-                                    modifier = Modifier.size(18.dp),
-                                )
-                            }
-                        }
-                    }
+                    InputField(
+                        query = query,
+                        onQueryChange = { query = it },
+                        onSearch = { submit(it) },
+                        expanded = expanded,
+                        onExpandedChange = { if (!it) onExpandedChange(false) },
+                        modifier = Modifier.fillMaxSize(),
+                        label = if (expanded) "搜索视频、UP主..." else "",
+                    )
                 }
             }
         }
@@ -304,7 +205,19 @@ internal fun CouiHomeInlineSearchRow(
                 .fillMaxWidth()
                 .padding(horizontal = AppSpacingTokens.Large)
                 .background(
-                    AppSurfaceTokens.surfaceContainer(),
+                    // Popup 底下没有可叠的父层：COUI 的容器色在深色下是半透明白，
+                    // 直接铺会透出下面的信息流，先合成到画布色再画。
+                    run {
+                        val container = AppSurfaceTokens.surfaceContainer()
+                        if (container.alpha < 1f) {
+                            com.android.purebilibili.core.theme.opaqueCompositeOver(
+                                container,
+                                AppSurfaceTokens.background(),
+                            )
+                        } else {
+                            container
+                        }
+                    },
                     AppShapes.container(ContainerLevel.Card),
                 )
                 .padding(vertical = AppSpacingTokens.Small),

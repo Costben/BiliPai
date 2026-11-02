@@ -965,13 +965,11 @@ private fun BoxScope.LandingInfoContent(
         LandingInfoTexts(model = model, sourceLayout = sourceLayout)
     }
     if (model.infoPresentation.showOverflowMenu) {
-        AppIcon(
-            imageVector = AppIcons.Outlined.MoreVert,
-            contentDescription = null,
+        com.android.purebilibili.core.ui.components.CouiMoreDisc(
             tint = AppContentColors.secondaryText(),
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .size(AppSpacingTokens.Medium + AppSpacingTokens.Micro),
+            size = 32.dp,
+            iconSize = 18.dp,
+            modifier = Modifier.align(Alignment.BottomEnd),
         )
     }
 }

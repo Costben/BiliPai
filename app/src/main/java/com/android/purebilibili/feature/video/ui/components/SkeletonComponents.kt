@@ -309,9 +309,19 @@ internal fun RelatedVideoGridRowSkeleton(
                 .padding(horizontal = cardLayout.outerPaddingDp.dp, vertical = 2.dp),
         ) {
             RelatedVideoItemSkeleton(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
+                modifier = Modifier.fillMaxWidth().padding(
+                    vertical = if (
+                        LocalRelatedVideoCardStyle.current ==
+                        com.android.purebilibili.core.store.RelatedVideoCardStyle.COMPACT
+                    ) 3.dp else 5.dp,
+                ),
                 coverAspectRatio = cardLayout.coverAspectRatio,
-                stacked = (cardPresentation ?: resolveRelatedVideoCardLayout(maxWidth.value.toInt())) == RelatedVideoCardLayout.STACKED,
+                stacked = (cardPresentation ?: resolveRelatedVideoCardLayout(
+                    maxWidth.value.toInt(),
+                    LocalRelatedVideoCardStyle.current,
+                )) == RelatedVideoCardLayout.STACKED,
+                compact = LocalRelatedVideoCardStyle.current ==
+                    com.android.purebilibili.core.store.RelatedVideoCardStyle.COMPACT,
             )
         }
     }
@@ -338,10 +348,18 @@ private fun RelatedVideoItemSkeleton(
     modifier: Modifier = Modifier,
     coverAspectRatio: Float = com.android.purebilibili.core.ui.videoCardCoverAspectRatio(),
     stacked: Boolean = false,
+    compact: Boolean = true,
 ) {
+    val compactRow = compact && !stacked
     HorizontalVideoCardFrame(
         plainHorizontal = true,
-        fillInfoHeight = true,
+        fillInfoHeight = !compactRow,
+        plainCoverHeightDp = if (compactRow) {
+            RELATED_VIDEO_COMPACT_COVER_HEIGHT_DP
+        } else {
+            com.android.purebilibili.feature.home.components.cards
+                .HORIZONTAL_VIDEO_CARD_COVER_HEIGHT_DP
+        },
         coverAspectRatio = coverAspectRatio,
         stacked = stacked,
         trailingContent = { Spacer(Modifier.size(48.dp)) },
@@ -355,7 +373,7 @@ private fun RelatedVideoItemSkeleton(
         infoContent = {
             val typography = com.android.purebilibili.feature.home.components.cards.horizontalVideoCardTypography()
             RelatedSkeletonText(
-                text = "推荐视频标题占位\n第二行标题占位",
+                text = if (compactRow) "推荐视频标题占位" else "推荐视频标题占位\n第二行标题占位",
                 style = typography.title,
                 maxLines = videoCardTitleMaxLines(),
                 modifier = Modifier.fillMaxWidth(),

@@ -1084,9 +1084,10 @@ private fun SubscriptionArticleScreen(
                         AppIcon(AppIcons.Filled.Share, contentDescription = "分享文章")
                     }
                     com.android.purebilibili.core.ui.components.AppGlassMenuAnchor(onOpen = { actionsExpanded = true }) {
-                        AppIconButton(onClick = { actionsExpanded = true }) {
-                            AppIcon(AppIcons.Filled.MoreVert, contentDescription = "阅读选项")
-                        }
+                        com.android.purebilibili.core.ui.components.CouiMoreButton(
+                            onClick = { actionsExpanded = true },
+                            contentDescription = "阅读选项",
+                        )
                         AppDropdownMenu(
                             expanded = actionsExpanded,
                             onDismissRequest = { actionsExpanded = false },

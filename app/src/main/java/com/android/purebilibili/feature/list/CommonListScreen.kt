@@ -1970,12 +1970,7 @@ fun CommonListScreen(
                                                 selectedFavoriteFolderIds = emptySet()
                                                 isFavoriteFolderSelectionMode = true
                                             },
-                                        ) {
-                                            AppIcon(
-                                                imageVector = AppIcons.Filled.MoreVert,
-                                                contentDescription = "更多管理"
-                                            )
-                                        }
+                                        )
                                     }
                                     }
                                 }
@@ -2034,12 +2029,9 @@ fun CommonListScreen(
                                                 ))
                                             }
                                         },
-                                    ) {
-                                        AppIcon(
-                                            imageVector = AppIcons.Filled.MoreVert,
-                                            contentDescription = "收藏夹管理",
-                                        )
-                                    }
+                                        couiMore = true,
+                                        moreDescription = "收藏夹管理",
+                                    )
                                 }
 
                                 if (likedVideosViewModel?.isOwnLikedVideos == true && !isBatchActionMode) {
@@ -2063,12 +2055,9 @@ fun CommonListScreen(
                                                 ),
                                             ),
                                         ),
-                                    ) {
-                                        AppIcon(
-                                            imageVector = AppIcons.Filled.MoreVert,
-                                            contentDescription = "更多操作",
-                                        )
-                                    }
+                                        couiMore = true,
+                                        moreDescription = "更多操作",
+                                    )
                                 }
 
                                 if (historyViewModel != null) {
@@ -2094,12 +2083,9 @@ fun CommonListScreen(
                                                     ),
                                                 ),
                                             ),
-                                        ) {
-                                            AppIcon(
-                                                imageVector = AppIcons.Filled.MoreVert,
-                                                contentDescription = "更多管理"
-                                            )
-                                        }
+                                            couiMore = true,
+                                            moreDescription = "更多管理",
+                                        )
                                     }
                                 }
 
