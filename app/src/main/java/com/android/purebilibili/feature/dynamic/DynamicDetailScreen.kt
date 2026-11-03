@@ -343,7 +343,7 @@ fun DynamicDetailScreen(
                                 interactionViewModel.loadReplyInteractionStatus(oid, type, onLoaded)
                             },
                             extraViewActions = viewActions,
-                            moreTint = AppContentColors.secondaryText().copy(0.5f),
+                            moreTint = AppContentColors.primaryText(),
                         )
                     }
                 }

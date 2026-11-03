@@ -84,6 +84,6 @@ internal fun DynamicCommentInputHost(
         allowImageAttachment = replyTarget == null,
         showSyncToDynamic = false,
         showProgressInsert = false,
-        couiSheet = LocalAppUiStyle.current == AppUiStyle.COUI17,
+        couiOverlay = LocalAppUiStyle.current == AppUiStyle.COUI17,
     )
 }
