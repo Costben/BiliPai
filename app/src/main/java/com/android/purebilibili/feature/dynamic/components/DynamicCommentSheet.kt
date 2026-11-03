@@ -649,13 +649,19 @@ fun DynamicCommentSheet(
                 }
 
                 val liquidGlassEnabled = LocalAppThemeConfig.current.liquidGlassEnabled
+                // COUI 17 只留搜索框，不再铺一层容器底色。
+                val couiEntryBar = com.android.purebilibili.core.theme.LocalAppUiStyle.current ==
+                    com.android.purebilibili.core.theme.AppUiStyle.COUI17
                 DynamicCommentEntryBar(
                     onClick = onOpenComposer,
                     liquidGlassEnabled = liquidGlassEnabled,
                     backdrop = commentChromeBackdrop,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(AppSurfaceTokens.surfaceContainer())
+                        .then(
+                            if (couiEntryBar) Modifier
+                            else Modifier.background(AppSurfaceTokens.surfaceContainer())
+                        )
                         .padding(
                             horizontal = AppSpacingTokens.Large,
                             vertical = AppSpacingTokens.Medium,
@@ -735,6 +741,8 @@ fun DynamicInlineCommentHeader(
     onSortModeChange: (CommentSortMode) -> Unit,
     miuixBackdrop: MiuixBackdrop? = null,
     onShowReactions: (() -> Unit)? = null,
+    /** 卡片式评论区不需要标题下方的分割线。 */
+    flat: Boolean = false,
 ) {
     val sortModes = remember { listOf(CommentSortMode.HOT, CommentSortMode.NEWEST) }
     val sortModeLabels = remember(sortModes) { sortModes.map { it.label } }
@@ -775,7 +783,9 @@ fun DynamicInlineCommentHeader(
             miuixBackdrop = miuixBackdrop,
         )
     }
-    AppHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+    if (!flat) {
+        AppHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+    }
 }
 
 /** 真实评论项的复用类型；临时骨架使用独立类型。 */
@@ -844,6 +854,8 @@ fun LazyListScope.dynamicInlineCommentItems(
     onImagePreview: (List<String>, Int, ImagePreviewSourceAnchor?, ImagePreviewTextContent?) -> Unit,
     avatarListState: LazyListState? = null,
     skeletonSlotCount: Int = DYNAMIC_COMMENT_SKELETON_MIN_SLOTS,
+    /** 卡片式评论区：条目之间不画分割线，楼中楼单独包容器。 */
+    flatCommentRow: Boolean = false,
 ) {
     when {
         isLoading && comments.isEmpty() -> dynamicCommentSkeletonItems(
@@ -891,6 +903,7 @@ fun LazyListScope.dynamicInlineCommentItems(
                 onToggleTopClick = { onToggleTop(reply) },
                 onAvatarClick = { mid -> mid.toLongOrNull()?.let(onUserClick) },
                 onImagePreview = onImagePreview,
+                flatCommentRow = flatCommentRow,
             )
         }
     }

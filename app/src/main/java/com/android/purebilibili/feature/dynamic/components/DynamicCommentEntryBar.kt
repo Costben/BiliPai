@@ -5,8 +5,10 @@ import com.android.purebilibili.core.ui.components.appActionClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,15 +17,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import com.android.purebilibili.core.theme.AppUiStyle
+import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.AppIcons
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
+import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.appElasticPress
+import com.android.purebilibili.core.ui.renderer.coui.AppCouiInputField
 import com.android.purebilibili.feature.home.components.BottomBarMatchedReusableLiquidDock
 import com.android.purebilibili.feature.home.components.resolveFloatingDockGeometryScale
 import com.android.purebilibili.feature.home.components.resolveSharedBottomBarCapsuleShape
 import com.android.purebilibili.feature.video.ui.components.CommentEntryBarContent
 import com.android.purebilibili.feature.video.ui.components.resolveBottomInputBarPlaceholderTextColor
+import io.github.suqi8.coui.kmp.basic.SearchBarDefaults
 import io.github.suqi8.coui.kmp.blur.Backdrop as MiuixBackdrop
 
 /**
@@ -40,6 +48,11 @@ internal fun DynamicCommentEntryBar(
     modifier: Modifier = Modifier,
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
 ) {
+    if (LocalAppUiStyle.current == AppUiStyle.COUI17) {
+        CouiCommentEntryBar(onClick = onClick, backdrop = backdrop, modifier = modifier)
+        return
+    }
+
     val shape = resolveSharedBottomBarCapsuleShape()
     val textColor = resolveBottomInputBarPlaceholderTextColor(
         inputContainerColor = if (liquidGlassEnabled) {
@@ -97,5 +110,50 @@ internal fun DynamicCommentEntryBar(
                 textStyle = MaterialTheme.typography.bodySmall,
             )
         }
+    }
+}
+
+/**
+ * COUI 皮肤下的评论入口：直接复用 ColorOS 搜索框胶囊，只把放大镜换成编辑图标。
+ *
+ * 输入框本身禁用编辑与聚焦，点击由覆盖层接管，落到共享输入弹层。
+ */
+@Composable
+private fun CouiCommentEntryBar(
+    onClick: () -> Unit,
+    backdrop: MiuixBackdrop?,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier.appElasticPress()) {
+        AppCouiInputField(
+            query = "",
+            onQueryChange = {},
+            onSearch = {},
+            expanded = false,
+            onExpandedChange = {},
+            placeholder = "写评论",
+            enabled = false,
+            glowColor = null,
+            backdrop = backdrop,
+            leadingIcon = {
+                AppIcon(
+                    imageVector = AppIcons.Outlined.Edit,
+                    contentDescription = null,
+                    tint = SearchBarDefaults.searchBarColors().iconColor,
+                    modifier = Modifier
+                        .padding(
+                            start = SearchBarDefaults.LeadingIconStartPadding,
+                            end = SearchBarDefaults.LeadingIconEndPadding,
+                        )
+                        .size(20.dp),
+                )
+            },
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .appActionClickable(role = Role.Button, onClick = onClick),
+        )
     }
 }

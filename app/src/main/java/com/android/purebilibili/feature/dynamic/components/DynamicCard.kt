@@ -186,6 +186,10 @@ fun DynamicCardV2(
     gifImageLoader: ImageLoader,
     actions: DynamicCardActions,
     presentation: DynamicCardPresentation = DynamicCardPresentation(),
+    /** 列表里每条动态自成一张卡片；详情页整页就是这张卡的展开形态，不再套卡片底。 */
+    withCardBackground: Boolean = true,
+    /** 详情页把「更多」菜单移到了顶栏，卡片作者行不再重复提供一个入口。 */
+    showAuthorMenu: Boolean = true,
 ) {
     val onVideoClick = actions.navigation.onVideoClick
     val onBangumiClick = actions.navigation.onBangumiClick
@@ -223,17 +227,6 @@ fun DynamicCardV2(
     val detailImageLayout = presentation.detailImageLayout
 
     if (!item.visible) return
-    var shareImagePreview by remember(item.id_str) { mutableStateOf(false) }
-    if (shareImagePreview) {
-        com.android.purebilibili.feature.share.ShareImagePreviewSheet(
-            document = com.android.purebilibili.feature.share.dynamicShareDocument(item),
-            loadDocument = {
-                val complete = DynamicRepository.getDynamicDetail(item.id_str).getOrThrow()
-                com.android.purebilibili.feature.share.dynamicShareDocument(complete)
-            },
-            onDismiss = { shareImagePreview = false },
-        )
-    }
     val openDynamicDetail = remember(item, onDynamicDetailClick) {
         onDynamicDetailClick?.let { callback ->
             { id: String ->
@@ -287,13 +280,6 @@ fun DynamicCardV2(
     } == true
     val type = DynamicType.fromApiValue(item.type)
     val cardClickAction = remember(item) { resolveDynamicCardPrimaryAction(item) }
-    val watchLaterAid = remember(item) { resolveDynamicWatchLaterAid(item) }
-    val deleteAction = remember(item) { resolveDynamicDeleteAction(item) }
-    val menuCapabilities = remember(item, currentUserMid) {
-        resolveDynamicMenuCapabilities(item, currentUserMid)
-    }
-    var pendingDeleteAction by remember(item.id_str) { mutableStateOf<DynamicDeleteAction?>(null) }
-    var pendingBlockAuthor by remember(item.id_str) { mutableStateOf<DynamicManageAction.BlockAuthor?>(null) }
     var pendingVoteId by remember(item.id_str) { mutableStateOf<Long?>(null) }
     //  附加内容卡（相关游戏 / 投稿 / 商品 / 预约 / 投票 / 赛事 / 充电抽奖）统一映射，
     //  与详情页 opus 正文段落里的 link_card 走同一个模型和同一个组件，
@@ -347,10 +333,6 @@ fun DynamicCardV2(
         }
     }
     //  [新增] 评论互动设置弹窗状态
-    var showReplyInteractionDialog by remember(item.id_str) { mutableStateOf<ReplyInteractionData?>(null) }
-    var replyInteractionOid by remember(item.id_str) { mutableStateOf(0L) }
-    var replyInteractionType by remember(item.id_str) { mutableStateOf(0) }
-    val isCurrentlyTop = item.modules.module_tag?.text == "置顶"
     val isPrimaryClickEnabled = remember(cardClickAction, onArticleClick, openDynamicDetail, onPrimaryClickOverride) {
         shouldEnableDynamicCardPrimaryClick(
             action = cardClickAction,
@@ -390,148 +372,31 @@ fun DynamicCardV2(
         )
     }
 
-    pendingDeleteAction?.let { action ->
-        AppAlertDialog(
-            onDismissRequest = { pendingDeleteAction = null },
-            title = { AppText(action.title) },
-            text = { AppText(action.content) },
-            confirmButton = {
-                AppDialogAction(
-                    onClick = {
-                        pendingDeleteAction = null
-                        onDeleteClick?.invoke(action)
-                    }
-                ) {
-                    AppText(action.confirmText, color = AppContentColors.error())
-                }
-            },
-            dismissButton = {
-                AppDialogAction(onClick = { pendingDeleteAction = null }) {
-                    AppText(action.cancelText)
-                }
-            }
-        )
-    }
-
-    pendingBlockAuthor?.let { action ->
-        AppAlertDialog(
-            onDismissRequest = { pendingBlockAuthor = null },
-            title = { AppText("屏蔽 UP 主") },
-            text = { AppText("屏蔽后将不再推荐 ${action.authorName} 的内容，并同步到哔哩哔哩黑名单。") },
-            confirmButton = {
-                AppDialogAction(
-                    onClick = {
-                        pendingBlockAuthor = null
-                        onManageAction(action)
-                    },
-                ) { AppText("屏蔽", color = AppContentColors.error()) }
-            },
-            dismissButton = {
-                AppDialogAction(onClick = { pendingBlockAuthor = null }) { AppText("取消") }
-            },
-        )
-    }
-
-    //  [新增] 评论互动设置弹窗（评论精选 / 评论开关，对齐 BiliPai）
-    showReplyInteractionDialog?.let { interactionData ->
-        val selection = interactionData.up_reply_selection
-        val reply = interactionData.up_reply
-        val selectionEnabled = selection?.status == 1
-        val replyEnabled = reply?.status == 1
-        AppAlertDialog(
-            onDismissRequest = { showReplyInteractionDialog = null },
-            title = { AppText("评论互动设置") },
-            text = {
-                Column {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(AppShapes.container(ContainerLevel.Chip))
-                            .appActionClickable(enabled = selection?.can_modify == true) {
-                                showReplyInteractionDialog = null
-                                onManageAction(
-                                    DynamicManageAction.SetReplySubject(
-                                        oid = replyInteractionOid,
-                                        replyType = replyInteractionType,
-                                        action = resolveDynamicReplySelectionAction(selectionEnabled)
-                                    )
-                                )
-                            }
-                            .padding(vertical = AppSpacingTokens.Medium),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        AppIcon(
-                            rememberAppCommentIcon(),
-                            contentDescription = null,
-                            modifier = Modifier.size(AppSpacingTokens.Large),
-                            tint = AppContentColors.primaryText()
-                        )
-                        Spacer(modifier = Modifier.width(AppSpacingTokens.Small))
-                        AppText(
-                            if (selectionEnabled) "停止评论精选" else "开启评论精选",
-                            color = if (selection?.can_modify == true) {
-                                AppContentColors.primaryText()
-                            } else {
-                                AppContentColors.secondaryText().copy(0.5f)
-                            }
-                        )
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(AppShapes.container(ContainerLevel.Chip))
-                            .appActionClickable(enabled = reply?.can_modify == true) {
-                                showReplyInteractionDialog = null
-                                onManageAction(
-                                    DynamicManageAction.SetReplySubject(
-                                        oid = replyInteractionOid,
-                                        replyType = replyInteractionType,
-                                        action = resolveDynamicReplyOpenAction(replyEnabled)
-                                    )
-                                )
-                            }
-                            .padding(vertical = AppSpacingTokens.Medium),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        AppIcon(
-                            rememberAppVisibilityOffIcon(),
-                            contentDescription = null,
-                            modifier = Modifier.size(AppSpacingTokens.Large),
-                            tint = AppContentColors.primaryText()
-                        )
-                        Spacer(modifier = Modifier.width(AppSpacingTokens.Small))
-                        AppText(
-                            if (replyEnabled) "关闭评论" else "恢复评论",
-                            color = if (reply?.can_modify == true) {
-                                AppContentColors.primaryText()
-                            } else {
-                                AppContentColors.secondaryText().copy(0.5f)
-                            }
-                        )
-                    }
-                }
-            },
-            confirmButton = {},
-            dismissButton = {
-                AppDialogAction(onClick = { showReplyInteractionDialog = null }) {
-                    AppText("取消")
-                }
-            }
-        )
-    }
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = resolveDynamicCardOuterPadding())
+            .then(
+                if (withCardBackground) {
+                    Modifier
+                        .clip(AppShapes.container(ContainerLevel.Card))
+                        .background(AppSurfaceTokens.cardContainer())
+                } else {
+                    Modifier
+                }
+            )
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = resolveDynamicCardContentPadding())
                 .padding(
-                    top = if (isDetail) AppSpacingTokens.Medium else AppSpacingTokens.ExtraSmall,
-                    bottom = if (isDetail) AppSpacingTokens.None else AppSpacingTokens.ExtraSmall,
+                    top = if (isDetail) AppSpacingTokens.Medium else AppSpacingTokens.Small,
+                    bottom = when {
+                        withCardBackground -> AppSpacingTokens.Small
+                        isDetail -> AppSpacingTokens.None
+                        else -> AppSpacingTokens.Small
+                    },
                 )
                 .then(articleContainer?.modifier ?: Modifier)
                 .appActionClickable(enabled = isPrimaryClickEnabled) {
@@ -645,247 +510,19 @@ fun DynamicCardV2(
                     }
                 }
 
-                val moreIcon = rememberAppMoreIcon()
-                val linkIcon = rememberAppLinkIcon()
-                val shareIcon = rememberAppShareIcon()
-                val historyIcon = rememberAppHistoryIcon()
-                val deleteIcon = rememberAppDeleteIcon()
-                val visibilityOffIcon = rememberAppVisibilityOffIcon()
-                val chevronUpIcon = rememberAppChevronUpIcon()
-                val visibilityOnIcon = rememberAppVisibilityOnIcon()
-                val commentIcon = rememberAppCommentIcon()
-                val warningIcon = rememberAppWarningIcon()
-                val errorTint = AppContentColors.error()
-                AppWindowActionMenu(
-                    groups = listOf(
-                        buildList {
-                            add(
-                                AppWindowAction(
-                                    label = "复制链接",
-                                    icon = linkIcon,
-                                    onClick = {
-                                        val dynamicUrl = "https://t.bilibili.com/${item.id_str}"
-                                        val clipboard = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE)
-                                            as android.content.ClipboardManager
-                                        clipboard.setPrimaryClip(
-                                            android.content.ClipData.newPlainText("动态链接", dynamicUrl)
-                                        )
-                                        android.widget.Toast.makeText(
-                                            context,
-                                            "已复制链接",
-                                            android.widget.Toast.LENGTH_SHORT
-                                        ).show()
-                                    },
-                                )
-                            )
-                            add(
-                                AppWindowAction(
-                                    label = "分享动态",
-                                    icon = shareIcon,
-                                    onClick = {
-                                        val dynamicUrl = "https://t.bilibili.com/${item.id_str}"
-                                        val descText = content?.desc?.text?.take(100).orEmpty()
-                                        val shareText = if (descText.isNotBlank()) {
-                                            "$descText\n$dynamicUrl"
-                                        } else {
-                                            "分享动态\n$dynamicUrl"
-                                        }
-                                        val shareIntent = android.content.Intent(
-                                            android.content.Intent.ACTION_SEND
-                                        ).apply {
-                                            this.type = "text/plain"
-                                            putExtra(android.content.Intent.EXTRA_TEXT, shareText)
-                                        }
-                                        context.startActivity(
-                                            android.content.Intent.createChooser(shareIntent, "分享动态")
-                                        )
-                                    },
-                                )
-                            )
-                            if (watchLaterAid != null && onWatchLaterClick != null) {
-                                add(
-                                    AppWindowAction(
-                                        label = "稍后再看",
-                                        icon = historyIcon,
-                                        onClick = { onWatchLaterClick(watchLaterAid) },
-                                    )
-                                )
-                            }
-                            run {
-                                add(
-                                    AppWindowAction(
-                                        label = "存图 / 分享图片",
-                                        icon = historyIcon,
-                                        onClick = { shareImagePreview = true },
-                                    )
-                                )
-                            }
-                            val canShareToMessage = item.basic?.comment_type in setOf(11, 17) &&
-                                item.modules.module_author?.mid != null
-                            if (onShareToMessageClick != null && canShareToMessage) {
-                                add(
-                                    AppWindowAction(
-                                        label = "分享至消息",
-                                        icon = shareIcon,
-                                        onClick = onShareToMessageClick,
-                                    )
-                                )
-                            }
-                            if (onCheckDynamicClick != null && menuCapabilities.isOwnDynamic) {
-                                add(
-                                    AppWindowAction(
-                                        label = "检查动态",
-                                        icon = warningIcon,
-                                        onClick = onCheckDynamicClick,
-                                    )
-                                )
-                            }
-                        },
-                        buildList {
-                            if (!menuCapabilities.isOwnDynamic) {
-                                add(
-                                    AppWindowAction(
-                                        label = "不感兴趣",
-                                        icon = visibilityOffIcon,
-                                        onClick = {
-                                            onManageAction(DynamicManageAction.NotInterested(item.id_str))
-                                        },
-                                    )
-                                )
-                            }
-                            if (menuCapabilities.canToggleTop) {
-                                add(
-                                    AppWindowAction(
-                                        label = resolveDynamicPinnedMenuLabel(isCurrentlyTop),
-                                        icon = chevronUpIcon,
-                                        onClick = {
-                                            onManageAction(
-                                                DynamicManageAction.ToggleTop(item.id_str, isCurrentlyTop)
-                                            )
-                                        },
-                                    )
-                                )
-                            }
-                            if (menuCapabilities.canSetVisibility) {
-                                add(
-                                    AppWindowAction(
-                                        label = resolveDynamicVisibilityMenuLabel(
-                                            isPrivate = menuCapabilities.isPrivate
-                                        ),
-                                        icon = visibilityOnIcon,
-                                        onClick = {
-                                            onManageAction(
-                                                DynamicManageAction.SetVisibility(
-                                                    dynamicId = item.id_str,
-                                                    dynType = resolveDynamicDynType(item),
-                                                    isPrivate = !menuCapabilities.isPrivate
-                                                )
-                                            )
-                                        },
-                                    )
-                                )
-                            }
-                            if (menuCapabilities.canManageComments) {
-                                add(
-                                    AppWindowAction(
-                                        label = "评论互动设置",
-                                        icon = commentIcon,
-                                        onClick = {
-                                            val oid = resolveDynamicReplySubjectOid(item)
-                                            if (oid == null || onLoadReplyInteractionStatus == null) {
-                                                android.widget.Toast.makeText(
-                                                    context,
-                                                    "该动态暂不支持互动设置",
-                                                    android.widget.Toast.LENGTH_SHORT
-                                                ).show()
-                                            } else {
-                                                onLoadReplyInteractionStatus(
-                                                    oid,
-                                                    resolveDynamicReplySubjectType(item)
-                                                ) { data ->
-                                                    if (data == null) {
-                                                        android.widget.Toast.makeText(
-                                                            context,
-                                                            "获取互动设置失败",
-                                                            android.widget.Toast.LENGTH_SHORT
-                                                        ).show()
-                                                    } else {
-                                                        replyInteractionOid = oid
-                                                        replyInteractionType = resolveDynamicReplySubjectType(item)
-                                                        showReplyInteractionDialog = data
-                                                    }
-                                                }
-                                            }
-                                        },
-                                    )
-                                )
-                            }
-                            if (menuCapabilities.canBlockAuthor) {
-                                add(
-                                    AppWindowAction(
-                                        label = "屏蔽该 UP 主",
-                                        icon = visibilityOffIcon,
-                                        onClick = {
-                                            pendingBlockAuthor = DynamicManageAction.BlockAuthor(
-                                                authorMid = author?.mid ?: 0L,
-                                                authorName = author?.name.orEmpty().ifBlank { "该用户" },
-                                                authorFace = author?.face.orEmpty(),
-                                            )
-                                        },
-                                    )
-                                )
-                            }
-                        },
-                        buildList {
-                            if (menuCapabilities.canEdit) {
-                                add(
-                                    AppWindowAction(
-                                        label = "编辑动态",
-                                        onClick = {
-                                            onManageAction(
-                                                DynamicManageAction.Edit(
-                                                    dynamicId = item.id_str,
-                                                    initialDraft = resolveDynamicEditDraft(item),
-                                                    replyOid = resolveDynamicReplySubjectOid(item),
-                                                    replyType = resolveDynamicReplySubjectType(item),
-                                                )
-                                            )
-                                        },
-                                    )
-                                )
-                            }
-                            if (deleteAction != null && onDeleteClick != null) {
-                                add(
-                                    AppWindowAction(
-                                        label = deleteAction.label,
-                                        icon = deleteIcon,
-                                        iconTint = errorTint,
-                                        onClick = { pendingDeleteAction = deleteAction },
-                                    )
-                                )
-                            }
-                            if (menuCapabilities.canReport) {
-                                add(
-                                    AppWindowAction(
-                                        label = "举报",
-                                        icon = warningIcon,
-                                        iconTint = errorTint,
-                                        onClick = {
-                                            onManageAction(
-                                                DynamicManageAction.Report(
-                                                    dynamicId = item.id_str,
-                                                    authorMid = author?.mid ?: 0L
-                                                )
-                                            )
-                                        },
-                                    )
-                                )
-                            }
-                        },
-                    ),
-                    couiMore = true,
-                    moreTint = AppContentColors.secondaryText().copy(0.5f),
-                )
+                if (showAuthorMenu) {
+                    DynamicActionMenu(
+                        item = item,
+                        currentUserMid = currentUserMid,
+                        onManageAction = onManageAction,
+                        onDeleteClick = onDeleteClick,
+                        onWatchLaterClick = onWatchLaterClick,
+                        onShareToMessageClick = onShareToMessageClick,
+                        onCheckDynamicClick = onCheckDynamicClick,
+                        onLoadReplyInteractionStatus = onLoadReplyInteractionStatus,
+                        moreTint = AppContentColors.secondaryText().copy(0.5f),
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(AppSpacingTokens.Medium))
         }
@@ -2101,14 +1738,6 @@ fun DynamicCardV2(
                     )
                 }
             }
-        }
-
-        if (!isDetail) {
-            AppHorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.32f),
-                thickness = AppSpacingTokens.Micro * 0.35f
-            )
         }
     }
 }

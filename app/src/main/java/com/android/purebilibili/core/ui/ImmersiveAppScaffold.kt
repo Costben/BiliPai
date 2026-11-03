@@ -11,6 +11,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.android.purebilibili.core.ui.performance.isLowBlurBudgetForced
 import com.android.purebilibili.core.ui.blur.BlurSurfaceType
 import com.android.purebilibili.core.ui.blur.ChromeBackdropSource
@@ -39,6 +41,10 @@ internal fun ImmersiveAppScaffold(
     contentWindowInsets: WindowInsets = WindowInsets.navigationBars,
     /** Let a screen opt into the progressive renderer when both top effects are temporarily on. */
     preferProgressiveTopBlur: Boolean = false,
+    /** Let a single page request the progressive material even when the global switch is off. */
+    forceProgressiveTopBlur: Boolean = false,
+    /** Extra height the progressive blur bleeds below the bar before fading out. */
+    progressiveTopBlurExtraHeight: Dp = 0.dp,
     /**
      * Optional source owned by a wallpaper host. The host must attach its modifier to the
      * wallpaper layer so the top chrome samples the same visual background as the screen.
@@ -52,8 +58,10 @@ internal fun ImmersiveAppScaffold(
 ) {
     val config = LocalAppThemeConfig.current
     val lowBlurBudget = isLowBlurBudgetForced()
-    val headerRequested = config.headerBlurEnabled && !preferProgressiveTopBlur && topBar != null
-    val progressiveRequested = config.progressiveTopBlurEnabled && !headerRequested && topBar != null
+    val headerRequested = config.headerBlurEnabled && !preferProgressiveTopBlur &&
+        !forceProgressiveTopBlur && topBar != null
+    val progressiveRequested = (config.progressiveTopBlurEnabled || forceProgressiveTopBlur) &&
+        !headerRequested && topBar != null
     val hazeState = externalHazeState ?: if (
         headerRequested &&
             !lowBlurBudget &&
@@ -100,6 +108,11 @@ internal fun ImmersiveAppScaffold(
                     surfaceColor = globalWallpaperAwareChromeColor(topBarSurfaceColor),
                     fadeEnabled = fadeActive,
                     extendBelowBounds = false,
+                    progressiveBlurBottomExtensionDp = if (progressiveActive) {
+                        progressiveTopBlurExtraHeight
+                    } else {
+                        0.dp
+                    },
                     modifier = Modifier.then(
                         if (progressiveActive || fadeActive) {
                             Modifier.background(Color.Transparent)

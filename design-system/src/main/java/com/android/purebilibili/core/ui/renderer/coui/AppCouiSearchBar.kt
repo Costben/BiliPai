@@ -43,6 +43,8 @@ fun AppCouiInputField(
     leadingIcon: (@Composable () -> Unit)? = null,
     trailingIcon: (@Composable () -> Unit)? = null,
     interactionSource: MutableInteractionSource? = null,
+    glowColor: Color? = SearchBarDefaults.causticGlowColor(),
+    backdrop: io.github.suqi8.coui.kmp.blur.Backdrop? = null,
 ) {
     InputField(
         query = query,
@@ -57,5 +59,7 @@ fun AppCouiInputField(
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
         interactionSource = interactionSource,
+        glowColor = glowColor,
+        backdrop = backdrop,
     )
 }

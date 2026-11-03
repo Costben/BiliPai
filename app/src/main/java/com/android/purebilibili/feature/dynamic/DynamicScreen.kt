@@ -406,6 +406,9 @@ fun DynamicScreen(
     }
 
     val appThemeConfig = com.android.purebilibili.core.ui.LocalAppThemeConfig.current
+    // COUI 17 的顶栏材质是 ColorOS 渐变模糊：皮肤本身即要求材质，不跟随全局顶部模糊开关。
+    val couiTopChromeSkin = com.android.purebilibili.core.theme.LocalAppUiStyle.current ==
+        com.android.purebilibili.core.theme.AppUiStyle.COUI17
     // 顶部高斯模糊使用独立 Haze 源；液态玻璃的 Backdrop 渐进模糊仍单独由
     // DynamicTopBarWithTabs 根据安卓原生液态玻璃开关控制。
     val dynamicTopBarHazeState = if (
@@ -771,7 +774,8 @@ fun DynamicScreen(
                 val dynamicDockSource = if (
                     appThemeConfig.progressiveTopBlurEnabled ||
                     appThemeConfig.headerBlurEnabled ||
-                    appThemeConfig.liquidGlassEnabled
+                    appThemeConfig.liquidGlassEnabled ||
+                    couiTopChromeSkin
                 ) {
                     com.android.purebilibili.core.ui.blur.rememberChromeBackdropSource()
                 } else {
@@ -996,6 +1000,7 @@ fun DynamicScreen(
                                     hazeState = dynamicTopBarHazeState,
                                     indicatorPositionProvider = dynamicTabIndicatorPositionProvider,
                                     isScrollInProgressProvider = dynamicTabScrollInProgressProvider,
+                                    forceProgressiveBlur = couiTopChromeSkin,
                                 )
                             }
 
@@ -1208,6 +1213,7 @@ fun DynamicScreen(
                                     indicatorPositionProvider = dynamicTabIndicatorPositionProvider,
                                     isScrollInProgressProvider = dynamicTabScrollInProgressProvider,
                                     shouldShowHorizontalUserList = shouldShowHorizontalUserList,
+                                    forceProgressiveBlur = couiTopChromeSkin,
                                 )
                             }
 
@@ -1636,6 +1642,8 @@ internal fun DynamicList(
             -1
         },
         contentPadding = PaddingValues(
+            start = resolveDynamicTimelineHorizontalPadding(),
+            end = resolveDynamicTimelineHorizontalPadding(),
             top = statusBarHeight + topPaddingExtra,
             bottom = bottomPadding
         ),

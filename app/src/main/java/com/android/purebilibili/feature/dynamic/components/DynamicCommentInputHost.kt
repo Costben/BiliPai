@@ -8,6 +8,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.android.purebilibili.core.theme.AppUiStyle
+import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.feature.dynamic.DYNAMIC_COMMENT_ROOT_INPUT_HINT
 import com.android.purebilibili.feature.dynamic.DynamicViewModel
 import com.android.purebilibili.feature.video.ui.components.CommentInputDialog
@@ -82,5 +84,6 @@ internal fun DynamicCommentInputHost(
         allowImageAttachment = replyTarget == null,
         showSyncToDynamic = false,
         showProgressInsert = false,
+        couiSheet = LocalAppUiStyle.current == AppUiStyle.COUI17,
     )
 }

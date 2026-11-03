@@ -112,6 +112,38 @@ fun CouiMoreButton(
 }
 
 /**
+ * 无底色的三点按钮：只保留图标本身，用于评论列表这类密集排布。
+ *
+ * 触控区仍是 40dp，只是不再画 COUI 的圆盘与光晕。
+ */
+@Composable
+fun CouiBareMoreButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    contentDescription: String? = null,
+    tint: Color = Color.Unspecified,
+    size: Dp = 40.dp,
+    iconSize: Dp = 18.dp,
+) {
+    val click = appActionWithFeedback(onClick)
+    val semanticsModifier = if (contentDescription == null) {
+        Modifier
+    } else {
+        Modifier.semantics { this.contentDescription = contentDescription }
+    }
+    Box(
+        modifier = modifier
+            .size(size)
+            .then(semanticsModifier)
+            .appActionClickable(enabled = enabled, onClick = click),
+        contentAlignment = Alignment.Center,
+    ) {
+        CouiMoreGlyph(tint = tint, iconSize = iconSize)
+    }
+}
+
+/**
  * 只有视觉的三点圆盘，不含点击与按压反馈。
  *
  * 用于外层已经承担手势的场景（按钮锚点、玻璃菜单源、自绘触控区），

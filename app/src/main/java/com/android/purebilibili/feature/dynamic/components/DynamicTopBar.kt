@@ -109,6 +109,8 @@ fun DynamicTopBarWithTabs(
     shouldShowHorizontalUserList: Boolean = false,
     onAuthorSearchClick: (() -> Unit)? = null,
     authorSearchSource: com.android.purebilibili.core.ui.components.AppGlassMenuSource? = null,
+    /** Forces the progressive material even when the global top-blur switch is off. */
+    forceProgressiveBlur: Boolean = false,
 ) {
     val density = LocalDensity.current
     val statusBarHeight = WindowInsets.statusBars.getTop(density).let { with(density) { it.toDp() } }
@@ -120,7 +122,8 @@ fun DynamicTopBarWithTabs(
         com.android.purebilibili.core.theme.LocalAppUiStyle.current == com.android.purebilibili.core.theme.AppUiStyle.COUI17
     val headerBlurEnabled = appThemeConfig.headerBlurEnabled
     val progressiveTopBlurEnabled = appThemeConfig.progressiveTopBlurEnabled
-    val isProgressiveBlurActive = progressiveTopBlurEnabled && !headerBlurEnabled
+    val isProgressiveBlurActive = forceProgressiveBlur ||
+        (progressiveTopBlurEnabled && !headerBlurEnabled)
     val isProgressiveFadeActive = appThemeConfig.progressiveTopFadeEnabled && !headerBlurEnabled
     val collapseArrowRotation = animateFloatAsState(
         targetValue = if (actionDockCollapsed) 0f else 180f,

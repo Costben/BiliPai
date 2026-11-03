@@ -27,6 +27,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import com.android.purebilibili.core.util.PickMultipleGalleryVisualMedia
 import com.android.purebilibili.core.plugin.skin.LocalUiSkinState
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.MutableTransitionState
 import com.android.purebilibili.core.ui.rememberAppBottomSheetMotion
 import androidx.compose.animation.AnimatedVisibility
@@ -34,6 +35,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.*
 import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -49,6 +53,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalConfiguration
@@ -79,8 +84,14 @@ import com.android.purebilibili.core.util.FormatUtils
 import com.android.purebilibili.core.util.LocalWindowSizeClass
 import com.android.purebilibili.data.model.response.MentionSearchUser
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
+import io.github.suqi8.coui.kmp.basic.GradientStrokeStyle
+import io.github.suqi8.coui.kmp.basic.InnerShadowStyle
+import io.github.suqi8.coui.kmp.basic.materialShadowEdge
+import io.github.suqi8.coui.kmp.layout.BottomSheetDefaults
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 private const val COMMENT_INPUT_FOCUS_RETRY_COUNT = 3
 private const val COMMENT_INPUT_FOCUS_RETRY_DELAY_MS = 80L
@@ -243,6 +254,7 @@ fun CommentInputDialog(
     allowImageAttachment: Boolean = true,
     showSyncToDynamic: Boolean = true,
     showProgressInsert: Boolean = true,
+    couiSheet: Boolean = false,
 ) {
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.screenWidthDp > configuration.screenHeightDp
@@ -310,6 +322,9 @@ fun CommentInputDialog(
     val sheetMotion = rememberAppBottomSheetMotion()
     val inputVisibility = remember { MutableTransitionState(false) }
     var dismissRequested by remember { mutableStateOf(false) }
+    // COUI 面板的拖拽把手位移；松手未过阈值时回弹到 0。
+    val couiSheetDragOffset = remember { Animatable(0f) }
+    val couiSheetDragScope = rememberCoroutineScope()
     val latestOnDismiss by rememberUpdatedState(onDismiss)
     val inputActive = visible && !dismissRequested
     LaunchedEffect(visible, draftKey) {
@@ -421,7 +436,8 @@ fun CommentInputDialog(
             }
             // 写评论时需要参照下层评论；输入窗在两种主题及玻璃开关下均不模糊背景。
             // 只退出本输入窗的模糊，不修改其他弹层的默认材质或模糊行为。
-            com.android.purebilibili.core.ui.ModalWindowBlurBehindEffect(enabled = false)
+            // COUI 17 的面板按 ColorOS 材质走：窗口背后模糊 + 半透明填充 + 内阴影描边。
+            com.android.purebilibili.core.ui.ModalWindowBlurBehindEffect(enabled = couiSheet)
             val density = LocalDensity.current
             val imeBottomPx = WindowInsets.ime.getBottom(density)
             val navigationBarsBottomPx = WindowInsets.navigationBars.getBottom(density)
@@ -489,10 +505,31 @@ fun CommentInputDialog(
                         modifier = modifier
                             .widthIn(max = inputOverlayMaxWidthDp.dp)
                             .fillMaxWidth()
-                            .then(if (inputExpanded) Modifier.fillMaxHeight() else Modifier.wrapContentHeight()),
+                            .then(if (inputExpanded) Modifier.fillMaxHeight() else Modifier.wrapContentHeight())
+                            .then(
+                                if (couiSheet) {
+                                    Modifier
+                                        .graphicsLayer { translationY = couiSheetDragOffset.value }
+                                        // ColorOS 17 的每个面板都带内阴影描边，材质高光由它提供。
+                                        .materialShadowEdge(
+                                            stroke = BottomSheetDefaults.stroke(),
+                                            cornerWeight = BottomSheetDefaults.CornerWeight,
+                                            cornerRadius = AppShapes.containerCornerDp(ContainerLevel.Sheet),
+                                            edgeStyle = GradientStrokeStyle.EDGE_STYLE_2,
+                                            shadowStyle = InnerShadowStyle.SHADOW_STYLE_2,
+                                        )
+                                } else {
+                                    Modifier
+                                }
+                            ),
                         shape = AppShapes.container(ContainerLevel.Sheet),
-                        color = MaterialTheme.colorScheme.surface,
-                        tonalElevation = 8.dp
+                        color = if (couiSheet) {
+                            // 半透明填充叠在窗口背后模糊上，就是 COUI 面板的材质。
+                            BottomSheetDefaults.backgroundColor().copy(alpha = 0.72f)
+                        } else {
+                            MaterialTheme.colorScheme.surface
+                        },
+                        tonalElevation = if (couiSheet) 0.dp else 8.dp
                     ) {
                         Box(
                             modifier = Modifier
@@ -512,6 +549,29 @@ fun CommentInputDialog(
                                 )
                                 .navigationBarsPadding() // 避让底部导航栏(手势条)
                         ) {
+                            if (couiSheet) {
+                                val dragDismissThresholdPx = with(density) { 96.dp.toPx() }
+                                CouiSheetDragHandle(
+                                    onDrag = { delta ->
+                                        couiSheetDragScope.launch {
+                                            couiSheetDragOffset.snapTo(
+                                                (couiSheetDragOffset.value + delta).coerceAtLeast(0f)
+                                            )
+                                        }
+                                    },
+                                    onDragEnd = {
+                                        val shouldDismiss = couiSheetDragOffset.value > dragDismissThresholdPx
+                                        couiSheetDragScope.launch {
+                                            if (shouldDismiss) {
+                                                couiSheetDragOffset.snapTo(0f)
+                                                dismissDialog()
+                                            } else {
+                                                couiSheetDragOffset.animateTo(0f)
+                                            }
+                                        }
+                                    },
+                                )
+                            }
                             // 紧凑态只取原生输入高度；展开态填满剩余视口，均先给发布栏留空间。
                             Box(
                                 modifier = Modifier
@@ -523,7 +583,14 @@ fun CommentInputDialog(
                                             max = layoutPolicy.inputBoxMaxHeightDp.dp
                                         )
                                     )
-                                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f), AppShapes.container(ContainerLevel.Chip))
+                                    .background(
+                                        color = if (couiSheet) {
+                                            COUITheme.colorScheme.surfaceContainer.copy(alpha = 0.55f)
+                                        } else {
+                                            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                                        },
+                                        shape = AppShapes.container(ContainerLevel.Chip),
+                                    )
                                     .testTag("comment_composer_editor_surface")
                                     .padding(
                                         start = COMMENT_INPUT_EDITOR_HORIZONTAL_PADDING_DP.dp,
@@ -1206,5 +1273,36 @@ private fun CommentMentionSearchPanel(
                 }
             }
         }
+    }
+}
+
+/**
+ * COUI 底部面板的拖拽把手：24dp 触控带 + 36×4dp 胶囊。
+ *
+ * 尺寸与颜色对齐 `BottomSheetDefaults`，让共享输入弹层在 COUI 皮肤下与原生面板一致。
+ */
+@Composable
+private fun CouiSheetDragHandle(
+    onDrag: (Float) -> Unit,
+    onDragEnd: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(24.dp)
+            .draggable(
+                orientation = Orientation.Vertical,
+                state = rememberDraggableState { onDrag(it) },
+                onDragStopped = { onDragEnd() },
+            ),
+        contentAlignment = Alignment.Center,
+    ) {
+        Box(
+            modifier = Modifier
+                .size(width = 36.dp, height = 4.dp)
+                .clip(RoundedCornerShape(2.dp))
+                .background(BottomSheetDefaults.dragHandleColor()),
+        )
     }
 }

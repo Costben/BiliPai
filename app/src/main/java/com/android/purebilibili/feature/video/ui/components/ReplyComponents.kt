@@ -1313,7 +1313,12 @@ fun ReplyItemView(
     // Null preserves the native MD3/Miuix layout and all other comment callers.
     avatarListState: LazyListState? = null,
     avatarItemKey: Any = item.rpid,
-    onAvatarClick: (String) -> Unit
+    onAvatarClick: (String) -> Unit,
+    /**
+     * 动态详情这类「卡片式评论区」：条目之间不再画分割线，右上角菜单只留三点，
+     * 楼中楼预览单独包一层容器底。默认关闭，保持其它调用方的原生排版。
+     */
+    flatCommentRow: Boolean = false
 ) {
     val replyShareContext = com.android.purebilibili.feature.share.LocalReplyShareContext.current
     var showImagePreview by remember(item.oid, item.rpid) { mutableStateOf(false) }
@@ -2041,9 +2046,24 @@ fun ReplyItemView(
                         modifier = Modifier
                             .fillMaxWidth()
                             // This preview is already inside the indented body column.
-                            .clip(AppShapes.container(ContainerLevel.Chip))
-                            .background(appearance.composerHintBackgroundColor)
-                            .padding(horizontal = 8.dp, vertical = 8.dp),
+                            .clip(
+                                if (flatCommentRow) {
+                                    AppShapes.container(ContainerLevel.Card)
+                                } else {
+                                    AppShapes.container(ContainerLevel.Chip)
+                                }
+                            )
+                            .background(
+                                if (flatCommentRow) {
+                                    com.android.purebilibili.core.ui.AppSurfaceTokens.cardContainer()
+                                } else {
+                                    appearance.composerHintBackgroundColor
+                                }
+                            )
+                            .padding(
+                                horizontal = if (flatCommentRow) 10.dp else 8.dp,
+                                vertical = if (flatCommentRow) 10.dp else 8.dp,
+                            ),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         previewReplies.forEachIndexed { index, subReply ->
@@ -2231,28 +2251,44 @@ fun ReplyItemView(
             )
         }
 
-        com.android.purebilibili.core.ui.components.CouiMoreButton(
-            onClick = openButtonActions,
-            modifier = Modifier
-                .appGlassMenuSource(actionButtonSource, onOpen = openButtonActions)
-                .align(Alignment.TopEnd)
-                .size(layoutPolicy.actionButtonSizeDp.dp)
-                .testTag("$COMMENT_ACTION_BUTTON_TAG_PREFIX${item.rpid}"),
-            contentDescription = "评论操作",
-            tint = appearance.actionTint,
-            iconSize = 18.dp,
-        )
+        if (flatCommentRow) {
+            com.android.purebilibili.core.ui.components.CouiBareMoreButton(
+                onClick = openButtonActions,
+                modifier = Modifier
+                    .appGlassMenuSource(actionButtonSource, onOpen = openButtonActions)
+                    .align(Alignment.TopEnd)
+                    .size(layoutPolicy.actionButtonSizeDp.dp)
+                    .testTag("$COMMENT_ACTION_BUTTON_TAG_PREFIX${item.rpid}"),
+                contentDescription = "评论操作",
+                tint = appearance.actionTint,
+                iconSize = 18.dp,
+            )
+        } else {
+            com.android.purebilibili.core.ui.components.CouiMoreButton(
+                onClick = openButtonActions,
+                modifier = Modifier
+                    .appGlassMenuSource(actionButtonSource, onOpen = openButtonActions)
+                    .align(Alignment.TopEnd)
+                    .size(layoutPolicy.actionButtonSizeDp.dp)
+                    .testTag("$COMMENT_ACTION_BUTTON_TAG_PREFIX${item.rpid}"),
+                contentDescription = "评论操作",
+                tint = appearance.actionTint,
+                iconSize = 18.dp,
+            )
+        }
 
-        AppHorizontalDivider(
-            modifier = Modifier.padding(
-                start = if (avatarListState != null) {
-                    layoutPolicy.horizontalPaddingDp.dp + NAGRAM_CHAT_AVATAR_SIZE_DP.dp +
-                        layoutPolicy.avatarContentSpacingDp.dp
-                } else layoutPolicy.dividerStartPaddingDp.dp
-            ),
-            thickness = 0.5.dp,
-            color = appearance.dividerColor.copy(alpha = 0.25f)
-        )
+        if (!flatCommentRow) {
+            AppHorizontalDivider(
+                modifier = Modifier.padding(
+                    start = if (avatarListState != null) {
+                        layoutPolicy.horizontalPaddingDp.dp + NAGRAM_CHAT_AVATAR_SIZE_DP.dp +
+                            layoutPolicy.avatarContentSpacingDp.dp
+                    } else layoutPolicy.dividerStartPaddingDp.dp
+                ),
+                thickness = 0.5.dp,
+                color = appearance.dividerColor.copy(alpha = 0.25f)
+            )
+        }
     }
 }
 

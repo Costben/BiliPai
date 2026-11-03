@@ -198,6 +198,8 @@ internal fun BiliPaiImmersiveTopBar(
     surfaceColor: Color = MaterialTheme.colorScheme.background,
     fadeEnabled: Boolean? = null,
     extendBelowBounds: Boolean = false,
+    /** Overrides the preset bottom extension; `0.dp` keeps [extendBelowBounds] semantics. */
+    progressiveBlurBottomExtensionDp: Dp = 0.dp,
     opaqueBackgroundFallback: Boolean = true,
     progressiveCompositeEnabled: Boolean = true,
     iconSurfaceColor: Color = Color.Transparent,
@@ -250,10 +252,14 @@ internal fun BiliPaiImmersiveTopBar(
                 modifier = Modifier
                     .matchParentSize()
                     .layout { measurable, constraints ->
-                        val extension = resolveProgressiveTopBlurBottomExtension(
-                            enabled = extendBelowBounds,
-                            endFraction = BILIPAI_PROGRESSIVE_TOP_BLUR_DEFAULT_GRADIENT.endFraction,
-                        ).roundToPx()
+                        val extension = if (progressiveBlurBottomExtensionDp > 0.dp) {
+                            progressiveBlurBottomExtensionDp.roundToPx()
+                        } else {
+                            resolveProgressiveTopBlurBottomExtension(
+                                enabled = extendBelowBounds,
+                                endFraction = BILIPAI_PROGRESSIVE_TOP_BLUR_DEFAULT_GRADIENT.endFraction,
+                            ).roundToPx()
+                        }
                         val extended = constraints.copy(
                             minHeight = constraints.minHeight + extension,
                             maxHeight = constraints.maxHeight + extension,

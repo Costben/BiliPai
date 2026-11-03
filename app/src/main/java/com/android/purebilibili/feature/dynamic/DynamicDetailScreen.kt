@@ -37,6 +37,7 @@ import com.android.purebilibili.core.ui.components.AppTextField
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.graphics.Color
+import com.android.purebilibili.core.ui.components.AppWindowAction
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppIconButton
 import androidx.compose.material3.MaterialTheme
@@ -75,6 +76,7 @@ import com.android.purebilibili.core.ui.rememberAppBackIcon
 import com.android.purebilibili.core.ui.rememberAppGridLayoutIcon
 import com.android.purebilibili.core.ui.rememberAppListLayoutIcon
 import com.android.purebilibili.data.model.response.DynamicItem
+import com.android.purebilibili.feature.dynamic.components.DynamicActionMenu
 import com.android.purebilibili.feature.dynamic.components.DynamicCardV2
 import com.android.purebilibili.feature.dynamic.components.DynamicCardActions
 import com.android.purebilibili.feature.dynamic.components.DynamicCardInteractionActions
@@ -163,13 +165,14 @@ fun DynamicDetailScreen(
     val homeSettings by SettingsManager.getHomeSettings(context)
         .collectAsStateWithLifecycle(initialValue = HomeSettings())
     val liquidGlassEnabled = homeSettings.androidNativeLiquidGlassEnabled
+    val couiSkin = LocalAppUiStyle.current == AppUiStyle.COUI17
     // Only scrolling content captures this backdrop. The comment controls remain sibling
     // overlays, matching video detail and preventing a RenderNode backdrop cycle.
     // Record a complete viewport, including its background. Capturing only the transparent
     // LazyColumn leaves sparse glyph/image bounds as filter input; edge-clamped sampling
     // can then stretch those bounds into rectangular bands inside the glass.
     // The composer stays outside this source to prevent sampling itself.
-    val detailCommentSource = if (liquidGlassEnabled) rememberChromeBackdropSource() else null
+    val detailCommentSource = if (liquidGlassEnabled || couiSkin) rememberChromeBackdropSource() else null
     val detailCommentBackdrop = detailCommentSource?.backdrop
     val detailCommentSourceModifier = if (detailCommentSource != null) {
         detailCommentSource.modifier.sharedGlobalWallpaperBackground(MaterialTheme.colorScheme.background)
@@ -238,14 +241,36 @@ fun DynamicDetailScreen(
             android.widget.Toast.makeText(context, message, android.widget.Toast.LENGTH_SHORT).show()
         }
     }
+    //  「更多」菜单在详情页只保留顶栏这一个入口，卡片作者行不再重复提供。
+    val detailManageAction: (DynamicManageAction) -> Unit = { action ->
+        dispatchDynamicManageAction(
+            action = action,
+            onReport = { pendingReport = it },
+            onEdit = { editingAction = it },
+            onNotInterested = {
+                interactionViewModel.handleManageAction(it) { success, msg ->
+                    android.widget.Toast.makeText(context, msg, android.widget.Toast.LENGTH_SHORT).show()
+                    if (success) onBack()
+                }
+            },
+            onOther = {
+                interactionViewModel.handleManageAction(it) { _, msg ->
+                    android.widget.Toast.makeText(context, msg, android.widget.Toast.LENGTH_SHORT).show()
+                }
+            },
+        )
+    }
     AppScaffold(
         modifier = Modifier.graphicsLayer {
             alpha = if (uiState is DynamicDetailUiState.Loading) 1f else contentRevealAlpha.value
         },
         blurContentReady = uiState !is DynamicDetailUiState.Loading,
+        //  详情页顶栏固定走渐进式模糊：内容滚到顶栏下方时要有材质，而不是只剩一层淡出。
+        //  额外下沿让标题下方的正文也进入模糊带，避免刚滚出标题就重新变锐利。
+        forceProgressiveTopBlur = true,
+        progressiveTopBlurExtraHeight = 72.dp,
         topBar = {
-            val canToggleImageLayout = (uiState as? DynamicDetailUiState.Success)
-                ?.let { shouldShowDynamicDetailImageLayoutToggle(it.item) } == true
+            val detailItem = (uiState as? DynamicDetailUiState.Success)?.item
             AppTopBar(
                 title = screenTitle,
                 navigationIcon = {
@@ -254,24 +279,72 @@ fun DynamicDetailScreen(
                     }
                 },
                 actions = {
-                    if (canToggleImageLayout) {
+                    if (detailItem != null) {
+                        val canToggleImageLayout =
+                            shouldShowDynamicDetailImageLayoutToggle(detailItem)
                         val nextImageLayout = toggleDynamicDetailImageLayout(effectiveDetailImageLayout)
-                        AppIconButton(
-                            onClick = {
-                                detailImageLayoutOverrideName = nextImageLayout.name
-                            }
-                        ) {
-                            AppIcon(
-                                imageVector = if (effectiveDetailImageLayout ==
-                                    SettingsManager.DynamicDetailImageLayout.EXPANDED
-                                ) {
-                                    rememberAppGridLayoutIcon()
-                                } else {
-                                    rememberAppListLayoutIcon()
-                                },
-                                contentDescription = "切换图片展示（当前：${effectiveDetailImageLayout.label}）",
+                        val viewActions = if (canToggleImageLayout) {
+                            listOf(
+                                AppWindowAction(
+                                    label = "切换图片展示",
+                                    icon = if (effectiveDetailImageLayout ==
+                                        SettingsManager.DynamicDetailImageLayout.EXPANDED
+                                    ) {
+                                        rememberAppListLayoutIcon()
+                                    } else {
+                                        rememberAppGridLayoutIcon()
+                                    },
+                                    summary = "当前：${effectiveDetailImageLayout.label}",
+                                    onClick = {
+                                        detailImageLayoutOverrideName = nextImageLayout.name
+                                    },
+                                )
                             )
+                        } else {
+                            emptyList()
                         }
+                        DynamicActionMenu(
+                            item = detailItem,
+                            currentUserMid = com.android.purebilibili.core.store.TokenManager.midCache,
+                            onManageAction = detailManageAction,
+                            onDeleteClick = { action ->
+                                interactionViewModel.deleteDynamic(action) { success, msg ->
+                                    android.widget.Toast.makeText(
+                                        context,
+                                        msg,
+                                        android.widget.Toast.LENGTH_SHORT,
+                                    ).show()
+                                    if (success) onBack()
+                                }
+                            },
+                            onWatchLaterClick = { aid ->
+                                interactionViewModel.addToWatchLater(aid) { _, msg ->
+                                    android.widget.Toast.makeText(
+                                        context,
+                                        msg,
+                                        android.widget.Toast.LENGTH_SHORT,
+                                    ).show()
+                                }
+                            },
+                            onShareToMessageClick = {
+                                onShareToMessageClick?.invoke(detailItem)
+                                    ?: run { pendingMessageShare = detailItem }
+                            },
+                            onCheckDynamicClick = {
+                                interactionViewModel.checkDynamic(detailItem.id_str) { _, msg ->
+                                    android.widget.Toast.makeText(
+                                        context,
+                                        msg,
+                                        android.widget.Toast.LENGTH_SHORT,
+                                    ).show()
+                                }
+                            },
+                            onLoadReplyInteractionStatus = { oid, type, onLoaded ->
+                                interactionViewModel.loadReplyInteractionStatus(oid, type, onLoaded)
+                            },
+                            extraViewActions = viewActions,
+                            moreTint = AppContentColors.secondaryText().copy(0.5f),
+                        )
                     }
                 }
             )
@@ -427,24 +500,7 @@ fun DynamicDetailScreen(
                                         }
                                     },
                                     onReserveClick = interactionViewModel::toggleDynamicReserve,
-                                    onManageAction = { action ->
-                                        dispatchDynamicManageAction(
-                                            action = action,
-                                            onReport = { pendingReport = it },
-                                            onEdit = { editingAction = it },
-                                            onNotInterested = {
-                                                interactionViewModel.handleManageAction(it) { success, msg ->
-                                                    android.widget.Toast.makeText(context, msg, android.widget.Toast.LENGTH_SHORT).show()
-                                                    if (success) onBack()
-                                                }
-                                            },
-                                            onOther = {
-                                                interactionViewModel.handleManageAction(it) { _, msg ->
-                                                    android.widget.Toast.makeText(context, msg, android.widget.Toast.LENGTH_SHORT).show()
-                                                }
-                                            },
-                                        )
-                                    },
+                                    onManageAction = detailManageAction,
                                     onLoadReplyInteractionStatus = { oid, type, onLoaded ->
                                         interactionViewModel.loadReplyInteractionStatus(oid, type, onLoaded)
                                     },
@@ -463,6 +519,8 @@ fun DynamicDetailScreen(
                                 forwardCountDelta = forwardCountDelta,
                                 detailImageLayout = effectiveDetailImageLayout,
                             ),
+                            withCardBackground = false,
+                            showAuthorMenu = false,
                         )
                     }
                 }
@@ -473,11 +531,13 @@ fun DynamicDetailScreen(
                             onShowReactions = { reactionItem = state.item },
                             sortMode = commentSortMode,
                             onSortModeChange = interactionViewModel::setDynamicCommentSortMode,
+                            flat = true,
                         )
                     }
                     dynamicInlineCommentItems(
                         avatarListState = (if (useSplitLayout) commentListState else detailListState)
                             .takeIf { avatarPushEnabled },
+                        flatCommentRow = true,
                         comments = comments,
                         isLoading = commentsLoading,
                         isLoadingMore = commentsLoadingMore,
@@ -624,7 +684,15 @@ fun DynamicDetailScreen(
                                         ) {
                                             LazyColumn(
                                                 state = commentListState,
-                                                modifier = Modifier.fillMaxSize(),
+                                                modifier = Modifier
+                                                    .fillMaxSize()
+                                                    .then(
+                                                        if (detailCommentBackdrop != null) {
+                                                            detailCommentSourceModifier
+                                                        } else {
+                                                            Modifier
+                                                        }
+                                                    ),
                                                 contentPadding = PaddingValues(top = paddingValues.calculateTopPadding(), bottom = commentContentBottomPadding),
                                             ) {
                                                 commentContent()
@@ -636,13 +704,8 @@ fun DynamicDetailScreen(
                                                 .fillMaxWidth()
                                                 .imePadding()
                                         ) {
-                                            AppHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-                                            AppSurface(
-                                                modifier = Modifier.fillMaxWidth(),
-                                                color = resolveDynamicDetailBottomBarColor(LocalAppUiStyle.current, MaterialTheme.colorScheme),
-                                                tonalElevation = 0.dp,
-                                                shadowElevation = 0.dp,
-                                            ) {
+                                            // COUI 17：底部不再叠一层分隔线与容器，只留搜索框本身。
+                                            if (couiSkin) {
                                                 commentComposer(
                                                     Modifier
                                                         .fillMaxWidth()
@@ -651,6 +714,23 @@ fun DynamicDetailScreen(
                                                             vertical = AppSpacingTokens.Medium,
                                                         )
                                                 )
+                                            } else {
+                                                AppHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                                                AppSurface(
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    color = resolveDynamicDetailBottomBarColor(LocalAppUiStyle.current, MaterialTheme.colorScheme),
+                                                    tonalElevation = 0.dp,
+                                                    shadowElevation = 0.dp,
+                                                ) {
+                                                    commentComposer(
+                                                        Modifier
+                                                            .fillMaxWidth()
+                                                            .padding(
+                                                                horizontal = AppSpacingTokens.Large,
+                                                                vertical = AppSpacingTokens.Medium,
+                                                            )
+                                                    )
+                                                }
                                             }
                                         }
                                     }
@@ -676,7 +756,10 @@ fun DynamicDetailScreen(
                                     modifier = Modifier
                                         .fillMaxSize()
                                         .then(
-                                            if (floatingCommentComposer && detailCommentBackdrop != null) {
+                                            if (
+                                                (floatingCommentComposer || couiSkin) &&
+                                                detailCommentBackdrop != null
+                                            ) {
                                                 detailCommentSourceModifier
                                             } else {
                                                 Modifier
@@ -711,13 +794,8 @@ fun DynamicDetailScreen(
                                         .fillMaxWidth()
                                         .imePadding()
                                 ) {
-                                    AppHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-                                    AppSurface(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        color = resolveDynamicDetailBottomBarColor(LocalAppUiStyle.current, MaterialTheme.colorScheme),
-                                        tonalElevation = 0.dp,
-                                        shadowElevation = 0.dp,
-                                    ) {
+                                    // COUI 17：底部不再叠一层分隔线与容器，只留搜索框本身。
+                                    if (couiSkin) {
                                         commentComposer(
                                             Modifier
                                                 .fillMaxWidth()
@@ -726,6 +804,23 @@ fun DynamicDetailScreen(
                                                     vertical = AppSpacingTokens.Medium,
                                                 ),
                                         )
+                                    } else {
+                                        AppHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                                        AppSurface(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            color = resolveDynamicDetailBottomBarColor(LocalAppUiStyle.current, MaterialTheme.colorScheme),
+                                            tonalElevation = 0.dp,
+                                            shadowElevation = 0.dp,
+                                        ) {
+                                            commentComposer(
+                                                Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(
+                                                        horizontal = AppSpacingTokens.Large,
+                                                        vertical = AppSpacingTokens.Medium,
+                                                    ),
+                                            )
+                                        }
                                     }
                                 }
                             }

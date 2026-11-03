@@ -79,7 +79,7 @@ internal fun DynamicFeedSkeletonCard(
         modifier = modifier
             .fillMaxWidth()
             .clip(cardShape)
-            .background(MaterialTheme.colorScheme.surfaceContainerLow)
+            .background(com.android.purebilibili.core.ui.AppSurfaceTokens.cardContainer())
             .padding(AppSpacingTokens.Medium)
     ) {
         // 作者行：头像 + 名称/时间
