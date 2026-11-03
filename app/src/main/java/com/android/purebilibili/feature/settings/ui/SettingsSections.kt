@@ -380,11 +380,15 @@ private fun SettingsRootCategoryRow(
                 style = COUITheme.textStyles.main,
                 fontWeight = FontWeight.Medium,
                 color = AppContentColors.primaryText(),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
             AppText(
                 text = subtitle,
                 style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText(),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
         }
         AppIcon(

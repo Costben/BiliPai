@@ -409,7 +409,13 @@ private fun FavoriteCategoryContent(
                 verticalArrangement = Arrangement.Center,
             ) {
                 AppText(state.error, color = AppContentColors.error())
-                AppButton(onClick = onRetry) { AppText("重试") }
+                AppButton(
+                    onClick = onRetry,
+                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                        containerColor = AppContentColors.accent(),
+                        contentColor = AppContentColors.onAccent(),
+                    ),
+                ) { AppText("重试") }
             }
             visibleItems.isEmpty() -> Box(
                 Modifier.fillMaxSize().padding(top = headerInset),

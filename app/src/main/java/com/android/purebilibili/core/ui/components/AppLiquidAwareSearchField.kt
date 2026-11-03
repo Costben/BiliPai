@@ -118,6 +118,9 @@ fun AppLiquidAwareSearchField(
                 placeholder = placeholder,
                 height = liquidHeight,
                 containerColor = com.android.purebilibili.core.ui.AppSurfaceTokens.searchContainer(),
+                // COUI 的搜索框统一是胶囊形；原生输入框默认的 12dp 圆角在非玻璃分支下
+                // 会退化成圆角矩形，和玻璃分支的胶囊对不上。
+                shape = CircleShape,
                 focusRequester = focusRequester,
                 autoFocusEnabled = autoFocusEnabled,
                 interactionSource = interactionSource,

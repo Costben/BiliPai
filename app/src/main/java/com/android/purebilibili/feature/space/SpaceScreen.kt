@@ -6198,7 +6198,13 @@ private fun SpaceErrorSection(
             color = AppContentColors.secondaryText()
         )
         Spacer(modifier = Modifier.height(actionGap))
-        AppButton(onClick = onRetry) {
+        AppButton(
+            onClick = onRetry,
+            colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                containerColor = AppContentColors.accent(),
+                contentColor = AppContentColors.onAccent(),
+            ),
+        ) {
             AppText("重试")
         }
     }
@@ -6220,7 +6226,13 @@ private fun SpaceErrorState(
                 color = AppContentColors.secondaryText()
             )
             Spacer(modifier = Modifier.height(12.dp))
-            AppButton(onClick = onRetry) {
+            AppButton(
+                onClick = onRetry,
+                colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                    containerColor = AppContentColors.accent(),
+                    contentColor = AppContentColors.onAccent(),
+                ),
+            ) {
                 AppText("重试")
             }
         }

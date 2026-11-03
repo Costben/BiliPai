@@ -39,7 +39,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.Dp
@@ -583,6 +586,197 @@ fun AdaptivePreferenceGroupRenderer(
     }
 }
 
+// ═══════════════════════════════════════════════════
+//  COUI 17 preference rows
+// ═══════════════════════════════════════════════════
+
+/**
+ * COUI 17 设置行的统一内边距与间距。
+ *
+ * 有说明与无说明共用同一套垂直内边距，说明固定单行，行高最多只差一行 footnote，
+ * 不再随说明折行翻成邻行的 1.6 倍。
+ */
+private val CouiPreferenceRowHorizontalPadding = 16.dp
+private val CouiPreferenceRowVerticalPadding = 12.dp
+private val CouiPreferenceIconTextGap = 14.dp
+private val CouiPreferenceValueStartPadding = 12.dp
+private val CouiPreferenceTrailingGap = 8.dp
+private val CouiPreferenceChevronGap = 6.dp
+private val CouiPreferenceChevronSize = 14.dp
+
+/** COUI 行尾状态文字的上限宽度（`coui_preference_status_text_max_width`，162dp）。 */
+private val CouiPreferenceValueMaxWidth = 162.dp
+
+@Composable
+private fun CouiPreferenceIconSlot(
+    icon: ImageVector?,
+    iconPainter: Painter?,
+    containerColor: Color,
+    contentColor: Color,
+    containerSize: Dp,
+    glyphSize: Dp,
+    cornerRadius: Dp,
+) {
+    if (icon == null && iconPainter == null) return
+    Box(
+        modifier = Modifier
+            .size(containerSize)
+            .appPreferenceIconBackground(color = containerColor, cornerRadius = cornerRadius),
+        contentAlignment = Alignment.Center,
+    ) {
+        if (icon != null) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = contentColor,
+                modifier = Modifier.size(glyphSize),
+            )
+        } else if (iconPainter != null) {
+            Icon(
+                painter = iconPainter,
+                contentDescription = null,
+                tint = contentColor,
+                modifier = Modifier.size(glyphSize),
+            )
+        }
+    }
+    Spacer(modifier = Modifier.width(CouiPreferenceIconTextGap))
+}
+
+/**
+ * COUI 17 行文字块：单行标题与右侧值同基线对齐，说明固定单行省略。
+ * 右侧值自带行尾内边距与最大宽度，不会挤到行缘。
+ */
+@Composable
+private fun CouiPreferenceTextBlock(
+    title: String,
+    subtitle: String?,
+    textColor: Color,
+    subtitleColor: Color,
+    value: String? = null,
+    valueColor: Color = AppContentColors.secondaryText(),
+    valueOnLongPress: (() -> Unit)? = null,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Text(
+                text = appSearchHighlightedText(title),
+                style = COUITheme.textStyles.headline1,
+                color = textColor,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .weight(1f)
+                    .alignByBaseline(),
+            )
+            if (!value.isNullOrBlank()) {
+                Text(
+                    text = value,
+                    style = COUITheme.textStyles.body2,
+                    color = valueColor,
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.End,
+                    modifier = Modifier
+                        .widthIn(max = CouiPreferenceValueMaxWidth)
+                        .padding(start = CouiPreferenceValueStartPadding)
+                        .onLongPressAction(
+                            enabled = valueOnLongPress != null,
+                            onLongPress = { valueOnLongPress?.invoke() },
+                        )
+                        .alignByBaseline(),
+                )
+            }
+        }
+        if (!subtitle.isNullOrBlank()) {
+            Text(
+                text = appSearchHighlightedText(subtitle),
+                style = COUITheme.textStyles.footnote1,
+                color = subtitleColor,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+    }
+}
+
+@Composable
+private fun CouiPreferenceRow(
+    title: String,
+    subtitle: String?,
+    textColor: Color,
+    subtitleColor: Color,
+    modifier: Modifier = Modifier,
+    icon: ImageVector? = null,
+    iconPainter: Painter? = null,
+    iconContainerColor: Color = Color.Unspecified,
+    iconContentColor: Color = Color.Unspecified,
+    iconContainerSize: Dp = 38.dp,
+    iconGlyphSize: Dp = 20.dp,
+    iconCornerRadius: Dp = 10.dp,
+    value: String? = null,
+    valueColor: Color = AppContentColors.secondaryText(),
+    valueOnLongPress: (() -> Unit)? = null,
+    showChevron: Boolean = false,
+    chevronTint: Color = AppContentColors.secondaryText(),
+    trailingContent: (@Composable () -> Unit)? = null,
+    onClick: (() -> Unit)? = null,
+    rowAlpha: Float = 1f,
+) {
+    val haptic = LocalHapticFeedback.current
+    val hapticsEnabled = LocalAppThemeConfig.current.hapticFeedbackEnabled
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .heightIn(min = AppChromeSizeTokens.CompactRowMinHeightDp.dp)
+            .alpha(rowAlpha)
+            .clickable(enabled = onClick != null) {
+                if (hapticsEnabled) haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                onClick?.invoke()
+            }
+            .padding(
+                horizontal = CouiPreferenceRowHorizontalPadding,
+                vertical = CouiPreferenceRowVerticalPadding,
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        CouiPreferenceIconSlot(
+            icon = icon,
+            iconPainter = iconPainter,
+            containerColor = iconContainerColor,
+            contentColor = iconContentColor,
+            containerSize = iconContainerSize,
+            glyphSize = iconGlyphSize,
+            cornerRadius = iconCornerRadius,
+        )
+        CouiPreferenceTextBlock(
+            modifier = Modifier.weight(1f),
+            title = title,
+            subtitle = subtitle,
+            textColor = textColor,
+            subtitleColor = subtitleColor,
+            value = value,
+            valueColor = valueColor,
+            valueOnLongPress = valueOnLongPress,
+        )
+        if (trailingContent != null || showChevron) {
+            Spacer(modifier = Modifier.width(CouiPreferenceTrailingGap))
+            trailingContent?.invoke()
+            if (showChevron) {
+                Spacer(modifier = Modifier.width(CouiPreferenceChevronGap))
+                Icon(
+                    imageVector = AppIcons.AutoMirrored.Filled.ArrowForwardIos,
+                    contentDescription = null,
+                    tint = chevronTint,
+                    modifier = Modifier.size(CouiPreferenceChevronSize),
+                )
+            }
+        }
+    }
+}
+
 @Composable
 internal fun AdaptiveSwitchPreferenceContent(
     icon: ImageVector? = null,
@@ -647,6 +841,37 @@ private fun AdaptiveSwitchPreferenceBody(
         iconStyle,
     )
     val listItemStyle = rememberResolvedAppListItemStyle()
+    if (uiStyle == AppUiStyle.COUI17) {
+        // COUI 17：单行标题 + 可选单行说明，开关固定在行尾；行高不随说明折行变化。
+        CouiPreferenceRow(
+            icon = icon,
+            iconContainerColor = effectiveIconTint.copy(alpha = iconBackgroundAlpha),
+            iconContentColor = iconContentColor,
+            iconContainerSize = visualSpec.iconContainerSizeDp.dp,
+            iconGlyphSize = visualSpec.iconGlyphSizeDp.dp,
+            iconCornerRadius = visualSpec.iconCornerRadiusDp.dp,
+            title = title,
+            subtitle = subtitle,
+            textColor = textColor,
+            subtitleColor = subtitleColor,
+            trailingContent = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (titleTrailingContent != null) {
+                        titleTrailingContent()
+                        Spacer(modifier = Modifier.width(CouiPreferenceTrailingGap))
+                    }
+                    AppAdaptiveSwitch(
+                        checked = checked,
+                        onCheckedChange = onCheckedChange,
+                        enabled = enabled,
+                    )
+                }
+            },
+            onClick = if (enabled) ({ onCheckedChange(!checked) }) else null,
+            rowAlpha = if (enabled) 1f else 0.6f,
+        )
+        return
+    }
     if (listItemStyle == AppListItemStyle.NATIVE && uiStyle == AppUiStyle.MATERIAL3) {
         // MD3 原生:ListItem + M3 Switch
         val haptic = LocalHapticFeedback.current
@@ -799,6 +1024,7 @@ fun AdaptiveSliderPreferenceRenderer(
     subtitleColor: Color = AppContentColors.secondaryText(),
     valueColor: Color = AppContentColors.primaryText()
 ) {
+    val uiStyle = LocalAppUiStyle.current
     val visualSpec = rememberAdaptiveListComponentVisualSpec()
     val rowSpec = rememberAdaptiveListRowVisualSpec()
     val iconTreatment = LocalAppPreferenceIconTreatment.current
@@ -821,6 +1047,46 @@ fun AdaptiveSliderPreferenceRenderer(
         iconStyle,
     )
     val iconCornerRadius = visualSpec.iconCornerRadiusDp.dp
+    if (uiStyle == AppUiStyle.COUI17) {
+        // COUI 17：标题与数值同基线，说明单行；滑块独占下一行，内边距与其它设置行一致。
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    horizontal = CouiPreferenceRowHorizontalPadding,
+                    vertical = CouiPreferenceRowVerticalPadding,
+                ),
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                CouiPreferenceIconSlot(
+                    icon = icon,
+                    iconPainter = null,
+                    containerColor = effectiveIconTint.copy(alpha = iconBackgroundAlpha),
+                    contentColor = iconContentColor,
+                    containerSize = visualSpec.iconContainerSizeDp.dp,
+                    glyphSize = visualSpec.iconGlyphSizeDp.dp,
+                    cornerRadius = iconCornerRadius,
+                )
+                CouiPreferenceTextBlock(
+                    modifier = Modifier.weight(1f),
+                    title = title,
+                    subtitle = subtitle,
+                    textColor = textColor,
+                    subtitleColor = subtitleColor,
+                    value = valueLabel,
+                    valueColor = valueColor,
+                )
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+            AppSlider(
+                value = value,
+                onValueChange = onValueChange,
+                valueRange = valueRange,
+                steps = steps,
+            )
+        }
+        return
+    }
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -1043,6 +1309,38 @@ internal fun AdaptivePreferenceContent(
     )
     val listItemStyle = rememberResolvedAppListItemStyle()
     val nativeListItem = listItemStyle == AppListItemStyle.NATIVE
+    if (uiStyle == AppUiStyle.COUI17 && !centered) {
+        // COUI 17：单行标题 + 右侧值 + 可选单行说明；值与行右缘保持行内边距，不再贴边。
+        CouiPreferenceRow(
+            icon = icon,
+            iconPainter = iconPainter,
+            iconContainerColor = if (effectiveIconTint == Color.Unspecified) {
+                Color.Transparent
+            } else {
+                effectiveIconTint.copy(alpha = iconBackgroundAlpha)
+            },
+            iconContentColor = iconContentColor,
+            iconContainerSize = visualSpec.iconContainerSizeDp.dp,
+            iconGlyphSize = visualSpec.iconGlyphSizeDp.dp,
+            iconCornerRadius = iconCornerRadius,
+            title = title,
+            subtitle = subtitle,
+            textColor = textColor,
+            subtitleColor = subtitleColor,
+            value = value,
+            valueColor = valueColor,
+            valueOnLongPress = if (enableCopy && onCopyRequest != null) {
+                { onCopyRequest?.invoke(copyValue ?: value.orEmpty(), title) }
+            } else {
+                null
+            },
+            showChevron = onClick != null && showChevron,
+            chevronTint = chevronTint,
+            trailingContent = trailingContent,
+            onClick = onClick,
+        )
+        return
+    }
     if (nativeListItem && uiStyle == AppUiStyle.MATERIAL3) {
         Md3NativeListItemContent(
             icon = icon,

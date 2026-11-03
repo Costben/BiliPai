@@ -52,27 +52,33 @@ fun AppCompactInputField(
         if (autoFocusEnabled) requester.requestFocus()
     }
     if (com.android.purebilibili.core.ui.isMiuixNonGlassEnabled()) {
-        // 原生输入框自行测量文字与边距，不把玻璃输入框的固定高度或胶囊形状带入此分支。
-        io.github.suqi8.coui.kmp.basic.TextField(
-            value = value,
-            onValueChange = onValueChange,
-            modifier = modifier.heightIn(min = height).focusRequester(requester),
-            label = placeholder,
-            useLabelAsPlaceholder = true,
-            readOnly = readOnly,
-            singleLine = singleLine,
-            maxLines = maxLines,
-            interactionSource = interactionSource,
-            keyboardOptions = keyboardOptions,
-            keyboardActions = keyboardActions,
-            leadingIcon = leadingIcon,
-            trailingIcon = trailingIcon,
-            colors = io.github.suqi8.coui.kmp.basic.TextFieldDefaults.textFieldColors(
-                backgroundColor = if (containerColor == AppSurfaceTokens.searchContainer()) {
-                    io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.secondaryContainer
-                } else containerColor,
-            ),
-        )
+        // COUI 原生输入框只有下划线、没有实色底，底色与圆角必须由外层容器提供；
+        // 否则搜索行会退化成分割线，和不带边框的 COUI 胶囊搜索框对不上。
+        Box(
+            modifier = modifier
+                .heightIn(min = height)
+                .clip(shape)
+                .background(containerColor),
+        ) {
+            io.github.suqi8.coui.kmp.basic.TextField(
+                value = value,
+                onValueChange = onValueChange,
+                modifier = Modifier.fillMaxWidth().heightIn(min = height).focusRequester(requester),
+                label = placeholder,
+                useLabelAsPlaceholder = true,
+                readOnly = readOnly,
+                singleLine = singleLine,
+                maxLines = maxLines,
+                interactionSource = interactionSource,
+                keyboardOptions = keyboardOptions,
+                keyboardActions = keyboardActions,
+                leadingIcon = leadingIcon,
+                trailingIcon = trailingIcon,
+                colors = io.github.suqi8.coui.kmp.basic.TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent,
+                ),
+            )
+        }
         return
     }
     val textColor = AppContentColors.primaryText()
@@ -152,27 +158,33 @@ fun AppCompactInputField(
         if (autoFocusEnabled) requester.requestFocus()
     }
     if (com.android.purebilibili.core.ui.isMiuixNonGlassEnabled()) {
-        // 原生输入框自行测量文字与边距，不把玻璃输入框的固定高度或胶囊形状带入此分支。
-        io.github.suqi8.coui.kmp.basic.TextField(
-            value = value,
-            onValueChange = onValueChange,
-            modifier = modifier.heightIn(min = height).focusRequester(requester),
-            label = placeholder,
-            useLabelAsPlaceholder = true,
-            readOnly = readOnly,
-            singleLine = singleLine,
-            maxLines = maxLines,
-            interactionSource = interactionSource,
-            keyboardOptions = keyboardOptions,
-            keyboardActions = keyboardActions,
-            leadingIcon = leadingIcon,
-            trailingIcon = trailingIcon,
-            colors = io.github.suqi8.coui.kmp.basic.TextFieldDefaults.textFieldColors(
-                backgroundColor = if (containerColor == AppSurfaceTokens.searchContainer()) {
-                    io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.secondaryContainer
-                } else containerColor,
-            ),
-        )
+        // COUI 原生输入框只有下划线、没有实色底，底色与圆角必须由外层容器提供；
+        // 否则搜索行会退化成分割线，和不带边框的 COUI 胶囊搜索框对不上。
+        Box(
+            modifier = modifier
+                .heightIn(min = height)
+                .clip(shape)
+                .background(containerColor),
+        ) {
+            io.github.suqi8.coui.kmp.basic.TextField(
+                value = value,
+                onValueChange = onValueChange,
+                modifier = Modifier.fillMaxWidth().heightIn(min = height).focusRequester(requester),
+                label = placeholder,
+                useLabelAsPlaceholder = true,
+                readOnly = readOnly,
+                singleLine = singleLine,
+                maxLines = maxLines,
+                interactionSource = interactionSource,
+                keyboardOptions = keyboardOptions,
+                keyboardActions = keyboardActions,
+                leadingIcon = leadingIcon,
+                trailingIcon = trailingIcon,
+                colors = io.github.suqi8.coui.kmp.basic.TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent,
+                ),
+            )
+        }
         return
     }
     val textColor = AppContentColors.primaryText()

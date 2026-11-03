@@ -1646,7 +1646,13 @@ fun HomeScreen(
     val bottomBarVisible = isGlobalBottomBarVisible
     // App Shell keeps this stable while the bottom bar animates out, so the feed
     // content padding does not shift during tab/detail navigation.
-    val homeListBottomPadding = LocalBottomBarContentPadding.current
+    // 下滑隐藏时宿主留白会随底栏一起收起，这里改用 dock 的固定占位兜底，
+    // 保证列表最后一条在 dock 复现时仍然完整可见。
+    val homeListBottomPadding = com.android.purebilibili.feature.home.components.rememberDockAwareBottomContentPadding(
+        shellPadding = LocalBottomBarContentPadding.current,
+        reserveDock = !useSideNavigation &&
+            bottomBarVisibilityMode != SettingsManager.BottomBarVisibilityMode.ALWAYS_HIDDEN,
+    )
 
     //  [修复] 跟踪是否正在导航到/从视频页 - 必须在 LaunchedEffect 之前声明
     var isVideoNavigating by remember { mutableStateOf(false) }
@@ -1702,7 +1708,8 @@ fun HomeScreen(
                 firstVisibleItem = firstVisibleItem,
                 scrollOffset = scrollOffset,
                 isVideoNavigating = isVideoNavigating,
-                contentInteractionRestored = isHomeContentInteractionRestored
+                contentInteractionRestored = isHomeContentInteractionRestored,
+                isAtScrollEnd = !currentGridState.canScrollForward,
             )
 
             previousScrollState = scrollUpdate.state

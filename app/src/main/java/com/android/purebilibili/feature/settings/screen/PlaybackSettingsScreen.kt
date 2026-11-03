@@ -34,6 +34,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -508,12 +509,16 @@ SettingsItemAnchor("playback.video_second_codec_preference") {
                                 Column(modifier = Modifier.weight(1f)) {
                                     AppText(
                                         text = "倍速提示背景深浅",
-                                        color = AppContentColors.primaryText()
+                                        color = AppContentColors.primaryText(),
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
                                     )
                                     AppText(
                                         text = "调高后，倍速提示和其他提示的背景更深",
                                         style = COUITheme.textStyles.footnote1,
-                                        color = AppContentColors.secondaryText()
+                                        color = AppContentColors.secondaryText(),
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
                                     )
                                 }
                                 AppSurface(

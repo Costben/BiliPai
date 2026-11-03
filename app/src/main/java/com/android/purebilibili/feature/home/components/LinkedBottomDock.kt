@@ -382,11 +382,19 @@ internal fun LinkedBottomDock(
         val navigationColor = com.android.purebilibili.core.ui.AppInteractionColors.nativeNavigation(
             com.android.purebilibili.core.ui.AppNavigationColorRole.BAR,
         )?.selectedContent ?: accentColor
+        // 页面输入框获得焦点时，浮在键盘上方的 dock 会挡住正在编辑的内容。
+        // 只有 dock 自己的搜索框展开时才需要跟着 IME 上浮，其余情况整体让位。
+        val imeVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0
+        val dockOwnsIme = phase == LinkedDockPhase.Search
+        val hideDockForIme = imeVisible && !dockOwnsIme
         BoxWithConstraints(
-            modifier = modifier.fillMaxWidth().imePadding().navigationBarsPadding()
+            modifier = modifier.fillMaxWidth()
+                .then(if (dockOwnsIme) Modifier.imePadding() else Modifier)
+                .navigationBarsPadding()
                 .padding(horizontal = 12.dp, vertical = 8.dp),
             contentAlignment = Alignment.TopCenter,
         ) {
+            if (hideDockForIme) return@BoxWithConstraints
             val density = LocalDensity.current
             val maximumWidth: Int
             val button: Int

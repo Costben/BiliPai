@@ -2983,7 +2983,13 @@ internal fun CommonListContent(
             )
             if (onRetry != null) {
                 Spacer(modifier = Modifier.height(AppSpacingTokens.Medium))
-                AppButton(onClick = onRetry) {
+                AppButton(
+                    onClick = onRetry,
+                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                        containerColor = AppContentColors.accent(),
+                        contentColor = AppContentColors.onAccent(),
+                    ),
+                ) {
                     AppText("重试")
                 }
             }

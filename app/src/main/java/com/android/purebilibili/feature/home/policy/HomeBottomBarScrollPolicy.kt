@@ -17,7 +17,8 @@ internal fun reduceHomeBottomBarListScroll(
     isVideoNavigating: Boolean,
     contentInteractionRestored: Boolean = false,
     topRevealThresholdPx: Int = 100,
-    offsetHysteresisPx: Int = 200
+    offsetHysteresisPx: Int = 200,
+    isAtScrollEnd: Boolean = false,
 ): HomeBottomBarScrollUpdate {
     val nextState = HomeBottomBarScrollState(
         firstVisibleItem = firstVisibleItem,
@@ -31,6 +32,9 @@ internal fun reduceHomeBottomBarListScroll(
     }
 
     val intent = when {
+        // 触底即恢复：列表底部已按 dock 高度预留，dock 复现不会盖住最后一条内容，
+        // 继续隐藏反而让用户在末尾失去导航入口。
+        isAtScrollEnd -> BottomBarVisibilityIntent.SHOW
         firstVisibleItem == 0 && scrollOffset < topRevealThresholdPx -> BottomBarVisibilityIntent.SHOW
         firstVisibleItem > previousState.firstVisibleItem -> BottomBarVisibilityIntent.HIDE
         firstVisibleItem < previousState.firstVisibleItem -> BottomBarVisibilityIntent.SHOW

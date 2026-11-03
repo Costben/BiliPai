@@ -453,12 +453,27 @@ fun DynamicScreen(
     val statusBarHeight = WindowInsets.statusBars.getTop(density).let { with(density) { it.toDp() } }
     val appNavigationSettings by SettingsManager.getAppNavigationSettings(context)
         .collectAsStateWithLifecycle(initialValue = AppNavigationSettings())
+    val effectiveBottomBarVisibilityMode = com.android.purebilibili.navigation.resolveEffectiveBottomBarVisibilityMode(
+        appNavigationSettings.bottomBarVisibilityMode,
+        com.android.purebilibili.core.theme.LocalAppUiStyle.current,
+    )
     val shouldAutoCollapseBottomBar = shouldAutoCollapseDynamicBottomBar(
-        visibilityMode = com.android.purebilibili.navigation.resolveEffectiveBottomBarVisibilityMode(appNavigationSettings.bottomBarVisibilityMode, com.android.purebilibili.core.theme.LocalAppUiStyle.current)
+        visibilityMode = effectiveBottomBarVisibilityMode
+    )
+    val useSideNavigation = com.android.purebilibili.core.util.shouldUseSidebarNavigationForLayout(
+        windowSizeClass = com.android.purebilibili.core.util.LocalWindowSizeClass.current,
+        tabletUseSidebar = appNavigationSettings.tabletUseSidebar,
+        foldPosture = com.android.purebilibili.core.util.LocalAppWindowAdaptiveInfo.current.posture,
     )
     // 底栏隐藏/复原若改变 contentPadding，会触发不等高卡片重排；平板与折叠屏上抽搐最明显。
     // 自动折叠期间钉住已预留的底部空间，底栏只做显隐、不拉动列表布局。
-    val liveListBottomPadding = LocalBottomBarContentPadding.current
+    // 宿主留白在 dock 隐藏时会收缩，因此以 dock 的固定占位作为下限，
+    // 避免末条卡片在 dock 复现时被压住。
+    val liveListBottomPadding = com.android.purebilibili.feature.home.components.rememberDockAwareBottomContentPadding(
+        shellPadding = LocalBottomBarContentPadding.current,
+        reserveDock = !useSideNavigation &&
+            effectiveBottomBarVisibilityMode != SettingsManager.BottomBarVisibilityMode.ALWAYS_HIDDEN,
+    )
     val isBottomBarVisibleForPadding = LocalBottomBarVisible.current
     val videoCardTransitionClock = com.android.purebilibili.core.ui.transition.LocalVideoCardTransitionClock.current
     val retainSourceBottomPadding = videoCardTransitionClock != null && (
@@ -703,6 +718,20 @@ fun DynamicScreen(
             setBottomBarVisible(true)
             bottomBarChromeScrollOffset.value = 0f
             bottomBarScrollState.value = DynamicBottomBarScrollState()
+        }
+    }
+
+    // 触底恢复 dock：底部留白已按 dock 固定高度预留，末条卡片不会被遮挡。
+    // 只在列表静止后判定，避免惯性滑动中途反复显隐。
+    val isDynamicListAtEnd by remember(activeListState) {
+        derivedStateOf {
+            val listState = activeListState ?: return@derivedStateOf false
+            !listState.isScrollInProgress && !listState.canScrollForward
+        }
+    }
+    LaunchedEffect(isDynamicListAtEnd, shouldAutoCollapseBottomBar) {
+        if (isDynamicListAtEnd && shouldAutoCollapseBottomBar) {
+            setBottomBarVisible(true)
         }
     }
 

@@ -552,7 +552,7 @@ class NativeThemeMigrationBoundaryTest {
 
         // L2 直读预算，逐类冻结。
         const val MAX_APP_MATERIAL_THEME_TYPOGRAPHY_READS = 13
-        const val MAX_APP_MATERIAL_THEME_COLOR_SCHEME_READS = 182
+        const val MAX_APP_MATERIAL_THEME_COLOR_SCHEME_READS = 180
         const val MAX_APP_HARDCODED_COLOR_LITERALS = 203
         const val MAX_APP_ROUNDED_CORNER_SHAPE_LITERALS = 183
 

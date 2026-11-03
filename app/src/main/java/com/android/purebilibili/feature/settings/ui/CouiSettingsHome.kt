@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.android.purebilibili.R
+import com.android.purebilibili.core.ui.components.AppPreference
 import io.github.suqi8.coui.kmp.basic.Card
 import io.github.suqi8.coui.kmp.basic.HorizontalDivider
 import io.github.suqi8.coui.kmp.basic.Icon
@@ -54,17 +55,13 @@ internal fun CouiSettingsHomeContent(
         Card(modifier = Modifier.fillMaxWidth()) {
             categories.forEachIndexed { index, category ->
                 val visual = rememberSettingsEntryVisual(category.searchTarget)
-                ArrowPreference(
+                // COUI 自带的 ArrowPreference 不限制 summary 行数，中文说明会被折成两行
+                // 甚至留下孤字；这里走 App 的单行设置行，标题与说明都按单行省略。
+                AppPreference(
+                    icon = visual.icon,
+                    iconTint = COUITheme.colorScheme.primary,
                     title = category.title,
-                    summary = category.subtitle,
-                    startAction = {
-                        CouiSettingsEntryIcon(
-                            icon = visual.icon,
-                            contentDescription = null,
-                            tint = COUITheme.colorScheme.primary,
-                            sizeDp = visual.iconSizeDp,
-                        )
-                    },
+                    subtitle = category.subtitle,
                     onClick = { onCategoryClick(category) },
                 )
                 if (index != categories.lastIndex) {

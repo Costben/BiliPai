@@ -17,8 +17,6 @@ import androidx.compose.ui.layout.LookaheadScope
 import androidx.compose.runtime.key
 import coil3.request.crossfade
 import coil3.request.placeholder
-import com.android.purebilibili.core.ui.resolveFilledButtonContainerColor
-import com.android.purebilibili.core.ui.resolveFilledButtonContentColor
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.appGentleActionClickable
 import com.android.purebilibili.core.ui.components.AppText
@@ -788,9 +786,8 @@ private fun ProfileScreenContent(
                     AppButton(
                         onClick = { viewModel.loadProfile(force = true) },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = resolveFilledButtonContainerColor(MaterialTheme.colorScheme),
-
-                            contentColor = resolveFilledButtonContentColor(MaterialTheme.colorScheme)
+                            containerColor = AppContentColors.accent(),
+                            contentColor = AppContentColors.onAccent()
                         )
                     ) {
                         AppIcon(rememberAppRefreshIcon(), contentDescription = null, modifier = Modifier.size(18.dp))

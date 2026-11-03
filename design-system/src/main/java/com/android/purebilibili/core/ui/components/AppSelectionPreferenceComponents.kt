@@ -241,7 +241,7 @@ fun <T> AppSingleChoicePreference(
     }
 
     if (presentation == AppSingleChoicePresentation.WINDOW_POPUP &&
-        LocalAppUiStyle.current.usesMiuixFamilySkin
+        LocalAppUiStyle.current == AppUiStyle.MIUIX
     ) {
         val selectedIndex = options.indexOfFirst { it.value == selectedValue }.coerceAtLeast(0)
         val dropdownItems = remember(options, optionLeading) {
@@ -291,8 +291,9 @@ fun <T> AppSingleChoicePreference(
         return
     }
 
-    // MD3 预设或居中弹窗模式：统一样式渲染条目，保证列表间距与弹出样式无关。
-    // 「跟随选项弹出」时点击条目在锚点处展开 MD3 DropdownMenu。
+    // COUI 17、MD3 预设或居中弹窗模式：统一样式渲染条目，保证列表间距与弹出样式无关。
+    // COUI 17 走 AppPreference 的 COUI 单行行（标题 + 右侧值），弹窗由 AppDropdownMenu 承载。
+    // 「跟随选项弹出」时点击条目在锚点处展开 DropdownMenu。
 
     var dialogVisible by rememberSaveable { mutableStateOf(false) }
     var menuExpanded by remember { mutableStateOf(false) }
