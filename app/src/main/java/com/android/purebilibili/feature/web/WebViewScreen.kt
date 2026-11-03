@@ -45,6 +45,7 @@ import com.android.purebilibili.core.ui.AppScaffold
 import com.android.purebilibili.core.ui.AppTopBar
 import com.android.purebilibili.core.ui.rememberAppBackIcon
 import com.android.purebilibili.core.ui.components.AppIconButton
+import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.util.BilibiliNavigationTarget
 import com.android.purebilibili.core.util.hasCommentLocation
 
@@ -146,7 +147,7 @@ fun WebViewScreen(
                 },
                 actions = {
                     TextButton(onClick = { openExternal(externalUrl ?: url) }, modifier = Modifier.appElasticPress()) {
-                        Text("外部打开")
+                        AppText("外部打开")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -162,7 +163,7 @@ fun WebViewScreen(
                 .padding(paddingValues)
         ) {
             if (rendererFailed || externalUrl != null) {
-                Text(
+                AppText(
                     text = if (rendererFailed) "网页渲染异常，请使用外部浏览器打开"
                         else "已交给外部应用打开，可返回评论区",
                     modifier = Modifier.padding(16.dp)
@@ -422,7 +423,7 @@ fun WebViewScreen(
                                 contentScale = androidx.compose.ui.layout.ContentScale.Fit,
                                 modifier = Modifier.fillMaxWidth().heightIn(max = 280.dp),
                             )
-                            Text("正在加载商品…", modifier = Modifier.padding(top = 16.dp))
+                            AppText("正在加载商品…", modifier = Modifier.padding(top = 16.dp))
                         }
                     }
                     }

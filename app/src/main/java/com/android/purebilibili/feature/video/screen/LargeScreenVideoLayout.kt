@@ -17,10 +17,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -282,11 +281,11 @@ internal fun LargeScreenVideoLayout(
                     ) {
                         intro(Modifier.fillMaxSize())
                     }
-                    VerticalDivider(
-                        modifier = Modifier.fillMaxHeight()
+                    Spacer(
+                        modifier = Modifier
+                            .width(1.dp)
+                            .fillMaxHeight()
                             .videoDetailTransitionChrome(transitionChromeAlphaProvider),
-                        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f),
-                        thickness = 1.dp,
                     )
                     player(
                         Modifier
@@ -294,11 +293,11 @@ internal fun LargeScreenVideoLayout(
                             .height(metrics.playerHeightDp.dp)
                             .then(playerBackdropModifier),
                     )
-                    VerticalDivider(
-                        modifier = Modifier.fillMaxHeight()
+                    Spacer(
+                        modifier = Modifier
+                            .width(1.dp)
+                            .fillMaxHeight()
                             .videoDetailTransitionChrome(transitionChromeAlphaProvider),
-                        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f),
-                        thickness = 1.dp,
                     )
                     Column(
                         modifier = Modifier
@@ -323,11 +322,11 @@ internal fun LargeScreenVideoLayout(
                                 .then(playerBackdropModifier),
                         )
                     }
-                    VerticalDivider(
-                        modifier = Modifier.fillMaxHeight()
+                    Spacer(
+                        modifier = Modifier
+                            .width(1.dp)
+                            .fillMaxHeight()
                             .videoDetailTransitionChrome(transitionChromeAlphaProvider),
-                        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f),
-                        thickness = 1.dp,
                     )
                     Box(
                         modifier = Modifier
@@ -358,11 +357,11 @@ internal fun LargeScreenVideoLayout(
                         ) {
                             intro(Modifier.fillMaxSize())
                         }
-                        VerticalDivider(
-                            modifier = Modifier.fillMaxHeight()
+                        Spacer(
+                            modifier = Modifier
+                                .width(1.dp)
+                                .fillMaxHeight()
                                 .videoDetailTransitionChrome(transitionChromeAlphaProvider),
-                            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f),
-                            thickness = 1.dp,
                         )
                         Box(
                             modifier = Modifier
@@ -397,11 +396,11 @@ internal fun LargeScreenVideoLayout(
                             }
                         }
                     }
-                    VerticalDivider(
-                        modifier = Modifier.fillMaxHeight()
+                    Spacer(
+                        modifier = Modifier
+                            .width(1.dp)
+                            .fillMaxHeight()
                             .videoDetailTransitionChrome(transitionChromeAlphaProvider),
-                        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f),
-                        thickness = 1.dp,
                     )
                     Box(
                         modifier = Modifier

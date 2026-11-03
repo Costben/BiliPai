@@ -28,7 +28,6 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.material3.Text
 import com.android.purebilibili.core.ui.motion.AppMotionEasing
 
 /**
@@ -96,7 +95,7 @@ fun AnimatedCountText(
             }
         }
     }
-    Text(
+    AppText(
         text = prefix + formatter(
             if (count > Int.MAX_VALUE.toLong()) count else animatedValue.coerceAtLeast(0).toLong()
         ),

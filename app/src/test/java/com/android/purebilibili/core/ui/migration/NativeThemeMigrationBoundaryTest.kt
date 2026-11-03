@@ -534,27 +534,27 @@ class NativeThemeMigrationBoundaryTest {
 
         // Frozen from production sources on 2026-11-03; lower after each migration batch.
         // 别名已解析，COUI import 不计入债务。
-        const val MAX_FEATURE_MATERIAL3_FILES = 371
-        const val MAX_FEATURE_MATERIAL3_IMPORTS = 570
-        const val MAX_FEATURE_MATERIAL3_WILDCARD_IMPORTS = 86
+        const val MAX_FEATURE_MATERIAL3_FILES = 363
+        const val MAX_FEATURE_MATERIAL3_IMPORTS = 536
+        const val MAX_FEATURE_MATERIAL3_WILDCARD_IMPORTS = 83
         const val MAX_FEATURE_MIUIX_COMPONENT_FILES = 0
         const val MAX_FEATURE_MIUIX_COMPONENT_IMPORTS = 0
-        const val MAX_FEATURE_THEME_BRANCH_FILES = 84
-        const val MAX_FEATURE_THEME_BRANCH_LINES = 293
+        const val MAX_FEATURE_THEME_BRANCH_FILES = 83
+        const val MAX_FEATURE_THEME_BRANCH_LINES = 291
         const val MAX_FEATURE_DIRECT_PROGRESS_CALLS = 2
         const val MAX_PRIMITIVE_FACADE_MATERIAL3_IMPORTS = 45
 
         // 下列上限为 0 之外的存量：剩余命中都是 Material3 皮肤分支里的真实直连调用
         // （双皮肤共存期必须保留），不是 import 别名假阳性。后续批次迁移一处就调低一处。
-        const val MAX_APP_DIRECT_BUTTON_CALLS = 7
-        const val MAX_APP_DIRECT_ICON_BUTTON_CALLS = 15
+        const val MAX_APP_DIRECT_BUTTON_CALLS = 6
+        const val MAX_APP_DIRECT_ICON_BUTTON_CALLS = 11
         const val MAX_APP_ICON_BUTTON_FIXED_DIMENSION_CALLS = 39
 
         // L2 直读预算，逐类冻结。
-        const val MAX_APP_MATERIAL_THEME_TYPOGRAPHY_READS = 2130
-        const val MAX_APP_MATERIAL_THEME_COLOR_SCHEME_READS = 974
+        const val MAX_APP_MATERIAL_THEME_TYPOGRAPHY_READS = 2127
+        const val MAX_APP_MATERIAL_THEME_COLOR_SCHEME_READS = 949
         const val MAX_APP_HARDCODED_COLOR_LITERALS = 203
-        const val MAX_APP_ROUNDED_CORNER_SHAPE_LITERALS = 206
+        const val MAX_APP_ROUNDED_CORNER_SHAPE_LITERALS = 204
 
         const val MIUIX_NAVIGATION_EXCEPTION_FILE_COUNT = 23
         const val MIUIX_NAVIGATION_EXCEPTION_PATHS_SHA256 =

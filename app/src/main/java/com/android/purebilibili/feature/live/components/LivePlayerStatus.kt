@@ -9,7 +9,6 @@ import android.text.format.DateFormat
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import com.android.purebilibili.core.ui.components.AppText
 
 /** 全屏控制栏的时间、电量只观察系统广播，不参与播放器状态与流切换。 */
 @Composable
@@ -46,7 +46,7 @@ internal fun LivePlayerStatus(modifier: Modifier = Modifier) {
         onDispose { context.unregisterReceiver(receiver) }
     }
     Row(modifier, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-        Text(battery?.let { "$it%" } ?: "—%", color = Color.White, fontSize = 12.sp, modifier = Modifier.widthIn(min = 30.dp))
-        Text(time, color = Color.White, fontSize = 12.sp, modifier = Modifier.widthIn(min = 35.dp))
+        AppText(battery?.let { "$it%" } ?: "—%", color = Color.White, fontSize = 12.sp, modifier = Modifier.widthIn(min = 30.dp))
+        AppText(time, color = Color.White, fontSize = 12.sp, modifier = Modifier.widthIn(min = 35.dp))
     }
 }

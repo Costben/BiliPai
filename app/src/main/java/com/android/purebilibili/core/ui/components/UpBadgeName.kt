@@ -2,7 +2,6 @@ package com.android.purebilibili.core.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.android.purebilibili.core.ui.LocalUpBadgeVisibility
 import androidx.compose.runtime.CompositionLocalProvider
@@ -93,7 +92,7 @@ fun UpBadgeName(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(
+                        AppText(
                             text = name.ifBlank { "未知UP主" },
                             style = nameStyle,
                             color = nameColor,
@@ -107,7 +106,7 @@ fun UpBadgeName(
                         inlineTrailingContent()
                     }
                 } else {
-                    Text(
+                    AppText(
                         text = name.ifBlank { "未知UP主" },
                         style = nameStyle,
                         color = nameColor,
@@ -119,7 +118,7 @@ fun UpBadgeName(
                     )
                 }
                 if (shouldShowMeta) {
-                    Text(
+                    AppText(
                         text = metaText.orEmpty(),
                         style = metaStyle,
                         color = metaColor,

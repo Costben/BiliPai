@@ -49,10 +49,10 @@ import com.android.purebilibili.feature.dynamic.components.DynamicSelfAvatar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import com.android.purebilibili.core.ui.components.AppIcon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Button
 import com.android.purebilibili.core.ui.components.AppListItem
 import com.android.purebilibili.core.ui.components.AppRadioButton
+import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppTextButton
 import com.android.purebilibili.feature.dynamic.components.DynamicPublishComposer
@@ -1888,7 +1888,7 @@ private fun DynamicEmptyState(
 
 @Composable
 private fun OldContentDivider(label: String) {
-    Surface(
+    AppSurface(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = AppSpacingTokens.Large, vertical = AppSpacingTokens.Small),

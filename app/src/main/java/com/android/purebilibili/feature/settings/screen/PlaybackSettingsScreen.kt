@@ -3,6 +3,7 @@ package com.android.purebilibili.feature.settings
 
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppIcon
+import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppText
 
 import com.android.purebilibili.core.ui.components.AppSegmentOption
@@ -458,22 +459,21 @@ SettingsItemAnchor("playback.video_second_codec_preference") {
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Column(modifier = Modifier.weight(1f)) {
-                                    Text(
+                                    AppText(
                                         text = "倍速提示大小",
-                                        style = MaterialTheme.typography.bodyLarge,
                                         color = AppContentColors.primaryText()
                                     )
-                                    Text(
+                                    AppText(
                                         text = "调整长按加速提示的整体大小",
                                         style = MaterialTheme.typography.bodySmall,
                                         color = AppContentColors.secondaryText()
                                     )
                                 }
-                                Surface(
+                                AppSurface(
                                     shape = AppShapes.container(ContainerLevel.Pill),
                                     color = MaterialTheme.colorScheme.primaryContainer
                                 ) {
-                                    Text(
+                                    AppText(
                                         text = "${(hintScale * 100f).roundToInt()}%",
                                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                                         style = MaterialTheme.typography.labelMedium,
@@ -504,22 +504,21 @@ SettingsItemAnchor("playback.video_second_codec_preference") {
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Column(modifier = Modifier.weight(1f)) {
-                                    Text(
+                                    AppText(
                                         text = "倍速提示背景深浅",
-                                        style = MaterialTheme.typography.bodyLarge,
                                         color = AppContentColors.primaryText()
                                     )
-                                    Text(
+                                    AppText(
                                         text = "调高后，倍速提示和其他提示的背景更深",
                                         style = MaterialTheme.typography.bodySmall,
                                         color = AppContentColors.secondaryText()
                                     )
                                 }
-                                Surface(
+                                AppSurface(
                                     shape = AppShapes.container(ContainerLevel.Pill),
                                     color = MaterialTheme.colorScheme.primaryContainer
                                 ) {
-                                    Text(
+                                    AppText(
                                         text = "${(hintAlpha * 100f).roundToInt()}%",
                                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                                         style = MaterialTheme.typography.labelMedium,

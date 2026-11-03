@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -28,6 +27,7 @@ import com.android.purebilibili.core.theme.*
 import com.android.purebilibili.core.ui.AppAlertDialog
 import com.android.purebilibili.core.ui.AppDialogAction
 import com.android.purebilibili.core.ui.LocalAppThemeConfig
+import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.feature.settings.DarkThemeStyle
 import com.materialkolor.PaletteStyle
 import com.materialkolor.dynamiccolor.ColorSpec
@@ -140,7 +140,7 @@ internal fun UpdateHighlightsHost(
     }
     AppAlertDialog(
         onDismissRequest = ::dismiss,
-        title = { Text(if (applied) "已应用新配色" else if (snapshot != null) "预览 CMF 配色" else "本次更新") },
+        title = { AppText(if (applied) "已应用新配色" else if (snapshot != null) "预览 CMF 配色" else "本次更新") },
         text = {
             Column(
                 modifier = Modifier
@@ -149,33 +149,33 @@ internal fun UpdateHighlightsHost(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 if (applied) {
-                    Text("已启用 Standard · Cmf · SPEC_2026。可随时在外观设置中选择其他配色。")
+                    AppText("已启用 Standard · Cmf · SPEC_2026。可随时在外观设置中选择其他配色。")
                 } else if (snapshot != null) {
-                    Text("应用后将切换为 Standard · Cmf · SPEC_2026，保留颜色来源、种子色、对比度及高级覆盖色。")
+                    AppText("应用后将切换为 Standard · Cmf · SPEC_2026，保留颜色来源、种子色、对比度及高级覆盖色。")
                     CmfComparison(snapshot, glassEnabled)
-                    Text("仅预览不会保存设置。", style = MaterialTheme.typography.bodySmall)
+                    AppText("仅预览不会保存设置。", style = MaterialTheme.typography.bodySmall)
                 } else {
-                    Text("v${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.bodySmall)
-                    if (features.isEmpty()) Text("当前没有新的体验项目。")
+                    AppText("v${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.bodySmall)
+                    if (features.isEmpty()) AppText("当前没有新的体验项目。")
                     features.forEach { feature ->
-                        Text(feature.title, style = MaterialTheme.typography.titleMedium)
-                        Text(feature.description)
+                        AppText(feature.title, style = MaterialTheme.typography.titleMedium)
+                        AppText(feature.description)
                         if (isUpdateHighlightAlreadyEnabled(feature, currentSettings)) {
-                            Text("你已启用这项功能。", style = MaterialTheme.typography.bodySmall)
+                            AppText("你已启用这项功能。", style = MaterialTheme.typography.bodySmall)
                         } else if (!canPreviewUpdateHighlight(feature, currentSettings)) {
-                            Text("切换到 MD3 主题并选择自定义颜色后，可从这里预览；当前设置会保持不变。",
+                            AppText("切换到 MD3 主题并选择自定义颜色后，可从这里预览；当前设置会保持不变。",
                                 style = MaterialTheme.typography.bodySmall)
                         } else if (feature.action == UpdateHighlightAction.PREVIEW_CMF) {
-                            AppDialogAction(onClick = { previewSnapshot = currentSettings; message = null }) { Text("预览新配色") }
+                            AppDialogAction(onClick = { previewSnapshot = currentSettings; message = null }) { AppText("预览新配色") }
                         }
                     }
                 }
-                message?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+                message?.let { AppText(it, color = MaterialTheme.colorScheme.error) }
             }
         },
         confirmButton = {
             if (snapshot != null && !applied) {
-                if (applying) Text("正在应用…") else AppDialogAction(onClick = {
+                if (applying) AppText("正在应用…") else AppDialogAction(onClick = {
                     if (applying) return@AppDialogAction
                     applying = true
                     scope.launch {
@@ -193,11 +193,11 @@ internal fun UpdateHighlightsHost(
                             applying = false
                         }
                     }
-                }) { Text("应用新配色") }
-            } else AppDialogAction(onClick = ::dismiss) { Text(if (applied) "完成" else "保持当前设置") }
+                }) { AppText("应用新配色") }
+            } else AppDialogAction(onClick = ::dismiss) { AppText(if (applied) "完成" else "保持当前设置") }
         },
         dismissButton = {
-            if (snapshot != null && !applying) AppDialogAction(onClick = { previewSnapshot = null; message = null }) { Text("返回") }
+            if (snapshot != null && !applying) AppDialogAction(onClick = { previewSnapshot = null; message = null }) { AppText("返回") }
         },
     )
 }
@@ -221,15 +221,15 @@ private fun CmfComparison(settings: AppThemeSettings, glassEnabled: Boolean, mod
     }
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         palettes.forEach { (dark, current, candidate) ->
-            Text(if (dark) "深色模式" else "浅色模式", style = MaterialTheme.typography.titleSmall)
+            AppText(if (dark) "深色模式" else "浅色模式", style = MaterialTheme.typography.titleSmall)
             listOf("当前" to current, "CMF" to candidate).forEach { (label, scheme) ->
                 Column(
                     Modifier.fillMaxWidth().background(scheme.surface).padding(12.dp),
                     verticalArrangement = Arrangement.spacedBy(6.dp),
                 ) {
-                    Text("$label · 主要文字", color = scheme.onSurface)
-                    Text("说明文字", color = scheme.onSurfaceVariant)
-                    Text("选中状态", color = scheme.onSecondaryContainer,
+                    AppText("$label · 主要文字", color = scheme.onSurface)
+                    AppText("说明文字", color = scheme.onSurfaceVariant)
+                    AppText("选中状态", color = scheme.onSecondaryContainer,
                         modifier = Modifier.background(scheme.secondaryContainer).padding(8.dp))
                 }
             }

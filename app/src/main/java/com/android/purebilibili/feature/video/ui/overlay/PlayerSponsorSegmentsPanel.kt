@@ -9,10 +9,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+import com.android.purebilibili.core.ui.components.AppIcon
+import com.android.purebilibili.core.ui.components.AppSurface
+import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -111,10 +112,10 @@ fun PlayerSponsorSegmentsPanel(
                 ) {
                     Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         SponsorCategoryTitle(row.title, sponsorInfoColor(marker.category, marker.colorHex))
-                        Text(row.timeRange, fontSize = 13.sp, lineHeight = 16.sp,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        AppText(row.timeRange, fontSize = 13.sp, lineHeight = 16.sp,
+                            color = AppContentColors.secondaryText())
                     }
-                    Text(row.behaviorLabel, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    AppText(row.behaviorLabel, fontSize = 13.sp, color = AppContentColors.secondaryText())
                     if (row.seekTargetMs != null) {
                         Box(
                             Modifier.size(36.dp).semantics { contentDescription = row.seekDescription }
@@ -124,9 +125,9 @@ fun PlayerSponsorSegmentsPanel(
                                 },
                             contentAlignment = Alignment.Center,
                         ) {
-                            val tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                            val tint = AppContentColors.primaryText().copy(alpha = 0.7f)
                             if (behaviorForCategory(marker.category) == SponsorBlockSegmentBehavior.MARKER_ONLY) {
-                                Icon(AppIcons.Outlined.MyLocation, null, Modifier.size(18.dp), tint)
+                                AppIcon(AppIcons.Outlined.MyLocation, null, Modifier.size(18.dp), tint)
                             } else SponsorStepOverIcon(tint)
                         }
                     } else Spacer(Modifier.width(10.dp))
@@ -166,11 +167,12 @@ fun PlayerSponsorSegmentsPanel(
 private fun SponsorInfoDialog(onDismiss: () -> Unit, paneTitle: String, content: @Composable ColumnScope.() -> Unit) {
     Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Box(Modifier.fillMaxWidth().padding(horizontal = 40.dp, vertical = 24.dp), contentAlignment = Alignment.Center) {
-            Surface(
+            AppSurface(
                 modifier = Modifier.widthIn(min = 280.dp, max = 560.dp).fillMaxWidth()
                     .semantics { this.paneTitle = paneTitle },
-                shape = RoundedCornerShape(28.dp), color = MaterialTheme.colorScheme.surface,
-                contentColor = MaterialTheme.colorScheme.onSurface,
+                shape = RoundedCornerShape(28.dp),
+                color = AppSurfaceTokens.surface(),
+                contentColor = AppContentColors.primaryText(),
             ) {
                 Column(
                     Modifier.verticalScroll(rememberScrollState()).padding(vertical = 10.dp),
@@ -185,13 +187,13 @@ private fun SponsorInfoDialog(onDismiss: () -> Unit, paneTitle: String, content:
 private fun SponsorCategoryTitle(title: String, color: Color) {
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
         Box(Modifier.size(10.dp).background(color, CircleShape))
-        Text(title, fontSize = 14.sp, lineHeight = 14.sp)
+        AppText(title, fontSize = 14.sp, lineHeight = 14.sp)
     }
 }
 
 @Composable
 private fun SponsorVoteOption(text: String, onClick: () -> Unit) {
-    Text(text, fontSize = 14.sp, modifier = Modifier.fillMaxWidth()
+    AppText(text, fontSize = 14.sp, modifier = Modifier.fillMaxWidth()
         .clickable(role = Role.Button, onClick = onClick).padding(horizontal = 16.dp, vertical = 14.dp))
 }
 
@@ -216,5 +218,5 @@ private val SponsorStepOverVector = ImageVector.Builder(
 
 @Composable
 private fun SponsorStepOverIcon(tint: Color) {
-    Icon(SponsorStepOverVector, null, Modifier.size(18.dp), tint)
+    AppIcon(SponsorStepOverVector, null, Modifier.size(18.dp), tint)
 }

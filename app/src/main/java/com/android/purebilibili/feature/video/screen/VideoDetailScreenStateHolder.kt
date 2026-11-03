@@ -348,8 +348,8 @@ private fun CollapsedPlayerNavigationBar(
                                 )
                             }
                         } else {
-                            IconButton(onClick = onBack, modifier = Modifier.size(width = 42.dp, height = 34.dp).appElasticPress()) {
-                                Icon(
+                            AppIconButton(onClick = onBack, modifier = Modifier.size(width = 42.dp, height = 34.dp)) {
+                                AppIcon(
                                     AppIcons.Filled.ArrowBack,
                                     contentDescription = "返回",
                                     tint = AppContentColors.primaryText(),
@@ -368,8 +368,8 @@ private fun CollapsedPlayerNavigationBar(
                                 )
                             }
                         } else {
-                            IconButton(onClick = onHomeClick, modifier = Modifier.size(width = 42.dp, height = 34.dp).appElasticPress()) {
-                                Icon(
+                            AppIconButton(onClick = onHomeClick, modifier = Modifier.size(width = 42.dp, height = 34.dp)) {
+                                AppIcon(
                                     AppIcons.Filled.Home,
                                     contentDescription = "首页",
                                     tint = AppContentColors.primaryText(),
@@ -390,12 +390,12 @@ private fun CollapsedPlayerNavigationBar(
                             )
                             AppText("立即播放", color = AppContentColors.accent())
                         } else {
-                            Icon(
+                            AppIcon(
                                 imageVector = AppIcons.Filled.PlayArrow,
                                 contentDescription = null,
                                 tint = AppContentColors.accent(),
                             )
-                            Text("立即播放", color = AppContentColors.accent())
+                            AppText("立即播放", color = AppContentColors.accent())
                         }
                     }
                     if (useMiuixNonGlassChrome) {

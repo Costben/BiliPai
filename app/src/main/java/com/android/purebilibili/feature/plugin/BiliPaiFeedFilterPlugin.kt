@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,6 +37,7 @@ import com.android.purebilibili.core.ui.components.AppChoiceOption
 import com.android.purebilibili.core.ui.components.AppOutlinedTextField
 import com.android.purebilibili.core.ui.components.AppSingleChoicePreference
 import com.android.purebilibili.core.ui.components.AppSwitchPreference
+import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.data.model.response.VideoItem
 import kotlinx.coroutines.launch
@@ -269,7 +269,7 @@ class BiliPaiFeedFilterPlugin : BuiltinPlugin, FeedPlugin<VideoItem> {
                 style = MaterialTheme.typography.titleMedium,
                 color = AppContentColors.primaryText()
             )
-            Surface(
+            AppSurface(
                 modifier = Modifier.fillMaxWidth().clip(AppShapes.container(ContainerLevel.Card)),
                 color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.38f),
             ) {

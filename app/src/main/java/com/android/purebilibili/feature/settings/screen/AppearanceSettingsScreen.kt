@@ -2775,9 +2775,9 @@ internal fun ThemeRoleModeEditor(
                     .padding(12.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                Text(stringResource(R.string.appearance_theme_preview_primary), color = finalScheme.onSurface)
-                Text(stringResource(R.string.appearance_theme_preview_secondary), color = finalScheme.onSurfaceVariant)
-                Text(stringResource(R.string.appearance_theme_preview_selected), color = finalScheme.onSecondaryContainer,
+                AppText(stringResource(R.string.appearance_theme_preview_primary), color = finalScheme.onSurface)
+                AppText(stringResource(R.string.appearance_theme_preview_secondary), color = finalScheme.onSurfaceVariant)
+                AppText(stringResource(R.string.appearance_theme_preview_selected), color = finalScheme.onSecondaryContainer,
                     modifier = Modifier.background(finalScheme.secondaryContainer,
                         AppShapes.container(ContainerLevel.Field)).padding(8.dp))
             }

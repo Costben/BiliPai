@@ -131,16 +131,16 @@ fun BiliPaiTransferScanner(
     if (!granted) {
         Box(modifier = modifier, contentAlignment = Alignment.Center) {
             androidx.compose.foundation.layout.Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                androidx.compose.material3.Text("需要摄像头权限才能扫描二维码", color = AppContentColors.secondaryText())
+                AppText("需要摄像头权限才能扫描二维码", color = AppContentColors.secondaryText())
                 AppTextButton(onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) }) {
-                    androidx.compose.material3.Text("允许使用摄像头")
+                    AppText("允许使用摄像头")
                 }
                 AppTextButton(onClick = {
                     context.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                         Uri.parse("package:${context.packageName}")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-                }) { androidx.compose.material3.Text("打开权限设置") }
+                }) { AppText("打开权限设置") }
                 AppTextButton(onClick = { launchGalleryPicker() }) {
-                    androidx.compose.material3.Text("从相册识别")
+                    AppText("从相册识别")
                 }
             }
         }
@@ -281,7 +281,7 @@ fun BiliPaiTransferScanner(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     AppTextButton(onClick = { launchGalleryPicker() }) {
-                        androidx.compose.material3.Text("从相册识别")
+                        AppText("从相册识别")
                     }
                     if (cameraControl != null) {
                         AppTextButton(onClick = {
@@ -289,7 +289,7 @@ fun BiliPaiTransferScanner(
                             torchEnabled = next
                             cameraControl?.enableTorch(next)
                         }) {
-                            androidx.compose.material3.Text(if (torchEnabled) "关闭手电筒" else "手电筒")
+                            AppText(if (torchEnabled) "关闭手电筒" else "手电筒")
                         }
                     }
                 }

@@ -5,6 +5,8 @@ import com.android.purebilibili.core.ui.AppIcons
 import com.android.purebilibili.core.ui.components.AppTextButton as TextButton
 import com.android.purebilibili.core.ui.components.AppSwitch as Switch
 import com.android.purebilibili.core.ui.components.AppFilterChip as FilterChip
+import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.components.AppListItem
 import com.android.purebilibili.core.ui.components.AppText as Text
 import com.android.purebilibili.core.ui.components.AppIcon as Icon
 import com.android.purebilibili.core.ui.AppAlertDialog as AlertDialog
@@ -12,7 +14,6 @@ import com.android.purebilibili.core.ui.AppAlertDialog as AlertDialog
 import android.widget.NumberPicker
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,9 +35,9 @@ internal fun PlayerSleepTimerSettings(
     val presets = remember(minutes) { resolvePlayerSleepTimerPresets(minutes) }
     Text("定时关闭", Modifier.fillMaxWidth().padding(16.dp), fontSize = 14.sp)
     presets.forEach { value ->
-        ListItem(
+        AppListItem(
             headlineContent = { Text(if (value == 0) "禁用" else "$value 分钟", fontSize = 14.sp) },
-            trailingContent = { if ((minutes ?: 0) == value) Icon(AppIcons.Outlined.Done, null, tint = MaterialTheme.colorScheme.primary) },
+            trailingContent = { if ((minutes ?: 0) == value) Icon(AppIcons.Outlined.Done, null, tint = AppContentColors.accent()) },
             modifier = Modifier.fillMaxWidth().clickable {
                 onMinutesChange(value.takeIf { it > 0 }); onPresetSelected()
             },

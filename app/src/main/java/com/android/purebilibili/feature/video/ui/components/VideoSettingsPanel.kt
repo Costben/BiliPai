@@ -426,15 +426,15 @@ fun VideoSettingsPanel(
         var draftVolume by remember { mutableFloatStateOf(playerVolume.coerceIn(1f, 3f)) }
         AlertDialog(
             onDismissRequest = { showPlayerVolumeDialog = false },
-            title = { Text("播放器音量") },
+            title = { AppText("播放器音量") },
             text = {
                 Column {
-                    Text("${(draftVolume * 100).toInt()}%")
+                    AppText("${(draftVolume * 100).toInt()}%")
                     Slider(draftVolume, { draftVolume = it }, valueRange = 1f..3f, steps = 39)
                 }
             },
-            dismissButton = { TextButton({ showPlayerVolumeDialog = false }) { Text("取消") } },
-            confirmButton = { TextButton({ onPlayerVolumeChange(draftVolume); showPlayerVolumeDialog = false }) { Text("确认") } },
+            dismissButton = { TextButton({ showPlayerVolumeDialog = false }) { AppText("取消") } },
+            confirmButton = { TextButton({ onPlayerVolumeChange(draftVolume); showPlayerVolumeDialog = false }) { AppText("确认") } },
         )
     }
     PlayerNativeSettingsHost(
@@ -454,7 +454,7 @@ fun VideoSettingsPanel(
                     if (page != "main") PlayerSettingsRow("返回", onClick = { page = if (page == "cdnAdvanced") "cdn" else "main" })
                     val submenuTitle = when (page) { "quality" -> "选择画质"; "audio" -> "选择音质"; "codec" -> "首选编码格式"; "cdn", "cdnAdvanced" -> "CDN 设置"; "transform" -> "画面变换"; "enhancement" -> "画质增强"; "actionCounts" -> FullscreenActionCountSettings.TITLE; else -> null }
                     submenuTitle?.let { title ->
-                        Box(Modifier.fillMaxWidth().height(45.dp), contentAlignment = Alignment.Center) { Text(title, fontSize = 14.sp) }
+                        Box(Modifier.fillMaxWidth().height(45.dp), contentAlignment = Alignment.Center) { AppText(title, fontSize = 14.sp) }
                     }
                     when (page) {
                         "main" -> {

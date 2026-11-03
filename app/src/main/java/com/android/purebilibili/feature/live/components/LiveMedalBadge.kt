@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -18,6 +17,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalDensity
+import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.data.model.response.LiveMessageMedal
 import com.android.purebilibili.feature.live.LiveStatusPalette
 
@@ -41,7 +41,7 @@ internal fun rememberLiveMedalSize(medal: LiveMessageMedal): DpSize {
 @Composable
 internal fun LiveMedalBadge(medal: LiveMessageMedal, modifier: Modifier = Modifier) {
     val background = if (medal.backgroundColor != 0) Color(medal.backgroundColor) else LiveStatusPalette.MedalFallback
-    Text(
+    AppText(
         text = remember(medal.name, medal.level) { liveMedalLabel(medal) },
         color = Color(medal.textColor),
         style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp, lineHeight = 10.sp),

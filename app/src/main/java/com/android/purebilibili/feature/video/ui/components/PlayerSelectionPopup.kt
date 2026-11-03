@@ -10,8 +10,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.relocation.BringIntoViewRequester
 import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.DropdownMenu
+import com.android.purebilibili.core.ui.AppAlertDialog
+import com.android.purebilibili.core.ui.components.AppDropdownMenu
+import com.android.purebilibili.core.ui.components.AppDropdownMenuItem
+import com.android.purebilibili.core.ui.components.AppIcon
+import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.ui.window.Popup
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
@@ -28,10 +31,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.ui.window.PopupProperties
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Modifier
@@ -112,7 +112,7 @@ fun PlayerSelectionPopup(
             source = source, sourceLayer = sourceLayer, onSourceVisibilityChange = onSourceVisibilityChange,
         ) {
             Column {
-                if (showTitle) Text(title, style = MaterialTheme.typography.titleMedium,
+                if (showTitle) AppText(title,
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp))
                 content()
             }
@@ -252,10 +252,10 @@ fun PlayerSelectionPopup(
             }
         }
     } else if (placement == PlayerListPopupPlacement.CENTER) {
-        AlertDialog(
+        AppAlertDialog(
             onDismissRequest = onDismissRequest,
             confirmButton = {},
-            title = if (showTitle) { { Text(title) } } else null,
+            title = if (showTitle) { { AppText(title) } } else null,
             text = {
                 Column(modifier = menuModifier.verticalScroll(scrollState)) { content() }
             },
@@ -302,7 +302,7 @@ fun PlayerSelectionPopup(
                             height = with(density) { target.height.coerceAtLeast(0).toDp() },
                         ),
                 ) {
-                    DropdownMenu(
+                    AppDropdownMenu(
                         expanded = true,
                         onDismissRequest = onDismissRequest,
                         modifier = menuModifier,
@@ -316,7 +316,7 @@ fun PlayerSelectionPopup(
                         ),
                     ) {
                         if (showTitle) {
-                            Text(
+                            AppText(
                                 text = title,
                                 style = MaterialTheme.typography.titleSmall,
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
@@ -369,12 +369,12 @@ internal fun PlayerNativeDropdownItem(
             modifier = itemModifier,
             text = {
                 Column {
-                    Text(item.text)
-                    item.summary?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
+                    AppText(item.text)
+                    item.summary?.let { AppText(it, style = MaterialTheme.typography.bodySmall) }
                 }
             },
             enabled = enabled,
-            trailingIcon = if (isSelected) { { Icon(AppIcons.Filled.Check, contentDescription = null) } } else null,
+            trailingIcon = if (isSelected) { { AppIcon(AppIcons.Filled.Check, contentDescription = null) } } else null,
             onClick = { onSelectedIndexChange(index) },
         )
         return
@@ -391,19 +391,19 @@ internal fun PlayerNativeDropdownItem(
             )
         }
     } else {
-        DropdownMenuItem(
+        AppDropdownMenuItem(
             modifier = itemModifier,
             text = {
                 Column {
-                    Text(text = item.text)
+                    AppText(text = item.text)
                     item.summary?.let {
-                        Text(text = it, style = MaterialTheme.typography.bodySmall)
+                        AppText(text = it, style = MaterialTheme.typography.bodySmall)
                     }
                 }
             },
             enabled = enabled,
             trailingIcon = if (isSelected) {
-                { Icon(AppIcons.Filled.Check, contentDescription = null) }
+                { AppIcon(AppIcons.Filled.Check, contentDescription = null) }
             } else null,
             onClick = { onSelectedIndexChange(index) },
         )

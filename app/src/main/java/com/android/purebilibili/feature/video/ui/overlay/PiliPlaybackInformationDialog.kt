@@ -16,10 +16,9 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import com.android.purebilibili.core.ui.components.AppButton
+import com.android.purebilibili.core.ui.components.AppSurface
+import com.android.purebilibili.core.ui.components.AppText
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -86,7 +85,7 @@ internal fun PiliPlaybackInformationDialog(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 16.dp),
                 contentAlignment = Alignment.Center,
             ) {
-                Surface(
+                AppSurface(
                     modifier = Modifier.widthIn(max = 560.dp).fillMaxWidth().heightIn(max = maxHeight),
                     shape = RoundedCornerShape(24.dp),
                     color = Color(0xFF242424),
@@ -94,7 +93,7 @@ internal fun PiliPlaybackInformationDialog(
                     tonalElevation = 0.dp,
                 ) {
                     Column {
-                        Text(
+                        AppText(
                             text = "播放信息",
                             modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp, bottom = 16.dp),
                             style = TextStyle(color = Color.White, fontSize = 22.sp, lineHeight = 28.sp),
@@ -113,11 +112,11 @@ internal fun PiliPlaybackInformationDialog(
                                         .padding(horizontal = 24.dp, vertical = 10.dp),
                                     verticalArrangement = Arrangement.spacedBy(4.dp),
                                 ) {
-                                    Text(
+                                    AppText(
                                         text = row.label,
                                         style = TextStyle(color = Color.White, fontSize = 14.sp, lineHeight = 20.sp),
                                     )
-                                    Text(
+                                    AppText(
                                         text = row.value,
                                         style = TextStyle(color = Color(0xFFD0D0D0), fontSize = 13.sp, lineHeight = 19.sp),
                                     )
@@ -128,11 +127,8 @@ internal fun PiliPlaybackInformationDialog(
                             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
                             horizontalArrangement = Arrangement.End,
                         ) {
-                            TextButton(
-                                onClick = onDismiss,
-                                colors = ButtonDefaults.textButtonColors(contentColor = Color.White),
-                            ) {
-                                Text("确定", style = TextStyle(fontSize = 14.sp))
+                            AppButton(onClick = onDismiss) {
+                                AppText("确定", style = TextStyle(fontSize = 14.sp))
                             }
                         }
                     }

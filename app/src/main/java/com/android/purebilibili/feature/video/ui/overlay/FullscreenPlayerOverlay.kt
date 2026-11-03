@@ -127,6 +127,7 @@ import java.util.Locale
 import dev.chrisbanes.haze.HazeState
 import com.android.purebilibili.core.ui.blur.hazeSourceCompat
 import com.android.purebilibili.core.ui.AppShapes
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.ContainerLevel
 import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.NavigationEventTransitionState
@@ -1176,10 +1177,10 @@ fun FullscreenPlayerOverlay(
             enter = fadeIn(tween(200)),
             exit = fadeOut(tween(300))
         ) {
-            Surface(
-                shape = RoundedCornerShape(8.dp),
-                color = MaterialTheme.colorScheme.secondaryContainer,
-                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            AppSurface(
+                shape = AppShapes.container(ContainerLevel.Chip),
+                color = AppSurfaceTokens.secondaryContainer(),
+                contentColor = AppSurfaceTokens.onSecondaryContainer(),
                 shadowElevation = 4.dp
             ) {
                 AppText(

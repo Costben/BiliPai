@@ -31,13 +31,13 @@ import com.android.purebilibili.core.ui.components.AppButton
 import com.android.purebilibili.core.ui.AdaptiveLoadingIndicator
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Surface
 import com.android.purebilibili.core.ui.components.AppContentCard
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppIconButton
 import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.AppModalBottomSheet
 import com.android.purebilibili.core.ui.components.AppOutlinedTextField
+import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppTextButton
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -556,7 +556,7 @@ internal fun VideoNoteSidePanel(
     modifier: Modifier = Modifier
 ) {
     var selectedTab by remember { mutableIntStateOf(0) }
-    Surface(
+    AppSurface(
         modifier = modifier,
         shape = VideoDetailShapes.field(),
         color = MaterialTheme.colorScheme.surfaceContainerLow,
@@ -681,7 +681,7 @@ internal fun VideoNotePreviewPane(
     richTextState: RichTextState,
     modifier: Modifier = Modifier
 ) {
-    Surface(
+    AppSurface(
         modifier = modifier,
         shape = VideoDetailShapes.field(),
         color = MaterialTheme.colorScheme.surfaceContainerLow,

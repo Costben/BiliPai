@@ -1,5 +1,6 @@
 package com.android.purebilibili.feature.settings
 import com.android.purebilibili.core.ui.components.appElasticPress
+import com.android.purebilibili.core.ui.components.AppHorizontalDivider
 
 
 import androidx.compose.foundation.layout.Arrangement
@@ -24,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import io.github.suqi8.coui.kmp.basic.ButtonDefaults
 import io.github.suqi8.coui.kmp.basic.Card
 import io.github.suqi8.coui.kmp.basic.CardDefaults
-import io.github.suqi8.coui.kmp.basic.HorizontalDivider
 import io.github.suqi8.coui.kmp.basic.Icon
 import io.github.suqi8.coui.kmp.basic.IconButton
 import io.github.suqi8.coui.kmp.basic.LinearProgressIndicator
@@ -282,7 +282,7 @@ private fun MiuixReleaseNotes(
                         color = COUITheme.colorScheme.onSurfaceSecondary,
                     )
                 }
-                AppUpdateReleaseNotesBlock.Divider -> HorizontalDivider()
+                AppUpdateReleaseNotesBlock.Divider -> AppHorizontalDivider()
                 is AppUpdateReleaseNotesBlock.Paragraph -> Text(
                     text = block.text,
                     style = COUITheme.textStyles.body1,

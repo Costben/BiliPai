@@ -64,8 +64,6 @@ import com.android.purebilibili.core.util.animateScrollToTop
 import com.android.purebilibili.core.util.Logger
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberUpdatedState
@@ -621,8 +619,9 @@ private fun SubscriptionFeedGrid(
         }
         if (refreshErrors.isNotEmpty()) {
             item(span = StaggeredGridItemSpan.FullLine, key = "subscription_refresh_errors") {
-                Surface(
+                AppSurface(
                     color = MaterialTheme.colorScheme.errorContainer,
+                    contentColor = MaterialTheme.colorScheme.onErrorContainer,
                     shape = MaterialTheme.shapes.medium,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
@@ -1538,7 +1537,7 @@ private fun FeedInlineText(
     } else {
         style
     }
-    Text(
+    AppText(
         text = annotated,
         modifier = modifier,
         style = scaledStyle.copy(lineHeight = scaledStyle.fontSize * 1.55f),

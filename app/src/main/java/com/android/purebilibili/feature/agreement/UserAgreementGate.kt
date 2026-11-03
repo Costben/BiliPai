@@ -16,7 +16,6 @@ import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,8 +29,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.dp
 import com.android.purebilibili.core.ui.AppDialogAction
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.components.AppButton
 import com.android.purebilibili.core.ui.components.AppCard
+import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppTextButton
 
@@ -79,7 +80,7 @@ private fun UserAgreementGateScreen(onAgree: () -> Unit) {
     androidx.compose.runtime.LaunchedEffect(scrolledToEnd) {
         if (scrolledToEnd) reachedBottom = true
     }
-    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+    AppSurface(modifier = Modifier.fillMaxSize(), color = AppSurfaceTokens.background()) {
         Column(
             // Avoid the status bar / navigation bar so titles are never drawn underneath them.
             modifier = Modifier.fillMaxSize()

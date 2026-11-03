@@ -91,8 +91,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import com.android.purebilibili.core.ui.AppAlertDialog
 import com.android.purebilibili.core.ui.components.AppButton
 import com.android.purebilibili.core.ui.components.resolveUpNameColor
@@ -4014,12 +4012,12 @@ private fun SpaceContributionVideoSummaryBar(
                     }
                 }
             }
-            if (!glassSortMenu) DropdownMenu(
+            if (!glassSortMenu) com.android.purebilibili.core.ui.components.AppDropdownMenu(
                 expanded = sortMenuExpanded,
                 onDismissRequest = { sortMenuExpanded = false }
             ) {
                 VideoSortOrder.entries.forEach { order ->
-                    DropdownMenuItem(
+                    com.android.purebilibili.core.ui.components.AppDropdownMenuItem(
                         text = { AppText(order.displayName) },
                         onClick = {
                             onSelectSortOrder(order)

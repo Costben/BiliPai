@@ -228,7 +228,7 @@ internal fun ThemeCustomColorPickerDialog(
                                     color = previewScheme.surface,
                                     shape = AppShapes.container(ContainerLevel.Field),
                                 ) {
-                                    androidx.compose.material3.Text("Aa 示例文字", color = if (
+                                    AppText("Aa 示例文字", color = if (
                                         roleTarget == ThemeRoleColorTarget.LIGHT_SECONDARY_TEXT ||
                                         roleTarget == ThemeRoleColorTarget.DARK_SECONDARY_TEXT
                                     ) previewScheme.onSurfaceVariant else previewScheme.onSurface,

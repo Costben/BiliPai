@@ -3,9 +3,8 @@ package com.android.purebilibili.feature.video.ui.components
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.core.ui.components.appActionClickable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -14,13 +13,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import com.android.purebilibili.core.store.FullscreenActionCountSettings
+import com.android.purebilibili.core.ui.ContainerLevel
+import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.AppShapes
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+import com.android.purebilibili.core.ui.components.AppIcon
+import com.android.purebilibili.core.ui.components.AppListItem
+import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppSwitch
+import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.*
-import com.android.purebilibili.core.theme.AppUiStyle
-import com.android.purebilibili.core.theme.LocalAppUiStyle
 import com.android.purebilibili.core.ui.LocalAppThemeConfig
 
 
@@ -29,13 +34,12 @@ internal val LocalPlayerGlassSettingsSurface = compositionLocalOf { false }
 
 internal fun playerNativeMenuConfig(config: com.android.purebilibili.core.ui.AppThemeConfig) =
     config.copy(nativeMiuixPopupsEnabled = false)
-/** 播放器保留原生面板结构，内部菜单跟随应用玻璃开关；关闭玻璃不启用独立 Miuix 菜单。 */
+/** 播放器原生面板跟随应用皮肤：保留原生菜单结构，只关闭玻璃菜单的独立 Miuix 弹窗。 */
 @Composable
 internal fun PlayerNativeMenuTheme(content: @Composable () -> Unit) {
     val config = LocalAppThemeConfig.current
     CompositionLocalProvider(
         LocalAppThemeConfig provides playerNativeMenuConfig(config),
-        LocalAppUiStyle provides AppUiStyle.MATERIAL3,
         content = content,
     )
 }
@@ -106,7 +110,7 @@ internal fun PlayerNativeSettingsHost(
                         .padding(horizontal = 6.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text("更多操作", fontSize = 16.sp)
+                    AppText("更多操作", fontSize = 16.sp)
                     Spacer(Modifier.weight(1f))
                     PanelAction(AppIcons.Outlined.Close, "关闭", requestDismiss)
                 }
@@ -117,14 +121,14 @@ internal fun PlayerNativeSettingsHost(
     }
     PlayerNativeMenuTheme {
         DanmakuSettingsPanelHost(false, policy, onDismiss) {
-            Surface(
+            AppSurface(
                 modifier = Modifier
                     .padding(12.dp)
                     .padding(bottom = bottomPaddingDp.dp)
                     .width(menuWidth)
                     .heightIn(max = policy.maxHeightDp.dp),
-                color = MaterialTheme.colorScheme.surface,
-                shape = RoundedCornerShape(12.dp),
+                color = AppSurfaceTokens.surface(),
+                shape = AppShapes.container(ContainerLevel.Card),
             ) { content() }
         }
     }
@@ -139,9 +143,9 @@ internal fun PlayerSettingsRow(title: String, subtitle: String? = null, onClick:
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (title == "弹幕设置") {
-            PiliPlusDanmakuSettingsIcon(size = 20.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+            PiliPlusDanmakuSettingsIcon(size = 20.dp, tint = AppContentColors.secondaryText())
         } else {
-        Icon(
+        AppIcon(
             imageVector = when (title) {
                 "稍后再看（添加 / 移出）" -> AppIcons.Outlined.WatchLater
                 "查看笔记" -> AppIcons.Outlined.EditNote
@@ -171,14 +175,14 @@ internal fun PlayerSettingsRow(title: String, subtitle: String? = null, onClick:
             },
             contentDescription = null,
             modifier = Modifier.size(20.dp),
-            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            tint = AppContentColors.secondaryText(),
         )
         }
         Spacer(Modifier.width(16.dp))
         Column(Modifier.weight(1f)) {
-            Text(title, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
-            if (!subtitle.isNullOrBlank()) Text(
-                subtitle, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant,
+            AppText(title, fontSize = 14.sp, color = AppContentColors.primaryText())
+            if (!subtitle.isNullOrBlank()) AppText(
+                subtitle, fontSize = 12.sp, color = AppContentColors.secondaryText(),
             )
         }
     }
@@ -219,13 +223,13 @@ internal fun PlayerSettingsPopupRow(
         ) {
             options.forEachIndexed { index, label ->
                 com.android.purebilibili.core.ui.components.AppDropdownMenuItem(
-                    text = { Text(label, fontSize = 14.sp) },
+                    text = { AppText(label, fontSize = 14.sp) },
                     enabled = enabledOptions.getOrElse(index) { true },
                     onClick = {
                         expanded = false
                         if (label != current) onSelected(index)
                     },
-                    trailingIcon = if (label == current) ({ Icon(AppIcons.Outlined.Done, null) }) else null,
+                    trailingIcon = if (label == current) ({ AppIcon(AppIcons.Outlined.Done, null) }) else null,
                 )
             }
         }
@@ -241,16 +245,18 @@ internal fun PlayerSettingsSelectionRow(
     allowSelectedClick: Boolean = false,
     onClick: () -> Unit,
 ) {
-    ListItem(
-        headlineContent = { Text(title, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (enabled) 1f else 0.38f)) },
-        supportingContent = if (subtitle != null) ({ Text(subtitle, fontSize = 12.sp) }) else null,
-        trailingContent = { if (selected) Icon(AppIcons.Outlined.Done, null, tint = MaterialTheme.colorScheme.primary) },
-        modifier = Modifier.fillMaxWidth().appActionClickable(enabled = enabled) { if (!selected || allowSelectedClick) onClick() },
-        // 玻璃容器接管时透出父容器；其他场景保留原生列表底色。
-        colors = ListItemDefaults.colors(
-            containerColor = if (LocalPlayerGlassSettingsSurface.current) Color.Transparent
-            else MaterialTheme.colorScheme.surface,
-        ),
+    AppListItem(
+        headlineContent = { AppText(title, fontSize = 14.sp, color = AppContentColors.primaryText().copy(alpha = if (enabled) 1f else 0.38f)) },
+        supportingContent = if (subtitle != null) ({ AppText(subtitle, fontSize = 12.sp) }) else null,
+        trailingContent = { if (selected) AppIcon(AppIcons.Outlined.Done, null, tint = AppContentColors.accent()) },
+        modifier = Modifier
+            .fillMaxWidth()
+            // 玻璃容器接管时透出父容器；其他场景保留原生列表底色。
+            .background(
+                if (LocalPlayerGlassSettingsSurface.current) Color.Transparent
+                else AppSurfaceTokens.surface(),
+            )
+            .appActionClickable(enabled = enabled) { if (!selected || allowSelectedClick) onClick() },
     )
 }
 
@@ -269,11 +275,11 @@ internal fun PlayerSettingsToggleRow(
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(
+        AppText(
             text = title,
             modifier = Modifier.weight(1f),
             fontSize = 14.sp,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = AppContentColors.primaryText(),
         )
         AppSwitch(checked = checked, onCheckedChange = onCheckedChange, enabled = enabled)
     }
