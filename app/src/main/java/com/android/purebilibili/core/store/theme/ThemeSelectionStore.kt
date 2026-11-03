@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.first
  * Miuix 皮肤已由同血统的 COUI 17 取代，旧存档里的 MIUIX 在读取时改写为 COUI17。
  * 历史旧键 `ui_preset` / `android_native_variant_v1` 在首次读取时按
  * FRONTEND_ARCHITECTURE_THEME_SIMPLIFICATION_PLAN.md §5.2 迁移表单向迁移：
- * iOS、非法值 → MIUIX；全量缺失 → 新用户默认 Material 3；同一事务写入新键并删除旧键。
+ * iOS、非法值 → MIUIX；全量缺失 → 新用户默认 COUI 17；同一事务写入新键并删除旧键。
  */
 
 internal val KEY_THEME_SELECTION = stringPreferencesKey("theme_selection_v1")
@@ -51,7 +51,7 @@ internal data class ThemeSelectionMigrationResult(
 /**
  * 按迁移表计算迁移结果（纯函数，可测试）：
  * - 新键优先；非法新键视为缺失。
- * - 旧 iOS、非法值 → MIUIX；全量缺失 → Material 3；MD3 组合保留有效选择。
+ * - 旧 iOS、非法值 → MIUIX；全量缺失 → COUI 17；MD3 组合保留有效选择。
  * - 同一事务写入新键并删除旧键。
  */
 internal fun resolveThemeSelectionMigration(

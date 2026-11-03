@@ -32,9 +32,9 @@ class UiPresetSettingsPolicyTest {
     }
 
     @Test
-    fun missingLegacyKeys_defaultToMaterial3Style() {
+    fun missingLegacyKeys_defaultToCoui17Style() {
         assertEquals(
-            AppUiStyle.MATERIAL3,
+            AppUiStyle.COUI17,
             AppUiStyle.fromLegacyValues(
                 rawUiPreset = null,
                 rawAndroidNativeVariant = null

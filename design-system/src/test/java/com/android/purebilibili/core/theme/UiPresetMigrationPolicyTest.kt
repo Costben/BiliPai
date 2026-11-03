@@ -5,7 +5,7 @@ import kotlin.test.assertEquals
 
 /**
  * 覆盖 FRONTEND_ARCHITECTURE_THEME_SIMPLIFICATION_PLAN.md §5.2 的单向迁移表。
- * 目标：历史 iOS、非法值解析为 MIUIX；全量缺失使用 Material 3；MD3 组合保留有效选择。
+ * 目标：历史 iOS、非法值解析为 MIUIX；全量缺失（全新安装）使用 COUI 17；MD3 组合保留有效选择。
  */
 class UiPresetMigrationPolicyTest {
 
@@ -55,11 +55,11 @@ class UiPresetMigrationPolicyTest {
         )
     }
 
-    // --- 迁移表：全量缺失 → Material 3；部分缺失 / 非法值 → MIUIX ---
+    // --- 迁移表：全量缺失 → COUI 17；部分缺失 / 非法值 → MIUIX ---
 
     @Test
-    fun missingBothKeys_migratesToMaterial3() {
-        assertEquals(AppUiStyle.MATERIAL3, resolveLegacy(null, null))
+    fun missingBothKeys_migratesToCoui17() {
+        assertEquals(AppUiStyle.COUI17, resolveLegacy(null, null))
     }
 
     @Test

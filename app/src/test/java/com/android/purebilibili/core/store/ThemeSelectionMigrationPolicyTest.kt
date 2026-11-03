@@ -100,9 +100,9 @@ class ThemeSelectionMigrationPolicyTest {
     }
 
     @Test
-    fun missingKeys_migrateToMaterial3() {
+    fun missingKeys_migrateToCoui17() {
         val result = migrate(mutablePreferencesOf())
-        assertEquals(AppUiStyle.MATERIAL3, result.selection)
+        assertEquals(AppUiStyle.COUI17, result.selection)
         assertTrue(result.needsWrite)
     }
 
@@ -118,13 +118,13 @@ class ThemeSelectionMigrationPolicyTest {
     }
 
     @Test
-    fun invalidNewKey_isTreatedAsMissing_andUsesMaterial3Default() {
+    fun invalidNewKey_isTreatedAsMissing_andUsesCoui17Default() {
         val result = migrate(
             mutablePreferencesOf(
                 keySelection to "IOS"
             )
         )
-        assertEquals(AppUiStyle.MATERIAL3, result.selection)
+        assertEquals(AppUiStyle.COUI17, result.selection)
         assertTrue(result.needsWrite)
     }
 
@@ -175,12 +175,12 @@ class ThemeSelectionMigrationPolicyTest {
     }
 
     @Test
-    fun freshInstallWithNoThemeData_isAlreadySettledWithMaterial3AfterFirstRun() {
+    fun freshInstallWithNoThemeData_isAlreadySettledWithCoui17AfterFirstRun() {
         val prefs = mutablePreferencesOf()
         migrate(prefs).migrationEdits(prefs)
 
         val second = migrate(prefs)
-        assertEquals(AppUiStyle.MATERIAL3, second.selection)
+        assertEquals(AppUiStyle.COUI17, second.selection)
         assertFalse(second.needsWrite)
     }
 }

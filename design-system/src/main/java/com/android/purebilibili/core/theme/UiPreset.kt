@@ -44,7 +44,7 @@ enum class AppUiStyle {
 
     companion object {
         /**
-         * 按迁移表解析历史旧键：全量缺失使用新用户默认的 Material 3；
+         * 按迁移表解析历史旧键：全量缺失（全新安装）使用新用户默认的 COUI 17；
          * 历史 iOS 或非法组合迁移为 MIUIX；
          * COUI 17 变体单独存在时也按 COUI 17 恢复；
          * 仅 MD3 + 合法变体保留有效选择。
@@ -58,7 +58,7 @@ enum class AppUiStyle {
                 AndroidNativeVariant::fromValueOrNull
             )
             return when {
-                rawUiPreset == null && rawAndroidNativeVariant == null -> AppUiStyle.MATERIAL3
+                rawUiPreset == null && rawAndroidNativeVariant == null -> AppUiStyle.COUI17
                 // 老版本拆成两个键写库，新变体可能只留下变体键，不能因此退化成 MIUIX。
                 androidNativeVariant == AndroidNativeVariant.COUI17 -> AppUiStyle.COUI17
                 // 非法或历史 iOS 组合保留旧用户的 MIUIX 兼容行为。
