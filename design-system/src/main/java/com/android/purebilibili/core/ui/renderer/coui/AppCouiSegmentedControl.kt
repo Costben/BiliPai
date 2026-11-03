@@ -99,21 +99,13 @@ internal fun <T> AppCouiSegmentedControl(
     containerHorizontalPadding: Dp = 0.dp,
     onSelectionChange: (T) -> Unit,
 ) {
-    // Compact choices use the same native geometry and transition as other Miuix tabs.
-    AppCouiNonGlassTabs(
+    // 紧凑选项也不再画 Miuix 分段块：COUI 17 下与其它标签行同一套胶囊。
+    AppCouiChipTabRow(
         options = options,
         selectedValue = selectedValue,
         enabled = enabled,
-        compact = true,
-        scrollable = false,
-        minTabWidth = 0.dp,
-        colors = colors,
-        height = height,
         modifier = if (itemWidth == null) modifier.fillMaxWidth() else modifier,
-        fixedItemWidth = itemWidth,
-        labelFontSize = labelFontSize,
         containerHorizontalPadding = containerHorizontalPadding,
-        indicatorPositionProvider = indicatorPositionProvider,
         onSelectionChange = onSelectionChange,
     )
 }
@@ -141,6 +133,18 @@ internal fun <T> AppCouiTabRow(
     stretchToFill: Boolean = false,
     onSelectionChange: (T) -> Unit,
 ) {
+    // COUI 17：标签行就是 ColorOS 的胶囊标签组，不再走自绘的分段块。
+    if (LocalAppUiStyle.current == AppUiStyle.COUI17) {
+        AppCouiChipTabRow(
+            options = options,
+            selectedValue = selectedValue,
+            enabled = enabled,
+            modifier = modifier,
+            containerHorizontalPadding = containerHorizontalPadding,
+            onSelectionChange = onSelectionChange,
+        )
+        return
+    }
     // Native Miuix controls keep measured, padding-aware slots under either material.
     // Actual liquid dock rendering is selected outside this renderer.
     if (LocalAppUiStyle.current.usesMiuixFamilySkin || fixedItemWidth != null ||
