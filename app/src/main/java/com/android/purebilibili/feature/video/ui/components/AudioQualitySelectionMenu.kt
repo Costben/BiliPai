@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.IntRect
@@ -14,6 +13,7 @@ import com.android.purebilibili.core.ui.ContainerLevel
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.feature.video.playback.audio.AudioQualityOption
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 private val HiResGold = Color(0xFFFFD36A)
 private val DolbyBlue = Color(0xFF8DCDFF)
@@ -31,7 +31,7 @@ private fun AudioFormatBadge(text: String, accent: Color, background: Color, mod
         shape = AppShapes.container(ContainerLevel.Tag), border = BorderStroke(0.75.dp, accent),
     ) {
         AppText(
-            text = text, style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold,
+            text = text, style = COUITheme.textStyles.footnote2, fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp),
         )
     }

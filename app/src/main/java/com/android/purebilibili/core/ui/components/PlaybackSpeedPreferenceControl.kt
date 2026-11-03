@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,8 +30,11 @@ import com.android.purebilibili.core.store.normalizeLongPressSpeed
 import com.android.purebilibili.core.store.parseNewPlaybackSpeedOption
 import com.android.purebilibili.core.store.parseLongPressSpeedInput
 import com.android.purebilibili.core.ui.AppShapes
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.AppAlertDialog
 import com.android.purebilibili.core.ui.ContainerLevel
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import kotlin.math.roundToInt
 
 fun formatPlaybackSpeed(speed: Float): String {
@@ -68,13 +70,13 @@ fun LongPressSpeedPreferenceControl(
                     if (titleTrailingContent == null) {
                         AppText(
                             text = title,
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurface
+                            style = COUITheme.textStyles.main,
+                            color = AppContentColors.primaryText()
                         )
                     } else {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            AppText(text = title, style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f))
+                            AppText(text = title, style = COUITheme.textStyles.main,
+                                color = AppContentColors.primaryText(), modifier = Modifier.weight(1f))
                             titleTrailingContent()
                         }
                     }
@@ -82,8 +84,8 @@ fun LongPressSpeedPreferenceControl(
                 if (subtitle != null) {
                     AppText(
                         text = subtitle,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        style = COUITheme.textStyles.footnote1,
+                        color = AppContentColors.secondaryText()
                     )
                 }
             }
@@ -101,7 +103,7 @@ fun LongPressSpeedPreferenceControl(
                 AppText(
                     text = formatPlaybackSpeed(displayedSpeed),
                     color = com.android.purebilibili.core.ui.AppContentColors.link(),
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     fontWeight = FontWeight.SemiBold,
                 )
             }
@@ -135,8 +137,8 @@ fun LongPressSpeedPreferenceControl(
                                     showSpeedEditor = false
                                 },
                                 shape = AppShapes.container(ContainerLevel.Card),
-                                color = if (selected) MaterialTheme.colorScheme.primary
-                                    else MaterialTheme.colorScheme.surfaceVariant,
+                                color = if (selected) AppContentColors.accent()
+                                    else AppSurfaceTokens.surfaceContainer(),
                                 modifier = Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp)
                             ) {
                                 Box(
@@ -146,9 +148,9 @@ fun LongPressSpeedPreferenceControl(
                                 ) {
                                     AppText(
                                         text = formatPlaybackSpeed(preset),
-                                        style = MaterialTheme.typography.labelMedium,
-                                        color = if (selected) MaterialTheme.colorScheme.onPrimary
-                                            else MaterialTheme.colorScheme.onSurfaceVariant
+                                        style = COUITheme.textStyles.footnote1,
+                                        color = if (selected) AppContentColors.onAccent()
+                                            else AppContentColors.secondaryText()
                                     )
                                 }
                             }
@@ -199,27 +201,27 @@ fun PlaybackSpeedPreferenceControl(
                     if (title != null) {
                         AppText(
                             text = title,
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurface
+                            style = COUITheme.textStyles.main,
+                            color = AppContentColors.primaryText()
                         )
                     }
                     if (subtitle != null) {
                         AppText(
                             text = subtitle,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            style = COUITheme.textStyles.footnote1,
+                            color = AppContentColors.secondaryText()
                         )
                     }
                 }
                 if (showCurrentValue) {
                     AppSurface(
                         shape = AppShapes.container(ContainerLevel.Pill),
-                        color = MaterialTheme.colorScheme.primaryContainer
+                        color = AppSurfaceTokens.primaryContainer()
                     ) {
                         AppText(
                             text = formatPlaybackSpeed(currentSpeed),
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            style = MaterialTheme.typography.labelMedium,
+                            color = AppSurfaceTokens.onPrimaryContainer(),
+                            style = COUITheme.textStyles.footnote1,
                             fontWeight = FontWeight.SemiBold,
                             modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
                         )
@@ -236,15 +238,15 @@ fun PlaybackSpeedPreferenceControl(
                 AppSurface(
                     onClick = { onSpeedChange(speed) },
                     shape = AppShapes.container(ContainerLevel.Card),
-                    color = if (selected) MaterialTheme.colorScheme.primary
-                        else MaterialTheme.colorScheme.surfaceVariant,
+                    color = if (selected) AppContentColors.accent()
+                        else AppSurfaceTokens.surfaceContainer(),
                     modifier = Modifier.heightIn(min = 48.dp)
                 ) {
                     AppText(
                         text = formatPlaybackSpeed(speed),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = if (selected) MaterialTheme.colorScheme.onPrimary
-                            else MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = COUITheme.textStyles.footnote1,
+                        color = if (selected) AppContentColors.onAccent()
+                            else AppContentColors.secondaryText(),
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp)
                     )
                 }
@@ -267,13 +269,13 @@ fun PlaybackSpeedOptionsPreferenceControl(
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
         AppText(
             text = "播放器倍速列表",
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface
+            style = COUITheme.textStyles.main,
+            color = AppContentColors.primaryText()
         )
         AppText(
             text = "播放器菜单、双指调速与默认速度共用此列表；长按倍速独立设置。删除已选倍速会自动切换到最接近的选项。1x 不可删除。",
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            style = COUITheme.textStyles.footnote1,
+            color = AppContentColors.secondaryText()
         )
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -282,15 +284,15 @@ fun PlaybackSpeedOptionsPreferenceControl(
             options.forEach { speed ->
                 AppSurface(
                     shape = AppShapes.container(ContainerLevel.Card),
-                    color = MaterialTheme.colorScheme.surfaceVariant
+                    color = AppSurfaceTokens.surfaceContainer()
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         val roleSuffix = if (speed == defaultSpeed) " · 默认" else ""
                         AppText(
                             text = formatPlaybackSpeed(speed) + roleSuffix,
                             modifier = Modifier.padding(start = 12.dp),
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            style = COUITheme.textStyles.footnote1,
+                            color = AppContentColors.secondaryText()
                         )
                         AppIconButton(
                             onClick = { onRemoveSpeed(speed) },

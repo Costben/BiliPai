@@ -3,13 +3,13 @@ package com.android.purebilibili.feature.video.ui.components
 import com.android.purebilibili.core.ui.videoCardTitleMaxLines
 import com.android.purebilibili.feature.home.HomeFeedCardLayout
 import com.android.purebilibili.core.ui.AppContentColors
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -90,13 +90,13 @@ fun VideoDetailSkeleton(animated: Boolean = true) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+                .background(AppSurfaceTokens.background())
         ) {
             VideoDetailTabBarSkeleton()
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surface)
+                    .background(AppSurfaceTokens.surface())
             ) {
                 VideoDetailUpInfoSkeleton()
                 VideoDetailTitleInfoSkeleton()
@@ -155,7 +155,7 @@ private fun VideoDetailTabBarSkeleton() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)
+            .background(AppSurfaceTokens.surface())
             .padding(horizontal = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -210,7 +210,7 @@ private fun VideoDetailTitleInfoSkeleton() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)
+            .background(AppSurfaceTokens.surface())
             .padding(horizontal = 12.dp, vertical = 6.dp)
     ) {
         Row(
@@ -275,7 +275,7 @@ private fun VideoDetailRelatedHeaderSkeleton() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background)
+            .background(AppSurfaceTokens.background())
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -383,11 +383,11 @@ private fun RelatedVideoItemSkeleton(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(com.android.purebilibili.core.ui.AppSpacingTokens.Small),
                 ) {
-                    RelatedSkeletonText("00-00", MaterialTheme.typography.labelMedium)
+                    RelatedSkeletonText("00-00", COUITheme.textStyles.footnote1)
                     if (com.android.purebilibili.core.ui.LocalUpBadgeVisibility.current.showAvatars) {
                         SkeletonBlock(modifier = Modifier.size(16.dp), shape = CircleShape)
                     }
-                    RelatedSkeletonText("UP 主名称", MaterialTheme.typography.labelMedium, modifier = Modifier.weight(1f))
+                    RelatedSkeletonText("UP 主名称", COUITheme.textStyles.footnote1, modifier = Modifier.weight(1f))
                 }
                 FlowRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -438,7 +438,7 @@ private fun rememberVideoSkeletonPulse(): androidx.compose.runtime.State<Float> 
 @Composable
 private fun rememberVideoSkeletonBlockColor(): () -> Color {
     val pulse = LocalVideoSkeletonPulse.current
-    val isDarkTheme = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val isDarkTheme = AppSurfaceTokens.background().luminance() < 0.5f
     val base = AppContentColors.primaryText()
     return androidx.compose.runtime.remember(pulse, isDarkTheme, base) {
         com.android.purebilibili.core.ui.skeleton.skeletonFill(

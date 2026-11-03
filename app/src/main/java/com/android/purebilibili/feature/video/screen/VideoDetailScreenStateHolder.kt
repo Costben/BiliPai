@@ -2,6 +2,7 @@
 package com.android.purebilibili.feature.video.screen
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.motion.AppMotionEasing
@@ -304,7 +305,7 @@ private fun CollapsedPlayerNavigationBar(
         val useMiuixNonGlassChrome = isMiuixNonGlassEnabled()
         val mediaScrimAlpha = resolveCollapsedPlayerMediaScrimAlpha(scrollRatio)
         val toolbarAlpha = resolveCollapsedPlayerToolbarAlpha(scrollRatio)
-        val toolbarSurface = MaterialTheme.colorScheme.surface
+        val toolbarSurface = AppSurfaceTokens.surface()
         Box(
             modifier = modifier.drawBehind {
                 drawRect(
@@ -5364,7 +5365,7 @@ internal fun VideoDetailScreenStateHolder(
                                                     AppText(
                                                         text = "正在重试 ${loadingState.retryAttempt}/${loadingState.maxAttempts}...",
                                                         color = AppContentColors.secondaryText(),
-                                                        style = MaterialTheme.typography.bodyMedium
+                                                        style = COUITheme.textStyles.body1
                                                     )
                                                 }
                                             }
@@ -5475,13 +5476,13 @@ internal fun VideoDetailScreenStateHolder(
                                                     is com.android.purebilibili.data.model.VideoLoadError.PlayUrlEmpty -> "⚡"
                                                     else -> ""
                                                 },
-                                                style = MaterialTheme.typography.displayMedium
+                                                style = COUITheme.textStyles.title1
                                             )
                                             Spacer(Modifier.height(16.dp))
                                             AppText(
                                                 text = errorState.msg,
                                                 color = AppContentColors.primaryText(),
-                                                style = MaterialTheme.typography.titleMedium,
+                                                style = COUITheme.textStyles.headline1,
                                                 textAlign = androidx.compose.ui.text.style.TextAlign.Center
                                             )
 
@@ -5493,7 +5494,7 @@ internal fun VideoDetailScreenStateHolder(
                                                     AppText(
                                                         text = " 建议：切换 WiFi/移动数据 或 清除缓存后重试",
                                                         color = AppContentColors.secondaryText(),
-                                                        style = MaterialTheme.typography.bodySmall,
+                                                        style = COUITheme.textStyles.footnote1,
                                                         textAlign = androidx.compose.ui.text.style.TextAlign.Center
                                                     )
                                                 }
@@ -5502,7 +5503,7 @@ internal fun VideoDetailScreenStateHolder(
                                                     AppText(
                                                         text = " 该视频可能暂时不可用，请尝试其他视频",
                                                         color = AppContentColors.secondaryText(),
-                                                        style = MaterialTheme.typography.bodySmall,
+                                                        style = COUITheme.textStyles.footnote1,
                                                         textAlign = androidx.compose.ui.text.style.TextAlign.Center
                                                     )
                                                 }
@@ -5575,7 +5576,7 @@ internal fun VideoDetailScreenStateHolder(
                                                     AppText(
                                                         text = "可在「我的 - 账号与播放」中更换播放账号",
                                                         color = AppContentColors.secondaryText(),
-                                                        style = MaterialTheme.typography.bodySmall,
+                                                        style = COUITheme.textStyles.footnote1,
                                                         textAlign = androidx.compose.ui.text.style.TextAlign.Center
                                                     )
                                                 }

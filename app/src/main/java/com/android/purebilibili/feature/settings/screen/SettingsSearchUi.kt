@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -51,6 +50,8 @@ import com.android.purebilibili.core.ui.LocalGlobalWallpaperBackdropVisible
 import com.android.purebilibili.core.ui.wallpaper.LocalGlobalWallpaperBackdropSource
 import com.android.purebilibili.feature.home.components.BottomBarMatchedReusableLiquidDock
 import io.github.suqi8.coui.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.components.AppTextButton
 
 @Composable
 private fun settingsSearchWallpaperBackdrop(): Backdrop? {
@@ -130,7 +131,7 @@ internal fun SettingsHomeSearchEntry(
             AppText(
                 text = placeholder,
                 color = AppContentColors.secondaryText(),
-                style = MaterialTheme.typography.bodyLarge,
+                style = COUITheme.textStyles.main,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -166,14 +167,14 @@ internal fun SettingsSearchEmptyState(
         Spacer(modifier = Modifier.height(16.dp))
         AppText(
             text = stringResource(R.string.settings_search_empty_title),
-            style = MaterialTheme.typography.titleMedium,
+            style = COUITheme.textStyles.headline1,
             fontWeight = FontWeight.SemiBold,
             textAlign = TextAlign.Center,
         )
         Spacer(modifier = Modifier.height(4.dp))
         AppText(
             text = stringResource(R.string.settings_search_empty_subtitle),
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = AppContentColors.secondaryText(),
             textAlign = TextAlign.Center,
         )

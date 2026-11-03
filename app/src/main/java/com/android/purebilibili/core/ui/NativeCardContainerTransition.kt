@@ -1,8 +1,9 @@
 package com.android.purebilibili.core.ui
 
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.unit.dp
 import com.android.purebilibili.feature.live.rememberLiveCardContainerTransition
 import com.android.purebilibili.navigation3.BiliPaiNavKey
@@ -23,7 +24,7 @@ internal fun rememberNativeCardContainerTransition(
         roomId = 0,
         title = "",
         hostName = "",
-        color = MaterialTheme.colorScheme.surface,
+        color = AppSurfaceTokens.surface(),
         cornerRadius = 12.dp,
         containerTarget = target,
         enabled = enabled && LocalNativeCardNavigate.current != null &&

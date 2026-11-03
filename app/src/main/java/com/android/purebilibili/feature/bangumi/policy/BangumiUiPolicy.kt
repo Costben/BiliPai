@@ -2,7 +2,6 @@ package com.android.purebilibili.feature.bangumi
 
 import android.content.pm.ActivityInfo
 import androidx.compose.runtime.Composable
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.luminance
 import com.android.purebilibili.core.theme.AdaptiveAccentColors
 import com.android.purebilibili.core.ui.components.userVipPink
@@ -10,13 +9,14 @@ import androidx.compose.ui.graphics.Color
 import com.android.purebilibili.core.theme.ACCESSIBLE_TEXT_MIN_CONTRAST
 import com.android.purebilibili.core.theme.AccessibleContainerColors
 import com.android.purebilibili.core.theme.resolveAccessibleContainerColors
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 /** Fixed business colors shared by cover badges and episode labels. */
 @Composable
 internal fun bangumiBrandBadgeColors(label: String): AdaptiveAccentColors? {
     val color = when (label.trim()) {
         "会员", "大会员", "会员专享" -> userVipPink()
-        "免费", "限免" -> if (MaterialTheme.colorScheme.surface.luminance() < 0.5f) {
+        "免费", "限免" -> if (AppSurfaceTokens.surface().luminance() < 0.5f) {
             Color(0xFFD66011)
         } else {
             Color(0xFFFF7F24)

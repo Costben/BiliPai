@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.home.components
 
 import com.android.purebilibili.core.ui.AppContentColors
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.android.purebilibili.core.ui.components.liquidDockViewport
 
 

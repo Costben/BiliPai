@@ -2,6 +2,8 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppContentColors
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import coil3.request.crossfade
 import com.android.purebilibili.core.ui.components.AppSegmentOption
@@ -69,7 +71,7 @@ fun EmotePanelSheet(
             ) {
                 AppText(
                     text = "表情",
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                    style = COUITheme.textStyles.headline1.copy(fontWeight = FontWeight.Bold),
                     color = AppContentColors.primaryText()
                 )
             }
@@ -93,7 +95,7 @@ fun EmotePanelSheet(
                     AppText(
                         text = "暂无表情包",
                         color = AppContentColors.secondaryText(),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = COUITheme.textStyles.body1
                     )
                 }
             } else {
@@ -116,7 +118,7 @@ fun EmotePanelSheet(
                 )
 
                 AppHorizontalDivider(
-                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f),
+                    color = AppSurfaceTokens.outline().copy(alpha = 0.3f),
                     thickness = 0.5.dp
                 )
 

@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.list
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.compose.foundation.Canvas
@@ -67,15 +69,15 @@ internal fun PersonalRecapActivityChart(
     val maxCount = maxOf(reads.maxOrNull() ?: 0, watches.maxOrNull() ?: 0, 1)
     val readColor = AppContentColors.accent()
     val watchColor = MaterialTheme.colorScheme.tertiary
-    val gridColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+    val gridColor = AppSurfaceTokens.outline().copy(alpha = 0.4f)
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(6.dp)) {
-        AppText("阅读与观看趋势", style = MaterialTheme.typography.labelMedium)
+        AppText("阅读与观看趋势", style = COUITheme.textStyles.footnote1)
         Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            AppText("● 阅读 ${rssStats.readCount} 篇", color = readColor, style = MaterialTheme.typography.labelSmall)
+            AppText("● 阅读 ${rssStats.readCount} 篇", color = readColor, style = COUITheme.textStyles.footnote2)
             AppText(
                 if (videoStats != null) "● 视频 ${videoStats.videoCount} 个" else "观看记录暂不可用",
                 color = watchColor,
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
             )
         }
         Canvas(
@@ -113,12 +115,12 @@ internal fun PersonalRecapActivityChart(
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             AppText(
                 if (window == PersonalRecapWindow.TODAY) "0 时" else dateFormat.format(Instant.ofEpochMilli(startMs)),
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 color = AppContentColors.secondaryText(),
             )
             AppText(
                 if (window == PersonalRecapWindow.TODAY) "24 时" else dateFormat.format(Instant.ofEpochMilli(nowMs)),
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 color = AppContentColors.secondaryText(),
             )
         }
@@ -134,11 +136,11 @@ internal fun PersonalRecapProgress(
 ) {
     val progress = fraction.coerceIn(0f, 1f)
     val fillColor = AppContentColors.accent()
-    val trackColor = MaterialTheme.colorScheme.surfaceVariant
+    val trackColor = AppSurfaceTokens.surfaceContainer()
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(5.dp)) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            AppText(label, modifier = Modifier.weight(1f), style = MaterialTheme.typography.labelMedium)
-            AppText("${(progress * 100).roundToInt()}%", style = MaterialTheme.typography.labelMedium, color = fillColor)
+            AppText(label, modifier = Modifier.weight(1f), style = COUITheme.textStyles.footnote1)
+            AppText("${(progress * 100).roundToInt()}%", style = COUITheme.textStyles.footnote1, color = fillColor)
         }
         Canvas(
             modifier = Modifier
@@ -155,6 +157,6 @@ internal fun PersonalRecapProgress(
                 drawRoundRect(fillColor, size = Size(size.width * progress, size.height), cornerRadius = radius)
             }
         }
-        AppText(detail, style = MaterialTheme.typography.labelSmall, color = AppContentColors.secondaryText())
+        AppText(detail, style = COUITheme.textStyles.footnote2, color = AppContentColors.secondaryText())
     }
 }

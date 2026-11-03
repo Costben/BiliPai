@@ -1,6 +1,7 @@
 // 文件路径: feature/dynamic/components/DynamicSidebar.kt
 package com.android.purebilibili.feature.dynamic.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.core.ui.components.appActionWithFeedback
@@ -28,7 +29,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 //  Material Icons
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppTextButton
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppDropdownMenu
 import com.android.purebilibili.core.ui.components.AppDropdownMenuItem
@@ -395,10 +395,10 @@ fun DynamicSidebar(
                                     modifier = Modifier.fillMaxWidth(),
                                     autoSize = TextAutoSize.StepBased(
                                         minFontSize = 8.sp,
-                                        maxFontSize = MaterialTheme.typography.labelSmall.fontSize,
+                                        maxFontSize = COUITheme.textStyles.footnote2.fontSize,
                                         stepSize = 0.5.sp,
                                     ),
-                                    fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                                    fontSize = COUITheme.textStyles.footnote2.fontSize,
                                     fontWeight = FontWeight.SemiBold,
                                     textAlign = TextAlign.Center,
                                     maxLines = 1,
@@ -498,7 +498,7 @@ fun DynamicSidebar(
                 .padding(top = resolveDynamicSidebarDividerTopOffset(topPadding))
                 .fillMaxHeight()
                 .width(AppSpacingTokens.Micro / 4)
-                .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f))
+                .background(AppSurfaceTokens.outline().copy(alpha = 0.2f))
         )
     }
 }
@@ -573,16 +573,16 @@ fun SidebarItem(
                 .size(AppSpacingTokens.DoubleExtraLarge + AppSpacingTokens.Small)
                 .clip(CircleShape)
                 .background(
-                    if (isSelected) nativeNavigation?.selectedContainer ?: MaterialTheme.colorScheme.primaryContainer
-                    else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                    if (isSelected) nativeNavigation?.selectedContainer ?: AppSurfaceTokens.primaryContainer()
+                    else AppSurfaceTokens.surfaceContainer().copy(alpha = 0.5f)
                 ),
             contentAlignment = Alignment.Center
         ) {
             AppText(
                 text = icon,
-                fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                fontSize = COUITheme.textStyles.footnote1.fontSize,
                 fontWeight = FontWeight.Bold,
-                color = if (isSelected) nativeNavigation?.selectedContent ?: MaterialTheme.colorScheme.onPrimaryContainer else AppContentColors.secondaryText()
+                color = if (isSelected) nativeNavigation?.selectedContent ?: AppSurfaceTokens.onPrimaryContainer() else AppContentColors.secondaryText()
             )
         }
 
@@ -590,7 +590,7 @@ fun SidebarItem(
             Spacer(modifier = Modifier.height(AppSpacingTokens.ExtraSmall))
             AppText(
                 text = label,
-                fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                fontSize = COUITheme.textStyles.footnote2.fontSize,
                 // The label sits outside the selected icon container, so it uses the
                 // accent role rather than the container's paired content role.
                 color = if (isSelected) nativeNavigation?.selectedContent ?: AppContentColors.accent() else AppContentColors.secondaryText(),
@@ -688,7 +688,7 @@ fun SidebarUserItem(
                                     CircleShape
                                 )
                                 isSelected -> Modifier.border(AppSpacingTokens.Micro / 2, accentColor, CircleShape)
-                                else -> Modifier.border(AppSpacingTokens.Micro / 2, MaterialTheme.colorScheme.outline.copy(alpha = 0.2f), CircleShape)
+                                else -> Modifier.border(AppSpacingTokens.Micro / 2, AppSurfaceTokens.outline().copy(alpha = 0.2f), CircleShape)
                             }
                         )
                         .padding(AppSpacingTokens.Micro),
@@ -733,7 +733,7 @@ fun SidebarUserItem(
                 Spacer(modifier = Modifier.height(AppSpacingTokens.ExtraSmall))
                 AppText(
                     text = displayName,
-                    fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                    fontSize = COUITheme.textStyles.footnote2.fontSize,
                     fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
                     color = if (isSelected) accentColor else AppContentColors.primaryText(),
                     maxLines = 1,
@@ -747,7 +747,7 @@ fun SidebarUserItem(
             expanded = showMenu,
             onDismissRequest = { showMenu = false },
             modifier = if (com.android.purebilibili.core.ui.components.appGlassMenuAvailable()) Modifier
-                else Modifier.background(MaterialTheme.colorScheme.surfaceContainer) // 自适应菜单背景
+                else Modifier.background(AppSurfaceTokens.surfaceContainer()) // 自适应菜单背景
         ) {
             AppDropdownMenuItem(
                 text = { AppText(if (user.isPinned) "取消置顶" else "置顶", color = AppContentColors.primaryText()) },

@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import android.widget.Toast
 import androidx.compose.animation.animateColorAsState
@@ -24,7 +25,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -273,7 +273,7 @@ internal fun SubReplyInitialContent(
         ) {
             AppText(
                 text = "评论详情",
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                style = COUITheme.textStyles.headline1.copy(fontWeight = FontWeight.Bold),
                 modifier = Modifier.weight(1f),
             )
             AppIconButton(onClick = onDismiss, modifier = Modifier.testTag(SUB_REPLY_DETAIL_CLOSE_TAG)) {
@@ -693,7 +693,7 @@ internal fun SubReplyDetailContent(
                 ) { conversationMode ->
                     AppText(
                         text = if (conversationMode) "对话详情" else "评论详情",
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                        style = COUITheme.textStyles.headline1.copy(fontWeight = FontWeight.Bold),
                         color = appearance.primaryTextColor,
                     )
                 }
@@ -716,7 +716,7 @@ internal fun SubReplyDetailContent(
                 text = "未找到目标回复，可能已删除或不可见",
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
                 color = appearance.secondaryTextColor,
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 textAlign = TextAlign.Center,
             )
         }
@@ -820,14 +820,14 @@ internal fun SubReplyDetailContent(
                                             showLoadedReplyCount = showLoadedReplyCount,
                                         )
                                     },
-                                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
+                                    style = COUITheme.textStyles.body1.copy(fontWeight = FontWeight.Medium),
                                     color = appearance.primaryTextColor
                                 )
                                 Spacer(modifier = Modifier.weight(1f))
                                 if (effectiveConversationMode) {
                                     AppText(
                                         text = "返回全部回复",
-                                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
+                                        style = COUITheme.textStyles.body1.copy(fontWeight = FontWeight.Medium),
                                         color = appearance.sortTint,
                                         modifier = Modifier
                                             .clickable {
@@ -859,7 +859,7 @@ internal fun SubReplyDetailContent(
                                         )
                                         AppText(
                                             text = sortMode.label,
-                                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
+                                            style = COUITheme.textStyles.body1.copy(fontWeight = FontWeight.Medium),
                                             color = appearance.sortTint
                                         )
                                     }
@@ -976,7 +976,7 @@ internal fun SubReplyDetailContent(
                                         .clickable(onClick = onLoadMore)
                                         .padding(horizontal = 16.dp, vertical = 18.dp),
                                     textAlign = TextAlign.Center,
-                                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
+                                    style = COUITheme.textStyles.body1.copy(fontWeight = FontWeight.Medium),
                                     color = appearance.sortTint
                                 )
                             }
@@ -990,7 +990,7 @@ internal fun SubReplyDetailContent(
                                     AppText(
                                         text = "没有更多了",
                                         color = appearance.secondaryTextColor,
-                                        style = MaterialTheme.typography.bodySmall,
+                                        style = COUITheme.textStyles.footnote1,
                                     )
                                 }
                             }

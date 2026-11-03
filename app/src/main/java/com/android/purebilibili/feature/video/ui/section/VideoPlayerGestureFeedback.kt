@@ -1,6 +1,8 @@
 package com.android.purebilibili.feature.video.ui.section
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -14,7 +16,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -108,13 +109,13 @@ internal fun PlayerSeekCancelHint(
     ) {
         AppSurface(
             shape = RoundedCornerShape(8.dp),
-            color = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            color = AppSurfaceTokens.secondaryContainer(),
+            contentColor = AppSurfaceTokens.onSecondaryContainer(),
             shadowElevation = 4.dp
         ) {
             AppText(
                 text = "松开手指，取消进退",
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
             )
         }
@@ -161,7 +162,7 @@ internal fun PlayerOrientationHint(
             AppText(
                 text = orientationHintText,
                 color = Color.White,
-                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold)
+                style = COUITheme.textStyles.button.copy(fontWeight = FontWeight.SemiBold)
             )
         }
     }
@@ -189,7 +190,7 @@ internal fun PlayerSeekFeedback(
             AppText(
                 text = seekFeedbackText ?: "",
                 color = com.android.purebilibili.core.ui.MediaContrastPalette.Foreground,
-                style = MaterialTheme.typography.headlineMedium.copy(
+                style = COUITheme.textStyles.title3.copy(
                     fontWeight = FontWeight.Bold
                 )
             )
@@ -231,7 +232,7 @@ internal fun PlayerRestorePictureButton(
             Spacer(modifier = Modifier.width(8.dp))
             AppText(
                 text = "还原画面",
-                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
+                style = COUITheme.textStyles.button.copy(fontWeight = FontWeight.Bold)
             )
         }
     }
@@ -356,8 +357,8 @@ internal fun PlayerLongPressSpeedHint(
                         top = 5.dp * longPressSpeedHintScale,
                         bottom = 5.dp * longPressSpeedHintScale,
                     ),
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontSize = MaterialTheme.typography.bodyMedium.fontSize * longPressSpeedHintScale,
+                    style = COUITheme.textStyles.body1.copy(
+                        fontSize = COUITheme.textStyles.body1.fontSize * longPressSpeedHintScale,
                         fontWeight = FontWeight.Medium
                     )
                 )

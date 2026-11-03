@@ -69,6 +69,9 @@ import com.android.purebilibili.core.ui.animation.entrance
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.android.purebilibili.core.theme.usesMiuixFamilySkin
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+import com.android.purebilibili.core.ui.AppAlertDialog
 
 /**
  *  底栏项目配置
@@ -346,7 +349,7 @@ fun BottomBarSettingsContent(
                 Box(modifier = Modifier.entrance().padding(horizontal = standaloneHorizontalPadding)) {
                     AppText(
                         text = "集中管理底部导航、首页顶部标签、搜索分类栏和平板侧边栏。底栏项目最少 2 个，最多 5 个。",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                 }
@@ -611,14 +614,14 @@ fun BottomBarSettingsContent(
                             ) {
                             AppText(
                                 text = "可调整顶部标签的显示/隐藏和顺序，第一位会直接显示在首页顶部。最多显示 ${SettingsManager.MAX_TOP_TABS} 个标签。",
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText()
                             )
 
                             val visibleTopOrder = localTopTabOrder.filter { it in localTopTabVisible }
                             AppText(
                                 text = "已显示的标签",
-                                style = MaterialTheme.typography.labelMedium,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText()
                             )
                             visibleTopOrder.forEachIndexed { index, id ->
@@ -629,7 +632,7 @@ fun BottomBarSettingsContent(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .clip(AppShapes.container(ContainerLevel.Card))
-                                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+                                        .background(AppSurfaceTokens.surfaceContainer().copy(alpha = 0.4f))
                                         .padding(horizontal = 12.dp, vertical = 10.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
@@ -645,7 +648,7 @@ fun BottomBarSettingsContent(
                                     if (showText) {
                                         AppText(
                                             text = tab.label,
-                                            style = MaterialTheme.typography.bodyMedium,
+                                            style = COUITheme.textStyles.body1,
                                             color = AppContentColors.primaryText(),
                                             modifier = Modifier.weight(1f)
                                         )
@@ -655,7 +658,7 @@ fun BottomBarSettingsContent(
                                     if (tab.fixedVisible) {
                                         AppText(
                                             text = "固定",
-                                            style = MaterialTheme.typography.labelSmall,
+                                            style = COUITheme.textStyles.footnote2,
                                             color = AppContentColors.secondaryText()
                                         )
                                     }
@@ -685,7 +688,7 @@ fun BottomBarSettingsContent(
                             Spacer(modifier = Modifier.height(4.dp))
                             AppText(
                                 text = "可用标签",
-                                style = MaterialTheme.typography.labelMedium,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText()
                             )
                             allTopTabs.forEach { tab ->
@@ -705,7 +708,7 @@ fun BottomBarSettingsContent(
                                 ) {
                                     AppText(
                                         text = tab.label,
-                                        style = MaterialTheme.typography.bodyMedium,
+                                        style = COUITheme.textStyles.body1,
                                         color = AppContentColors.primaryText(),
                                         modifier = Modifier.weight(1f)
                                     )
@@ -749,12 +752,12 @@ fun BottomBarSettingsContent(
                         ) {
                             AppText(
                                 text = "调整搜索结果页顶部分类标签的顺序，常用分类可以提前显示。",
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText()
                             )
                             AppText(
                                 text = "分类顺序",
-                                style = MaterialTheme.typography.labelMedium,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText()
                             )
                             localSearchFilterTabOrder.forEachIndexed { index, type ->
@@ -762,13 +765,13 @@ fun BottomBarSettingsContent(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .clip(AppShapes.container(ContainerLevel.Card))
-                                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+                                        .background(AppSurfaceTokens.surfaceContainer().copy(alpha = 0.4f))
                                         .padding(horizontal = 12.dp, vertical = 10.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     AppText(
                                         text = type.displayName,
-                                        style = MaterialTheme.typography.bodyMedium,
+                                        style = COUITheme.textStyles.body1,
                                         color = AppContentColors.primaryText(),
                                         modifier = Modifier.weight(1f)
                                     )
@@ -927,7 +930,7 @@ fun BottomBarSettingsContent(
                         Spacer(modifier = Modifier.height(8.dp))
                         AppText(
                             text = " 长按图标并拖拽可调整显示顺序",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText()
                         )
                     }
@@ -996,7 +999,7 @@ private fun BottomBarPreview(
         modifier = Modifier
             .fillMaxWidth()
             .clip(AppShapes.container(ContainerLevel.Dialog)),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+        color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.5f),
         tonalElevation = 2.dp
     ) {
         BoxWithConstraints(
@@ -1095,7 +1098,7 @@ private fun BottomBarPreview(
                         if (showText) {
                             AppText(
                                 text = tab.label,
-                                style = MaterialTheme.typography.labelSmall,
+                                style = COUITheme.textStyles.footnote2,
                                 color = if (index == 0 && !isDragging) AppContentColors.accent() else AppContentColors.secondaryText()
                             )
                         }
@@ -1130,7 +1133,7 @@ private fun BottomBarTabItem(
         BottomBarColors.getColorByIndex(colorIndex)
     }
     val itemContainerColor = if (isMaterial3) {
-        MaterialTheme.colorScheme.primaryContainer
+        AppSurfaceTokens.primaryContainer()
     } else {
         itemColor
     }
@@ -1189,7 +1192,7 @@ private fun BottomBarTabItem(
         ) {
             AppText(
                 text = displayLabel,
-                style = MaterialTheme.typography.bodyLarge,
+                style = COUITheme.textStyles.main,
                 color = AppContentColors.primaryText()
             )
             AppText(
@@ -1198,7 +1201,7 @@ private fun BottomBarTabItem(
                 } else {
                     "默认：${tab.label}；点击名称修改"
                 },
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 color = AppContentColors.secondaryText()
             )
         }
@@ -1281,7 +1284,7 @@ private fun BottomBarTabItem(
                             Spacer(modifier = Modifier.width(12.dp))
                             AppText(
                                 text = BottomBarColorNames[index],
-                                style = MaterialTheme.typography.bodyMedium,
+                                style = COUITheme.textStyles.body1,
                                 color = AppContentColors.primaryText()
                             )
                             Spacer(modifier = Modifier.weight(1f))

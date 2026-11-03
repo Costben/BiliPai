@@ -49,6 +49,7 @@ import com.android.purebilibili.feature.cast.localNetworkRuntimePermissions
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.android.purebilibili.core.theme.usesMiuixFamilySkin
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  *  权限管理页面
@@ -195,7 +196,7 @@ fun PermissionSettingsContent(
             Box(modifier = Modifier.entrance()) {
                 AppText(
                     text = stringResource(R.string.permission_settings_intro),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                 )
@@ -238,7 +239,7 @@ fun PermissionSettingsContent(
                     Spacer(modifier = Modifier.height(16.dp))
                     AppText(
                         text = stringResource(R.string.permission_settings_footer),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         modifier = Modifier.padding(horizontal = 16.dp),
                     )
@@ -313,13 +314,13 @@ private fun PermissionItem(
         Column(modifier = Modifier.weight(1f)) {
             AppText(
                 text = name,
-                style = MaterialTheme.typography.bodyLarge,
+                style = COUITheme.textStyles.main,
                 color = AppContentColors.primaryText()
             )
             Spacer(modifier = Modifier.height(2.dp))
             AppText(
                 text = description,
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText()
             )
         }

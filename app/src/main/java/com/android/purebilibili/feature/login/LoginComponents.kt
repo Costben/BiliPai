@@ -1,5 +1,6 @@
 package com.android.purebilibili.feature.login
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.android.purebilibili.core.ui.AppIcons
 
 import coil3.request.crossfade
@@ -342,7 +343,7 @@ fun BrandingHeader(isSmall: Boolean = false) {
                 AppText(
                     text = "高画质登录",
                     color = palette.secondaryText,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     fontWeight = FontWeight.SemiBold
                 )
             }
@@ -368,14 +369,14 @@ fun BrandingHeader(isSmall: Boolean = false) {
         AppText(
             text = "BiliPai 登录",
             color = palette.primaryText,
-            style = if (isSmall) MaterialTheme.typography.headlineSmall else MaterialTheme.typography.headlineMedium,
+            style = if (isSmall) COUITheme.textStyles.title4 else COUITheme.textStyles.title3,
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(AppSpacingTokens.ExtraSmall))
         AppText(
             text = "安全登录，继续你的观看进度",
             color = palette.secondaryText,
-            style = MaterialTheme.typography.bodySmall
+            style = COUITheme.textStyles.footnote1
         )
     }
 }
@@ -448,7 +449,7 @@ fun LoginMethodTabs(
                     AppText(
                         text = title,
                         color = fg,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Medium
                     )
                 }
@@ -472,7 +473,7 @@ fun QrCodeLoginContent(
 
         AppText(
             text = "打开哔哩哔哩 App 扫码",
-            style = MaterialTheme.typography.titleLarge,
+            style = COUITheme.textStyles.title4,
             fontWeight = FontWeight.Bold,
             color = palette.primaryText
         )
@@ -480,7 +481,7 @@ fun QrCodeLoginContent(
         AppText(
             text = resolveQrLoginReason(),
             color = palette.secondaryText,
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             textAlign = TextAlign.Center
         )
 
@@ -546,7 +547,7 @@ fun QrCodeLoginContent(
                             AppText(
                                 text = "已扫码，请在手机确认",
                                 color = palette.qrContent,
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 textAlign = TextAlign.Center
                             )
                         }
@@ -563,7 +564,7 @@ fun QrCodeLoginContent(
                             AppText(
                                 text = "二维码加载失败",
                                 color = palette.qrContent,
-                                style = MaterialTheme.typography.bodySmall
+                                style = COUITheme.textStyles.footnote1
                             )
                             AppTextButton(onClick = onRefresh) {
                                 AppText(text = "重试", color = palette.link)
@@ -587,9 +588,9 @@ fun QrCodeLoginContent(
                 modifier = Modifier.padding(horizontal = AppSpacingTokens.Large, vertical = AppSpacingTokens.Small),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                AppText(text = "↻", color = palette.link, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+                AppText(text = "↻", color = palette.link, style = COUITheme.textStyles.button, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.width(AppSpacingTokens.ExtraSmall))
-                AppText(text = "刷新二维码", color = palette.link, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+                AppText(text = "刷新二维码", color = palette.link, style = COUITheme.textStyles.button, fontWeight = FontWeight.SemiBold)
             }
         }
     }
@@ -659,7 +660,7 @@ fun PhoneLoginContent(
 
         AppText(
             text = "手机号验证登录",
-            style = MaterialTheme.typography.titleLarge,
+            style = COUITheme.textStyles.title4,
             fontWeight = FontWeight.Bold,
             color = palette.primaryText
         )
@@ -667,7 +668,7 @@ fun PhoneLoginContent(
         AppText(
             text = "验证码有效期 5 分钟，同手机号 60 秒内不可重复发送",
             color = palette.secondaryText,
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth(0.92f)
         )
@@ -692,7 +693,7 @@ fun PhoneLoginContent(
                 Spacer(modifier = Modifier.width(AppSpacingTokens.Small))
                 AppText(
                     text = "提示：仅扫码登录可解锁更高画质（4K/HDR/1080P60）",
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = palette.tertiaryText
                 )
             }
@@ -745,7 +746,7 @@ fun PhoneLoginContent(
             AppText(
                 text = "号码长度需为 ${selectedRegion.minDigits}-${selectedRegion.maxDigits} 位",
                 color = palette.tertiaryText,
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 modifier = Modifier.fillMaxWidth(0.96f)
             )
         }
@@ -785,7 +786,7 @@ fun PhoneLoginContent(
                 Spacer(modifier = Modifier.width(AppSpacingTokens.Small))
                 AppText(
                     text = "先完成安全验证，再发送短信验证码",
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = palette.tertiaryText
                 )
             }
@@ -809,7 +810,7 @@ fun PhoneLoginContent(
                 },
                 enabled = phoneEligible && state !is LoginState.Loading
             ) {
-                AppText(text = "重新获取验证码", color = palette.link, style = MaterialTheme.typography.labelMedium)
+                AppText(text = "重新获取验证码", color = palette.link, style = COUITheme.textStyles.footnote1)
             }
         } else {
             ModernButton(
@@ -829,7 +830,7 @@ fun PhoneLoginContent(
             AppText(
                 text = state.msg,
                 color = palette.error,
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(0.9f)
             )
@@ -858,21 +859,21 @@ private fun CountryCodeSelector(
         AppText(
             text = region.dialingCode,
             color = palette.inputText,
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             fontWeight = FontWeight.SemiBold
         )
         Spacer(modifier = Modifier.width(AppSpacingTokens.ExtraSmall))
         AppText(
             text = region.name,
             color = palette.inputPlaceholder,
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             maxLines = 1,
             modifier = Modifier.weight(1f)
         )
         AppText(
             text = "▾",
             color = palette.inputIcon,
-            style = MaterialTheme.typography.labelMedium,
+            style = COUITheme.textStyles.footnote1,
             fontWeight = FontWeight.SemiBold
         )
     }
@@ -896,7 +897,7 @@ fun ModernTextField(
         keyboardOptions = keyboardOptions,
         visualTransformation = visualTransformation,
         singleLine = true,
-        textStyle = MaterialTheme.typography.bodyLarge.copy(
+        textStyle = COUITheme.textStyles.main.copy(
             color = palette.inputText,
             fontWeight = FontWeight.Medium
         ),
@@ -935,7 +936,7 @@ fun ModernTextField(
                             AppText(
                                 text = placeholder,
                                 color = palette.inputPlaceholder,
-                                style = MaterialTheme.typography.bodyMedium
+                                style = COUITheme.textStyles.body1
                             )
                         }
                         innerTextField()
@@ -984,7 +985,7 @@ fun ModernButton(
             AppText(
                 text = text,
                 color = palette.buttonText,
-                style = MaterialTheme.typography.labelLarge,
+                style = COUITheme.textStyles.button,
                 fontWeight = FontWeight.SemiBold
             )
         }
@@ -1013,7 +1014,7 @@ fun TopBar(
             AppText(
                 text = "‹",
                 color = palette.closeFg,
-                style = MaterialTheme.typography.titleLarge,
+                style = COUITheme.textStyles.title4,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -1030,7 +1031,7 @@ private fun LoginPill(text: String, palette: LoginPalette) {
         AppText(
             text = text,
             color = palette.tertiaryText,
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
         )

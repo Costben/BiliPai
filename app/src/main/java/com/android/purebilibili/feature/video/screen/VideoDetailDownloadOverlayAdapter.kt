@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import com.android.purebilibili.core.ui.components.AppIcon
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,6 +23,7 @@ import com.android.purebilibili.core.ui.rememberAppPhotoIcon
 import com.android.purebilibili.feature.video.viewmodel.VideoPlaybackUiState
 import com.android.purebilibili.feature.video.viewmodel.VideoPlaybackViewModel
 import kotlinx.coroutines.launch
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,7 +60,7 @@ internal fun VideoDetailDownloadOverlayAdapter(
             ) {
                 AppText(
                     text = "下载选项",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
                 )
@@ -87,12 +87,12 @@ internal fun VideoDetailDownloadOverlayAdapter(
                     Column {
                         AppText(
                             text = "缓存视频",
-                            style = MaterialTheme.typography.bodyLarge,
+                            style = COUITheme.textStyles.main,
                             color = AppContentColors.primaryText()
                         )
                         AppText(
                             text = "选择画质缓存当前视频",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText()
                         )
                     }
@@ -121,12 +121,12 @@ internal fun VideoDetailDownloadOverlayAdapter(
                         Column {
                             AppText(
                                 text = "批量缓存",
-                                style = MaterialTheme.typography.bodyLarge,
+                                style = COUITheme.textStyles.main,
                                 color = AppContentColors.primaryText()
                             )
                             AppText(
                                 text = "选择分 P、合集视频及其内部分 P，统一加入下载",
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText()
                             )
                         }
@@ -175,12 +175,12 @@ internal fun VideoDetailDownloadOverlayAdapter(
                     Column {
                         AppText(
                             text = "下载音频",
-                            style = MaterialTheme.typography.bodyLarge,
+                            style = COUITheme.textStyles.main,
                             color = AppContentColors.primaryText()
                         )
                         AppText(
                             text = "仅保存音频文件",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText()
                         )
                     }
@@ -226,12 +226,12 @@ internal fun VideoDetailDownloadOverlayAdapter(
                     Column {
                         AppText(
                             text = "保存封面",
-                            style = MaterialTheme.typography.bodyLarge,
+                            style = COUITheme.textStyles.main,
                             color = AppContentColors.primaryText()
                         )
                         AppText(
                             text = "保存当前视频封面到相册",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText()
                         )
                     }

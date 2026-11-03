@@ -2,6 +2,7 @@
 package com.android.purebilibili.feature.video.ui.section
 
 import com.android.purebilibili.core.plugin.BuiltinPluginIds
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -265,6 +266,7 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
+import com.android.purebilibili.core.ui.AppAlertDialog
 
 @Composable
 private fun GesturePercentDigit(
@@ -5414,8 +5416,8 @@ private fun VideoPlayerSectionContent(
                 ) {
                     AppText(
                         text = "需要长按锁定倍速吗？",
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            fontSize = MaterialTheme.typography.bodyMedium.fontSize * longPressSpeedHintScale
+                        style = COUITheme.textStyles.body1.copy(
+                            fontSize = COUITheme.textStyles.body1.fontSize * longPressSpeedHintScale
                         )
                     )
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

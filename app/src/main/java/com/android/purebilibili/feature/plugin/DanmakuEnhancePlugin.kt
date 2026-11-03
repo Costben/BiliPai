@@ -10,7 +10,6 @@ import com.android.purebilibili.core.ui.AppContentColors
 import android.content.Context
 import androidx.compose.foundation.layout.*
 //  Material Icons
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppOutlinedTextField
 import com.android.purebilibili.core.ui.components.AppSwitch
 import com.android.purebilibili.core.ui.components.AppText
@@ -36,6 +35,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.decodeFromString
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 private const val TAG = "DanmakuEnhancePlugin"
 
@@ -205,7 +205,7 @@ class DanmakuEnhancePlugin : BuiltinPlugin, DanmakuPluginApi {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column(modifier = Modifier.weight(1f)) {
-                    AppText("启用关键词屏蔽", style = MaterialTheme.typography.bodyLarge)
+                    AppText("启用关键词屏蔽", style = COUITheme.textStyles.main)
                 }
                 AppSwitch(
                     checked = enableFilter,
@@ -261,10 +261,10 @@ class DanmakuEnhancePlugin : BuiltinPlugin, DanmakuPluginApi {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column(modifier = Modifier.weight(1f)) {
-                    AppText("启用同传高亮", style = MaterialTheme.typography.bodyLarge)
+                    AppText("启用同传高亮", style = COUITheme.textStyles.main)
                     AppText(
                         "高亮显示同传/翻译弹幕",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                 }

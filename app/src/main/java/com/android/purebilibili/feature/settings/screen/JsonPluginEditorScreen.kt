@@ -33,6 +33,7 @@ import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.ContainerLevel
 import kotlinx.serialization.json.JsonPrimitive
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  * 🔧 JSON 插件编辑器界面
@@ -95,7 +96,7 @@ fun JsonPluginEditorContent(
 ) {
     if (pluginType != "json_rule") {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            AppText("内置插件无法编辑规则", style = MaterialTheme.typography.bodyLarge)
+            AppText("内置插件无法编辑规则", style = COUITheme.textStyles.main)
         }
         return
     }
@@ -108,10 +109,10 @@ fun JsonPluginEditorContent(
         // 基本信息
         item {
             AppCard(
-                colors = AppCardDefaults.colors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                colors = AppCardDefaults.colors(containerColor = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.5f))
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    AppText("基本信息", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                    AppText("基本信息", style = COUITheme.textStyles.headline1, fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.height(16.dp))
 
                     AppTextField(
@@ -140,7 +141,7 @@ fun JsonPluginEditorContent(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                AppText("过滤规则", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                AppText("过滤规则", style = COUITheme.textStyles.headline1, fontWeight = FontWeight.Bold)
 
                 AppTextButton(onClick = {
                     onRulesChange(rules + Rule(field = "title", op = "contains", value = JsonPrimitive(""), action = "hide"))
@@ -173,7 +174,7 @@ fun JsonPluginEditorContent(
             item {
                 AppText(
                     text = "点击 + 添加规则",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppContentColors.secondaryText()
                 )
             }
@@ -235,7 +236,7 @@ private fun RuleEditor(
             ) {
                 AppText(
                     text = "规则",
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.link()
                 )
                 AppIconButton(onClick = onDelete, modifier = Modifier.size(24.dp)) {
@@ -307,7 +308,7 @@ private fun DropdownSelector(
     Column {
         AppText(
             text = label,
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             color = AppContentColors.secondaryText()
         )
         com.android.purebilibili.core.ui.components.AppGlassMenuAnchor(onOpen = { expanded = true }) {

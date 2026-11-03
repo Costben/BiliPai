@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -87,7 +86,7 @@ private fun ProfilePhoneLoadingSkeleton(blockColor: () -> Color) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(heroHeight)
-                    .background(MaterialTheme.colorScheme.surfaceContainerLow),
+                    .background(AppSurfaceTokens.surfaceContainer()),
             ) {
                 Column(
                     modifier = Modifier
@@ -201,7 +200,7 @@ private fun ProfileSkeletonServiceGroup(blockColor: () -> Color) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(shape)
-            .background(MaterialTheme.colorScheme.surfaceContainerLow)
+            .background(AppSurfaceTokens.surfaceContainer())
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
@@ -261,7 +260,7 @@ private fun ProfileSkeletonBlock(
 @Composable
 private fun rememberProfileSkeletonBlockColor(animated: Boolean): () -> Color {
     val sweep = com.android.purebilibili.core.ui.skeleton.rememberSkeletonSweepState(animated)
-    val surfaceVariant = MaterialTheme.colorScheme.surfaceVariant
+    val surfaceVariant = AppSurfaceTokens.surfaceContainer()
     val onSurfaceVariant = AppContentColors.secondaryText()
     return remember(sweep, surfaceVariant, onSurfaceVariant) {
         com.android.purebilibili.core.ui.skeleton.skeletonFill(

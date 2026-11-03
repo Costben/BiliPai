@@ -3,6 +3,7 @@ package com.android.purebilibili.feature.video.screen
 import com.android.purebilibili.feature.video.viewmodel.CommentSubjectKey
 import com.android.purebilibili.feature.video.viewmodel.resolveReplyCount
 import com.android.purebilibili.core.ui.AppContentColors
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import android.content.Context
 import android.os.Build
@@ -22,7 +23,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import com.android.purebilibili.core.ui.components.AppIcon
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -614,7 +614,7 @@ private fun ExternalPlaylistQueueCollapsedBar(
         tonalElevation = 0.dp,
         border = BorderStroke(
             width = 0.6.dp,
-            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)
+            color = AppSurfaceTokens.outline().copy(alpha = 0.45f)
         )
     ) {
         ExternalPlaylistQueueCollapsedBarContent(
@@ -642,7 +642,7 @@ private fun ExternalPlaylistQueueCollapsedBarContent(
             AppText(
                 text = title,
                 modifier = Modifier.weight(1f),
-                style = MaterialTheme.typography.titleMedium,
+                style = COUITheme.textStyles.headline1,
                 fontWeight = FontWeight.SemiBold,
                 color = AppContentColors.primaryText(),
                 maxLines = 1,
@@ -652,7 +652,7 @@ private fun ExternalPlaylistQueueCollapsedBarContent(
             AppText(
                 text = "${videoCount}个视频",
                 color = AppContentColors.accent(),
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 fontWeight = FontWeight.Medium,
                 maxLines = 1,
             )

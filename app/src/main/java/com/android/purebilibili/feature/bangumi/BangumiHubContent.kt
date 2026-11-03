@@ -2,6 +2,7 @@ package com.android.purebilibili.feature.bangumi
 
 import com.android.purebilibili.core.ui.components.wallpaperMediaCardSurface
 import com.android.purebilibili.core.ui.AppContentColors
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
@@ -56,7 +57,6 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -456,7 +456,7 @@ private fun TimelineSection(
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         AppText(
             text = "追番时间表",
-            style = MaterialTheme.typography.titleMedium,
+            style = COUITheme.textStyles.headline1,
         )
         val uiStyle = LocalAppUiStyle.current
         val liquidGlassEnabled = com.android.purebilibili.core.ui.LocalAppThemeConfig.current.liquidGlassEnabled
@@ -744,7 +744,7 @@ private fun IndexFilterRow(
             text = group.label,
             modifier = Modifier.width(56.dp),
             color = AppContentColors.secondaryText(),
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             maxLines = 1,
         )
         if (selectedChoice != null) {
@@ -1103,13 +1103,13 @@ private fun PosterGridCard(
         AppText(
             text = item.title,
             modifier = Modifier.padding(top = 5.dp),
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
         AppText(
             text = item.newEp?.indexShow?.ifBlank { item.indexShow }.orEmpty(),
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText(),
             minLines = 1,
             maxLines = 1,
@@ -1142,13 +1142,13 @@ private fun SearchPosterCard(
         AppText(
             text = plainSearchTitle(item),
             modifier = Modifier.padding(top = 5.dp),
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
         AppText(
             text = item.indexShow,
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText(),
             minLines = 1,
             maxLines = 1,
@@ -1218,14 +1218,14 @@ private fun FollowPosterCard(
         AppText(
             item.title,
             modifier = Modifier.padding(top = 5.dp),
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
         item.progress.ifBlank { item.newEp?.indexShow.orEmpty() }.takeIf { it.isNotBlank() }?.let { subtitle ->
             AppText(
                 text = subtitle,
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -1262,14 +1262,14 @@ private fun TimelineEpisodeCard(episode: TimelineEpisode, onClick: () -> Unit) {
         AppText(
             episode.title,
             modifier = Modifier.padding(top = 5.dp),
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
         resolveTimelineEpisodeUpdateLabel(episode).takeIf(String::isNotBlank)?.let { updateLabel ->
             AppText(
                 text = updateLabel,
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -1383,15 +1383,15 @@ private fun FollowInfoCard(
                         }
                     }
                     item.newEp?.indexShow?.takeIf { it.isNotBlank() }?.let {
-                        AppText(it, style = MaterialTheme.typography.bodySmall, color = AppContentColors.secondaryText())
+                        AppText(it, style = COUITheme.textStyles.footnote1, color = AppContentColors.secondaryText())
                     }
                     item.progress.takeIf { it.isNotBlank() }?.let {
-                        AppText(it, style = MaterialTheme.typography.bodySmall, color = AppContentColors.accent())
+                        AppText(it, style = COUITheme.textStyles.footnote1, color = AppContentColors.accent())
                     }
                     item.evaluate.takeIf { it.isNotBlank() }?.let {
                         AppText(
                             it,
-                            style = MaterialTheme.typography.labelSmall,
+                            style = COUITheme.textStyles.footnote2,
                             color = AppContentColors.secondaryText(),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -1421,8 +1421,8 @@ private fun SectionHeader(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            AppText(title, style = MaterialTheme.typography.titleMedium)
-            subtitle?.let { AppText(it, color = AppContentColors.secondaryText(), style = MaterialTheme.typography.bodySmall) }
+            AppText(title, style = COUITheme.textStyles.headline1)
+            subtitle?.let { AppText(it, color = AppContentColors.secondaryText(), style = COUITheme.textStyles.footnote1) }
         }
         onRefresh?.let {
             AppIconButton(onClick = it) {

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -30,6 +29,7 @@ import com.android.purebilibili.feature.settings.share.SavedSettingsProfile
 import com.android.purebilibili.feature.settings.share.SettingsShareService
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun LiquidGlassSavedPresets(modifier: Modifier = Modifier) {
@@ -79,7 +79,7 @@ internal fun LiquidGlassSavedPresets(modifier: Modifier = Modifier) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             AppText(
                 text = "我的液态玻璃预设",
-                style = MaterialTheme.typography.titleSmall,
+                style = COUITheme.textStyles.headline2,
                 modifier = Modifier.weight(1f).padding(top = 12.dp),
             )
             AppTextButton(enabled = !busy, onClick = {
@@ -91,13 +91,13 @@ internal fun LiquidGlassSavedPresets(modifier: Modifier = Modifier) {
         }
         AppText(
             text = "保存当前调节参数，点击名称一键恢复；分享的 JSON 可通过下方“导入设置”恢复。",
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText(),
         )
         if (profiles.isEmpty()) {
             AppText(
                 text = if (busy) "正在读取预设…" else "还没有保存的预设",
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText(),
             )
         }

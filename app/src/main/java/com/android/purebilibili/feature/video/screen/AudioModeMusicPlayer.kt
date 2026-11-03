@@ -63,6 +63,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.isActive
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 private data class AudioPlaybackSnapshot(
     val isPlaying: Boolean = false,
@@ -132,7 +133,7 @@ internal fun AudioModeMusicPlayer(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(androidx.compose.material3.MaterialTheme.colorScheme.background),
+                .background(AppSurfaceTokens.background()),
             contentAlignment = Alignment.Center
         ) {
             AdaptiveLoadingIndicator(color = Color.White)

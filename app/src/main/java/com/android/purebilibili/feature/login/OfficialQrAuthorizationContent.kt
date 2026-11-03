@@ -1,5 +1,6 @@
 package com.android.purebilibili.feature.login
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.compose.foundation.layout.Arrangement
@@ -80,19 +81,19 @@ internal fun OfficialQrAuthorizationPanel(
                 ) {
                     AppText(
                         "扫描网页或 TV 登录二维码",
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = COUITheme.textStyles.main,
                         color = AppContentColors.primaryText(),
                     )
                     AppText(
                         "使用当前账号，授权其他设备登录",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                     )
                 }
                 scanner()
                 AppText(
                     "将二维码对准取景框，保持完整、清晰",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                     textAlign = TextAlign.Center,
                 )
@@ -103,7 +104,7 @@ internal fun OfficialQrAuthorizationPanel(
                 AppText(if (state == QrAuthorizationState.Checking) "正在校验登录请求…" else "正在授权…")
             }
             is QrAuthorizationState.Ready -> {
-                AppText("确认${state.type.label}端登录", style = MaterialTheme.typography.titleMedium)
+                AppText("确认${state.type.label}端登录", style = COUITheme.textStyles.headline1)
                 AppText("使用账号：${state.accountName.ifBlank { "UID ${state.mid}" }}（UID ${state.mid}）",
                     textAlign = TextAlign.Center)
                 state.location?.let { AppText("登录地点：$it", textAlign = TextAlign.Center) }
@@ -121,7 +122,7 @@ internal fun OfficialQrAuthorizationPanel(
                 ) {
                     AppText(
                         "确认即代表你已阅读并同意用户协议与隐私政策，点击查看全文。",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         textAlign = TextAlign.Center,
                     )
@@ -134,7 +135,7 @@ internal fun OfficialQrAuthorizationPanel(
                 AppOutlinedButton(onClick = onReset, modifier = Modifier.fillMaxWidth()) { AppText("取消并重新扫描") }
             }
             is QrAuthorizationState.Authorized -> {
-                AppText("已授权${state.type.label}端登录", style = MaterialTheme.typography.titleMedium)
+                AppText("已授权${state.type.label}端登录", style = COUITheme.textStyles.headline1)
                 AppText("请查看对方设备的登录结果。", textAlign = TextAlign.Center)
                 AppButton(onClick = onReset, modifier = Modifier.fillMaxWidth()) { AppText("继续扫描") }
             }
@@ -150,7 +151,7 @@ internal fun OfficialQrAuthorizationPanel(
 internal fun OfficialQrAuthorizationDialog(onDismiss: () -> Unit) {
     AppAlertDialog(
         onDismissRequest = onDismiss,
-        title = { AppText("扫码授权登录", style = MaterialTheme.typography.titleLarge) },
+        title = { AppText("扫码授权登录", style = COUITheme.textStyles.title4) },
         text = {
             OfficialQrAuthorizationContent(modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()))
         },

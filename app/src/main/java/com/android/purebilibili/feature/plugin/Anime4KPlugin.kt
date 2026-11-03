@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,6 +52,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 private const val TAG = "Anime4KPlugin"
 
@@ -170,7 +170,7 @@ class Anime4KPlugin : BuiltinPlugin, VideoEnhancementPluginApi {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            AppText("增强算法", style = MaterialTheme.typography.titleSmall)
+            AppText("增强算法", style = COUITheme.textStyles.headline2)
             VideoEnhancementAlgorithm.entries.forEach { algorithm ->
                 AppFilterChip(
                     selected = configSnapshot.algorithm == algorithm,
@@ -187,11 +187,11 @@ class Anime4KPlugin : BuiltinPlugin, VideoEnhancementPluginApi {
             }
             AppText(
                 text = "HDR、杜比视界、小窗和后台播放会自动使用原始视频输出。",
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText()
             )
             if (configSnapshot.algorithm == VideoEnhancementAlgorithm.ANIME4K) {
-                AppText("CNN 模型", style = MaterialTheme.typography.titleSmall)
+                AppText("CNN 模型", style = COUITheme.textStyles.headline2)
                 anime4kOptions.forEach { preset ->
                     AppFilterChip(
                         selected = configSnapshot.preset == preset,

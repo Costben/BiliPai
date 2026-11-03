@@ -1,6 +1,8 @@
 package com.android.purebilibili.feature.video.ui.overlay
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -12,7 +14,6 @@ import androidx.compose.animation.core.tween
 import com.android.purebilibili.core.ui.motion.rememberSystemReduceMotion
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -129,7 +130,7 @@ private fun NextWatchCard(
     val miuix = LocalAppUiStyle.current.usesMiuixFamilySkin
     val shape = if (miuix) AppShapes.container(ContainerLevel.Card) else androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
     val container = if (miuix) io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.surfaceContainerHigh
-        else MaterialTheme.colorScheme.surfaceContainerHigh
+        else AppSurfaceTokens.surfaceContainerHigh()
     val content = if (miuix) io.github.suqi8.coui.kmp.theme.COUITheme.colorScheme.onSurface
         else AppContentColors.primaryText()
     AppSurface(modifier = modifier, shape = shape, color = container, tonalElevation = 3.dp) {
@@ -143,12 +144,12 @@ private fun NextWatchCard(
                     contentScale = ContentScale.Crop, modifier = Modifier.size(56.dp, 36.dp).clip(androidx.compose.foundation.shape.RoundedCornerShape(6.dp)))
                 Column(modifier = Modifier.weight(1f)) {
                     AppText(text = suggestion.label, color = content,
-                        style = MaterialTheme.typography.labelSmall, maxLines = 1, tapToCopyEnabled = false)
+                        style = COUITheme.textStyles.footnote2, maxLines = 1, tapToCopyEnabled = false)
                     AppText(text = suggestion.title, color = content,
-                        style = MaterialTheme.typography.labelLarge, maxLines = 1,
+                        style = COUITheme.textStyles.button, maxLines = 1,
                         overflow = TextOverflow.Ellipsis, tapToCopyEnabled = false)
                     AppText(text = "剩余 $remainingSeconds 秒", color = content.copy(alpha = 0.7f),
-                        style = MaterialTheme.typography.labelSmall, maxLines = 1,
+                        style = COUITheme.textStyles.footnote2, maxLines = 1,
                         tapToCopyEnabled = false)
                 }
             }

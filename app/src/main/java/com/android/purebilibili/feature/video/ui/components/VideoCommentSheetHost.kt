@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppContentColors
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import android.os.Build
 import androidx.compose.animation.AnimatedVisibility
@@ -34,7 +35,6 @@ import com.android.purebilibili.core.ui.AdaptivePullToRefreshBox
 import com.android.purebilibili.core.ui.AdaptiveLoadingIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import com.android.purebilibili.core.ui.components.AppIcon
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppLiquidGlassBackToTopButton
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppTextButton
@@ -992,7 +992,7 @@ internal fun VideoCommentMainList(
                             AppText(
                                 text = "说点什么，直接评论 UP 主和大家",
                                 color = appearance.secondaryTextColor,
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp)
                             )
                         }

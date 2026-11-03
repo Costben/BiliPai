@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,6 +44,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import kotlin.math.ceil
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 /** current/total 表示已完成类别数，释放容量仅在重新统计后提供。 */
 data class CacheClearProgress(
@@ -101,7 +103,7 @@ internal fun CacheClearConfirmDialog(
                 modifier = Modifier.padding(16.dp).widthIn(max = 480.dp).fillMaxWidth()
                     .heightIn(max = (maxHeight - 32.dp).coerceAtLeast(1.dp)),
                 shape = AppShapes.container(ContainerLevel.Dialog),
-                containerColor = MaterialTheme.colorScheme.surface,
+                containerColor = AppSurfaceTokens.surface(),
                 tonalElevation = 2.dp
             ) {
                 Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(20.dp),
@@ -116,20 +118,20 @@ internal fun CacheClearConfirmDialog(
                         onSegmentPress = { highlightedTarget = it }
                     )
                     AppText(if (emptyAfterClear) "缓存已清空" else "存储使用情况",
-                        style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                        style = COUITheme.textStyles.title4, fontWeight = FontWeight.Bold)
                     Spacer(Modifier.height(8.dp))
                     AppText(
                         when {
                             clearSucceeded && !clearing -> "已释放 $releasedSize 磁盘空间"
                             breakdown == null -> "正在统计缓存…"
                             else -> "磁盘 ${breakdown.format()} · 内存约 ${formatCacheClearBytes(breakdown.memoryCache)}"
-                        }, style = MaterialTheme.typography.bodySmall, color = AppContentColors.secondaryText()
+                        }, style = COUITheme.textStyles.footnote1, color = AppContentColors.secondaryText()
                     )
                     if (!emptyAfterClear) {
                         CacheDeviceStorageBar(breakdown, deviceStorage)
                         Spacer(Modifier.height(12.dp))
                         Column(Modifier.clip(AppShapes.container(ContainerLevel.Card))
-                            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = .24f))) {
+                            .background(AppSurfaceTokens.surfaceContainer().copy(alpha = .24f))) {
                             segments.sortedByDescending { it.bytes }.forEach { segment ->
                                 key(segment.target) {
                                     val option = options.first { it.target == segment.target }
@@ -140,7 +142,7 @@ internal fun CacheClearConfirmDialog(
                             }
                         }
                         Spacer(Modifier.height(12.dp))
-                        AppText(selectedCacheSizeSummary, style = MaterialTheme.typography.bodyMedium,
+                        AppText(selectedCacheSizeSummary, style = COUITheme.textStyles.body1,
                             color = AppContentColors.secondaryText())
                         Spacer(Modifier.height(12.dp))
                         AppButton(onClick = onConfirm,
@@ -151,7 +153,7 @@ internal fun CacheClearConfirmDialog(
                     }
                     Spacer(Modifier.height(8.dp))
                     AppText("可重建的缓存会在需要时重新获取。不会删除离线缓存、下载内容和播放记录。",
-                        style = MaterialTheme.typography.bodySmall, color = AppContentColors.secondaryText())
+                        style = COUITheme.textStyles.footnote1, color = AppContentColors.secondaryText())
                     AppTextButton(onClick = { if (!clearing) onDismiss() }, modifier = Modifier.fillMaxWidth()) {
                         AppText(if (clearSucceeded) "完成" else "取消")
                     }
@@ -176,8 +178,8 @@ private fun CacheDeviceStorageBar(breakdown: CacheUtils.CacheBreakdown?, storage
     val reduced = LocalSystemReduceMotion.current
     val cache = animateFloatAsState(cacheFraction, if (reduced) snap() else AppMotionTokens.standardSpec(), label = "cacheDeviceFraction")
     val used = animateFloatAsState(usedFraction, if (reduced) snap() else AppMotionTokens.standardSpec(), label = "cacheDeviceUsed")
-    val color = MaterialTheme.colorScheme.primary
-    val track = MaterialTheme.colorScheme.onSurface
+    val color = AppContentColors.accent()
+    val track = AppContentColors.primaryText()
     Spacer(Modifier.height(12.dp))
     Canvas(Modifier.widthIn(max = 174.dp).fillMaxWidth(.8f).height(4.dp).semantics {
         contentDescription = if (storage == null || breakdown == null) "设备存储统计中" else "设备存储占用；缓存 ${formatCacheClearBytes(breakdown.reclaimableDiskSize)}"
@@ -221,13 +223,13 @@ private fun CacheClearCategoryRow(segment: CacheClearDonutSegment, description: 
         Spacer(Modifier.width(12.dp))
         Column(Modifier.weight(1f)) {
             AppText(cacheClearCategoryTitle(segment.target), fontWeight = FontWeight.Medium,
-                style = MaterialTheme.typography.bodyLarge, maxLines = 2)
+                style = COUITheme.textStyles.main, maxLines = 2)
             AppText(if (segment.target == CacheClearTarget.APP_METADATA) "按需重新获取" else segment.percentLabel,
-                style = MaterialTheme.typography.labelSmall, color = AppContentColors.secondaryText())
+                style = COUITheme.textStyles.footnote2, color = AppContentColors.secondaryText())
         }
         Spacer(Modifier.width(8.dp))
         AppText(when { segment.target == CacheClearTarget.APP_METADATA -> "可重建"; unknown -> "统计中"; else -> formatCacheClearBytes(segment.bytes) },
-            color = AppContentColors.link(), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Medium)
+            color = AppContentColors.link(), style = COUITheme.textStyles.body1, fontWeight = FontWeight.Medium)
     }
 }
 
@@ -248,7 +250,7 @@ fun CacheClearAnimationDialog(progress: CacheClearProgress, onDismiss: () -> Uni
         AppPopupSurface(type = AppPopupSurfaceType.SHEET,
             modifier = Modifier.padding(12.dp).widthIn(max = 480.dp).fillMaxWidth()
                 .heightIn(max = (window.heightDp * .8f).coerceAtLeast(96.dp)),
-            shape = AppShapes.container(ContainerLevel.Sheet), containerColor = MaterialTheme.colorScheme.surface,
+            shape = AppShapes.container(ContainerLevel.Sheet), containerColor = AppSurfaceTokens.surface(),
             tonalElevation = 3.dp) {
             Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -260,11 +262,11 @@ fun CacheClearAnimationDialog(progress: CacheClearProgress, onDismiss: () -> Uni
                     AppText(if (value == null) "准备中…" else "${ceil(value * 100).toInt()}%", fontSize = 24.sp, fontWeight = FontWeight.Bold)
                     if (value != null) AppLinearProgressIndicator(progress = { animated.value }, modifier = Modifier.widthIn(max = 240.dp).fillMaxWidth().height(5.dp))
                 }
-                AppText(if (progress.isComplete) "清理完成" else "正在清理", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                AppText(if (progress.isComplete) "清理完成" else "正在清理", style = COUITheme.textStyles.headline1, fontWeight = FontWeight.Bold)
                 AppText(if (progress.isComplete) "已释放 ${progress.clearedSize} 磁盘空间" else progress.message,
-                    style = MaterialTheme.typography.bodyMedium, color = AppContentColors.secondaryText())
+                    style = COUITheme.textStyles.body1, color = AppContentColors.secondaryText())
                 AppText(if (progress.isComplete) "即将返回缓存详情" else "请稍候，清理完成后会更新缓存详情",
-                    style = MaterialTheme.typography.bodySmall, color = AppContentColors.secondaryText())
+                    style = COUITheme.textStyles.footnote1, color = AppContentColors.secondaryText())
             }
         }
     }

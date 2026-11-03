@@ -48,6 +48,7 @@ import com.android.purebilibili.core.ui.components.AppIconButton
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.util.BilibiliNavigationTarget
 import com.android.purebilibili.core.util.hasCommentLocation
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 /**
  * WebViewScreen - 应用内浏览器
@@ -151,7 +152,7 @@ fun WebViewScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
+                    containerColor = AppSurfaceTokens.surface(),
                     titleContentColor = AppContentColors.primaryText()
                 )
             )
@@ -411,7 +412,7 @@ fun WebViewScreen(
                     if (cardSource != null && webContentAlpha.value < 1f) {
                         androidx.compose.foundation.layout.Column(
                             modifier = Modifier.fillMaxSize()
-                                .background(MaterialTheme.colorScheme.surface)
+                                .background(AppSurfaceTokens.surface())
                                 .graphicsLayer { alpha = 1f - webContentAlpha.value }
                                 .padding(24.dp),
                             horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,

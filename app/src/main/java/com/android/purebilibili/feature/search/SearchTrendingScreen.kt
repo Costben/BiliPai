@@ -51,6 +51,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.android.purebilibili.core.ui.AdaptivePullToRefreshBox
 import com.android.purebilibili.core.ui.globalWallpaperAwareChromeColor
 import androidx.compose.ui.graphics.RectangleShape
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,12 +86,12 @@ fun SearchTrendingScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = globalWallpaperAwareChromeColor(MaterialTheme.colorScheme.background),
-                    scrolledContainerColor = globalWallpaperAwareChromeColor(MaterialTheme.colorScheme.background)
+                    containerColor = globalWallpaperAwareChromeColor(AppSurfaceTokens.background()),
+                    scrolledContainerColor = globalWallpaperAwareChromeColor(AppSurfaceTokens.background())
                 )
             )
         },
-        containerColor = globalWallpaperAwareChromeColor(MaterialTheme.colorScheme.background)
+        containerColor = globalWallpaperAwareChromeColor(AppSurfaceTokens.background())
     ) { paddingValues ->
         when {
             state.isLoading -> TrendingListSkeleton(
@@ -145,7 +147,7 @@ fun SearchTrendingScreen(
 @Composable
 private fun SearchTrendingHero() {
     val heroPrimary = AppContentColors.accent()
-    val heroPrimaryContainer = MaterialTheme.colorScheme.primaryContainer
+    val heroPrimaryContainer = AppSurfaceTokens.primaryContainer()
     val heroTertiary = MaterialTheme.colorScheme.tertiary
     Box(
         modifier = Modifier
@@ -208,7 +210,7 @@ private fun SearchTrendingHero() {
                 .align(Alignment.Center)
                 .padding(horizontal = 24.dp),
             color = Color.White,
-            style = MaterialTheme.typography.displayMedium.copy(
+            style = COUITheme.textStyles.title1.copy(
                 fontWeight = FontWeight.Black
             )
         )
@@ -224,7 +226,7 @@ private fun SearchTrendingRow(
 ) {
     AppSurface(
         onClick = onClick,
-        color = MaterialTheme.colorScheme.surface,
+        color = AppSurfaceTokens.surface(),
         shape = RectangleShape
     ) {
         Column {
@@ -244,7 +246,7 @@ private fun SearchTrendingRow(
                     modifier = Modifier.weight(1f),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.titleLarge.copy(
+                    style = COUITheme.textStyles.title4.copy(
                         fontWeight = FontWeight.Medium
                     )
                 )
@@ -270,13 +272,13 @@ private fun SearchTrendingRow(
                     !item.subtitle.isNullOrBlank() -> AppText(
                         text = item.subtitle,
                         color = AppContentColors.secondaryText(),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = COUITheme.textStyles.body1
                     )
                 }
             }
             AppHorizontalDivider(
                 modifier = Modifier.padding(start = 78.dp),
-                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
+                color = AppSurfaceTokens.outline().copy(alpha = 0.35f)
             )
         }
     }
@@ -306,7 +308,7 @@ private fun SearchTrendingRank(
             3 -> AppContentColors.accent()
             else -> AppContentColors.secondaryText().copy(alpha = 0.72f)
         },
-        style = MaterialTheme.typography.titleLarge.copy(
+        style = COUITheme.textStyles.title4.copy(
             fontWeight = FontWeight.Black,
             fontStyle = FontStyle.Italic
         )

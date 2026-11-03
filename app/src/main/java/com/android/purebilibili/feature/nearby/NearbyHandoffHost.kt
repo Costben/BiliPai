@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.nearby
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.SystemClock
@@ -11,7 +13,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.ui.unit.dp
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppLinearProgressIndicator
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -313,10 +314,10 @@ internal fun NearbyHandoffHost(
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
                         AppText(request.video.title, maxLines = 2)
-                        AppText("来自 ${request.peer.name}", style = MaterialTheme.typography.bodySmall)
+                        AppText("来自 ${request.peer.name}", style = COUITheme.textStyles.footnote1)
                         AppLinearProgressIndicator(modifier = Modifier.fillMaxWidth())
                         AppText(receivingStage)
-                        AppText("准备视频 → 同步最新进度 → 等待播放确认", style = MaterialTheme.typography.bodySmall)
+                        AppText("准备视频 → 同步最新进度 → 等待播放确认", style = COUITheme.textStyles.footnote1)
                     }
                 },
                 confirmButton = { AppDialogAction(cancelReceiving) { AppText("取消接收") } },

@@ -1,5 +1,6 @@
 package com.android.purebilibili.feature.login
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.android.purebilibili.core.ui.AppContentColors
 
 import android.Manifest
@@ -28,7 +29,6 @@ import androidx.compose.foundation.layout.padding
 import com.android.purebilibili.core.ui.components.AppTextButton
 import com.android.purebilibili.core.ui.components.AppOutlinedButton
 import com.android.purebilibili.core.ui.components.AppText
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -310,7 +310,7 @@ fun BiliPaiTransferScanner(
                     modifier = Modifier.weight(1f).heightIn(min = 48.dp),
                     contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
                 ) {
-                    AppText("相册识别", style = MaterialTheme.typography.labelLarge)
+                    AppText("相册识别", style = COUITheme.textStyles.button)
                 }
                 AppOutlinedButton(
                     onClick = {
@@ -324,7 +324,7 @@ fun BiliPaiTransferScanner(
                 ) {
                     AppText(
                         if (torchEnabled) "关闭手电筒" else "手电筒",
-                        style = MaterialTheme.typography.labelLarge,
+                        style = COUITheme.textStyles.button,
                     )
                 }
             }

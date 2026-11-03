@@ -66,7 +66,8 @@ fun ActionButton(
     activeColor: Color = AppContentColors.secondaryText().copy(0.6f),
     modifier: Modifier = Modifier
 ) {
-    val colorScheme = MaterialTheme.colorScheme
+    val neutralSurfaceContent = AppContentColors.secondaryText()
+    val disabledSurfaceContent = AppContentColors.primaryText().copy(alpha = 0.38f)
     val isLike = label == "点赞"
     val isForward = label == "转发"
     val isComment = label == "评论"
@@ -74,10 +75,10 @@ fun ActionButton(
     // Ordinary actions remain neutral; confirmed likes use the active theme accent.
     val miuix = LocalAppUiStyle.current.usesMiuixFamilySkin
     val neutralContentColor = if (miuix) COUITheme.colorScheme.onSecondaryVariant
-        else colorScheme.onSurfaceVariant
+        else neutralSurfaceContent
     val buttonColor = when {
         !enabled -> if (miuix) COUITheme.colorScheme.disabledOnSecondaryVariant
-            else colorScheme.onSurface.copy(alpha = 0.38f)
+            else disabledSurfaceContent
         isLike && isActive -> DynamicStatusPalette.liked()
         else -> neutralContentColor
     }
@@ -224,7 +225,7 @@ fun ActionButton(
                 ) { text ->
                     AppText(
                         text = text,
-                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                        fontSize = COUITheme.textStyles.footnote1.fontSize,
                         fontWeight = FontWeight.Medium,
                         color = buttonColor,
                         letterSpacing = AppTypographyTokens.ZeroLetterSpacing,
@@ -262,10 +263,10 @@ private fun DynamicNativeActionText(
         AppText(
             text = text,
             // Both native themes share constrained action slots, with or without glass.
-            style = MaterialTheme.typography.labelLarge,
+            style = COUITheme.textStyles.button,
             autoSize = androidx.compose.foundation.text.TextAutoSize.StepBased(
-                minFontSize = MaterialTheme.typography.labelSmall.fontSize,
-                maxFontSize = MaterialTheme.typography.labelLarge.fontSize,
+                minFontSize = COUITheme.textStyles.footnote2.fontSize,
+                maxFontSize = COUITheme.textStyles.button.fontSize,
             ),
             maxLines = 1,
             softWrap = false,

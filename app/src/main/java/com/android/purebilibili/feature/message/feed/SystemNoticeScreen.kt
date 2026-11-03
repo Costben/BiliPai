@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.ExperimentalMaterial3Api
 import com.android.purebilibili.core.ui.components.AppIcon
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.runtime.*
@@ -49,6 +48,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.Job
 import com.android.purebilibili.core.coroutines.AccountScopedRequests
 import com.android.purebilibili.core.store.TokenManager
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 data class SystemNoticeUiState(
     val isLoading: Boolean = true,
@@ -264,12 +264,12 @@ fun SystemNoticeScreen(
                                     ) {
                                         AppText(
                                             text = item.title,
-                                            style = MaterialTheme.typography.bodyLarge,
+                                            style = COUITheme.textStyles.main,
                                             fontWeight = FontWeight.Medium
                                         )
                                         ClickableText(
                                             text = annotatedContent,
-                                            style = MaterialTheme.typography.bodyMedium.copy(
+                                            style = COUITheme.textStyles.body1.copy(
                                                 color = AppContentColors.secondaryText()
                                             ),
                                             onClick = { offset ->
@@ -284,7 +284,7 @@ fun SystemNoticeScreen(
                                             text = item.timeAt,
                                             modifier = Modifier
                                                 .align(Alignment.End),
-                                            style = MaterialTheme.typography.bodySmall,
+                                            style = COUITheme.textStyles.footnote1,
                                             color = AppContentColors.secondaryText()
                                         )
                                     }

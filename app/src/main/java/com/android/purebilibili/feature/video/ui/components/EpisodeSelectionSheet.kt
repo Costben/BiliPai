@@ -37,6 +37,7 @@ import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
 import androidx.navigationevent.findViewTreeNavigationEventDispatcherOwner
 import com.android.purebilibili.core.ui.AppModalBottomSheet
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 /** 分 P 与合集共用窗口、安全区、材质和返回收起过程，内容由各入口提供。 */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -89,7 +90,7 @@ internal fun EpisodeSelectionSheet(
             com.android.purebilibili.core.ui.AppPopupSurface(
                 type = com.android.purebilibili.core.ui.AppPopupSurfaceType.SHEET,
                 shape = androidx.compose.ui.graphics.RectangleShape,
-                containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surface,
+                containerColor = AppSurfaceTokens.surface(),
                 modifier = Modifier.fillMaxSize().graphicsLayer {
                     val progress = backProgress.value
                     transformOrigin = TransformOrigin(0.5f, 1f)

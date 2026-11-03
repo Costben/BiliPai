@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.home
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
@@ -339,13 +341,13 @@ private fun GridPinchColumnHudContent(
             if (LocalAppUiStyle.current.usesMiuixFamilySkin) {
                 AppText(
                     text = "$columnCount 列网格",
-                    style = MaterialTheme.typography.labelLarge,
+                    style = COUITheme.textStyles.button,
                     color = color,
                 )
             } else {
                 androidx.compose.material3.Text(
                     text = "$columnCount 列网格",
-                    style = MaterialTheme.typography.labelLarge,
+                    style = COUITheme.textStyles.button,
                     color = color,
                 )
             }

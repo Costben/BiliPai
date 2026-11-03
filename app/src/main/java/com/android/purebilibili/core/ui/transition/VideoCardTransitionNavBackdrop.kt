@@ -1,8 +1,9 @@
 package com.android.purebilibili.core.ui.transition
 
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -15,7 +16,7 @@ internal fun VideoCardTransitionNavBackdrop(
     phase: VideoCardTransitionBackgroundPhase,
     isLightBackground: Boolean,
     modifier: Modifier = Modifier,
-    baseBackgroundColor: Color = MaterialTheme.colorScheme.background,
+    baseBackgroundColor: Color = AppSurfaceTokens.background(),
 ) {
     if (!visible) return
     Box(

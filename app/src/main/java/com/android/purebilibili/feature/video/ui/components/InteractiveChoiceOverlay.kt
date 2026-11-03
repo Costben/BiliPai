@@ -1,6 +1,8 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppContentColors
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +19,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import com.android.purebilibili.core.ui.components.AppButton
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppTextButton
 import androidx.compose.runtime.Composable
@@ -82,8 +83,8 @@ fun InteractiveChoiceOverlay(
                             )
                             .width(168.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                            containerColor = AppSurfaceTokens.secondaryContainer(),
+                            contentColor = AppSurfaceTokens.onSecondaryContainer()
                         )
                     ) {
                         val label = if (choice.isDefault) "${choice.text}（默认）" else choice.text
@@ -100,7 +101,7 @@ fun InteractiveChoiceOverlay(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.97f),
+                            color = AppSurfaceTokens.surface().copy(alpha = 0.97f),
                             shape = AppShapes.container(ContainerLevel.Card)
                         )
                         .padding(14.dp),
@@ -114,7 +115,7 @@ fun InteractiveChoiceOverlay(
                         AppText(
                             text = state.title,
                             modifier = Modifier.weight(1f),
-                            style = MaterialTheme.typography.titleMedium,
+                            style = COUITheme.textStyles.headline1,
                             fontWeight = FontWeight.SemiBold,
                             color = AppContentColors.primaryText(),
                             maxLines = 2,
@@ -124,7 +125,7 @@ fun InteractiveChoiceOverlay(
                         if (countdown != null) {
                             AppText(
                                 text = "${(countdown / 1000L).coerceAtLeast(0L)}s",
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.error()
                             )
                         }
@@ -142,8 +143,8 @@ fun InteractiveChoiceOverlay(
                             onClick = { onSelectChoice(choice.edgeId, choice.cid) },
                             modifier = Modifier.fillMaxWidth(),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                                containerColor = AppSurfaceTokens.secondaryContainer(),
+                                contentColor = AppSurfaceTokens.onSecondaryContainer()
                             )
                         ) {
                             AppText(text = label)
@@ -166,7 +167,7 @@ private fun CoordinateModeHeader(
     Row(
         modifier = modifier
             .background(
-                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.92f),
+                color = AppSurfaceTokens.surface().copy(alpha = 0.92f),
                 shape = AppShapes.container(ContainerLevel.Card)
             )
             .padding(horizontal = 10.dp, vertical = 6.dp),
@@ -175,13 +176,13 @@ private fun CoordinateModeHeader(
     ) {
         AppText(
             text = title,
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = AppContentColors.primaryText()
         )
         if (remainingMs != null) {
             AppText(
                 text = "${(remainingMs / 1000L).coerceAtLeast(0L)}s",
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.error()
             )
         }
@@ -191,7 +192,7 @@ private fun CoordinateModeHeader(
         ) {
             AppText(
                 text = "关闭",
-                style = MaterialTheme.typography.labelSmall
+                style = COUITheme.textStyles.footnote2
             )
         }
     }

@@ -2,6 +2,8 @@
 
 package com.android.purebilibili.feature.home.subscription
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -18,7 +20,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -122,11 +123,11 @@ internal fun ArticleNoteEditorSheet(
         ) {
             AppText(
                 text = "文章笔记",
-                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold)
+                style = COUITheme.textStyles.title4.copy(fontWeight = FontWeight.SemiBold)
             )
             AppText(
                 text = sourceTitle,
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 color = AppContentColors.secondaryText(),
             )
             Spacer(modifier = Modifier.height(10.dp))
@@ -157,7 +158,7 @@ internal fun ArticleNoteEditorSheet(
                 }
                 AppText(
                     text = if (summaryDraft != null) "从原文生成摘要草稿" else "原文内容不足以生成摘要",
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = AppContentColors.secondaryText(),
                     modifier = Modifier.align(Alignment.CenterVertically),
                 )
@@ -234,7 +235,7 @@ internal fun ArticleNoteEditorSheet(
             ) {
                 AppText(
                     text = "$charCount 字",
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = AppContentColors.secondaryText(),
                     modifier = Modifier.weight(1f)
                 )

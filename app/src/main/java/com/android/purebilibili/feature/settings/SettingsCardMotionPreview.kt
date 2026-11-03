@@ -4,7 +4,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -29,6 +28,8 @@ import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.R
 import kotlin.math.sin
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 /** 用本地示意场景分别展示各开关的作用；不启动播放器或改变真实页面的转场状态。 */
 @Composable
@@ -39,7 +40,7 @@ internal fun SettingsCardMotionPreview(
     modifier: Modifier = Modifier,
 ) {
     val accent = AppContentColors.accent()
-    val surface = MaterialTheme.colorScheme.surface
+    val surface = AppSurfaceTokens.surface()
     val ink = AppContentColors.primaryText()
     val phase by remember(progress) {
         derivedStateOf {
@@ -154,7 +155,7 @@ internal fun SettingsCardMotionPreview(
         }
         AppText(
             text = caption,
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             color = ink,
             modifier = Modifier.align(Alignment.BottomCenter).padding(horizontal = 8.dp, vertical = 8.dp),
         )

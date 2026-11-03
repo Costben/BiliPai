@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -49,6 +48,10 @@ import com.android.purebilibili.core.ui.components.formatPlaybackSpeed
 import com.android.purebilibili.feature.dynamic.components.resolveImagePreviewGalleryPageTransform
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppShapes
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+import com.android.purebilibili.core.ui.ContainerLevel
 
 internal enum class SettingsFeaturePreview(
     val settingId: String,
@@ -114,7 +117,7 @@ internal fun SettingsCardPreviewGroupHeader(
                 .padding(end = 16.dp)
                 .heightIn(min = 48.dp)
                 .semantics { contentDescription = previewAccessibilityLabel },
-        ) { AppText(stringResource(R.string.preview_button), style = MaterialTheme.typography.labelLarge) }
+        ) { AppText(stringResource(R.string.preview_button), style = COUITheme.textStyles.button) }
     }
     if (open) {
         SettingsFeaturePreviewDialog(
@@ -204,26 +207,26 @@ private fun SettingsFeaturePreviewDialog(
                     if (feature == SettingsFeaturePreview.LONG_PRESS) {
                         stringResource(if (enabled) R.string.preview_status_long_press_on else R.string.preview_status_long_press_off)
                     } else stringResource(if (enabled) R.string.preview_status_enabled else R.string.preview_status_disabled),
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                 )
                 FeaturePreviewScene(
                     feature, enabled, { progress.value }, speed = speed,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(180.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(MaterialTheme.colorScheme.surfaceVariant),
+                        .clip(AppShapes.container(ContainerLevel.Card))
+                        .background(AppSurfaceTokens.surfaceContainer()),
                 )
-                AppText(stringResource(R.string.preview_illustration_notice), style = MaterialTheme.typography.bodySmall,
+                AppText(stringResource(R.string.preview_illustration_notice), style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText())
                 if (transitionDurationMillis != null) {
-                    AppText(stringResource(R.string.preview_transition_speed_notice), style = MaterialTheme.typography.bodySmall)
+                    AppText(stringResource(R.string.preview_transition_speed_notice), style = COUITheme.textStyles.footnote1)
                 }
                 if (reduceMotion) {
-                    AppText(stringResource(R.string.preview_reduce_motion_notice), style = MaterialTheme.typography.bodySmall)
+                    AppText(stringResource(R.string.preview_reduce_motion_notice), style = COUITheme.textStyles.footnote1)
                 }
                 if (feature in setOf(SettingsFeaturePreview.TOP_BLUR, SettingsFeaturePreview.TRANSITION_BLUR) && Build.VERSION.SDK_INT < 31) {
-                    AppText(stringResource(R.string.preview_blur_unavailable_notice), style = MaterialTheme.typography.bodySmall)
+                    AppText(stringResource(R.string.preview_blur_unavailable_notice), style = COUITheme.textStyles.footnote1)
                 }
             }
         },
@@ -347,7 +350,7 @@ private fun FeaturePreviewScene(
 
 @Composable
 internal fun PreviewScrollingCards(progress: () -> Float, accent: Color, modifier: Modifier = Modifier) {
-    val background = MaterialTheme.colorScheme.surfaceVariant
+    val background = AppSurfaceTokens.surfaceContainer()
     Canvas(modifier) {
         drawRect(background)
         repeat(6) { row ->

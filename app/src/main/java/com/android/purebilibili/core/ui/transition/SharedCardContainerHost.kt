@@ -1,5 +1,7 @@
 package com.android.purebilibili.core.ui.transition
 
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+
 import androidx.activity.compose.PredictiveBackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibilityScope
@@ -22,7 +24,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.background
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.rememberUpdatedState
@@ -188,7 +189,7 @@ internal fun <T : Any> SharedCardContainerHost(
         // original wallpaper and material presentation when the container is closed.
         modifier = Modifier
             .fillMaxSize()
-            .background(if (detailVisible) MaterialTheme.colorScheme.surface else Color.Transparent),
+            .background(if (detailVisible) AppSurfaceTokens.surface() else Color.Transparent),
     ) {
         val sharedScope = this
         val transition = rememberTransition(transitionState, label = "shared-card-container")
@@ -216,7 +217,7 @@ internal fun <T : Any> SharedCardContainerHost(
                 } else {
                     destination(target, closeDetail, replaceDetail, detailContentReady,
                         sharedCardContainerBounds(Modifier.fillMaxSize(), keyOf(target))
-                            .background(MaterialTheme.colorScheme.surface))
+                            .background(AppSurfaceTokens.surface()))
                 }
             }
         }

@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.runtime.Composable
@@ -47,6 +46,7 @@ import com.android.purebilibili.core.ui.LocalAnimatedVisibilityScope
 import com.android.purebilibili.core.ui.LocalSharedTransitionScope
 import com.android.purebilibili.core.ui.transition.liveCoverSharedElementKey
 import com.android.purebilibili.core.ui.rememberAppTopChromePolicy
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 internal data class LiveRoomCardUiModel(
     val roomId: Long,
@@ -156,7 +156,7 @@ internal fun LiveRoomCard(
                     AppText(
                         text = if (searchResult) model.hostName else model.areaName.ifBlank { "直播间" },
                         color = LiveStatusPalette.MediaContent.copy(alpha = 0.92f),
-                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.sp),
+                        style = COUITheme.textStyles.footnote2.copy(fontSize = 11.sp),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f),
@@ -165,7 +165,7 @@ internal fun LiveRoomCard(
                     AppText(
                         text = model.viewerText.ifBlank { "${formatLiveViewerCount(model.viewerCount)}人看过" },
                         color = LiveStatusPalette.MediaContent,
-                        style = MaterialTheme.typography.labelSmall.copy(
+                        style = COUITheme.textStyles.footnote2.copy(
                             fontSize = 11.sp,
                             fontFeatureSettings = AppTypographyTokens.TabularNumerals
                         ),
@@ -185,7 +185,7 @@ internal fun LiveRoomCard(
                 AppText(
                     text = model.title,
                     color = AppContentColors.primaryText(),
-                    style = MaterialTheme.typography.bodyMedium.copy(letterSpacing = 0.3.sp),
+                    style = COUITheme.textStyles.body1.copy(letterSpacing = 0.3.sp),
                     minLines = 2,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
@@ -194,7 +194,7 @@ internal fun LiveRoomCard(
                 AppText(
                     text = model.hostName,
                     color = AppContentColors.secondaryText(),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     minLines = 1,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

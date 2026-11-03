@@ -1,6 +1,8 @@
 // 文件路径: core/util/PermissionHelper.kt
 package com.android.purebilibili.core.util
 
+import com.android.purebilibili.core.ui.AppContentColors
+
 import com.android.purebilibili.core.ui.AppIcons
 
 import android.Manifest
@@ -13,7 +15,6 @@ import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 //  Material Icons
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -74,7 +75,7 @@ fun rememberPermissionState(
                 AppIcon(
                     rationaleIcon,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
+                    tint = AppContentColors.accent(),
                 )
             },
             title = { AppText(rationaleTitle) },
@@ -105,7 +106,7 @@ fun rememberPermissionState(
                 AppIcon(
                     AppIcons.Outlined.Check,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
+                    tint = AppContentColors.accent(),
                 )
             },
             title = { AppText("权限已关闭") },

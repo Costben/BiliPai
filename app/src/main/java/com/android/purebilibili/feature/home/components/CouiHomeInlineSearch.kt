@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.home.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -19,7 +21,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -263,7 +264,7 @@ private fun InlineSearchSuggestionRow(
         )
         AppText(
             text = text,
-            style = MaterialTheme.typography.bodyLarge,
+            style = COUITheme.textStyles.main,
             color = AppContentColors.primaryText(),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -276,7 +277,7 @@ private fun InlineSearchSuggestionRow(
 private fun InlineSearchHint(text: String) {
     AppText(
         text = text,
-        style = MaterialTheme.typography.bodyMedium,
+        style = COUITheme.textStyles.body1,
         color = AppContentColors.secondaryText(),
         modifier = Modifier.padding(
             horizontal = AppSpacingTokens.Large,

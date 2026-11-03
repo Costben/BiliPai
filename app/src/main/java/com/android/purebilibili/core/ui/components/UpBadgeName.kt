@@ -1,7 +1,9 @@
 package com.android.purebilibili.core.ui.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppContentColors
+
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import com.android.purebilibili.core.ui.LocalUpBadgeVisibility
 import androidx.compose.runtime.CompositionLocalProvider
@@ -23,10 +25,10 @@ fun UpBadgeName(
     badgeTrailingContent: (@Composable () -> Unit)? = null,
     leadingContent: (@Composable () -> Unit)? = null,
     metaText: String? = null,
-    nameStyle: TextStyle = MaterialTheme.typography.labelMedium,
-    nameColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
-    metaStyle: TextStyle = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
-    metaColor: Color = MaterialTheme.colorScheme.primary,
+    nameStyle: TextStyle = COUITheme.textStyles.footnote1,
+    nameColor: Color = AppContentColors.secondaryText(),
+    metaStyle: TextStyle = COUITheme.textStyles.footnote2.copy(fontWeight = FontWeight.Medium),
+    metaColor: Color = AppContentColors.accent(),
     badgeTextColor: Color = nameColor.copy(alpha = 0.85f),
     badgeBorderColor: Color = nameColor.copy(alpha = 0.35f),
     badgeBackgroundColor: Color = Color.Transparent,

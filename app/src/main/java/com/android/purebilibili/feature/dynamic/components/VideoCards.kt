@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.dynamic.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.AppContentColors
 
 import coil3.network.NetworkHeaders
@@ -35,7 +37,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import com.android.purebilibili.core.ui.components.AppIcon
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -295,7 +296,7 @@ private fun VideoCardLargeCover(
             .fillMaxWidth()
             .aspectRatio(16f / 10f)
             .clip(coverShape)
-            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .background(AppSurfaceTokens.surfaceContainer())
     ) {
         val coverOverlayTextStyle = remember {
             TextStyle(shadow = resolveVideoCardCoverOverlayTextShadow())
@@ -321,7 +322,7 @@ private fun VideoCardLargeCover(
             ) {
                 AppText(
                     text = badgeText,
-                    fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                    fontSize = COUITheme.textStyles.footnote2.fontSize,
                     fontWeight = FontWeight.Bold,
                     color = AppContentColors.onAccent()
                 )
@@ -392,7 +393,7 @@ private fun VideoCardLargeInfo(
     if (isCollection && collectionTitle.isNotBlank()) {
         AppText(
             text = collectionTitle,
-            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+            fontSize = COUITheme.textStyles.body1.fontSize,
             fontWeight = FontWeight.Bold,
             maxLines = videoCardTitleMaxLines(),
             overflow = videoCardTitleOverflow(),
@@ -401,7 +402,7 @@ private fun VideoCardLargeInfo(
         Spacer(modifier = Modifier.height(AppSpacingTokens.Micro))
         AppText(
             text = archive.title,
-            fontSize = MaterialTheme.typography.labelMedium.fontSize,
+            fontSize = COUITheme.textStyles.footnote1.fontSize,
             maxLines = videoCardTitleMaxLines(),
             overflow = videoCardTitleOverflow(),
             color = AppContentColors.secondaryText(),
@@ -410,11 +411,11 @@ private fun VideoCardLargeInfo(
     } else {
         AppText(
             text = archive.title,
-            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+            fontSize = COUITheme.textStyles.body1.fontSize,
             fontWeight = FontWeight.Bold,
             maxLines = videoCardTitleMaxLines(),
             overflow = videoCardTitleOverflow(),
-            lineHeight = MaterialTheme.typography.bodyLarge.lineHeight,
+            lineHeight = COUITheme.textStyles.main.lineHeight,
             color = AppContentColors.primaryText(),
             modifier = titleModifier
         )
@@ -427,7 +428,7 @@ private fun VideoCardLargeMetaText(
 ) {
     AppText(
         text = text,
-        fontSize = MaterialTheme.typography.labelSmall.fontSize,
+        fontSize = COUITheme.textStyles.footnote2.fontSize,
         color = MediaContrastPalette.Foreground,
         maxLines = 1
     )

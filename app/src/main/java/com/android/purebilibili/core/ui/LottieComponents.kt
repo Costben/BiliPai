@@ -1,12 +1,14 @@
 // 文件路径: core/ui/LottieComponents.kt
 package com.android.purebilibili.core.ui
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppContentColors
+
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppButton
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +22,7 @@ import com.android.purebilibili.core.plugin.skin.LocalUiSkinState
 import com.android.purebilibili.core.plugin.skin.UiSkinAnimatedAsset
 import com.android.purebilibili.core.plugin.skin.UiSkinSurface
 import com.android.purebilibili.core.plugin.skin.assetPath
+import com.android.purebilibili.core.ui.components.AppTextButton
 
 /**
  *  Lottie 动画加载器
@@ -94,8 +97,8 @@ fun LoadingAnimation(
             Spacer(modifier = Modifier.height(AppSpacingTokens.Small))
             AppText(
                 text = text,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                style = COUITheme.textStyles.body1,
+                color = AppContentColors.primaryText().copy(alpha = 0.6f)
             )
         }
     }
@@ -160,17 +163,17 @@ fun EmptyState(
         Spacer(modifier = Modifier.height(AppSpacingTokens.Large))
         AppText(
             text = easterEggMessage ?: message,
-            style = MaterialTheme.typography.bodyLarge,
+            style = COUITheme.textStyles.main,
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = AppContentColors.secondaryText()
         )
         if (!subtitle.isNullOrBlank()) {
             Spacer(modifier = Modifier.height(AppSpacingTokens.Small))
             AppText(
                 text = subtitle,
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = AppContentColors.secondaryText()
             )
         }
         if (actionText != null && onAction != null) {
@@ -247,11 +250,11 @@ fun ErrorState(
         Spacer(modifier = Modifier.height(AppSpacingTokens.Large))
         AppText(
             text = displayMessage,
-            style = MaterialTheme.typography.bodyLarge,
+            style = COUITheme.textStyles.main,
             color = if (showEncouragement)
-                MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
+                AppContentColors.accent().copy(alpha = 0.8f)
             else
-                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                AppContentColors.primaryText().copy(alpha = 0.6f)
         )
         if (onRetry != null) {
             Spacer(modifier = Modifier.height(AppSpacingTokens.Medium))

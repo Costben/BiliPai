@@ -2,6 +2,7 @@
 package com.android.purebilibili.feature.video.ui.components.glass
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.feature.video.ui.components.*
 
@@ -647,13 +648,13 @@ private fun DanmakuBlockManagerDialog(
                         AppText(
                             text = "屏蔽管理",
                             color = panelColors.titleColor,
-                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold)
+                            style = COUITheme.textStyles.title4.copy(fontWeight = FontWeight.SemiBold)
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         AppText(
                             text = "分类维护关键词、正则和 UID(hash) 规则",
                             color = panelColors.supportingColor,
-                            style = MaterialTheme.typography.bodySmall
+                            style = COUITheme.textStyles.footnote1
                         )
                     }
                     AppIconButton(
@@ -697,7 +698,7 @@ private fun DanmakuBlockManagerDialog(
                         AppText(
                             text = currentHint,
                             color = panelColors.supportingColor.copy(alpha = 0.6f),
-                            style = MaterialTheme.typography.bodySmall
+                            style = COUITheme.textStyles.footnote1
                         )
                     },
                     modifier = Modifier.fillMaxWidth(),
@@ -761,7 +762,7 @@ private fun DanmakuBlockManagerDialog(
                             AppText(
                                 text = "当前分类还没有规则",
                                 color = panelColors.supportingColor,
-                                style = MaterialTheme.typography.bodySmall
+                                style = COUITheme.textStyles.footnote1
                             )
                         } else {
                             currentRules.forEachIndexed { index, rule ->
@@ -773,7 +774,7 @@ private fun DanmakuBlockManagerDialog(
                                     AppText(
                                         text = rule,
                                         color = panelColors.titleColor,
-                                        style = MaterialTheme.typography.bodyMedium,
+                                        style = COUITheme.textStyles.body1,
                                         modifier = Modifier.weight(1f)
                                     )
                                     AppTextButton(
@@ -866,7 +867,7 @@ private fun DanmakuFilterSwitchRow(
             AppText(
                 text = label,
                 color = colors.titleColor,
-                style = if (fullscreenStyle) MaterialTheme.typography.bodyLarge else MaterialTheme.typography.bodyMedium
+                style = if (fullscreenStyle) COUITheme.textStyles.main else COUITheme.textStyles.body1
             )
             AppSwitch(
                 checked = checked,
@@ -897,7 +898,7 @@ private fun PortraitDanmakuDisplayAreaModeSelector(
             AppText(
                 text = "竖屏弹幕显示区域",
                 color = colors.titleColor,
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium)
+                style = COUITheme.textStyles.main.copy(fontWeight = FontWeight.Medium)
             )
             Spacer(modifier = Modifier.height(12.dp))
             Row(
@@ -934,7 +935,7 @@ private fun PortraitDanmakuDisplayAreaModeSelector(
                             } else {
                                 colors.titleColor
                             },
-                            style = MaterialTheme.typography.labelLarge.copy(
+                            style = COUITheme.textStyles.button.copy(
                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
                             ),
                             textAlign = TextAlign.Center
@@ -992,7 +993,7 @@ private fun DanmakuAreaSelector(
             AppText(
                 text = "显示区域",
                 color = colors.titleColor,
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium)
+                style = COUITheme.textStyles.main.copy(fontWeight = FontWeight.Medium)
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -1045,7 +1046,7 @@ private fun DanmakuAreaSelector(
                                     } else {
                                         colors.titleColor
                                     },
-                                    style = MaterialTheme.typography.bodyLarge.copy(
+                                    style = COUITheme.textStyles.main.copy(
                                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
                                     ),
                                     textAlign = TextAlign.Center
@@ -1058,7 +1059,7 @@ private fun DanmakuAreaSelector(
                                     } else {
                                         colors.supportingColor
                                     },
-                                    style = MaterialTheme.typography.labelSmall,
+                                    style = COUITheme.textStyles.footnote2,
                                     textAlign = TextAlign.Center
                                 )
                             }
@@ -1115,7 +1116,7 @@ private fun DanmakuSliderItem(
                 AppText(
                     text = "$label ${valueText(localValue)}",
                     color = colors.titleColor,
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium),
+                    style = COUITheme.textStyles.headline1.copy(fontWeight = FontWeight.Medium),
                     modifier = Modifier.weight(1f)
                 )
                 if (resetValue != null) {
@@ -1141,7 +1142,7 @@ private fun DanmakuSliderItem(
                 AppText(
                     text = label,
                     color = colors.titleColor,
-                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium)
+                    style = COUITheme.textStyles.main.copy(fontWeight = FontWeight.Medium)
                 )
                 AppSurface(
                     color = colors.itemColor,
@@ -1150,7 +1151,7 @@ private fun DanmakuSliderItem(
                     AppText(
                         text = displayValue(localValue),
                         color = colors.sliderActiveTrackColor,
-                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+                        style = COUITheme.textStyles.footnote1.copy(fontWeight = FontWeight.SemiBold),
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                     )
                 }

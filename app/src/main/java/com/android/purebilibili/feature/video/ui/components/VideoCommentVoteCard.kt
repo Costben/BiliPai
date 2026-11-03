@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -27,6 +26,11 @@ import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.data.model.response.ReplyVoteCard
 import com.android.purebilibili.feature.dynamic.components.DynamicVoteDialog
 import kotlin.math.roundToInt
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+import com.android.purebilibili.core.ui.AppShapes
+import com.android.purebilibili.core.ui.ContainerLevel
 
 @Composable
 fun VideoCommentVoteCard(
@@ -38,14 +42,13 @@ fun VideoCommentVoteCard(
     var displayedCard by remember(card) { mutableStateOf(card) }
     var selectedOption by remember(card.voteId) { mutableIntStateOf(-1) }
     var showVoteDialog by remember(card.voteId) { mutableStateOf(false) }
-    val colors = MaterialTheme.colorScheme
     val totalVotes = displayedCard.options.sumOf { it.count }.coerceAtLeast(0L)
 
     AppSurface(
         modifier = modifier,
-        shape = RoundedCornerShape(16.dp),
-        color = colors.surfaceContainerLow,
-        contentColor = colors.onSurface,
+        shape = AppShapes.container(ContainerLevel.Card),
+        color = AppSurfaceTokens.surfaceContainer(),
+        contentColor = AppContentColors.primaryText(),
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -53,9 +56,9 @@ fun VideoCommentVoteCard(
         ) {
             AppText(
                 text = displayedCard.title,
-                style = MaterialTheme.typography.titleMedium,
+                style = COUITheme.textStyles.headline1,
                 fontWeight = FontWeight.SemiBold,
-                color = colors.onSurface,
+                color = AppContentColors.primaryText(),
             )
             AppText(
                 text = if (displayedCard.myVoteOption != null) {
@@ -63,8 +66,8 @@ fun VideoCommentVoteCard(
                 } else {
                     "${displayedCard.count} 人参与 · 选择选项投票"
                 },
-                style = MaterialTheme.typography.bodyMedium,
-                color = colors.onSurfaceVariant,
+                style = COUITheme.textStyles.body1,
+                color = AppContentColors.secondaryText(),
             )
             Row(
                 modifier = Modifier
@@ -75,15 +78,15 @@ fun VideoCommentVoteCard(
                 displayedCard.options.forEachIndexed { position, option ->
                     val selected = displayedCard.myVoteOption == option.idx
                     val (containerColor, contentColor) = when (position % 3) {
-                        0 -> colors.primaryContainer to colors.onPrimaryContainer
-                        1 -> colors.secondaryContainer to colors.onSecondaryContainer
-                        else -> colors.tertiaryContainer to colors.onTertiaryContainer
+                        0 -> AppSurfaceTokens.primaryContainer() to AppSurfaceTokens.onPrimaryContainer()
+                        1 -> AppSurfaceTokens.secondaryContainer() to AppSurfaceTokens.onSecondaryContainer()
+                        else -> AppSurfaceTokens.surfaceContainerHigh() to AppContentColors.primaryText()
                     }
                     val optionColors = resolveAccessibleContainerColors(
                         containerColor = containerColor,
                         contentColor = contentColor,
-                        backgroundColor = colors.surfaceContainerLow,
-                        fallbackContentColors = listOf(colors.onSurface, Color.Black, Color.White),
+                        backgroundColor = AppSurfaceTokens.surfaceContainer(),
+                        fallbackContentColors = listOf(AppContentColors.primaryText(), Color.Black, Color.White),
                     )
                     AppSurface(
                         onClick = {
@@ -93,7 +96,7 @@ fun VideoCommentVoteCard(
                         modifier = Modifier
                             .widthIn(min = 144.dp, max = 240.dp)
                             .heightIn(min = 72.dp),
-                        shape = RoundedCornerShape(12.dp),
+                        shape = AppShapes.container(ContainerLevel.MediaCover),
                         color = optionColors.containerColor,
                         contentColor = optionColors.contentColor,
                     ) {
@@ -103,7 +106,7 @@ fun VideoCommentVoteCard(
                         ) {
                             AppText(
                                 text = if (selected) "✓ ${option.desc}" else option.desc,
-                                style = MaterialTheme.typography.bodyMedium,
+                                style = COUITheme.textStyles.body1,
                                 fontWeight = FontWeight.Medium,
                                 color = optionColors.contentColor,
                             )
@@ -113,7 +116,7 @@ fun VideoCommentVoteCard(
                                 } else {
                                     "0%"
                                 },
-                                style = MaterialTheme.typography.bodyMedium,
+                                style = COUITheme.textStyles.body1,
                                 color = optionColors.contentColor,
                             )
                         }

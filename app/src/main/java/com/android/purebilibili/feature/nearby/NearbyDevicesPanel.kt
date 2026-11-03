@@ -6,10 +6,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
+import com.android.purebilibili.core.ui.AppShapes
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.ContainerLevel
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,19 +63,19 @@ internal fun NearbyDevicesPanel(
         Column(Modifier.fillMaxWidth().widthIn(max = 600.dp).heightIn(max = 680.dp)
             .imePadding().navigationBarsPadding().padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            AppText(NEARBY_TITLE, style = MaterialTheme.typography.titleLarge)
-            AppText(state.status, style = MaterialTheme.typography.bodySmall)
+            AppText(NEARBY_TITLE, style = COUITheme.textStyles.title4)
+            AppText(state.status, style = COUITheme.textStyles.footnote1)
             Column(Modifier.weight(1f, fill = false).verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            AppText("两端连接同一局域网并打开此面板，选择设备、核对身份后即可加密接续播放。", style = MaterialTheme.typography.bodyMedium)
-            state.localEndpoint?.let { AppText("本机接收地址：$it", style = MaterialTheme.typography.bodySmall) }
+            AppText("两端连接同一局域网并打开此面板，选择设备、核对身份后即可加密接续播放。", style = COUITheme.textStyles.body1)
+            state.localEndpoint?.let { AppText("本机接收地址：$it", style = COUITheme.textStyles.footnote1) }
             Row {
                 AppTextButton(onClick = if (state.receiving) onDisable else onEnable, enabled = ready && !state.busy) {
                     AppText(if (state.receiving) "关闭接收" else "开启设备接力")
                 }
             }
             if (state.receiving) {
-                AppText("正在发现局域网设备；首次配对需在两端核对相同的校验码。", style = MaterialTheme.typography.bodySmall)
+                AppText("正在发现局域网设备；首次配对需在两端核对相同的校验码。", style = COUITheme.textStyles.footnote1)
                 state.discovered.filter { found -> state.peers.none { it.pin == found.pin } }.forEach { peer ->
                     AppTextButton(onClick = { onNearbyPair(peer) }, enabled = !state.busy) { AppText("配对 ${peer.name}") }
                 }
@@ -82,12 +85,12 @@ internal fun NearbyDevicesPanel(
                 AppTextButton(onClick = { onPairingCode(endpoint) }, enabled = !state.busy) { AppText("生成配对码") }
             }
             state.pairingCode?.takeIf { showManualPairing }?.let { pairingCode ->
-                AppText("配对码 5 分钟内有效，仅供你要配对的设备使用。", style = MaterialTheme.typography.bodySmall)
+                AppText("配对码 5 分钟内有效，仅供你要配对的设备使用。", style = COUITheme.textStyles.footnote1)
                 AppTextButton(onClick = { clipboard.setText(AnnotatedString(pairingCode)) }) { AppText("复制配对码") }
             }
             if (state.receiving && showManualPairing) {
                 AppText("手机与模拟器配对：优先由实体手机生成配对码，复制到模拟器后点击配对。连接保持期间，手机也可通过同一连接回传视频。模拟器可能无法自动发现局域网设备。",
-                    style = MaterialTheme.typography.bodySmall)
+                    style = COUITheme.textStyles.footnote1)
                 AppTextButton(onClick = { showEndpoint = !showEndpoint }) { AppText("手动连接地址") }
                 if (showEndpoint) AppOutlinedTextField(value = endpoint, onValueChange = { endpoint = it.take(80) },
                     label = { AppText("接收地址（IP:端口，可留空）") }, singleLine = true, modifier = Modifier.fillMaxWidth())
@@ -131,10 +134,10 @@ internal fun NearbyDevicesPanel(
                             drag = (drag + amount).coerceIn(-threshold * 1.5f, 0f)
                         }
                     })
-                AppText("上滑卡片，发送到 ${selected.name}", style = MaterialTheme.typography.bodySmall)
+                AppText("上滑卡片，发送到 ${selected.name}", style = COUITheme.textStyles.footnote1)
                 AppTextButton(onClick = { onSend(selected) }, enabled = !state.busy) { AppText("发送当前视频") }
             } else if (state.peers.isNotEmpty() && video == null) {
-                AppText("打开一个视频后，可在播放器中发送接力。", style = MaterialTheme.typography.bodySmall)
+                AppText("打开一个视频后，可在播放器中发送接力。", style = COUITheme.textStyles.footnote1)
             }
             }
         }
@@ -143,11 +146,11 @@ internal fun NearbyDevicesPanel(
 
 @Composable
 private fun NearbyVideoCard(video: NearbyVideo, modifier: Modifier = Modifier) {
-    Box(modifier.clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.surfaceContainerHigh)) {
+    Box(modifier.clip(AppShapes.container(ContainerLevel.ProminentCard)).background(AppSurfaceTokens.surfaceContainerHigh())) {
         AsyncImage(video.cover, null, modifier = Modifier.matchParentSize(), contentScale = ContentScale.Crop)
         Box(Modifier.matchParentSize().background(Color.Black.copy(alpha = 0.35f)))
         AppText(video.title, modifier = Modifier.align(Alignment.BottomStart).padding(16.dp),
-            color = Color.White, maxLines = 2, style = MaterialTheme.typography.titleMedium)
+            color = Color.White, maxLines = 2, style = COUITheme.textStyles.headline1)
     }
 }
 
@@ -172,8 +175,8 @@ internal fun NearbyFlightOverlay(flight: NearbyFlight, modifier: Modifier = Modi
                 alpha = 1f - distance
             }.then(if (reduceMotion) Modifier else Modifier.nearbyLivingEdge(
                 progressProvider = { progress.value },
-                accent = MaterialTheme.colorScheme.primary,
-                highlight = MaterialTheme.colorScheme.onSurface,
+                accent = AppContentColors.accent(),
+                highlight = AppContentColors.primaryText(),
                 glassEnabled = glassEnabled,
             ))) {
             NearbyVideoCard(flight.video, Modifier.matchParentSize().padding(12.dp)

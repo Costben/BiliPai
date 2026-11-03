@@ -6,6 +6,8 @@ import com.android.purebilibili.navigation.tabSelectedPage
 import com.android.purebilibili.navigation.tabIndicatorPosition
 import com.android.purebilibili.core.util.rememberHapticFeedback
 import com.android.purebilibili.core.util.HapticType
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import com.android.purebilibili.feature.video.ui.components.RelatedVideoList
 
@@ -350,7 +352,7 @@ internal fun TabletVideoLayout(
                     modifier = Modifier
                         .fillMaxSize()
                         .statusBarsPadding()
-                        .background(MaterialTheme.colorScheme.background)
+                        .background(AppSurfaceTokens.background())
                 ) {
                 // 视频播放器（固定高度，不参与滚动）
 
@@ -1007,7 +1009,7 @@ internal fun TabletSecondaryContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                .background(AppSurfaceTokens.surfaceContainer())
                 .padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -1042,7 +1044,7 @@ internal fun TabletSecondaryContent(
                     Modifier
                 }
             )
-            .background(MaterialTheme.colorScheme.background)
+            .background(AppSurfaceTokens.background())
     ) {
         if (tabs.size > 1) {
             Row(
@@ -1079,7 +1081,7 @@ internal fun TabletSecondaryContent(
             ) {
                 AppText(
                     text = requireNotNull(fixedTab).label,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold,
                     modifier = Modifier.weight(1f),
                 )
@@ -1334,14 +1336,14 @@ internal fun TabletSecondaryContent(
                             ) {
                                 AppText(
                                     text = commentState.pageControl?.emptyMessage()?.takeIf { it.isNotBlank() } ?: "暂无评论",
-                                    style = MaterialTheme.typography.titleMedium,
+                                    style = COUITheme.textStyles.headline1,
                                     color = commentAppearance.secondaryTextColor
                                 )
                                 if (includeRelatedTab) {
                                     Spacer(modifier = Modifier.height(8.dp))
                                     AppText(
                                         text = "先看看相关推荐",
-                                        style = MaterialTheme.typography.bodyMedium,
+                                        style = COUITheme.textStyles.body1,
                                         color = commentAppearance.secondaryTextColor
                                     )
                                     Spacer(modifier = Modifier.height(12.dp))
@@ -1550,12 +1552,12 @@ private fun TabletCollectionPane(
                 Column(modifier = Modifier.weight(1f)) {
                     AppText(
                         text = ugcSeason.title,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         color = AppContentColors.primaryText(),
                     )
                     AppText(
                         text = "共 ${episodes.size} 个视频",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                     )
                 }
@@ -1563,7 +1565,7 @@ private fun TabletCollectionPane(
                     collectionId = ugcSeason.id,
                     currentBvid = currentBvid,
                     currentAid = currentAid,
-                    fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                    fontSize = COUITheme.textStyles.footnote1.fontSize,
                 )
             }
         }
@@ -1605,7 +1607,7 @@ private fun TabletCollectionPane(
                         overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                         color = AppContentColors.primaryText()
                     )
-                    if (isCurrent) AppText(text = "正在播放", style = MaterialTheme.typography.labelSmall)
+                    if (isCurrent) AppText(text = "正在播放", style = COUITheme.textStyles.footnote2)
                 }
             }
         }
@@ -1808,7 +1810,7 @@ private fun ScrollableVideoInfoSection(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
-                        AppText("视频简介", style = MaterialTheme.typography.titleSmall)
+                        AppText("视频简介", style = COUITheme.textStyles.headline2)
                         AppTextButton(onClick = { supportingInfoExpanded = !supportingInfoExpanded }) {
                             AppText(if (supportingInfoExpanded) "收起" else "展开")
                         }
@@ -1860,7 +1862,7 @@ private fun ScrollableVideoInfoSection(
             Spacer(modifier = Modifier.height(24.dp))
             AppText(
                 text = "更多推荐",
-                style = MaterialTheme.typography.titleSmall,
+                style = COUITheme.textStyles.headline2,
                 fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                 color = AppContentColors.primaryText()
             )
@@ -1904,7 +1906,7 @@ private fun ScrollableVideoInfoSection(
                                     .fillMaxWidth()
                                     .aspectRatio(1.6f)
                                     .clip(AppShapes.container(ContainerLevel.Chip))
-                                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                                    .background(AppSurfaceTokens.surfaceContainer())
                             ) {
                                 coil3.compose.AsyncImage(
                                     model = com.android.purebilibili.core.util.FormatUtils.fixImageUrl(video.pic),
@@ -1922,7 +1924,7 @@ private fun ScrollableVideoInfoSection(
                             Spacer(modifier = Modifier.height(6.dp))
                             AppText(
                                 text = video.title,
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.primaryText(),
                                 maxLines = 2,
                                 overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
@@ -1931,7 +1933,7 @@ private fun ScrollableVideoInfoSection(
                             Spacer(modifier = Modifier.height(2.dp))
                             AppText(
                                 text = video.owner.name,
-                                style = MaterialTheme.typography.labelSmall,
+                                style = COUITheme.textStyles.footnote2,
                                 color = AppContentColors.secondaryText(),
                                 maxLines = 1,
                                 overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
@@ -1945,14 +1947,14 @@ private fun ScrollableVideoInfoSection(
                         .fillMaxWidth()
                         .height(100.dp)
                         .background(
-                            color = MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.3f),
+                            color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.3f),
                             shape = AppShapes.container(ContainerLevel.Chip)
                         ),
                     contentAlignment = Alignment.Center
                 ) {
                     AppText(
                         text = "暂无更多推荐",
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         color = AppContentColors.secondaryText()
                     )
                 }
@@ -2055,7 +2057,7 @@ private fun TabletRelatedCarouselSkeleton(modifier: Modifier = Modifier) {
         Spacer(Modifier.height(24.dp))
         AppText(
             text = "更多推荐",
-            style = MaterialTheme.typography.titleSmall,
+            style = COUITheme.textStyles.headline2,
             fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
             color = AppContentColors.primaryText(),
         )
@@ -2076,14 +2078,14 @@ private fun TabletRelatedCarouselSkeleton(modifier: Modifier = Modifier) {
                     Spacer(Modifier.height(6.dp))
                     com.android.purebilibili.core.ui.skeleton.ContentSkeletonText(
                         text = "推荐视频标题占位\n第二行标题占位",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         colorProvider = color,
                         maxLines = 2,
                     )
                     Spacer(Modifier.height(2.dp))
                     com.android.purebilibili.core.ui.skeleton.ContentSkeletonText(
                         text = "UP 主名称",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         colorProvider = color,
                     )
                 }

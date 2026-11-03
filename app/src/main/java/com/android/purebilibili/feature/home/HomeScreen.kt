@@ -1,6 +1,8 @@
 // 文件路径: feature/home/HomeScreen.kt
 package com.android.purebilibili.feature.home
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.core.plugin.BuiltinPluginIds
@@ -2986,7 +2988,7 @@ fun HomeScreen(
                 AppSurface(
                     shape = AppShapes.container(ContainerLevel.Pill),
                     color = if (refreshTipAppearance.surfaceStyle == HomeRefreshTipSurfaceStyle.PLAIN) {
-                        MaterialTheme.colorScheme.surfaceContainerHigh
+                        AppSurfaceTokens.surfaceContainerHigh()
                     } else {
                         overlayChromeColors.containerColor
                     },
@@ -3003,7 +3005,7 @@ fun HomeScreen(
                 ) {
                     AppText(
                         text = refreshDeltaTipText.orEmpty(),
-                        style = MaterialTheme.typography.labelLarge,
+                        style = COUITheme.textStyles.button,
                         color = AppContentColors.primaryText(),
                         modifier = Modifier.padding(horizontal = AppSpacingTokens.Medium + AppSpacingTokens.Micro, vertical = AppSpacingTokens.Small)
                     )
@@ -3088,13 +3090,13 @@ fun HomeScreen(
                     ) {
                         AppText(
                             text = "⟲",
-                            style = MaterialTheme.typography.labelLarge,
+                            style = COUITheme.textStyles.button,
                             fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.width(AppSpacingTokens.ExtraSmall))
                         AppText(
                             text = "撤销刷新",
-                            style = MaterialTheme.typography.labelLarge,
+                            style = COUITheme.textStyles.button,
                             fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.width(AppSpacingTokens.ExtraSmall))

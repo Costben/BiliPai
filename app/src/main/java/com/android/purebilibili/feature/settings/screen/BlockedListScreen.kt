@@ -45,6 +45,7 @@ import com.android.purebilibili.core.util.ShareUtils
 import kotlinx.coroutines.launch
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.purebilibili.core.ui.AdaptiveLoadingIndicator
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -230,7 +231,7 @@ fun BlockedListContent(
         ) {
             AppText(
                 text = "暂无屏蔽的 UP 主",
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 color = AppContentColors.secondaryText()
             )
             if (onSyncBlockedList != null) {
@@ -420,7 +421,7 @@ private fun BlockedListSyncAction(
             Spacer(modifier = Modifier.height(8.dp))
             AppText(
                 text = message,
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText()
             )
         }
@@ -465,7 +466,7 @@ private fun BlockedUpItem(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 AppText(
                     text = name.ifBlank { "UP主$mid" },
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = COUITheme.textStyles.main,
                     fontWeight = FontWeight.Medium,
                     color = AppContentColors.primaryText(),
                     maxLines = 1,
@@ -487,7 +488,7 @@ private fun BlockedUpItem(
                     archiveCount = archiveCount,
                     isDeleted = isDeleted
                 ),
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = if (isDeleted) AppContentColors.error() else AppContentColors.secondaryText(),
                 maxLines = 2
             )
@@ -495,7 +496,7 @@ private fun BlockedUpItem(
                 Spacer(modifier = Modifier.height(2.dp))
                 AppText(
                     text = sign.trim(),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                     maxLines = 2
                 )

@@ -12,6 +12,7 @@ import com.android.purebilibili.core.ui.AppIcons
 import com.android.purebilibili.core.ui.rememberAppShareIcon
 import com.android.purebilibili.core.ui.rememberAppWatchLaterIcon
 import com.android.purebilibili.feature.video.ui.section.BiliActionButton
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.navigation.animatePagerSelection
 import com.android.purebilibili.core.ui.resolveFilledButtonContainerColor
@@ -224,7 +225,7 @@ fun BangumiPlayerContent(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
+                .background(AppSurfaceTokens.background()),
         )
         Column(
             modifier = Modifier
@@ -235,7 +236,7 @@ fun BangumiPlayerContent(
                     if (liquidGlassEnabled) {
                         Modifier
                             .layerBackdrop(selectionBackdrop)
-                            .background(MaterialTheme.colorScheme.background)
+                            .background(AppSurfaceTokens.background())
                     } else Modifier
                 )
                 .commentThreadNavigationBlur {
@@ -292,7 +293,7 @@ fun BangumiPlayerContent(
                         Column(modifier = Modifier.weight(1f)) {
                             AppText(
                                 text = up.uname,
-                                style = MaterialTheme.typography.titleMedium,
+                                style = COUITheme.textStyles.headline1,
                                 fontWeight = FontWeight.SemiBold,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
@@ -305,7 +306,7 @@ fun BangumiPlayerContent(
                             if (subText.isNotBlank()) {
                                 AppText(
                                     text = subText,
-                                    style = MaterialTheme.typography.bodySmall,
+                                    style = COUITheme.textStyles.footnote1,
                                     color = AppContentColors.secondaryText(),
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
@@ -339,14 +340,14 @@ fun BangumiPlayerContent(
                                 Column {
                                     AppText(
                                         text = cooperator.uname,
-                                        style = MaterialTheme.typography.bodyMedium,
+                                        style = COUITheme.textStyles.body1,
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis
                                     )
                                     cooperator.role?.takeIf { it.isNotBlank() }?.let {
                                         AppText(
                                             text = it,
-                                            style = MaterialTheme.typography.labelSmall,
+                                            style = COUITheme.textStyles.footnote2,
                                             color = AppContentColors.secondaryText()
                                         )
                                     }
@@ -358,7 +359,7 @@ fun BangumiPlayerContent(
 
                 AppText(
                     text = detail.title,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = COUITheme.textStyles.title4,
                     fontWeight = FontWeight.Bold,
                     maxLines = 2
                 )
@@ -367,7 +368,7 @@ fun BangumiPlayerContent(
                     Spacer(modifier = Modifier.height(4.dp))
                     AppText(
                         text = detail.subtitle,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
@@ -381,7 +382,7 @@ fun BangumiPlayerContent(
                     .joinToString(" ")
                 AppText(
                     text = "正在播放：$currentPlayingLabel",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppContentColors.accent(),
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
@@ -395,7 +396,7 @@ fun BangumiPlayerContent(
                     }
                     AppText(
                         text = accessLabel,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = if (currentEpisode.playable || currentEpisode.episodeCanView) {
                             AppContentColors.accent()
                         } else {
@@ -417,7 +418,7 @@ fun BangumiPlayerContent(
                         }
                         AppText(
                             text = statText,
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText()
                         )
                     }
@@ -452,7 +453,7 @@ fun BangumiPlayerContent(
                     modifier = Modifier.weight(1f),
                     colors = if (isFollowing) {
                         ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            containerColor = AppSurfaceTokens.surfaceContainer(),
                             contentColor = AppContentColors.secondaryText(),
                         )
                     } else {
@@ -486,7 +487,7 @@ fun BangumiPlayerContent(
         if (!isCourse) {
             item {
                 var confirmTriple by remember(currentEpisode.id) { mutableStateOf(false) }
-                val actionColor = MaterialTheme.colorScheme.primary
+                val actionColor = AppContentColors.accent()
                 val episodeActionEnabled = currentEpisode.aid > 0L && !tripleInProgress
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 2.dp),
@@ -573,7 +574,7 @@ fun BangumiPlayerContent(
                         onClick = onDownloadClick,
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            containerColor = AppSurfaceTokens.surfaceContainer(),
                             contentColor = AppContentColors.secondaryText()
                         )
                     ) {
@@ -583,7 +584,7 @@ fun BangumiPlayerContent(
                         onClick = onShareClick,
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            containerColor = AppSurfaceTokens.surfaceContainer(),
                             contentColor = AppContentColors.secondaryText()
                         )
                     ) {
@@ -596,7 +597,7 @@ fun BangumiPlayerContent(
         if (!isCourse && detail.seasons.orEmpty().count { it.seasonId > 0L } > 1) {
             item {
                 Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)) {
-                    AppText("相关季度", style = MaterialTheme.typography.titleMedium)
+                    AppText("相关季度", style = COUITheme.textStyles.headline1)
                     LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         items(detail.seasons.orEmpty().filter { it.seasonId > 0L }.distinctBy { it.seasonId }, key = { it.seasonId }) { season ->
                             val selected = season.seasonId == detail.seasonId
@@ -625,7 +626,7 @@ fun BangumiPlayerContent(
             item {
                 AppHorizontalDivider(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
+                    color = AppSurfaceTokens.outline().copy(alpha = 0.3f)
                 )
 
                 // 选集标题和快速跳转
@@ -638,7 +639,7 @@ fun BangumiPlayerContent(
                 ) {
                     AppText(
                         text = "选集 (${detail.episodes.orEmpty().size})",
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         fontWeight = FontWeight.Bold
                     )
 
@@ -648,13 +649,13 @@ fun BangumiPlayerContent(
 
                         AppSurface(
                             onClick = { showJumpDialog = true },
-                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            color = AppSurfaceTokens.surfaceContainer(),
                             shape = AppShapes.container(ContainerLevel.Sheet)
                         ) {
                             AppText(
                                 text = "跳转",
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                                style = MaterialTheme.typography.labelMedium,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText()
                             )
                         }
@@ -705,13 +706,13 @@ fun BangumiPlayerContent(
 
                             AppSurface(
                                 onClick = { selectedPage = page },
-                                color = if (isCurrentPage) AppContentColors.accent() else MaterialTheme.colorScheme.surfaceVariant,
+                                color = if (isCurrentPage) AppContentColors.accent() else AppSurfaceTokens.surfaceContainer(),
                                 shape = AppShapes.container(ContainerLevel.Dialog)
                             ) {
                                 AppText(
                                     text = "$start-$end",
                                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                                    style = MaterialTheme.typography.bodySmall,
+                                    style = COUITheme.textStyles.footnote1,
                                     color = if (isCurrentPage) AppContentColors.onAccent() else AppContentColors.secondaryText()
                                 )
                             }
@@ -764,13 +765,13 @@ fun BangumiPlayerContent(
                 AppText(
                     text = "简介",
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     fontWeight = FontWeight.Bold
                 )
                 AppText(
                     text = detail.evaluate,
                     modifier = Modifier.padding(16.dp),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppContentColors.secondaryText()
                 )
             }
@@ -783,7 +784,7 @@ fun BangumiPlayerContent(
                 AppText(
                     text = "课程概述",
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -888,7 +889,7 @@ fun BangumiPlayerContent(
                             AppText(
                                 text = option.label,
                                 color = AppSurfaceTokens.onSurfaceContainerHigh(),
-                                style = MaterialTheme.typography.bodyMedium,
+                                style = COUITheme.textStyles.body1,
                                 modifier = Modifier.weight(1f)
                             )
                         }
@@ -1021,7 +1022,7 @@ fun EpisodeChipSelectable(
             color = if (isSelected) {
                 selectedColors.backgroundColor
             } else {
-                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                AppSurfaceTokens.surfaceContainer().copy(alpha = 0.5f)
             }
         ) {
             Column(
@@ -1037,7 +1038,7 @@ fun EpisodeChipSelectable(
                 ) {
                     AppText(
                         text = episode.title.ifEmpty { "第${episode.id}讲" },
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
                         color = if (isSelected) selectedColors.contentColor else AppContentColors.primaryText(),
                         maxLines = 1,
@@ -1052,9 +1053,9 @@ fun EpisodeChipSelectable(
                             modifier = Modifier
                                 .background(
                                     color = brandColors?.backgroundColor ?: if (isPreview) {
-                                        MaterialTheme.colorScheme.primaryContainer
+                                        AppSurfaceTokens.primaryContainer()
                                     } else {
-                                        MaterialTheme.colorScheme.secondaryContainer
+                                        AppSurfaceTokens.secondaryContainer()
                                     },
                                     shape = RoundedCornerShape(4.dp)
                                 )
@@ -1062,11 +1063,11 @@ fun EpisodeChipSelectable(
                         ) {
                             AppText(
                                 text = episode.badge,
-                                style = MaterialTheme.typography.labelSmall,
+                                style = COUITheme.textStyles.footnote2,
                                 color = brandColors?.contentColor ?: if (isPreview) {
-                                    MaterialTheme.colorScheme.onPrimaryContainer
+                                    AppSurfaceTokens.onPrimaryContainer()
                                 } else {
-                                    MaterialTheme.colorScheme.onSecondaryContainer
+                                    AppSurfaceTokens.onSecondaryContainer()
                                 },
                                 fontWeight = FontWeight.Medium
                             )
@@ -1076,7 +1077,7 @@ fun EpisodeChipSelectable(
                 if (episode.longTitle.isNotBlank()) {
                     AppText(
                         text = episode.longTitle,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = if (isSelected) {
                             selectedColors.contentColor.copy(alpha = 0.8f)
                         } else {
@@ -1092,13 +1093,13 @@ fun EpisodeChipSelectable(
         AppSurface(
             modifier = Modifier.clickable(onClick = onClick),
             shape = AppShapes.container(ContainerLevel.Chip),
-            color = if (isSelected) selectedColors.backgroundColor else MaterialTheme.colorScheme.surfaceVariant
+            color = if (isSelected) selectedColors.backgroundColor else AppSurfaceTokens.surfaceContainer()
         ) {
             AppText(
                 text = episode.title.ifEmpty { "第${episode.id}话" },
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
                 color = if (isSelected) selectedColors.contentColor else AppContentColors.primaryText(),
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
             )
         }
@@ -1137,7 +1138,7 @@ fun EpisodeJumpDialog(
                     AppText(
                         text = errorMessage!!,
                         color = AppContentColors.error(),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         modifier = Modifier.padding(top = 4.dp)
                     )
                 }
@@ -1192,12 +1193,12 @@ fun BangumiErrorContent(
                     isLoginRequired -> ""
                     else -> ""
                 },
-                style = MaterialTheme.typography.displaySmall
+                style = COUITheme.textStyles.title1
             )
             Spacer(modifier = Modifier.height(16.dp))
             AppText(
                 text = message,
-                style = MaterialTheme.typography.titleMedium,
+                style = COUITheme.textStyles.headline1,
                 color = AppContentColors.primaryText(),
                 textAlign = androidx.compose.ui.text.style.TextAlign.Center
             )
@@ -1205,7 +1206,7 @@ fun BangumiErrorContent(
                 Spacer(modifier = Modifier.height(8.dp))
                 AppText(
                     text = "开通大会员即可观看",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppContentColors.accent()
                 )
             }

@@ -3,6 +3,8 @@ package com.android.purebilibili.feature.video.ui.components
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Equalizer
 import com.android.purebilibili.core.ui.AppIcons
+import com.android.purebilibili.core.ui.AppShapes
+import com.android.purebilibili.core.ui.ContainerLevel
 
 import com.android.purebilibili.core.util.rememberHapticFeedback
 import com.android.purebilibili.core.util.HapticType
@@ -26,7 +28,6 @@ import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppIconButton as IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,6 +54,7 @@ import com.android.purebilibili.data.model.response.UgcEpisode
 import com.android.purebilibili.data.model.response.UgcSeason
 import com.android.purebilibili.feature.home.components.cards.VideoCardCoverDurationText
 import kotlinx.coroutines.launch
+import com.android.purebilibili.core.ui.components.AppHorizontalDivider
 
 /** Keep current-video parts separate from a surrounding watch-later/favorite/UP queue. */
 @Composable
@@ -148,7 +150,7 @@ fun PlayerEpisodeMenu(
             PanelAction(AppIcons.Filled.Close, "关闭", requestPanelDismiss)
         }
         com.android.purebilibili.core.ui.components.AppHorizontalDivider(
-            color = MaterialTheme.colorScheme.outlineVariant,
+            color = AppSurfaceTokens.outline(),
         )
         if (content.sections.size > 1) {
             // 玻璃分区复用共享 dock 与完整槽位指示器，原生保留原有文字轨道。
@@ -172,7 +174,7 @@ fun PlayerEpisodeMenu(
             } else {
                 Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState())) {
                     content.sections.forEachIndexed { index, item ->
-                        AppText(item.title, color = if (index == sectionIndex) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                        AppText(item.title, color = if (index == sectionIndex) AppContentColors.accent() else AppContentColors.primaryText(),
                             modifier = Modifier.appActionClickable { sectionIndex = index }.padding(horizontal = 16.dp, vertical = 12.dp))
                     }
                 }
@@ -216,7 +218,7 @@ fun PlayerEpisodeMenu(
                         group.forEach { part ->
                             val active = part == current
                             AppText(part.title.substringAfterLast(" · "),
-                                color = if (active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                                color = if (active) AppContentColors.accent() else AppContentColors.primaryText(),
                                 modifier = Modifier.playerPopupSelectedOption(active).height(45.dp).semantics { this.selected = active }
                                     .appActionClickable { select(part) }.padding(horizontal = 12.dp, vertical = 10.dp))
                         }
@@ -331,8 +333,8 @@ internal fun PlayerDetailPanel(title: String, isFullscreen: Boolean, playerBound
         if (useGlassSurface && com.android.purebilibili.core.ui.LocalAppThemeConfig.current.liquidGlassEnabled) {
             com.android.purebilibili.core.ui.AppPopupSurface(
                 type = com.android.purebilibili.core.ui.AppPopupSurfaceType.SHEET,
-                shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
-                containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                shape = AppShapes.container(ContainerLevel.MediaCover),
+                containerColor = AppSurfaceTokens.surfaceContainer(),
                 content = panelContent,
             )
         } else {
@@ -384,7 +386,7 @@ internal fun PlayerPanelMediaRow(title: String, cover: String, durationSeconds: 
     episodeViewCount: Long? = null,
     episodeDanmakuCount: Long? = null,
     onClick: () -> Unit) {
-    val color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+    val color = if (selected) AppContentColors.accent() else AppContentColors.primaryText()
     val durationText = if (durationSeconds > 0) {
         FormatUtils.formatDuration(durationSeconds.coerceAtMost(Int.MAX_VALUE.toLong()).toInt())
     } else ""
@@ -406,9 +408,9 @@ internal fun PlayerPanelMediaRow(title: String, cover: String, durationSeconds: 
             if (partCoverIndex != null) AppText(
                 text = partCoverIndex.removePrefix("P"),
                 fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                color = AppSurfaceTokens.onSecondaryContainer(),
                 modifier = Modifier.align(Alignment.TopEnd)
-                    .background(MaterialTheme.colorScheme.secondaryContainer, androidx.compose.foundation.shape.RoundedCornerShape(topEnd = 6.dp, bottomStart = 4.dp))
+                    .background(AppSurfaceTokens.secondaryContainer(), androidx.compose.foundation.shape.RoundedCornerShape(topEnd = 6.dp, bottomStart = 4.dp))
                     .padding(horizontal = 4.dp),
             )
             if (accessEpisode != null) {
@@ -436,7 +438,7 @@ internal fun PlayerPanelMediaRow(title: String, cover: String, durationSeconds: 
             if (episodePresentation && episodePubdate > 0L) {
                 AppText(java.time.Instant.ofEpochSecond(episodePubdate).atZone(java.time.ZoneId.systemDefault())
                     .format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
-                    fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
+                    fontSize = 12.sp, color = AppContentColors.secondaryText(), maxLines = 1)
             }
             if (episodePresentation && episodeViewCount != null && episodeViewCount >= 0L) {
                 com.android.purebilibili.feature.home.components.cards.HorizontalVideoStatRow(
@@ -450,7 +452,7 @@ internal fun PlayerPanelMediaRow(title: String, cover: String, durationSeconds: 
             }
             if (!episodePresentation && indexAndDuration.isNotBlank()) AppText(indexAndDuration, fontSize = 12.sp, color = color)
             if (!metadataText.isNullOrBlank()) AppText(metadataText, fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                color = AppContentColors.secondaryText(), maxLines = 1, overflow = TextOverflow.Ellipsis)
             if (!durationBesideIndex && cover.isBlank() && durationText.isNotBlank()) AppText(durationText, fontSize = 12.sp)
             if (selected && !episodePresentation) AppText("正在播放", fontSize = 12.sp, color = color)
         }

@@ -15,12 +15,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.android.purebilibili.core.ui.components.AppFilterChip
 import com.android.purebilibili.core.ui.components.AppText
+import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 @Composable
 internal fun DanmakuColorOptions(
@@ -38,8 +39,8 @@ internal fun DanmakuColorOptions(
             Box(
                 Modifier.size(36.dp)
                     .background(Color(option.value or 0xFF000000.toInt()), RoundedCornerShape(8.dp))
-                    .border(2.dp, if (selectedColor == option.value) MaterialTheme.colorScheme.primary
-                        else MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
+                    .border(2.dp, if (selectedColor == option.value) AppContentColors.accent()
+                        else AppSurfaceTokens.outline(), RoundedCornerShape(8.dp))
                     .selectable(selected = selectedColor == option.value, role = Role.RadioButton,
                         onClick = { onColorSelected(option.value) })
                     .semantics { contentDescription = option.label },

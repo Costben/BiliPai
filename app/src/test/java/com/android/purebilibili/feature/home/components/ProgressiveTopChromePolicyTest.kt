@@ -17,7 +17,7 @@ class ProgressiveTopChromePolicyTest {
         assertFalse(shouldUseOpaqueTopChromeBackground(false, false, liquidGlassActive = true))
 
         val source = loadSource("feature/home/components/ProgressiveTopChrome.kt")
-        assertTrue(source.contains("MaterialTheme.colorScheme.background.copy(alpha = 1f)"))
+        assertTrue(source.contains("AppSurfaceTokens.background().copy(alpha = 1f)"))
         assertTrue(source.contains(".then(modifier)"))
     }
 
@@ -93,7 +93,7 @@ class ProgressiveTopChromePolicyTest {
         val settingsTablet = loadSource("feature/settings/screen/SettingsTabletShell.kt")
         assertTrue(space.contains("BiliPaiImmersiveTopBar("))
         assertTrue(space.contains("spaceChromeSource?.modifier"))
-        assertTrue(space.contains("globalWallpaperAwareBackground(MaterialTheme.colorScheme.surface)"))
+        assertTrue(space.contains("globalWallpaperAwareBackground(AppSurfaceTokens.surface())"))
         assertTrue(space.contains("top = chromeTopInset"))
         assertFalse(space.contains("onPinnedChromeHeightChanged"))
         assertFalse(space.contains("val tabPinned = gridState.firstVisibleItemIndex > 0"))
@@ -102,7 +102,7 @@ class ProgressiveTopChromePolicyTest {
         assertTrue(profile.contains("globalWallpaperAwareBackground(colorScheme.surface)"))
         assertTrue(bangumiHub.contains("BiliPaiImmersiveTopBar("))
         assertTrue(bangumiHub.contains(".then(chromeSource?.modifier ?: Modifier)"))
-        assertTrue(bangumiHub.contains("globalWallpaperAwareBackground(MaterialTheme.colorScheme.background)"))
+        assertTrue(bangumiHub.contains("globalWallpaperAwareBackground(AppSurfaceTokens.background())"))
         assertTrue(bangumiHub.contains("showFollowStatusTabs = false"))
         assertTrue(settingsTablet.contains("BiliPaiImmersiveTopBar("))
     }

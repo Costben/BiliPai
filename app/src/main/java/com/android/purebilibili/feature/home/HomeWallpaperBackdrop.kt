@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.home
 
+import com.android.purebilibili.core.ui.AppContentColors
+
 import com.android.purebilibili.core.ui.LocalGlobalWallpaperBackdropVisible
 import com.android.purebilibili.core.ui.wallpaper.LocalGlobalWallpaperUri
 import com.android.purebilibili.core.ui.wallpaper.LocalGlobalWallpaperBackdropSource
@@ -19,7 +21,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.ui.Alignment
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.wallpaper.WallpaperReadabilityProfile
 import com.android.purebilibili.core.ui.wallpaper.resolveWallpaperBodyTintAlpha
 import com.android.purebilibili.core.ui.wallpaper.resolveWallpaperProtectionAlpha
@@ -157,7 +158,7 @@ internal fun HomeWallpaperBackdrop(
             else appearance.baseBackgroundAlpha
         val scrimAlpha = if (readability != null) appearance.scrimAlpha * 0.35f else appearance.scrimAlpha
         val bottomAlpha = readability?.bottom?.let {
-            resolveWallpaperProtectionAlpha(it, baseColor, MaterialTheme.colorScheme.onSurface, appearance.blurRadiusDp > 0f)
+            resolveWallpaperProtectionAlpha(it, baseColor, AppContentColors.primaryText(), appearance.blurRadiusDp > 0f)
         } ?: appearance.bottomScrimAlpha
         val context = LocalContext.current
         val configuration = LocalConfiguration.current

@@ -21,7 +21,6 @@ import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import com.android.purebilibili.core.ui.components.AppIcon
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -48,6 +47,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.Job
 import com.android.purebilibili.core.coroutines.AccountScopedRequests
 import com.android.purebilibili.core.store.TokenManager
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 data class ReplyMeUiState(
     val isLoading: Boolean = true,
@@ -338,18 +338,18 @@ private fun ReplyMeCard(
                         append(" 回复了你的")
                         append(item.item?.business.orEmpty().ifBlank { "内容" })
                     },
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = COUITheme.textStyles.main,
                     fontWeight = FontWeight.Medium
                 )
                 item.item?.sourceContent?.takeIf { it.isNotBlank() }?.let {
                     Spacer(modifier = Modifier.height(4.dp))
-                    AppText(text = it, style = MaterialTheme.typography.bodyMedium, maxLines = 3, overflow = TextOverflow.Ellipsis)
+                    AppText(text = it, style = COUITheme.textStyles.body1, maxLines = 3, overflow = TextOverflow.Ellipsis)
                 }
                 firstNonBlank(item.item?.targetReplyContent, item.item?.rootReplyContent)?.let {
                     Spacer(modifier = Modifier.height(4.dp))
                     AppText(
                         text = "| $it",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -359,7 +359,7 @@ private fun ReplyMeCard(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     AppText(
                         text = formatMessageFeedTime(item.replyTime),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
 

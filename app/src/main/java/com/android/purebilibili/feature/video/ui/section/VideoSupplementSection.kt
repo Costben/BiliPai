@@ -3,6 +3,7 @@
 package com.android.purebilibili.feature.video.ui.section
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -16,8 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -201,7 +200,7 @@ private fun VideoNoteSheetFooter(
     if (!isLoggedIn) {
         AppText(
             text = "官方笔记编辑器需要登录 B 站账号",
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             color = AppContentColors.secondaryText(),
             modifier = Modifier.padding(horizontal = 16.dp),
         )

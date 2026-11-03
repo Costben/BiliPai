@@ -40,8 +40,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import com.android.purebilibili.core.ui.components.AppLazyVerticalGrid as LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -74,6 +72,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+import com.android.purebilibili.core.ui.AppAlertDialog
 
 /**
  * 浏览页 UI 状态（不可变快照）。screen composable 消费此状态 + lambda 事件。
@@ -343,7 +344,7 @@ private fun SkinCatalogCard(
     AppSurface(
         onClick = onClick,
         shape = AppShapes.container(ContainerLevel.Card),
-        color = MaterialTheme.colorScheme.surface,
+        color = AppSurfaceTokens.surface(),
         tonalElevation = 1.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -354,7 +355,7 @@ private fun SkinCatalogCard(
                     .fillMaxWidth()
                     .aspectRatio(4f / 3f)
                     .clip(AppShapes.container(ContainerLevel.Chip))
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .background(AppSurfaceTokens.surfaceContainer())
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
@@ -374,7 +375,7 @@ private fun SkinCatalogCard(
                         AppText(
                             text = "官方示例",
                             color = AppContentColors.onAccent(),
-                            style = MaterialTheme.typography.labelSmall,
+                            style = COUITheme.textStyles.footnote2,
                             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                         )
                     }
@@ -401,7 +402,7 @@ private fun SkinCatalogCard(
                         AppText(
                             text = entry.capabilities.labels().take(2).joinToString("·"),
                             color = Color.White,
-                            style = MaterialTheme.typography.labelSmall,
+                            style = COUITheme.textStyles.footnote2,
                             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                         )
                     }
@@ -410,7 +411,7 @@ private fun SkinCatalogCard(
             Spacer(modifier = Modifier.height(6.dp))
             AppText(
                 text = entry.displayName,
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = AppContentColors.primaryText()
@@ -454,26 +455,26 @@ private fun SkinCatalogPreviewDialog(
                 if (loading) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         AppCircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
-                        AppText("正在下载并准备预览…", style = MaterialTheme.typography.bodySmall)
+                        AppText("正在下载并准备预览…", style = COUITheme.textStyles.footnote1)
                     }
                 } else if (error != null) {
-                    AppText(error, color = AppContentColors.error(), style = MaterialTheme.typography.bodySmall)
+                    AppText(error, color = AppContentColors.error(), style = COUITheme.textStyles.footnote1)
                 } else if (previewData != null) {
                     UiSkinCompositionPreview(data = previewData)
                     AppText(
                         text = "完整装扮使用通栏插画和大图标；实际显示会随导航布局调整。",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                     AppText(
                         text = entry.licenseNote
                             ?: "素材来自 B 站官方付费/限定主题存档，仅供本地私用，不得作为社区包分发。",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppContentColors.secondaryText()
                     )
                 }
                 if (installError != null) {
-                    AppText(installError, color = AppContentColors.error(), style = MaterialTheme.typography.bodySmall)
+                    AppText(installError, color = AppContentColors.error(), style = COUITheme.textStyles.footnote1)
                 }
             }
         },

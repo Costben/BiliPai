@@ -1,5 +1,6 @@
 package com.android.purebilibili.feature.download
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.android.purebilibili.core.player.withAppVideoDecoderDiagnostics
 import com.android.purebilibili.core.player.withAppVideoDecoderPreference
 import com.android.purebilibili.core.ui.AppIcons
@@ -881,7 +882,7 @@ fun OfflineVideoPlayerScreen(
                             AppText(
                                 text = "${FormatUtils.formatDuration(targetSeconds)} / ${FormatUtils.formatDuration(durationSeconds.toInt())}",
                                 color = Color.White,
-                                style = MaterialTheme.typography.titleMedium,
+                                style = COUITheme.textStyles.headline1,
                                 fontWeight = FontWeight.Bold
                             )
                             val deltaSeconds = (seekTargetTime - startPosition) / 1000
@@ -890,7 +891,7 @@ fun OfflineVideoPlayerScreen(
                                 AppText(
                                     text = "($sign${deltaSeconds}s)",
                                     color = com.android.purebilibili.core.ui.MediaContrastPalette.Foreground,
-                                    style = MaterialTheme.typography.bodySmall
+                                    style = COUITheme.textStyles.footnote1
                                 )
                             }
                         }
@@ -948,7 +949,7 @@ fun OfflineVideoPlayerScreen(
                     AppText(
                         text = seekFeedbackText ?: "",
                         color = com.android.purebilibili.core.ui.MediaContrastPalette.Foreground,
-                        style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold)
+                        style = COUITheme.textStyles.title3.copy(fontWeight = FontWeight.Bold)
                     )
                 }
             }
@@ -1073,7 +1074,7 @@ fun OfflineVideoPlayerScreen(
                     AppText(
                         text = task.episodeLabel?.takeIf { it.isNotBlank() } ?: task.title,
                         color = Color.White,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         fontWeight = FontWeight.Medium,
                         maxLines = 1,
                         modifier = Modifier.weight(1f)
@@ -1132,13 +1133,13 @@ fun OfflineVideoPlayerScreen(
                                         modifier = Modifier.size(16.dp)
                                     )
                                     Spacer(modifier = Modifier.width(AppSpacingTokens.ExtraSmall))
-                                    AppText("上一集", color = Color.White, style = MaterialTheme.typography.labelMedium)
+                                    AppText("上一集", color = Color.White, style = COUITheme.textStyles.footnote1)
                                 }
                             }
                             AppText(
                                 text = "${currentEpisodeIndex + 1}/${episodeQueue.size}",
                                 color = Color.White.copy(alpha = 0.85f),
-                                style = MaterialTheme.typography.labelMedium
+                                style = COUITheme.textStyles.footnote1
                             )
                             AppSurface(
                                 onClick = {
@@ -1153,7 +1154,7 @@ fun OfflineVideoPlayerScreen(
                                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    AppText("下一集", color = Color.White, style = MaterialTheme.typography.labelMedium)
+                                    AppText("下一集", color = Color.White, style = COUITheme.textStyles.footnote1)
                                     Spacer(modifier = Modifier.width(AppSpacingTokens.ExtraSmall))
                                     AppIcon(
                                         AppIcons.Outlined.SkipNext,
@@ -1198,7 +1199,7 @@ fun OfflineVideoPlayerScreen(
                         AppText(
                             text = "${FormatUtils.formatDuration((progressState.current / 1000).toInt())} / ${FormatUtils.formatDuration((progressState.duration / 1000).toInt())}",
                             color = Color.White.copy(alpha = 0.9f),
-                            style = MaterialTheme.typography.labelMedium
+                            style = COUITheme.textStyles.footnote1
                         )
 
                         Spacer(modifier = Modifier.weight(1f))
@@ -1289,7 +1290,7 @@ fun OfflineVideoPlayerScreen(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
-                        AppText("播放失败", color = Color.White, style = MaterialTheme.typography.titleLarge)
+                        AppText("播放失败", color = Color.White, style = COUITheme.textStyles.title4)
                         AppText(
                             failure.message,
                             color = Color.White.copy(alpha = 0.85f),

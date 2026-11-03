@@ -1,5 +1,7 @@
 package com.android.purebilibili.core.ui.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import com.android.purebilibili.core.ui.motion.AppMotionEasing
 import com.android.purebilibili.core.util.LocalWindowSizeClass
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -7,7 +9,6 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -201,7 +202,7 @@ fun <T> AppLiquidAwareTabRow(
             liquidGlassEnabled = liquidGlassEnabled && liquidGlassAdaptIndicatorToLabel,
         ),
         labels = measurementLabels,
-        textStyle = MaterialTheme.typography.labelLarge.copy(
+        textStyle = COUITheme.textStyles.button.copy(
             fontSize = resolvedLabelFontSize,
             fontWeight = FontWeight.SemiBold,
         ),

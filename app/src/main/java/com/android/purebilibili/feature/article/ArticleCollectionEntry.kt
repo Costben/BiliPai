@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
@@ -26,6 +25,9 @@ import com.android.purebilibili.core.ui.*
 import com.android.purebilibili.core.ui.components.*
 import com.android.purebilibili.data.model.response.*
 import com.android.purebilibili.data.repository.ArticleRepository
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -170,14 +172,14 @@ private fun ArticleCollectionBody(
                         Spacer(Modifier.width(12.dp))
                     }
                     Column(Modifier.weight(1f)) {
-                        AppText(collection.name.ifBlank { "专栏文集" }, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                        AppText(collection.name.ifBlank { "专栏文集" }, style = COUITheme.textStyles.title4, fontWeight = FontWeight.Bold)
                         val author = data?.author
                         if (author != null && author.name.isNotBlank()) {
                             AppTextButton(onClick = { onAuthorClick(author.mid) }, enabled = author.mid > 0L) {
                                 AppText(author.name, color = AppContentColors.secondaryText(), tapToCopyEnabled = false)
                             }
                         }
-                        AppText("文集号：${seed.id}", style = MaterialTheme.typography.labelSmall, color = AppContentColors.secondaryText())
+                        AppText("文集号：${seed.id}", style = COUITheme.textStyles.footnote2, color = AppContentColors.secondaryText())
                     }
                 }
                 if (canLocateCurrent) {
@@ -192,7 +194,7 @@ private fun ArticleCollectionBody(
                 if (metadata.isNotBlank()) AppText(metadata, color = AppContentColors.secondaryText())
                 collection.updateTime?.takeIf { it > 0L }?.let {
                     AppText("更新于 ${com.android.purebilibili.core.util.FormatUtils.formatPrecisePublishTime(it)}",
-                        style = MaterialTheme.typography.bodySmall, color = AppContentColors.secondaryText())
+                        style = COUITheme.textStyles.footnote1, color = AppContentColors.secondaryText())
                 }
             }
         }
@@ -217,7 +219,7 @@ private fun ArticleCollectionBody(
             ) else null
             Row(
                 Modifier.fillMaxWidth().then(container?.modifier ?: Modifier).clip(AppShapes.container(ContainerLevel.Card))
-                    .background(if (current) MaterialTheme.colorScheme.secondaryContainer else AppSurfaceTokens.surfaceContainer())
+                    .background(if (current) AppSurfaceTokens.secondaryContainer() else AppSurfaceTokens.surfaceContainer())
                     .clickable { container?.onClick?.invoke() ?: onArticleClick(item.id, item.title) }.padding(12.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -229,14 +231,14 @@ private fun ArticleCollectionBody(
                 }
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     AppText(item.title, maxLines = 2, fontWeight = FontWeight.Medium, tapToCopyEnabled = false)
-                    if (current) AppText("正在阅读", color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.labelSmall)
-                    if (item.summary.isNotBlank()) AppText(item.summary, maxLines = 2, color = AppContentColors.secondaryText(), style = MaterialTheme.typography.bodySmall)
+                    if (current) AppText("正在阅读", color = AppContentColors.accent(), style = COUITheme.textStyles.footnote2)
+                    if (item.summary.isNotBlank()) AppText(item.summary, maxLines = 2, color = AppContentColors.secondaryText(), style = COUITheme.textStyles.footnote1)
                     val stats = listOfNotNull(
                         item.stats?.view?.let { "${formatArticleActionCount(it)}阅读" },
                         item.stats?.like?.let { "${formatArticleActionCount(it)}赞" },
                         item.stats?.reply?.let { "${formatArticleActionCount(it)}评论" },
                     ).joinToString(" · ")
-                    if (stats.isNotBlank()) AppText(stats, style = MaterialTheme.typography.labelSmall, color = AppContentColors.secondaryText())
+                    if (stats.isNotBlank()) AppText(stats, style = COUITheme.textStyles.footnote2, color = AppContentColors.secondaryText())
                 }
             }
         }

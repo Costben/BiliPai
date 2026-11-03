@@ -29,7 +29,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import com.android.purebilibili.core.ui.AdaptiveLoadingIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -88,6 +87,8 @@ import com.android.purebilibili.feature.home.components.resolveFloatingDockGeome
 import io.github.suqi8.coui.kmp.basic.Button as MiuixButton
 import io.github.suqi8.coui.kmp.blur.layerBackdrop
 import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 @Composable
 fun TopicDetailScreen(
@@ -355,7 +356,7 @@ private fun TopicHeaderCardSkeleton(modifier: Modifier = Modifier) {
     val blockColor = rememberStaticSkeletonBlockColor()
     AppSurface(
         shape = AppShapes.container(ContainerLevel.Chip),
-        color = MaterialTheme.colorScheme.surface,
+        color = AppSurfaceTokens.surface(),
         tonalElevation = 1.dp,
         modifier = modifier.fillMaxWidth(),
     ) {
@@ -549,7 +550,7 @@ private fun TopicHeaderCard(
     val creatorFace = creator?.face
     AppSurface(
         shape = AppShapes.container(ContainerLevel.Chip),
-        color = MaterialTheme.colorScheme.surface,
+        color = AppSurfaceTokens.surface(),
         tonalElevation = 1.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -567,7 +568,7 @@ private fun TopicHeaderCard(
             Column(modifier = Modifier.weight(1f)) {
                 AppText(
                     text = topic?.name.orEmpty().ifBlank { "话题" },
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     fontWeight = FontWeight.SemiBold,
                     color = AppContentColors.primaryText(),
                     maxLines = 1,
@@ -577,7 +578,7 @@ private fun TopicHeaderCard(
                     Spacer(modifier = Modifier.height(AppSpacingTokens.ExtraSmall))
                     AppText(
                         text = topicDescription,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         color = AppContentColors.secondaryText(),
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
@@ -592,7 +593,7 @@ private fun TopicHeaderCard(
                             append(" · $creatorName")
                         }
                     },
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText()
                 )
             }
@@ -606,7 +607,7 @@ private fun TopicHeaderCard(
                     modifier = Modifier
                         .size(34.dp)
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .background(AppSurfaceTokens.surfaceContainer())
                         .appActionClickable(enabled = (creator?.uid ?: 0L) > 0L) {
                             onUserClick(creator?.uid ?: 0L)
                         },

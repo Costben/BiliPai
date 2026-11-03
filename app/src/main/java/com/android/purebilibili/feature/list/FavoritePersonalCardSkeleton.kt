@@ -1,7 +1,7 @@
 package com.android.purebilibili.feature.list
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
@@ -26,12 +26,12 @@ internal fun FavoritePersonalCardSkeleton(stacked: Boolean, blockColor: () -> Co
         stacked = stacked,
         enabled = false,
         onClick = {},
-        headlineContent = { TextPlaceholder("加载收藏视频标题", MaterialTheme.typography.bodyMedium) },
+        headlineContent = { TextPlaceholder("加载收藏视频标题", COUITheme.textStyles.body1) },
         supportingContent = {
             Column {
-                TextPlaceholder("UP 主名称", MaterialTheme.typography.bodySmall)
-                TextPlaceholder("收藏时间", MaterialTheme.typography.labelSmall)
-                TextPlaceholder("播放量 · 弹幕量", MaterialTheme.typography.labelSmall)
+                TextPlaceholder("UP 主名称", COUITheme.textStyles.footnote1)
+                TextPlaceholder("收藏时间", COUITheme.textStyles.footnote2)
+                TextPlaceholder("播放量 · 弹幕量", COUITheme.textStyles.footnote2)
             }
         },
         coverContent = { ContentSkeletonBlock(blockColor, Modifier.fillMaxSize(), androidx.compose.ui.graphics.RectangleShape) },

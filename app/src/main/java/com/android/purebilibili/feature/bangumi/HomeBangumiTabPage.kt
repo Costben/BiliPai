@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -40,6 +39,7 @@ import com.android.purebilibili.core.ui.components.AppLiquidAwareTabRow
 import com.android.purebilibili.core.ui.components.AppSegmentOption
 import com.android.purebilibili.feature.download.DownloadManager
 import kotlinx.coroutines.launch
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 /**
  * 首页顶栏「追番」独立页：留在首页 Pager 内，
@@ -75,7 +75,7 @@ fun HomeBangumiTabPage(
     val layoutDirection = LocalLayoutDirection.current
     val themeConfig = LocalAppThemeConfig.current
     val chromeSource = if (themeConfig.liquidGlassEnabled) {
-        rememberChromeBackdropSource(recordingBackground = MaterialTheme.colorScheme.background)
+        rememberChromeBackdropSource(recordingBackground = AppSurfaceTokens.background())
     } else null
     val channelBackdrop = chromeSource?.takeIf {
         shouldCaptureBangumiHubChrome(state) && it.isReady
@@ -99,7 +99,7 @@ fun HomeBangumiTabPage(
         Box(
             modifier = Modifier.fillMaxSize()
                 .then(chromeSource?.modifier ?: Modifier)
-                .globalWallpaperAwareBackground(MaterialTheme.colorScheme.background),
+                .globalWallpaperAwareBackground(AppSurfaceTokens.background()),
         ) {
             // Keep scrolling posters out of the channel header in both display and capture.
             Box(Modifier.fillMaxSize().padding(top = channelHeight).clipToBounds()) {
@@ -190,7 +190,7 @@ fun HomeBangumiTabPage(
                     .onSizeChanged { channelHeightPx = it.height }
                     .then(
                         if (com.android.purebilibili.core.ui.isMiuixNonGlassEnabled()) {
-                            Modifier.background(MaterialTheme.colorScheme.background)
+                            Modifier.background(AppSurfaceTokens.background())
                         } else Modifier
                     )
                     .padding(horizontal = 16.dp, vertical = 8.dp),

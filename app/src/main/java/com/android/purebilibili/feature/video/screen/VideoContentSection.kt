@@ -5,6 +5,7 @@ import com.android.purebilibili.feature.video.ui.components.commentSectionNotice
 import com.android.purebilibili.navigation.tabIndicatorPosition
 import com.android.purebilibili.core.ui.motion.AppMotionEasing
 import com.android.purebilibili.feature.video.ui.components.RelatedVideoList
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -140,6 +141,7 @@ import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
+import com.android.purebilibili.core.ui.components.AppIconButton
 
 internal fun shouldShowDanmakuSendInput(isPlayerCollapsed: Boolean): Boolean = !isPlayerCollapsed
 
@@ -961,7 +963,7 @@ internal fun VideoContentSection(
             Box(
                 modifier = Modifier
                     .matchParentSize()
-                    .background(MaterialTheme.colorScheme.surface)
+                    .background(AppSurfaceTokens.surface())
             )
 
             HorizontalPager(
@@ -1146,7 +1148,7 @@ internal fun VideoContentSection(
                     }
                     .background(
                         if (isPlayerCollapsed && !liquidGlassEnabled) {
-                            MaterialTheme.colorScheme.surface
+                            AppSurfaceTokens.surface()
                         } else {
                             Color.Transparent
                         }
@@ -1157,7 +1159,7 @@ internal fun VideoContentSection(
                         surfaceColor = Color.Transparent,
                     )
                     .topSolidProgressiveFade(
-                        surfaceColor = MaterialTheme.colorScheme.surface,
+                        surfaceColor = AppSurfaceTokens.surface(),
                         enabled = solidProgressiveCommentHeaderEnabled && chromeBlurActive,
                     ),
             )
@@ -1859,7 +1861,7 @@ internal fun VideoCommentTab(
                             isRepliesRefreshing -> Unit
                             isRepliesLoading -> AdaptiveLoadingIndicator()
                             isRepliesEnd -> {
-                                AppText("没有更多了", color = commentAppearance.secondaryTextColor, style = MaterialTheme.typography.bodySmall)
+                                AppText("没有更多了", color = commentAppearance.secondaryTextColor, style = COUITheme.textStyles.footnote1)
                             }
                             // 当 shouldLoadMore 为 true 时才显示加载指示器
                             shouldLoadMore -> AdaptiveLoadingIndicator()
@@ -1942,7 +1944,7 @@ internal fun LandscapeCommentPanel(
         ) { requestDismiss ->
             AppSurface(
                 modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.surface,
+                color = AppSurfaceTokens.surface(),
             ) {
                 Column(modifier = Modifier.fillMaxSize()) {
                     Row(
@@ -1953,7 +1955,7 @@ internal fun LandscapeCommentPanel(
                     ) {
                         AppText(
                             "评论 $replyCount",
-                            style = MaterialTheme.typography.titleMedium,
+                            style = COUITheme.textStyles.headline1,
                             modifier = Modifier.weight(1f),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -2163,7 +2165,7 @@ private fun VideoHeaderContent(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface) // 🎨 [修复] 与 TabBar 统一使用容器背景色，消除割裂感
+            .background(AppSurfaceTokens.surface()) // 🎨 [修复] 与 TabBar 统一使用容器背景色，消除割裂感
             .onGloballyPositioned { coordinates ->
                 onGloballyPositioned(coordinates.size.height.toFloat())
             },
@@ -2324,7 +2326,7 @@ internal fun VideoContentTabBar(
                         // 后同样成立，采样对象是滚动中的评论内容。
                         Modifier
                     } else {
-                        Modifier.background(MaterialTheme.colorScheme.surface)
+                        Modifier.background(AppSurfaceTokens.surface())
                     }
                 )
                 .padding(
@@ -2454,12 +2456,12 @@ fun VideoTagChip(
 ) {
     AppSurface(
         onClick = { onClick(tagName) },
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f),
+        color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.8f),
         shape = AppShapes.container(ContainerLevel.Dialog)
     ) {
         AppText(
             text = tagName,
-            style = MaterialTheme.typography.labelMedium,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText(),
             modifier = Modifier
                 .padding(horizontal = 12.dp, vertical = 6.dp)

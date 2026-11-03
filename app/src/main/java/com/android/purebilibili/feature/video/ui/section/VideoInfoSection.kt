@@ -2,6 +2,7 @@
 package com.android.purebilibili.feature.video.ui.section
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.core.ui.components.rememberFollowActionWithConfirmation
 import com.android.purebilibili.core.ui.AppContentColors
@@ -324,7 +325,7 @@ fun VideoTitleSection(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)
+            .background(AppSurfaceTokens.surface())
             .padding(horizontal = 12.dp, vertical = 4.dp)
     ) {
         // Title row (expandable)
@@ -339,7 +340,7 @@ fun VideoTitleSection(
             ) {
                 AppText(
                     text = info.title,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     fontWeight = FontWeight.SemiBold,
                     maxLines = if (expanded) Int.MAX_VALUE else 1,
                     overflow = TextOverflow.Ellipsis,
@@ -367,7 +368,7 @@ fun VideoTitleSection(
         // Stats row (views, danmaku)
         AppText(
             text = "${FormatUtils.formatStat(info.stat.view.toLong())}  \u2022  ${FormatUtils.formatStat(info.stat.danmaku.toLong())}\u5f39\u5e55",
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText(),
             maxLines = 1
         )
@@ -376,14 +377,14 @@ fun VideoTitleSection(
             Spacer(Modifier.height(6.dp))
             if (emphasizePublishTime) {
                 AppSurface(
-                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.78f),
+                    color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.78f),
                     shape = com.android.purebilibili.core.ui.AppShapes.container(
                         com.android.purebilibili.core.ui.ContainerLevel.Field
                     )
                 ) {
                     AppText(
                         text = publishTimeRowText,
-                        style = MaterialTheme.typography.labelMedium,
+                        style = COUITheme.textStyles.footnote1,
                         fontWeight = FontWeight.Medium,
                         color = AppContentColors.secondaryText(),
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
@@ -392,7 +393,7 @@ fun VideoTitleSection(
             } else {
                 AppText(
                     text = publishTimeRowText,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                     maxLines = 1
                 )
@@ -419,8 +420,8 @@ fun VideoDetailSponsorLabelChip(
     AppSurface(
         modifier = modifier,
         shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp),
-        color = MaterialTheme.colorScheme.secondaryContainer,
-        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+        color = AppSurfaceTokens.secondaryContainer(),
+        contentColor = AppSurfaceTokens.onSecondaryContainer()
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp),
@@ -441,8 +442,8 @@ fun VideoDetailSponsorLabelChip(
             }
             AppText(
                 text = label,
-                style = MaterialTheme.typography.labelSmall,
-                lineHeight = MaterialTheme.typography.labelSmall.fontSize,
+                style = COUITheme.textStyles.footnote2,
+                lineHeight = COUITheme.textStyles.footnote2.fontSize,
                 maxLines = maxLines
             )
         }
@@ -556,7 +557,7 @@ fun VideoTitleWithDesc(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)
+            .background(AppSurfaceTokens.surface())
             .padding(horizontal = horizontalPadding, vertical = if (isMaterial3) 4.dp else 3.dp)
     ) {
         val stackSponsorLabel = sponsorLabel.isNotBlank() && shouldStackSponsorLabelAboveTitle(sponsorLabel)
@@ -612,7 +613,7 @@ fun VideoTitleWithDesc(
             SelectionContainer(modifier = Modifier.weight(1f)) {
                 AppText(
                     text = info.title,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     fontWeight = FontWeight.SemiBold,
                     maxLines = Int.MAX_VALUE,
                     overflow = TextOverflow.Ellipsis,
@@ -676,7 +677,7 @@ fun VideoTitleWithDesc(
                     Spacer(Modifier.width(2.dp))
                     AppText(
                         text = FormatUtils.formatStat(info.stat.view.toLong()),
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppContentColors.secondaryText()
                     )
                 }
@@ -715,7 +716,7 @@ fun VideoTitleWithDesc(
                     Spacer(Modifier.width(2.dp))
                     AppText(
                         text = FormatUtils.formatStat(info.stat.danmaku.toLong()),
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppContentColors.secondaryText()
                     )
                 }
@@ -724,7 +725,7 @@ fun VideoTitleWithDesc(
             if (onlineCountText.isNotBlank()) {
                 AppText(
                     text = onlineCountText,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = AppContentColors.accent().copy(alpha = 0.82f),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -733,14 +734,14 @@ fun VideoTitleWithDesc(
             if (publishTimeRowText.isNotBlank()) {
                 if (emphasizePublishTime) {
                     AppSurface(
-                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.78f),
+                        color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.78f),
                         shape = com.android.purebilibili.core.ui.AppShapes.container(
                             com.android.purebilibili.core.ui.ContainerLevel.Field
                         )
                     ) {
                         AppText(
                             text = publishTimeRowText,
-                            style = MaterialTheme.typography.labelSmall,
+                            style = COUITheme.textStyles.footnote2,
                             fontWeight = FontWeight.Medium,
                             color = AppContentColors.secondaryText(),
                             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
@@ -749,7 +750,7 @@ fun VideoTitleWithDesc(
                 } else {
                     AppText(
                         text = fullPublishTimeText.ifBlank { publishTimeRowText },
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppContentColors.secondaryText(),
                         maxLines = 1
                     )
@@ -771,7 +772,7 @@ fun VideoTitleWithDesc(
             ) {
                 AppText(
                     text = info.bvid,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = AppContentColors.secondaryText(),
                     modifier = Modifier.copyOnClick(info.bvid, "BV号")
                 )
@@ -925,7 +926,7 @@ fun VideoDescriptionAndTags(
                         text = descriptionText,
                         maxLines = if (expanded || !showCollapsedPreview) Int.MAX_VALUE else 3,
                         overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         modifier = descriptionModifier
                     )
@@ -1010,7 +1011,7 @@ private fun VideoArgueMsgRow(argueMsg: String) {
         )
         AppText(
             text = argueMsg,
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             color = AppContentColors.secondaryText()
         )
     }
@@ -1027,8 +1028,8 @@ private fun VideoHonorChip(
 ) {
     VideoInfoChip(
         text = text,
-        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        containerColor = AppSurfaceTokens.secondaryContainer(),
+        contentColor = AppSurfaceTokens.onSecondaryContainer(),
         onClick = onClick,
     )
 }
@@ -1057,7 +1058,7 @@ private fun VideoInfoChip(
             AppText(
                 text = text,
                 color = contentColor,
-                style = MaterialTheme.typography.labelMedium,
+                style = COUITheme.textStyles.footnote1,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
@@ -1174,7 +1175,7 @@ fun UpInfoSection(
                         modifier = Modifier
                             .size(avatarSize)
                             .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                            .background(AppSurfaceTokens.surfaceContainer())
                             .then(sharedFaceModifier),
                         contentAlignment = Alignment.Center
                     ) {
@@ -1235,7 +1236,7 @@ fun UpInfoSection(
                                 .padding(horizontal = 2.dp)
                                 .size(18.dp)
                                 .clip(CircleShape)
-                                .background(MaterialTheme.colorScheme.surfaceVariant),
+                                .background(AppSurfaceTokens.surfaceContainer()),
                             contentScale = androidx.compose.ui.layout.ContentScale.Crop
                         )
                     } else {
@@ -1274,7 +1275,7 @@ fun UpInfoSection(
                 SelectionContainer(modifier = Modifier.weight(1f, fill = false)) {
                     AppText(
                         text = info.owner.name,
-                        style = MaterialTheme.typography.titleSmall,
+                        style = COUITheme.textStyles.headline2,
                         fontWeight = FontWeight.SemiBold,
                         color = ownerNameColor,
                         maxLines = 1,
@@ -1323,7 +1324,7 @@ fun UpInfoSection(
             val followAccent = AppContentColors.selectionAccent(
                 com.android.purebilibili.core.ui.LocalAppThemeConfig.current.liquidGlassEnabled
             )
-            val followDarkTheme = MaterialTheme.colorScheme.surface.luminance() < 0.5f
+            val followDarkTheme = AppSurfaceTokens.surface().luminance() < 0.5f
             val followVisualPolicy = remember(isFollowing, followDarkTheme) {
                 resolveVideoFollowVisualPolicy(
                     isFollowing = isFollowing,
@@ -1342,7 +1343,7 @@ fun UpInfoSection(
                 enabled = followStatusKnown,
                 color = nativeFollowColors?.container ?: if (isFollowing) followAccent.copy(alpha = 0.14f) else when (followVisualPolicy.detailButtonTone) {
                     FollowButtonTone.PRIMARY -> AppContentColors.accent()
-                    FollowButtonTone.PRIMARY_CONTAINER -> MaterialTheme.colorScheme.primaryContainer
+                    FollowButtonTone.PRIMARY_CONTAINER -> AppSurfaceTokens.primaryContainer()
                 },
                 shape = VideoDetailShapes.action(),
                 modifier = followActionModifier.followActionAnchor()
@@ -1361,10 +1362,10 @@ fun UpInfoSection(
                             text = followLabel,
                             maxLines = 1,
                             softWrap = false,
-                            style = MaterialTheme.typography.labelMedium,
+                            style = COUITheme.textStyles.footnote1,
                             color = nativeFollowColors?.content ?: if (isFollowing) followAccent else when (followVisualPolicy.detailTextTone) {
                                 FollowTextTone.ON_PRIMARY -> AppContentColors.onAccent()
-                                FollowTextTone.ON_PRIMARY_CONTAINER -> MaterialTheme.colorScheme.onPrimaryContainer
+                                FollowTextTone.ON_PRIMARY_CONTAINER -> AppSurfaceTokens.onPrimaryContainer()
                             },
                             fontWeight = FontWeight.Medium
                         )
@@ -1491,14 +1492,14 @@ private fun CreatorTeamSection(
         ) {
             AppText(
                 text = "创作团队",
-                style = MaterialTheme.typography.titleSmall,
+                style = COUITheme.textStyles.headline2,
                 fontWeight = FontWeight.SemiBold,
                 color = AppContentColors.primaryText()
             )
             Spacer(modifier = Modifier.weight(1f))
             AppText(
                 text = "共 ${staff.size} 位",
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 color = AppContentColors.secondaryText()
             )
         }
@@ -1542,7 +1543,7 @@ private fun CreatorTeamMemberChip(
     val followAccent = AppContentColors.selectionAccent(
         com.android.purebilibili.core.ui.LocalAppThemeConfig.current.liquidGlassEnabled
     )
-    val followDarkTheme = MaterialTheme.colorScheme.surface.luminance() < 0.5f
+    val followDarkTheme = AppSurfaceTokens.surface().luminance() < 0.5f
     val followVisualPolicy = remember(isFollowing, followDarkTheme) {
         resolveVideoFollowVisualPolicy(
             isFollowing = isFollowing,
@@ -1569,7 +1570,7 @@ private fun CreatorTeamMemberChip(
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                    .background(AppSurfaceTokens.surfaceContainer()),
                 contentScale = androidx.compose.ui.layout.ContentScale.Crop
             )
             UserAvatarCornerMarkBadge(
@@ -1591,7 +1592,7 @@ private fun CreatorTeamMemberChip(
             ) {
                 AppText(
                     text = member.name,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     fontWeight = FontWeight.Medium,
                     color = AppContentColors.primaryText(),
                     maxLines = 1,
@@ -1602,7 +1603,7 @@ private fun CreatorTeamMemberChip(
             if (member.title.isNotBlank()) {
                 AppText(
                     text = member.title,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = AppContentColors.secondaryText(),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -1628,7 +1629,7 @@ private fun CreatorTeamMemberChip(
                 AppSurface(
                     color = nativeFollowColors?.container ?: if (isFollowing) followAccent.copy(alpha = 0.14f) else when (followVisualPolicy.detailButtonTone) {
                         FollowButtonTone.PRIMARY -> AppContentColors.accent()
-                        FollowButtonTone.PRIMARY_CONTAINER -> MaterialTheme.colorScheme.primaryContainer
+                        FollowButtonTone.PRIMARY_CONTAINER -> AppSurfaceTokens.primaryContainer()
                     },
                     shape = VideoDetailShapes.action(),
                     modifier = Modifier.heightIn(min = 28.dp)
@@ -1641,10 +1642,10 @@ private fun CreatorTeamMemberChip(
                             text = if (isFollowing) "已关注" else "关注",
                             maxLines = 1,
                             softWrap = false,
-                            style = MaterialTheme.typography.labelMedium,
+                            style = COUITheme.textStyles.footnote1,
                             color = nativeFollowColors?.content ?: if (isFollowing) followAccent else when (followVisualPolicy.detailTextTone) {
                                 FollowTextTone.ON_PRIMARY -> AppContentColors.onAccent()
-                                FollowTextTone.ON_PRIMARY_CONTAINER -> MaterialTheme.colorScheme.onPrimaryContainer
+                                FollowTextTone.ON_PRIMARY_CONTAINER -> AppSurfaceTokens.onPrimaryContainer()
                             },
                             fontWeight = FontWeight.Medium
                         )
@@ -1666,7 +1667,7 @@ fun DescriptionSection(desc: String) {
 
     AppSurface(
         modifier = Modifier.fillMaxWidth(),
-        color = MaterialTheme.colorScheme.background
+        color = AppSurfaceTokens.background()
     ) {
         Column(
             modifier = Modifier
@@ -1677,7 +1678,7 @@ fun DescriptionSection(desc: String) {
             SelectionContainer {
                 AppText(
                     text = desc,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppContentColors.secondaryText(),
                     maxLines = if (expanded) Int.MAX_VALUE else 3,
                     overflow = TextOverflow.Ellipsis
@@ -1696,7 +1697,7 @@ fun DescriptionSection(desc: String) {
                     AppText(
                         text = if (expanded) "\u6536\u8d77" else "\u5c55\u5f00\u66f4\u591a",
                         color = AppContentColors.accent(),
-                        style = MaterialTheme.typography.labelMedium,
+                        style = COUITheme.textStyles.footnote1,
                         fontWeight = FontWeight.Medium
                     )
                     Spacer(modifier = Modifier.width(2.dp))
@@ -1804,7 +1805,7 @@ fun BgmInfoRow(
             Column(modifier = Modifier.weight(1f)) {
                 AppText(
                     text = title,
-                    style = MaterialTheme.typography.labelMedium.copy(
+                    style = COUITheme.textStyles.footnote1.copy(
                         fontWeight = FontWeight.Medium
                     ),
                     color = AppContentColors.accent().copy(alpha = 0.92f),
@@ -1815,7 +1816,7 @@ fun BgmInfoRow(
                     Spacer(modifier = Modifier.height(2.dp))
                     AppText(
                         text = it,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppContentColors.secondaryText(),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -1956,7 +1957,7 @@ private fun BgmSelectionSheet(
                 ) {
                     AppText(
                         text = title,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         fontWeight = FontWeight.SemiBold,
                         color = AppContentColors.primaryText(),
                         modifier = Modifier.weight(1f),
@@ -2027,7 +2028,7 @@ private fun BgmSelectionSheet(
                 item(key = "bgm-recommend-error") {
                     AppText(
                         text = selectedData.errorMessage.takeIf { it.isNotBlank() } ?: "音乐推荐加载失败",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
@@ -2036,7 +2037,7 @@ private fun BgmSelectionSheet(
                 item(key = "bgm-recommend-empty") {
                     AppText(
                         text = "暂无相关视频",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
@@ -2053,7 +2054,7 @@ private fun BgmSelectionSheet(
                 item {
                     AppText(
                         text = "暂时无法加载更多音乐信息",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
                     )
@@ -2098,7 +2099,7 @@ private fun BgmDiscoveryRelatedHeader() {
     ) {
         AppText(
             text = "使用该音乐的视频",
-            style = MaterialTheme.typography.titleSmall,
+            style = COUITheme.textStyles.headline2,
             fontWeight = FontWeight.SemiBold,
             color = AppContentColors.primaryText()
         )
@@ -2230,7 +2231,7 @@ private fun BgmSelectionStrip(
                             if (selected) {
                                 AppContentColors.accent().copy(alpha = 0.12f)
                             } else {
-                                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f)
+                                AppSurfaceTokens.surfaceContainer().copy(alpha = 0.55f)
                             }
                         )
                         .border(
@@ -2238,7 +2239,7 @@ private fun BgmSelectionStrip(
                             color = if (selected) {
                                 AppContentColors.accent().copy(alpha = 0.55f)
                             } else {
-                                MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.38f)
+                                AppSurfaceTokens.outline().copy(alpha = 0.38f)
                             },
                             shape = AppShapes.container(ContainerLevel.Floating)
                         ),
@@ -2267,7 +2268,7 @@ private fun BgmSelectionStrip(
                 Spacer(modifier = Modifier.height(8.dp))
                 AppText(
                     text = bgm.musicTitle.ifBlank { "未知音乐" },
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = if (selected) {
                         AppContentColors.accent()
                     } else {
@@ -2307,7 +2308,7 @@ internal fun BgmDetailCard(
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         shape = AppShapes.container(ContainerLevel.Floating),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.42f)
+        color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.42f)
     ) {
         if (isLoading) {
             BgmDetailCardSkeleton()
@@ -2330,7 +2331,7 @@ internal fun BgmDetailCard(
                 ) {
                     AppText(
                         text = detail?.musicTitle.orEmpty().ifBlank { bgm.musicTitle.ifBlank { "未知音乐" } },
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         fontWeight = FontWeight.SemiBold,
                         color = AppContentColors.primaryText(),
                         maxLines = 2,
@@ -2347,7 +2348,7 @@ internal fun BgmDetailCard(
                         Spacer(modifier = Modifier.width(4.dp))
                         AppText(
                             text = scoreText,
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = COUITheme.textStyles.body1,
                             fontWeight = FontWeight.SemiBold,
                             color = AppContentColors.primaryText()
                         )
@@ -2355,7 +2356,7 @@ internal fun BgmDetailCard(
                     Spacer(modifier = Modifier.height(6.dp))
                     AppText(
                         text = displayStatLine,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -2363,7 +2364,7 @@ internal fun BgmDetailCard(
                     Spacer(modifier = Modifier.height(6.dp))
                     AppText(
                         text = commentText,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -2371,7 +2372,7 @@ internal fun BgmDetailCard(
                     Spacer(modifier = Modifier.height(8.dp))
                     AppText(
                         text = description,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         maxLines = 3,
                         overflow = TextOverflow.Ellipsis
@@ -2381,7 +2382,7 @@ internal fun BgmDetailCard(
                     Spacer(modifier = Modifier.height(12.dp))
                     AppText(
                         text = "打开音乐详情",
-                        style = MaterialTheme.typography.labelMedium,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.accent(),
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier.clickable(onClick = onOpenMusic)
@@ -2688,7 +2689,7 @@ private fun OwnerStatsRow(labels: List<String>, modifier: Modifier = Modifier) {
         labels.forEach { label ->
             AppText(
                 text = label,
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis

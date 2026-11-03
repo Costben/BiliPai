@@ -1,5 +1,6 @@
 package com.android.purebilibili.feature.dynamic
 
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.AppContentColors
 
 import com.android.purebilibili.core.ui.AppShapes
@@ -175,7 +176,7 @@ fun DynamicDetailScreen(
     val detailCommentSource = if (liquidGlassEnabled || couiSkin) rememberChromeBackdropSource() else null
     val detailCommentBackdrop = detailCommentSource?.backdrop
     val detailCommentSourceModifier = if (detailCommentSource != null) {
-        detailCommentSource.modifier.sharedGlobalWallpaperBackground(MaterialTheme.colorScheme.background)
+        detailCommentSource.modifier.sharedGlobalWallpaperBackground(AppSurfaceTokens.background())
     } else {
         Modifier
     }
@@ -715,7 +716,7 @@ fun DynamicDetailScreen(
                                                         )
                                                 )
                                             } else {
-                                                AppHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                                                AppHorizontalDivider(color = AppSurfaceTokens.outline().copy(alpha = 0.5f))
                                                 AppSurface(
                                                     modifier = Modifier.fillMaxWidth(),
                                                     color = resolveDynamicDetailBottomBarColor(LocalAppUiStyle.current, MaterialTheme.colorScheme),
@@ -805,7 +806,7 @@ fun DynamicDetailScreen(
                                                 ),
                                         )
                                     } else {
-                                        AppHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                                        AppHorizontalDivider(color = AppSurfaceTokens.outline().copy(alpha = 0.5f))
                                         AppSurface(
                                             modifier = Modifier.fillMaxWidth(),
                                             color = resolveDynamicDetailBottomBarColor(LocalAppUiStyle.current, MaterialTheme.colorScheme),

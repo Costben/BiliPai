@@ -34,7 +34,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import com.android.purebilibili.core.ui.components.AppContentCard
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppIconButton
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.AppModalBottomSheet
 import com.android.purebilibili.core.ui.components.AppOutlinedTextField
 import com.android.purebilibili.core.ui.components.AppSurface
@@ -116,7 +115,7 @@ fun VideoNoteCard(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = if (isMaterial3) 16.dp else 12.dp, vertical = 6.dp),
-        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+        containerColor = AppSurfaceTokens.surfaceContainer(),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(
             horizontal = if (isMaterial3) 16.dp else 12.dp,
             vertical = if (isMaterial3) 14.dp else 10.dp,
@@ -132,12 +131,12 @@ fun VideoNoteCard(
             Column(modifier = Modifier.weight(1f)) {
                 AppText(
                     text = "视频笔记",
-                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                    style = COUITheme.textStyles.headline2.copy(fontWeight = FontWeight.SemiBold),
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 AppText(
                     text = resolveNoteSubtitle(noteState, isLoggedIn),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                     maxLines = if (defaultCollapsed) 1 else 2,
                     overflow = TextOverflow.Ellipsis,
@@ -164,7 +163,7 @@ fun VideoNoteCard(
                 Spacer(modifier = Modifier.height(10.dp))
                 AppText(
                     text = noteState.feedbackMessage,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.accent(),
                 )
             }
@@ -172,7 +171,7 @@ fun VideoNoteCard(
                 Spacer(modifier = Modifier.height(10.dp))
                 AppText(
                     text = noteState.errorMessage,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.error(),
                 )
             }
@@ -221,7 +220,7 @@ fun VideoNoteCard(
                 Spacer(modifier = Modifier.height(12.dp))
                 AppText(
                     text = "公开笔记 ${noteState.publicNoteCount} 篇",
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                 )
                 Spacer(modifier = Modifier.height(6.dp))
@@ -265,14 +264,13 @@ private fun VideoNotePrimaryActionButton(
     enabled: Boolean,
     onClick: () -> Unit
 ) {
-    val colorScheme = MaterialTheme.colorScheme
     AppButton(
         onClick = onClick,
         enabled = enabled,
         colors = if (LocalAppUiStyle.current == AppUiStyle.MATERIAL3) {
             ButtonDefaults.buttonColors(
-                containerColor = colorScheme.primaryContainer,
-                contentColor = colorScheme.onPrimaryContainer,
+                containerColor = AppSurfaceTokens.primaryContainer(),
+                contentColor = AppSurfaceTokens.onPrimaryContainer(),
             )
         } else {
             null // AppButton selects the native Miuix primary colors.
@@ -339,7 +337,7 @@ fun VideoNoteEditorSheet(
         ) {
             AppText(
                 text = if (noteState.editorFromAiSummary) "AI 笔记草稿" else "视频笔记",
-                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold)
+                style = COUITheme.textStyles.title4.copy(fontWeight = FontWeight.SemiBold)
             )
             Spacer(modifier = Modifier.height(12.dp))
             AppOutlinedTextField(
@@ -431,7 +429,7 @@ fun VideoNoteEditorSheet(
                 AppText(
                     text = noteState.errorMessage,
                     color = AppContentColors.error(),
-                    style = MaterialTheme.typography.bodySmall
+                    style = COUITheme.textStyles.footnote1
                 )
             }
             Spacer(modifier = Modifier.height(14.dp))
@@ -442,7 +440,7 @@ fun VideoNoteEditorSheet(
             ) {
                 AppText(
                     text = "$charCount 字",
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = AppContentColors.secondaryText(),
                     modifier = Modifier.weight(1f)
                 )
@@ -538,7 +536,7 @@ internal fun VideoNoteEditorField(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(VideoDetailShapes.field())
-                    .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                    .background(AppSurfaceTokens.surfaceContainer())
                     .padding(10.dp)
             )
         }
@@ -559,7 +557,7 @@ internal fun VideoNoteSidePanel(
     AppSurface(
         modifier = modifier,
         shape = VideoDetailShapes.field(),
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        color = AppSurfaceTokens.surfaceContainer(),
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -592,7 +590,7 @@ internal fun VideoNoteSidePanel(
             Spacer(modifier = Modifier.height(10.dp))
             AppText(
                 text = "$charCount 字 · 支持 B 站官方笔记样式",
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 color = AppContentColors.secondaryText(),
             )
         }
@@ -612,7 +610,7 @@ private fun VideoNotePanelTab(
             .heightIn(min = 36.dp)
             .clip(VideoDetailShapes.field())
             .background(
-                if (selected) nativeNavigation?.selectedContainer ?: MaterialTheme.colorScheme.primaryContainer
+                if (selected) nativeNavigation?.selectedContainer ?: AppSurfaceTokens.primaryContainer()
                 else Color.Transparent
             )
             .clickable(onClick = onClick),
@@ -620,8 +618,8 @@ private fun VideoNotePanelTab(
     ) {
         AppText(
             text = label,
-            style = MaterialTheme.typography.labelLarge,
-            color = if (selected) nativeNavigation?.selectedContent ?: MaterialTheme.colorScheme.onPrimaryContainer
+            style = COUITheme.textStyles.button,
+            color = if (selected) nativeNavigation?.selectedContent ?: AppSurfaceTokens.onPrimaryContainer()
             else AppContentColors.secondaryText(),
         )
     }
@@ -641,14 +639,14 @@ private fun VideoNoteTimestampList(
     ) {
         AppText(
             text = "点击跳转到对应进度",
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             color = AppContentColors.secondaryText(),
         )
         Spacer(modifier = Modifier.height(8.dp))
         if (timestamps.isEmpty()) {
             AppText(
                 text = "播放中点工具栏的时钟按钮，可在光标处插入当前时间点。",
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText(),
             )
         } else {
@@ -684,7 +682,7 @@ internal fun VideoNotePreviewPane(
     AppSurface(
         modifier = modifier,
         shape = VideoDetailShapes.field(),
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        color = AppSurfaceTokens.surfaceContainer(),
     ) {
         Column(
             modifier = Modifier
@@ -694,7 +692,7 @@ internal fun VideoNotePreviewPane(
         ) {
             AppText(
                 text = "实时预览",
-                style = MaterialTheme.typography.labelMedium,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText(),
             )
             Spacer(modifier = Modifier.height(6.dp))
@@ -928,7 +926,7 @@ private fun PublicNoteListRow(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 AppText(
                     text = note.authorName.ifBlank { "B站用户" },
-                    style = MaterialTheme.typography.labelLarge,
+                    style = COUITheme.textStyles.button,
                     color = AppContentColors.secondaryText(),
                     modifier = Modifier.clickable(onClick = onAuthorClick),
                 )
@@ -947,7 +945,7 @@ private fun PublicNoteListRow(
                 Spacer(modifier = Modifier.height(2.dp))
                 AppText(
                     text = note.pubtime,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = AppContentColors.secondaryText(),
                 )
             }
@@ -955,7 +953,7 @@ private fun PublicNoteListRow(
                 Spacer(modifier = Modifier.height(4.dp))
                 AppText(
                     text = note.summary,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     maxLines = 4,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -963,7 +961,7 @@ private fun PublicNoteListRow(
             Spacer(modifier = Modifier.height(2.dp))
             AppText(
                 text = "查看全部",
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.accent(),
             )
         }

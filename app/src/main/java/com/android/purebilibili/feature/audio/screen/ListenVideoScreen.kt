@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.audio.screen
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.navigation.tabSelectedPage
 import com.android.purebilibili.navigation.tabIndicatorPosition
@@ -44,7 +45,6 @@ import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.ContainerLevel
 import com.android.purebilibili.core.ui.components.AppIconButton
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.AppModalBottomSheet
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppText
@@ -212,7 +212,7 @@ internal fun ListenVideoScreen(
             .background(
                 Brush.verticalGradient(
                     listOf(
-                        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.34f),
+                        AppSurfaceTokens.primaryContainer().copy(alpha = 0.34f),
                         AppSurfaceTokens.chromeBackground(),
                         AppSurfaceTokens.chromeBackground()
                     )
@@ -227,7 +227,7 @@ internal fun ListenVideoScreen(
                 .background(
                     Brush.verticalGradient(
                         listOf(
-                            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.34f),
+                            AppSurfaceTokens.primaryContainer().copy(alpha = 0.34f),
                             AppSurfaceTokens.chromeBackground(),
                             AppSurfaceTokens.chromeBackground(),
                         )
@@ -327,12 +327,12 @@ private fun ListenVideoHeader(
             Column(modifier = Modifier.weight(1f)) {
                 AppText(
                     text = "听视频",
-                    style = MaterialTheme.typography.headlineMedium,
+                    style = COUITheme.textStyles.title3,
                     fontWeight = FontWeight.Bold
                 )
                 AppText(
                     text = "收藏夹是播放列表，视频集是专辑，UP 主是歌手",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppContentColors.secondaryText()
                 )
             }
@@ -381,7 +381,7 @@ private fun ListenVideoHeader(
                             Spacer(modifier = Modifier.width(4.dp))
                             AppText(
                                 text = "正在播放",
-                                style = MaterialTheme.typography.labelSmall,
+                                style = COUITheme.textStyles.footnote2,
                                 color = AppContentColors.accent()
                             )
                         }
@@ -395,7 +395,7 @@ private fun ListenVideoHeader(
                             text = item.artist,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText()
                         )
                     }
@@ -662,7 +662,7 @@ private fun ListenVideoIndexProgress(
         AppCircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
         AppText(
             text = "正在整理收藏夹 $indexedCount/$totalCount",
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText()
         )
     }
@@ -700,7 +700,7 @@ private fun MusicEntityCard(
                     .clip(
                         if (circularCover) CircleShape else AppShapes.container(ContainerLevel.Dialog)
                     )
-                    .background(MaterialTheme.colorScheme.primaryContainer),
+                    .background(AppSurfaceTokens.primaryContainer()),
                 contentAlignment = Alignment.Center
             ) {
                 if (coverUrl.isNotBlank()) {
@@ -714,7 +714,7 @@ private fun MusicEntityCard(
                     AppIcon(
                         imageVector = fallbackIcon,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        tint = AppSurfaceTokens.onPrimaryContainer(),
                         modifier = Modifier.size(30.dp)
                     )
                 }
@@ -726,14 +726,14 @@ private fun MusicEntityCard(
                     minLines = if (alignTitleLines) 2 else 1,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     fontWeight = FontWeight.SemiBold
                 )
                 AppText(
                     text = subtitle,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText()
                 )
             }
@@ -761,7 +761,7 @@ private fun ListenVideoMessage(
             tint = AppContentColors.accent()
         )
         Spacer(modifier = Modifier.height(12.dp))
-        AppText(title, style = MaterialTheme.typography.titleMedium)
+        AppText(title, style = COUITheme.textStyles.headline1)
         actionLabel?.let { label ->
             Spacer(modifier = Modifier.height(16.dp))
             AppButton(onClick = onAction, modifier = Modifier.height(48.dp)) {
@@ -792,7 +792,7 @@ private fun ListenVideoTrackSheet(
             AppText(
                 text = title,
                 modifier = Modifier.weight(1f),
-                style = MaterialTheme.typography.titleLarge,
+                style = COUITheme.textStyles.title4,
                 fontWeight = FontWeight.Bold,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -859,7 +859,7 @@ private fun ListenVideoTrackSheet(
                                 track.artistName,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText()
                             )
                         }

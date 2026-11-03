@@ -61,7 +61,7 @@ class ReusableLiquidGlassBackdropStructureTest {
         assertTrue(pagerStart < overlayStart)
         assertTrue(
             source.substring(captureStart, pagerStart)
-                .contains(".background(MaterialTheme.colorScheme.background)")
+                .contains(".background(AppSurfaceTokens.background())")
         )
         assertTrue(source.contains("tabBarContent(Modifier.fillMaxWidth())"))
         assertTrue(source.contains(".onSizeChanged { tabBarHeightPx.intValue = it.height }"))
@@ -142,9 +142,10 @@ class ReusableLiquidGlassBackdropStructureTest {
             "app/src/main/java/com/android/purebilibili/feature/audio/screen/MusicPlayerContent.kt"
         )
 
-        assertTrue(source.contains("val musicBackdrop = rememberMiuixLayerBackdrop()"))
+        assertTrue(source.contains("val musicBackdropSource = rememberChromeBackdropSource()"))
+        assertTrue(source.contains("val musicBackdrop = musicBackdropSource.backdrop"))
+        assertTrue(source.contains(".then(musicBackdropSource.modifier)"))
         assertTrue(source.contains("miuixBackdrop = musicBackdrop"))
-        assertTrue(source.contains(".miuixLayerBackdrop(musicBackdrop)"))
     }
 
     private fun loadSource(path: String): String {

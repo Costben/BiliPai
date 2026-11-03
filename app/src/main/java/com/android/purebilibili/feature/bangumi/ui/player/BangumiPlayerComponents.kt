@@ -2,6 +2,7 @@
 package com.android.purebilibili.feature.bangumi.ui.player
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.core.plugin.BuiltinPluginIds
 
@@ -1088,7 +1089,7 @@ fun BangumiQualityMenu(
                 AppText(
                     text = "画质选择",
                     color = AppContentColors.primaryText(),
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
                 )
@@ -1110,7 +1111,7 @@ fun BangumiQualityMenu(
                         AppText(
                             text = quality,
                             color = if (isSelected) AppContentColors.link() else AppContentColors.primaryText(),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = COUITheme.textStyles.body1,
                             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                         )
 
@@ -1123,7 +1124,7 @@ fun BangumiQualityMenu(
                                 AppText(
                                     text = tag,
                                     color = AppContentColors.onAccent(),
-                                    style = MaterialTheme.typography.labelSmall,
+                                    style = COUITheme.textStyles.footnote2,
                                     fontWeight = FontWeight.Medium,
                                     modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                                 )

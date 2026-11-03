@@ -2,6 +2,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -120,14 +121,14 @@ fun DanmakuPoolSheet(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     AppText(
                         text = "弹幕列表",
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         fontWeight = FontWeight.Bold,
                         color = AppContentColors.primaryText(),
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     AppText(
                         text = "共 ${snapshot.size} 条",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                     )
                 }
@@ -157,7 +158,7 @@ fun DanmakuPoolSheet(
                             ) {
                                 AppText(
                                     text = mode.label,
-                                    style = MaterialTheme.typography.labelMedium,
+                                    style = COUITheme.textStyles.footnote1,
                                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                                     color = if (isSelected) AppContentColors.onAccent()
                                     else AppContentColors.secondaryText(),
@@ -190,7 +191,7 @@ fun DanmakuPoolSheet(
                 placeholder = {
                     AppText(
                         text = "搜索当前已加载的弹幕...",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                     )
                 },
@@ -231,7 +232,7 @@ fun DanmakuPoolSheet(
                 ) {
                     AppText(
                         text = if (searchQuery.isNotEmpty()) "未找到包含「$searchQuery」的弹幕" else "暂无弹幕数据",
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         color = AppContentColors.secondaryText(),
                     )
                 }
@@ -294,7 +295,7 @@ fun DanmakuPoolSheet(
             title = {
                 AppText(
                     text = if (showReportReasons) "举报原因" else "弹幕操作",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     fontWeight = FontWeight.Bold,
                 )
             },
@@ -320,7 +321,7 @@ fun DanmakuPoolSheet(
                     ) {
                         AppText(
                             text = item.text.orEmpty(),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = COUITheme.textStyles.body1,
                             color = AppContentColors.primaryText(),
                             maxLines = 3,
                             overflow = TextOverflow.Ellipsis,
@@ -343,7 +344,7 @@ fun DanmakuPoolSheet(
                             Spacer(modifier = Modifier.width(10.dp))
                             AppText(
                                 text = "跳转到该时间 (${FormatUtils.formatDuration(item.showAtTime)})",
-                                style = MaterialTheme.typography.bodyMedium,
+                                style = COUITheme.textStyles.body1,
                             )
                         }
 
@@ -357,7 +358,7 @@ fun DanmakuPoolSheet(
                             ) {
                                 PiliPlusDanmakuSendIcon(size = 20.dp)
                                 Spacer(modifier = Modifier.width(10.dp))
-                                AppText("发送同款", style = MaterialTheme.typography.bodyMedium)
+                                AppText("发送同款", style = COUITheme.textStyles.body1)
                             }
                         }
 
@@ -377,7 +378,7 @@ fun DanmakuPoolSheet(
                         ) {
                             AppIcon(AppIcons.Outlined.ContentCopy, contentDescription = null, modifier = Modifier.size(20.dp))
                             Spacer(modifier = Modifier.width(10.dp))
-                            AppText(text = "复制弹幕内容", style = MaterialTheme.typography.bodyMedium)
+                            AppText(text = "复制弹幕内容", style = COUITheme.textStyles.body1)
                         }
 
                         // 撤回弹幕（仅自己发送的弹幕）
@@ -401,7 +402,7 @@ fun DanmakuPoolSheet(
                                 Spacer(modifier = Modifier.width(10.dp))
                                 AppText(
                                     text = "撤回该弹幕",
-                                    style = MaterialTheme.typography.bodyMedium,
+                                    style = COUITheme.textStyles.body1,
                                     color = AppContentColors.error(),
                                 )
                             }
@@ -425,7 +426,7 @@ fun DanmakuPoolSheet(
                                     modifier = Modifier.size(20.dp),
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
-                                AppText(text = "屏蔽发送者", style = MaterialTheme.typography.bodyMedium)
+                                AppText(text = "屏蔽发送者", style = COUITheme.textStyles.body1)
                             }
                         }
 
@@ -447,7 +448,7 @@ fun DanmakuPoolSheet(
                                 Spacer(modifier = Modifier.width(10.dp))
                                 AppText(
                                     text = "举报弹幕",
-                                    style = MaterialTheme.typography.bodyMedium,
+                                    style = COUITheme.textStyles.body1,
                                     color = AppContentColors.error(),
                                 )
                             }
@@ -478,7 +479,7 @@ private fun DanmakuPoolItemRow(
     modifier: Modifier = Modifier,
 ) {
     val backgroundColor = if (isHighlighted) {
-        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.35f)
+        AppSurfaceTokens.primaryContainer().copy(alpha = 0.35f)
     } else {
         AppSurfaceTokens.surfaceContainer()
     }
@@ -507,7 +508,7 @@ private fun DanmakuPoolItemRow(
             ) {
                 AppText(
                     text = FormatUtils.formatDuration(item.showAtTime),
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     fontWeight = FontWeight.Medium,
                     color = AppContentColors.secondaryText(),
                 )
@@ -520,13 +521,13 @@ private fun DanmakuPoolItemRow(
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(3.dp))
-                        .background(MaterialTheme.colorScheme.primaryContainer)
+                        .background(AppSurfaceTokens.primaryContainer())
                         .padding(horizontal = 4.dp, vertical = 1.dp),
                 ) {
                     AppText(
                         text = "UP",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        style = COUITheme.textStyles.footnote2,
+                        color = AppSurfaceTokens.onPrimaryContainer(),
                         fontWeight = FontWeight.Bold,
                     )
                 }
@@ -543,7 +544,7 @@ private fun DanmakuPoolItemRow(
                 ) {
                     AppText(
                         text = "我的",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppContentColors.accent(),
                         fontWeight = FontWeight.Bold,
                     )
@@ -566,7 +567,7 @@ private fun DanmakuPoolItemRow(
             // 弹幕文本
             AppText(
                 text = item.text.orEmpty(),
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 color = AppContentColors.primaryText(),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
@@ -578,7 +579,7 @@ private fun DanmakuPoolItemRow(
             // 点赞按钮
             Row(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(12.dp))
+                    .clip(AppShapes.container(ContainerLevel.MediaCover))
                     .clickable(onClick = onLikeClick)
                     .padding(horizontal = 6.dp, vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -594,7 +595,7 @@ private fun DanmakuPoolItemRow(
                 Spacer(modifier = Modifier.width(4.dp))
                 AnimatedCountText(
                     count = totalLikes,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = if (isLiked) AppContentColors.accent() else AppContentColors.secondaryText(),
                 )
             }

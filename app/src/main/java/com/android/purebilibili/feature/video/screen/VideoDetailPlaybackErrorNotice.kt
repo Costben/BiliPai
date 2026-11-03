@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +16,7 @@ import com.android.purebilibili.core.ui.components.AppButton
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.data.model.VideoLoadError
 import com.android.purebilibili.feature.video.viewmodel.VideoPlaybackUiState
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun VideoDetailPlaybackErrorNotice(
@@ -36,7 +36,7 @@ internal fun VideoDetailPlaybackErrorNotice(
             AppText(
                 text = state.error.toUserMessage(),
                 color = Color.White,
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 textAlign = TextAlign.Center
             )
             val canRetry = state.canRetry || state.error is VideoLoadError.RateLimited ||

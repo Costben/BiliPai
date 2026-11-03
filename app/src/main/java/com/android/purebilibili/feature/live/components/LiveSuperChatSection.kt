@@ -37,7 +37,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -63,6 +62,7 @@ import com.android.purebilibili.feature.live.rememberLiveChromePalette
 import com.android.purebilibili.feature.live.resolveLiveSuperChatColor
 import com.android.purebilibili.feature.live.remainingLiveSuperChatSeconds
 import kotlinx.coroutines.delay
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 fun LiveSuperChatSection(
@@ -100,7 +100,7 @@ fun LiveSuperChatSection(
                 AppText(
                     text = "暂无醒目留言",
                     color = Color.White.copy(alpha = 0.6f),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     modifier = Modifier.padding(vertical = AppSpacingTokens.Large),
                 )
             }

@@ -7,6 +7,7 @@ import com.android.purebilibili.core.ui.components.appElasticPress
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.appActionWithFeedback
 import com.android.purebilibili.core.ui.components.AppText
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animateFloatAsState
@@ -126,16 +127,12 @@ fun ActionButtonsRow(
     showCommentAction: Boolean = true,
     modifier: Modifier = Modifier.fillMaxWidth()
 ) {
-    val colorScheme = MaterialTheme.colorScheme
     val uiStyle = LocalAppUiStyle.current
-    val activeColors = remember(
-        uiStyle,
-        colorScheme.primary,
-        colorScheme.secondary
-    ) {
+    val accentColor = AppContentColors.accent()
+    val activeColors = remember(uiStyle, accentColor) {
         resolveVideoDetailActionActiveColors(
-            primary = colorScheme.primary,
-            secondary = colorScheme.secondary,
+            primary = accentColor,
+            secondary = accentColor,
             uiStyle = uiStyle,
         )
     }
@@ -689,7 +686,7 @@ fun TripleProgressIcon(
         Spacer(modifier = Modifier.height(2.dp))
         AppText(
             text = text,
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             color = textTint,
             fontWeight = if (isActive) FontWeight.Medium else FontWeight.Normal,
             maxLines = 1
@@ -778,7 +775,7 @@ internal fun BiliActionButton(
         Spacer(modifier = Modifier.height(2.dp))
         AppText(
             text = text,
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             color = textTint,
             fontWeight = if (isActive) FontWeight.Medium else FontWeight.Normal,
             maxLines = 1,
@@ -860,7 +857,7 @@ fun ActionButton(
         Spacer(modifier = Modifier.height(4.dp))
         AppText(
             text = text,
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             color = if (isActive) resolvedIconColor else AppContentColors.secondaryText(),
             fontWeight = FontWeight.Normal,
             maxLines = 1

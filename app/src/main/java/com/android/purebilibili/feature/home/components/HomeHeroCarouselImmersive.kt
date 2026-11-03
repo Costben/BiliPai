@@ -1,5 +1,8 @@
 package com.android.purebilibili.feature.home.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -20,7 +23,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -138,7 +140,7 @@ internal fun HomeHeroCarouselImmersive(
                 .matchParentSize()
                 .background(Brush.verticalGradient(
                     0.85f to Color.Transparent,
-                    1f to MaterialTheme.colorScheme.surface,
+                    1f to AppSurfaceTokens.surface(),
                 )),
         )
         val current = videos.getOrNull(pagerState.currentPage)
@@ -150,7 +152,7 @@ internal fun HomeHeroCarouselImmersive(
         ) {
             AppText(
                 text = current?.title.orEmpty(),
-                style = MaterialTheme.typography.titleLarge.copy(
+                style = COUITheme.textStyles.title4.copy(
                     shadow = Shadow(color = Color(0xB3000000), blurRadius = 16f),
                 ),
                 color = Color.White,
@@ -161,7 +163,7 @@ internal fun HomeHeroCarouselImmersive(
             if (ownerName.isNotBlank()) {
                 AppText(
                     text = ownerName,
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = Color(0xE6FFFFFF),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -176,7 +178,7 @@ internal fun HomeHeroCarouselImmersive(
             if (meta.isNotBlank()) {
                 AppText(
                     text = meta,
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = Color(0xCCFFFFFF),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

@@ -2,6 +2,8 @@
 package com.android.purebilibili.feature.video.ui.overlay
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import com.android.purebilibili.core.ui.components.rememberFollowActionWithConfirmation
 import com.android.purebilibili.core.ui.MediaContrastPalette
@@ -177,6 +179,7 @@ import com.android.purebilibili.core.store.ChapterDisplayMode
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
+import com.android.purebilibili.core.ui.AppAlertDialog
 
 internal fun shouldShowEpisodeEntryFromVideoData(
     relatedVideosCount: Int,
@@ -1821,14 +1824,14 @@ private fun VideoPlayerOverlayContent(
                         AppText(
                             text = insightPresentation.summary,
                             color = Color.White,
-                            style = MaterialTheme.typography.labelMedium,
+                            style = COUITheme.textStyles.footnote1,
                             fontSize = overlayVisualPolicy.statsFontSp.sp,
                             maxLines = 1
                         )
                         AppText(
                             text = insightPresentation.statusText,
                             color = Color.White.copy(alpha = 0.7f),
-                            style = MaterialTheme.typography.labelSmall,
+                            style = COUITheme.textStyles.footnote2,
                             fontSize = (overlayVisualPolicy.statsFontSp - 1f).coerceAtLeast(9f).sp
                         )
                     }
@@ -1909,7 +1912,7 @@ private fun VideoPlayerOverlayContent(
                     ) {
                         AppText(
                             text = signal.title,
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = COUITheme.textStyles.body1,
                             modifier = Modifier.weight(1f)
                         )
                         AppTextButton(
@@ -2223,7 +2226,7 @@ private fun VideoPlayerOverlayContent(
                             .padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
-                        AppText("CDN 测速与线路", style = MaterialTheme.typography.titleLarge)
+                        AppText("CDN 测速与线路", style = COUITheme.textStyles.title4)
                         PlaybackCdnDiagnostics(
                             diagnostics = cdnLineDiagnostics,
                             checking = isCdnProbing,
@@ -2672,14 +2675,14 @@ private fun PlaybackInsightPanel(
             }
         ),
         shape = panelShape,
-        color = MaterialTheme.colorScheme.surface.copy(
+        color = AppSurfaceTokens.surface().copy(
             alpha = if (realtimeHazeState != null) 0.72f else 0.94f
         ),
         contentColor = AppContentColors.primaryText(),
         tonalElevation = 0.dp,
         border = BorderStroke(
             width = 0.6.dp,
-            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)
+            color = AppSurfaceTokens.outline().copy(alpha = 0.45f)
         )
     ) {
         Column {
@@ -2690,10 +2693,10 @@ private fun PlaybackInsightPanel(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(modifier = Modifier.weight(1f)) {
-                    AppText("播放器洞察", style = MaterialTheme.typography.titleMedium)
+                    AppText("播放器洞察", style = COUITheme.textStyles.headline1)
                     AppText(
                         displayedPresentation.statusText,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppContentColors.secondaryText()
                     )
                 }
@@ -2709,7 +2712,7 @@ private fun PlaybackInsightPanel(
                     )
                 }
             }
-            AppHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f))
+            AppHorizontalDivider(color = AppSurfaceTokens.outline().copy(alpha = 0.35f))
             LazyColumn(
                 modifier = Modifier.weight(1f, fill = false),
                 contentPadding = PaddingValues(16.dp),
@@ -2720,7 +2723,7 @@ private fun PlaybackInsightPanel(
                         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                             AppText(
                                 section.title,
-                                style = MaterialTheme.typography.labelMedium,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.accent()
                             )
                             rows.forEach { row ->
@@ -2733,12 +2736,12 @@ private fun PlaybackInsightPanel(
                                         row.label,
                                         modifier = Modifier.weight(0.8f),
                                         color = AppContentColors.secondaryText(),
-                                        style = MaterialTheme.typography.labelSmall
+                                        style = COUITheme.textStyles.footnote2
                                     )
                                     AppText(
                                         row.value,
                                         modifier = Modifier.weight(1.2f),
-                                        style = MaterialTheme.typography.labelSmall,
+                                        style = COUITheme.textStyles.footnote2,
                                         fontFamily = FontFamily.Monospace,
                                         textAlign = androidx.compose.ui.text.style.TextAlign.End,
                                         maxLines = 1,
@@ -2754,13 +2757,13 @@ private fun PlaybackInsightPanel(
                         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                             AppText(
                                 "诊断事件",
-                                style = MaterialTheme.typography.labelMedium,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.accent()
                             )
                             diagnosticEvents.takeLast(6).asReversed().forEach { event ->
                                 AppText(
                                     event,
-                                    style = MaterialTheme.typography.labelSmall,
+                                    style = COUITheme.textStyles.footnote2,
                                     fontFamily = FontFamily.Monospace,
                                     maxLines = 2,
                                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
@@ -2825,7 +2828,7 @@ fun LandscapeEndDrawer(
             widthDp = configuration.screenWidthDp
         )
     }
-    val useDarkDrawerOverlay = MaterialTheme.colorScheme.surface.luminance() < 0.5f
+    val useDarkDrawerOverlay = AppSurfaceTokens.surface().luminance() < 0.5f
     val drawerOverlayColor = if (useDarkDrawerOverlay) {
         Color(0xCC11141A)
     } else {
@@ -2988,7 +2991,7 @@ fun LandscapeEndDrawer(
                         // 只有推荐，显示标题
                         AppText(
                             text = "推荐视频",
-                            style = MaterialTheme.typography.titleMedium,
+                            style = COUITheme.textStyles.headline1,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.landscapeControlCenterGroup(index = 1)
                                 .padding(layoutPolicy.listContentPaddingDp.dp)
@@ -3057,7 +3060,7 @@ fun LandscapeEndDrawer(
                                     item {
                                         AppText(
                                             text = section.title,
-                                            style = MaterialTheme.typography.labelMedium,
+                                            style = COUITheme.textStyles.footnote1,
                                             color = AppContentColors.secondaryText(),
                                             modifier = Modifier.padding(bottom = 8.dp)
                                         )
@@ -3120,7 +3123,7 @@ private fun InteractionButton(
         AppText(
             text = label,
             color = if (isActive) AppContentColors.accent() else AppContentColors.secondaryText(),
-            style = MaterialTheme.typography.labelSmall
+            style = COUITheme.textStyles.footnote2
         )
     }
 }
@@ -3409,7 +3412,7 @@ private fun LandscapeEpisodeItem(
                     .aspectRatio(16f / 9f)
                     .fillMaxHeight()
                     .clip(AppShapes.container(ContainerLevel.Tag))
-                    .background(MaterialTheme.colorScheme.surfaceContainerHighest)
+                    .background(AppSurfaceTokens.surfaceContainerHighest())
             ) {
                 coil3.compose.AsyncImage(
                     model = checkedEpisodeArc.pic,

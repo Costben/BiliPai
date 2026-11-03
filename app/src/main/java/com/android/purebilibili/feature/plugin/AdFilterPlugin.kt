@@ -63,6 +63,8 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 private const val TAG = "AdFilterPlugin"
 private const val AD_FILTER_CUSTOM_LIST_PREVIEW_LIMIT = 3
@@ -509,7 +511,7 @@ class AdFilterPlugin : BuiltinPlugin, FeedPlugin<VideoItem> {
                 iconTint = AppContentColors.error()
             )
 
-            AppHorizontalDivider(modifier = Modifier.padding(start = 56.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(0.5f))
+            AppHorizontalDivider(modifier = Modifier.padding(start = 56.dp), color = AppSurfaceTokens.outline().copy(0.5f))
 
             // 标题党过滤
             AppSwitchPreference(
@@ -525,7 +527,7 @@ class AdFilterPlugin : BuiltinPlugin, FeedPlugin<VideoItem> {
                 iconTint = MaterialTheme.colorScheme.tertiary
             )
 
-            AppHorizontalDivider(modifier = Modifier.padding(start = 56.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(0.5f))
+            AppHorizontalDivider(modifier = Modifier.padding(start = 56.dp), color = AppSurfaceTokens.outline().copy(0.5f))
 
             // 低质量过滤
             AppSwitchPreference(
@@ -763,7 +765,7 @@ private fun AdFilterInsightPanel(summary: AdFilterInsightSummary) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(AppShapes.container(ContainerLevel.Card))
-            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.42f))
+            .background(AppSurfaceTokens.surfaceContainer().copy(alpha = 0.42f))
             .padding(14.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -775,13 +777,13 @@ private fun AdFilterInsightPanel(summary: AdFilterInsightSummary) {
             Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 AppText(
                     text = "过滤效果",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     fontWeight = FontWeight.SemiBold,
                     color = AppContentColors.primaryText()
                 )
                 AppText(
                     text = "展示最近实际隐藏的视频",
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText()
                 )
             }
@@ -791,7 +793,7 @@ private fun AdFilterInsightPanel(summary: AdFilterInsightSummary) {
             ) {
                 AppText(
                     text = "${summary.totalFilteredCount} 条",
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.accent(),
                     fontWeight = FontWeight.Medium,
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
@@ -858,21 +860,21 @@ private fun AdFilterStatTile(
     Column(
         modifier = modifier
             .clip(AppShapes.container(ContainerLevel.Card))
-            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.72f))
+            .background(AppSurfaceTokens.surface().copy(alpha = 0.72f))
             .padding(horizontal = 8.dp, vertical = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         AppText(
             text = title,
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             color = AppContentColors.secondaryText(),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
         AppText(
             text = value,
-            style = MaterialTheme.typography.titleSmall,
+            style = COUITheme.textStyles.headline2,
             color = AppContentColors.primaryText(),
             fontWeight = FontWeight.SemiBold,
             maxLines = 1
@@ -890,7 +892,7 @@ private fun AdFilterRecordSection(
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         AppText(
             text = title,
-            style = MaterialTheme.typography.labelLarge,
+            style = COUITheme.textStyles.button,
             color = AppContentColors.accent(),
             fontWeight = FontWeight.SemiBold
         )
@@ -899,13 +901,13 @@ private fun AdFilterRecordSection(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(AppShapes.container(ContainerLevel.Card))
-                    .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.58f))
+                    .background(AppSurfaceTokens.surface().copy(alpha = 0.58f))
                     .padding(horizontal = 12.dp, vertical = 14.dp),
                 contentAlignment = Alignment.Center
             ) {
                 AppText(
                     text = emptyText,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText()
                 )
             }
@@ -941,7 +943,7 @@ private fun AdFilterRecordCard(
         modifier = Modifier
             .fillMaxWidth()
             .clip(AppShapes.container(ContainerLevel.Card))
-            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.72f))
+            .background(AppSurfaceTokens.surface().copy(alpha = 0.72f))
             .combinedClickable(
                 onClick = {},
                 onLongClick = { showDetailDialog = true }
@@ -960,7 +962,7 @@ private fun AdFilterRecordCard(
                 .width(92.dp)
                 .aspectRatio(16f / 9f)
                 .clip(AppShapes.container(ContainerLevel.Chip))
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .background(AppSurfaceTokens.surfaceContainer())
         )
         Column(
             modifier = Modifier.weight(1f),
@@ -968,7 +970,7 @@ private fun AdFilterRecordCard(
         ) {
             AppText(
                 text = record.videoTitle.ifBlank { "未知视频" },
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 color = AppContentColors.primaryText(),
                 fontWeight = FontWeight.Medium,
                 maxLines = 2,
@@ -988,11 +990,11 @@ private fun AdFilterRecordCard(
                     modifier = Modifier
                         .size(20.dp)
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .background(AppSurfaceTokens.surfaceContainer())
                 )
                 AppText(
                     text = record.upName.ifBlank { "未知 UP" },
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -1009,7 +1011,7 @@ private fun AdFilterRecordCard(
             }
             AppText(
                 text = "播放 ${FormatUtils.formatStat(record.viewCount.toLong())}",
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 color = AppContentColors.secondaryText()
             )
         }
@@ -1055,12 +1057,12 @@ private fun AdFilterDetailLine(
     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
         AppText(
             text = label,
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             color = AppContentColors.secondaryText()
         )
         AppText(
             text = value,
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = AppContentColors.primaryText()
         )
     }
@@ -1074,7 +1076,7 @@ private fun AdFilterChip(text: String) {
     ) {
         AppText(
             text = text,
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             color = AppContentColors.accent(),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -1101,7 +1103,7 @@ private fun AdFilterListItemAvatar(
             modifier = Modifier
                 .size(28.dp)
                 .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .background(AppSurfaceTokens.surfaceContainer())
         )
     } else {
         AppIcon(
@@ -1148,18 +1150,18 @@ private fun AdFilterCustomListSection(
         ) {
             AppText(
                 text = title,
-                style = MaterialTheme.typography.titleSmall,
+                style = COUITheme.textStyles.headline2,
                 fontWeight = FontWeight.SemiBold,
                 color = AppContentColors.accent(),
                 modifier = Modifier.weight(1f)
             )
             AppSurface(
                 shape = AppShapes.container(ContainerLevel.Pill),
-                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.68f)
+                color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.68f)
             ) {
                 AppText(
                     text = summary.countText,
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
                 )
@@ -1180,7 +1182,7 @@ private fun AdFilterCustomListSection(
 
         AppText(
             text = summary.previewText,
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText(),
             modifier = Modifier.padding(bottom = if (summary.hiddenCountText == null) 0.dp else 2.dp)
         )
@@ -1189,7 +1191,7 @@ private fun AdFilterCustomListSection(
             summary.hiddenCountText?.let { hiddenCountText ->
                 AppText(
                     text = hiddenCountText,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = AppContentColors.accent().copy(alpha = 0.72f)
                 )
             }
@@ -1214,7 +1216,7 @@ private fun AdFilterCustomListSection(
                         Column(modifier = Modifier.weight(1f)) {
                             AppText(
                                 text = item,
-                                style = MaterialTheme.typography.bodyMedium,
+                                style = COUITheme.textStyles.body1,
                                 color = AppContentColors.primaryText(),
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
@@ -1222,7 +1224,7 @@ private fun AdFilterCustomListSection(
                             if (blockedUpProfile != null && blockedUpProfile.filteredCount > 0) {
                                 AppText(
                                     text = "已过滤 ${blockedUpProfile.filteredCount} 条",
-                                    style = MaterialTheme.typography.labelSmall,
+                                    style = COUITheme.textStyles.footnote2,
                                     color = AppContentColors.secondaryText()
                                 )
                             }

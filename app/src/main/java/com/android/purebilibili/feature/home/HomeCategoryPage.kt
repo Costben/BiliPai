@@ -29,7 +29,9 @@ import androidx.compose.foundation.lazy.staggeredgrid.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.foundation.shape.RoundedCornerShape
+import com.android.purebilibili.core.ui.AppShapes
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+import com.android.purebilibili.core.ui.ContainerLevel
 import com.android.purebilibili.core.ui.components.AppCard
 import com.android.purebilibili.core.ui.components.AppCardDefaults
 import com.android.purebilibili.core.ui.AdaptiveLoadingIndicator
@@ -67,6 +69,7 @@ import com.android.purebilibili.data.model.response.VideoItem
 import com.android.purebilibili.feature.home.components.BottomBarLiquidSegmentedControl
 import com.android.purebilibili.feature.home.components.HomeHeroCarousel
 import com.android.purebilibili.feature.home.components.HomeHeroCarouselImmersive
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import io.github.suqi8.coui.kmp.blur.Backdrop as MiuixBackdrop
 import io.github.suqi8.coui.kmp.blur.layerBackdrop
 import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop
@@ -724,12 +727,12 @@ internal fun HomeCategoryPageContent(
                 ) {
                     AppText(
                         text = "直播首页已独立",
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         color = AppContentColors.primaryText(),
                     )
                     AppText(
                         text = "与底栏「直播」相同，支持分区、排序与下拉刷新",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                     )
                     AppTextButton(onClick = onOpenLiveHome) {
@@ -1050,7 +1053,7 @@ private fun PopularSubCategorySegmentedControl(
                     .fillMaxWidth()
                     .offset(y = (-6).dp),
                 height = AppSpacingTokens.TripleExtraLarge,
-                labelFontSize = MaterialTheme.typography.labelMedium.fontSize,
+                labelFontSize = COUITheme.textStyles.footnote1.fontSize,
                 centerContent = true,
                 dragSelectionEnabled = labels.size > 1,
             )
@@ -1073,7 +1076,7 @@ private fun PopularSubCategorySegmentedControl(
             indicatorHeight = com.android.purebilibili.core.ui.roundMatchedLiquidIndicatorHeightDp(
                 AppSpacingTokens.TripleExtraLarge.value
             ).dp,
-            labelFontSize = MaterialTheme.typography.labelMedium.fontSize,
+            labelFontSize = COUITheme.textStyles.footnote1.fontSize,
             // Page-level categories retain equal slots across material changes.
             forceEqualWidth = LocalAppUiStyle.current == AppUiStyle.MATERIAL3,
             // Four-character labels fit the cell but not Tab's extra 16dp text padding.
@@ -1117,7 +1120,7 @@ private fun TodayWatchModeSegmentedControl(
         enabled = enabled,
         height = AppChromeSizeTokens.BottomBarMatchedSegmentedControlHeightDp.dp,
         indicatorHeight = AppChromeSizeTokens.BottomBarMatchedSegmentedIndicatorHeightDp.dp,
-        labelFontSize = MaterialTheme.typography.labelMedium.fontSize,
+        labelFontSize = COUITheme.textStyles.footnote1.fontSize,
         containerHorizontalPadding = AppSpacingTokens.ExtraSmall,
         containerVerticalPadding = AppSpacingTokens.ExtraSmall,
         miuixBackdrop = miuixBackdrop,
@@ -1165,7 +1168,7 @@ private fun TodayWatchPlanCard(
 
     AppCard(
         colors = AppCardDefaults.colors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
+            containerColor = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.6f)
         ),
         modifier = Modifier
             .fillMaxWidth()
@@ -1176,7 +1179,7 @@ private fun TodayWatchPlanCard(
                 modifier = Modifier
                     .matchParentSize()
                     .layerBackdrop(todayWatchBackdrop)
-                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)),
+                    .background(AppSurfaceTokens.surfaceContainer().copy(alpha = 0.6f)),
             )
             Column(
                 modifier = Modifier.fillMaxWidth(),
@@ -1189,7 +1192,7 @@ private fun TodayWatchPlanCard(
             ) {
                 AppText(
                     text = "今日推荐单",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     color = AppContentColors.accent(),
                     modifier = Modifier.weight(1f)
                 )
@@ -1223,13 +1226,13 @@ private fun TodayWatchPlanCard(
             if (collapsed) {
                 AppText(
                     text = "已收起推荐单。展开后恢复自动更新；也可以直接点“刷新”换一批。",
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = AppContentColors.secondaryText()
                 )
                 if (!error.isNullOrBlank()) {
                     AppText(
                         text = error,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.error()
                     )
                 }
@@ -1250,7 +1253,7 @@ private fun TodayWatchPlanCard(
             ) {
             AppText(
                 text = "点开后会自动从推荐单移除；想换一批可点右上角“刷新”。",
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 color = AppContentColors.secondaryText()
             )
 
@@ -1263,14 +1266,14 @@ private fun TodayWatchPlanCard(
                         size = AppSpacingTokens.Medium + AppSpacingTokens.Micro,
                         strokeWidth = AppSpacingTokens.Micro * 0.9f
                     )
-                    AppText("正在根据你的历史观看习惯生成推荐…", style = MaterialTheme.typography.bodySmall)
+                    AppText("正在根据你的历史观看习惯生成推荐…", style = COUITheme.textStyles.footnote1)
                 }
             }
 
             if (!error.isNullOrBlank()) {
                 AppText(
                     text = error,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.error()
                 )
             }
@@ -1292,7 +1295,7 @@ private fun TodayWatchPlanCard(
                         } else {
                             "当前按你的观看习惯与模式偏好生成"
                         },
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                 }
@@ -1306,7 +1309,7 @@ private fun TodayWatchPlanCard(
                     index = titleOrder,
                     exponent = cardConfig.waterfallExponent
                 ) {
-                    AppText("UP主榜", style = MaterialTheme.typography.labelLarge)
+                    AppText("UP主榜", style = COUITheme.textStyles.button)
                 }
                 val ranksOrder = revealIndex++
                 WaterfallReveal(
@@ -1323,7 +1326,7 @@ private fun TodayWatchPlanCard(
                             val clickable = shouldEnableTodayWatchUpRankClick(up)
                             AppText(
                                 text = "${index + 1}. ${up.name}",
-                                style = MaterialTheme.typography.labelMedium,
+                                style = COUITheme.textStyles.footnote1,
                                 color = if (clickable) {
                                     AppContentColors.accent()
                                 } else {
@@ -1346,7 +1349,7 @@ private fun TodayWatchPlanCard(
                     index = queueTitleOrder,
                     exponent = cardConfig.waterfallExponent
                 ) {
-                    AppText("视频队列", style = MaterialTheme.typography.labelLarge)
+                    AppText("视频队列", style = COUITheme.textStyles.button)
                 }
                 activePlan.videoQueue
                     .take(cardConfig.queuePreviewLimit.coerceAtLeast(1))
@@ -1368,7 +1371,7 @@ private fun TodayWatchPlanCard(
                             ) {
                                 AppText(
                                     text = "${index + 1}.",
-                                    style = MaterialTheme.typography.bodySmall,
+                                    style = COUITheme.textStyles.footnote1,
                                     color = AppContentColors.accent()
                                 )
                                 if (showUpAvatars && video.owner.face.isNotBlank()) {
@@ -1390,7 +1393,7 @@ private fun TodayWatchPlanCard(
                                     ) {
                                         AppText(
                                             text = video.owner.name.take(1).ifBlank { "UP" },
-                                            style = MaterialTheme.typography.labelSmall,
+                                            style = COUITheme.textStyles.footnote2,
                                             color = AppContentColors.accent()
                                         )
                                     }
@@ -1401,14 +1404,14 @@ private fun TodayWatchPlanCard(
                                 ) {
                                     AppText(
                                         text = video.title,
-                                        style = MaterialTheme.typography.bodySmall,
+                                        style = COUITheme.textStyles.footnote1,
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis,
                                         color = AppContentColors.primaryText()
                                     )
                                     UpBadgeName(
                                         name = video.owner.name,
-                                        nameStyle = MaterialTheme.typography.labelSmall,
+                                        nameStyle = COUITheme.textStyles.footnote2,
                                         nameColor = AppContentColors.secondaryText(),
                                         badgeTextColor = AppContentColors.secondaryText().copy(alpha = 0.85f),
                                         badgeBorderColor = AppContentColors.secondaryText().copy(alpha = 0.35f),
@@ -1419,7 +1422,7 @@ private fun TodayWatchPlanCard(
                                     if (explanation.isNotBlank()) {
                                         AppText(
                                             text = explanation,
-                                            style = MaterialTheme.typography.labelSmall,
+                                            style = COUITheme.textStyles.footnote2,
                                             maxLines = 1,
                                             overflow = TextOverflow.Ellipsis,
                                             color = AppContentColors.accent().copy(alpha = 0.85f)
@@ -1472,12 +1475,12 @@ private fun OldContentDivider(onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = AppSpacingTokens.Medium, vertical = AppSpacingTokens.ExtraSmall + AppSpacingTokens.Micro)
-            .clip(RoundedCornerShape(10.dp))
+            .clip(AppShapes.container(ContainerLevel.Field))
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(10.dp),
+        shape = AppShapes.container(ContainerLevel.Field),
         // 半透明主色容器：让模糊壁纸背景透出，与毛玻璃卡片的观感一致。
         color = resolveOldContentDividerContainerColor(MaterialTheme.colorScheme),
-        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        contentColor = AppSurfaceTokens.onPrimaryContainer(),
         tonalElevation = 0.dp,
     ) {
         Column(
@@ -1488,14 +1491,14 @@ private fun OldContentDivider(onClick: () -> Unit) {
         ) {
             AppText(
                 text = "上次刷新到这里，点击回顶刷新",
-                style = MaterialTheme.typography.titleSmall,
+                style = COUITheme.textStyles.headline2,
                 fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Center,
             )
             AppText(
                 text = "以下是之前的内容",
-                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f),
-                style = MaterialTheme.typography.labelSmall,
+                color = AppSurfaceTokens.onPrimaryContainer().copy(alpha = 0.8f),
+                style = COUITheme.textStyles.footnote2,
                 textAlign = TextAlign.Center,
             )
         }

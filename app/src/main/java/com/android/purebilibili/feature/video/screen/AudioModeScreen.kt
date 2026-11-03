@@ -1,6 +1,8 @@
 package com.android.purebilibili.feature.video.screen
 
 import com.android.purebilibili.core.ui.AppContentColors
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import androidx.compose.foundation.verticalScroll
 import android.app.Activity
@@ -26,7 +28,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import com.android.purebilibili.core.ui.AppAlertDialog
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppOutlinedTextField
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppText
@@ -394,7 +395,7 @@ private fun AudioModeInitialState(
         ) {
             when (state) {
                 is VideoPlaybackUiState.Error -> {
-                    AppText("音频加载失败", style = MaterialTheme.typography.headlineSmall, color = Color.White)
+                    AppText("音频加载失败", style = COUITheme.textStyles.title4, color = Color.White)
                     AppText(state.msg, color = Color.White.copy(alpha = 0.72f))
                     if (state.canRetry) {
                         AppTextButton(onClick = onRetry, modifier = Modifier.height(48.dp)) { AppText("重试", color = Color.White) }
@@ -439,7 +440,7 @@ internal fun AudioModeSleepTimerDialog(
                 AppText(
                     text = "选择常用时长，或输入分钟数 / 小时:分钟，例如 90、1:30。",
                     color = AppContentColors.secondaryText(),
-                    style = MaterialTheme.typography.bodySmall
+                    style = COUITheme.textStyles.footnote1
                 )
                 if (onSleepAfterCurrent != null) {
                     AppTextButton(onClick = onSleepAfterCurrent) {
@@ -458,7 +459,7 @@ internal fun AudioModeSleepTimerDialog(
                             color = if (isSelected) {
                                 AppContentColors.accent()
                             } else {
-                                MaterialTheme.colorScheme.surfaceVariant
+                                AppSurfaceTokens.surfaceContainer()
                             }
                         ) {
                             Box(
@@ -467,7 +468,7 @@ internal fun AudioModeSleepTimerDialog(
                             ) {
                                 AppText(
                                     text = formatAudioModeSleepTimerButtonLabel(minutes),
-                                    style = MaterialTheme.typography.labelMedium,
+                                    style = COUITheme.textStyles.footnote1,
                                     color = if (isSelected) {
                                         AppContentColors.onAccent()
                                     } else {

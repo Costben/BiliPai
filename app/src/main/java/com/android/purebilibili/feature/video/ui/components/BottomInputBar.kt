@@ -1,6 +1,8 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import com.android.purebilibili.core.ui.components.appActionClickable
 import com.android.purebilibili.core.ui.components.appActionWithFeedback
@@ -35,7 +37,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.appElasticPress
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.runtime.Composable
@@ -267,13 +268,13 @@ private fun DockedSolidBottomInputBar(
     onCommentClick: () -> Unit,
     showActionButtons: Boolean = true,
 ) {
-    val surfaceColor = MaterialTheme.colorScheme.surface
+    val surfaceColor = AppSurfaceTokens.surface()
     val bottomBarColor = resolveBottomBarSurfaceColor(
         surfaceColor = surfaceColor,
         blurEnabled = frostedBottomBar,
         blurIntensity = currentUnifiedBlurIntensity()
     )
-    val inputContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest
+    val inputContainerColor = AppSurfaceTokens.surfaceContainerHighest()
     val inputTextColor = resolveBottomInputBarPlaceholderTextColor(
         inputContainerColor = inputContainerColor,
         onSurfaceColor = AppContentColors.primaryText(),
@@ -367,7 +368,7 @@ private fun FloatingLiquidBottomInputBar(
     com.android.purebilibili.core.ui.components.ProvideAppElasticFeedback {
         val shellShape = resolveSharedBottomBarCapsuleShape()
         val inputTextColor = resolveBottomInputBarPlaceholderTextColor(
-            inputContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+            inputContainerColor = AppSurfaceTokens.surfaceContainer(),
             onSurfaceColor = AppContentColors.primaryText(),
             onSurfaceVariantColor = AppContentColors.secondaryText()
         )
@@ -417,7 +418,7 @@ private fun FloatingLiquidBottomInputBar(
                         textColor = inputTextColor,
                         iconSize = 20.dp,
                         iconSpacing = 6.dp,
-                        textStyle = MaterialTheme.typography.bodyMedium,
+                        textStyle = COUITheme.textStyles.body1,
                         modifier = Modifier
                             .fillMaxSize()
                             .appActionClickable(role = Role.Button) { onCommentClick() }
@@ -511,7 +512,7 @@ private fun BottomInputBarContentRow(
                     textColor = inputTextColor,
                     iconSize = 18.dp,
                     iconSpacing = 8.dp,
-                    textStyle = MaterialTheme.typography.bodySmall,
+                    textStyle = COUITheme.textStyles.footnote1,
                 )
             }
 
@@ -665,7 +666,7 @@ private fun IconActionButton(
                 Spacer(modifier = Modifier.height(2.dp))
                 AppText(
                     text = label,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = tint
                 )
             }

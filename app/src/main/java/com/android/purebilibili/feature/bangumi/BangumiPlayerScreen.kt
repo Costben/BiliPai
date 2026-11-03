@@ -4,6 +4,7 @@ package com.android.purebilibili.feature.bangumi
 import com.android.purebilibili.core.player.withAppVideoDecoderDiagnostics
 import com.android.purebilibili.core.player.withAppVideoDecoderPreference
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.core.ui.motion.AppMotionEasing
 import com.android.purebilibili.core.ui.AppContentColors
@@ -108,6 +109,7 @@ import com.android.purebilibili.core.ui.components.AppIconButton
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
+import com.android.purebilibili.core.ui.components.AppTextButton
 
 /**
  * 番剧播放页面
@@ -1370,7 +1372,7 @@ fun BangumiPlayerScreen(
                     .fillMaxHeight()
                     .onSizeChanged { measuredCommentWidthPx = it.width },
             ) { dismiss ->
-                Column(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface)) {
+                Column(Modifier.fillMaxSize().background(AppSurfaceTokens.surface())) {
                     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                         AppText("评论", modifier = Modifier.weight(1f).padding(start = 12.dp))
                         com.android.purebilibili.core.ui.components.AppTextButton(onClick = {
@@ -1499,7 +1501,7 @@ private fun BangumiPlayNoticeOverlay(
             if (title.isNotBlank()) {
                 AppText(
                     text = title,
-                    style = if (isFullscreen) MaterialTheme.typography.titleMedium else MaterialTheme.typography.titleSmall,
+                    style = if (isFullscreen) COUITheme.textStyles.headline1 else COUITheme.textStyles.headline2,
                     fontWeight = FontWeight.SemiBold,
                     color = Color.White,
                     maxLines = 1,
@@ -1510,7 +1512,7 @@ private fun BangumiPlayNoticeOverlay(
             }
             AppText(
                 text = message,
-                style = if (isFullscreen) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodySmall,
+                style = if (isFullscreen) COUITheme.textStyles.body1 else COUITheme.textStyles.footnote1,
                 color = Color.White.copy(alpha = 0.8f),
                 textAlign = androidx.compose.ui.text.style.TextAlign.Center
             )
@@ -1522,7 +1524,7 @@ private fun BangumiPlayNoticeOverlay(
                     contentColor = AppContentColors.onAccent()
                 )
             ) {
-                AppText("重试", style = MaterialTheme.typography.labelMedium)
+                AppText("重试", style = COUITheme.textStyles.footnote1)
             }
         }
 

@@ -2,6 +2,8 @@
 package com.android.purebilibili.feature.bangumi.ui.detail
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.resolveFilledButtonContainerColor
@@ -124,7 +126,7 @@ fun BangumiDetailHeader(
                 AppText(
                     text = detail.title,
                     color = Color.White,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = COUITheme.textStyles.title4,
                     fontWeight = FontWeight.Bold,
                     maxLines = 2
                 )
@@ -145,7 +147,7 @@ fun BangumiDetailHeader(
                     AppText(
                         text = desc,
                         color = Color.White.copy(alpha = 0.7f),
-                        style = MaterialTheme.typography.bodySmall
+                        style = COUITheme.textStyles.footnote1
                     )
                 }
 
@@ -156,7 +158,7 @@ fun BangumiDetailHeader(
                     AppText(
                         text = "${FormatUtils.formatStat(stat.views)}播放 · ${FormatUtils.formatStat(stat.favorites)}追番",
                         color = Color.White.copy(alpha = 0.7f),
-                        style = MaterialTheme.typography.bodySmall
+                        style = COUITheme.textStyles.footnote1
                     )
                 }
             }
@@ -192,7 +194,7 @@ fun RatingRow(
         AppText(
             text = " (${count}人评分)",
             color = Color.White.copy(alpha = 0.7f),
-            style = MaterialTheme.typography.bodySmall
+            style = COUITheme.textStyles.footnote1
         )
     }
 }
@@ -264,7 +266,7 @@ fun SeasonSelector(
         AppText(
             text = "相关季度",
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            style = MaterialTheme.typography.titleMedium,
+            style = COUITheme.textStyles.headline1,
             fontWeight = FontWeight.Bold
         )
 
@@ -284,13 +286,13 @@ fun SeasonSelector(
                     color = if (isCurrentSeason) {
                         AppContentColors.accent()
                     } else {
-                        MaterialTheme.colorScheme.surfaceVariant
+                        AppSurfaceTokens.surfaceContainer()
                     }
                 ) {
                     AppText(
                         text = season.seasonTitle.ifEmpty { season.title },
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         color = if (isCurrentSeason) {
                             AppContentColors.onAccent()
                         } else {
@@ -320,7 +322,7 @@ fun EpisodeChip(
             .width(140.dp)
             .aspectRatio(16f / 9f),
         shape = AppShapes.container(ContainerLevel.Chip),
-        color = if (isSelected) AppContentColors.accent() else MaterialTheme.colorScheme.surfaceVariant
+        color = if (isSelected) AppContentColors.accent() else AppSurfaceTokens.surfaceContainer()
     ) {
         Box {
             // 封面
@@ -360,7 +362,7 @@ fun EpisodeChip(
                     AppText(
                         text = episode.badge,
                         modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp),
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = badgeColors.contentColor
                     )
                 }
@@ -375,7 +377,7 @@ fun EpisodeChip(
                 AppText(
                     text = episode.title.ifEmpty { "第${episode.id}话" },
                     color = Color.White,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     fontWeight = FontWeight.Medium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -384,7 +386,7 @@ fun EpisodeChip(
                     AppText(
                         text = episode.longTitle,
                         color = Color.White.copy(alpha = 0.7f),
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -396,7 +398,7 @@ fun EpisodeChip(
                 AppText(
                     text = FormatUtils.formatDuration((episode.duration / 1000L).toInt()),
                     color = Color.White.copy(alpha = 0.7f),
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .padding(8.dp)
@@ -410,7 +412,7 @@ fun EpisodeChip(
                         .align(Alignment.BottomCenter)
                         .fillMaxWidth()
                         .height(2.dp)
-                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+                        .background(AppSurfaceTokens.surfaceContainer().copy(alpha = 0.4f))
                 ) {
                     Box(
                         modifier = Modifier
@@ -460,7 +462,7 @@ fun EpisodePreviewRow(
                         .width(80.dp)
                         .aspectRatio(16f / 9f),
                     shape = AppShapes.container(ContainerLevel.Chip),
-                    color = MaterialTheme.colorScheme.surfaceVariant
+                    color = AppSurfaceTokens.surfaceContainer()
                 ) {
                     Box(contentAlignment = Alignment.Center) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -471,7 +473,7 @@ fun EpisodePreviewRow(
                             )
                             AppText(
                                 text = "全部${episodes.size}集",
-                                style = MaterialTheme.typography.labelSmall,
+                                style = COUITheme.textStyles.footnote2,
                                 color = AppContentColors.secondaryText()
                             )
                         }

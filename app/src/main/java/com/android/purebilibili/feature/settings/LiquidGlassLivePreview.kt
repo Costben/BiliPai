@@ -33,7 +33,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.rememberCoroutineScope
 import com.android.purebilibili.core.store.home.GlassPopupPalette
@@ -92,6 +91,8 @@ import coil3.compose.AsyncImage
 import kotlin.math.abs
 import kotlin.math.roundToInt
 import io.github.suqi8.coui.kmp.blur.ProgressiveBlur
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -166,18 +167,18 @@ internal fun LiquidGlassAdjustmentPanel(
             Column(modifier = Modifier.weight(1f)) {
                 AppText(
                     text = "实时预览与调节",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     fontWeight = FontWeight.Medium,
                 )
                 AppText(
                     text = "先选择一个预设，再按需要微调；修改会自动保存并应用到首页",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                 )
             }
             AppText(
                 text = "$modeLabel · $percentage%",
-                style = MaterialTheme.typography.labelMedium,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.link(),
                 maxLines = 1,
                 softWrap = false,
@@ -197,7 +198,7 @@ internal fun LiquidGlassAdjustmentPanel(
 
         AppText(
             text = "图标与文字颜色",
-            style = MaterialTheme.typography.labelMedium,
+            style = COUITheme.textStyles.footnote1,
             fontWeight = FontWeight.Medium,
         )
         AppSegmentedControl(
@@ -226,7 +227,7 @@ internal fun LiquidGlassAdjustmentPanel(
             } else {
                 "根据当前显示区域的明暗自动切换文字颜色，复杂背景下更易辨认。"
             },
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText(),
         )
 
@@ -276,7 +277,7 @@ internal fun LiquidGlassAdjustmentPanel(
                 Spacer(modifier = Modifier.width(10.dp))
                 AppText(
                     text = "${selectedArtwork.label} · 左右滑动切换",
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                 )
             }
@@ -312,7 +313,7 @@ internal fun LiquidGlassAdjustmentPanel(
             } else {
                 "这张图片只用于效果预览，不会设为首页背景或分享给别人。"
             },
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText(),
         )
 
@@ -325,7 +326,7 @@ internal fun LiquidGlassAdjustmentPanel(
         ) {
             AppText(
                 text = "效果预设",
-                style = MaterialTheme.typography.labelMedium,
+                style = COUITheme.textStyles.footnote1,
                 fontWeight = FontWeight.Medium,
             )
             AppText(
@@ -334,7 +335,7 @@ internal fun LiquidGlassAdjustmentPanel(
                 } else {
                     advancedSettings.preset.label
                 },
-                style = MaterialTheme.typography.labelMedium,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.link(),
             )
         }
@@ -365,7 +366,7 @@ internal fun LiquidGlassAdjustmentPanel(
             LIQUID_GLASS_PRESET_SLIDER_ANCHORS.forEach { preset ->
                 AppText(
                     text = preset.label,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     fontWeight = if (preset == advancedSettings.preset) {
                         FontWeight.SemiBold
                     } else {
@@ -388,12 +389,12 @@ internal fun LiquidGlassAdjustmentPanel(
                 LiquidGlassAdvancedPreset.PRISM -> "棱镜：加强边缘彩光和折射，效果更醒目"
                 LiquidGlassAdvancedPreset.CUSTOM -> "自定：已使用下方的高级参数"
             },
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText(),
         )
         AppText(
             text = "导入与分享",
-            style = MaterialTheme.typography.labelMedium,
+            style = COUITheme.textStyles.footnote1,
             fontWeight = FontWeight.Medium,
         )
         // Size actions by their content; narrow windows move the second action to its own row.
@@ -431,7 +432,7 @@ internal fun LiquidGlassAdjustmentPanel(
         }
         AppText(
             text = "导入前会先确认，只替换液态玻璃参数；分享文件不包含预览图片和其他设置。",
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText(),
         )
         if (!alwaysShowAdvanced) AppTextButton(
@@ -578,7 +579,7 @@ internal fun LiquidGlassAdjustmentPanel(
         ) {
             AppText(
                 text = "通透",
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 color = AppContentColors.secondaryText(),
             )
             AppSlider(
@@ -596,14 +597,14 @@ internal fun LiquidGlassAdjustmentPanel(
             )
             AppText(
                 text = "磨砂",
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 color = AppContentColors.secondaryText(),
             )
         }
 
         AppText(
             text = "拖动时实时预览，松手后自动保存；中间位置是推荐强度。",
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText(),
         )
     }
@@ -775,7 +776,7 @@ private fun LiquidGlassHomeSample(
         resolveLiquidGlassTuning(progress, advancedSettings, readabilityMode)
     }
     val sampleShape = RoundedCornerShape(24.dp)
-    val glassColor = MaterialTheme.colorScheme.surfaceContainer
+    val glassColor = AppSurfaceTokens.surfaceContainer()
     val contentColor = AppContentColors.primaryText()
     val adaptiveReadabilityEnabled = readabilityMode == LiquidGlassReadabilityMode.ADAPTIVE
     val topReadabilityState = rememberLiquidGlassAdaptiveReadabilityState(
@@ -821,7 +822,7 @@ private fun LiquidGlassHomeSample(
         modifier = modifier
             .height(360.dp)
             .clip(sampleShape)
-            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .background(AppSurfaceTokens.surfaceContainer())
             .pointerInput(previewImageUri, previewArtwork, previewPanLimitPx) {
                 detectVerticalDragGestures { change, dragAmount ->
                     change.consume()
@@ -937,7 +938,7 @@ private fun LiquidGlassHomeSample(
             Spacer(modifier = Modifier.width(8.dp))
             AppText(
                 text = "搜索感兴趣的视频",
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = topContentColor.copy(alpha = 0.8f),
             )
         }
@@ -1040,7 +1041,7 @@ private fun LiquidGlassOpenSourceAcknowledgements(
     ) {
         AppText(
             text = "感谢开源社区",
-            style = MaterialTheme.typography.titleSmall,
+            style = COUITheme.textStyles.headline2,
             fontWeight = FontWeight.SemiBold,
             color = Color.White,
             textAlign = TextAlign.Center,
@@ -1048,13 +1049,13 @@ private fun LiquidGlassOpenSourceAcknowledgements(
         AppText(
             text = "Kotlin · Jetpack Compose · Miuix\n" +
                 "AndroidX Media3 · Coil · kotlinx.serialization",
-            style = MaterialTheme.typography.labelMedium,
+            style = COUITheme.textStyles.footnote1,
             color = Color.White.copy(alpha = 0.92f),
             textAlign = TextAlign.Center,
         )
         AppText(
             text = "以及每一位开源贡献者",
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             color = Color.White.copy(alpha = 0.76f),
             textAlign = TextAlign.Center,
         )
@@ -1081,18 +1082,18 @@ private fun LiquidGlassAdvancedSlider(
             Column(modifier = Modifier.weight(1f)) {
                 AppText(
                     text = title,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     fontWeight = FontWeight.Medium,
                 )
                 AppText(
                     text = description,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                 )
             }
             AppText(
                 text = valueText,
-                style = MaterialTheme.typography.labelMedium,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.link(),
             )
         }

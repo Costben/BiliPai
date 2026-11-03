@@ -22,7 +22,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import com.android.purebilibili.core.ui.common.AppSelectionContainer as SelectionContainer
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -51,6 +50,8 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 private const val TAG = "HomeFeedAnonymizerPlugin"
 private const val HOME_FEED_ANONYMIZER_WEB_ENDPOINT =
@@ -237,7 +238,7 @@ private fun HomeFeedAnonymizerSettingsContent(enabled: Boolean) {
             }
             AppText(
                 text = "BiliPai 仅实现 Android 端内置插件形态，保留原项目与 Plus 改版来源说明。",
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText(),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
@@ -261,14 +262,14 @@ private fun HomeFeedAnonymizerSection(
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         AppText(
             text = title,
-            style = MaterialTheme.typography.labelLarge,
+            style = COUITheme.textStyles.button,
             color = AppContentColors.accent(),
             fontWeight = FontWeight.Medium
         )
         AppSurface(
             modifier = Modifier.fillMaxWidth(),
             shape = AppShapes.container(ContainerLevel.Chip),
-            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.62f)
+            color = AppSurfaceTokens.surface().copy(alpha = 0.62f)
         ) {
             Column(
                 modifier = Modifier.padding(10.dp),
@@ -299,7 +300,7 @@ private fun HomeFeedAnonymizerInfoRowView(
                 onLongClick = onShowDetail
             )
             .background(
-                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.28f),
+                color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.28f),
                 shape = AppShapes.container(ContainerLevel.Chip)
             )
             .padding(horizontal = 10.dp, vertical = 8.dp),
@@ -307,7 +308,7 @@ private fun HomeFeedAnonymizerInfoRowView(
     ) {
         AppText(
             text = row.label,
-            style = MaterialTheme.typography.labelMedium,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText(),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -316,7 +317,7 @@ private fun HomeFeedAnonymizerInfoRowView(
         Spacer(modifier = Modifier.width(10.dp))
         AppText(
             text = row.summary,
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = if (row.url == null) {
                 AppContentColors.primaryText()
             } else {
@@ -342,14 +343,14 @@ private fun HomeFeedAnonymizerDetailDialog(
             Column(modifier = Modifier.fillMaxWidth()) {
                 AppText(
                     text = "长按并拖拽选择需要复制的内容",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 SelectionContainer {
                     AppText(
                         text = row.fullContent,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         modifier = Modifier
                             .fillMaxWidth()
                             .heightIn(max = 280.dp)

@@ -3,7 +3,6 @@ package com.android.purebilibili.feature.live.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -20,6 +19,7 @@ import androidx.compose.ui.platform.LocalDensity
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.data.model.response.LiveMessageMedal
 import com.android.purebilibili.feature.live.LiveStatusPalette
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 private fun liveMedalLabel(medal: LiveMessageMedal): AnnotatedString = buildAnnotatedString {
     append(medal.name)
@@ -33,7 +33,7 @@ internal fun rememberLiveMedalSize(medal: LiveMessageMedal): DpSize {
     val measurer = rememberTextMeasurer()
     val density = LocalDensity.current
     val text = remember(medal.name, medal.level) { liveMedalLabel(medal) }
-    val style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp, lineHeight = 10.sp)
+    val style = COUITheme.textStyles.footnote2.copy(fontSize = 10.sp, lineHeight = 10.sp)
     val measured = measurer.measure(text, style = style, maxLines = 1)
     return with(density) { DpSize(measured.size.width.toDp() + 12.dp, measured.size.height.toDp() + 6.dp) }
 }
@@ -44,7 +44,7 @@ internal fun LiveMedalBadge(medal: LiveMessageMedal, modifier: Modifier = Modifi
     AppText(
         text = remember(medal.name, medal.level) { liveMedalLabel(medal) },
         color = Color(medal.textColor),
-        style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp, lineHeight = 10.sp),
+        style = COUITheme.textStyles.footnote2.copy(fontSize = 10.sp, lineHeight = 10.sp),
         maxLines = 1,
         modifier = modifier
             .background(background, RoundedCornerShape(4.dp))

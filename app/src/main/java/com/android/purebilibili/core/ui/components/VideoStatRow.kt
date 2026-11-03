@@ -1,5 +1,7 @@
 package com.android.purebilibili.core.ui.components
 
+import com.android.purebilibili.core.ui.AppContentColors
+
 import com.android.purebilibili.core.ui.AppIcons
 
 import androidx.compose.foundation.layout.Arrangement
@@ -7,7 +9,6 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,7 +30,7 @@ fun VideoStatRow(
     modifier: Modifier = Modifier,
     playIcon: ImageVector = AppIcons.Outlined.PlayCircleOutline,
     danmakuIcon: ImageVector = AppIcons.Outlined.Subtitles,
-    contentColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    contentColor: Color = AppContentColors.secondaryText(),
     textStyle: TextStyle = feedContentTypography().statistic,
 ) {
     FlowRow(

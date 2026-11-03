@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.home.components.cards
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.core.ui.common.copyPlainTextToClipboard
@@ -365,7 +367,7 @@ private fun VideoCardOwnerMetadata(
                     modifier = Modifier
                         .size(AppSpacingTokens.Medium + AppSpacingTokens.Micro)
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surfaceVariant),
+                        .background(AppSurfaceTokens.surfaceContainer()),
                     contentScale = ContentScale.Crop
                 )
             }
@@ -440,7 +442,7 @@ private fun VideoCardPublishTime(
     val contentTypography = feedContentTypography()
     if (emphasized) {
         AppSurface(
-            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f),
+            color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.8f),
             shape = AppShapes.container(ContainerLevel.Pill),
             modifier = modifier
         ) {
@@ -1456,7 +1458,7 @@ internal fun ElegantVideoCard(
                         }
                     } else Modifier
                 )
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .background(AppSurfaceTokens.surfaceContainer())
                 //  [交互优化] 封面区域：点击跳转
                 .pointerInput(isLongPressEnabled, onLongClick, onDismiss, onWatchLater, onUnfavorite) {
                     val hasPreviewAction = isLongPressEnabled && onLongClick != null
@@ -1663,7 +1665,7 @@ internal fun ElegantVideoCard(
                             AppText(
                                 text = primaryStatText,
                                 color = MediaContrastPalette.Foreground.copy(alpha = 0.94f),
-                                fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                                fontSize = COUITheme.textStyles.footnote2.fontSize,
                                 fontWeight = FontWeight.Medium,
                                 style = coverOverlayTextStyle,
                                 maxLines = 1,
@@ -1691,7 +1693,7 @@ internal fun ElegantVideoCard(
                                 AppText(
                                     text = secondaryStatText,
                                     color = MediaContrastPalette.Foreground.copy(alpha = 0.90f),
-                                    fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                                    fontSize = COUITheme.textStyles.footnote2.fontSize,
                                     fontWeight = FontWeight.Medium,
                                     style = coverOverlayTextStyle,
                                     maxLines = 1,
@@ -1719,7 +1721,7 @@ internal fun ElegantVideoCard(
                                 AppText(
                                     text = onlineCount,
                                     color = MediaContrastPalette.Foreground.copy(alpha = 0.90f),
-                                    fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                                    fontSize = COUITheme.textStyles.footnote2.fontSize,
                                     fontWeight = FontWeight.Medium,
                                     style = coverOverlayTextStyle,
                                     maxLines = 1,
@@ -1747,7 +1749,7 @@ internal fun ElegantVideoCard(
                                 AppText(
                                     text = durationText,
                                     color = MediaContrastPalette.Foreground.copy(alpha = 0.90f),
-                                    fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                                    fontSize = COUITheme.textStyles.footnote2.fontSize,
                                     fontWeight = FontWeight.Medium,
                                     style = coverOverlayTextStyle,
                                     maxLines = 1,
@@ -1763,7 +1765,7 @@ internal fun ElegantVideoCard(
                         AppText(
                             text = durationText,
                             color = MediaContrastPalette.Foreground,
-                            fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                            fontSize = COUITheme.textStyles.footnote2.fontSize,
                             fontWeight = FontWeight.Medium,
                             style = coverOverlayTextStyle,
                             maxLines = 1,
@@ -1779,7 +1781,7 @@ internal fun ElegantVideoCard(
                     AppText(
                         text = durationText,
                         color = MediaContrastPalette.Foreground,
-                        fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                        fontSize = COUITheme.textStyles.footnote2.fontSize,
                         fontWeight = FontWeight.Medium,
                         style = coverOverlayTextStyle,
                         maxLines = 1,

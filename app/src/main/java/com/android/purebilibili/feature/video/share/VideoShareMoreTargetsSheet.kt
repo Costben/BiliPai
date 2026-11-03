@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.video.share
 
 import com.android.purebilibili.core.ui.AppContentColors
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import android.content.Context
 import android.content.Intent
@@ -23,7 +24,6 @@ import androidx.compose.foundation.layout.size
 import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -121,12 +121,12 @@ internal fun VideoShareMoreTargetsSheet(
         ) {
             if (isLandscape) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    AppText("更多分享方式", style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+                    AppText("更多分享方式", style = COUITheme.textStyles.headline1, modifier = Modifier.weight(1f))
                     AppTextButton(onClick = onDismiss, enabled = !openingTarget) { AppText("关闭") }
                 }
             } else {
-                AppText("更多分享方式", style = MaterialTheme.typography.headlineSmall)
-                AppText("选择应用继续分享", style = MaterialTheme.typography.bodySmall)
+                AppText("更多分享方式", style = COUITheme.textStyles.title4)
+                AppText("选择应用继续分享", style = COUITheme.textStyles.footnote1)
             }
             LazyColumn(modifier = Modifier.fillMaxWidth().then(
                 if (isLandscape) Modifier.weight(1f) else Modifier.heightIn(max = maxListHeight),
@@ -168,7 +168,7 @@ internal fun VideoShareMoreTargetsSheet(
             if (!isLandscape) {
                 AppText(
                     "系统面板的屏幕方向由设备决定",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                 )
                 AppButton(onClick = onDismiss, enabled = !openingTarget, modifier = Modifier.fillMaxWidth()) {

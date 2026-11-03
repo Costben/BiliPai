@@ -12,6 +12,7 @@ import com.android.purebilibili.core.ui.AppAlertDialog
 import com.android.purebilibili.core.ui.AppDialogAction
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppTextButton
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun ArticleReadingSettingsDialog(
@@ -42,7 +43,7 @@ internal fun ArticleReadingSettingsDialog(
                     ) { AppText("${if (selected) "✓ " else ""}$label", tapToCopyEnabled = false) }
                 }
                 AppText("阅读示例\n调整后会立即应用到专栏正文。",
-                    style = androidx.compose.material3.MaterialTheme.typography.bodyLarge.withArticleReadingPreferences(preferences))
+                    style = COUITheme.textStyles.main.withArticleReadingPreferences(preferences))
             }
         },
         dismissButton = {

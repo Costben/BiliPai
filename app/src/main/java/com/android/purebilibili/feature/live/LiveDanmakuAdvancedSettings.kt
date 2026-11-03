@@ -17,6 +17,7 @@ import com.android.purebilibili.core.ui.AppSpacingTokens
 import com.android.purebilibili.core.ui.components.AppSwitch
 import com.android.purebilibili.core.ui.components.AppText
 import kotlin.math.roundToInt
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** 三种材质共用内容和保存回调，外观由主题组件提供。 */
 @Composable
@@ -73,7 +74,7 @@ internal fun LiveDanmakuAdvancedSettings(
         AppText(
             "实际滚动时长还受上一级滚动速度和固定速度选项影响。",
             color = AppContentColors.secondaryText(),
-            style = if (glass) androidx.compose.material3.MaterialTheme.typography.bodySmall
+            style = if (glass) COUITheme.textStyles.footnote1
                 else androidx.compose.material3.LocalTextStyle.current,
         )
         LiveDanmakuStyleSliderRow(

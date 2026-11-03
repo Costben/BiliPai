@@ -26,6 +26,7 @@ import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.ContainerLevel
 import com.android.purebilibili.core.ui.AppSpacingTokens
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  *  开源许可证数据类
@@ -357,12 +358,12 @@ fun OpenSourceLicensesScreen(
                 ) {
                     AppText(
                         text = "本应用使用了以下开源组件，感谢所有开源贡献者！",
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         color = AppContentColors.secondaryText(),
                     )
                     AppText(
                         text = "说明：该列表按当前工程依赖、投屏/测试模块以及明确参考实现整理，可能不包含全部传递依赖或完整法律清单。",
-                        style = MaterialTheme.typography.labelMedium,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.link(),
                         modifier = Modifier.padding(bottom = 8.dp),
                     )
@@ -411,14 +412,14 @@ fun LicenseCard(
             Column(modifier = Modifier.weight(1f)) {
                 AppText(
                     text = library.name,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     fontWeight = FontWeight.SemiBold,
                     color = AppContentColors.primaryText()
                 )
                 if (library.description.isNotEmpty()) {
                     AppText(
                         text = library.description,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         modifier = Modifier.padding(top = 2.dp)
                     )
@@ -429,19 +430,19 @@ fun LicenseCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     AppSurface(
-                        color = MaterialTheme.colorScheme.primaryContainer,
+                        color = AppSurfaceTokens.primaryContainer(),
                         shape = AppShapes.container(ContainerLevel.Tag)
                     ) {
                         AppText(
                             text = library.license,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            style = COUITheme.textStyles.footnote2,
+                            color = AppSurfaceTokens.onPrimaryContainer(),
                             modifier = Modifier.padding(horizontal = AppSpacingTokens.Small, vertical = 2.dp)
                         )
                     }
                     AppText(
                         text = "GitHub/链接",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppContentColors.link(),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -449,7 +450,7 @@ fun LicenseCard(
                 }
                 AppText(
                     text = library.url,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = AppContentColors.link(),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.theme.AppUiStyle
@@ -112,8 +113,8 @@ internal fun CommentListTitle(
     // 紧凑字阶用于玻璃评论栏与详情页共享浮动评论栏；关闭玻璃的原生列表栏默认保持
     // MD3/Miuix 原字阶，只有明确传入 compactTypography 的调用点才跟随紧凑字阶。
     val compact = liquidGlassEnabled || compactTypography
-    val titleStyle = if (compact) MaterialTheme.typography.titleMedium else MaterialTheme.typography.titleLarge
-    val countStyle = if (compact) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.titleMedium
+    val titleStyle = if (compact) COUITheme.textStyles.headline1 else COUITheme.textStyles.title4
+    val countStyle = if (compact) COUITheme.textStyles.body1 else COUITheme.textStyles.headline1
     val titleWeight = if (compact) FontWeight.SemiBold else FontWeight.Bold
     val appearance = rememberVideoCommentAppearance()
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
@@ -220,7 +221,7 @@ fun CommentSortHeader(
                         modifier = Modifier.size(18.dp),
                     )
                     Spacer(modifier = Modifier.width(6.dp))
-                    AppText(text = sortMode.label, style = MaterialTheme.typography.bodyMedium)
+                    AppText(text = sortMode.label, style = COUITheme.textStyles.body1)
                 }
             }
         }

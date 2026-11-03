@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -51,6 +50,7 @@ import dev.chrisbanes.haze.HazeState
 import kotlinx.coroutines.launch
 import io.github.suqi8.coui.kmp.blur.layerBackdrop
 import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 /** Episode wiring only; ordinary videos own the shared list, chrome and composer appearance. */
 @Composable
@@ -126,7 +126,7 @@ internal fun BangumiCommentPanel(
                     .fillMaxSize()
                     .layerBackdrop(backdrop)
                     .hazeSourceCompat(hazeState)
-                    .background(MaterialTheme.colorScheme.surface),
+                    .background(AppSurfaceTokens.surface()),
                 upMid = state.upMid,
                 maxTimestampMs = maxTimestampMs,
                 replies = state.replies,
@@ -186,7 +186,7 @@ internal fun BangumiCommentPanel(
                                 surfaceColor = androidx.compose.ui.graphics.Color.Transparent,
                             )
                             .topSolidProgressiveFade(
-                                surfaceColor = MaterialTheme.colorScheme.surface,
+                                surfaceColor = AppSurfaceTokens.surface(),
                                 enabled = solidHeaderEnabled,
                             ),
                     )

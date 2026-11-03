@@ -1,5 +1,6 @@
 package com.android.purebilibili.feature.dynamic.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.compose.animation.core.LinearEasing
@@ -11,7 +12,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -42,7 +42,7 @@ fun DynamicUserLiveBadge(
         AppText(
             text = resolveDynamicUserLiveBadgeLabel(),
             color = color,
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             fontWeight = FontWeight.Bold,
             maxLines = 1,
             softWrap = false,

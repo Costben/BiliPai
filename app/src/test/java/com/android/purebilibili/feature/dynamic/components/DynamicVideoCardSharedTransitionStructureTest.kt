@@ -39,7 +39,7 @@ class DynamicVideoCardSharedTransitionStructureTest {
         assertTrue(source.contains("feedContentTypography().coverBadge"))
         assertFalse(source.contains("MediaContrastPalette.Scrim.copy(alpha = 0.45f)"))
         assertTrue(source.contains("resolveAppTvIcon()"))
-        assertTrue(source.contains("tint = MaterialTheme.colorScheme.onPrimaryContainer"))
+        assertTrue(source.contains("tint = AppContentColors.accent()"))
         assertFalse(source.contains("rememberAppPlayIcon()"))
         assertFalse(source.contains("CircleShape"))
     }

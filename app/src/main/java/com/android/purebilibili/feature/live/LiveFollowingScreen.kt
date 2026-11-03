@@ -30,7 +30,6 @@ import com.android.purebilibili.core.ui.rememberAppTopChromePolicy
 import com.android.purebilibili.core.ui.components.AppButton
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppIconButton
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -57,6 +56,8 @@ import com.android.purebilibili.core.util.responsiveContentWidth
 import com.android.purebilibili.data.model.response.LiveRoom
 import com.android.purebilibili.data.repository.LiveRepository
 import kotlinx.coroutines.launch
+import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 @Composable
 fun LiveFollowingScreen(
@@ -77,7 +78,6 @@ fun LiveFollowingScreen(
             isTabletLayout = windowSizeClass.isTablet,
         )
     }
-    val colorScheme = MaterialTheme.colorScheme
     var isLoading by remember { mutableStateOf(true) }
     var isLoadingMore by remember { mutableStateOf(false) }
     var isRefreshing by remember { mutableStateOf(false) }
@@ -182,7 +182,7 @@ fun LiveFollowingScreen(
 
             )
         },
-        containerColor = colorScheme.background,
+        containerColor = AppSurfaceTokens.background(),
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
     ) { innerPadding ->
         AdaptivePullToRefreshBox(
@@ -204,11 +204,11 @@ fun LiveFollowingScreen(
                     .padding(innerPadding),
                 contentAlignment = Alignment.Center,
             ) {
-                AppText(text = error ?: "", color = colorScheme.onSurfaceVariant)
+                AppText(text = error ?: "", color = AppContentColors.secondaryText())
             }
             items.isEmpty() && !hasMore -> Box(Modifier.fillMaxSize().padding(innerPadding), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    AppText("关注的主播暂时都未开播", color = colorScheme.onSurfaceVariant)
+                    AppText("关注的主播暂时都未开播", color = AppContentColors.secondaryText())
                     AppButton(onClick = { loadPage(refresh = true) }) { AppText("重新加载") }
                 }
             }
@@ -227,7 +227,7 @@ fun LiveFollowingScreen(
                     verticalArrangement = Arrangement.spacedBy(metrics.cardSpaceDp.dp),
                 ) {
                     if (error != null) {
-                        item { AppText(error.orEmpty(), color = colorScheme.onSurfaceVariant) }
+                        item { AppText(error.orEmpty(), color = AppContentColors.secondaryText()) }
                     }
                     items(items, key = { it.roomid }) { item ->
                         LiveRoomCard(

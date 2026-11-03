@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -177,7 +176,7 @@ private fun BangumiHubScreen(
     // Keep progressive sampling attached through skeleton → content transitions.
     // Recreating its graphics layers briefly exposes an empty/dark texture.
     val chromeSource = if (progressiveBlur || themeConfig.liquidGlassEnabled) {
-        rememberChromeBackdropSource(recordingBackground = MaterialTheme.colorScheme.background)
+        rememberChromeBackdropSource(recordingBackground = AppSurfaceTokens.background())
     } else {
         null
     }
@@ -196,7 +195,7 @@ private fun BangumiHubScreen(
     val chromeActive = hazeActive || progressiveActive || fadeActive
 
     AppScaffold(
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = AppSurfaceTokens.background(),
         contentWindowInsets = WindowInsets(0.dp),
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
@@ -204,12 +203,12 @@ private fun BangumiHubScreen(
                 backdrop = chromeBackdrop.takeIf { progressiveActive },
                 enabled = progressiveActive,
                 headerBlurActive = hazeActive,
-                surfaceColor = globalWallpaperAwareChromeColor(MaterialTheme.colorScheme.background),
+                surfaceColor = globalWallpaperAwareChromeColor(AppSurfaceTokens.background()),
                 fadeEnabled = fadeActive,
                 extendBelowBounds = false,
                 modifier = Modifier.background(
                     if (chromeActive) Color.Transparent
-                    else globalWallpaperAwareChromeColor(MaterialTheme.colorScheme.background)
+                    else globalWallpaperAwareChromeColor(AppSurfaceTokens.background())
                 ).then(
                     if (hazeActive) {
                         hazeState?.let {
@@ -227,7 +226,7 @@ private fun BangumiHubScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            if (solidNativeHeader && !chromeActive) MaterialTheme.colorScheme.background
+                            if (solidNativeHeader && !chromeActive) AppSurfaceTokens.background()
                             else Color.Transparent
                         ),
                 ) {
@@ -341,7 +340,7 @@ private fun BangumiHubScreen(
                     .fillMaxSize()
                     .then(chromeSource?.modifier ?: Modifier)
                     .then(if (hazeState != null) Modifier.hazeSourceCompat(hazeState) else Modifier)
-                    .globalWallpaperAwareBackground(MaterialTheme.colorScheme.background),
+                    .globalWallpaperAwareBackground(AppSurfaceTokens.background()),
             ) {
                 // 沉浸顶栏使用列表内部留白，让滚动内容进入采样区域；普通顶栏保留外部避让。
                 Box(

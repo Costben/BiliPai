@@ -1,6 +1,8 @@
 package com.android.purebilibili.feature.video.share
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppHorizontalDivider
@@ -72,6 +74,7 @@ import com.android.purebilibili.core.ui.components.AppGlassMenu
 import com.android.purebilibili.core.ui.components.AppGlassMenuSource
 import com.android.purebilibili.core.ui.components.LocalAppGlassPanelDismissAction
 import com.android.purebilibili.core.ui.components.appGlassMenuAvailable
+import com.android.purebilibili.core.ui.components.AppTextButton
 
 @Composable
 internal fun VideoShareSheetHost(
@@ -112,7 +115,7 @@ internal fun VideoShareSheet(
     var showMoreTargets by remember { mutableStateOf(false) }
     var moreShareMedia by remember { mutableStateOf<VideoShareCoverFile?>(null) }
     var shareStyle by remember { mutableStateOf(VideoShareStyle.LINK) }
-    val neutralIconBackground = MaterialTheme.colorScheme.surfaceContainerHighest
+    val neutralIconBackground = AppSurfaceTokens.surfaceContainerHighest()
     val neutralIconContent = AppContentColors.primaryText()
     val styleOptions = remember {
         listOf(
@@ -126,24 +129,24 @@ internal fun VideoShareSheet(
             label = "分享到动态",
             iconText = null,
             iconVector = AppIcons.Outlined.DynamicFeed,
-            backgroundColor = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            backgroundColor = AppSurfaceTokens.primaryContainer(),
+            contentColor = AppSurfaceTokens.onPrimaryContainer(),
         ),
         VideoShareSheetItem(
             target = VideoShareTarget.BILIBILI_FRIENDS,
             label = "B 站好友",
             iconText = null,
             iconVector = AppIcons.Outlined.People,
-            backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            backgroundColor = AppSurfaceTokens.secondaryContainer(),
+            contentColor = AppSurfaceTokens.onSecondaryContainer(),
         ),
         VideoShareSheetItem(
             target = VideoShareTarget.WECHAT,
             label = "微信",
             iconText = "微",
             iconVector = null,
-            backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+            backgroundColor = AppSurfaceTokens.secondaryContainer(),
+            contentColor = AppSurfaceTokens.onSecondaryContainer()
         ),
         VideoShareSheetItem(
             target = VideoShareTarget.QQ,
@@ -236,7 +239,7 @@ internal fun VideoShareSheet(
                 ) {
                     AppText(
                         "分享",
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier.weight(1f),
                     )
@@ -253,7 +256,7 @@ internal fun VideoShareSheet(
                 AppText(
                     text = "分享",
                     modifier = Modifier.padding(start = 20.dp, top = 22.dp, bottom = 14.dp),
-                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold)
+                    style = COUITheme.textStyles.title4.copy(fontWeight = FontWeight.SemiBold)
                 )
             }
             Column(
@@ -289,7 +292,7 @@ internal fun VideoShareSheet(
                     },
                     modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
                     color = AppContentColors.secondaryText(),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -409,7 +412,7 @@ internal fun VideoShareSheet(
                 }) { AppText("其他应用打开") }
             }
             if (!isLandscape) {
-                AppHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                AppHorizontalDivider(color = AppSurfaceTokens.outline().copy(alpha = 0.5f))
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -426,7 +429,7 @@ internal fun VideoShareSheet(
                     AppText(
                         text = "取消",
                         color = AppContentColors.primaryText(),
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium)
+                        style = COUITheme.textStyles.headline1.copy(fontWeight = FontWeight.Medium)
                     )
                 }
             }
@@ -541,7 +544,7 @@ private fun VideoShareSheetItemView(
                 AppText(
                     text = item.iconText.orEmpty(),
                     color = item.contentColor,
-                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold)
+                    style = COUITheme.textStyles.title4.copy(fontWeight = FontWeight.Bold)
                 )
             }
         }
@@ -549,7 +552,7 @@ private fun VideoShareSheetItemView(
         AppText(
             text = item.label,
             color = AppContentColors.secondaryText(),
-            style = MaterialTheme.typography.labelMedium,
+            style = COUITheme.textStyles.footnote1,
             maxLines = 2,
             textAlign = androidx.compose.ui.text.style.TextAlign.Center,
             overflow = TextOverflow.Ellipsis

@@ -19,7 +19,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,6 +53,7 @@ import com.android.purebilibili.navigation.animatePagerSelection
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun LiveAreaScreen(
@@ -226,9 +226,9 @@ private fun LiveFavoriteTagsPanel(
     var dragPosition by remember { mutableStateOf(Offset.Zero) }
     Column(Modifier.fillMaxWidth().heightIn(max = 240.dp).verticalScroll(androidx.compose.foundation.rememberScrollState()).padding(12.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            AppText("我的常用标签", style = MaterialTheme.typography.titleSmall)
+            AppText("我的常用标签", style = COUITheme.textStyles.headline2)
             Spacer(Modifier.width(8.dp))
-            AppText(if (isEditing) "长按拖动排序，点击移除" else "点击进入标签", style = MaterialTheme.typography.bodySmall, color = AppContentColors.secondaryText())
+            AppText(if (isEditing) "长按拖动排序，点击移除" else "点击进入标签", style = COUITheme.textStyles.footnote1, color = AppContentColors.secondaryText())
         }
         FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 8.dp)) {
             favoriteTags.forEach { tag ->
@@ -266,8 +266,8 @@ private fun LiveFavoriteTagsPanel(
                             onClick = { if (isEditing) onRemove(tag) else onTagClick(tag) },
                             enabled = enabled,
                             shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp),
-                            border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                            color = MaterialTheme.colorScheme.surface,
+                            border = androidx.compose.foundation.BorderStroke(1.dp, AppSurfaceTokens.outline()),
+                            color = AppSurfaceTokens.surface(),
                             modifier = Modifier.graphicsLayer(translationX = offset.x, translationY = offset.y),
                         ) {
                             AppText(tag.title + if (isEditing) " −" else "", modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp))
@@ -285,7 +285,6 @@ private fun LiveAreaIcon(
     title: String,
     modifier: Modifier = Modifier
 ) {
-    val colorScheme = MaterialTheme.colorScheme
     if (imageUrl.isBlank()) {
         AppSurface(
             color = AppSurfaceTokens.surfaceContainer(),
@@ -295,9 +294,9 @@ private fun LiveAreaIcon(
             Box(contentAlignment = Alignment.Center) {
                 AppText(
                     text = title.take(1),
-                    color = colorScheme.onSurfaceVariant,
+                    color = AppContentColors.secondaryText(),
                     fontWeight = FontWeight.SemiBold,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                 )
             }
         }
@@ -320,7 +319,6 @@ private fun LiveAreaGridItem(
     onAreaContainerClick: ((com.android.purebilibili.navigation3.BiliPaiNavKey.LiveAreaDetail) -> Unit)?,
     onClick: () -> Unit
 ) {
-    val colorScheme = MaterialTheme.colorScheme
     // 每个图标生成自己的导航会话，捕获和实际入栈必须使用同一个目标身份。
     val target = remember(parentAreaId, child.id, child.name) {
         com.android.purebilibili.navigation3.BiliPaiNavKey.LiveAreaDetail(
@@ -356,8 +354,8 @@ private fun LiveAreaGridItem(
             Spacer(Modifier.height(AppSpacingTokens.ExtraSmall))
             AppText(
                 text = child.name,
-                color = colorScheme.onSurface,
-                style = MaterialTheme.typography.labelMedium,
+                color = AppContentColors.primaryText(),
+                style = COUITheme.textStyles.footnote1,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center,
@@ -367,7 +365,7 @@ private fun LiveAreaGridItem(
         if (isEditing && child.id != "0") {
             AppSurface(
                 shape = CircleShape,
-                color = if (isFavorite) colorScheme.surfaceVariant else colorScheme.surfaceContainerHighest,
+                color = if (isFavorite) AppSurfaceTokens.surfaceContainer() else AppSurfaceTokens.surfaceContainerHighest(),
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(end = 16.dp)
@@ -376,7 +374,7 @@ private fun LiveAreaGridItem(
                 AppIcon(
                     imageVector = if (isFavorite) AppIcons.Outlined.Check else AppIcons.Outlined.Add,
                     contentDescription = if (isFavorite) "取消收藏" else "收藏标签",
-                    tint = if (isFavorite) colorScheme.onSurfaceVariant else colorScheme.onSurface,
+                    tint = if (isFavorite) AppContentColors.secondaryText() else AppContentColors.primaryText(),
                     modifier = Modifier.padding(AppSpacingTokens.Micro)
                 )
             }

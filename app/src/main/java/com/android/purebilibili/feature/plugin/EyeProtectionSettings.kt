@@ -49,6 +49,8 @@ import com.android.purebilibili.core.ui.components.AppSlider
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppSwitchPreference
 import com.android.purebilibili.core.ui.components.AppText
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.components.AppTextButton
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -171,12 +173,12 @@ internal fun EyeProtectionSettings(
             Spacer(modifier = Modifier.height(12.dp))
             AppText(
                 text = "进入时段渐变",
-                style = MaterialTheme.typography.labelLarge,
+                style = COUITheme.textStyles.button,
                 modifier = Modifier.padding(start = 56.dp)
             )
             AppText(
                 text = "到点后慢慢变暖，结束前再慢慢退出，避免突然变色",
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppSurfaceTokens.onSurfaceVariantSummary(),
                 modifier = Modifier.padding(start = 56.dp, top = 4.dp, bottom = 8.dp)
             )
@@ -280,19 +282,19 @@ internal fun EyeProtectionSettings(
         Spacer(modifier = Modifier.height(16.dp))
         AppText(
             text = "关怀强度",
-            style = MaterialTheme.typography.titleSmall,
+            style = COUITheme.textStyles.headline2,
             fontWeight = FontWeight.SemiBold,
             color = AppContentColors.accent()
         )
         AppText(
             text = presetDescription(uiConfig.carePreset),
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppSurfaceTokens.onSurfaceVariantSummary(),
             modifier = Modifier.padding(top = 4.dp, bottom = 8.dp)
         )
         AppText(
             text = "切换预设会同时调整亮度、暖色、提醒频率和稍后提醒时间。",
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppSurfaceTokens.onSurfaceVariantSummary(),
             modifier = Modifier.padding(bottom = 8.dp)
         )
@@ -319,14 +321,14 @@ internal fun EyeProtectionSettings(
         Spacer(modifier = Modifier.height(16.dp))
         AppText(
             text = "显示调节",
-            style = MaterialTheme.typography.titleSmall,
+            style = COUITheme.textStyles.headline2,
             fontWeight = FontWeight.SemiBold,
             color = AppContentColors.accent(),
             modifier = Modifier.padding(bottom = 4.dp)
         )
         AppText(
             text = "当前页是实时预览。离开后按立即开启或定时规则生效。",
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppSurfaceTokens.onSurfaceVariantSummary(),
             modifier = Modifier.padding(bottom = 12.dp)
         )
@@ -362,7 +364,7 @@ internal fun EyeProtectionSettings(
 
         AppText(
             text = "滤镜通过画面叠层调暗并增加暖色，不影响触摸；可搭配系统深色模式使用。",
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppSurfaceTokens.onSurfaceVariantSummary(),
             modifier = Modifier.padding(top = 8.dp)
         )
@@ -379,7 +381,7 @@ internal fun EyeProtectionSettings(
             )
             AppText(
                 text = "照顾好自己，视频永远看得完。",
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppSurfaceTokens.onSurfaceVariantSummary()
             )
         }
@@ -389,7 +391,7 @@ internal fun EyeProtectionSettings(
 @Composable
 private fun EyeProtectionStatusCard(status: EyeProtectionStatusCopy) {
     val container = if (status.isActive) {
-        MaterialTheme.colorScheme.surfaceContainerHighest
+        AppSurfaceTokens.surfaceContainerHighest()
     } else {
         AppSurfaceTokens.cardContainer()
     }
@@ -413,13 +415,13 @@ private fun EyeProtectionStatusCard(status: EyeProtectionStatusCopy) {
             Column(modifier = Modifier.weight(1f)) {
                 AppText(
                     text = status.title,
-                    style = MaterialTheme.typography.titleSmall,
+                    style = COUITheme.textStyles.headline2,
                     fontWeight = FontWeight.SemiBold,
                     color = content
                 )
                 AppText(
                     text = status.subtitle,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = content.copy(alpha = 0.82f)
                 )
             }
@@ -437,7 +439,7 @@ private fun ChipChoiceRow(
 ) {
     AppText(
         text = title,
-        style = MaterialTheme.typography.labelLarge,
+        style = COUITheme.textStyles.button,
         modifier = Modifier.padding(start = 56.dp)
     )
     FlowRow(
@@ -488,11 +490,11 @@ private fun SliderRow(
                 modifier = Modifier.size(22.dp)
             )
             Spacer(modifier = Modifier.padding(horizontal = 6.dp))
-            AppText(title, style = MaterialTheme.typography.bodyLarge)
+            AppText(title, style = COUITheme.textStyles.main)
         }
         AppText(
             text = valueLabel,
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = AppSurfaceTokens.onSurfaceVariantSummary()
         )
     }
@@ -560,12 +562,12 @@ private fun TimePickerDropdown(
                 Column {
                     AppText(
                         text = label,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppSurfaceTokens.onSurfaceVariantSummary()
                     )
                     AppText(
                         text = formatClockHour(selectedHour),
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         fontWeight = FontWeight.SemiBold
                     )
                 }
@@ -588,7 +590,7 @@ private fun TimePickerDropdown(
                         if (hour == selectedHour) {
                             AppText(
                                 text = "当前",
-                                style = MaterialTheme.typography.labelSmall,
+                                style = COUITheme.textStyles.footnote2,
                                 color = AppContentColors.accent()
                             )
                         }

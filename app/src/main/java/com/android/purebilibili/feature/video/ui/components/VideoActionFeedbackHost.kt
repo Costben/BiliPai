@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,6 +26,7 @@ import com.android.purebilibili.feature.video.ui.feedback.VideoFeedbackPlacement
 import dev.chrisbanes.haze.HazeState
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 fun BoxScope.VideoActionFeedbackHost(
@@ -52,7 +52,7 @@ fun BoxScope.VideoActionFeedbackHost(
     val maxWidth = if (emphasized) 320.dp else 280.dp
     val backgroundAlpha = backgroundAlphaOverride
         ?: if (emphasized) 0.62f else 0.46f
-    val baseFontSize = if (emphasized) MaterialTheme.typography.titleMedium.fontSize else MaterialTheme.typography.bodyMedium.fontSize
+    val baseFontSize = if (emphasized) COUITheme.textStyles.headline1.fontSize else COUITheme.textStyles.body1.fontSize
     val fontSize = baseFontSize * scale
     val fontWeight = if (emphasized) FontWeight.SemiBold else FontWeight.Medium
 

@@ -8,6 +8,7 @@ package com.android.purebilibili.feature.video.ui.pager
 import com.android.purebilibili.core.player.withAppVideoDecoderDiagnostics
 import com.android.purebilibili.core.player.withAppVideoDecoderPreference
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.feature.video.ui.gesture.detectPlayerTapGestures
 import com.android.purebilibili.feature.video.danmaku.resolvePortraitDanmakuUpperRegion
@@ -53,7 +54,6 @@ import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import com.android.purebilibili.core.ui.components.AppButton
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppIconButton
 import com.android.purebilibili.core.ui.components.AppText
@@ -3564,14 +3564,14 @@ private fun VideoPageItem(
                     AppText(
                         text = "$targetTimeText / $totalTimeText",
                         color = Color.White,
-                        style = MaterialTheme.typography.titleLarge,
+                        style = COUITheme.textStyles.title4,
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     AppText(
                         text = deltaText,
                         color = com.android.purebilibili.core.ui.MediaContrastPalette.Foreground,
-                        style = MaterialTheme.typography.bodyMedium
+                        style = COUITheme.textStyles.body1
                     )
                 }
             }
@@ -3616,7 +3616,7 @@ private fun VideoPageItem(
                 AppText(
                     text = seekFeedbackText.orEmpty(),
                     color = com.android.purebilibili.core.ui.MediaContrastPalette.Foreground,
-                    style = MaterialTheme.typography.headlineMedium,
+                    style = COUITheme.textStyles.title3,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -3716,8 +3716,8 @@ private fun VideoPageItem(
                     text = "${effectiveLongPressSpeed}x",
                     color = Color.White,
                     fontWeight = FontWeight.Medium,
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontSize = MaterialTheme.typography.bodySmall.fontSize * longPressSpeedHintScale,
+                    style = COUITheme.textStyles.footnote1.copy(
+                        fontSize = COUITheme.textStyles.footnote1.fontSize * longPressSpeedHintScale,
                         shadow = Shadow(
                             color = Color.Black.copy(alpha = 0.25f),
                             offset = Offset(1f, 1f),

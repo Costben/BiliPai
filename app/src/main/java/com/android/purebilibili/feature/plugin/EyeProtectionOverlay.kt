@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -48,6 +47,7 @@ import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppTextButton
 import com.android.purebilibili.core.ui.motion.continuityTween
 import com.android.purebilibili.core.ui.AppSpacingTokens
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 fun EyeProtectionOverlay(
@@ -168,7 +168,7 @@ private fun RestReminderDialog(
             AppText(
                 text = reminder.title,
                 fontWeight = FontWeight.SemiBold,
-                style = MaterialTheme.typography.titleLarge,
+                style = COUITheme.textStyles.title4,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -182,21 +182,21 @@ private fun RestReminderDialog(
             ) {
                 AppText(
                     text = "已使用 BiliPai 约 ${reminder.usageMinutes} 分钟",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppSurfaceTokens.onSurfaceVariantSummary(),
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(AppSpacingTokens.Small))
                 AppText(
                     text = reminder.message,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppContentColors.primaryText(),
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(AppSpacingTokens.Small))
                 AppText(
                     text = reminder.suggestion,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = accent,
                     textAlign = TextAlign.Center
                 )

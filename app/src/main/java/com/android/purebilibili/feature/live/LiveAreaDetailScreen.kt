@@ -10,7 +10,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -33,6 +32,7 @@ import com.android.purebilibili.data.model.response.LiveSecondSortTag
 import com.android.purebilibili.data.repository.LiveRepository
 import com.android.purebilibili.navigation.animatePagerSelection
 import kotlinx.coroutines.launch
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 private data class LiveAreaTab(val id: Int, val parentId: Int, val title: String, val cover: String = "")
 
@@ -172,7 +172,7 @@ private fun LiveAreaMenuSheet(
             ) {
                 Spacer(Modifier.size(40.dp))
                 Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                    AppText(title, style = MaterialTheme.typography.titleLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    AppText(title, style = COUITheme.textStyles.title4, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
                 AppIconButton(onClick = { visible = false }, modifier = Modifier.size(40.dp)) {
                     AppIcon(AppIcons.Outlined.Close, "关闭分区菜单")

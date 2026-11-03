@@ -2,7 +2,6 @@ package com.android.purebilibili.feature.message
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -11,6 +10,7 @@ import coil3.compose.AsyncImage
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppTextButton
 import kotlinx.serialization.json.*
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 internal data class ChatNoticeLink(val label: String, val url: String)
 internal data class ChatNoticeDetail(val label: String, val value: String)
@@ -67,8 +67,8 @@ internal fun ChatNoticeMessage(content: String, onOpenLink: (String) -> Unit, mo
             if (notice.text.isNotBlank()) AppText(notice.text)
             notice.details.forEach { detail ->
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    AppText(detail.label, Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
-                    AppText(detail.value, Modifier.weight(2f), style = MaterialTheme.typography.bodySmall)
+                    AppText(detail.label, Modifier.weight(1f), style = COUITheme.textStyles.footnote1)
+                    AppText(detail.value, Modifier.weight(2f), style = COUITheme.textStyles.footnote1)
                 }
             }
             notice.links.forEach { link -> AppTextButton(onClick = { onOpenLink(link.url) }) { AppText(link.label) } }
@@ -87,7 +87,7 @@ internal fun ChatRecommendationMessage(content: String, onOpenLink: (String) -> 
                     AsyncImage(card.cover, "封面", Modifier.widthIn(max = 110.dp).weight(1f).aspectRatio(16f / 9f))
                     Column(Modifier.weight(1.4f)) {
                         AppText(card.title, maxLines = 2)
-                        AppText(card.subtitle, style = MaterialTheme.typography.bodySmall, maxLines = 3)
+                        AppText(card.subtitle, style = COUITheme.textStyles.footnote1, maxLines = 3)
                     }
                 }
             }

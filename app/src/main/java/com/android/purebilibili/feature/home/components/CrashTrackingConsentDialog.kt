@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.home.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -9,7 +11,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -76,7 +77,7 @@ fun CrashTrackingConsentDialog(
         title = {
             AppText(
                 text = "帮助改进应用",
-                style = MaterialTheme.typography.titleLarge,
+                style = COUITheme.textStyles.title4,
                 fontWeight = FontWeight.SemiBold,
             )
         },
@@ -86,7 +87,7 @@ fun CrashTrackingConsentDialog(
                     text = "为快速发现并修复问题，应用可收集崩溃报告与错误日志。\n\n" +
                         "默认仅启用崩溃追踪；使用情况统计默认关闭。播放器诊断日志仍可手动开启，便于排查黑屏、卡顿等播放问题。\n\n" +
                         "数据仅用于改善稳定性，之后可随时在「设置」中调整。",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppContentColors.secondaryText(),
                 )
                 Spacer(modifier = Modifier.height(12.dp))
@@ -94,14 +95,14 @@ fun CrashTrackingConsentDialog(
                     headlineContent = {
                         AppText(
                             text = "启用崩溃追踪",
-                            style = MaterialTheme.typography.bodyLarge,
+                            style = COUITheme.textStyles.main,
                             fontWeight = FontWeight.Medium,
                         )
                     },
                     supportingContent = {
                         AppText(
                             text = if (isEnabled) "开启后将在崩溃时上传诊断信息" else "关闭后不上传崩溃报告",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText(),
                         )
                     },

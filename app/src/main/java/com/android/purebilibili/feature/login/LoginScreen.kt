@@ -1,5 +1,6 @@
 package com.android.purebilibili.feature.login
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -72,6 +73,7 @@ import com.google.zxing.qrcode.QRCodeWriter
 import android.graphics.Bitmap
 import android.graphics.Color
 import kotlinx.coroutines.launch
+import com.android.purebilibili.core.ui.AppAlertDialog
 
 enum class LoginMethod {
     /** Official Bilibili TV QR login; the phone confirms on Bilibili's servers. */
@@ -337,7 +339,7 @@ internal fun LoginPage(
                         ) {
                             AppText(
                                 text = "继续即表示你同意用户协议和隐私政策，点击查看全文。",
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText(),
                                 textAlign = TextAlign.Center,
                             )
@@ -357,11 +359,11 @@ internal fun LoginPage(
 @Composable
 private fun LoginHeader(authorizingOtherDevice: Boolean = false, modifier: Modifier = Modifier) {
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        AppText(text = if (authorizingOtherDevice) "授权其他设备登录" else "登录 BiliPai", style = MaterialTheme.typography.headlineMedium)
+        AppText(text = if (authorizingOtherDevice) "授权其他设备登录" else "登录 BiliPai", style = COUITheme.textStyles.title3)
         AppText(
             text = if (authorizingOtherDevice) "使用本机已登录的 B 站账号，确认其他设备的登录请求。"
                 else "选择一种方式继续，你的观看进度和账号信息会同步到当前设备。",
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = AppContentColors.secondaryText()
         )
     }
@@ -410,7 +412,7 @@ private fun LoginStateMessage(state: LoginState, modifier: Modifier = Modifier) 
     ) {
         AppText(
             text = message,
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = MaterialTheme.colorScheme.onErrorContainer,
             modifier = Modifier.padding(16.dp)
         )
@@ -421,7 +423,7 @@ private fun LoginStateMessage(state: LoginState, modifier: Modifier = Modifier) 
 private fun BiliPaiTransferEntry(onOpen: () -> Unit) {
     AppCard(modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            AppText("在两台 BiliPai 设备之间迁移登录会话、设置与插件", style = MaterialTheme.typography.titleMedium)
+            AppText("在两台 BiliPai 设备之间迁移登录会话、设置与插件", style = COUITheme.textStyles.headline1)
             AppText("内容只在设备端加密和解密，不经过服务器。", color = AppContentColors.secondaryText())
             AppButton(onClick = onOpen, modifier = Modifier.fillMaxWidth()) { AppText("开始传输") }
         }
@@ -517,7 +519,7 @@ private fun BiliPaiTransferDialog(onDismiss: () -> Unit, onContinueLogin: () -> 
                             AppText(
                                 (if (item.success) "✓ " else "✗ ") + item.name +
                                     (item.message?.let { "（$it）" } ?: ""),
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = if (item.success) AppContentColors.secondaryText() else AppContentColors.error(),
                             )
                         }
@@ -527,7 +529,7 @@ private fun BiliPaiTransferDialog(onDismiss: () -> Unit, onContinueLogin: () -> 
                         AppText(transferPreviewText(payload), textAlign = TextAlign.Center)
                         if (approvals.isNotEmpty()) {
                             AppText("插件需在本设备重新授权，未勾选的插件将跳过。JS 插件保留原设备启用状态，外部插件包导入后保持停用。",
-                                style = MaterialTheme.typography.bodySmall)
+                                style = COUITheme.textStyles.footnote1)
                             approvals.forEach { approval ->
                                 if (approval.error != null) {
                                     AppText("${approval.name}：${approval.error}", color = AppContentColors.error())
@@ -558,14 +560,14 @@ private fun BiliPaiTransferDialog(onDismiss: () -> Unit, onContinueLogin: () -> 
                     qrChunks.isNotEmpty() -> {
                         val total = qrChunks.size
                         val index = chunkIndex.coerceIn(0, total - 1)
-                        AppText(if (total == 1) "加密二维码" else "分块 ${index + 1}/$total", style = MaterialTheme.typography.labelMedium)
+                        AppText(if (total == 1) "加密二维码" else "分块 ${index + 1}/$total", style = COUITheme.textStyles.footnote1)
                         TransferQrImage(qrChunks[index], "BiliPai 传输二维码", Modifier.size(240.dp))
                         if (total > 1) {
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                 AppOutlinedButton(onClick = { chunkIndex-- }, enabled = index > 0) { AppText("上一张") }
                                 AppOutlinedButton(onClick = { chunkIndex++ }, enabled = index < total - 1) { AppText("下一张") }
                             }
-                            AppText("请让对方扫描全部分块，重复扫描不会增加进度", style = MaterialTheme.typography.labelSmall)
+                            AppText("请让对方扫描全部分块，重复扫描不会增加进度", style = COUITheme.textStyles.footnote2)
                         }
                         AppTextButton(onClick = { qrChunks = emptyList(); chunkIndex = 0 }) { AppText("重新选择传输内容") }
                     }
@@ -709,7 +711,7 @@ private fun TransferContentSelectionUi(
 private fun TransferCheckRow(label: String, checked: Boolean, enabled: Boolean = true, onChecked: (Boolean) -> Unit) {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         com.android.purebilibili.core.ui.components.AppCheckbox(checked = checked, enabled = enabled, onCheckedChange = onChecked)
-        AppText(label, style = MaterialTheme.typography.bodyMedium)
+        AppText(label, style = COUITheme.textStyles.body1)
     }
 }
 
@@ -721,7 +723,7 @@ private fun TransferGroup(
     onSelected: (Set<String>) -> Unit,
 ) {
     if (items.isEmpty()) return
-    AppText("$label（${selected.size}/${items.size}）", style = MaterialTheme.typography.labelMedium,
+    AppText("$label（${selected.size}/${items.size}）", style = COUITheme.textStyles.footnote1,
         color = AppContentColors.secondaryText())
     items.forEach { item ->
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -731,7 +733,7 @@ private fun TransferGroup(
                     onSelected(if (checked) selected + item.id else selected - item.id)
                 },
             )
-            AppText(item.name, style = MaterialTheme.typography.bodySmall)
+            AppText(item.name, style = COUITheme.textStyles.footnote1)
         }
     }
 }
@@ -751,7 +753,7 @@ private fun HighQualityAuthorizationCard(
 ) {
     AppCard(
         modifier = modifier.fillMaxWidth(),
-        colors = AppCardDefaults.colors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+        colors = AppCardDefaults.colors(containerColor = AppSurfaceTokens.secondaryContainer())
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -759,13 +761,13 @@ private fun HighQualityAuthorizationCard(
         ) {
             AppText(
                 text = "基础登录已完成",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
+                style = COUITheme.textStyles.headline1,
+                color = AppSurfaceTokens.onSecondaryContainer()
             )
             AppText(
                 text = "当前登录未返回高画质播放凭据。扫码可补充 1080P60、4K、HDR 等画质所需授权。",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
+                style = COUITheme.textStyles.body1,
+                color = AppSurfaceTokens.onSecondaryContainer()
             )
             AppButton(onClick = onAuthorize, modifier = Modifier.fillMaxWidth()) {
                 AppText("扫码授权高画质")
@@ -789,10 +791,10 @@ private fun TvQrLoginContent(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            AppText(text = "扫码登录", style = MaterialTheme.typography.titleLarge)
+            AppText(text = "扫码登录", style = COUITheme.textStyles.title4)
             AppText(
                 text = resolveQrLoginReason(),
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 color = AppContentColors.secondaryText(),
                 textAlign = TextAlign.Center
             )
@@ -811,7 +813,7 @@ private fun TvQrLoginContent(
                         AppText(
                             text = "已扫码，请在手机上确认登录。",
                             color = AppContentColors.accent(),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = COUITheme.textStyles.body1,
                             textAlign = TextAlign.Center
                         )
                     }
@@ -860,12 +862,12 @@ private fun PasswordLoginContent(
             AppText(
                 text = riskRequired?.message
                     ?: "本次登录环境存在风险，需验证绑定手机号。",
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 color = AppContentColors.secondaryText()
             )
             AppText(
                 text = "绑定手机：${riskHideTel.orEmpty()}",
-                style = MaterialTheme.typography.titleMedium,
+                style = COUITheme.textStyles.headline1,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -887,7 +889,7 @@ private fun PasswordLoginContent(
                 riskSmsSent.errorMessage?.let { err ->
                     AppText(
                         text = err,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.error()
                     )
                 }
@@ -912,7 +914,7 @@ private fun PasswordLoginContent(
                 riskRequired?.errorMessage?.let { err ->
                     AppText(
                         text = err,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.error()
                     )
                 }
@@ -925,7 +927,7 @@ private fun PasswordLoginContent(
                 }
                 AppText(
                     text = "将向绑定手机发送验证码。若收不到短信，请改用扫码或 Cookie 导入。",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText()
                 )
             }
@@ -961,7 +963,7 @@ private fun PasswordLoginContent(
             )
             AppText(
                 text = "提交前需要完成安全验证。若触发环境风控，将引导绑定手机二次验证。",
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText()
             )
             AppButton(
@@ -1041,7 +1043,7 @@ private fun SmsLoginContent(
                     } else {
                         "支持国际区号，区号列表来自 B 站官方接口"
                     },
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                 )
             },
             modifier = Modifier.fillMaxWidth()
@@ -1060,7 +1062,7 @@ private fun SmsLoginContent(
         }
         AppText(
             text = "发送验证码前需要完成安全验证。验证码有效期与发送频率以服务端规则为准。",
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText()
         )
         if (codeSent || code.isNotEmpty()) {
@@ -1123,7 +1125,7 @@ private fun PhoneRegionPickerSheet(
         ) {
             AppText(
                 text = "选择国家或地区",
-                style = MaterialTheme.typography.titleMedium,
+                style = COUITheme.textStyles.headline1,
             )
             AppOutlinedTextField(
                 value = query,
@@ -1143,7 +1145,7 @@ private fun PhoneRegionPickerSheet(
                     item {
                         AppText(
                             text = "常用",
-                            style = MaterialTheme.typography.labelLarge,
+                            style = COUITheme.textStyles.button,
                             color = AppContentColors.secondaryText(),
                             modifier = Modifier.padding(vertical = 4.dp),
                         )
@@ -1161,7 +1163,7 @@ private fun PhoneRegionPickerSheet(
                     item {
                         AppText(
                             text = "全部",
-                            style = MaterialTheme.typography.labelLarge,
+                            style = COUITheme.textStyles.button,
                             color = AppContentColors.secondaryText(),
                             modifier = Modifier.padding(top = 8.dp, bottom = 4.dp),
                         )
@@ -1179,7 +1181,7 @@ private fun PhoneRegionPickerSheet(
                     item {
                         AppText(
                             text = "无匹配地区",
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = COUITheme.textStyles.body1,
                             color = AppContentColors.secondaryText(),
                             modifier = Modifier.padding(vertical = 24.dp),
                         )
@@ -1217,19 +1219,19 @@ private fun PhoneRegionPickerRow(
             Column(modifier = Modifier.weight(1f)) {
                 AppText(
                     text = region.name,
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = COUITheme.textStyles.main,
                     maxLines = 1,
                 )
                 AppText(
                     text = region.dialingCode,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                 )
             }
             if (selected) {
                 AppText(
                     text = "已选",
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.accent(),
                 )
             }
@@ -1249,7 +1251,7 @@ private fun CookieImportContent(
     LoginFormCard(title = "Cookie 导入", modifier = modifier) {
         AppText(
             text = "粘贴浏览器中的完整 Cookie 字符串。导入前会先验证账号，验证失败不会覆盖当前登录状态。",
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = AppContentColors.secondaryText()
         )
         AppOutlinedTextField(
@@ -1282,7 +1284,7 @@ private fun LoginFormCard(
             modifier = Modifier.padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            AppText(text = title, style = MaterialTheme.typography.titleLarge)
+            AppText(text = title, style = COUITheme.textStyles.title4)
             content()
         }
     }

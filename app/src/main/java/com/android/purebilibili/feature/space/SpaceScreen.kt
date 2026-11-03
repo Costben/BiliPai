@@ -94,7 +94,6 @@ import androidx.compose.foundation.verticalScroll
 import com.android.purebilibili.core.ui.AppAlertDialog
 import com.android.purebilibili.core.ui.components.AppButton
 import com.android.purebilibili.core.ui.components.resolveUpNameColor
-import androidx.compose.material3.ButtonDefaults
 import com.android.purebilibili.core.ui.components.AppCheckbox
 import com.android.purebilibili.core.ui.components.AppCircularProgressIndicator
 import com.android.purebilibili.core.ui.AdaptiveLoadingIndicator
@@ -272,6 +271,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collect
 import com.android.purebilibili.core.theme.usesMiuixFamilySkin
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.components.AppDropdownMenu
+import com.android.purebilibili.core.ui.components.AppDropdownMenuItem
 
 // UP 空间多张头图自动轮播间隔
 private const val SPACE_BANNER_AUTO_ROTATE_INTERVAL_MS = 4_000L
@@ -514,7 +516,7 @@ fun SpaceScreen(
         !spaceProgressiveBlur
     val spaceTopChromeSurfaceColor =
         if (spaceProgressiveBlur || spaceHeaderBlurActive || spaceFadeActive) Color.Transparent
-        else com.android.purebilibili.core.ui.globalWallpaperAwareChromeColor(MaterialTheme.colorScheme.surface)
+        else com.android.purebilibili.core.ui.globalWallpaperAwareChromeColor(AppSurfaceTokens.surface())
             .copy(alpha = pinnedTopChromeScrim)
     // 仅按钮采样合入顶栏实际遮色；列表与返回顶部按钮仍采样各自位置的内容。
     // 共享顶栏颜色来源，关闭玻璃时沿用原生 MD3 / Miuix 的背景与布局。
@@ -526,7 +528,7 @@ fun SpaceScreen(
                 backdrop = spaceChromeBackdrop,
                 enabled = spaceProgressiveBlur,
                 headerBlurActive = spaceHeaderBlurActive,
-                surfaceColor = com.android.purebilibili.core.ui.globalWallpaperAwareChromeColor(MaterialTheme.colorScheme.surface),
+                surfaceColor = com.android.purebilibili.core.ui.globalWallpaperAwareChromeColor(AppSurfaceTokens.surface()),
                 fadeEnabled = spaceFadeActive,
                 opaqueBackgroundFallback = false,
                 modifier = Modifier.background(spaceTopChromeSurfaceColor),
@@ -547,7 +549,7 @@ fun SpaceScreen(
                                         enabled = pinnedTopChromeScrim > 0f
                                     )
                                     .background(
-                                        com.android.purebilibili.core.ui.globalWallpaperAwareChromeColor(MaterialTheme.colorScheme.surface)
+                                        com.android.purebilibili.core.ui.globalWallpaperAwareChromeColor(AppSurfaceTokens.surface())
                                             .copy(alpha = AppSurfaceTokens.FrostedScrimAlpha * pinnedTopChromeScrim)
                                     )
                             } ?: Modifier
@@ -722,7 +724,7 @@ fun SpaceScreen(
             }
             }
         },
-        containerColor = MaterialTheme.colorScheme.surface
+        containerColor = AppSurfaceTokens.surface()
     ) { scaffoldPadding ->
         val density = LocalDensity.current
         val searchBarRevealScrollOffsetPx = with(density) {
@@ -800,7 +802,7 @@ fun SpaceScreen(
                                 .fillMaxSize()
                                 .then(spaceChromeSource?.modifier ?: Modifier)
                                 .then(if (hazeState != null) Modifier.hazeSourceCompat(state = hazeState) else Modifier)
-                                .globalWallpaperAwareBackground(MaterialTheme.colorScheme.surface),
+                                .globalWallpaperAwareBackground(AppSurfaceTokens.surface()),
                         ) {
                         SpaceContent(
                             state = state,
@@ -1106,7 +1108,7 @@ fun SpaceScreen(
                             AppText(
                                 text = "暂无可用分组（不勾选即为默认分组）",
                                 color = AppContentColors.secondaryText(),
-                                style = MaterialTheme.typography.bodySmall
+                                style = COUITheme.textStyles.footnote1
                             )
                         } else {
                             followGroupTags.forEach { tag ->
@@ -1123,7 +1125,7 @@ fun SpaceScreen(
                                     )
                                     AppText(
                                         text = "${tag.name} (${tag.count})",
-                                        style = MaterialTheme.typography.bodyMedium,
+                                        style = COUITheme.textStyles.body1,
                                         color = AppContentColors.primaryText()
                                     )
                                 }
@@ -1132,7 +1134,7 @@ fun SpaceScreen(
                         AppText(
                             text = "可多选，确定后覆盖原分组设置。",
                             color = AppContentColors.secondaryText(),
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             modifier = Modifier.padding(top = 8.dp)
                         )
                     }
@@ -1188,7 +1190,7 @@ private fun SpacePlayedVideoLocatePrompt(
     ) {
         AppSurface(
             shape = AppShapes.container(ContainerLevel.Card),
-            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+            color = AppSurfaceTokens.surfaceContainerHigh(),
             tonalElevation = 6.dp,
             shadowElevation = 8.dp
         ) {
@@ -1199,12 +1201,12 @@ private fun SpacePlayedVideoLocatePrompt(
             ) {
                 AppText(
                     text = "刚刚看过",
-                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold)
+                    style = COUITheme.textStyles.headline2.copy(fontWeight = FontWeight.SemiBold)
                 )
                 AppText(
                     text = "是否定位到视频投稿",
                     modifier = Modifier.padding(top = 2.dp),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText()
                 )
                 Row(
@@ -1787,7 +1789,7 @@ private fun SpaceContent(
                 Modifier
                     .fillMaxWidth()
                     .onSizeChanged { pinnedTabsHeights[primaryTab] = it.height }
-                    .background(MaterialTheme.colorScheme.surface),
+                    .background(AppSurfaceTokens.surface()),
             ) {
                 SpaceContentTabs(
                     state = state,
@@ -3329,7 +3331,7 @@ private fun SpaceHeader(
                         }
                     else Modifier
                 )
-                .background(MaterialTheme.colorScheme.surface)
+                .background(AppSurfaceTokens.surface())
         ) {
         Box(
             modifier = Modifier.fillMaxWidth()
@@ -3462,8 +3464,8 @@ private fun SpaceHeader(
                             .fillMaxSize()
                             .then(avatarModifier)
                             .clip(CircleShape)
-                            .border(2.dp, MaterialTheme.colorScheme.surface, CircleShape)
-                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                            .border(2.dp, AppSurfaceTokens.surface(), CircleShape)
+                            .background(AppSurfaceTokens.surfaceContainer())
                     )
 
                     UserAvatarCornerMarkBadge(
@@ -3489,8 +3491,8 @@ private fun SpaceHeader(
                             modifier = Modifier
                                 .align(Alignment.BottomStart)
                                 .size(28.dp)
-                                .background(MaterialTheme.colorScheme.primary, CircleShape)
-                                .border(2.dp, MaterialTheme.colorScheme.surface, CircleShape)
+                                .background(AppContentColors.accent(), CircleShape)
+                                .border(2.dp, AppSurfaceTokens.surface(), CircleShape)
                                 .clip(CircleShape)
                                 .appActionClickable(enabled = !avatarHidden) {
                                     onLiveClick(
@@ -3505,7 +3507,7 @@ private fun SpaceHeader(
                             com.android.purebilibili.core.ui.components.PlaybackBarsIndicator(
                                 isPlaying = bannerPageActive && !contentPageMoving &&
                                     headerVisible && !avatarHidden && !topPhotoHidden,
-                                color = MaterialTheme.colorScheme.onPrimary,
+                                color = AppContentColors.onAccent(),
                                 contentDescription = "正在直播，点击进入直播间",
                                 modifier = Modifier.size(14.dp),
                             )
@@ -3634,7 +3636,7 @@ private fun SpaceHeaderIdentityInfo(
                     modifier = Modifier
                         .weight(1f, fill = false)
                         .copyOnLongPress(userInfo.name, "UP主名称"),
-                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                    style = COUITheme.textStyles.title4.copy(fontWeight = FontWeight.Bold),
                     color = resolveUpNameColor(
                         vipStatus = userInfo.vip.status,
                         vipType = userInfo.vip.type,
@@ -3667,7 +3669,7 @@ private fun SpaceHeaderIdentityInfo(
                 AppText(
                     text = userInfo.sign.trim(),
                     modifier = Modifier.copyOnLongPress(userInfo.sign, "UP主简介"),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.primaryText(),
                     maxLines = 4,
                     overflow = TextOverflow.Ellipsis
@@ -3688,7 +3690,7 @@ private fun SpaceHeaderIdentityInfo(
                         AppText(
                             text = "UID: ${userInfo.mid}",
                             modifier = Modifier.copyOnLongPress(userInfo.mid.toString(), "UID"),
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText()
                         )
                     }
@@ -3706,7 +3708,7 @@ private fun SpaceHeaderIdentityInfo(
                         AppText(
                             text = tag.title,
                             modifier = tagModifier,
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = if (hasUri) {
                                 MaterialTheme.colorScheme.secondary
                             } else {
@@ -3749,10 +3751,10 @@ private fun SpaceSearchEntryChip(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp),
         shape = shape,
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f),
+        color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.55f),
         border = BorderStroke(
             1.dp,
-            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)
+            AppSurfaceTokens.outline().copy(alpha = 0.45f)
         )
     ) {
         Row(
@@ -3771,7 +3773,7 @@ private fun SpaceSearchEntryChip(
             AppText(
                 text = label,
                 color = AppContentColors.secondaryText(),
-                style = MaterialTheme.typography.bodyMedium
+                style = COUITheme.textStyles.body1
             )
         }
     }
@@ -3970,7 +3972,7 @@ private fun SpaceContributionVideoSummaryBar(
     ) {
         AppText(
             text = "共${totalCount}视频",
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText()
         )
         Spacer(modifier = Modifier.weight(1f))
@@ -3993,7 +3995,7 @@ private fun SpaceContributionVideoSummaryBar(
                 )
                 AppText(
                     text = resolveSpaceVideoSortCompactLabel(currentOrder) + "发布",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText()
                 )
             }
@@ -4053,14 +4055,14 @@ private fun SpaceChargeGuardRow(
                 SpaceSupporterAvatarStack(avatarUrls = group.avatarUrls)
                 AppText(
                     text = "${FormatUtils.formatStat(group.count)}人为TA充电",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText()
                 )
                 AppIcon(
                     imageVector = AppIcons.AutoMirrored.Outlined.KeyboardArrowRight,
                     contentDescription = null,
                     modifier = Modifier.size(14.dp),
-                    tint = MaterialTheme.colorScheme.outline
+                    tint = AppSurfaceTokens.outline()
                 )
             }
         }
@@ -4073,7 +4075,7 @@ private fun SpaceChargeGuardRow(
                 SpaceSupporterAvatarStack(avatarUrls = group.avatarUrls)
                 AppText(
                     text = "${FormatUtils.formatStat(group.count)}人加入大航海",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText()
                 )
             }
@@ -4091,8 +4093,8 @@ private fun SpaceSupporterAvatarStack(avatarUrls: List<String>) {
                     .offset(x = (-6 * index).dp)
                     .size(18.dp)
                     .clip(CircleShape)
-                    .border(1.dp, MaterialTheme.colorScheme.surface, CircleShape)
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .border(1.dp, AppSurfaceTokens.surface(), CircleShape)
+                    .background(AppSurfaceTokens.surfaceContainer())
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(context)
@@ -4123,13 +4125,13 @@ private fun SpaceSectionHeader(
     ) {
         AppText(
             text = title,
-            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+            style = COUITheme.textStyles.title4.copy(fontWeight = FontWeight.Bold),
             color = AppContentColors.primaryText()
         )
         Spacer(modifier = Modifier.width(8.dp))
         AppText(
             text = count.toString(),
-            style = MaterialTheme.typography.titleMedium,
+            style = COUITheme.textStyles.headline1,
             color = AppContentColors.secondaryText()
         )
         Spacer(modifier = Modifier.weight(1f))
@@ -4349,7 +4351,7 @@ private fun SpaceHomeVideoCard(
                 }
                 .fillMaxWidth()
                 .clip(coverShape)
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .background(AppSurfaceTokens.surfaceContainer())
         ) {
             AsyncImage(
                 model = stationaryCoverRequest,
@@ -4380,7 +4382,7 @@ private fun SpaceHomeVideoCard(
                     AppText(
                         text = badgeLabel,
                         modifier = Modifier.padding(horizontal = 7.dp, vertical = 3.dp),
-                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
+                        style = COUITheme.textStyles.footnote2.copy(fontWeight = FontWeight.SemiBold),
                         color = AppContentColors.onAccent()
                     )
                 }
@@ -4406,7 +4408,7 @@ private fun SpaceHomeVideoCard(
                 AppText(
                     text = video.length,
                     color = Color.White,
-                    style = MaterialTheme.typography.labelSmall.merge(coverOverlayTextStyle),
+                    style = COUITheme.textStyles.footnote2.merge(coverOverlayTextStyle),
                     maxLines = 1,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
@@ -4455,7 +4457,7 @@ private fun SpaceHomeVideoCard(
                 Spacer(modifier = Modifier.height(4.dp))
                 AppText(
                     text = metadata,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                     overflow = TextOverflow.Visible
                 )
@@ -4569,7 +4571,7 @@ private fun SpaceAggregateMediaCard(
                 .fillMaxWidth()
                 .height(118.dp)
                 .clip(coverShape)
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .background(AppSurfaceTokens.surfaceContainer())
         ) {
             AsyncImage(
                 model = stationaryCoverRequest,
@@ -4595,7 +4597,7 @@ private fun SpaceAggregateMediaCard(
         Spacer(modifier = Modifier.height(8.dp))
         AppText(
             text = item.title,
-            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
+            style = COUITheme.textStyles.body1.copy(fontWeight = FontWeight.Medium),
             maxLines = videoCardTitleMaxLines(),
             overflow = videoCardTitleOverflow(),
             color = AppContentColors.primaryText()
@@ -4619,7 +4621,7 @@ private fun SpaceAggregatePosterCard(
                 .fillMaxWidth()
                 .height(196.dp)
                 .clip(AppShapes.container(ContainerLevel.Card))
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .background(AppSurfaceTokens.surfaceContainer())
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -4635,7 +4637,7 @@ private fun SpaceAggregatePosterCard(
         Spacer(modifier = Modifier.height(8.dp))
         AppText(
             text = item.title,
-            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
+            style = COUITheme.textStyles.body1.copy(fontWeight = FontWeight.Medium),
             maxLines = videoCardTitleMaxLines(),
             overflow = videoCardTitleOverflow()
         )
@@ -4643,7 +4645,7 @@ private fun SpaceAggregatePosterCard(
             Spacer(modifier = Modifier.height(4.dp))
             AppText(
                 text = item.subtitle,
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText(),
                 overflow = TextOverflow.Visible
             )
@@ -4684,18 +4686,18 @@ private fun SpaceNoticeCard(notice: String) {
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clip(AppShapes.container(ContainerLevel.Card))
-            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+            .background(AppSurfaceTokens.surfaceContainer().copy(alpha = 0.3f))
             .padding(14.dp)
     ) {
         AppText(
             text = "公告",
-            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+            style = COUITheme.textStyles.headline1.copy(fontWeight = FontWeight.Bold)
         )
         Spacer(modifier = Modifier.height(10.dp))
         SelectionContainer {
             AppText(
                 text = notice,
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 color = AppContentColors.secondaryText()
             )
         }
@@ -5047,7 +5049,7 @@ private fun SpaceAudioListItem(
             modifier = Modifier
                 .size(72.dp)
                 .clip(AppShapes.container(ContainerLevel.Card))
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .background(AppSurfaceTokens.surfaceContainer())
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -5062,7 +5064,7 @@ private fun SpaceAudioListItem(
         Column(modifier = Modifier.weight(1f)) {
             AppText(
                 text = audio.title,
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium),
+                style = COUITheme.textStyles.headline1.copy(fontWeight = FontWeight.Medium),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -5077,7 +5079,7 @@ private fun SpaceAudioListItem(
                 } else {
                     FormatUtils.formatDuration(audio.duration)
                 },
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText()
             )
         }
@@ -5128,9 +5130,9 @@ private fun SpaceArticleListItem(
             desc = remember(article.title) { DynamicDesc(text = article.title) },
             onUserClick = {},
             onBlankTap = openCard,
-            fontSize = MaterialTheme.typography.titleMedium.fontSize,
+            fontSize = COUITheme.textStyles.headline1.fontSize,
             fontWeight = FontWeight.SemiBold,
-            lineHeight = MaterialTheme.typography.titleMedium.lineHeight,
+            lineHeight = COUITheme.textStyles.headline1.lineHeight,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
@@ -5153,7 +5155,7 @@ private fun SpaceArticleListItem(
                             .width(140.dp)
                             .height(92.dp)
                             .clip(AppShapes.container(ContainerLevel.Card))
-                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                            .background(AppSurfaceTokens.surfaceContainer())
                     )
                 }
             }
@@ -5161,12 +5163,12 @@ private fun SpaceArticleListItem(
         Spacer(modifier = Modifier.height(10.dp))
         AppText(
             text = buildSpaceArticleStatsText(article),
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText()
         )
         AppHorizontalDivider(
             modifier = Modifier.padding(top = 12.dp),
-            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+            color = AppSurfaceTokens.outline().copy(alpha = 0.4f)
         )
     }
 }
@@ -5182,7 +5184,7 @@ private fun SpaceFavoriteFolderRow(
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         shape = AppShapes.container(ContainerLevel.Card),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.26f),
+        color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.26f),
         onClick = onClick
     ) {
         Row(
@@ -5194,20 +5196,20 @@ private fun SpaceFavoriteFolderRow(
             Column(modifier = Modifier.weight(1f)) {
                 AppText(
                     text = folder.title,
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium),
+                    style = COUITheme.textStyles.headline1.copy(fontWeight = FontWeight.Medium),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 AppText(
                     text = "${folder.media_count} 个视频",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText()
                 )
             }
             AppText(
                 text = "查看",
-                style = MaterialTheme.typography.labelMedium,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.accent()
             )
         }
@@ -5230,7 +5232,7 @@ private fun SpaceBangumiCard(
                 .fillMaxWidth()
                 .height(196.dp)
                 .clip(AppShapes.container(ContainerLevel.Card))
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .background(AppSurfaceTokens.surfaceContainer())
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -5251,14 +5253,14 @@ private fun SpaceBangumiCard(
         Spacer(modifier = Modifier.height(8.dp))
         AppText(
             text = item.title,
-            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
+            style = COUITheme.textStyles.body1.copy(fontWeight = FontWeight.Medium),
             maxLines = videoCardTitleMaxLines(),
             overflow = videoCardTitleOverflow()
         )
         Spacer(modifier = Modifier.height(4.dp))
         AppText(
             text = item.newEp?.indexShow?.ifBlank { item.progress }.orEmpty().ifBlank { item.evaluate },
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText(),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
@@ -5277,7 +5279,7 @@ private fun SpaceCheeseCard(
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         shape = AppShapes.container(ContainerLevel.Card),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.24f),
+        color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.24f),
         onClick = onClick,
     ) {
         Row(
@@ -5291,7 +5293,7 @@ private fun SpaceCheeseCard(
                     .width(116.dp)
                     .height(72.dp)
                     .clip(AppShapes.mediaCover())
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .background(AppSurfaceTokens.surfaceContainer())
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
@@ -5308,15 +5310,15 @@ private fun SpaceCheeseCard(
                             .align(Alignment.TopEnd)
                             .padding(4.dp)
                             .background(
-                                color = MaterialTheme.colorScheme.primaryContainer,
+                                color = AppSurfaceTokens.primaryContainer(),
                                 shape = RoundedCornerShape(4.dp)
                             )
                             .padding(horizontal = 6.dp, vertical = 2.dp)
                     ) {
                         AppText(
                             text = item.marks.orEmpty().joinToString(" · "),
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            style = MaterialTheme.typography.labelSmall
+                            color = AppSurfaceTokens.onPrimaryContainer(),
+                            style = COUITheme.textStyles.footnote2
                         )
                     }
                 }
@@ -5328,7 +5330,7 @@ private fun SpaceCheeseCard(
             ) {
                 AppText(
                     text = item.title,
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                    style = COUITheme.textStyles.headline1.copy(fontWeight = FontWeight.SemiBold),
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -5336,7 +5338,7 @@ private fun SpaceCheeseCard(
                     Spacer(modifier = Modifier.height(4.dp))
                     AppText(
                         text = item.status.orEmpty(),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -5351,8 +5353,8 @@ private fun SpaceCheeseCard(
                     Spacer(modifier = Modifier.height(4.dp))
                     AppText(
                         text = "更新于 $ctimeFormatted",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.outline,
+                        style = COUITheme.textStyles.footnote1,
+                        color = AppSurfaceTokens.outline(),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -5373,7 +5375,7 @@ private fun SpaceCheeseSkeletonItem(
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         shape = AppShapes.container(ContainerLevel.Card),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.24f),
+        color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.24f),
     ) {
         Row(
             modifier = Modifier
@@ -5435,7 +5437,7 @@ private fun SpaceCollectionSummaryCard(
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         shape = AppShapes.container(ContainerLevel.Card),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.24f),
+        color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.24f),
         onClick = onClick
     ) {
         Row(
@@ -5449,7 +5451,7 @@ private fun SpaceCollectionSummaryCard(
                     .width(116.dp)
                     .height(72.dp)
                     .clip(AppShapes.container(ContainerLevel.Card))
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .background(AppSurfaceTokens.surfaceContainer())
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
@@ -5464,21 +5466,21 @@ private fun SpaceCollectionSummaryCard(
             Column(modifier = Modifier.weight(1f)) {
                 AppText(
                     text = title,
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                    style = COUITheme.textStyles.headline1.copy(fontWeight = FontWeight.SemiBold),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 AppText(
                     text = "$total 个内容",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.accent()
                 )
                 if (subtitle.isNotBlank()) {
                     Spacer(modifier = Modifier.height(6.dp))
                     AppText(
                         text = subtitle,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
@@ -5508,7 +5510,7 @@ private fun SpaceCollectionWithPreviewCard(
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         shape = AppShapes.container(ContainerLevel.Card),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.24f),
+        color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.24f),
         onClick = onClick
     ) {
         Column(
@@ -5522,7 +5524,7 @@ private fun SpaceCollectionWithPreviewCard(
                         .width(116.dp)
                         .height(72.dp)
                         .clip(AppShapes.container(ContainerLevel.Card))
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .background(AppSurfaceTokens.surfaceContainer())
                 ) {
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
@@ -5537,21 +5539,21 @@ private fun SpaceCollectionWithPreviewCard(
                 Column(modifier = Modifier.weight(1f)) {
                     AppText(
                         text = title,
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                        style = COUITheme.textStyles.headline1.copy(fontWeight = FontWeight.SemiBold),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
                     Spacer(modifier = Modifier.height(6.dp))
                     AppText(
                         text = "$total 个内容",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.accent()
                     )
                     if (subtitle.isNotBlank()) {
                         Spacer(modifier = Modifier.height(6.dp))
                         AppText(
                             text = subtitle,
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText(),
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis
@@ -5576,12 +5578,12 @@ private fun SpaceCollectionWithPreviewCard(
                                     .fillMaxWidth()
                                     .height(70.dp)
                                     .clip(AppShapes.container(ContainerLevel.Card))
-                                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                                    .background(AppSurfaceTokens.surfaceContainer())
                             )
                             Spacer(modifier = Modifier.height(6.dp))
                             AppText(
                                 text = preview.title,
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText(),
                                 maxLines = 2,
                                 overflow = TextOverflow.Ellipsis
@@ -5602,7 +5604,7 @@ private fun SpaceOfficialTag(
     AppSurface(
         modifier = modifier,
         shape = AppShapes.container(ContainerLevel.Pill),
-        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+        color = AppSurfaceTokens.surfaceContainerHigh(),
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 5.dp, vertical = 2.dp),
@@ -5611,7 +5613,7 @@ private fun SpaceOfficialTag(
             AppSurface(
                 modifier = Modifier.size(18.dp),
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.surface,
+                color = AppSurfaceTokens.surface(),
             ) {
                 AppIcon(
                     imageVector = AppIcons.Outlined.Bolt,
@@ -5626,7 +5628,7 @@ private fun SpaceOfficialTag(
             Spacer(modifier = Modifier.width(4.dp))
             AppText(
                 text = badge.text,
-                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                style = COUITheme.textStyles.footnote2.copy(fontWeight = FontWeight.Bold),
                 color = AppContentColors.secondaryText(),
             )
         }
@@ -5648,7 +5650,7 @@ private fun SpaceBadgeChip(
         AppText(
             text = text,
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
-            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
+            style = COUITheme.textStyles.footnote2.copy(fontWeight = FontWeight.SemiBold),
             color = contentColor
         )
     }
@@ -5673,10 +5675,10 @@ private fun SpaceHeaderRelationActions(
             AppSurface(
                 onClick = onMessageClick,
                 shape = RoundedCornerShape(18.dp),
-                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.5f),
                 border = BorderStroke(
                     1.dp,
-                    MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
+                    AppSurfaceTokens.outline().copy(alpha = 0.35f)
                 ),
                 modifier = Modifier
                     .width(46.dp)
@@ -5703,7 +5705,7 @@ private fun SpaceHeaderRelationActions(
             border = if (isFollowed && !isOwner) {
                 BorderStroke(
                     1.dp,
-                    MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
+                    AppSurfaceTokens.outline().copy(alpha = 0.35f)
                 )
             } else null,
             modifier = Modifier
@@ -5729,7 +5731,7 @@ private fun SpaceHeaderRelationActions(
                 }
                 AppText(
                     text = followLabel,
-                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                    style = COUITheme.textStyles.button.copy(fontWeight = FontWeight.SemiBold),
                     color = followButtonColors.textColor,
                     maxLines = 1,
                     softWrap = false
@@ -5764,7 +5766,7 @@ private fun SpaceHeaderStat(
     ) {
         AppText(
             text = FormatUtils.formatStat(value),
-            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+            style = COUITheme.textStyles.headline2.copy(fontWeight = FontWeight.SemiBold),
             color = AppContentColors.primaryText(),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
@@ -5772,7 +5774,7 @@ private fun SpaceHeaderStat(
         Spacer(modifier = Modifier.height(2.dp))
         AppText(
             text = label,
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText(),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
@@ -5786,7 +5788,7 @@ private fun SpaceHeaderMetricDivider() {
         modifier = Modifier
             .width(1.dp)
             .height(15.dp)
-            .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
+            .background(AppSurfaceTokens.outline().copy(alpha = 0.2f))
     )
 }
 
@@ -5967,9 +5969,9 @@ private fun SpaceHeaderBanner(
             modifier = modifier.background(
                 Brush.linearGradient(
                     colors = listOf(
-                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.86f),
-                        MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.56f),
-                        MaterialTheme.colorScheme.surface
+                        AppSurfaceTokens.surfaceContainer().copy(alpha = 0.86f),
+                        AppSurfaceTokens.secondaryContainer().copy(alpha = 0.56f),
+                        AppSurfaceTokens.surface()
                     )
                 )
             )
@@ -6018,7 +6020,7 @@ private fun SpaceHeaderTitleBadge(
         Column(horizontalAlignment = Alignment.End) {
             AppText(
                 text = title.title,
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = Color.White,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -6026,7 +6028,7 @@ private fun SpaceHeaderTitleBadge(
             if (title.subTitle.isNotBlank()) {
                 AppText(
                     text = title.subTitle,
-                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                    style = COUITheme.textStyles.footnote2.copy(fontWeight = FontWeight.Bold),
                     color = subTitleColor,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -6063,8 +6065,8 @@ private fun SpaceFollowedUpSection(
                     modifier = Modifier
                         .size(20.dp)
                         .clip(CircleShape)
-                        .border(1.5.dp, MaterialTheme.colorScheme.surface, CircleShape)
-                        .background(MaterialTheme.colorScheme.surfaceVariant),
+                        .border(1.5.dp, AppSurfaceTokens.surface(), CircleShape)
+                        .background(AppSurfaceTokens.surfaceContainer()),
                     contentScale = ContentScale.Crop
                 )
             }
@@ -6072,7 +6074,7 @@ private fun SpaceFollowedUpSection(
         Spacer(modifier = Modifier.width(6.dp))
         AppText(
             text = namesText,
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText(),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -6080,14 +6082,14 @@ private fun SpaceFollowedUpSection(
         )
         AppText(
             text = suffixText,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.outline,
+            style = COUITheme.textStyles.footnote1,
+            color = AppSurfaceTokens.outline(),
             maxLines = 1
         )
         AppIcon(
             imageVector = AppIcons.AutoMirrored.Outlined.KeyboardArrowRight,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.outline,
+            tint = AppSurfaceTokens.outline(),
             modifier = Modifier.size(16.dp)
         )
     }
@@ -6115,7 +6117,7 @@ private fun SpaceBanBanner(
             )
             AppText(
                 text = "该账号封禁中",
-                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Medium),
+                style = COUITheme.textStyles.footnote1.copy(fontWeight = FontWeight.Medium),
                 color = MaterialTheme.colorScheme.onErrorContainer
             )
         }
@@ -6159,13 +6161,13 @@ private fun SpaceSectionEmptyState(
     ) {
         AppText(
             text = title,
-            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+            style = COUITheme.textStyles.headline1.copy(fontWeight = FontWeight.SemiBold),
             color = AppContentColors.secondaryText()
         )
         Spacer(modifier = Modifier.height(titleGap))
         AppText(
             text = subtitle,
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             textAlign = TextAlign.Center,
             color = AppContentColors.secondaryText()
         )
@@ -6192,7 +6194,7 @@ private fun SpaceErrorSection(
     ) {
         AppText(
             text = message,
-            style = MaterialTheme.typography.bodyLarge,
+            style = COUITheme.textStyles.main,
             color = AppContentColors.secondaryText()
         )
         Spacer(modifier = Modifier.height(actionGap))
@@ -6214,7 +6216,7 @@ private fun SpaceErrorState(
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             AppText(
                 text = message,
-                style = MaterialTheme.typography.bodyLarge,
+                style = COUITheme.textStyles.main,
                 color = AppContentColors.secondaryText()
             )
             Spacer(modifier = Modifier.height(12.dp))

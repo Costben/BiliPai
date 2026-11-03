@@ -1,5 +1,8 @@
 package com.android.purebilibili.core.ui
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppContentColors
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -12,7 +15,6 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -149,16 +151,16 @@ fun BoxScope.BrandSuccessFeedbackHost(
                 BrandSuccessKind.FOLLOW -> "关注成功"
                 BrandSuccessKind.UNFOLLOW -> "已取消关注"
             },
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.onSurface,
+            style = COUITheme.textStyles.button,
+            color = AppContentColors.primaryText(),
             textAlign = TextAlign.Center,
             tapToCopyEnabled = false
         )
         current.detail?.takeIf { it.isNotBlank() }?.let { detail ->
             AppText(
                 text = detail,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = COUITheme.textStyles.footnote2,
+                color = AppContentColors.secondaryText(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 tapToCopyEnabled = false

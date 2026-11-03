@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.video.ui.overlay.glass
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.core.util.rememberHapticFeedback
 import com.android.purebilibili.core.util.HapticType
@@ -27,7 +28,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import com.android.purebilibili.core.ui.components.AppIcon
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -188,7 +188,7 @@ private fun PlaybackOrderSheetContent(
     ) {
         AppText(
             text = "选择播放顺序",
-            style = MaterialTheme.typography.titleMedium,
+            style = COUITheme.textStyles.headline1,
             color = AppContentColors.primaryText(),
             modifier = Modifier.padding(vertical = layoutSpec.titleVerticalPaddingDp.dp),
         )
@@ -211,7 +211,7 @@ private fun PlaybackOrderSheetContent(
             ) {
                 AppText(
                     text = behavior.label,
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium),
+                    style = COUITheme.textStyles.headline1.copy(fontWeight = FontWeight.Medium),
                     color = AppContentColors.primaryText(),
                     modifier = Modifier.weight(1f),
                 )
@@ -228,7 +228,7 @@ private fun PlaybackOrderSheetContent(
             }
             if (index < options.lastIndex) {
                 AppHorizontalDivider(
-                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f),
+                    color = AppSurfaceTokens.outline().copy(alpha = 0.35f),
                 )
             }
         }

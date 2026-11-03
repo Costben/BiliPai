@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -42,6 +41,7 @@ import com.android.purebilibili.core.ui.components.AppTextButton
 import com.android.purebilibili.core.ui.rememberAppBackIcon
 import com.android.purebilibili.feature.dynamic.components.ImagePreviewDialog
 import com.android.purebilibili.feature.home.subscription.FeedReadingBlock
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun InstantArticleScreen(
@@ -150,7 +150,7 @@ internal fun InstantArticleContent(
                     ) {
                         AppText(
                             state.article.title.ifBlank { initialTitle }.ifBlank { "网页正文" },
-                            style = MaterialTheme.typography.headlineSmall,
+                            style = COUITheme.textStyles.title4,
                             fontWeight = FontWeight.Bold,
                         )
                         AppText(

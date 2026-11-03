@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.home
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import androidx.compose.foundation.layout.*
 import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,7 +13,6 @@ import com.android.purebilibili.core.ui.components.AppLazyVerticalGrid as LazyVe
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -106,7 +107,7 @@ private fun WeeklySeriesContent(
     val progressiveActive = progressiveRequested && chromeBackdrop != null
     val fadeActive = themeConfig.progressiveTopFadeEnabled && !themeConfig.headerBlurEnabled
     val chromeActive = hazeActive || progressiveActive || fadeActive
-    val pageColor = MaterialTheme.colorScheme.background
+    val pageColor = AppSurfaceTokens.background()
     val chromeColor = globalWallpaperAwareChromeColor(pageColor)
 
     AppScaffold(
@@ -206,7 +207,7 @@ private fun WeeklySeriesContent(
                             AppText(
                                 listOf(state.label, state.subject).filter { it.isNotBlank() }.joinToString("\n"),
                                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
-                                style = MaterialTheme.typography.titleSmall,
+                                style = COUITheme.textStyles.headline2,
                             )
                         }
                     }
@@ -215,7 +216,7 @@ private fun WeeklySeriesContent(
                             AppText(
                                 state.reminder,
                                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppSurfaceTokens.onSurfaceVariantSummary(),
                             )
                         }

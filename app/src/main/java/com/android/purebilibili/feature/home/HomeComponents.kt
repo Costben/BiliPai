@@ -3,6 +3,8 @@
 // UserState 定义在 HomeViewModel.kt 中
 package com.android.purebilibili.feature.home
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import com.android.purebilibili.core.util.LocalWindowSizeClass
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.resolveFilledButtonContainerColor
@@ -46,7 +48,7 @@ fun WelcomeDialog(githubUrl: String, onConfirm: () -> Unit) {
                     onClick = { uriHandler.openUri(githubUrl) },
                     colors = com.android.purebilibili.core.ui.components.AppTextButtonDefaults.primaryColors(),
                 ) {
-                    AppText("开源地址: $githubUrl", fontSize = MaterialTheme.typography.labelSmall.fontSize)
+                    AppText("开源地址: $githubUrl", fontSize = COUITheme.textStyles.footnote2.fontSize)
                 }
             }
         },

@@ -1,6 +1,8 @@
 // 文件路径: feature/home/components/BottomBar.kt
 package com.android.purebilibili.feature.home.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.core.ui.animation.rememberLiquidIndicatorWobble
@@ -2400,7 +2402,7 @@ private fun MaterialBottomBar(
     )
     val blurIntensity = currentUnifiedBlurIntensity()
     val baseSurfaceColor = if (isFloating) {
-        MaterialTheme.colorScheme.surfaceContainer
+        AppSurfaceTokens.surfaceContainer()
     } else {
         AppSurfaceTokens.cardContainer()
     }
@@ -3235,7 +3237,7 @@ private fun MiuixBottomBar(
             val unselectedItemColor = AppContentColors.secondaryText()
             val dockedIndicatorColor = resolveDockedBottomBarIndicatorColor(
                 defaultColor = if (!sharedLiquidGlassEnabled) AppSurfaceTokens.selectionContainer()
-                    else MaterialTheme.colorScheme.secondaryContainer,
+                    else AppSurfaceTokens.secondaryContainer(),
                 hasUiSkinDecoration = uiSkinDecoration != null,
             )
         val skinItemColors = resolveBottomBarSkinContentColors(
@@ -3553,9 +3555,9 @@ private fun RowScope.MiuixDockedBottomBarItem(
                 color = contentColor,
                 textAlign = TextAlign.Center,
                 fontSize = if (textOnly) {
-                    MaterialTheme.typography.labelMedium.fontSize
+                    COUITheme.textStyles.footnote1.fontSize
                 } else {
-                    MaterialTheme.typography.labelSmall.fontSize
+                    COUITheme.textStyles.footnote2.fontSize
                 },
                 fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
                 maxLines = 1,
@@ -5061,7 +5063,7 @@ internal fun BiliPaiBottomBarSearchVisualContent(
                     value = query,
                     onValueChange = onQueryChange,
                     singleLine = true,
-                    textStyle = MaterialTheme.typography.bodyMedium.copy(color = contentColor),
+                    textStyle = COUITheme.textStyles.body1.copy(color = contentColor),
                     cursorBrush = SolidColor(accentColor),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                     keyboardActions = KeyboardActions(onSearch = { submitWithFeedback() }),
@@ -5076,7 +5078,7 @@ internal fun BiliPaiBottomBarSearchVisualContent(
                                     text = "搜索",
                                     color = contentColor.copy(alpha = 0.45f),
                                     maxLines = 1,
-                                    style = MaterialTheme.typography.bodyMedium
+                                    style = COUITheme.textStyles.body1
                                 )
                             }
                             innerTextField()
@@ -5098,7 +5100,7 @@ internal fun BiliPaiBottomBarSearchVisualContent(
                             contentColor
                         },
                         maxLines = 1,
-                        style = MaterialTheme.typography.bodyMedium
+                        style = COUITheme.textStyles.body1
                     )
                 }
             }
@@ -5320,14 +5322,14 @@ private fun RowScope.AndroidNativeBottomBarItem(
                             fontScale = LocalDensity.current.fontScale
                         )
                     } else {
-                        MaterialTheme.typography.labelSmall.fontSize
+                        COUITheme.textStyles.footnote2.fontSize
                     },
                     lineHeight = if (shouldUseSkinItemLayout) {
                         resolveBottomBarSkinDockLabelLineHeight(
                             fontScale = LocalDensity.current.fontScale
                         )
                     } else {
-                        MaterialTheme.typography.labelMedium.lineHeight
+                        COUITheme.textStyles.footnote1.lineHeight
                     },
                     fontWeight = FontWeight.Medium,
                     maxLines = 1,

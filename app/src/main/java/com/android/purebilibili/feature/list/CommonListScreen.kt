@@ -1,5 +1,6 @@
 package com.android.purebilibili.feature.list
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.navigation.tabIndicatorPosition
@@ -105,7 +106,6 @@ import kotlinx.coroutines.launch // [Fix] Import
 //  Material Icons
 import androidx.compose.material3.ExperimentalMaterial3Api
 import com.android.purebilibili.core.ui.components.AppIcon
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.material3.TopAppBarDefaults
 import com.android.purebilibili.core.ui.components.AppFloatingToolbar
@@ -2238,13 +2238,13 @@ fun CommonListScreen(
                                     .fillMaxWidth()
                                     .padding(horizontal = AppSpacingTokens.Medium),
                                 shape = AppShapes.container(ContainerLevel.Pill),
-                                color = MaterialTheme.colorScheme.secondaryContainer,
+                                color = AppSurfaceTokens.secondaryContainer(),
                             ) {
                                 AppText(
                                     text = "历史记录功能已关闭 · 点击开启",
                                     modifier = Modifier.padding(AppSpacingTokens.Medium),
-                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
-                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = AppSurfaceTokens.onSecondaryContainer(),
+                                    style = COUITheme.textStyles.body1,
                                 )
                             }
                             Spacer(modifier = Modifier.height(AppSpacingTokens.Small))
@@ -2690,7 +2690,7 @@ fun CommonListScreen(
                             },
                             modifier = Modifier.fillMaxWidth(),
                             shape = AppShapes.container(ContainerLevel.Card),
-                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.36f),
+                            color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.36f),
                         ) {
                             AppText(
                                 text = folder.title,
@@ -2831,7 +2831,7 @@ fun CommonListScreen(
                                     onClick = { selectedFavoriteDetailTransferFolderId = folder.id },
                                     modifier = Modifier.fillMaxWidth(),
                                     shape = AppShapes.container(ContainerLevel.Card),
-                                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.36f),
+                                    color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.36f),
                                 ) {
                                     AppText(
                                         text = folder.title,
@@ -2979,7 +2979,7 @@ internal fun CommonListContent(
             AppText(
                 text = error,
                 color = AppContentColors.secondaryText(),
-                style = MaterialTheme.typography.bodyMedium
+                style = COUITheme.textStyles.body1
             )
             if (onRetry != null) {
                 Spacer(modifier = Modifier.height(AppSpacingTokens.Medium))
@@ -3357,7 +3357,7 @@ internal fun CommonListContent(
                                                 color = if (isSelected) {
                                                     AppContentColors.accent()
                                                 } else {
-                                                    MaterialTheme.colorScheme.outline.copy(alpha = 0.45f)
+                                                    AppSurfaceTokens.outline().copy(alpha = 0.45f)
                                                 },
                                                 shape = historySelectionShape
                                             )
@@ -3547,20 +3547,20 @@ private fun HistoryArticleCard(
                     AppText(
                         text = "专栏",
                         color = AppContentColors.accent(),
-                        style = MaterialTheme.typography.labelMedium,
+                        style = COUITheme.textStyles.footnote1,
                         modifier = Modifier.padding(horizontal = AppSpacingTokens.Small + AppSpacingTokens.Micro, vertical = AppSpacingTokens.ExtraSmall)
                     )
                 }
                 AppText(
                     text = article.title,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 4,
                     overflow = TextOverflow.Ellipsis
                 )
                 AppText(
                     text = article.owner.name.ifBlank { "未知作者" },
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppContentColors.secondaryText(),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -3714,7 +3714,7 @@ private fun FavoriteSubscribedFolderRow(
         resolveFavoriteFolderPreviewCover(folder, emptyList())
     }
     val cardSurface = wallpaperMediaCardSurface(
-        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.32f),
+        AppSurfaceTokens.surfaceContainer().copy(alpha = 0.32f),
         AppShapes.container(ContainerLevel.Card),
     )
     AppSurface(
@@ -3744,14 +3744,14 @@ private fun FavoriteSubscribedFolderRow(
                 Column(modifier = Modifier.weight(1f)) {
                     AppText(
                         text = folder.title,
-                        style = MaterialTheme.typography.titleSmall,
+                        style = COUITheme.textStyles.headline2,
                         color = AppContentColors.primaryText(),
                         maxLines = 1
                     )
                     Spacer(modifier = Modifier.height(AppSpacingTokens.ExtraSmall))
                     AppText(
                         text = "${folder.media_count} 个内容",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                 }
@@ -3766,7 +3766,7 @@ private fun FavoriteSubscribedFolderRow(
                 AppText(
                     text = message,
                     color = AppContentColors.error(),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     modifier = Modifier.padding(
                         start = AppSpacingTokens.Medium,
                         end = AppSpacingTokens.Medium,
@@ -3789,7 +3789,7 @@ private fun FavoriteSubscribedFolderPreview(
             .width(resolveFavoriteSubscribedFolderPreviewWidth())
             .aspectRatio(16f / 9f)
             .clip(shape)
-            .background(MaterialTheme.colorScheme.surfaceVariant),
+            .background(AppSurfaceTokens.surfaceContainer()),
         contentAlignment = Alignment.Center
     ) {
         if (coverUrl != null) {
@@ -3860,7 +3860,7 @@ private fun FavoriteCollectionRow(
     val subtitle = remember(subtitleParts) { subtitleParts.joinToString(separator = " · ") }
 
     val cardSurface = wallpaperMediaCardSurface(
-        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f),
+        AppSurfaceTokens.surfaceContainer().copy(alpha = 0.35f),
         AppShapes.container(ContainerLevel.Card),
     )
     AppSurface(
@@ -3886,7 +3886,7 @@ private fun FavoriteCollectionRow(
             Column(modifier = Modifier.weight(1f)) {
                 AppText(
                     text = item.title,
-                    style = MaterialTheme.typography.titleSmall,
+                    style = COUITheme.textStyles.headline2,
                     color = AppContentColors.primaryText(),
                     maxLines = 1
                 )
@@ -3894,7 +3894,7 @@ private fun FavoriteCollectionRow(
                     Spacer(modifier = Modifier.height(AppSpacingTokens.ExtraSmall))
                     AppText(
                         text = subtitle,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         maxLines = 2
                     )

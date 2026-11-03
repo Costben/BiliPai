@@ -4,6 +4,7 @@ package com.android.purebilibili.feature.bangumi.ui.list
 import com.android.purebilibili.core.ui.components.wallpaperAwareMediaCardBackground
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppText
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -95,7 +96,7 @@ fun BangumiCard(
                     AppText(
                         text = item.score,
                         color = AppContentColors.rating(),
-                        style = MaterialTheme.typography.labelMedium,
+                        style = COUITheme.textStyles.footnote1,
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -105,7 +106,7 @@ fun BangumiCard(
                     AppText(
                         text = indexShow,
                         color = Color.White,
-                        style = MaterialTheme.typography.labelSmall
+                        style = COUITheme.textStyles.footnote2
                     )
                 }
             }
@@ -118,7 +119,7 @@ fun BangumiCard(
             minLines = 2,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.bodySmall
+            style = COUITheme.textStyles.footnote1
         )
     }
 }
@@ -174,7 +175,7 @@ fun BangumiSearchCard(
             // 标题
             AppText(
                 text = item.orgTitle.ifEmpty { item.title.replace("<em class=\"keyword\">", "").replace("</em>", "") },
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 fontWeight = FontWeight.Medium,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
@@ -184,7 +185,7 @@ fun BangumiSearchCard(
             if (item.seasonTypeName.isNotEmpty()) {
                 AppText(
                     text = item.seasonTypeName,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText()
                 )
             }
@@ -196,13 +197,13 @@ fun BangumiSearchCard(
                         AppText(
                             text = String.format("%.1f", score.score),
                             color = AppContentColors.rating(),
-                            style = MaterialTheme.typography.labelMedium,
+                            style = COUITheme.textStyles.footnote1,
                             fontWeight = FontWeight.Bold
                         )
                         AppText(
                             text = " · ${score.userCount}人评分",
                             color = AppContentColors.secondaryText(),
-                            style = MaterialTheme.typography.labelSmall
+                            style = COUITheme.textStyles.footnote2
                         )
                     }
                 }
@@ -212,7 +213,7 @@ fun BangumiSearchCard(
             if (item.indexShow.isNotEmpty()) {
                 AppText(
                     text = item.indexShow,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = AppContentColors.secondaryText()
                 )
             }
@@ -280,7 +281,7 @@ fun BangumiSearchCardGrid(
                         AppText(
                             text = String.format("%.1f", score.score),
                             color = AppContentColors.rating(),
-                            style = MaterialTheme.typography.labelMedium,
+                            style = COUITheme.textStyles.footnote1,
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -291,7 +292,7 @@ fun BangumiSearchCardGrid(
                     AppText(
                         text = item.indexShow,
                         color = Color.White,
-                        style = MaterialTheme.typography.labelSmall
+                        style = COUITheme.textStyles.footnote2
                     )
                 }
             }
@@ -303,7 +304,7 @@ fun BangumiSearchCardGrid(
             modifier = Modifier.padding(top = 6.dp),
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.bodySmall
+            style = COUITheme.textStyles.footnote1
         )
         val hitEpisode = item.episodes?.firstOrNull { it.id > 0L }
         if (hitEpisode != null && onEpisodeClick != null) {
@@ -318,7 +319,7 @@ fun BangumiSearchCardGrid(
                     text = item.buttonText.ifBlank { "播匹配分集" },
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.labelSmall
+                    style = COUITheme.textStyles.footnote2
                 )
             }
         }
@@ -335,18 +336,20 @@ fun BangumiBadge(
     containerColor: Color = AppContentColors.accent()
 ) {
     val brandColors = com.android.purebilibili.feature.bangumi.bangumiBrandBadgeColors(text)
-    val colorScheme = MaterialTheme.colorScheme
+    val onAccentColor = AppContentColors.onAccent()
+    val surfaceColor = AppSurfaceTokens.surface()
+    val onSurfaceColor = AppContentColors.primaryText()
     val badgeColors = remember(
         containerColor,
-        colorScheme.onPrimary,
-        colorScheme.surface,
-        colorScheme.onSurface,
+        onAccentColor,
+        surfaceColor,
+        onSurfaceColor,
     ) {
         resolveBangumiCoverBadgeColors(
             primary = containerColor,
-            onPrimary = colorScheme.onPrimary,
-            surface = colorScheme.surface,
-            onSurface = colorScheme.onSurface,
+            onPrimary = onAccentColor,
+            surface = surfaceColor,
+            onSurface = onSurfaceColor,
         )
     }
     AppSurface(
@@ -358,7 +361,7 @@ fun BangumiBadge(
             text = text,
             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
             color = brandColors?.contentColor ?: badgeColors.contentColor,
-            style = MaterialTheme.typography.labelSmall
+            style = COUITheme.textStyles.footnote2
         )
     }
 }

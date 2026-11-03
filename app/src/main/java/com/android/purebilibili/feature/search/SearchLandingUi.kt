@@ -53,6 +53,7 @@ import com.android.purebilibili.core.ui.components.AppTextButton
 import com.android.purebilibili.core.util.responsiveContentWidth
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 private const val SEARCH_HIGHLIGHT_START_TOKEN = "§hl§"
 private const val SEARCH_HIGHLIGHT_END_TOKEN = "§/hl§"
@@ -285,7 +286,7 @@ fun SearchSuggestionDropdown(
     modifier: Modifier = Modifier
 ) {
     if (suggestions.isEmpty()) return
-    val outline = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
+    val outline = AppSurfaceTokens.outline().copy(alpha = 0.35f)
 
     AppSurface(
         modifier = modifier,
@@ -316,7 +317,7 @@ fun SearchSuggestionDropdown(
                             fallback = suggestion.keyword
                         ),
                         color = AppContentColors.primaryText(),
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = COUITheme.textStyles.main,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f)
@@ -429,7 +430,7 @@ private fun SearchKeywordSection(
                 Spacer(modifier = Modifier.height(12.dp))
                 AppText(
                     text = resolveSearchKeywordSectionHiddenText(title),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppContentColors.secondaryText()
                 )
             }
@@ -452,13 +453,13 @@ private fun SearchInlineMessage(
     ) {
         AppText(
             text = title,
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = AppContentColors.secondaryText()
         )
         if (!message.isNullOrBlank()) {
             AppText(
                 text = message,
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 color = AppContentColors.secondaryText()
             )
         }
@@ -466,7 +467,7 @@ private fun SearchInlineMessage(
             AppTextButton(onClick = onAction) {
                 AppText(
                     text = actionLabel,
-                    style = MaterialTheme.typography.labelLarge
+                    style = COUITheme.textStyles.button
                 )
             }
         }
@@ -483,7 +484,7 @@ private fun SearchKeywordSectionHeader(
     onToggleEnabled: (() -> Unit)?,
     onOpenTrending: (() -> Unit)?
 ) {
-    val outline = MaterialTheme.colorScheme.outline
+    val outline = AppSurfaceTokens.outline()
     val secondary = MaterialTheme.colorScheme.secondary
     val useCompactActions = shouldUseCompactSearchSectionActions(
         widthDp = LocalConfiguration.current.screenWidthDp,
@@ -501,7 +502,7 @@ private fun SearchKeywordSectionHeader(
         ) {
             AppText(
                 text = title,
-                style = MaterialTheme.typography.titleMedium.copy(
+                style = COUITheme.textStyles.headline1.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
                 maxLines = 1,
@@ -512,7 +513,7 @@ private fun SearchKeywordSectionHeader(
                 AppTextButton(onClick = onOpenTrending) {
                     AppText(
                         text = "完整榜单",
-                        style = MaterialTheme.typography.labelLarge,
+                        style = COUITheme.textStyles.button,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
@@ -559,7 +560,7 @@ private fun SearchKeywordSectionHeader(
                         Spacer(modifier = Modifier.width(2.dp))
                         AppText(
                             text = "刷新",
-                            style = MaterialTheme.typography.labelLarge
+                            style = COUITheme.textStyles.button
                         )
                     }
                 }
@@ -611,7 +612,7 @@ private fun SearchDiscoverOriginalCell(
                     modifier = Modifier.weight(1f, fill = false),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.bodyMedium.copy(
+                    style = COUITheme.textStyles.body1.copy(
                         fontWeight = FontWeight.Medium,
                         color = colors.titleColor
                     )
@@ -640,7 +641,7 @@ private fun SearchDiscoverOriginalCell(
                     text = displaySubtitle,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.bodyMedium.copy(
+                    style = COUITheme.textStyles.body1.copy(
                         color = colors.subtitleColor
                     )
                 )
@@ -666,7 +667,7 @@ private fun SearchKeywordCell(
             modifier = Modifier.weight(1f, fill = false),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.bodyMedium
+            style = COUITheme.textStyles.body1
         )
         Spacer(modifier = Modifier.width(AppSpacingTokens.ExtraSmall))
         when {
@@ -684,8 +685,8 @@ private fun SearchKeywordCell(
                 text = item.subtitle,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                color = MaterialTheme.colorScheme.outline,
-                style = MaterialTheme.typography.bodyMedium
+                color = AppSurfaceTokens.outline(),
+                style = COUITheme.textStyles.body1
             )
         }
     }
@@ -709,7 +710,7 @@ internal fun SearchKeywordBadge(
         AppText(
             text = text,
             color = contentColor,
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             fontWeight = FontWeight.Bold
         )
     }
@@ -736,7 +737,7 @@ private fun SearchHistorySectionModern(
         ) {
             AppText(
                 text = "搜索历史",
-                style = MaterialTheme.typography.titleMedium.copy(
+                style = COUITheme.textStyles.headline1.copy(
                     fontWeight = FontWeight.SemiBold
                 )
             )
@@ -758,7 +759,7 @@ private fun SearchHistorySectionModern(
                             recording -> "记录中"
                             else -> "无痕搜索"
                         },
-                        style = MaterialTheme.typography.labelLarge,
+                        style = COUITheme.textStyles.button,
                     )
                 }
                 if (historyList.isNotEmpty()) {
@@ -769,7 +770,7 @@ private fun SearchHistorySectionModern(
                             modifier = Modifier.size(18.dp),
                         )
                         Spacer(modifier = Modifier.width(2.dp))
-                        AppText(text = "清空", style = MaterialTheme.typography.labelLarge)
+                        AppText(text = "清空", style = COUITheme.textStyles.button)
                     }
                 }
             }
@@ -778,7 +779,7 @@ private fun SearchHistorySectionModern(
         if (historyList.isEmpty()) {
             AppText(
                 text = if (recordSearchHistory && !globalPrivacyMode) "暂无搜索历史" else "新搜索不会记录到历史，已有记录会保留",
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 color = AppContentColors.secondaryText(),
             )
         }
@@ -803,7 +804,7 @@ private fun SearchHistorySectionModern(
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             color = AppContentColors.primaryText(),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = COUITheme.textStyles.body1,
                             modifier = Modifier.weight(1f)
                         )
                         Box(

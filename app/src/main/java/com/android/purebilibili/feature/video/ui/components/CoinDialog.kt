@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,6 +40,9 @@ import com.android.purebilibili.core.ui.rememberDecorativeAnimationGate
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlin.math.sin
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppShapes
+import com.android.purebilibili.core.ui.ContainerLevel
 
 internal fun canGiveCoins(count: Int, current: Int, cap: Int, balance: Double?): Boolean =
     count in 1..(cap - current).coerceAtLeast(0) &&
@@ -135,7 +137,7 @@ private fun CoinDialogContent(
                 .padding(horizontal = 24.dp, vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            AppText("投币", color = Color.White, style = MaterialTheme.typography.titleLarge)
+            AppText("投币", color = Color.White, style = COUITheme.textStyles.title4)
             Spacer(Modifier.height(24.dp))
             Row(
                 Modifier.fillMaxWidth().height(168.dp)
@@ -201,13 +203,13 @@ private fun CoinDialogContent(
                     else -> "硬币余额：${String.format(java.util.Locale.ROOT, "%.1f", userBalance)}"
                 },
                 color = Color.White,
-                style = MaterialTheme.typography.titleMedium,
+                style = COUITheme.textStyles.headline1,
             )
             if (!canGiveCoins(selectedCount, currentCoinCount, maxCoins, userBalance)) {
                 AppText(
                     if (maxCoins - currentCoinCount < selectedCount) "当前视频剩余额度不足" else "硬币余额不足或暂不可用",
                     color = Color.White.copy(alpha = 0.8f),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                 )
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -232,7 +234,7 @@ private fun CoinChoice(
     Box(
         modifier.semantics { this.selected = selected; contentDescription = "$count 硬币${if (available) "" else "，不可投"}" }
             .clickable(role = Role.RadioButton, onClick = onClick)
-            .background(Color(0xFFC48A52), RoundedCornerShape(12.dp)),
+            .background(Color(0xFFC48A52), AppShapes.container(ContainerLevel.MediaCover)),
         contentAlignment = Alignment.Center,
     ) {
         Canvas(Modifier.matchParentSize()) {

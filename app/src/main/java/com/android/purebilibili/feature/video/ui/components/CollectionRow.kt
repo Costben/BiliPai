@@ -2,6 +2,8 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppIcon
@@ -69,7 +71,7 @@ fun CollectionRow(
         color = if (immersive) {
             Color.Transparent
         } else {
-            MaterialTheme.colorScheme.surfaceContainerLow
+            AppSurfaceTokens.surfaceContainer()
         }
     ) {
         Row(
@@ -86,14 +88,14 @@ fun CollectionRow(
             Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
                 AppText(
                     text = "合集：",
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = titleColor,
                     fontWeight = FontWeight.Medium
                 )
                 AppText(
                     text = ugcSeason.title,
                     modifier = Modifier.weight(1f, fill = false),
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = titleColor,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -107,7 +109,7 @@ fun CollectionRow(
                 Spacer(modifier = Modifier.width(6.dp))
                 AppText(
                     text = "$currentPosition/$totalCount",
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = secondaryColor,
                     fontWeight = FontWeight.Medium
                 )
@@ -121,7 +123,7 @@ fun CollectionRow(
                 collectionId = collectionSubscriptionId,
                 currentBvid = currentBvid,
                 currentAid = currentAid,
-                fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                fontSize = COUITheme.textStyles.footnote1.fontSize,
                 immersive = immersive,
             )
 

@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppContentColors
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -11,7 +12,6 @@ import androidx.compose.foundation.rememberScrollState
 import com.android.purebilibili.core.ui.components.AppFilterChip
 import com.android.purebilibili.core.ui.components.AppSlider
 import com.android.purebilibili.core.ui.components.AppText
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -94,12 +94,12 @@ internal fun FsrSharpnessOptions(
         ) {
             AppText(
                 text = "FSR 锐化",
-                style = MaterialTheme.typography.labelLarge,
+                style = COUITheme.textStyles.button,
                 color = AppContentColors.secondaryText()
             )
             AppText(
                 text = "${(safeSharpness * 100).roundToInt()}%",
-                style = MaterialTheme.typography.labelLarge,
+                style = COUITheme.textStyles.button,
                 fontWeight = FontWeight.SemiBold,
                 color = AppContentColors.primaryText()
             )

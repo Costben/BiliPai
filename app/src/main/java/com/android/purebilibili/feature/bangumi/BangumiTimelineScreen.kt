@@ -4,6 +4,8 @@ package com.android.purebilibili.feature.bangumi
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppHorizontalDivider
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -100,7 +102,7 @@ private fun BangumiTimelineScreenSkeleton(modifier: Modifier = Modifier) {
         }
         AppHorizontalDivider(
             thickness = 0.5.dp,
-            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
+            color = AppSurfaceTokens.outline().copy(alpha = 0.5f),
         )
         LazyColumn(
             contentPadding = PaddingValues(16.dp),
@@ -111,7 +113,7 @@ private fun BangumiTimelineScreenSkeleton(modifier: Modifier = Modifier) {
             items(7) {
                 AppSurface(
                     shape = AppShapes.container(ContainerLevel.Card),
-                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                    color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.5f),
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Row(
@@ -184,7 +186,7 @@ private fun TimelineView(
 
         AppHorizontalDivider(
             thickness = 0.5.dp,
-            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
+            color = AppSurfaceTokens.outline().copy(alpha = 0.5f)
         )
 
         // 当天番剧列表
@@ -246,7 +248,7 @@ private fun DayChip(
             containerColor = if (isToday) {
                 AppContentColors.accent().copy(alpha = 0.2f)
             } else {
-                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                AppSurfaceTokens.surfaceContainer().copy(alpha = 0.5f)
             },
             labelColor = if (isToday) {
                 AppContentColors.accent()
@@ -262,7 +264,7 @@ private fun DayChip(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 AppText(
                     text = if (isToday) "今天" else weekDay,
-                    style = MaterialTheme.typography.titleSmall,
+                    style = COUITheme.textStyles.headline2,
                     fontWeight = if (isSelected || isToday) FontWeight.Bold else FontWeight.Normal,
                     color = when {
                         isSelected -> AppContentColors.onAccent()
@@ -273,7 +275,7 @@ private fun DayChip(
                 Spacer(modifier = Modifier.height(2.dp))
                 AppText(
                     text = displayDate,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = when {
                         isSelected -> AppContentColors.onAccent().copy(alpha = 0.8f)
                         isToday -> AppContentColors.accent().copy(alpha = 0.7f)
@@ -296,7 +298,7 @@ private fun TimelineEpisodeCard(
     AppSurface(
         onClick = onClick,
         shape = AppShapes.container(ContainerLevel.Card),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+        color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.5f),
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
@@ -329,7 +331,7 @@ private fun TimelineEpisodeCard(
                     ) {
                         AppText(
                             "追番",
-                            style = MaterialTheme.typography.labelSmall,
+                            style = COUITheme.textStyles.footnote2,
                             color = AppContentColors.onAccent()
                         )
                     }
@@ -344,7 +346,7 @@ private fun TimelineEpisodeCard(
             ) {
                 AppText(
                     text = episode.title,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     fontWeight = FontWeight.Medium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -358,7 +360,7 @@ private fun TimelineEpisodeCard(
                     // 更新集数
                     AppText(
                         text = resolveTimelineEpisodeUpdateLabel(episode),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.accent()
                     )
 
@@ -367,7 +369,7 @@ private fun TimelineEpisodeCard(
                     // 更新时间
                     AppText(
                         text = episode.pubTime,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                 }
@@ -378,7 +380,7 @@ private fun TimelineEpisodeCard(
                     Spacer(modifier = Modifier.height(4.dp))
                     AppText(
                         text = scheduleLabel,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppContentColors.error()
                     )
                 }

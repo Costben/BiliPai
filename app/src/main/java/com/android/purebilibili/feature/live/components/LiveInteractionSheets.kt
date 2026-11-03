@@ -35,7 +35,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import com.android.purebilibili.core.ui.components.AppFilterChip
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppIconButton
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.AppModalBottomSheet
 import com.android.purebilibili.core.ui.components.AppOutlinedTextField
 import com.android.purebilibili.core.ui.components.AppSurface
@@ -76,6 +75,7 @@ import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.ContainerLevel
 import com.android.purebilibili.feature.live.LiveDanmakuItem
 import com.android.purebilibili.feature.live.resolveLiveSheetVisualSpec
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 fun LiveReportDialog(
@@ -91,7 +91,7 @@ fun LiveReportDialog(
             Column(verticalArrangement = Arrangement.spacedBy(AppSpacingTokens.Medium)) {
                 AppText(
                     text = "@${target.uname.ifBlank { target.uid.toString() }}：${target.text}",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -209,7 +209,7 @@ private fun LiveEmoticonGridCell(
             } else {
                 AppText(
                     text = item.emoji.ifBlank { item.description.ifBlank { "表情" } },
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -348,7 +348,7 @@ private fun LiveRuleSection(
     var level by remember(shieldInfo?.level) { androidx.compose.runtime.mutableFloatStateOf((shieldInfo?.level ?: 0).toFloat()) }
     val active = (shieldInfo?.level ?: 0) > 0 || (shieldInfo?.rank ?: 0) > 0 || (shieldInfo?.verify ?: 0) > 0
     Column(verticalArrangement = Arrangement.spacedBy(AppSpacingTokens.Small)) {
-        AppText("全局屏蔽", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+        AppText("全局屏蔽", style = COUITheme.textStyles.headline2, fontWeight = FontWeight.SemiBold)
         Row(verticalAlignment = Alignment.CenterVertically) {
             AppText(if (active) "屏蔽已开启" else "屏蔽未开启", modifier = Modifier.weight(1f))
             com.android.purebilibili.core.ui.components.AppSwitch(
@@ -396,7 +396,7 @@ private fun LiveKeywordSection(
 ) {
     val clearIcon = rememberAppClearIcon()
     Column(verticalArrangement = Arrangement.spacedBy(AppSpacingTokens.Small)) {
-        AppText("关键词", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+        AppText("关键词", style = COUITheme.textStyles.headline2, fontWeight = FontWeight.SemiBold)
         val keywords = shieldInfo?.keywords.orEmpty()
         if (keywords.isEmpty()) {
             AppText("暂无屏蔽词", color = AppContentColors.secondaryText())
@@ -414,7 +414,7 @@ private fun LiveKeywordSection(
                             AppText(
                                 text = item.keyword,
                                 color = AppContentColors.primaryText(),
-                                style = MaterialTheme.typography.labelMedium,
+                                style = COUITheme.textStyles.footnote1,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
@@ -447,7 +447,7 @@ private fun LiveShieldUserSection(
     onUnblockUser: (LiveShieldUser) -> Unit
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(AppSpacingTokens.Small)) {
-        AppText("用户", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+        AppText("用户", style = COUITheme.textStyles.headline2, fontWeight = FontWeight.SemiBold)
         val users = shieldInfo?.users.orEmpty()
         if (users.isEmpty()) {
             AppText("暂无屏蔽用户", color = AppContentColors.secondaryText())
@@ -479,7 +479,7 @@ private fun LiveShieldUserSection(
                             )
                             AppText(
                                 text = user.uname.ifBlank { user.uid.toString() },
-                                style = MaterialTheme.typography.bodyMedium,
+                                style = COUITheme.textStyles.body1,
                                 modifier = Modifier
                                     .weight(1f)
                                     .padding(start = AppSpacingTokens.Medium)

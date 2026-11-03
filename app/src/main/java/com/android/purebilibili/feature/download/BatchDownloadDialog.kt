@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.download
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.util.rememberHapticFeedback
 import com.android.purebilibili.core.util.HapticType
 
@@ -25,7 +27,6 @@ import androidx.compose.foundation.verticalScroll
 import com.android.purebilibili.core.ui.components.AppButton
 import com.android.purebilibili.core.ui.components.AppCheckbox
 import com.android.purebilibili.core.ui.components.AppFilterChip
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppOutlinedButton
 import com.android.purebilibili.core.ui.components.AppRadioButton
 import com.android.purebilibili.core.ui.components.AppText
@@ -100,7 +101,7 @@ internal fun BatchDownloadDialog(
                     .fillMaxWidth()
                     .heightIn(max = dialogMaxHeight),
                 shape = AppShapes.container(ContainerLevel.Floating),
-                containerColor = MaterialTheme.colorScheme.surface,
+                containerColor = AppSurfaceTokens.surface(),
             ) {
                 Column(
                     modifier = Modifier
@@ -110,13 +111,13 @@ internal fun BatchDownloadDialog(
                 ) {
                     AppText(
                         text = "批量缓存",
-                        style = MaterialTheme.typography.titleLarge,
+                        style = COUITheme.textStyles.title4,
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     AppText(
                         text = title,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         color = AppContentColors.secondaryText(),
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
@@ -124,12 +125,12 @@ internal fun BatchDownloadDialog(
 
                     Spacer(modifier = Modifier.height(16.dp))
                     if (isLoadingCandidates) {
-                        AppText("正在加载合集分 P…", style = MaterialTheme.typography.bodySmall)
+                        AppText("正在加载合集分 P…", style = COUITheme.textStyles.footnote1)
                         Spacer(modifier = Modifier.height(8.dp))
                     } else if (failedExpansionCount > 0) {
                         AppText(
                             "有 $failedExpansionCount 个稿件未能展开分 P，当前仅列出已知条目。",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                         )
                         AppOutlinedButton(onClick = onRetryExpansion) { AppText("重试加载分 P") }
                         Spacer(modifier = Modifier.height(8.dp))
@@ -172,7 +173,7 @@ internal fun BatchDownloadDialog(
 
                     AppText(
                         text = "选择条目",
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         fontWeight = FontWeight.SemiBold
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -208,13 +209,13 @@ internal fun BatchDownloadDialog(
                                 ) {
                                     AppText(
                                         text = candidate.label,
-                                        style = MaterialTheme.typography.bodyLarge,
+                                        style = COUITheme.textStyles.main,
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis
                                     )
                                     AppText(
                                         text = candidate.title,
-                                        style = MaterialTheme.typography.bodySmall,
+                                        style = COUITheme.textStyles.footnote1,
                                         color = AppContentColors.secondaryText(),
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis
@@ -224,14 +225,14 @@ internal fun BatchDownloadDialog(
                                     Box(
                                         modifier = Modifier
                                             .background(
-                                                color = MaterialTheme.colorScheme.surfaceContainerHighest,
+                                                color = AppSurfaceTokens.surfaceContainerHighest(),
                                                 shape = AppShapes.container(ContainerLevel.Pill)
                                             )
                                             .padding(horizontal = 8.dp, vertical = 4.dp)
                                     ) {
                                         AppText(
                                             text = "已存在",
-                                            style = MaterialTheme.typography.labelSmall,
+                                            style = COUITheme.textStyles.footnote2,
                                             color = AppContentColors.secondaryText()
                                         )
                                     }
@@ -255,7 +256,7 @@ internal fun BatchDownloadDialog(
                         )
                         AppText(
                             text = "同时缓存弹幕",
-                            style = MaterialTheme.typography.bodyLarge
+                            style = COUITheme.textStyles.main
                         )
                     }
 
@@ -263,7 +264,7 @@ internal fun BatchDownloadDialog(
 
                     AppText(
                         text = "统一画质",
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         fontWeight = FontWeight.SemiBold
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -282,7 +283,7 @@ internal fun BatchDownloadDialog(
                             )
                             AppText(
                                 text = qualityLabel,
-                                style = MaterialTheme.typography.bodyLarge
+                                style = COUITheme.textStyles.main
                             )
                         }
                     }

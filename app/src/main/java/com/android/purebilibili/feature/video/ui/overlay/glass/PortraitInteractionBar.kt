@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.video.ui.overlay.glass
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.feature.video.ui.overlay.*
 
@@ -20,7 +21,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import com.android.purebilibili.core.ui.components.AppIcon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -303,7 +303,7 @@ private fun InteractionButton(
             countValue = countValue,
             color = Color.White,
             fontWeight = FontWeight.Medium,
-            style = MaterialTheme.typography.labelSmall.copy(fontSize = layoutPolicy.labelFontSp.sp),
+            style = COUITheme.textStyles.footnote2.copy(fontSize = layoutPolicy.labelFontSp.sp),
         )
     }
 }

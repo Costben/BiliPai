@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import com.android.purebilibili.core.ui.LocalAppThemeConfig
 import androidx.compose.runtime.Composable
@@ -40,6 +39,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import com.android.purebilibili.core.ui.components.AppLazyVerticalGrid as LazyVerticalGrid
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 fun LiveMatchScreen(
@@ -272,7 +272,7 @@ internal fun LiveMatchCard(
     val playbackBvid = liveMatchPlaybackBvid(contest.playback)
     AppCard(modifier = modifier) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            AppText(title.ifBlank { "游戏赛事" }, style = MaterialTheme.typography.titleSmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            AppText(title.ifBlank { "游戏赛事" }, style = COUITheme.textStyles.headline2, maxLines = 2, overflow = TextOverflow.Ellipsis)
             val seasonId = contest.season?.id ?: 0L
             if (seasonId > 0L && onSeasonClick != null) {
                 AppTextButton(onClick = { onSeasonClick(seasonId) }) { AppText("赛季详情与排名") }
@@ -283,7 +283,7 @@ internal fun LiveMatchCard(
                     val knownScores = contest.homeScore?.takeIf { it >= 0 }?.let { home ->
                         contest.awayScore?.takeIf { it >= 0 }?.let { away -> "$home : $away" }
                     }
-                    AppText(if (contest.status in 2..3) knownScores ?: "— : —" else "VS", style = MaterialTheme.typography.titleLarge)
+                    AppText(if (contest.status in 2..3) knownScores ?: "— : —" else "VS", style = COUITheme.textStyles.title4)
                     AppText(
                         when (contest.status) { 1 -> "未开始"; 2 -> "进行中"; 3 -> "已结束"; else -> "待确认" },
                         color = if (contest.status == 2) AppSurfaceTokens.primary() else AppContentColors.secondaryText(),

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -19,6 +18,8 @@ import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppTextButton
 import com.android.purebilibili.feature.audio.viewmodel.ListenVideoCollectionViewModel
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 @Composable
 internal fun ListenVideoCollectionPlayer(
@@ -41,7 +42,7 @@ internal fun ListenVideoCollectionPlayer(
                         AppText("返回", color = androidx.compose.ui.graphics.Color.White)
                     }
                     Column(modifier = Modifier.align(Alignment.Center).padding(24.dp)) {
-                        AppText(title, style = MaterialTheme.typography.titleLarge, color = androidx.compose.ui.graphics.Color.White)
+                        AppText(title, style = COUITheme.textStyles.title4, color = androidx.compose.ui.graphics.Color.White)
                         AppText("正在读取播放列表", color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.72f))
                     }
                 }
@@ -54,7 +55,7 @@ internal fun ListenVideoCollectionPlayer(
                         AppText("返回", color = androidx.compose.ui.graphics.Color.White)
                     }
                     Column(modifier = Modifier.align(Alignment.Center).padding(24.dp)) {
-                        AppText(title, style = MaterialTheme.typography.titleLarge, color = androidx.compose.ui.graphics.Color.White)
+                        AppText(title, style = COUITheme.textStyles.title4, color = androidx.compose.ui.graphics.Color.White)
                         AppText(state.error.orEmpty(), color = androidx.compose.ui.graphics.Color.White)
                         AppTextButton(onClick = viewModel::retry) { AppText("重试", color = androidx.compose.ui.graphics.Color.White) }
                     }
@@ -63,7 +64,7 @@ internal fun ListenVideoCollectionPlayer(
         } else if (state.firstTrack != null && state.error != null) {
             AppSurface(
                 modifier = Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(16.dp),
-                color = MaterialTheme.colorScheme.surface,
+                color = AppSurfaceTokens.surface(),
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(8.dp)) {
                     AppText("已读取 ${state.loadedTrackCount} 首，后续曲目读取失败", modifier = Modifier.weight(1f))

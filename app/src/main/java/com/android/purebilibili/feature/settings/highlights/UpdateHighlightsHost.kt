@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -36,6 +35,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.IOException
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppContentColors
 
 @Suppress("DEPRECATION")
 private fun isExistingInstallation(context: Context): Boolean {
@@ -153,24 +154,24 @@ internal fun UpdateHighlightsHost(
                 } else if (snapshot != null) {
                     AppText("应用后将切换为 Standard · Cmf · SPEC_2026，保留颜色来源、种子色、对比度及高级覆盖色。")
                     CmfComparison(snapshot, glassEnabled)
-                    AppText("仅预览不会保存设置。", style = MaterialTheme.typography.bodySmall)
+                    AppText("仅预览不会保存设置。", style = COUITheme.textStyles.footnote1)
                 } else {
-                    AppText("v${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.bodySmall)
+                    AppText("v${BuildConfig.VERSION_NAME}", style = COUITheme.textStyles.footnote1)
                     if (features.isEmpty()) AppText("当前没有新的体验项目。")
                     features.forEach { feature ->
-                        AppText(feature.title, style = MaterialTheme.typography.titleMedium)
+                        AppText(feature.title, style = COUITheme.textStyles.headline1)
                         AppText(feature.description)
                         if (isUpdateHighlightAlreadyEnabled(feature, currentSettings)) {
-                            AppText("你已启用这项功能。", style = MaterialTheme.typography.bodySmall)
+                            AppText("你已启用这项功能。", style = COUITheme.textStyles.footnote1)
                         } else if (!canPreviewUpdateHighlight(feature, currentSettings)) {
                             AppText("切换到 MD3 主题并选择自定义颜色后，可从这里预览；当前设置会保持不变。",
-                                style = MaterialTheme.typography.bodySmall)
+                                style = COUITheme.textStyles.footnote1)
                         } else if (feature.action == UpdateHighlightAction.PREVIEW_CMF) {
                             AppDialogAction(onClick = { previewSnapshot = currentSettings; message = null }) { AppText("预览新配色") }
                         }
                     }
                 }
-                message?.let { AppText(it, color = MaterialTheme.colorScheme.error) }
+                message?.let { AppText(it, color = AppContentColors.error()) }
             }
         },
         confirmButton = {
@@ -221,7 +222,7 @@ private fun CmfComparison(settings: AppThemeSettings, glassEnabled: Boolean, mod
     }
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         palettes.forEach { (dark, current, candidate) ->
-            AppText(if (dark) "深色模式" else "浅色模式", style = MaterialTheme.typography.titleSmall)
+            AppText(if (dark) "深色模式" else "浅色模式", style = COUITheme.textStyles.headline2)
             listOf("当前" to current, "CMF" to candidate).forEach { (label, scheme) ->
                 Column(
                     Modifier.fillMaxWidth().background(scheme.surface).padding(12.dp),

@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components.glass
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.feature.video.ui.components.*
 
@@ -359,7 +360,7 @@ internal fun LandscapeDanmakuComposerEditor(
                         }
                     },
                 enabled = visible && !isSending,
-                textStyle = MaterialTheme.typography.bodyLarge.copy(color = Color(0xFF242424)),
+                textStyle = COUITheme.textStyles.main.copy(color = Color(0xFF242424)),
                 cursorBrush = inputCursor,
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
@@ -375,7 +376,7 @@ internal fun LandscapeDanmakuComposerEditor(
                             AppText(
                                 "发个友善的弹幕见证当下",
                                 color = Color(0xFFB9BABD),
-                                style = MaterialTheme.typography.bodyLarge,
+                                style = COUITheme.textStyles.main,
                                 maxLines = 1,
                             )
                         }
@@ -517,14 +518,14 @@ internal fun LandscapeDanmakuComposerEditor(
                                 onDraftChange(text, it)
                             },
                         )
-                        AppText("内嵌关注按钮", color = Color.White, style = MaterialTheme.typography.bodySmall)
+                        AppText("内嵌关注按钮", color = Color.White, style = COUITheme.textStyles.footnote1)
                     }
                 } else {
                     AppTextButton(
                         onClick = { showAdvancedOptions = true },
                         contentPadding = PaddingValues(horizontal = 0.dp),
                     ) {
-                        AppText("更多发送选项", color = secondaryText, style = MaterialTheme.typography.labelMedium)
+                        AppText("更多发送选项", color = secondaryText, style = COUITheme.textStyles.footnote1)
                     }
                 }
             }
@@ -560,7 +561,7 @@ private fun LandscapeDanmakuStyleRow(
         AppText(
             label,
             color = Color.White.copy(alpha = 0.62f),
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             modifier = Modifier.width(76.dp),
             maxLines = 1,
         )
@@ -595,6 +596,6 @@ private fun LandscapeDanmakuStyleOption(
         ) {
             symbol(tint)
         }
-        AppText(label, color = tint, style = MaterialTheme.typography.bodyMedium, maxLines = 1)
+        AppText(label, color = tint, style = COUITheme.textStyles.body1, maxLines = 1)
     }
 }

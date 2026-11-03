@@ -1,6 +1,10 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+import com.android.purebilibili.core.ui.AppShapes
+import com.android.purebilibili.core.ui.ContainerLevel
 
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -23,7 +27,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppText
@@ -127,7 +130,7 @@ fun RelatedVideosHeader() {
         ) {
             AppText(
                 text = "\u66f4\u591a\u63a8\u8350",
-                style = MaterialTheme.typography.titleMedium,
+                style = COUITheme.textStyles.headline1,
                 color = AppContentColors.primaryText()
             )
         }
@@ -415,7 +418,7 @@ fun RelatedVideoItem(
                         if (publishTime.isNotBlank()) {
                             AppText(
                                 text = publishTime,
-                                style = MaterialTheme.typography.labelMedium,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText(),
                                 maxLines = 1,
                                 softWrap = false,
@@ -433,7 +436,7 @@ fun RelatedVideoItem(
                                     )
                                     AppText(
                                         text = "已关注",
-                                        style = MaterialTheme.typography.labelSmall.copy(
+                                        style = COUITheme.textStyles.footnote2.copy(
                                             fontWeight = FontWeight.Medium,
                                         ),
                                         color = when (followVisualPolicy.relatedBadgeTone) {
@@ -463,13 +466,13 @@ fun RelatedVideoItem(
                                         modifier = Modifier
                                             .size(16.dp)
                                             .clip(CircleShape)
-                                            .background(MaterialTheme.colorScheme.surfaceVariant),
+                                            .background(AppSurfaceTokens.surfaceContainer()),
                                     )
                                 }
                             } else {
                                 null
                             },
-                            nameStyle = MaterialTheme.typography.labelMedium,
+                            nameStyle = COUITheme.textStyles.footnote1,
                             nameColor = AppContentColors.secondaryText(),
                             badgeTextColor = AppContentColors.secondaryText().copy(alpha = 0.85f),
                             badgeBorderColor = AppContentColors.secondaryText().copy(alpha = 0.35f),

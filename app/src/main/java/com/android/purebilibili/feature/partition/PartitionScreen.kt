@@ -1,6 +1,8 @@
 // 文件路径: feature/partition/PartitionScreen.kt
 package com.android.purebilibili.feature.partition
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -452,8 +454,8 @@ fun PartitionScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = if (headerBlurActive) Color.Transparent else MaterialTheme.colorScheme.background,
-                    scrolledContainerColor = if (headerBlurActive) Color.Transparent else MaterialTheme.colorScheme.background
+                    containerColor = if (headerBlurActive) Color.Transparent else AppSurfaceTokens.background(),
+                    scrolledContainerColor = if (headerBlurActive) Color.Transparent else AppSurfaceTokens.background()
                 ),
                 modifier = Modifier.then(
                     if (headerBlurActive) {
@@ -1355,7 +1357,7 @@ private fun PartitionSideRailItem(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Center,
-                    style = if (showIcon) MaterialTheme.typography.labelMedium else MaterialTheme.typography.labelLarge,
+                    style = if (showIcon) COUITheme.textStyles.footnote1 else COUITheme.textStyles.button,
                     fontWeight = if (selected || clampedSelectionProgress > 0.5f) {
                         FontWeight.SemiBold
                     } else {

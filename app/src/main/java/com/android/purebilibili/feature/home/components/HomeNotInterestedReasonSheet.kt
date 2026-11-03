@@ -1,5 +1,8 @@
 package com.android.purebilibili.feature.home.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppHorizontalDivider
 
@@ -14,7 +17,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -46,7 +48,7 @@ fun HomeNotInterestedReasonSheet(
         ) {
             AppText(
                 text = "选择不感兴趣的原因",
-                style = MaterialTheme.typography.titleLarge,
+                style = COUITheme.textStyles.title4,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.padding(horizontal = AppSpacingTokens.Large + AppSpacingTokens.ExtraSmall, vertical = AppSpacingTokens.Small)
             )
@@ -56,13 +58,13 @@ fun HomeNotInterestedReasonSheet(
                 } else {
                     "当前来源仅支持本地屏蔽，不会同步推荐偏好；关闭可取消。"
                 },
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText(),
                 modifier = Modifier.padding(horizontal = AppSpacingTokens.Large + AppSpacingTokens.ExtraSmall, vertical = AppSpacingTokens.ExtraSmall)
             )
             AppText(
                 text = video.title,
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 color = AppContentColors.secondaryText(),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
@@ -92,7 +94,7 @@ private fun ReasonGroup(
     if (reasons.isEmpty()) return
     AppText(
         text = title,
-        style = MaterialTheme.typography.labelLarge,
+        style = COUITheme.textStyles.button,
         color = AppContentColors.accent(),
         modifier = Modifier.padding(start = AppSpacingTokens.Large + AppSpacingTokens.ExtraSmall, top = AppSpacingTokens.Large, end = AppSpacingTokens.Large + AppSpacingTokens.ExtraSmall, bottom = AppSpacingTokens.ExtraSmall)
     )
@@ -107,20 +109,20 @@ private fun ReasonGroup(
         ) {
             AppText(
                 text = reason.name,
-                style = MaterialTheme.typography.bodyLarge,
+                style = COUITheme.textStyles.main,
                 modifier = Modifier.weight(1f)
             )
             Spacer(modifier = Modifier.padding(horizontal = AppSpacingTokens.ExtraSmall))
             AppText(
                 text = "选择",
-                style = MaterialTheme.typography.labelMedium,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText()
             )
         }
         if (index != reasons.lastIndex) {
             AppHorizontalDivider(
                 modifier = Modifier.padding(horizontal = AppSpacingTokens.Large + AppSpacingTokens.ExtraSmall),
-                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)
+                color = AppSurfaceTokens.outline().copy(alpha = 0.45f)
             )
         }
     }

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -30,6 +29,7 @@ import com.android.purebilibili.core.ui.components.AppIconButton
 import com.android.purebilibili.feature.live.LiveDanmakuItem
 import com.android.purebilibili.feature.video.danmaku.DanmakuTapAnchor
 import com.android.purebilibili.feature.video.ui.components.resolveDanmakuToolbarPosition
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 /** 直播消息工具条不提供单条点赞；举报继续使用直播消息携带的签名信息。 */
 @Composable
@@ -60,7 +60,7 @@ internal fun LiveDanmakuActionToolbar(
         AppPopupSurface(
             type = AppPopupSurfaceType.DIALOG,
             shape = RoundedCornerShape(12.dp),
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            containerColor = AppSurfaceTokens.surfaceContainerHigh(),
             tonalElevation = 3.dp,
             modifier = Modifier.widthIn(max = maxWidth),
         ) {

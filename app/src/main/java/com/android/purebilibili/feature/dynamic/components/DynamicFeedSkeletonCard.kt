@@ -1,5 +1,6 @@
 package com.android.purebilibili.feature.dynamic.components
 
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.compose.foundation.background
@@ -15,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import com.android.purebilibili.core.ui.skeleton.skeletonBackground
@@ -61,7 +61,7 @@ internal fun DynamicFeedSkeletonCard(
     val cardShape = AppShapes.container(ContainerLevel.Card)
     val textPlaceholderShape = AppShapes.container(ContainerLevel.Tag)
     val actionPlaceholderShape = AppShapes.container(ContainerLevel.Tag)
-    val surfaceVariant = MaterialTheme.colorScheme.surfaceVariant
+    val surfaceVariant = AppSurfaceTokens.surfaceContainer()
     val onSurfaceVariant = AppContentColors.secondaryText()
     // 传入固定色时用固定色（「骨架与真实卡片共用同一列表、靠 item 身份原地替换」的页面）；
     // 否则使用扫光，供独立骨架列表使用。

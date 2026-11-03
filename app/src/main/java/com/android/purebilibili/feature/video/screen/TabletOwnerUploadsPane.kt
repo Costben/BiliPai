@@ -1,13 +1,14 @@
 package com.android.purebilibili.feature.video.screen
 
 import com.android.purebilibili.core.ui.AppContentColors
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -53,7 +54,7 @@ internal fun TabletOwnerUploadsPane(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(AppShapes.container(ContainerLevel.Card))
-                        .background(MaterialTheme.colorScheme.surfaceContainerLow)
+                        .background(AppSurfaceTokens.surfaceContainer())
                         .clickable { onVideoClick(video.bvid, null) }
                         .padding(10.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -77,7 +78,7 @@ internal fun TabletOwnerUploadsPane(
                         Spacer(Modifier.height(4.dp))
                         AppText(
                             text = "${com.android.purebilibili.core.util.FormatUtils.formatStat(video.play.toLong())}播放 · ${video.comment}评论",
-                            style = MaterialTheme.typography.labelSmall,
+                            style = COUITheme.textStyles.footnote2,
                             color = AppContentColors.secondaryText()
                         )
                     }

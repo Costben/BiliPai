@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -194,7 +195,7 @@ fun CommentSearchSheet(
     CompositionLocalProvider(LocalFloatingChromeBackdrop provides sheetBackdrop) {
         AppModalBottomSheet(
             onDismissRequest = onDismiss,
-            containerColor = MaterialTheme.colorScheme.surface,
+            containerColor = AppSurfaceTokens.surface(),
             modifier = modifier,
         ) {
             Column(
@@ -217,7 +218,7 @@ fun CommentSearchSheet(
                     ) {
                         AppText(
                             text = "搜索评论",
-                            style = MaterialTheme.typography.titleMedium,
+                            style = COUITheme.textStyles.headline1,
                             fontWeight = FontWeight.Bold,
                             color = AppContentColors.primaryText(),
                         )
@@ -226,7 +227,7 @@ fun CommentSearchSheet(
                             AppText(
                                 text = if (fullSearchState.isComplete) "找到 ${filteredResults.size} 条"
                                     else "部分结果 · ${filteredResults.size} 条",
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText(),
                                 modifier = Modifier.weight(1f, fill = false),
                                 maxLines = 1,
@@ -236,7 +237,7 @@ fun CommentSearchSheet(
                             Spacer(modifier = Modifier.width(8.dp))
                             AppText(
                                 text = "加载中 ${fullSearchState.loadedCount} 条",
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText(),
                                 modifier = Modifier.weight(1f, fill = false),
                                 maxLines = 1,
@@ -247,7 +248,7 @@ fun CommentSearchSheet(
                             AppText(
                                 text = if (fullSearchState.isComplete) "已加载 ${fullSearchState.loadedCount} 条"
                                     else "部分结果 · ${fullSearchState.loadedCount} 条",
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText(),
                                 modifier = Modifier.weight(1f, fill = false),
                                 maxLines = 1,
@@ -258,7 +259,7 @@ fun CommentSearchSheet(
                             Spacer(modifier = Modifier.width(8.dp))
                             AppText(
                                 text = "加载失败，点此重试",
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.error(),
                                 modifier = Modifier
                                     .weight(1f, fill = false)
@@ -319,8 +320,8 @@ fun CommentSearchSheet(
                                 .layerBackdrop(filterBackdrop)
                                 .background(
                                     if (LocalAppUiStyle.current.usesMiuixFamilySkin) {
-                                        MaterialTheme.colorScheme.surfaceContainer
-                                    } else MaterialTheme.colorScheme.surfaceContainerLow
+                                        AppSurfaceTokens.surfaceContainer()
+                                    } else AppSurfaceTokens.surfaceContainer()
                                 ),
                         )
                     }
@@ -397,13 +398,13 @@ fun CommentSearchSheet(
                             Spacer(modifier = Modifier.height(10.dp))
                             AppText(
                                 text = "输入关键词搜索已加载的评论",
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText(),
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                             AppText(
                                 text = "支持搜索主评论、楼中楼及作者名称",
-                                style = MaterialTheme.typography.labelSmall,
+                                style = COUITheme.textStyles.footnote2,
                                 color = AppContentColors.secondaryText().copy(alpha = 0.45f),
                             )
                         }
@@ -418,13 +419,13 @@ fun CommentSearchSheet(
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             AppText(
                                 text = "未找到包含「$searchQuery」的评论",
-                                style = MaterialTheme.typography.bodyMedium,
+                                style = COUITheme.textStyles.body1,
                                 color = AppContentColors.secondaryText(),
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                             AppText(
                                 text = "可滚动评论区加载更多评论后再试",
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText().copy(alpha = 0.45f),
                             )
                         }
@@ -491,7 +492,7 @@ private fun CommentSearchSegmentedDock(
         modifier = modifier,
         height = 48.dp,
         indicatorHeight = 42.dp,
-        labelFontSize = MaterialTheme.typography.bodySmall.fontSize,
+        labelFontSize = COUITheme.textStyles.footnote1.fontSize,
         forceEqualWidth = true,
         allowNativeLabelOverflow = true,
         liquidGlassEffectsEnabled = liquidGlassEnabled,
@@ -563,7 +564,7 @@ private fun CommentSearchResultRow(
                         Spacer(modifier = Modifier.width(8.dp))
                         AppText(
                             text = highlightQuery(item.member.uname, searchQuery, primaryColor),
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             fontWeight = FontWeight.Medium,
                             color = com.android.purebilibili.core.ui.components.resolveUpNameColor(
                                 vipStatus = item.member.vip?.vipStatus ?: 0,
@@ -584,7 +585,7 @@ private fun CommentSearchResultRow(
                             ) {
                                 AppText(
                                     text = "UP主",
-                                    style = MaterialTheme.typography.labelSmall,
+                                    style = COUITheme.textStyles.footnote2,
                                     fontWeight = FontWeight.SemiBold,
                                     color = AppContentColors.accent(),
                                 )
@@ -595,13 +596,13 @@ private fun CommentSearchResultRow(
                             Box(
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(4.dp))
-                                    .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f))
+                                    .background(AppSurfaceTokens.secondaryContainer().copy(alpha = 0.4f))
                                     .padding(horizontal = 4.dp, vertical = 1.dp)
                             ) {
                                 AppText(
                                     text = "楼中楼回复",
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                                    style = COUITheme.textStyles.footnote2,
+                                    color = AppSurfaceTokens.onSecondaryContainer(),
                                 )
                             }
                         }
@@ -615,7 +616,7 @@ private fun CommentSearchResultRow(
                     if (timeStr.isNotBlank()) {
                         AppText(
                             text = timeStr,
-                            style = MaterialTheme.typography.labelSmall,
+                            style = COUITheme.textStyles.footnote2,
                             color = AppContentColors.secondaryText(),
                         )
                     }
@@ -627,7 +628,7 @@ private fun CommentSearchResultRow(
                 AppText(
                     modifier = Modifier.padding(start = if (pushAvatar) NAGRAM_CHAT_AVATAR_SIZE_DP.dp + 8.dp else 0.dp),
                     text = highlightQuery(item.content.message, searchQuery, primaryColor),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppContentColors.secondaryText(),
                     maxLines = 4,
                     overflow = TextOverflow.Ellipsis,
@@ -655,7 +656,7 @@ private fun CommentSearchResultRow(
                                 Spacer(modifier = Modifier.width(3.dp))
                                 AppText(
                                     text = FormatUtils.formatStat(item.like.toLong()),
-                                    style = MaterialTheme.typography.labelSmall,
+                                    style = COUITheme.textStyles.footnote2,
                                     color = AppContentColors.secondaryText(),
                                 )
                             }
@@ -673,7 +674,7 @@ private fun CommentSearchResultRow(
                                 Spacer(modifier = Modifier.width(3.dp))
                                 AppText(
                                     text = "${item.rcount}条回复",
-                                    style = MaterialTheme.typography.labelSmall,
+                                    style = COUITheme.textStyles.footnote2,
                                     color = AppContentColors.secondaryText(),
                                 )
                             }
@@ -684,7 +685,7 @@ private fun CommentSearchResultRow(
                         if (!location.isNullOrBlank()) {
                             AppText(
                                 text = location,
-                                style = MaterialTheme.typography.labelSmall,
+                                style = COUITheme.textStyles.footnote2,
                                 color = AppContentColors.secondaryText().copy(alpha = 0.45f),
                             )
                         }
@@ -693,7 +694,7 @@ private fun CommentSearchResultRow(
                     // 复制按钮
                     AppText(
                         text = "复制",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppContentColors.accent(),
                         modifier = Modifier
                             .clickable(onClick = onCopy)

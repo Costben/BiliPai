@@ -1,5 +1,6 @@
 package com.android.purebilibili.feature.dynamic.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.android.purebilibili.core.ui.AppIcons
 
 import androidx.compose.ui.platform.LocalContext
@@ -30,7 +31,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import android.app.DatePickerDialog
@@ -259,7 +259,7 @@ fun DynamicPublishComposer(
                         if (isEditing) "编辑动态" else "发布动态",
                         modifier = Modifier.weight(1f),
                         textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         maxLines = 1,
                         overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                     )
@@ -326,7 +326,7 @@ fun DynamicPublishComposer(
                             enabled = !submitting,
                             readOnly = submitting,
                             hint = "说点什么吧",
-                            textStyle = MaterialTheme.typography.bodyLarge,
+                            textStyle = COUITheme.textStyles.main,
                             hintColor = AppContentColors.secondaryText(),
                             cursorColor = AppContentColors.accent(),
                             onBeginEditing = {},

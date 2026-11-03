@@ -29,7 +29,6 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -58,6 +57,8 @@ import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppTextButton
 import com.android.purebilibili.core.util.FormatUtils
 import com.android.purebilibili.data.model.response.SpaceGuardMemberItem
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 /** UP主充电排行页（对齐 PiliPlus member_upower_rank）。 */
 @OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
@@ -93,12 +94,12 @@ fun SpaceUpowerRankScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    scrolledContainerColor = MaterialTheme.colorScheme.surface
+                    containerColor = AppSurfaceTokens.surface(),
+                    scrolledContainerColor = AppSurfaceTokens.surface()
                 ),
             )
         },
-        containerColor = MaterialTheme.colorScheme.surface
+        containerColor = AppSurfaceTokens.surface()
     ) { padding ->
         Column(
             modifier = Modifier
@@ -184,7 +185,7 @@ private fun SpaceUpowerRankRow(
         AppText(
             text = rank.toString(),
             modifier = Modifier.width(32.dp),
-            style = MaterialTheme.typography.titleMedium.copy(
+            style = COUITheme.textStyles.headline1.copy(
                 fontStyle = FontStyle.Italic,
                 fontWeight = FontWeight.Bold,
             ),
@@ -202,7 +203,7 @@ private fun SpaceUpowerRankRow(
         Spacer(modifier = Modifier.width(12.dp))
         AppText(
             text = nickname,
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = AppContentColors.primaryText(),
             modifier = Modifier.weight(1f),
         )
@@ -210,7 +211,7 @@ private fun SpaceUpowerRankRow(
         if (days > 0) {
             AppText(
                 text = "${days}天",
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText(),
             )
         }
@@ -265,12 +266,12 @@ fun SpaceMemberGuardScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    scrolledContainerColor = MaterialTheme.colorScheme.surface
+                    containerColor = AppSurfaceTokens.surface(),
+                    scrolledContainerColor = AppSurfaceTokens.surface()
                 ),
             )
         },
-        containerColor = MaterialTheme.colorScheme.surface
+        containerColor = AppSurfaceTokens.surface()
     ) { padding ->
         when {
             state.isLoading -> {
@@ -373,7 +374,7 @@ private fun SpaceGuardPodium(
                         Box(contentAlignment = Alignment.Center) {
                             AppText(
                                 text = (tops.indexOf(member) + 1).toString(),
-                                style = MaterialTheme.typography.labelSmall,
+                                style = COUITheme.textStyles.footnote2,
                                 color = AppContentColors.onAccent(),
                             )
                         }
@@ -381,7 +382,7 @@ private fun SpaceGuardPodium(
                 }
                 AppText(
                     text = member.username,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.primaryText(),
                     modifier = Modifier.padding(top = 4.dp),
                 )
@@ -408,13 +409,13 @@ private fun SpaceGuardMemberRow(
         Spacer(modifier = Modifier.width(12.dp))
         AppText(
             text = username,
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = AppContentColors.primaryText(),
             modifier = Modifier.weight(1f),
         )
         AppText(
             text = resolveSpaceGuardLevelLabel(guardLevel),
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             color = AppContentColors.accent(),
         )
     }
@@ -433,8 +434,8 @@ private fun SpaceSupporterAvatar(url: String, size: androidx.compose.ui.unit.Dp)
         modifier = Modifier
             .size(size)
             .clip(CircleShape)
-            .border(1.dp, MaterialTheme.colorScheme.surfaceVariant, CircleShape)
-            .background(MaterialTheme.colorScheme.surfaceVariant),
+            .border(1.dp, AppSurfaceTokens.surfaceContainer(), CircleShape)
+            .background(AppSurfaceTokens.surfaceContainer()),
     )
 }
 
@@ -452,7 +453,7 @@ private fun SpaceSupporterErrorState(
     ) {
         AppText(
             text = message,
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = AppContentColors.secondaryText(),
         )
         AppTextButton(onClick = onRetry) {
@@ -469,7 +470,7 @@ private fun SpaceSupporterEmptyState(text: String) {
     ) {
         AppText(
             text = text,
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = AppContentColors.secondaryText(),
         )
     }

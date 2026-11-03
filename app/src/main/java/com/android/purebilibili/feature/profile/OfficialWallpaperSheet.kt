@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.profile
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.AppContentColors
 
 import coil3.request.crossfade
@@ -88,7 +90,7 @@ fun OfficialWallpaperSheet(
     AppModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = AppSurfaceTokens.background(),
         dragHandle = null // 自定义头部
     ) {
         Column(
@@ -113,7 +115,7 @@ fun OfficialWallpaperSheet(
 
                     AppText(
                         text = "开屏壁纸设置",
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         fontWeight = FontWeight.Bold
                     )
 
@@ -135,12 +137,12 @@ fun OfficialWallpaperSheet(
             ) {
                 AppText(
                     "共 ${officialWallpapers.size} 张 · 历史来源",
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     modifier = Modifier.weight(1f),
                 )
                 com.android.purebilibili.data.repository.wallpaperArchiveSources.forEach { (name, url) ->
                     AppTextButton(onClick = { archiveUriHandler.openUri(url) }) {
-                        AppText(if (name == "bili_app_splash") "开屏归档" else "插画归档", style = MaterialTheme.typography.labelSmall)
+                        AppText(if (name == "bili_app_splash") "开屏归档" else "插画归档", style = COUITheme.textStyles.footnote2)
                     }
                 }
             }
@@ -149,7 +151,7 @@ fun OfficialWallpaperSheet(
                 AppText(
                     text = error.orEmpty(),
                     color = AppContentColors.error(),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                 )
             }
@@ -235,7 +237,7 @@ fun OfficialWallpaperSheet(
 
                                 AppText(
                                     text = item.title.ifEmpty { "未命名" },
-                                    style = MaterialTheme.typography.bodySmall,
+                                    style = COUITheme.textStyles.footnote1,
                                     maxLines = 1,
                                     color = if (isSelected) AppContentColors.accent() else AppContentColors.primaryText()
                                 )
@@ -248,7 +250,7 @@ fun OfficialWallpaperSheet(
             // 3. 底部保存栏
             AppSurface(
                 shadowElevation = 8.dp,
-                color = MaterialTheme.colorScheme.surface,
+                color = AppSurfaceTokens.surface(),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
@@ -270,7 +272,7 @@ fun OfficialWallpaperSheet(
                     ) {
                         AppText(
                             text = "保存到系统相册",
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = COUITheme.textStyles.body1,
                             color = AppContentColors.primaryText()
                         )
                         AppSwitch(
@@ -352,7 +354,7 @@ fun OfficialWallpaperSheet(
                                 .height(50.dp),
                             shape = AppShapes.container(ContainerLevel.Floating),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                                containerColor = AppSurfaceTokens.surfaceContainerHighest(),
                                 contentColor = AppContentColors.primaryText()
                             )
                         ) {
@@ -362,7 +364,7 @@ fun OfficialWallpaperSheet(
                                     strokeWidth = 2.dp
                                 )
                             } else {
-                                AppText("设为背景", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+                                AppText("设为背景", style = COUITheme.textStyles.button, fontWeight = FontWeight.Bold)
                             }
                         }
 
@@ -389,7 +391,7 @@ fun OfficialWallpaperSheet(
                                     strokeWidth = 2.dp
                                 )
                             } else {
-                                AppText("设为开屏", style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+                                AppText("设为开屏", style = COUITheme.textStyles.button, fontWeight = FontWeight.Bold)
                             }
                         }
                     }
@@ -398,7 +400,7 @@ fun OfficialWallpaperSheet(
                         AppText(
                             text = (saveState as WallpaperSaveState.Error).message,
                             color = AppContentColors.error(),
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             modifier = Modifier.padding(top = 8.dp).align(Alignment.CenterHorizontally)
                         )
                     }
@@ -406,7 +408,7 @@ fun OfficialWallpaperSheet(
                          AppText(
                             text = (splashSaveState as WallpaperSaveState.Error).message,
                             color = AppContentColors.error(),
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             modifier = Modifier.padding(top = 8.dp).align(Alignment.CenterHorizontally)
                         )
                     }

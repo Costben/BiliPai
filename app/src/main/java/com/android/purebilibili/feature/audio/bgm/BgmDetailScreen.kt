@@ -1,6 +1,9 @@
 package com.android.purebilibili.feature.audio.bgm
 
 import com.android.purebilibili.core.ui.AppSurfaceTokens
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppShapes
+import com.android.purebilibili.core.ui.ContainerLevel
 
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -20,7 +23,6 @@ import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import com.android.purebilibili.core.ui.common.AppSelectionContainer as SelectionContainer
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -262,7 +264,7 @@ private fun BgmDetailContent(
                                             AppTextButton(onClick = onCompose, modifier = Modifier.heightIn(min = 48.dp)) { AppText("写评论") }
                                         }
                                         !comments.isRepliesEnd -> AppTextButton(onClick = onLoadMore) { AppText("加载更多") }
-                                        else -> AppText("没有更多评论了", style = MaterialTheme.typography.bodySmall)
+                                        else -> AppText("没有更多评论了", style = COUITheme.textStyles.footnote1)
                                     }
                                 }
                             }
@@ -296,10 +298,10 @@ private fun BgmInfoCard(
         (context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(ClipData.newPlainText("音乐", text))
         Toast.makeText(context, "已复制", Toast.LENGTH_SHORT).show()
     }
-    AppSurface(modifier = modifier, shape = RoundedCornerShape(20.dp), color = MaterialTheme.colorScheme.surfaceContainer) {
+    AppSurface(modifier = modifier, shape = RoundedCornerShape(20.dp), color = AppSurfaceTokens.surfaceContainer()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                AppSurface(onClick = { cover = true }, modifier = Modifier.size(80.dp), shape = RoundedCornerShape(12.dp)) {
+                AppSurface(onClick = { cover = true }, modifier = Modifier.size(80.dp), shape = AppShapes.container(ContainerLevel.MediaCover)) {
                     AsyncImage(FormatUtils.fixImageUrl(detail.mvCover), "音乐封面", contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
                 }
                 Column(Modifier.weight(1f)) {
@@ -312,15 +314,15 @@ private fun BgmInfoCard(
                         }
                         try { context.startActivity(intent) } catch (_: android.content.ActivityNotFoundException) { copy(detail.musicTitle) }
                     }, contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp)) {
-                        AppText(detail.musicTitle.ifBlank { "未知音乐" }, style = MaterialTheme.typography.titleMedium)
+                        AppText(detail.musicTitle.ifBlank { "未知音乐" }, style = COUITheme.textStyles.headline1)
                     }
                     detail.artistsList.forEach { artist ->
                         AppTextButton(onClick = { if (artist.mid > 0) onUserClick(artist.mid) else copy(artist.name) }, contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp)) {
                             if (artist.face.isNotBlank()) AsyncImage(FormatUtils.fixImageUrl(artist.face), null, modifier = Modifier.size(24.dp))
-                            AppText("${artist.identity}：${artist.name}", style = MaterialTheme.typography.bodySmall)
+                            AppText("${artist.identity}：${artist.name}", style = COUITheme.textStyles.footnote1)
                         }
                     }
-                    if (detail.musicPublish.isNotBlank()) AppText("发行日期：${detail.musicPublish}", style = MaterialTheme.typography.bodySmall, color = AppSurfaceTokens.onSurfaceVariantSummary())
+                    if (detail.musicPublish.isNotBlank()) AppText("发行日期：${detail.musicPublish}", style = COUITheme.textStyles.footnote1, color = AppSurfaceTokens.onSurfaceVariantSummary())
                 }
             }
             SelectionContainer {
@@ -328,21 +330,21 @@ private fun BgmInfoCard(
                     detail.originArtist.ifBlank { detail.originArtistList }.takeIf { it.isNotBlank() }?.let { "原唱：$it" },
                     detail.album.takeIf { it.isNotBlank() }?.let { "专辑：$it" },
                     detail.musicSource.takeIf { it.isNotBlank() }?.let { "出处：$it" },
-                ).joinToString("\n"), style = MaterialTheme.typography.bodyMedium)
+                ).joinToString("\n"), style = COUITheme.textStyles.body1)
             }
             val achievements = (detail.achievement + listOf(detail.musicRank, detail.recreationRank)).filter { it.isNotBlank() }.distinct()
-            if (achievements.isNotEmpty()) AppText(achievements.joinToString(" · "), style = MaterialTheme.typography.labelMedium, color = AppContentColors.accent())
+            if (achievements.isNotEmpty()) AppText(achievements.joinToString(" · "), style = COUITheme.textStyles.footnote1, color = AppContentColors.accent())
             Row {
                 AppTextButton(onClick = { copy(detail.musicTitle) }, modifier = Modifier.heightIn(min = 48.dp)) { AppText("复制歌名") }
                 if (detail.mvCid > 0 && (detail.mvBvid.isNotBlank() || detail.mvAid > 0)) AppTextButton(onClick = { onVideoClick(detail.mvBvid.ifBlank { "av${detail.mvAid}" }, detail.mvCid, detail.mvCover) }, modifier = Modifier.heightIn(min = 48.dp)) { AppText("看 MV") }
             }
             AppHorizontalDivider()
-            AppText("热歌榜排名", style = MaterialTheme.typography.labelMedium)
+            AppText("热歌榜排名", style = COUITheme.textStyles.footnote1)
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                Column(Modifier.weight(1f)) { AppText(FormatUtils.formatStat(detail.hotSongHeat?.lastHeat ?: detail.musicHot)); AppText("热度", style = MaterialTheme.typography.bodySmall) }
-                Column(Modifier.weight(1f)) { AppText(FormatUtils.formatStat(detail.listenPv)); AppText("总播放量", style = MaterialTheme.typography.bodySmall) }
+                Column(Modifier.weight(1f)) { AppText(FormatUtils.formatStat(detail.hotSongHeat?.lastHeat ?: detail.musicHot)); AppText("热度", style = COUITheme.textStyles.footnote1) }
+                Column(Modifier.weight(1f)) { AppText(FormatUtils.formatStat(detail.listenPv)); AppText("总播放量", style = COUITheme.textStyles.footnote1) }
                 AppTextButton(onClick = onVideosClick, modifier = Modifier.weight(1f).heightIn(min = 48.dp), contentPadding = PaddingValues(0.dp)) {
-                    Column { AppText(FormatUtils.formatStat(detail.musicRelation.toLong())); AppText("使用稿件量 ›", style = MaterialTheme.typography.bodySmall) }
+                    Column { AppText(FormatUtils.formatStat(detail.musicRelation.toLong())); AppText("使用稿件量 ›", style = COUITheme.textStyles.footnote1) }
                 }
             }
         }
@@ -356,7 +358,7 @@ private fun BgmInfoCard(
 @Composable
 private fun BgmVideos(detail: BgmDetailData, videos: List<BgmRecommendVideo>, onVideoClick: (String, Long, String) -> Unit, modifier: Modifier = Modifier) {
     Column(modifier) {
-        AppText("${detail.musicTitle} · 共${videos.size}条视频", style = MaterialTheme.typography.titleSmall, modifier = Modifier.padding(16.dp))
+        AppText("${detail.musicTitle} · 共${videos.size}条视频", style = COUITheme.textStyles.headline2, modifier = Modifier.padding(16.dp))
         if (videos.isEmpty()) AppText("暂无使用这首音乐的视频", modifier = Modifier.padding(24.dp))
         else BoxWithConstraints(modifier = Modifier.weight(1f)) {
             val density = androidx.compose.ui.platform.LocalDensity.current
@@ -382,7 +384,7 @@ private fun BgmVideos(detail: BgmDetailData, videos: List<BgmRecommendVideo>, on
                             index = index, animationEnabled = false, glassEnabled = false, blurEnabled = false,
                             onClick = { _, _ -> onVideoClick(video.bvid, video.cid, video.cover) })
                         val labels = (video.labelList.map { it.name } + video.label).filter { it.isNotBlank() }
-                        if (labels.isNotEmpty()) AppText(labels.joinToString(" · "), style = MaterialTheme.typography.labelSmall)
+                        if (labels.isNotEmpty()) AppText(labels.joinToString(" · "), style = COUITheme.textStyles.footnote2)
                     }
                 }
                 if (!alignRows) {

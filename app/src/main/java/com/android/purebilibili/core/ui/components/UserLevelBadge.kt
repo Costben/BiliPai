@@ -1,12 +1,13 @@
 package com.android.purebilibili.core.ui.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.android.purebilibili.R
 import com.android.purebilibili.core.ui.AppShapes
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.ContainerLevel
 
 internal enum class UserLevelBadgeAsset {
@@ -96,15 +98,14 @@ private fun LegacyUserLevelBadge(
     level: Int,
     modifier: Modifier = Modifier
 ) {
-    val colorScheme = MaterialTheme.colorScheme
     Box(
         modifier = modifier
             .clip(AppShapes.container(ContainerLevel.Tag))
             .background(
                 brush = Brush.horizontalGradient(
                     colors = listOf(
-                        colorScheme.secondaryContainer,
-                        colorScheme.secondaryContainer
+                        AppSurfaceTokens.secondaryContainer(),
+                        AppSurfaceTokens.secondaryContainer()
                     )
                 )
             )
@@ -112,9 +113,9 @@ private fun LegacyUserLevelBadge(
     ) {
         AppText(
             text = "LV$level",
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             fontWeight = FontWeight.Bold,
-            color = colorScheme.onSecondaryContainer
+            color = AppSurfaceTokens.onSecondaryContainer()
         )
     }
 }

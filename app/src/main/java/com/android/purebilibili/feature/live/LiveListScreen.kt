@@ -29,7 +29,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import android.widget.Toast
 import com.android.purebilibili.core.ui.components.AppBadge
 import com.android.purebilibili.core.ui.components.AppIcon
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppOutlinedButton
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppText
@@ -84,6 +83,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.async
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 data class LiveRoomItem(
     val roomId: Long,
@@ -952,7 +953,7 @@ private fun LiveListHeader(
                             AppText(
                                 text = "搜索直播间 / 主播",
                                 color = palette.secondaryText,
-                                style = MaterialTheme.typography.bodyMedium,
+                                style = COUITheme.textStyles.body1,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 modifier = Modifier.weight(1f),
@@ -1006,7 +1007,7 @@ private fun LiveFollowHeader(
             },
             modifier = Modifier.weight(1f),
             color = palette.primaryText,
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
         )
         Row(
             modifier = Modifier.clickable(onClick = onActionClick),
@@ -1015,13 +1016,13 @@ private fun LiveFollowHeader(
             AppText(
                 text = "查看更多",
                 color = palette.secondaryText,
-                style = MaterialTheme.typography.labelLarge,
+                style = COUITheme.textStyles.button,
             )
             Spacer(Modifier.width(AppSpacingTokens.ExtraSmall))
             AppText(
                 text = ">",
                 color = palette.secondaryText,
-                style = MaterialTheme.typography.titleMedium,
+                style = COUITheme.textStyles.headline1,
                 fontWeight = FontWeight.SemiBold
             )
         }
@@ -1091,7 +1092,7 @@ private fun LiveFollowAvatarRow(
                 AppText(
                     text = item.uname,
                     color = palette.primaryText,
-                    style = MaterialTheme.typography.labelSmall.copy(fontSize = 12.sp),
+                    style = COUITheme.textStyles.footnote2.copy(fontSize = 12.sp),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Center,
@@ -1290,7 +1291,7 @@ internal fun LiveHomeLoadMoreFooter(
             // 空闲时保留单行占位，加载状态切换不改变列表底部高度。
             AppText(
                 text = if (isLoadingMore) "加载更多…" else " ",
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText(),
             )
         }
@@ -1333,7 +1334,7 @@ private fun LiveListLoadingState() {
         AppText(
             text = "直播内容加载中…",
             color = palette.secondaryText,
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
         )
     }
 }
@@ -1352,7 +1353,7 @@ private fun LiveListErrorState(
         AppText(
             text = message,
             color = palette.primaryText,
-            style = MaterialTheme.typography.bodyLarge,
+            style = COUITheme.textStyles.main,
         )
         Spacer(Modifier.height(AppSpacingTokens.Medium))
         AppOutlinedButton(onClick = onRetry) {
@@ -1391,7 +1392,7 @@ private fun EmptyState(
         AppText(
             text = message,
             color = palette.secondaryText,
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             textAlign = TextAlign.Center
         )
     }

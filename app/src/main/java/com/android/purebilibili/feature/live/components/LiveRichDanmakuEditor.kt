@@ -19,7 +19,6 @@ import android.view.inputmethod.InputConnectionWrapper
 import android.view.inputmethod.TextAttribute
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -39,6 +38,7 @@ import com.android.purebilibili.feature.live.liveDraftEmoteResources
 import com.android.purebilibili.feature.live.liveDraftPreviewSegments
 import com.android.purebilibili.feature.live.projectLiveRichDraftEdit
 import kotlin.math.roundToInt
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** 原始草稿由页面持有；原生可编辑跨度仅负责回复前缀与表情的行内呈现。 */
 @Composable
@@ -59,7 +59,7 @@ internal fun LiveRichDanmakuEditor(
     val accent = AppContentColors.accent()
     val replyColor = accent.toArgb()
     val replyBackground = accent.copy(alpha = 0.12f).toArgb()
-    val fontSize = MaterialTheme.typography.bodyLarge.fontSize.value
+    val fontSize = COUITheme.textStyles.main.fontSize.value
     AndroidView(
         modifier = modifier,
         factory = { LiveRichEditText(it) },

@@ -157,6 +157,7 @@ import com.android.purebilibili.feature.home.resolveHomeCardWallpaperSurfaceMode
 import com.android.purebilibili.feature.home.resolveHomeWallpaperBackdropAppearance
 import com.android.purebilibili.feature.home.resolveHomeWallpaperUri
 import com.android.purebilibili.core.ui.AppShapes
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import io.github.suqi8.coui.kmp.blur.Backdrop as MiuixBackdrop
 import io.github.suqi8.coui.kmp.blur.blur
 import io.github.suqi8.coui.kmp.blur.drawBackdrop
@@ -638,7 +639,7 @@ private fun SubscriptionFeedGrid(
                             } else {
                                 "${refreshErrors.size} 个订阅源刷新失败：${refreshErrors.first()}"
                             },
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = MaterialTheme.colorScheme.onErrorContainer,
                             modifier = Modifier.weight(1f),
                         )
@@ -753,7 +754,7 @@ private fun SubscriptionFeedCard(
             ) {
                 AppText(
                     text = item.title.ifBlank { item.link },
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = COUITheme.textStyles.main,
                     fontWeight = if (isRead) FontWeight.Normal else FontWeight.Medium,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
@@ -762,7 +763,7 @@ private fun SubscriptionFeedCard(
                     text = listOf(item.sourceTitle, item.author, formatFeedAge(item.publishedEpochSec))
                         .filter { it.isNotBlank() }
                         .joinToString(" · "),
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = AppContentColors.secondaryText(),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -938,7 +939,7 @@ private fun SubscriptionArticleScreen(
     val wallpaperUri = customArticleWallpaperUri.ifBlank {
         resolveHomeWallpaperUri(configuredWallpaperUri, splashWallpaperUri)
     }
-    val articleBackground = MaterialTheme.colorScheme.surface
+    val articleBackground = AppSurfaceTokens.surface()
     val dataSaverActive = remember(context) { SettingsManager.isDataSaverActive(context) }
     val wallpaperAppearance = remember(wallpaperEnabled, wallpaperUri, wallpaperMode, articleBackground, dataSaverActive) {
         resolveHomeWallpaperBackdropAppearance(
@@ -1070,7 +1071,7 @@ private fun SubscriptionArticleScreen(
                     }
                     if (glassReaderChrome) {
                         AppIconButton(onClick = cycleFontScale) {
-                            AppText("Aa", style = MaterialTheme.typography.titleMedium)
+                            AppText("Aa", style = COUITheme.textStyles.headline1)
                         }
                     } else {
                         AppTextButton(onClick = cycleFontScale, modifier = Modifier.heightIn(min = 48.dp)) {
@@ -1214,7 +1215,7 @@ private fun SubscriptionArticleScreen(
                     clipInOverlayDuringTransition = OverlayClip(AppShapes.container(ContainerLevel.Card)),
                 )
         },
-        color = MaterialTheme.colorScheme.surface,
+        color = AppSurfaceTokens.surface(),
         tonalElevation = 0.dp,
     ) {
         Box(Modifier.fillMaxSize()) {
@@ -1272,9 +1273,9 @@ private fun SubscriptionArticleScreen(
                                 ) {
                                     AppText(
                                         item.title,
-                                        style = if (glassReaderChrome) MaterialTheme.typography.headlineSmall.copy(
-                                            lineHeight = MaterialTheme.typography.headlineSmall.lineHeight * 1.15f,
-                                        ) else MaterialTheme.typography.headlineSmall,
+                                        style = if (glassReaderChrome) COUITheme.textStyles.title4.copy(
+                                            lineHeight = COUITheme.textStyles.title4.lineHeight * 1.15f,
+                                        ) else COUITheme.textStyles.title4,
                                         fontWeight = FontWeight.Bold,
                                     )
                                     if (!pureReading) {
@@ -1290,7 +1291,7 @@ private fun SubscriptionArticleScreen(
                                         if (bodyLoadFailed) {
                                             AppText(
                                                 "暂时无法补全正文，已保留现有内容。可在右上角菜单重新读取或打开原文。",
-                                                style = MaterialTheme.typography.bodySmall,
+                                                style = COUITheme.textStyles.footnote1,
                                                 color = AppContentColors.secondaryText(),
                                             )
                                         }
@@ -1306,7 +1307,7 @@ private fun SubscriptionArticleScreen(
                                             Modifier
                                                 .clip(MaterialTheme.shapes.medium)
                                                 .background(
-                                                    if (excerptSelected) MaterialTheme.colorScheme.primaryContainer
+                                                    if (excerptSelected) AppSurfaceTokens.primaryContainer()
                                                     else Color.Transparent
                                                 )
                                                 .clickable {
@@ -1430,9 +1431,9 @@ internal fun FeedReadingBlock(
                 fontScale = textScale,
                 onLinkClick = onOpenUrl,
                 style = when (block.level) {
-                    1 -> MaterialTheme.typography.headlineSmall
-                    2 -> MaterialTheme.typography.titleLarge
-                    else -> MaterialTheme.typography.titleMedium
+                    1 -> COUITheme.textStyles.title4
+                    2 -> COUITheme.textStyles.title4
+                    else -> COUITheme.textStyles.headline1
                 },
             )
         }
@@ -1452,10 +1453,10 @@ internal fun FeedReadingBlock(
             AppText(
                 block.text,
                 modifier = Modifier.fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surfaceVariant, MaterialTheme.shapes.medium)
+                    .background(AppSurfaceTokens.surfaceContainer(), MaterialTheme.shapes.medium)
                     .horizontalScroll(rememberScrollState())
                     .padding(12.dp),
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
             )
         }
         is FeedBlock.Image -> FeedArticleImage(
@@ -1496,7 +1497,7 @@ internal fun FeedReadingBlock(
 private fun FeedInlineText(
     inlines: List<FeedInline>,
     modifier: Modifier = Modifier,
-    style: androidx.compose.ui.text.TextStyle = MaterialTheme.typography.bodyLarge,
+    style: androidx.compose.ui.text.TextStyle = COUITheme.textStyles.main,
     italic: Boolean = false,
     fontScale: Float = 1f,
     onLinkClick: ((String) -> Unit)? = null,
@@ -1547,7 +1548,7 @@ private fun FeedInlineText(
 
 @Composable
 private fun FeedBodySkeleton(modifier: Modifier = Modifier) {
-    val barColor = MaterialTheme.colorScheme.surfaceVariant
+    val barColor = AppSurfaceTokens.surfaceContainer()
     Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         listOf(0.92f, 1f, 0.78f, 1f, 0.64f).forEach { fraction ->
             Box(
@@ -1577,7 +1578,7 @@ private fun FeedArticleImage(
             modifier = modifier
                 .fillMaxWidth()
                 .height(120.dp)
-                .background(MaterialTheme.colorScheme.surfaceVariant, MaterialTheme.shapes.medium),
+                .background(AppSurfaceTokens.surfaceContainer(), MaterialTheme.shapes.medium),
             contentAlignment = Alignment.Center,
         ) {
             AppText(alt.ifBlank { "图片无法显示" })

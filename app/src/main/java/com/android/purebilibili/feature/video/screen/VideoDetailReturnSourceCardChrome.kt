@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.video.screen
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -19,7 +20,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -762,7 +762,7 @@ private fun BoxScope.LandingCoverChrome(
         AppText(
             text = presentation.premiumBadgeText,
             color = MediaContrastPalette.Foreground,
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .align(Alignment.TopEnd)
@@ -865,7 +865,7 @@ private fun BoxScope.LandingCoverChrome(
                 AppText(
                     text = model.durationText,
                     color = MediaContrastPalette.Foreground,
-                    style = MaterialTheme.typography.labelSmall.merge(overlayStyle),
+                    style = COUITheme.textStyles.footnote2.merge(overlayStyle),
                     fontWeight = FontWeight.Medium,
                     modifier = Modifier.align(Alignment.BottomEnd),
                     maxLines = 1,
@@ -876,7 +876,7 @@ private fun BoxScope.LandingCoverChrome(
         AppText(
             text = model.durationText,
             color = MediaContrastPalette.Foreground,
-            style = MaterialTheme.typography.labelSmall.merge(overlayStyle),
+            style = COUITheme.textStyles.footnote2.merge(overlayStyle),
             fontWeight = FontWeight.Medium,
             maxLines = 1,
             modifier = Modifier
@@ -932,7 +932,7 @@ private fun LandingCoverStat(
         AppText(
             text = text,
             color = MediaContrastPalette.Foreground.copy(alpha = 0.94f),
-            style = MaterialTheme.typography.labelSmall.merge(textStyle),
+            style = COUITheme.textStyles.footnote2.merge(textStyle),
             fontWeight = FontWeight.Medium,
             maxLines = 1,
             softWrap = false,

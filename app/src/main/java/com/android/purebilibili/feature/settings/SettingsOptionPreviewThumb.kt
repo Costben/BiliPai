@@ -52,8 +52,8 @@ internal fun SettingsOptionPreviewThumb(
     val accent = AppContentColors.accent()
     val muted = AppContentColors.secondaryText().copy(alpha = 0.42f)
     val foreground = AppContentColors.primaryText()
-    val primaryContainer = MaterialTheme.colorScheme.primaryContainer
-    val onPrimaryContainer = MaterialTheme.colorScheme.onPrimaryContainer
+    val primaryContainer = AppSurfaceTokens.primaryContainer()
+    val onPrimaryContainer = AppSurfaceTokens.onPrimaryContainer()
     val tertiary = MaterialTheme.colorScheme.tertiary
     val shape = AppShapes.container(ContainerLevel.Chip)
     Box(

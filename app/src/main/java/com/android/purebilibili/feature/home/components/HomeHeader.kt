@@ -1,6 +1,8 @@
 // 文件路径: feature/home/components/HomeHeader.kt
 package com.android.purebilibili.feature.home.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.appElasticPress
@@ -1674,9 +1676,9 @@ fun HomeHeader(
         allowHazeLiquidGlassFallback = allowHazeLiquidGlassFallback
     )
     val surfaceColor = AppSurfaceTokens.cardContainer()
-    val surfaceContainerColor = MaterialTheme.colorScheme.surfaceContainer
-    val surfaceContainerHighColor = MaterialTheme.colorScheme.surfaceContainerHigh
-    val outlineVariantColor = MaterialTheme.colorScheme.outlineVariant
+    val surfaceContainerColor = AppSurfaceTokens.surfaceContainer()
+    val surfaceContainerHighColor = AppSurfaceTokens.surfaceContainerHigh()
+    val outlineVariantColor = AppSurfaceTokens.outline()
     val tabShape = RoundedCornerShape(if (isTabFloating) AppSpacingTokens.ExtraLarge - AppSpacingTokens.Micro else AppSpacingTokens.None)
     val tabSurfaceColor = surfaceColor
     val isLightMode = surfaceColor.luminance() > 0.5f
@@ -2114,13 +2116,13 @@ fun HomeHeader(
     val isProgressiveBlurActive = isProgressiveBlurEligible && miuixBackdrop != null
     val isProgressiveFadeActive = progressiveTopFadeEnabled && !isHeaderBlurEnabled
     val topChromeWallpaperPalette = if (!hasIllustratedHeader) {
-        currentTopChromeWallpaperPalette(MaterialTheme.colorScheme.background)
+        currentTopChromeWallpaperPalette(AppSurfaceTokens.background())
     } else null
     val wallpaperTopReadability = topChromeWallpaperPalette?.readability?.top
     val wallpaperProtectionActive = isProgressiveBlurActive && wallpaperTopReadability != null
     // 仅调整渐进模糊/纯色渐隐的保护层，关闭特效后的原生容器保持原有材质。
     val topFadeSurfaceColor = resolveTopChromeFadeColor(
-        surfaceColor = MaterialTheme.colorScheme.background,
+        surfaceColor = AppSurfaceTokens.background(),
         foregroundColor = topForegroundColor,
         blurred = isProgressiveBlurActive,
         backgroundColor = topChromeWallpaperPalette?.topColor,
@@ -2350,7 +2352,7 @@ fun HomeHeader(
                         HomeTopAvatarContent(
                             user = user,
                             shape = CircleShape,
-                            fallbackBackgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+                            fallbackBackgroundColor = AppSurfaceTokens.surfaceContainer(),
                         )
                     }
                 }
@@ -2484,7 +2486,7 @@ fun HomeHeader(
                     .then(
                         if (nativeProgressiveProtection) {
                             Modifier.homeTopReadabilityProtection(
-                                color = MaterialTheme.colorScheme.background,
+                                color = AppSurfaceTokens.background(),
                                 contentBottom = protectionContentBottom,
                                 tabTop = protectionTabTop,
                                 tabBottom = protectionTabBottom,
@@ -2492,7 +2494,7 @@ fun HomeHeader(
                                 tabVisibility = tabProtectionVisibility,
                             )
                         } else {
-                            Modifier.background(MaterialTheme.colorScheme.background.copy(alpha = nativeTopProtectionAlpha))
+                            Modifier.background(AppSurfaceTokens.background().copy(alpha = nativeTopProtectionAlpha))
                         }
                     )
             )
@@ -2877,7 +2879,7 @@ fun HomeHeader(
                                             HomeTopSearchPillContent(
                                                 searchIcon = topActionIcons.search,
                                                 contentColor = topForegroundColor,
-                                                textFontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                                                textFontSize = COUITheme.textStyles.main.fontSize,
                                                 iconTextGap = resolveHomeTopSearchIconTextGap(topChromePolicy),
                                                 modifier = Modifier.fillMaxWidth(),
                                                 pressed = searchPillPressed,

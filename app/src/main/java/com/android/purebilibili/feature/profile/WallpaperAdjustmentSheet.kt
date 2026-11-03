@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.profile
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.AppContentColors
 
 import coil3.request.crossfade
@@ -75,7 +77,7 @@ fun WallpaperAdjustmentSheet(
     AppModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = AppSurfaceTokens.surface(),
         dragHandle = null
     ) {
         Column(
@@ -100,7 +102,7 @@ fun WallpaperAdjustmentSheet(
 
                 AppText(
                     text = "调整壁纸位置",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.align(Alignment.Center)
                 )
@@ -131,7 +133,7 @@ fun WallpaperAdjustmentSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(300.dp) // Fixed height container for preview
-                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)),
+                    .background(AppSurfaceTokens.surfaceContainer().copy(alpha = 0.3f)),
                 contentAlignment = Alignment.Center
             ) {
                 // Device Mock Frame
@@ -187,7 +189,7 @@ fun WallpaperAdjustmentSheet(
                             AppText(
                                 text = "预览效果",
                                 color = Color.White.copy(alpha = 0.8f),
-                                style = MaterialTheme.typography.labelSmall,
+                                style = COUITheme.textStyles.footnote2,
                                 modifier = Modifier
                                     .align(Alignment.Center)
                                     .background(Color.Black.copy(alpha = 0.3f), AppShapes.container(ContainerLevel.Tag))
@@ -197,7 +199,7 @@ fun WallpaperAdjustmentSheet(
                             Column(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                                    .background(AppSurfaceTokens.surfaceContainer())
                                     .padding(12.dp),
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -209,7 +211,7 @@ fun WallpaperAdjustmentSheet(
                                 AppText(
                                     text = if (previewFailed) "图片加载失败，请返回重新选择" else "正在加载图片…",
                                     color = AppContentColors.secondaryText(),
-                                    style = MaterialTheme.typography.bodySmall,
+                                    style = COUITheme.textStyles.footnote1,
                                 )
                             }
                         }
@@ -227,9 +229,9 @@ fun WallpaperAdjustmentSheet(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    AppText("顶部对齐", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
-                    AppText("居中", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
-                    AppText("底部对齐", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
+                    AppText("顶部对齐", style = COUITheme.textStyles.footnote1, color = MaterialTheme.colorScheme.secondary)
+                    AppText("居中", style = COUITheme.textStyles.footnote1, color = MaterialTheme.colorScheme.secondary)
+                    AppText("底部对齐", style = COUITheme.textStyles.footnote1, color = MaterialTheme.colorScheme.secondary)
                 }
 
                 AppSlider(
@@ -244,8 +246,8 @@ fun WallpaperAdjustmentSheet(
 
                 AppText(
                     text = "上下拖动滑块调整图片显示区域",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.outline,
+                    style = COUITheme.textStyles.footnote1,
+                    color = AppSurfaceTokens.outline(),
                     modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 8.dp)
                 )
             }
@@ -283,7 +285,7 @@ fun ProfileWallpaperAdjustmentSheet(
     AppModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = AppSurfaceTokens.surface(),
         dragHandle = null
     ) {
         Column(
@@ -307,7 +309,7 @@ fun ProfileWallpaperAdjustmentSheet(
 
                 AppText(
                     text = "调整壁纸位置",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.align(Alignment.Center)
                 )
@@ -336,7 +338,7 @@ fun ProfileWallpaperAdjustmentSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(328.dp)
-                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)),
+                    .background(AppSurfaceTokens.surfaceContainer().copy(alpha = 0.3f)),
                 contentAlignment = Alignment.Center
             ) {
                 val aspectRatio = if (selectedTab == 0) 9f / 18f else 16f / 10f
@@ -421,7 +423,7 @@ fun ProfileWallpaperAdjustmentSheet(
                         AppText(
                             text = "双指缩放  单指拖动",
                             color = Color.White.copy(alpha = 0.86f),
-                            style = MaterialTheme.typography.labelSmall,
+                            style = COUITheme.textStyles.footnote2,
                             modifier = Modifier
                                 .align(Alignment.Center)
                                 .background(Color.Black.copy(alpha = 0.3f), AppShapes.container(ContainerLevel.Tag))
@@ -443,13 +445,13 @@ fun ProfileWallpaperAdjustmentSheet(
                 Column {
                     AppText(
                         text = if (selectedTab == 0) "手机端参数" else "平板端参数",
-                        style = MaterialTheme.typography.labelLarge,
+                        style = COUITheme.textStyles.button,
                         color = AppContentColors.primaryText()
                     )
                     AppText(
                         text = "缩放 ${"%.2f".format(currentTransform.scale)}x  横向 ${"%.2f".format(currentTransform.offsetX)}  纵向 ${"%.2f".format(currentTransform.offsetY)}",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.outline
+                        style = COUITheme.textStyles.footnote1,
+                        color = AppSurfaceTokens.outline()
                     )
                 }
 
@@ -462,8 +464,8 @@ fun ProfileWallpaperAdjustmentSheet(
 
             AppText(
                 text = "不同设备分别保存；首次设置会以居中参数作为默认值。",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.outline,
+                style = COUITheme.textStyles.footnote1,
+                color = AppSurfaceTokens.outline(),
                 modifier = Modifier
                     .padding(horizontal = 24.dp, vertical = 8.dp)
                     .align(Alignment.CenterHorizontally)

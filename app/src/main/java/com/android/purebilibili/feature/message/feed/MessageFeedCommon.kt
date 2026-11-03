@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import com.android.purebilibili.core.ui.components.AppButton
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppTextButton
 import androidx.compose.runtime.Composable
@@ -37,6 +36,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  * 消息通知卡片的 lazy item 身份。骨架卡片与真实卡片共用同一个 contentType，
@@ -208,7 +208,7 @@ internal fun MessageFeedAvatar(
         modifier = modifier
             .size(46.dp)
             .clip(CircleShape)
-            .background(MaterialTheme.colorScheme.surfaceVariant),
+            .background(AppSurfaceTokens.surfaceContainer()),
         contentScale = ContentScale.Crop
     )
 }
@@ -271,7 +271,7 @@ internal fun MessageFeedSectionHeader(text: String) {
     AppText(
         text = text,
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
-        style = MaterialTheme.typography.labelLarge,
+        style = COUITheme.textStyles.button,
         color = AppContentColors.accent(),
         fontWeight = FontWeight.SemiBold
     )
@@ -287,7 +287,7 @@ internal fun MessageFeedCard(
     val defaultContainerColor = if (surfaceSpec.usesTonalContainerTreatment) {
         AppSurfaceTokens.surfaceContainer()
     } else {
-        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.42f)
+        AppSurfaceTokens.surfaceContainer().copy(alpha = 0.42f)
     }
     Box(
         modifier = modifier

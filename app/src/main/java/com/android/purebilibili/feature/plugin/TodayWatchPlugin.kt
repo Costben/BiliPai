@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.ui.Alignment
 import com.android.purebilibili.core.ui.AppAlertDialog
 import com.android.purebilibili.core.ui.components.AppFilterChip
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppTextButton
 import androidx.compose.runtime.Composable
@@ -77,6 +76,8 @@ import kotlinx.serialization.json.Json
 import io.github.suqi8.coui.kmp.blur.Backdrop as MiuixBackdrop
 import io.github.suqi8.coui.kmp.blur.layerBackdrop
 import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 private const val TAG = "TodayWatchPlugin"
 
@@ -321,7 +322,7 @@ class TodayWatchPlugin : BuiltinPlugin, RecommendationPluginApi<VideoItem>, Toda
                 modifier = Modifier
                     .matchParentSize()
                     .layerBackdrop(settingsBackdrop)
-                    .background(MaterialTheme.colorScheme.background),
+                    .background(AppSurfaceTokens.background()),
             )
             Column(
                 modifier = Modifier.fillMaxWidth(),
@@ -329,7 +330,7 @@ class TodayWatchPlugin : BuiltinPlugin, RecommendationPluginApi<VideoItem>, Toda
             ) {
             AppText(
                 text = "默认模式",
-                style = MaterialTheme.typography.titleSmall,
+                style = COUITheme.textStyles.headline2,
                 color = AppContentColors.accent()
             )
             TodayWatchPluginModeSegmentedControl(
@@ -339,7 +340,7 @@ class TodayWatchPlugin : BuiltinPlugin, RecommendationPluginApi<VideoItem>, Toda
                 miuixBackdrop = settingsBackdrop,
             )
 
-            AppText("推荐策略", style = MaterialTheme.typography.labelLarge)
+            AppText("推荐策略", style = COUITheme.textStyles.button)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf(
                     RecommendationStrategy.BALANCED to "均衡推荐",
@@ -359,11 +360,11 @@ class TodayWatchPlugin : BuiltinPlugin, RecommendationPluginApi<VideoItem>, Toda
                     RecommendationStrategy.AFFINITY -> "优先匹配常看 UP 与主题"
                     RecommendationStrategy.EXPLORE -> "增加新 UP、新主题与近期内容"
                 },
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText()
             )
 
-            AppText("候选范围", style = MaterialTheme.typography.labelLarge)
+            AppText("候选范围", style = COUITheme.textStyles.button)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf(
                     TodayWatchCandidatePoolMode.LOCAL to "本地候选",
@@ -382,18 +383,18 @@ class TodayWatchPlugin : BuiltinPlugin, RecommendationPluginApi<VideoItem>, Toda
                 } else {
                     "仅重排首页已有内容，不产生额外请求"
                 },
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText()
             )
 
-            AppHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+            AppHorizontalDivider(color = AppSurfaceTokens.outline().copy(alpha = 0.5f))
 
             AppText(
                 text = "推荐规模",
-                style = MaterialTheme.typography.titleSmall,
+                style = COUITheme.textStyles.headline2,
                 color = AppContentColors.accent()
             )
-            AppText("UP主榜数量", style = MaterialTheme.typography.labelLarge)
+            AppText("UP主榜数量", style = COUITheme.textStyles.button)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf(3, 5, 8, 10).forEach { value ->
                     AppFilterChip(
@@ -404,7 +405,7 @@ class TodayWatchPlugin : BuiltinPlugin, RecommendationPluginApi<VideoItem>, Toda
                 }
             }
 
-            AppText("队列生成长度", style = MaterialTheme.typography.labelLarge)
+            AppText("队列生成长度", style = COUITheme.textStyles.button)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf(12, 20, 30, 40).forEach { value ->
                     AppFilterChip(
@@ -418,7 +419,7 @@ class TodayWatchPlugin : BuiltinPlugin, RecommendationPluginApi<VideoItem>, Toda
                 }
             }
 
-            AppText("卡片展示条数", style = MaterialTheme.typography.labelLarge)
+            AppText("卡片展示条数", style = COUITheme.textStyles.button)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf(4, 6, 8, 10).forEach { value ->
                     val clamped = value.coerceAtMost(uiConfig.queueBuildLimit)
@@ -430,7 +431,7 @@ class TodayWatchPlugin : BuiltinPlugin, RecommendationPluginApi<VideoItem>, Toda
                 }
             }
 
-            AppText("历史样本量", style = MaterialTheme.typography.labelLarge)
+            AppText("历史样本量", style = COUITheme.textStyles.button)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf(40, 80, 120).forEach { value ->
                     AppFilterChip(
@@ -441,7 +442,7 @@ class TodayWatchPlugin : BuiltinPlugin, RecommendationPluginApi<VideoItem>, Toda
                 }
             }
 
-            AppHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+            AppHorizontalDivider(color = AppSurfaceTokens.outline().copy(alpha = 0.5f))
 
             AppSwitchPreference(
                 icon = AppIcons.Outlined.AutoAwesome,
@@ -477,7 +478,7 @@ class TodayWatchPlugin : BuiltinPlugin, RecommendationPluginApi<VideoItem>, Toda
 
             if (uiConfig.enableWaterfallAnimation) {
                 Spacer(modifier = Modifier.height(4.dp))
-                AppText("动画曲率", style = MaterialTheme.typography.labelLarge)
+                AppText("动画曲率", style = COUITheme.textStyles.button)
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     listOf(
                         1.2f to "柔和",
@@ -494,18 +495,18 @@ class TodayWatchPlugin : BuiltinPlugin, RecommendationPluginApi<VideoItem>, Toda
                 }
             }
 
-            AppHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+            AppHorizontalDivider(color = AppSurfaceTokens.outline().copy(alpha = 0.5f))
             TodayWatchTasteInsightSection(insightState)
 
-            AppHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+            AppHorizontalDivider(color = AppSurfaceTokens.outline().copy(alpha = 0.5f))
             AppText(
                 text = "推荐画像维护",
-                style = MaterialTheme.typography.titleSmall,
+                style = COUITheme.textStyles.headline2,
                 color = AppContentColors.accent()
             )
             AppText(
                 text = "会清空本地学习到的偏好与不感兴趣反馈，推荐会回到冷启动状态。",
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText()
             )
             AppTextButton(
@@ -517,7 +518,7 @@ class TodayWatchPlugin : BuiltinPlugin, RecommendationPluginApi<VideoItem>, Toda
             if (!resetMessage.isNullOrBlank()) {
                 AppText(
                     text = resetMessage.orEmpty(),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.accent()
                 )
             }
@@ -525,7 +526,7 @@ class TodayWatchPlugin : BuiltinPlugin, RecommendationPluginApi<VideoItem>, Toda
             Spacer(modifier = Modifier.height(4.dp))
             AppText(
                 text = "所有设置仅在本地生效，不上传你的历史记录。",
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText()
             )
             }
@@ -603,17 +604,17 @@ private fun TodayWatchTasteInsightSection(
 ) {
     AppText(
         text = "推荐依据",
-        style = MaterialTheme.typography.titleSmall,
+        style = COUITheme.textStyles.headline2,
         color = AppContentColors.accent()
     )
     AppText(
         text = "${state.modeTitle}：${state.modeSummary}",
-        style = MaterialTheme.typography.bodySmall,
+        style = COUITheme.textStyles.footnote1,
         color = AppContentColors.secondaryText()
     )
 
     if (state.preferredCreators.isNotEmpty()) {
-        AppText("近期偏好 UP", style = MaterialTheme.typography.labelLarge)
+        AppText("近期偏好 UP", style = COUITheme.textStyles.button)
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             state.preferredCreators.forEach { signal ->
                 AppFilterChip(
@@ -625,11 +626,11 @@ private fun TodayWatchTasteInsightSection(
         }
     }
 
-    AppText("最近不感兴趣", style = MaterialTheme.typography.labelLarge)
+    AppText("最近不感兴趣", style = COUITheme.textStyles.button)
     if (state.recentDislikedVideos.isEmpty()) {
         AppText(
             text = "还没有本地负反馈。点视频菜单里的“不感兴趣”后，会在这里显示近期样本。",
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText()
         )
     } else {
@@ -641,12 +642,12 @@ private fun TodayWatchTasteInsightSection(
                 ) {
                     AppText(
                         text = item.title,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.primaryText()
                     )
                     AppText(
                         text = item.subtitle,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppContentColors.secondaryText()
                     )
                 }
@@ -655,7 +656,7 @@ private fun TodayWatchTasteInsightSection(
     }
 
     if (state.negativeSignals.isNotEmpty()) {
-        AppText("已降权信号", style = MaterialTheme.typography.labelLarge)
+        AppText("已降权信号", style = COUITheme.textStyles.button)
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             state.negativeSignals.forEach { signal ->
                 AppFilterChip(

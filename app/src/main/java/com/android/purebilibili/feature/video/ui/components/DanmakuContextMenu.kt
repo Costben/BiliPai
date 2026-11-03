@@ -1,10 +1,11 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppHorizontalDivider
-import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
@@ -197,7 +198,7 @@ fun DanmakuContextMenu(
                 ) { page ->
                     when (page) {
                         DanmakuContextMenuPage.REPORT -> Column(
-                            Modifier.width(300.dp).background(MaterialTheme.colorScheme.surface).padding(12.dp)
+                            Modifier.width(300.dp).background(AppSurfaceTokens.surface()).padding(12.dp)
                         ) {
                             AppTextButton(onClick = { currentPage = DanmakuContextMenuPage.MAIN }) {
                                 AppText("返回")
@@ -296,7 +297,7 @@ private fun RecallConfirmMenu(
             AppText(
                 text = "确认撤回",
                 color = AppContentColors.primaryText(),
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                style = COUITheme.textStyles.headline1.copy(fontWeight = FontWeight.SemiBold),
                 modifier = Modifier.align(Alignment.Center)
             )
         }
@@ -312,20 +313,20 @@ private fun RecallConfirmMenu(
             AppText(
                 text = "撤回后不可恢复",
                 color = AppContentColors.primaryText(),
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium)
+                style = COUITheme.textStyles.main.copy(fontWeight = FontWeight.Medium)
             )
             Spacer(modifier = Modifier.height(8.dp))
             AppText(
                 text = "确认撤回这条弹幕？",
                 color = AppContentColors.secondaryText(),
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(8.dp))
             AppText(
                 text = previewText,
                 color = AppContentColors.secondaryText(),
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center
@@ -381,14 +382,14 @@ private fun MainMenu(
             AppText(
                 text = "弹幕内容",
                 color = AppContentColors.secondaryText(),
-                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium)
+                style = COUITheme.textStyles.footnote2.copy(fontWeight = FontWeight.Medium)
             )
             Spacer(modifier = Modifier.height(4.dp))
             SelectionContainer {
                 AppText(
                     text = text,
                     color = AppContentColors.primaryText(),
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = COUITheme.textStyles.main,
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Center
@@ -518,7 +519,7 @@ private fun MenuItem(
         AppText(
             text = label,
             color = displayColor,
-            style = MaterialTheme.typography.bodyLarge
+            style = COUITheme.textStyles.main
         )
         if (icon != null) {
             AppIcon(

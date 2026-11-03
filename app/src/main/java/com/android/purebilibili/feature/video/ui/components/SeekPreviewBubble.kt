@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.MediaContrastPalette
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -24,7 +25,6 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.shape.RoundedCornerShape
 import com.android.purebilibili.core.ui.components.AppText
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -457,13 +457,13 @@ internal fun CompactSeekPreview(
                 text = FormatUtils.formatDuration((targetPositionMs / 1000L).toInt()),
                 color = Color.White,
                 fontWeight = FontWeight.SemiBold,
-                style = MaterialTheme.typography.titleMedium.copy(shadow = shadow)
+                style = COUITheme.textStyles.headline1.copy(shadow = shadow)
             )
             AppText(
                 text = " / ${FormatUtils.formatDuration((durationMs / 1000L).toInt())}",
                 color = Color.White.copy(alpha = 0.62f),
                 fontWeight = FontWeight.Medium,
-                style = MaterialTheme.typography.titleMedium.copy(shadow = shadow)
+                style = COUITheme.textStyles.headline1.copy(shadow = shadow)
             )
         }
     }
@@ -484,7 +484,7 @@ private fun SeekPreviewImage(
             AppText(
                 text = "预览加载中",
                 color = MediaContrastPalette.SecondaryForeground,
-                style = MaterialTheme.typography.bodySmall
+                style = COUITheme.textStyles.footnote1
             )
         }
         return
@@ -514,7 +514,7 @@ private fun SeekPreviewImage(
                 modifier = modifier.background(MediaContrastPalette.ControlSurface),
                 contentAlignment = Alignment.Center
             ) {
-                AppText(text = "...", color = Color.White, style = MaterialTheme.typography.bodySmall)
+                AppText(text = "...", color = Color.White, style = COUITheme.textStyles.footnote1)
             }
         }
         is AsyncImagePainter.State.Error -> {
@@ -522,7 +522,7 @@ private fun SeekPreviewImage(
                 modifier = modifier.background(MediaContrastPalette.ControlSurface),
                 contentAlignment = Alignment.Center
             ) {
-                AppText(text = "预览不可用", color = MediaContrastPalette.SecondaryForeground, style = MaterialTheme.typography.bodySmall)
+                AppText(text = "预览不可用", color = MediaContrastPalette.SecondaryForeground, style = COUITheme.textStyles.footnote1)
             }
         }
         is AsyncImagePainter.State.Success -> {

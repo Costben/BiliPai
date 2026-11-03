@@ -67,6 +67,7 @@ import com.android.purebilibili.core.ui.skeleton.ContentSkeletonBlock
 import com.android.purebilibili.core.ui.skeleton.rememberStaticSkeletonBlockColor
 import com.android.purebilibili.core.util.resolveSingleColumnFeedMaxWidth
 import com.android.purebilibili.core.util.responsiveContentWidth
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  * 会话行的 lazy item 身份。骨架行与真实会话行共用同一个 contentType，加载完成时
@@ -462,7 +463,7 @@ private fun MessageCenterShortcutCard(
             )
         }
         Spacer(Modifier.height(6.dp))
-        AppText(item.title, style = MaterialTheme.typography.labelMedium, maxLines = 1)
+        AppText(item.title, style = COUITheme.textStyles.footnote1, maxLines = 1)
     }
 }
 
@@ -494,7 +495,7 @@ private fun MessageUnreadBadge(
         AppText(
             text = text,
             color = AppContentColors.onAccent(),
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             fontWeight = FontWeight.SemiBold
         )
     }
@@ -629,7 +630,7 @@ fun SessionListItem(
         color = when {
             useGroupedListCards && session.top_ts > 0 -> AppSurfaceTokens.secondaryContainer().copy(alpha = 0.55f)
             useGroupedListCards -> AppSurfaceTokens.surfaceContainer()
-            session.top_ts > 0 -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+            session.top_ts > 0 -> AppSurfaceTokens.surfaceContainer().copy(alpha = 0.3f)
             else -> Color.Transparent
         }
     ) {
@@ -649,7 +650,7 @@ fun SessionListItem(
                         .fillMaxSize(if (hasPendant) 0.72f else 1f)
                         .clip(CircleShape)
                         .then(if (onAvatarClick != null) Modifier.appActionClickable(onClick = onAvatarClick) else Modifier)
-                        .background(MaterialTheme.colorScheme.surfaceVariant),
+                        .background(AppSurfaceTokens.surfaceContainer()),
                     contentScale = ContentScale.Crop
                 )
                 if (hasPendant) {
@@ -693,7 +694,7 @@ fun SessionListItem(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 AppText(
                     text = displayName,
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = COUITheme.textStyles.main,
                     fontWeight = FontWeight.Medium,
                     color = if (vipColor) com.android.purebilibili.core.ui.components.userVipPink() else Color.Unspecified,
                     maxLines = 1,
@@ -705,7 +706,7 @@ fun SessionListItem(
                     Spacer(modifier = Modifier.width(AppSpacingTokens.ExtraSmall))
                     AppText(
                         text = userLabel,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppContentColors.secondaryText(),
                         maxLines = 1,
                         modifier = Modifier
@@ -721,7 +722,7 @@ fun SessionListItem(
                     Spacer(modifier = Modifier.width(AppSpacingTokens.ExtraSmall))
                     AppText(
                         text = "置顶",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppContentColors.accent(),
                         modifier = Modifier
                             .background(
@@ -754,7 +755,7 @@ fun SessionListItem(
                     content = session.last_msg?.content,
                     msgType = session.last_msg?.msg_type ?: 1
                 ),
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 color = AppContentColors.secondaryText(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -766,7 +767,7 @@ fun SessionListItem(
         Column(horizontalAlignment = Alignment.End) {
             AppText(
                 text = formatTime(session.last_msg?.timestamp ?: 0),
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText()
             )
 
@@ -792,7 +793,7 @@ fun SessionListItem(
 private fun MessageSmallFlag(text: String) {
     AppText(
         text = text,
-        style = MaterialTheme.typography.labelSmall,
+        style = COUITheme.textStyles.footnote2,
         color = AppContentColors.accent(),
         modifier = Modifier
             .background(

@@ -80,7 +80,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.android.purebilibili.core.ui.components.AppSurface
+import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.AppShapes
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.ContainerLevel
 import com.android.purebilibili.core.ui.motion.AppMotionTokens
 import com.android.purebilibili.core.ui.rememberAppPlayerChromeProfile
@@ -127,8 +129,8 @@ fun BoxScope.GestureLevelOverlayHost(
     val reduceMotion = rememberSystemReduceMotion()
     val brightnessColor = colorResource(R.color.player_brightness_accent)
     val colorScheme = MaterialTheme.colorScheme
-    val glassDarkTheme = resolveBottomBarDarkTheme(colorScheme.background)
-    val glassContentColor = glassContentColorOverride ?: colorScheme.onSurface
+    val glassDarkTheme = resolveBottomBarDarkTheme(AppSurfaceTokens.background())
+    val glassContentColor = glassContentColorOverride ?: AppContentColors.primaryText()
     val miuixColorScheme = COUITheme.colorScheme
     val spec = remember(style, kind, percent, colorScheme, miuixColorScheme, brightnessColor) {
         resolveGestureLevelOverlaySpec(
@@ -360,7 +362,7 @@ private fun Md3GesturePercentText(
 ) {
     // Gesture feedback remains animated independently of card/navigation animation settings.
     val motionEnabled = !rememberSystemReduceMotion()
-    val textStyle = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold)
+    val textStyle = COUITheme.textStyles.button.copy(fontWeight = FontWeight.SemiBold)
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
@@ -452,13 +454,13 @@ private fun IosGestureLevelCapsule(
                 AppText(
                     text = resolveGestureLevelLabel(spec.kind),
                     color = Color.White.copy(alpha = 0.88f),
-                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Medium)
+                    style = COUITheme.textStyles.footnote1.copy(fontWeight = FontWeight.Medium)
                 )
             }
             AnimatedGesturePercentText(
                 percent = percent,
                 color = spec.textColor,
-                fontSize = MaterialTheme.typography.headlineSmall.fontSize,
+                fontSize = COUITheme.textStyles.title4.fontSize,
                 fontWeight = FontWeight.Bold,
                 label = "ios-gesture-level-percent",
                 // Host-level GestureLevelStepHaptics already ticks for all themes.

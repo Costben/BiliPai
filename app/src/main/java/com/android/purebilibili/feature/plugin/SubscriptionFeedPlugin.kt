@@ -16,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
@@ -43,6 +42,7 @@ import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppTextButton
 import com.android.purebilibili.plugin.sdk.PluginCapability
 import com.android.purebilibili.plugin.sdk.PluginCapabilityManifest
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 class SubscriptionFeedPlugin : BuiltinPlugin {
     override val id: String = BuiltinPluginIds.SUBSCRIPTION_FEED
@@ -154,7 +154,7 @@ private fun SubscriptionFeedSettings(modifier: Modifier = Modifier) {
         AppText(
             text = "添加 RSS 或 Atom 地址，在首页集中阅读更新。可批量导入 OPML、地址列表或 RSS 表格。",
             color = AppContentColors.secondaryText(),
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
         )
         AppOutlinedTextField(
             value = url,
@@ -321,7 +321,7 @@ private fun SubscriptionFeedSettings(modifier: Modifier = Modifier) {
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         color = AppContentColors.secondaryText(),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                     )
                 }
                 if (!selecting) {

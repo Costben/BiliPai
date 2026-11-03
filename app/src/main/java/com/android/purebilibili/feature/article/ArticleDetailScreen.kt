@@ -74,6 +74,7 @@ import com.android.purebilibili.feature.dynamic.components.prepareImagePreviewSo
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
 import com.android.purebilibili.core.ui.components.appDesktopFocusableItemVisuals
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 private const val ARTICLE_BANNER_CORNER_RADIUS_DP = 20f
 private const val ARTICLE_BODY_IMAGE_CORNER_RADIUS_DP = 18f
@@ -260,7 +261,7 @@ fun ArticleDetailScreen(
             }.then(bottomBarBackdrop?.modifier ?: Modifier)
                 .then(if (bottomBarHaze != null) Modifier.hazeSourceCompat(bottomBarHaze) else Modifier)
                 .then(if (bottomBarBackdrop != null || bottomBarHaze != null) {
-                    Modifier.sharedGlobalWallpaperBackground(MaterialTheme.colorScheme.background)
+                    Modifier.sharedGlobalWallpaperBackground(AppSurfaceTokens.background())
                 } else Modifier),
         ) {
         when (val state = uiState) {
@@ -420,13 +421,13 @@ private fun ArticleDetailContent(
     LaunchedEffect(readFromStartToken) {
         if (readFromStartToken > 0) listState.scrollToItem(0)
     }
-    val articleBackground = MaterialTheme.colorScheme.background
+    val articleBackground = AppSurfaceTokens.background()
     val articleTextColor = resolveArticleTextColor(AppContentColors.primaryText(), MaterialTheme.colorScheme.onBackground, articleBackground)
     val articleQuoteColor = resolveArticleTextColor(AppContentColors.secondaryText(), articleTextColor, articleBackground)
     val articleCodeColor = resolveArticleTextColor(AppContentColors.primaryText(), articleTextColor, AppSurfaceTokens.surfaceContainer())
-    val bodyStyle = MaterialTheme.typography.bodyLarge.withArticleReadingPreferences(readingPreferences)
-    val headingStyle = MaterialTheme.typography.titleLarge.withArticleReadingPreferences(readingPreferences)
-    val codeStyle = MaterialTheme.typography.bodyMedium.withArticleReadingPreferences(readingPreferences)
+    val bodyStyle = COUITheme.textStyles.main.withArticleReadingPreferences(readingPreferences)
+    val headingStyle = COUITheme.textStyles.title4.withArticleReadingPreferences(readingPreferences)
+    val codeStyle = COUITheme.textStyles.body1.withArticleReadingPreferences(readingPreferences)
     val sharedTransitionEnabled = transitionEnabled &&
         sharedTransitionScope != null &&
         animatedVisibilityScope != null &&
@@ -589,7 +590,7 @@ private fun ArticleDetailContent(
                     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                         AppText(
                             text = article.title,
-                            style = MaterialTheme.typography.headlineSmall,
+                            style = COUITheme.textStyles.title4,
                             fontWeight = FontWeight.Bold
                         )
                         if (article.authorName.isNotBlank() || article.publishTime.isNotBlank()) {
@@ -624,7 +625,7 @@ private fun ArticleDetailContent(
                                     if (article.authorName.isNotBlank()) {
                                         AppText(
                                             text = article.authorName,
-                                            style = MaterialTheme.typography.titleSmall,
+                                            style = COUITheme.textStyles.headline2,
                                             modifier = Modifier.clickable(enabled = article.authorMid > 0) {
                                                 if (article.authorMid > 0) onUserClick(article.authorMid)
                                             }
@@ -633,7 +634,7 @@ private fun ArticleDetailContent(
                                     if (article.publishTime.isNotBlank()) {
                                         AppText(
                                             text = article.publishTime,
-                                            style = MaterialTheme.typography.bodySmall,
+                                            style = COUITheme.textStyles.footnote1,
                                             color = AppContentColors.secondaryText()
                                         )
                                     }
@@ -643,7 +644,7 @@ private fun ArticleDetailContent(
                         if (shouldShowArticleSummary(article.summary, article.blocks)) {
                             AppText(
                                 text = article.summary,
-                                style = MaterialTheme.typography.bodyMedium,
+                                style = COUITheme.textStyles.body1,
                                 color = AppContentColors.secondaryText()
                             )
                         }

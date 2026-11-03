@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.home.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import com.android.purebilibili.core.ui.motion.AppMotionEasing
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -34,7 +36,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppNativeTabRow
 import com.android.purebilibili.core.ui.components.AppSegmentOption
@@ -489,7 +490,7 @@ fun BottomBarLiquidSegmentedControl(
             rememberMeasuredTabMinWidth(
                 requestedMinWidth = AppChromeSizeTokens.CompactTabMinWidth,
                 labels = items,
-                textStyle = MaterialTheme.typography.labelLarge.copy(
+                textStyle = COUITheme.textStyles.button.copy(
                     fontSize = effectiveLabelFontSize,
                     fontWeight = FontWeight.SemiBold,
                 ),
@@ -585,7 +586,7 @@ fun BottomBarLiquidSegmentedControl(
             rememberMeasuredTabMinWidth(
                 requestedMinWidth = AppChromeSizeTokens.MinimumTouchTarget,
                 labels = glassMeasurementLabels,
-                textStyle = MaterialTheme.typography.labelLarge.copy(
+                textStyle = COUITheme.textStyles.button.copy(
                     fontSize = effectiveLabelFontSize,
                     fontWeight = FontWeight.SemiBold,
                 ),

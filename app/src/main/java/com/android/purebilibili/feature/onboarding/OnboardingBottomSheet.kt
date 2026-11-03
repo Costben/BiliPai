@@ -62,6 +62,7 @@ import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.AppSpacingTokens
 import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.ContainerLevel
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  *  iOS 风格新手引导底部弹窗
@@ -226,7 +227,7 @@ fun OnboardingBottomSheet(
                                 ),
                                 border = androidx.compose.foundation.BorderStroke(
                                     1.dp,
-                                    MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                                    AppSurfaceTokens.outline().copy(alpha = 0.3f)
                                 )
                             ) {
                                 AppText(stringResource(R.string.onboarding_skip), fontWeight = FontWeight.Medium)
@@ -266,7 +267,7 @@ fun OnboardingBottomSheet(
                                 AppText(
                                     stringResource(R.string.onboarding_start_exploring),
                                     fontWeight = FontWeight.Bold,
-                                    style = MaterialTheme.typography.labelLarge
+                                    style = COUITheme.textStyles.button
                                 )
                             }
                         }
@@ -276,7 +277,7 @@ fun OnboardingBottomSheet(
                     Spacer(modifier = Modifier.height(AppSpacingTokens.Medium))
                     AppText(
                         "github.com/Costben/BiliPai",
-                        style = MaterialTheme.typography.labelMedium,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.accent().copy(alpha = 0.8f),
                         modifier = Modifier.clickable {
                             uriHandler.openUri("https://github.com/Costben/BiliPai")
@@ -357,7 +358,7 @@ private fun WelcomePage(hazeState: HazeState) {
         // 标题 - 动画项 1
         AppText(
             stringResource(R.string.onboarding_welcome_title),
-            style = MaterialTheme.typography.headlineMedium,
+            style = COUITheme.textStyles.title3,
             fontWeight = FontWeight.Bold,
             color = AppContentColors.primaryText(),
             modifier = Modifier.graphicsLayer {
@@ -371,7 +372,7 @@ private fun WelcomePage(hazeState: HazeState) {
         // 副标题 - 动画项 2
         AppText(
             stringResource(R.string.onboarding_welcome_subtitle),
-            style = MaterialTheme.typography.bodyLarge,
+            style = COUITheme.textStyles.main,
             color = AppContentColors.secondaryText(),
             letterSpacing = 3.sp,
             modifier = Modifier.graphicsLayer {
@@ -411,7 +412,7 @@ private fun WelcomePage(hazeState: HazeState) {
         val disclaimerColors = resolveAccessibleContainerColors(
             containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.4f),
             contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-            backgroundColor = MaterialTheme.colorScheme.surface,
+            backgroundColor = AppSurfaceTokens.surface(),
             fallbackContentColors = listOf(
                 AppContentColors.primaryText(),
                 MaterialTheme.colorScheme.onBackground,
@@ -429,7 +430,7 @@ private fun WelcomePage(hazeState: HazeState) {
         ) {
             AppText(
                 stringResource(R.string.onboarding_disclaimer),
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = disclaimerColors.contentColor,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(AppSpacingTokens.Medium)
@@ -511,7 +512,7 @@ private fun AppearanceSettingsPage(hazeState: HazeState) {
         // 标题 - 动画项 1
         AppText(
             stringResource(R.string.onboarding_appearance_title),
-            style = MaterialTheme.typography.headlineSmall,
+            style = COUITheme.textStyles.title4,
             fontWeight = FontWeight.Bold,
             color = AppContentColors.primaryText(),
             modifier = Modifier.graphicsLayer {
@@ -525,7 +526,7 @@ private fun AppearanceSettingsPage(hazeState: HazeState) {
         // 副标题 - 动画项 2
         AppText(
             stringResource(R.string.onboarding_appearance_subtitle),
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = AppContentColors.secondaryText(),
             modifier = Modifier.graphicsLayer {
                 alpha = animatedItems[2].value
@@ -649,7 +650,7 @@ private fun PlaybackSettingsPage(hazeState: HazeState) {
         // 标题 - 动画项 1
         AppText(
             stringResource(R.string.onboarding_playback_title),
-            style = MaterialTheme.typography.headlineSmall,
+            style = COUITheme.textStyles.title4,
             fontWeight = FontWeight.Bold,
             color = AppContentColors.primaryText(),
             modifier = Modifier.graphicsLayer {
@@ -663,7 +664,7 @@ private fun PlaybackSettingsPage(hazeState: HazeState) {
         // 副标题 - 动画项 2
         AppText(
             stringResource(R.string.onboarding_playback_subtitle),
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = AppContentColors.secondaryText(),
             modifier = Modifier.graphicsLayer {
                 alpha = animatedItems[2].value
@@ -776,20 +777,20 @@ private fun FeatureBadge(
                     }
                     .background(
                         color = opaqueCompositeOver(
-                            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f),
-                            MaterialTheme.colorScheme.surface,
+                            AppSurfaceTokens.primaryContainer().copy(alpha = 0.6f),
+                            AppSurfaceTokens.surface(),
                         ),
                         shape = CircleShape
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                AppText(emoji, style = MaterialTheme.typography.titleLarge)
+                AppText(emoji, style = COUITheme.textStyles.title4)
             }
         }
         Spacer(modifier = Modifier.height(AppSpacingTokens.Small))
         AppText(
             label,
-            style = MaterialTheme.typography.labelMedium,
+            style = COUITheme.textStyles.footnote1,
             fontWeight = FontWeight.Medium,
             color = AppContentColors.primaryText()
         )
@@ -809,7 +810,7 @@ private fun FeatureListItem(
 ) {
     //  真正的毛玻璃卡片效果
     AppSurface(
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+        color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.5f),
         shape = AppShapes.container(ContainerLevel.Card),
         modifier = Modifier
             .fillMaxWidth()
@@ -835,12 +836,12 @@ private fun FeatureListItem(
                 modifier = Modifier
                     .size(44.dp)
                     .background(
-                        color = MaterialTheme.colorScheme.surface,
+                        color = AppSurfaceTokens.surface(),
                         shape = AppShapes.container(ContainerLevel.Card)
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                AppText(icon, style = MaterialTheme.typography.titleMedium)
+                AppText(icon, style = COUITheme.textStyles.headline1)
             }
 
             Spacer(modifier = Modifier.width(AppSpacingTokens.Medium))
@@ -849,12 +850,12 @@ private fun FeatureListItem(
                 AppText(
                     title,
                     fontWeight = FontWeight.SemiBold,
-                    style = MaterialTheme.typography.titleSmall,
+                    style = COUITheme.textStyles.headline2,
                     color = AppContentColors.primaryText()
                 )
                 AppText(
                     description,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText()
                 )
             }

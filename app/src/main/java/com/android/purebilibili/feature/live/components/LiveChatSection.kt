@@ -75,6 +75,8 @@ import com.android.purebilibili.core.ui.components.AppFilledIconButton
 import com.android.purebilibili.core.ui.components.AppIconButton
 import com.android.purebilibili.core.ui.components.AppIconButtonDefaults
 import com.android.purebilibili.core.ui.components.AppSurface
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 /**
  * 直播聊天区域组件
@@ -194,7 +196,7 @@ fun LiveChatSection(
                         AppText(
                             text = "回到底部",
                             color = if (darkOverlay) LiveStatusPalette.MediaContent else palette.primaryText,
-                            style = MaterialTheme.typography.labelMedium
+                            style = COUITheme.textStyles.footnote1
                         )
                     }
                 }
@@ -254,7 +256,7 @@ private fun ChatMessageItem(
     val usernameColor = if (item.isAdmin) {
         if (isOverlay) LiveStatusPalette.AdminName else colorScheme.tertiary
     } else if (item.isSelf) {
-        if (isOverlay) colorScheme.primaryFixed else colorScheme.primary
+        if (isOverlay) colorScheme.primaryFixed else AppContentColors.accent()
     } else if (isOverlay) {
         LiveStatusPalette.MediaContent.copy(alpha = tokens.nameAlpha)
     } else {
@@ -288,7 +290,7 @@ private fun ChatMessageItem(
             val segments = remember(item.text, resources) { splitLiveMessageEmotes(item.text, resources.keys) }
             val medal = remember(item.medal, item.medalName, item.medalLevel, item.medalColor) { resolveLiveMessageMedal(item) }
             val medalSize = medal?.let { rememberLiveMedalSize(it) }
-            val anchorColor = MaterialTheme.colorScheme.primary
+            val anchorColor = AppContentColors.accent()
             val annotatedText = remember(item, segments, usernameColor, replyColor, direct, isAnchor, anchorColor, medal) {
                 androidx.compose.ui.text.buildAnnotatedString {
                     if (isAnchor) {
@@ -350,9 +352,9 @@ private fun ChatMessageItem(
             }
             androidx.compose.foundation.text.BasicText(
                 text = annotatedText,
-                style = MaterialTheme.typography.bodyMedium.copy(
+                style = COUITheme.textStyles.body1.copy(
                     fontSize = if (compact) 12.sp else tokens.fontSizeSp.sp,
-                    lineHeight = if (compact) 16.sp else MaterialTheme.typography.bodyMedium.lineHeight,
+                    lineHeight = if (compact) 16.sp else COUITheme.textStyles.body1.lineHeight,
                     color = bodyColor, fontWeight = FontWeight.Normal,
                 ),
                 inlineContent = inlineContentMap,
@@ -470,13 +472,13 @@ private fun UserLevelBadge(level: Int) {
     AppSurface(
                 border = androidx.compose.foundation.BorderStroke(AppSpacingTokens.Micro / 2, color),
         shape = AppShapes.borderedContainer(ContainerLevel.Tag),
-        color = MaterialTheme.colorScheme.secondaryContainer,
+        color = AppSurfaceTokens.secondaryContainer(),
         modifier = Modifier.padding(top = AppSpacingTokens.Micro)
     ) {
          AppText(
             text = "UL$level",
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSecondaryContainer,
+            style = COUITheme.textStyles.footnote2,
+            color = AppSurfaceTokens.onSecondaryContainer(),
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(horizontal = AppSpacingTokens.Micro)
         )
@@ -549,7 +551,7 @@ internal fun LiveChatInputBar(
                     modifier = Modifier.size(22.dp),
                 )
             }
-            AppText("发送弹幕", modifier = Modifier.weight(1f).padding(top = if (compact) 0.dp else 6.dp), maxLines = 1, overflow = TextOverflow.Ellipsis, color = foreground.copy(alpha = 0.8f), style = MaterialTheme.typography.bodyMedium)
+            AppText("发送弹幕", modifier = Modifier.weight(1f).padding(top = if (compact) 0.dp else 6.dp), maxLines = 1, overflow = TextOverflow.Ellipsis, color = foreground.copy(alpha = 0.8f), style = COUITheme.textStyles.body1)
             LiveLikeButton(tint = foreground, onLike = onLike, modifier = Modifier.size(34.dp), canLike = canLike, onUnavailable = onLikeUnavailable)
             AppIconButton(onClick = onOpenEmote, modifier = Modifier.size(34.dp)) {
                 AppIcon(AppIcons.Outlined.EmojiEmotions, "表情", tint = foreground)
@@ -658,7 +660,7 @@ internal fun LiveLikeButton(
                     AppText(
                         text = "x$count",
                         color = palette.onAccent,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(
                             horizontal = AppSpacingTokens.ExtraSmall,

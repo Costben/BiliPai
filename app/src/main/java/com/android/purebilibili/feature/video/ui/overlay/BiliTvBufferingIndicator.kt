@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -24,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.android.purebilibili.R
 import com.android.purebilibili.core.ui.components.AppText
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppContentColors
 
 /** 视频播放共用的小电视动画；仅改变图案和文案，不叠加背景遮罩。 */
 @Composable
@@ -97,7 +98,7 @@ internal fun BiliTvBufferingIndicator(
             AppText(
                 text = label,
                 color = Color.White,
-                style = MaterialTheme.typography.labelMedium,
+                style = COUITheme.textStyles.footnote1,
             )
         }
     }

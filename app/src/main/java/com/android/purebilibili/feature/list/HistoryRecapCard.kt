@@ -1,5 +1,6 @@
 package com.android.purebilibili.feature.list
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -12,7 +13,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -119,13 +119,13 @@ private fun HistoryRecapCardContent(
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                AppText("我的回顾", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                AppText("我的回顾", style = COUITheme.textStyles.headline2, fontWeight = FontWeight.SemiBold)
                 Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState())) {
                     PersonalRecapWindow.entries.forEach { entry ->
                         val selected = entry == window
                         AppText(
                             text = entry.label,
-                            style = MaterialTheme.typography.labelMedium,
+                            style = COUITheme.textStyles.footnote1,
                             color = if (selected) AppContentColors.accent() else AppContentColors.secondaryText(),
                             fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
                             modifier = Modifier
@@ -140,12 +140,12 @@ private fun HistoryRecapCardContent(
             val emptyRss = rssStats.readCount <= 0
             val emptyVideo = videoUnavailable || currentVideoStats == null || currentVideoStats.videoCount <= 0
             if (loading) {
-                AppText("正在整理阅读与观看记录…", style = MaterialTheme.typography.bodySmall)
+                AppText("正在整理阅读与观看记录…", style = COUITheme.textStyles.footnote1)
             } else if (emptyRss && emptyVideo) {
                 AppText(
                     text = if (videoUnavailable) "暂时无法读取观看记录，可稍后刷新历史记录重试。"
                     else "这段时间还没有阅读或观看记录。",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                 )
             } else {
@@ -165,7 +165,7 @@ private fun HistoryRecapCardContent(
                             Column {
                                 AppText(
                                     text = "已读 ${rssStats.readCount} 篇",
-                                    style = MaterialTheme.typography.titleMedium,
+                                    style = COUITheme.textStyles.headline1,
                                     fontWeight = FontWeight.SemiBold,
                                 )
                                 val sourceTitle = rssStats.topSourceKey
@@ -173,7 +173,7 @@ private fun HistoryRecapCardContent(
                                 if (!sourceTitle.isNullOrBlank()) {
                                     AppText(
                                         text = "最常读：$sourceTitle",
-                                        style = MaterialTheme.typography.labelSmall,
+                                        style = COUITheme.textStyles.footnote2,
                                         color = AppContentColors.secondaryText(),
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis,
@@ -197,12 +197,12 @@ private fun HistoryRecapCardContent(
                             Column {
                                 AppText(
                                     text = "看了 ${currentVideoStats.videoCount} 个视频",
-                                    style = MaterialTheme.typography.titleMedium,
+                                    style = COUITheme.textStyles.headline1,
                                     fontWeight = FontWeight.SemiBold,
                                 )
                                 AppText(
                                     text = formatRecapDuration(currentVideoStats.totalDurationSec),
-                                    style = MaterialTheme.typography.labelSmall,
+                                    style = COUITheme.textStyles.footnote2,
                                     color = AppContentColors.secondaryText(),
                                 )
                             }
@@ -218,7 +218,7 @@ private fun HistoryRecapCardContent(
                 if (currentVideoStats?.historyMayBeIncomplete == true) {
                     AppText(
                         "较早的观看记录尚未全部载入，视频统计仅包含已载入记录。",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppContentColors.secondaryText(),
                     )
                 }
@@ -239,7 +239,7 @@ private fun HistoryRecapCardContent(
                         ) {
                             AppText(
                                 text = "最近爱看",
-                                style = MaterialTheme.typography.labelMedium,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText(),
                             )
                             if (currentVideoStats.topUps.size > 5) {
@@ -270,7 +270,7 @@ private fun HistoryRecapCardContent(
                                         modifier = Modifier
                                             .size(48.dp)
                                             .clip(CircleShape)
-                                            .background(MaterialTheme.colorScheme.surfaceVariant),
+                                            .background(AppSurfaceTokens.surfaceContainer()),
                                         contentAlignment = Alignment.Center,
                                     ) {
                                         if (up.face.isNotBlank()) {
@@ -290,7 +290,7 @@ private fun HistoryRecapCardContent(
                                     }
                                     AppText(
                                         text = up.name,
-                                        style = MaterialTheme.typography.labelSmall,
+                                        style = COUITheme.textStyles.footnote2,
                                         color = AppContentColors.secondaryText(),
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis,

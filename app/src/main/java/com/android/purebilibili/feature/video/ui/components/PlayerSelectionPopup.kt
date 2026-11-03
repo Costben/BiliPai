@@ -1,6 +1,8 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
@@ -228,13 +230,13 @@ fun PlayerSelectionPopup(
                         // MIUIX 的 DropdownImpl 每行自带一层更浅的背景（宽度只到内容末尾），
                         // 容器若用 surfaceContainerHigh 就会露出来变成阶梯状色块；
                         // 这里跟行背景取同一档色，视觉上才是一整块。
-                        color = MaterialTheme.colorScheme.surfaceContainer,
+                        color = AppSurfaceTokens.surfaceContainer(),
                         // 用设计系统的语义档位而不是硬编码：MiuixAlignedShapes.extraSmall
                         // 正是 8dp，Material3 下跟随它自己的 extraSmall，改规范时会一起变。
                         shape = MaterialTheme.shapes.extraSmall,
                         border = BorderStroke(
                             width = 0.5.dp,
-                            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
+                            color = AppSurfaceTokens.outline().copy(alpha = 0.5f),
                         ),
                     ) {
                         Column(
@@ -318,7 +320,7 @@ fun PlayerSelectionPopup(
                         if (showTitle) {
                             AppText(
                                 text = title,
-                                style = MaterialTheme.typography.titleSmall,
+                                style = COUITheme.textStyles.headline2,
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
                             )
                         }
@@ -370,7 +372,7 @@ internal fun PlayerNativeDropdownItem(
             text = {
                 Column {
                     AppText(item.text)
-                    item.summary?.let { AppText(it, style = MaterialTheme.typography.bodySmall) }
+                    item.summary?.let { AppText(it, style = COUITheme.textStyles.footnote1) }
                 }
             },
             enabled = enabled,
@@ -397,7 +399,7 @@ internal fun PlayerNativeDropdownItem(
                 Column {
                     AppText(text = item.text)
                     item.summary?.let {
-                        AppText(text = it, style = MaterialTheme.typography.bodySmall)
+                        AppText(text = it, style = COUITheme.textStyles.footnote1)
                     }
                 }
             },

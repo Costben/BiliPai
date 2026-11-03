@@ -35,6 +35,9 @@ import com.android.purebilibili.core.ui.blur.BlurSurfaceType
 import com.android.purebilibili.core.ui.blur.currentUnifiedBlurIntensity
 import dev.chrisbanes.haze.HazeState
 import io.github.suqi8.coui.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 @Composable
 internal fun ArticleInteractionBar(
@@ -321,9 +324,9 @@ private fun RowScope.ArticleAction(
     }) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             AppIcon(icon, contentDescription = null, modifier = Modifier.size(20.dp),
-                tint = if (selected) androidx.compose.material3.MaterialTheme.colorScheme.primary else AppContentColors.secondaryText())
+                tint = if (selected) AppContentColors.accent() else AppContentColors.secondaryText())
             AppText(count?.let(::formatArticleActionCount) ?: label, maxLines = 1, tapToCopyEnabled = false,
-                style = androidx.compose.material3.MaterialTheme.typography.labelSmall)
+                style = COUITheme.textStyles.footnote2)
         }
     }
 }

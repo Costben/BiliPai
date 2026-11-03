@@ -104,6 +104,7 @@ import com.android.purebilibili.core.ui.animation.EntranceGroup
 import com.android.purebilibili.core.ui.animation.entrance
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.purebilibili.core.theme.usesMiuixFamilySkin
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  *  外观设置二级页面
@@ -566,7 +567,7 @@ fun AppearanceSettingsContent(
     val themePreviewCompatibilitySeed = com.android.purebilibili.core.theme.LocalWallpaperColorCompatibility.current.seed
     val themePreviewSeed = remember(
         state.md3ColorSource, state.md3CustomColorHex, state.themeColorIndex,
-        MaterialTheme.colorScheme.primary, themePreviewCompatibilitySeed,
+        AppContentColors.accent(), themePreviewCompatibilitySeed,
     ) {
         resolveMd3ThemeSeedColor(
             state.md3ColorSource, state.md3CustomColorHex, state.themeColorIndex,
@@ -961,7 +962,7 @@ fun AppearanceSettingsContent(
                                     }
                                     AppText(
                                         text = stringResource(R.string.appearance_theme_restore_palette_summary),
-                                        style = MaterialTheme.typography.bodySmall,
+                                        style = COUITheme.textStyles.footnote1,
                                         color = AppContentColors.secondaryText(),
                                     )
                                 }
@@ -1263,7 +1264,7 @@ fun AppearanceSettingsContent(
                                                     Spacer(modifier = Modifier.height(8.dp))
                                                     AppText(
                                                         text = displayedThemeColorNames.getOrElse(index) { "" },
-                                                        style = MaterialTheme.typography.labelSmall,
+                                                        style = COUITheme.textStyles.footnote2,
                                                         color = if (isSelected) AppContentColors.accent() else AppContentColors.secondaryText(),
                                                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                                                         maxLines = 1
@@ -1446,7 +1447,7 @@ fun AppearanceSettingsContent(
                                 Spacer(modifier = Modifier.height(16.dp))
                                 AppText(
                                     text = resolveDisplayMetricsSummary(context, displayMetricsSnapshot),
-                                    style = MaterialTheme.typography.bodySmall,
+                                    style = COUITheme.textStyles.footnote1,
                                     color = AppContentColors.secondaryText(),
                                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                                 )
@@ -1549,13 +1550,13 @@ fun AppearanceSettingsContent(
                             ) {
                                 AppText(
                                     text = context.getString(R.string.appearance_splash_random_pool_label),
-                                    style = MaterialTheme.typography.bodyMedium,
+                                    style = COUITheme.textStyles.body1,
                                     color = AppContentColors.primaryText()
                                 )
                                 Spacer(modifier = Modifier.weight(1f))
                                 AppText(
                                     text = context.getString(R.string.appearance_splash_count, splashRandomPoolPreview.totalCount),
-                                    style = MaterialTheme.typography.labelMedium,
+                                    style = COUITheme.textStyles.footnote1,
                                     color = AppContentColors.link()
                                 )
                             }
@@ -1565,7 +1566,7 @@ fun AppearanceSettingsContent(
                             if (splashRandomPoolPreview.previewUris.isEmpty()) {
                                 AppText(
                                     text = context.getString(R.string.appearance_splash_no_visible),
-                                    style = MaterialTheme.typography.bodySmall,
+                                    style = COUITheme.textStyles.footnote1,
                                     color = AppContentColors.secondaryText()
                                 )
                             } else {
@@ -1581,7 +1582,7 @@ fun AppearanceSettingsContent(
                                             modifier = Modifier
                                                 .size(width = 42.dp, height = 72.dp)
                                                 .clip(AppShapes.container(ContainerLevel.Field))
-                                                .background(MaterialTheme.colorScheme.surfaceVariant)
+                                                .background(AppSurfaceTokens.surfaceContainer())
                                         )
                                     }
                                 }
@@ -1589,7 +1590,7 @@ fun AppearanceSettingsContent(
                                     Spacer(modifier = Modifier.height(6.dp))
                                     AppText(
                                         text = context.getString(R.string.appearance_splash_remaining_count, splashRandomPoolPreview.totalCount - splashRandomPoolPreview.previewUris.size),
-                                        style = MaterialTheme.typography.labelSmall,
+                                        style = COUITheme.textStyles.footnote2,
                                         color = AppContentColors.secondaryText()
                                     )
                                 }
@@ -1652,7 +1653,7 @@ fun AppearanceSettingsContent(
                                     modifier = Modifier
                                         .size(60.dp)
                                         .clip(AppShapes.container(ContainerLevel.Field))
-                                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                                        .background(AppSurfaceTokens.surfaceContainer())
                                 ) {
                                     if (hasSplashWallpaper) {
                                         AsyncImage(
@@ -1684,12 +1685,12 @@ fun AppearanceSettingsContent(
                                 Column(modifier = Modifier.weight(1f)) {
                                     AppText(
                                         text = context.getString(R.string.appearance_splash_choose_wallpaper),
-                                        style = MaterialTheme.typography.bodyLarge,
+                                        style = COUITheme.textStyles.main,
                                         color = AppContentColors.primaryText()
                                     )
                                     AppText(
                                         text = context.getString(if (hasSplashWallpaper) R.string.appearance_splash_wallpaper_set_summary else R.string.appearance_splash_wallpaper_empty_summary),
-                                        style = MaterialTheme.typography.bodySmall,
+                                        style = COUITheme.textStyles.footnote1,
                                         color = AppContentColors.secondaryText()
                                     )
                                 }
@@ -2121,7 +2122,7 @@ fun AppearanceSettingsContent(
                                 modifier = Modifier
                                     .size(60.dp)
                                     .clip(AppShapes.container(ContainerLevel.Field))
-                                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                                    .background(AppSurfaceTokens.surfaceContainer())
                             ) {
                                 if (resolvedHomeWallpaperUri.isNotBlank()) {
                                     com.android.purebilibili.core.ui.wallpaper.WallpaperMedia(
@@ -2157,7 +2158,7 @@ fun AppearanceSettingsContent(
                             Column(modifier = Modifier.weight(1f)) {
                                 AppText(
                                     text = context.getString(R.string.appearance_home_wallpaper_choose),
-                                    style = MaterialTheme.typography.bodyLarge,
+                                    style = COUITheme.textStyles.main,
                                     color = AppContentColors.primaryText()
                                 )
                                 AppText(
@@ -2166,7 +2167,7 @@ fun AppearanceSettingsContent(
                                         homeWallpaperFollowsSplash -> context.getString(R.string.appearance_home_wallpaper_follows_splash)
                                         else -> context.getString(R.string.appearance_home_wallpaper_source)
                                     },
-                                    style = MaterialTheme.typography.bodySmall,
+                                    style = COUITheme.textStyles.footnote1,
                                     color = AppContentColors.secondaryText()
                                 )
                             }
@@ -2646,11 +2647,11 @@ private fun ThemePaletteContrastSummary(
         modifier = modifier.padding(horizontal = 16.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        AppText(stringResource(R.string.appearance_theme_contrast_readability), style = MaterialTheme.typography.titleSmall)
-        summaries.forEach { AppText(it, style = MaterialTheme.typography.bodySmall,
+        AppText(stringResource(R.string.appearance_theme_contrast_readability), style = COUITheme.textStyles.headline2)
+        summaries.forEach { AppText(it, style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText()) }
         AppText(stringResource(R.string.appearance_theme_contrast_summary),
-            style = MaterialTheme.typography.bodySmall, color = AppContentColors.secondaryText())
+            style = COUITheme.textStyles.footnote1, color = AppContentColors.secondaryText())
     }
 }
 
@@ -2725,7 +2726,7 @@ internal fun ThemeRoleModeEditor(
         roles.controlAccentHex
     )
     Column(modifier = modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
-        AppText(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+        AppText(title, style = COUITheme.textStyles.headline2, fontWeight = FontWeight.SemiBold)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -2741,7 +2742,7 @@ internal fun ThemeRoleModeEditor(
                         .background(parseMd3CustomColorHex(hex))
                         .border(
                             1.dp,
-                            MaterialTheme.colorScheme.outlineVariant,
+                            AppSurfaceTokens.outline(),
                             AppShapes.container(ContainerLevel.Field)
                         )
                 )
@@ -2763,7 +2764,7 @@ internal fun ThemeRoleModeEditor(
                 secondaryContrast
             ),
             color = AppContentColors.secondaryText(),
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             modifier = Modifier.padding(top = 8.dp)
         )
         if (finalScheme != null) {
@@ -2790,23 +2791,23 @@ internal fun ThemeRoleModeEditor(
                         context.getString(R.string.appearance_theme_contrast_issue_item, it.label, it.ratio, it.required)
                     }
                 ),
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = if (finalIssues.isEmpty()) AppContentColors.secondaryText() else AppContentColors.error(),
                 modifier = Modifier.padding(top = 8.dp),
             )
             AppText(stringResource(R.string.appearance_theme_contrast_explain),
-                style = MaterialTheme.typography.bodySmall, color = AppContentColors.secondaryText())
+                style = COUITheme.textStyles.footnote1, color = AppContentColors.secondaryText())
         }
         onRepair?.let { repair ->
             AppTextButton(onClick = repair, enabled = repairAvailable) { AppText(stringResource(R.string.appearance_theme_contrast_repair)) }
             AppText(stringResource(R.string.appearance_theme_contrast_repair_summary),
-                style = MaterialTheme.typography.bodySmall, color = AppContentColors.secondaryText())
+                style = COUITheme.textStyles.footnote1, color = AppContentColors.secondaryText())
         }
         if (warning) {
             AppText(
                 text = stringResource(R.string.appearance_theme_contrast_warning),
                 color = AppContentColors.error(),
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 modifier = Modifier.padding(top = 8.dp)
             )
         }
@@ -2885,7 +2886,7 @@ private fun Md3ColorPickerSliderFrame(
                 .background(Color.White, CircleShape)
                 .border(
                     width = 1.dp,
-                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.72f),
+                    color = AppSurfaceTokens.outline().copy(alpha = 0.72f),
                     shape = CircleShape
                 )
         )
@@ -2917,7 +2918,7 @@ fun DynamicColorPreview(title: String? = null) {
     ) {
         AppText(
             text = title ?: stringResource(R.string.appearance_dynamic_color_preview),
-            style = MaterialTheme.typography.labelMedium,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText(),
             modifier = Modifier.padding(bottom = 8.dp)
         )
@@ -2973,7 +2974,7 @@ fun ColorPreviewItem(
         Spacer(modifier = Modifier.height(4.dp))
         AppText(
             text = label,
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             color = AppContentColors.secondaryText()
         )
     }

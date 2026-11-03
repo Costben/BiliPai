@@ -2,6 +2,8 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import com.android.purebilibili.core.util.rememberHapticFeedback
 import com.android.purebilibili.core.util.HapticType
@@ -33,7 +35,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -184,7 +185,7 @@ fun CollectionSheet(
             ) {
                 AppText(
                     text = "合集",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     fontWeight = FontWeight.Bold,
                     color = AppContentColors.primaryText()
                 )
@@ -197,7 +198,7 @@ fun CollectionSheet(
                         currentBvid = currentBvid,
                         currentCid = currentCid
                     ),
-                    fontSize = MaterialTheme.typography.labelMedium.fontSize
+                    fontSize = COUITheme.textStyles.footnote1.fontSize
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 EpisodeListNavigationActions(
@@ -246,7 +247,7 @@ fun CollectionSheet(
                 }
             }
 
-            AppHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            AppHorizontalDivider(color = AppSurfaceTokens.outline())
 
             // ── 合集简介（接口 intro 字段，可展开）──
             val collectionIntro = ugcSeason.displayIntro
@@ -270,7 +271,7 @@ fun CollectionSheet(
                             AppText(
                                 text = "简介",
                                 tapToCopyEnabled = false,
-                                style = MaterialTheme.typography.labelLarge,
+                                style = COUITheme.textStyles.button,
                                 fontWeight = FontWeight.Bold,
                                 color = AppContentColors.primaryText(),
                                 modifier = Modifier.alignByBaseline()
@@ -279,7 +280,7 @@ fun CollectionSheet(
                             AppText(
                                 text = collectionIntro,
                                 tapToCopyEnabled = false,
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText(),
                                 maxLines = if (introExpanded) Int.MAX_VALUE else 1,
                                 overflow = TextOverflow.Ellipsis,
@@ -293,7 +294,7 @@ fun CollectionSheet(
                         AppText(
                             text = "${ugcSeason.ep_count} 集 · 总播放 ${FormatUtils.formatStat(totalPlays)}",
                             tapToCopyEnabled = false,
-                            style = MaterialTheme.typography.labelLarge,
+                            style = COUITheme.textStyles.button,
                             fontWeight = FontWeight.Bold,
                             color = AppContentColors.primaryText()
                         )
@@ -421,7 +422,7 @@ internal fun CollectionEpisodeRow(
                     .width(coverWidth)
                     .height(100.dp)
                     .clip(AppShapes.container(ContainerLevel.Chip))
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .background(AppSurfaceTokens.surfaceContainer())
             ) {
                 arc?.pic?.takeIf { it.isNotBlank() }?.let { pic ->
                     AsyncImage(
@@ -449,7 +450,7 @@ internal fun CollectionEpisodeRow(
             Column(modifier = Modifier.weight(1f).height(100.dp)) {
                 AppText(
                     text = episode.title,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     fontWeight = if (isCurrentEpisode) FontWeight.Bold else FontWeight.Normal,
                     color = if (isCurrentEpisode) {
                         AppContentColors.accent()
@@ -464,7 +465,7 @@ internal fun CollectionEpisodeRow(
                     Spacer(modifier = Modifier.height(4.dp))
                     AppText(
                         text = publishTimeText,
-                        style = MaterialTheme.typography.labelMedium,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         maxLines = 1,
                         overflow = TextOverflow.Clip
@@ -496,13 +497,13 @@ internal fun CollectionEpisodeRow(
                 episode.pages.forEachIndexed { pageIndex, page ->
                     AppText(
                         text = "${pageIndex + 1}.${page.part}",
-                        style = MaterialTheme.typography.labelMedium,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier
                             .clip(AppShapes.container(ContainerLevel.Chip))
-                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                            .background(AppSurfaceTokens.surfaceContainer())
                             .clickable(enabled = page.cid > 0) { onPartClick(page) }
                             .padding(horizontal = 10.dp, vertical = 6.dp)
                     )

@@ -4,7 +4,6 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -27,6 +26,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 internal data class LikeDetailState(
     val loading: Boolean = true,
@@ -95,8 +95,8 @@ internal fun LikeDetailScreen(cardId: Long, contentLink: String?, onBack: () -> 
                     Row(Modifier.fillMaxWidth().clickable { item.user?.mid?.takeIf { it > 0 }?.let(onOpenSpace) }.padding(16.dp)) {
                         MessageFeedAvatar(item.user?.avatar.orEmpty())
                         Column(Modifier.padding(start = 12.dp)) {
-                            AppText("${item.user?.nickname.orEmpty()} 赞了我", style = MaterialTheme.typography.bodyLarge)
-                            AppText(formatMessageFeedTime(item.likeTime.coerceAtMost(Int.MAX_VALUE.toLong()).toInt()), style = MaterialTheme.typography.bodySmall)
+                            AppText("${item.user?.nickname.orEmpty()} 赞了我", style = COUITheme.textStyles.main)
+                            AppText(formatMessageFeedTime(item.likeTime.coerceAtMost(Int.MAX_VALUE.toLong()).toInt()), style = COUITheme.textStyles.footnote1)
                         }
                     }
                 }

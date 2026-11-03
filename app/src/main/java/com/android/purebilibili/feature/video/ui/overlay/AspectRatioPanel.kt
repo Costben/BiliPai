@@ -2,6 +2,7 @@
 package com.android.purebilibili.feature.video.ui.overlay
 
 import com.android.purebilibili.core.ui.AppContentColors
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -21,7 +22,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.feature.video.ui.components.VideoAspectRatio
 import com.android.purebilibili.core.ui.AppShapes
@@ -112,7 +112,7 @@ fun AspectRatioPanel(
                     AppText(
                         text = "画面比例",
                         color = Color.White.copy(alpha = 0.6f),
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
 
@@ -134,7 +134,7 @@ fun AspectRatioPanel(
                             AppText(
                                 text = option.label,
                                 color = if (isSelected) AppContentColors.accent() else Color.White,
-                                style = MaterialTheme.typography.bodyMedium.copy(
+                                style = COUITheme.textStyles.body1.copy(
                                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                                 ),
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp)

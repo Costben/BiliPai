@@ -1,5 +1,6 @@
 package com.android.purebilibili.feature.list
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.core.ui.components.appActionWithFeedback
@@ -22,7 +23,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import com.android.purebilibili.core.ui.components.AppLazyVerticalStaggeredGrid as LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppFloatingToolbar
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
@@ -660,7 +660,7 @@ private fun FavoritePgcCard(
                         text = item.badge,
                         modifier = Modifier.align(Alignment.TopStart).padding(AppSpacingTokens.Small),
                         color = com.android.purebilibili.core.ui.MediaContrastPalette.Foreground,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                     )
                 }
                 if (!batchMode) {
@@ -687,7 +687,7 @@ private fun FavoritePgcCard(
                 AppText(item.title, style = com.android.purebilibili.feature.home.components.cards.horizontalVideoCardTypography().title, maxLines = 2, overflow = TextOverflow.Ellipsis)
                 AppText(
                     item.subtitle,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
@@ -739,13 +739,13 @@ private fun FavoriteGenericCategoryCard(
             )
         },
         overlineContent = item.badge.takeIf(String::isNotBlank)?.let { badge ->
-            { AppText(badge, color = AppContentColors.accent(), style = MaterialTheme.typography.labelSmall) }
+            { AppText(badge, color = AppContentColors.accent(), style = COUITheme.textStyles.footnote2) }
         },
         supportingContent = item.subtitle.takeIf(String::isNotBlank)?.let { subtitle ->
             {
                 AppText(
                     subtitle,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,

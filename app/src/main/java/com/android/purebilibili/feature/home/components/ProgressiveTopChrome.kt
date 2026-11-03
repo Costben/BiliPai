@@ -1,9 +1,11 @@
 package com.android.purebilibili.feature.home.components
 
+import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+
 import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
@@ -195,7 +197,7 @@ internal fun BiliPaiImmersiveTopBar(
     headerBlurActive: Boolean = false,
     liquidGlassActive: Boolean = false,
     modifier: Modifier = Modifier,
-    surfaceColor: Color = MaterialTheme.colorScheme.background,
+    surfaceColor: Color = AppSurfaceTokens.background(),
     fadeEnabled: Boolean? = null,
     extendBelowBounds: Boolean = false,
     /** Overrides the preset bottom extension; `0.dp` keeps [extendBelowBounds] semantics. */
@@ -214,7 +216,7 @@ internal fun BiliPaiImmersiveTopBar(
     // 渐隐取色属于顶部特效，玻璃和原生路径共用；特效关闭后的背景不参与。
     val fadeColor = resolveTopChromeFadeColor(
         surfaceColor = surfaceColor,
-        foregroundColor = MaterialTheme.colorScheme.onSurface,
+        foregroundColor = AppContentColors.primaryText(),
         blurred = active,
         backgroundColor = wallpaperPalette?.topColor,
         readabilityBand = readability?.top,
@@ -240,7 +242,7 @@ internal fun BiliPaiImmersiveTopBar(
     androidx.compose.foundation.layout.Box(
         modifier = Modifier
             .background(
-                if (opaqueBackground) MaterialTheme.colorScheme.background.copy(alpha = 1f)
+                if (opaqueBackground) AppSurfaceTokens.background().copy(alpha = 1f)
                 else Color.Transparent
             )
             .then(modifier),
@@ -279,7 +281,7 @@ internal fun BiliPaiImmersiveTopBar(
             )
         }
         val iconBackground = if (opaqueBackground) {
-            iconSurfaceColor.compositeOver(MaterialTheme.colorScheme.background)
+            iconSurfaceColor.compositeOver(AppSurfaceTokens.background())
         } else iconSurfaceColor
         androidx.compose.runtime.CompositionLocalProvider(
             com.android.purebilibili.core.ui.components.LocalAppTopBarSurfaceColor provides iconBackground,

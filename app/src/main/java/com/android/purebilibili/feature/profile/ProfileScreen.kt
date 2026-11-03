@@ -476,7 +476,7 @@ private fun ProfileScreenContent(
             squaredImagePath = skinSquaredBackgroundImagePath,
         )
     }
-    val isDarkTheme = MaterialTheme.colorScheme.surface.luminance() < 0.5f
+    val isDarkTheme = AppSurfaceTokens.surface().luminance() < 0.5f
     val isLoggedOut = state is ProfileUiState.LoggedOut
     val privacyModeEnabled by SettingsManager.getPrivacyModeEnabled(context)
         .collectAsStateWithLifecycle(initialValue = SettingsManager.isPrivacyModeEnabledSync(context))
@@ -719,7 +719,7 @@ private fun ProfileScreenContent(
             // 🔧 [新增] 离线/错误状态 - 显示错误信息并提供重试和离线缓存入口
             AppScaffold(
                 topBarIconBackdropSource = profileProgressiveChrome.source,
-                containerColor = MaterialTheme.colorScheme.background,
+                containerColor = AppSurfaceTokens.background(),
                 topBar = {
                     BiliPaiImmersiveTopBar(
                         backdrop = profileProgressiveChrome.backdrop,
@@ -730,7 +730,7 @@ private fun ProfileScreenContent(
                         if (!profileProgressiveChrome.enabled) {
                         TopReadabilityChrome(
                             height = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 64.dp,
-                            surfaceColor = MaterialTheme.colorScheme.background,
+                            surfaceColor = AppSurfaceTokens.background(),
                             surfaceAlpha = 0.86f
                         )
                         }
@@ -760,7 +760,7 @@ private fun ProfileScreenContent(
                     modifier = Modifier
                         .fillMaxSize()
                         .profileProgressiveBackdrop(profileProgressiveChrome)
-                        .globalWallpaperAwareBackground(MaterialTheme.colorScheme.background)
+                        .globalWallpaperAwareBackground(AppSurfaceTokens.background())
                         .padding(padding)
                         .padding(32.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -778,7 +778,7 @@ private fun ProfileScreenContent(
 
                     AppText(
                         text = currentUiState.message,
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = COUITheme.textStyles.main,
                         color = AppContentColors.secondaryText()
                     )
 
@@ -836,7 +836,7 @@ private fun ProfileScreenContent(
             AppScaffold(
                 topBarIconBackdropSource = profileProgressiveChrome.source,
                 modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-                containerColor = MaterialTheme.colorScheme.background,
+                containerColor = AppSurfaceTokens.background(),
                 // [Immersive] Mobile hides default TopBar, Tablet keeps it
                 topBar = {
                     if (windowSizeClass.shouldUseSplitLayout) {
@@ -852,7 +852,7 @@ private fun ProfileScreenContent(
                             if (!profileProgressiveChrome.enabled) {
                             TopReadabilityChrome(
                                 height = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 104.dp,
-                                surfaceColor = MaterialTheme.colorScheme.background,
+                                surfaceColor = AppSurfaceTokens.background(),
                                 surfaceAlpha = 0.82f,
                                 hazeState = null,
                                 hazeEnabled = false
@@ -995,8 +995,10 @@ private fun BoxScope.ProfileBackground(
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
     val density = LocalDensity.current
-    val colorScheme = MaterialTheme.colorScheme
-    val isDarkTheme = colorScheme.surface.luminance() < 0.5f
+    val pageSurface = AppSurfaceTokens.surface()
+    val pageOnSurface = AppContentColors.primaryText()
+    val pageOnSurfaceVariant = AppContentColors.secondaryText()
+    val isDarkTheme = pageSurface.luminance() < 0.5f
     val heroHeight = resolveProfileHeroHeightDp(
         screenHeightDp = configuration.screenHeightDp,
         widthSizeClass = windowSizeClass.widthSizeClass
@@ -1028,19 +1030,19 @@ private fun BoxScope.ProfileBackground(
             .crossfade(false)
             .build()
     }
-    val heroChrome = remember(hasWallpaper, isDarkTheme, colorScheme.onSurface, colorScheme.onSurfaceVariant) {
+    val heroChrome = remember(hasWallpaper, isDarkTheme, pageOnSurface, pageOnSurfaceVariant) {
         resolveProfileHeroChrome(
             hasWallpaper = hasWallpaper,
             isDarkTheme = isDarkTheme,
-            onSurfaceColor = colorScheme.onSurface,
-            onSurfaceVariantColor = colorScheme.onSurfaceVariant
+            onSurfaceColor = pageOnSurface,
+            onSurfaceVariantColor = pageOnSurfaceVariant
         )
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .globalWallpaperAwareBackground(colorScheme.surface)
+            .globalWallpaperAwareBackground(pageSurface)
     )
 
     Box(
@@ -1399,28 +1401,45 @@ private fun ProfileSpaceContent(
         hasWallpaper = hasWallpaper
     ).dp
     val statusBarTopPadding = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
-    val colorScheme = MaterialTheme.colorScheme
-    val isDarkTheme = colorScheme.surface.luminance() < 0.5f
+    val pageSurface = AppSurfaceTokens.surface()
+    val pageOnSurface = AppContentColors.primaryText()
+    val pageOnSurfaceVariant = AppContentColors.secondaryText()
+    val pagePrimary = AppContentColors.accent()
+    val pageContainerLow = AppSurfaceTokens.surfaceContainer()
+    val pageContainerHigh = AppSurfaceTokens.surfaceContainerHigh()
+    val pageContainerHighest = AppSurfaceTokens.surfaceContainerHighest()
+    val pageOutline = AppSurfaceTokens.outline()
+    val isDarkTheme = pageSurface.luminance() < 0.5f
     val layoutTokens = remember { resolveProfileLayoutTokens() }
-    val contentChrome = remember(colorScheme, isDarkTheme) {
+    val contentChrome = remember(
+        pageSurface,
+        pageOnSurface,
+        pageOnSurfaceVariant,
+        pagePrimary,
+        pageContainerLow,
+        pageContainerHigh,
+        pageContainerHighest,
+        pageOutline,
+        isDarkTheme,
+    ) {
         resolveProfileContentChrome(
-            surfaceColor = colorScheme.surface,
-            onSurfaceColor = colorScheme.onSurface,
-            onSurfaceVariantColor = colorScheme.onSurfaceVariant,
-            primaryColor = colorScheme.primary,
-            surfaceContainerLowColor = colorScheme.surfaceContainerLow,
-            surfaceContainerHighColor = colorScheme.surfaceContainerHigh,
-            surfaceContainerHighestColor = colorScheme.surfaceContainerHighest,
-            outlineVariantColor = colorScheme.outlineVariant,
+            surfaceColor = pageSurface,
+            onSurfaceColor = pageOnSurface,
+            onSurfaceVariantColor = pageOnSurfaceVariant,
+            primaryColor = pagePrimary,
+            surfaceContainerLowColor = pageContainerLow,
+            surfaceContainerHighColor = pageContainerHigh,
+            surfaceContainerHighestColor = pageContainerHighest,
+            outlineVariantColor = pageOutline,
             isDarkTheme = isDarkTheme
         )
     }
-    val heroChrome = remember(hasWallpaper, isDarkTheme, colorScheme.onSurface, colorScheme.onSurfaceVariant) {
+    val heroChrome = remember(hasWallpaper, isDarkTheme, pageOnSurface, pageOnSurfaceVariant) {
         resolveProfileHeroChrome(
             hasWallpaper = hasWallpaper,
             isDarkTheme = isDarkTheme,
-            onSurfaceColor = colorScheme.onSurface,
-            onSurfaceVariantColor = colorScheme.onSurfaceVariant
+            onSurfaceColor = pageOnSurface,
+            onSurfaceVariantColor = pageOnSurfaceVariant
         )
     }
     val tabletRailScrollState = rememberScrollState()
@@ -1609,7 +1628,7 @@ private fun ProfileSpaceContent(
                     .fillMaxSize()
                     .profileProgressiveBackdrop(progressiveTopChrome)
                     .then(if (hazeState != null) Modifier.hazeSourceCompat(hazeState) else Modifier)
-                    .globalWallpaperAwareBackground(colorScheme.surface),
+                    .globalWallpaperAwareBackground(pageSurface),
             ) {
                 Box(
                     modifier = Modifier
@@ -2157,7 +2176,7 @@ private fun ProfileQuickAccessDashboard(
                     onClick = action,
                     modifier = Modifier.weight(1f).heightIn(min = 72.dp),
                     shape = AppShapes.container(ContainerLevel.Card),
-                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.32f),
+                    color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.32f),
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp, horizontal = 4.dp),
@@ -2167,7 +2186,7 @@ private fun ProfileQuickAccessDashboard(
                         AppIcon(icon, contentDescription = null, tint = AppContentColors.accent())
                         AppText(
                             label,
-                            style = MaterialTheme.typography.labelMedium,
+                            style = COUITheme.textStyles.footnote1,
                             color = contentColor,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -2184,7 +2203,7 @@ private fun ProfileQuickAccessDashboard(
                 AppText(
                     "收藏夹",
                     modifier = Modifier.weight(1f),
-                    style = MaterialTheme.typography.titleSmall,
+                    style = COUITheme.textStyles.headline2,
                     fontWeight = FontWeight.SemiBold,
                     color = contentColor,
                 )
@@ -2222,14 +2241,16 @@ private fun ProfileSpaceHeroHeader(
 ) {
     val configuration = LocalConfiguration.current
     val windowSizeClass = LocalWindowSizeClass.current
-    val colorScheme = MaterialTheme.colorScheme
+    val pageSurface = AppSurfaceTokens.surface()
+    val pageOnSurface = AppContentColors.primaryText()
+    val pageOnSurfaceVariant = AppContentColors.secondaryText()
     // The separate phone identity overlay owns wallpaper/photo colors. Statistics
     // use an opaque page surface in both native themes and both glass states.
     val statisticsChrome = if (!showIdentity) resolveProfileHeroChrome(
         hasWallpaper = false,
-        isDarkTheme = colorScheme.surface.luminance() < 0.5f,
-        onSurfaceColor = colorScheme.onSurface,
-        onSurfaceVariantColor = colorScheme.onSurfaceVariant,
+        isDarkTheme = pageSurface.luminance() < 0.5f,
+        onSurfaceColor = pageOnSurface,
+        onSurfaceVariantColor = pageOnSurfaceVariant,
     ) else heroChrome
     val heroHeight = resolveProfileHeroHeightDp(
         screenHeightDp = configuration.screenHeightDp,
@@ -2245,7 +2266,7 @@ private fun ProfileSpaceHeroHeader(
                     if (!showIdentity) {
                         val top = identityReserve.toPx().coerceIn(0f, size.height)
                         drawRect(
-                            color = colorScheme.surface,
+                            color = pageSurface,
                             topLeft = androidx.compose.ui.geometry.Offset(0f, top),
                             size = androidx.compose.ui.geometry.Size(size.width, size.height - top),
                         )
@@ -2373,7 +2394,7 @@ private fun ProfileSpaceHeader(
                     UserLevelBadge(level = user.level)
                     if (user.isVip) com.android.purebilibili.core.ui.components.UserVipBadge(label = user.vipLabel, compact = true)
                 }
-                AppText("UID ${user.mid}", color = secondaryColor, style = MaterialTheme.typography.bodySmall)
+                AppText("UID ${user.mid}", color = secondaryColor, style = COUITheme.textStyles.footnote1)
             }
         }
         Row(
@@ -2424,13 +2445,13 @@ private fun ProfileSpaceHeader(
                 AppText(
                     text = "硬币 ${FormatUtils.formatStat(user.coin.toLong())}",
                     modifier = if (openLedger != null) Modifier.clickable { openLedger(AccountLedgerKind.COINS) } else Modifier,
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = secondaryColor,
                 )
                 AppText(
                     text = "经验 ${levelProgress.currentExp}/${levelProgress.nextExp}",
                     modifier = if (openLedger != null) Modifier.clickable { openLedger(AccountLedgerKind.EXPERIENCE) } else Modifier,
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = secondaryColor,
                 )
             }
@@ -2517,7 +2538,7 @@ private fun ProfileIdentityDrawer(
             ) {
                 AppText(
                     text = meta.signText,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = if (meta.signPlaceholder) secondaryColor else contentColor.copy(alpha = 0.86f),
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis
@@ -2561,7 +2582,7 @@ private fun ProfileSpaceMetaChip(
     ) {
         AppText(
             text = text,
-            style = MaterialTheme.typography.labelMedium,
+            style = COUITheme.textStyles.footnote1,
             color = contentColor,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -2593,11 +2614,11 @@ private fun ProfileSpaceStat(
     ) {
         AppText(
             text = FormatUtils.formatStat(value.toLong()),
-            style = MaterialTheme.typography.titleMedium,
+            style = COUITheme.textStyles.headline1,
             color = color,
             fontWeight = FontWeight.Bold
         )
-        AppText(text = label, style = MaterialTheme.typography.labelSmall, color = color.copy(alpha = 0.7f))
+        AppText(text = label, style = COUITheme.textStyles.footnote2, color = color.copy(alpha = 0.7f))
     }
 }
 
@@ -2806,7 +2827,7 @@ private fun ProfileSpaceServices(
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         AppText(
             text = "我的服务",
-            style = MaterialTheme.typography.titleMedium,
+            style = COUITheme.textStyles.headline1,
             color = contentChrome.onSurfaceColor,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(horizontal = 20.dp)
@@ -2956,7 +2977,7 @@ private fun ProfileSpaceSection(
         ) {
             AppText(
                 text = if (count > 0) "$title  ${FormatUtils.formatStat(count.toLong())}" else title,
-                style = MaterialTheme.typography.titleMedium,
+                style = COUITheme.textStyles.headline1,
                 color = textColor,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.weight(1f)
@@ -3039,7 +3060,7 @@ private fun ProfileSpacePosterCard(
             ) {
                 AppText(
                     text = title,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = contentChrome.onSurfaceColor,
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 1,
@@ -3047,7 +3068,7 @@ private fun ProfileSpacePosterCard(
                 )
                 AppText(
                     text = subtitle.ifBlank { "公开" },
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = contentChrome.onSurfaceVariantColor,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -3212,7 +3233,7 @@ private fun ProfileVideoList(
                                         },
                                         supportingContent = {
                                             AppText("${FormatUtils.formatStat(video.play.toLong())} 播放 · ${video.length}",
-                                                style = MaterialTheme.typography.bodySmall)
+                                                style = COUITheme.textStyles.footnote1)
                                         },
                                         coverContent = {
                                             AsyncImage(model = video.pic, contentDescription = null,
@@ -3250,7 +3271,7 @@ private fun ProfileDynamicList(
             if (index != items.lastIndex) {
                 AppHorizontalDivider(
                     modifier = Modifier.padding(vertical = 4.dp),
-                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.22f),
+                    color = AppSurfaceTokens.outline().copy(alpha = 0.22f),
                     thickness = 0.7.dp
                 )
             }
@@ -3315,13 +3336,13 @@ private fun ProfileDynamicCard(
                 modifier = Modifier
                     .size(42.dp)
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .background(AppSurfaceTokens.surfaceContainer())
             )
             Spacer(modifier = Modifier.width(10.dp))
             Column(modifier = Modifier.weight(1f)) {
                 AppText(
                     text = authorName,
-                    style = MaterialTheme.typography.titleSmall,
+                    style = COUITheme.textStyles.headline2,
                     color = AppContentColors.accent(),
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 1,
@@ -3330,7 +3351,7 @@ private fun ProfileDynamicCard(
                 if (publishText.isNotBlank()) {
                     AppText(
                         text = publishText,
-                        style = MaterialTheme.typography.labelMedium,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                 }
@@ -3348,7 +3369,7 @@ private fun ProfileDynamicCard(
                     expanded = showMoreMenu,
                     onDismissRequest = { showMoreMenu = false },
                     modifier = if (com.android.purebilibili.core.ui.components.appGlassMenuAvailable()) Modifier
-                else Modifier.background(MaterialTheme.colorScheme.surfaceContainer)
+                else Modifier.background(AppSurfaceTokens.surfaceContainer())
                 ) {
                     AppDropdownMenuItem(
                         text = { AppText("复制链接") },
@@ -3394,7 +3415,7 @@ private fun ProfileDynamicCard(
         if (bodyText.isNotBlank()) {
             AppText(
                 text = bodyText,
-                style = MaterialTheme.typography.bodyLarge,
+                style = COUITheme.textStyles.main,
                 color = AppContentColors.primaryText(),
 
                 maxLines = 8,
@@ -3420,7 +3441,7 @@ private fun ProfileDynamicOriginalContent(item: SpaceDynamicItem, onVideoClick: 
     AppSurface(
         modifier = Modifier.fillMaxWidth(),
         shape = AppShapes.container(ContainerLevel.Chip),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.28f),
+        color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.28f),
         shadowElevation = 0.dp
     ) {
         Column(
@@ -3430,7 +3451,7 @@ private fun ProfileDynamicOriginalContent(item: SpaceDynamicItem, onVideoClick: 
             if (authorName.isNotBlank()) {
                 AppText(
                     text = "@$authorName",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppContentColors.accent(),
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 1,
@@ -3440,7 +3461,7 @@ private fun ProfileDynamicOriginalContent(item: SpaceDynamicItem, onVideoClick: 
             if (text.isNotBlank()) {
                 AppText(
                     text = text,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppContentColors.secondaryText(),
 
                     maxLines = 8,
@@ -3485,7 +3506,7 @@ private fun ProfileDynamicMajorContent(item: SpaceDynamicItem, onVideoClick: (St
         if (!title.isNullOrBlank() && title != resolveProfileDynamicText(item)) {
             AppText(
                 text = title,
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 color = AppContentColors.primaryText(),
                 fontWeight = FontWeight.Medium,
                 maxLines = 2,
@@ -3522,7 +3543,7 @@ private fun ProfileDynamicMajorContent(item: SpaceDynamicItem, onVideoClick: (St
                             Modifier
                         }
                     )
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .background(AppSurfaceTokens.surfaceContainer())
             )
         }
     }
@@ -3587,7 +3608,7 @@ private fun ProfileDynamicAction(icon: ImageVector, text: String) {
         Spacer(modifier = Modifier.width(5.dp))
         AppText(
             text = text,
-            style = MaterialTheme.typography.labelMedium,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText(),
             maxLines = 1
         )
@@ -3601,7 +3622,7 @@ private fun ProfileSpaceListRow(title: String, subtitle: String, imageUrl: Strin
             .fillMaxWidth()
             .clip(AppShapes.container(ContainerLevel.Chip))
             .clickable(onClick = onClick),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.42f),
+        color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.42f),
         shadowElevation = 0.dp
     ) {
         Row(
@@ -3613,7 +3634,7 @@ private fun ProfileSpaceListRow(title: String, subtitle: String, imageUrl: Strin
                 modifier = Modifier
                     .size(width = 112.dp, height = 64.dp)
                     .clip(AppShapes.container(ContainerLevel.Chip))
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                    .background(AppSurfaceTokens.surfaceContainer()),
                 contentAlignment = Alignment.Center
             ) {
                 if (imageUrl.isNotBlank()) {
@@ -3634,7 +3655,7 @@ private fun ProfileSpaceListRow(title: String, subtitle: String, imageUrl: Strin
             Column(modifier = Modifier.weight(1f)) {
                 AppText(
                     text = title,
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = COUITheme.textStyles.main,
                     color = AppContentColors.primaryText(),
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
@@ -3642,7 +3663,7 @@ private fun ProfileSpaceListRow(title: String, subtitle: String, imageUrl: Strin
                 Spacer(modifier = Modifier.height(4.dp))
                 AppText(
                     text = subtitle.ifBlank { "公开" },
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -3660,7 +3681,7 @@ private fun ProfileSpaceEmpty(text: String) {
             .padding(48.dp),
         contentAlignment = Alignment.Center
     ) {
-        AppText(text = text, style = MaterialTheme.typography.bodyMedium, color = AppContentColors.secondaryText())
+        AppText(text = text, style = COUITheme.textStyles.body1, color = AppContentColors.secondaryText())
     }
 }
 
@@ -3682,7 +3703,7 @@ private fun ProfileEditAccountDialog(
         title = { AppText("编辑资料") },
         text = {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                AppText("B 站账号资料", color = AppContentColors.secondaryText(), style = MaterialTheme.typography.labelMedium, modifier = Modifier.padding(start = 12.dp, bottom = 4.dp))
+                AppText("B 站账号资料", color = AppContentColors.secondaryText(), style = COUITheme.textStyles.footnote1, modifier = Modifier.padding(start = 12.dp, bottom = 4.dp))
                 ProfileAccountEditRow("头像", "", avatar = accountFace, enabled = !isSaving, onClick = onEditAvatar)
                 ProfileAccountEditRow("昵称", state.name.ifBlank { "未展示" }, enabled = !isSaving) {
                     onEditField(ProfileAccountField.NAME)
@@ -3730,7 +3751,7 @@ private fun ProfileAccountEditRow(
             .padding(horizontal = 12.dp, vertical = 8.dp),
         contentAlignment = Alignment.CenterStart,
     ) {
-        AppText(title, color = AppContentColors.primaryText(), style = MaterialTheme.typography.bodyLarge)
+        AppText(title, color = AppContentColors.primaryText(), style = COUITheme.textStyles.main)
         if (!avatar.isNullOrBlank()) {
             // 头像行与其他行一致：头像与右箭头右对齐，标题保持居左。
             Row(
@@ -3753,7 +3774,7 @@ private fun ProfileAccountEditRow(
                     AppText(
                         text = value,
                         color = AppContentColors.secondaryText(),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f, fill = false),
@@ -3790,7 +3811,7 @@ private fun ProfileAvatarConfirmDialog(
                 )
                 AppText(
                     "确认后将提交到 B 站账号。",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                 )
             }
@@ -3859,7 +3880,7 @@ private fun ProfileAccountFieldDialog(
                 AppText(
                     if (isName) "改名可能需要消耗 6 枚硬币，实际费用和限制以 B 站返回为准。确认后将提交账号修改。"
                     else "请输入有效日期，提交后会修改 B 站账号生日。",
-                    style = MaterialTheme.typography.bodySmall
+                    style = COUITheme.textStyles.footnote1
                 )
             }
         },
@@ -3932,7 +3953,7 @@ fun TabletProfileContent(
             // Right Pane: Services
             // [Modified] Glassy Background for Readability
             // Detect theme via MaterialTheme properties
-            val isDarkTheme = MaterialTheme.colorScheme.surface.luminance() < 0.5f
+            val isDarkTheme = AppSurfaceTokens.surface().luminance() < 0.5f
             val glassContainerColor = if (isDarkTheme) Color.Black.copy(alpha = 0.3f) else Color.White.copy(alpha = 0.5f)
             val glassBorderColor = if (isDarkTheme) Color.White.copy(alpha = 0.1f) else Color.White.copy(alpha = 0.4f)
             val contentColor = if (isDarkTheme) Color.White else Color.Black
@@ -3953,7 +3974,7 @@ fun TabletProfileContent(
                 ) {
                     AppText(
                         text = "我的服务",
-                        style = MaterialTheme.typography.titleLarge,
+                        style = COUITheme.textStyles.title4,
                         fontWeight = FontWeight.Bold,
                         color = contentColor,
                         modifier = Modifier.padding(bottom = 16.dp)
@@ -4117,7 +4138,7 @@ private fun MobileProfileContent(
                     "将打开系统相册选择一张照片作为背景。\n\n" +
                         "📸 仅获取您选中照片的访问权限\n" +
                         "🔒 不会访问您的其他照片",
-                    style = MaterialTheme.typography.bodyMedium
+                    style = COUITheme.textStyles.body1
                 )
             },
             confirmButton = {
@@ -4199,7 +4220,7 @@ private fun MobileProfileContent(
                     .fillMaxSize()
                     .profileProgressiveBackdrop(progressiveTopChrome)
                     .then(if (hazeState != null) Modifier.hazeSourceCompat(hazeState) else Modifier)
-                    .globalWallpaperAwareBackground(MaterialTheme.colorScheme.surface),
+                    .globalWallpaperAwareBackground(AppSurfaceTokens.surface()),
             ) {
                 captureBackground()
             // 📜 滚动内容
@@ -4245,7 +4266,7 @@ private fun MobileProfileContent(
 
                 // [Adaptive Frost] 自适应磨砂玻璃逻辑
                 // [Fix] Detect theme via MaterialTheme properties
-                val isDarkTheme = MaterialTheme.colorScheme.surface.luminance() < 0.5f
+                val isDarkTheme = AppSurfaceTokens.surface().luminance() < 0.5f
 
                 // 玻璃颜色：深色模式用黑透，浅色模式用白透
                 val glassContainerColor = if (isDarkTheme) Color.Black.copy(alpha = 0.24f) else Color.White.copy(alpha = 0.28f)
@@ -4267,7 +4288,7 @@ private fun MobileProfileContent(
                     onInboxClick = onInboxClick,  //  [新增]
                     onAccountManageClick = onAccountManageClick,
                     onLogout = onLogout,
-                    containerColor = if (isImmersive) glassContainerColor else MaterialTheme.colorScheme.surface,
+                    containerColor = if (isImmersive) glassContainerColor else AppSurfaceTokens.surface(),
                     contentColor = if (isImmersive) glassContentColor else AppContentColors.primaryText(),
                     borderColor = if (isImmersive) glassBorderColor else null,
                     isLogin = user.isLogin // [New] Pass login status
@@ -4381,14 +4402,14 @@ fun GuestProfileContent(
 
             AppText(
                 text = "欢迎使用 BiliPai",
-                style = MaterialTheme.typography.headlineSmall,
+                style = COUITheme.textStyles.title4,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
             )
 
             AppText(
                 text = "登录后享受完整的 B站 体验",
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 color = Color.White.copy(alpha = 0.6f),
                 modifier = Modifier.padding(top = AppSpacingTokens.Small)
             )
@@ -4421,7 +4442,7 @@ fun GuestProfileContent(
                 Spacer(modifier = Modifier.width(AppSpacingTokens.ExtraSmall))
                 AppText(
                     text = "支持扫码登录和网页登录",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = Color.White
                 )
             }
@@ -4440,7 +4461,7 @@ fun UserInfoSection(
         modifier = Modifier
             .fillMaxWidth()
             //  修复：背景色 (支持透明)
-            .background(if (transparent) Color.Transparent else MaterialTheme.colorScheme.surface)
+            .background(if (transparent) Color.Transparent else AppSurfaceTokens.surface())
             .clickable(onClick = onClick) // [New] Make it clickable
             .padding(horizontal = 24.dp, vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -4454,7 +4475,7 @@ fun UserInfoSection(
                 modifier = Modifier
                     .size(72.dp)
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                    .background(AppSurfaceTokens.surfaceContainer()),
                 contentScale = ContentScale.Crop
             )
             UserAvatarCornerMarkBadge(
@@ -4524,7 +4545,7 @@ private fun ProfileWallpaperActionSheet(
 ) {
     AppModalBottomSheet(
         onDismissRequest = onDismiss,
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = AppSurfaceTokens.surface(),
         shape = AppShapes.container(ContainerLevel.Sheet)
     ) {
         Column(
@@ -4536,7 +4557,7 @@ private fun ProfileWallpaperActionSheet(
         ) {
             AppText(
                 text = "背景装扮",
-                style = MaterialTheme.typography.titleMedium,
+                style = COUITheme.textStyles.headline1,
                 fontWeight = FontWeight.Bold,
                 color = AppContentColors.primaryText(),
                 modifier = Modifier.padding(bottom = 2.dp)
@@ -4580,7 +4601,7 @@ private fun ProfileWallpaperSheetActionRow(
             .clip(shape)
             .clickable(enabled = enabled, onClick = onClick),
         shape = shape,
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = if (enabled) 0.54f else 0.30f),
+        color = AppSurfaceTokens.surfaceContainer().copy(alpha = if (enabled) 0.54f else 0.30f),
         tonalElevation = 0.dp,
         shadowElevation = 0.dp
     ) {
@@ -4595,7 +4616,7 @@ private fun ProfileWallpaperSheetActionRow(
             AppSurface(
                 modifier = Modifier.size(34.dp),
                 shape = AppShapes.container(ContainerLevel.Field),
-                color = MaterialTheme.colorScheme.surface.copy(alpha = if (enabled) 0.82f else 0.46f)
+                color = AppSurfaceTokens.surface().copy(alpha = if (enabled) 0.82f else 0.46f)
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     AppIcon(
@@ -4608,7 +4629,7 @@ private fun ProfileWallpaperSheetActionRow(
             }
             AppText(
                 text = title,
-                style = MaterialTheme.typography.bodyLarge,
+                style = COUITheme.textStyles.main,
                 fontWeight = FontWeight.Medium,
                 color = contentColor,
                 modifier = Modifier.weight(1f)
@@ -4654,13 +4675,13 @@ private fun ProfileWallpaperActionCard(
     val buttonColor = if (isImmersive) {
         if (blurEnabled) Color.White.copy(alpha = 0.10f) else Color.White.copy(alpha = 0.16f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
+        AppSurfaceTokens.surface().copy(alpha = 0.9f)
     }
     val contentColor = if (isImmersive) Color.White else AppContentColors.primaryText()
     val buttonBorderColor = if (isImmersive) {
         Color.White.copy(alpha = if (blurEnabled) 0.16f else 0.10f)
     } else {
-        MaterialTheme.colorScheme.outline.copy(alpha = 0.12f)
+        AppSurfaceTokens.outline().copy(alpha = 0.12f)
     }
     val showSectionLabel = !isImmersive
     val actionRows = listOf(
@@ -4695,7 +4716,7 @@ private fun ProfileWallpaperActionCard(
         if (showSectionLabel) {
             AppText(
                 text = "背景装扮",
-                style = MaterialTheme.typography.labelMedium,
+                style = COUITheme.textStyles.footnote1,
                 color = sectionLabelColor,
                 modifier = Modifier.padding(start = 4.dp, bottom = 8.dp)
             )
@@ -4811,7 +4832,7 @@ private fun ProfileWallpaperActionButton(
             ) {
                 AppText(
                     text = displayTitle,
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     fontWeight = FontWeight.SemiBold,
                     color = effectiveContentColor,
                     maxLines = titleMaxLines,
@@ -4821,7 +4842,7 @@ private fun ProfileWallpaperActionButton(
                     Spacer(modifier = Modifier.height(2.dp))
                     AppText(
                         text = subtitle,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = effectiveSecondaryColor
                     )
                 }
@@ -4843,7 +4864,7 @@ fun UserInfoText(user: UserState, centered: Boolean = false, forceWhite: Boolean
 
     AppText(
         text = user.name,
-        style = MaterialTheme.typography.titleLarge.copy(
+        style = COUITheme.textStyles.title4.copy(
             shadow = shadow
         ),
         fontWeight = FontWeight.Bold,
@@ -4857,12 +4878,12 @@ fun UserInfoText(user: UserState, centered: Boolean = false, forceWhite: Boolean
             // Theme soft pill (same as space header / side drawer), not brand primary pink.
             com.android.purebilibili.core.ui.components.UserVipBadge(
                 label = user.vipLabel,
-                fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                fontSize = COUITheme.textStyles.footnote2.fontSize,
                 compact = true,
             )
         } else {
-            AppSurface(color = MaterialTheme.colorScheme.surfaceVariant, shape = AppShapes.container(ContainerLevel.Tag)) {
-                AppText("正式会员", style = MaterialTheme.typography.labelSmall, color = AppContentColors.secondaryText(), modifier = Modifier.padding(horizontal = AppSpacingTokens.ExtraSmall, vertical = AppSpacingTokens.Micro))
+            AppSurface(color = AppSurfaceTokens.surfaceContainer(), shape = AppShapes.container(ContainerLevel.Tag)) {
+                AppText("正式会员", style = COUITheme.textStyles.footnote2, color = AppContentColors.secondaryText(), modifier = Modifier.padding(horizontal = AppSpacingTokens.ExtraSmall, vertical = AppSpacingTokens.Micro))
             }
         }
     }
@@ -4890,7 +4911,7 @@ fun UserStatsSection(user: UserState, onFollowingClick: () -> Unit = {}, transpa
         modifier = Modifier
             .fillMaxWidth()
             //  修复：背景色 (支持透明)
-            .background(if (transparent) Color.Transparent else MaterialTheme.colorScheme.surface)
+            .background(if (transparent) Color.Transparent else AppSurfaceTokens.surface())
             .padding(bottom = 8.dp), // [Modified] 减少底部间距，使下方服务紧贴 (16.dp -> 8.dp)
         horizontalArrangement = Arrangement.SpaceAround
     ) {
@@ -4926,12 +4947,12 @@ fun StatItem(
             text = count,
             fontWeight = FontWeight.Bold,
             color = textColor,
-            style = MaterialTheme.typography.titleMedium.copy(shadow = shadow)
+            style = COUITheme.textStyles.headline1.copy(shadow = shadow)
         )
         AppText(
             text = label,
             color = if (useShadow) Color.White.copy(alpha = 0.9f) else labelColor, // Whiter label
-            style = MaterialTheme.typography.bodySmall.copy(shadow = shadow) // Apply same shadow to label
+            style = COUITheme.textStyles.footnote1.copy(shadow = shadow) // Apply same shadow to label
         )
     }
 }
@@ -4961,18 +4982,18 @@ fun VipBannerSection(user: UserState) {
                     text = if (user.isVip) "尊贵的大会员" else "成为大会员",
                     color = colorScheme.onTertiaryContainer,
                     fontWeight = FontWeight.Bold,
-                    style = MaterialTheme.typography.titleSmall
+                    style = COUITheme.textStyles.headline2
                 )
                 AppText(
                     text = "硬币: ${user.coin}   B币: ${user.bcoin}",
                     color = colorScheme.onTertiaryContainer,
-                    style = MaterialTheme.typography.labelSmall
+                    style = COUITheme.textStyles.footnote2
                 )
             }
             AppText(
                 text = if (user.isVip) "续费 >" else "开通 >",
                 color = colorScheme.onTertiaryContainer,
-                style = MaterialTheme.typography.labelMedium
+                style = COUITheme.textStyles.footnote1
             )
         }
     }
@@ -4991,7 +5012,7 @@ fun ServicesSection(
     onInboxClick: () -> Unit = {},  //  [新增] 私信入口
     onAccountManageClick: () -> Unit = {},
     onLogout: () -> Unit = {},
-    containerColor: Color = MaterialTheme.colorScheme.surface,
+    containerColor: Color = AppSurfaceTokens.surface(),
     contentColor: Color = AppContentColors.primaryText(),
     borderColor: Color? = null,
     embeddedInPanel: Boolean = false,
@@ -5048,7 +5069,7 @@ fun ServicesSection(
                                 title = title,
                                 onClick = onClick,
                                 iconTint = contentColor,
-                                containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.3f),
+                                containerColor = AppSurfaceTokens.surface().copy(alpha = 0.3f),
                                 contentColor = contentColor,
                                 modifier = Modifier.weight(1f)
                             )
@@ -5296,7 +5317,7 @@ private fun ProfileServiceRow(
         Spacer(modifier = Modifier.width(14.dp))
         AppText(
             text = title,
-            style = MaterialTheme.typography.titleMedium,
+            style = COUITheme.textStyles.headline1,
             fontWeight = FontWeight.SemiBold,
             color = textColor,
             modifier = Modifier.weight(1f),
@@ -5386,7 +5407,7 @@ private fun ProfileAccountActionArea(
             ) {
                 AppText(
                     text = if (isLogin) "退出登录" else "立即登录",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     fontWeight = FontWeight.SemiBold,
                     color = if (isLogin) AppContentColors.error() else AppContentColors.accent(),
                     maxLines = 1
@@ -5476,7 +5497,7 @@ private fun ProfileFavoriteFolderShortcutChip(
         modifier = modifier
             .heightIn(min = if (compact) 42.dp else 48.dp)
             .clip(AppShapes.container(ContainerLevel.Card))
-            .background(MaterialTheme.colorScheme.surface.copy(alpha = if (compact) 0.22f else 0.28f))
+            .background(AppSurfaceTokens.surface().copy(alpha = if (compact) 0.22f else 0.28f))
             .appGentleActionClickable(
                 shape = AppShapes.container(ContainerLevel.Card),
                 onClick = onClick,
@@ -5497,7 +5518,7 @@ private fun ProfileFavoriteFolderShortcutChip(
                 color = contentColor,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                style = if (compact) MaterialTheme.typography.labelMedium else MaterialTheme.typography.labelLarge,
+                style = if (compact) COUITheme.textStyles.footnote1 else COUITheme.textStyles.button,
                 fontWeight = FontWeight.SemiBold
             )
             AppText(
@@ -5505,7 +5526,7 @@ private fun ProfileFavoriteFolderShortcutChip(
                 color = contentColor.copy(alpha = 0.62f),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.labelSmall
+                style = COUITheme.textStyles.footnote2
             )
         }
     }
@@ -5521,7 +5542,7 @@ private fun ProfileFavoriteFolderMoreChip(
         modifier = modifier
             .heightIn(min = 42.dp)
             .clip(AppShapes.container(ContainerLevel.Card))
-            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.18f))
+            .background(AppSurfaceTokens.surface().copy(alpha = 0.18f))
             .appGentleActionClickable(
                 shape = AppShapes.container(ContainerLevel.Card),
                 onClick = onClick,
@@ -5534,7 +5555,7 @@ private fun ProfileFavoriteFolderMoreChip(
             color = contentColor,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.labelMedium,
+            style = COUITheme.textStyles.footnote1,
             fontWeight = FontWeight.SemiBold
         )
     }
@@ -5561,9 +5582,9 @@ internal fun AccountSwitchDialog(
     val hasVipCandidate = accounts.any { it.isVip && it.mid != activeAccountMid }
     val showPlaybackGuide = !activeIsVip && hasVipCandidate && playbackAccountMid == null
     val playbackAccountColors = resolveAccessibleContainerColors(
-        containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.45f),
-        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-        backgroundColor = MaterialTheme.colorScheme.surface,
+        containerColor = AppSurfaceTokens.primaryContainer().copy(alpha = 0.45f),
+        contentColor = AppSurfaceTokens.onPrimaryContainer(),
+        backgroundColor = AppSurfaceTokens.surface(),
         fallbackContentColors = listOf(
             AppContentColors.primaryText(),
             MaterialTheme.colorScheme.onBackground,
@@ -5572,7 +5593,7 @@ internal fun AccountSwitchDialog(
     val playbackGuideColors = resolveAccessibleContainerColors(
         containerColor = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.45f),
         contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-        backgroundColor = MaterialTheme.colorScheme.surface,
+        backgroundColor = AppSurfaceTokens.surface(),
         fallbackContentColors = listOf(
             AppContentColors.primaryText(),
             MaterialTheme.colorScheme.onBackground,
@@ -5593,12 +5614,12 @@ internal fun AccountSwitchDialog(
             ) {
                 AppText(
                     text = "主账号用于点赞、收藏、评论和个人数据；可分别指定推荐、记录观看和视频取流账号。未指定时跟随主账号，指定账号失效时请重新登录。",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText()
                 )
 
                 if (onSetPurpose != null && purposeAccountMids == null) {
-                    AppText("正在读取账号用途…", style = MaterialTheme.typography.bodySmall)
+                    AppText("正在读取账号用途…", style = COUITheme.textStyles.footnote1)
                 }
                 if (onSetPurpose != null && purposeAccountMids != null) {
                     listOf(
@@ -5614,7 +5635,7 @@ internal fun AccountSwitchDialog(
                                 AppWindowAction(label = account.name.ifBlank { "UID ${account.mid}" }, selected = useGlassPurposeControls && selectedMid == account.mid, onClick = { onSetPurpose(purpose, account.mid) })
                             }
                         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                            AppText(title, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
+                            AppText(title, modifier = Modifier.weight(1f), style = COUITheme.textStyles.body1)
                             if (useGlassPurposeControls) {
                                 AccountPurposeGlassAnchor(label, actions)
                             } else {
@@ -5624,7 +5645,7 @@ internal fun AccountSwitchDialog(
                             }
                         }
                     }
-                    AppText("推荐与搜索覆盖推荐流、热门、相关视频及网页搜索；记录观看只改变视频/专栏上报，不改变历史列表、互动账号和隐私模式。", style = MaterialTheme.typography.bodySmall, color = AppContentColors.secondaryText())
+                    AppText("推荐与搜索覆盖推荐流、热门、相关视频及网页搜索；记录观看只改变视频/专栏上报，不改变历史列表、互动账号和隐私模式。", style = COUITheme.textStyles.footnote1, color = AppContentColors.secondaryText())
                 }
 
                 if (playbackAccount != null) {
@@ -5639,11 +5660,11 @@ internal fun AccountSwitchDialog(
                                 .padding(horizontal = 14.dp, vertical = 10.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            AppText("🎬", style = MaterialTheme.typography.titleMedium)
+                            AppText("🎬", style = COUITheme.textStyles.headline1)
                             Spacer(Modifier.width(AppSpacingTokens.Small))
                             AppText(
                                 text = "正在用「${playbackAccount.name.ifBlank { "UID ${playbackAccount.mid}" }}」${if (playbackAccount.isVip) "的大会员" else "的账号"}播放",
-                                style = MaterialTheme.typography.bodyMedium,
+                                style = COUITheme.textStyles.body1,
                                 color = playbackAccountColors.contentColor,
                                 modifier = Modifier.weight(1f),
                                 maxLines = 2,
@@ -5655,7 +5676,7 @@ internal fun AccountSwitchDialog(
                             ) {
                                 AppText(
                                     text = "取消",
-                                    style = MaterialTheme.typography.labelMedium,
+                                    style = COUITheme.textStyles.footnote1,
                                     color = playbackAccountColors.contentColor
                                 )
                             }
@@ -5674,13 +5695,13 @@ internal fun AccountSwitchDialog(
                                 .padding(horizontal = 14.dp, vertical = 10.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            AppText("💎", style = MaterialTheme.typography.titleMedium)
+                            AppText("💎", style = COUITheme.textStyles.headline1)
                             Spacer(Modifier.width(AppSpacingTokens.Small))
                             AppText(
                                 text = guideAccount?.let {
                                     "「${it.name.ifBlank { "UID ${it.mid}" }}」是大会员，设为播放账号即可观看大会员视频"
                                 } ?: "可将大会员账号设为播放账号",
-                                style = MaterialTheme.typography.bodyMedium,
+                                style = COUITheme.textStyles.body1,
                                 color = playbackGuideColors.contentColor,
                                 modifier = Modifier.weight(1f)
                             )
@@ -5691,7 +5712,7 @@ internal fun AccountSwitchDialog(
                 if (accounts.isEmpty()) {
                     AppText(
                         text = "暂无已保存账号，先添加一个账号后即可快速切换。",
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         color = AppContentColors.secondaryText()
                     )
                 } else {
@@ -5701,9 +5722,9 @@ internal fun AccountSwitchDialog(
                         AppSurface(
                             shape = AppShapes.container(ContainerLevel.Card),
                             color = if (isPlayback) {
-                                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.28f)
+                                AppSurfaceTokens.primaryContainer().copy(alpha = 0.28f)
                             } else {
-                                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f)
+                                AppSurfaceTokens.surfaceContainer().copy(alpha = 0.35f)
                             },
                             modifier = Modifier.fillMaxWidth()
                         ) {
@@ -5725,7 +5746,7 @@ internal fun AccountSwitchDialog(
                                         modifier = Modifier
                                             .size(42.dp)
                                             .clip(CircleShape)
-                                            .background(MaterialTheme.colorScheme.surface)
+                                            .background(AppSurfaceTokens.surface())
                                     )
                                     Spacer(modifier = Modifier.width(12.dp))
                                     Column(
@@ -5738,7 +5759,7 @@ internal fun AccountSwitchDialog(
                                         ) {
                                             AppText(
                                                 text = account.name.ifBlank { "UID ${account.mid}" },
-                                                style = MaterialTheme.typography.bodyLarge,
+                                                style = COUITheme.textStyles.main,
                                                 fontWeight = FontWeight.SemiBold,
                                                 maxLines = 1,
                                                 overflow = TextOverflow.Ellipsis,
@@ -5752,7 +5773,7 @@ internal fun AccountSwitchDialog(
                                                     AppText(
                                                         text = "当前",
                                                         color = AppContentColors.accent(),
-                                                        style = MaterialTheme.typography.labelSmall,
+                                                        style = COUITheme.textStyles.footnote2,
                                                         fontWeight = FontWeight.SemiBold,
                                                         modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                                                     )
@@ -5766,7 +5787,7 @@ internal fun AccountSwitchDialog(
                                                     AppText(
                                                         text = "🎬 播放中",
                                                         color = MaterialTheme.colorScheme.tertiary,
-                                                        style = MaterialTheme.typography.labelSmall,
+                                                        style = COUITheme.textStyles.footnote2,
                                                         fontWeight = FontWeight.SemiBold,
                                                         modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                                                     )
@@ -5781,7 +5802,7 @@ internal fun AccountSwitchDialog(
                                                     append(account.vipLabel.ifBlank { "大会员" })
                                                 }
                                             },
-                                            style = MaterialTheme.typography.bodySmall,
+                                            style = COUITheme.textStyles.footnote1,
                                             color = if (account.isVip) {
                                                 AppContentColors.accent()
                                             } else {
@@ -5807,7 +5828,7 @@ internal fun AccountSwitchDialog(
                                             ) {
                                                 AppText(
                                                     text = "取消播放账号",
-                                                    style = MaterialTheme.typography.labelMedium,
+                                                    style = COUITheme.textStyles.footnote1,
                                                     color = AppContentColors.secondaryText()
                                                 )
                                             }
@@ -5817,7 +5838,7 @@ internal fun AccountSwitchDialog(
                                             ) {
                                                 AppText(
                                                     text = if (account.isVip) "设为播放(大会员)" else "设为播放",
-                                                    style = MaterialTheme.typography.labelMedium,
+                                                    style = COUITheme.textStyles.footnote1,
                                                     color = if (account.isVip) {
                                                         AppContentColors.accent()
                                                     } else {
@@ -5834,7 +5855,7 @@ internal fun AccountSwitchDialog(
                                         ) {
                                             AppText(
                                                 text = "切换",
-                                                style = MaterialTheme.typography.labelMedium
+                                                style = COUITheme.textStyles.footnote1
                                             )
                                         }
                                         Spacer(modifier = Modifier.width(4.dp))
@@ -5843,7 +5864,7 @@ internal fun AccountSwitchDialog(
                                         ) {
                                             AppText(
                                                 text = "移除",
-                                                style = MaterialTheme.typography.labelMedium,
+                                                style = COUITheme.textStyles.footnote1,
                                                 color = AppContentColors.error()
                                             )
                                         }

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,6 +25,7 @@ import com.android.purebilibili.core.ui.components.AppLinearProgressIndicator
 import com.android.purebilibili.core.ui.components.AppSwitch
 import com.android.purebilibili.core.ui.components.AppText
 import java.util.Locale
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** Plain native UI: no network, player or storage access inside this section. */
 @Composable
@@ -50,7 +50,7 @@ internal fun CdnTransferPanel(
     val highestSpeed = state.nodes.maxOfOrNull { it.speedBps }?.coerceAtLeast(1) ?: 1L
     AppCard(modifier = modifier) {
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            AppText("播放加速", style = MaterialTheme.typography.titleSmall)
+            AppText("播放加速", style = COUITheme.textStyles.headline2)
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
                 CdnMetric("活动请求", "$active", Modifier.weight(1f))
                 CdnMetric("前方缓冲", "${state.bufferMs / 1_000} 秒", Modifier.weight(1f))
@@ -62,15 +62,15 @@ internal fun CdnTransferPanel(
             )
             AppText(
                 if (active > 0) "正在取流 · ${cdnSpeed(state.speedHistory.lastOrNull() ?: 0)}" else "等待媒体请求 · 已缓存内容播放时无需下载",
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText()
             )
             Row(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.weight(1f)) {
-                    AppText("并发下载", style = MaterialTheme.typography.bodyMedium)
+                    AppText("并发下载", style = COUITheme.textStyles.body1)
                     AppText(
                         if (experimentalRewriteEnabled) parallelUnavailableReason ?: "先关闭实验性 URL 改写，再使用并发下载" else "Wi-Fi 下按缓冲自动调节，最多 4 个分块请求；失败自动回退",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppContentColors.secondaryText()
                     )
                 }
@@ -83,7 +83,7 @@ internal fun CdnTransferPanel(
             }
             AppText(
                 "网络读取 ${cdnBytes(state.networkBytes)} · 慢块补救 ${state.rescueCount} 次 · 续传 ${state.resumedCount} 次 · 单连接回退 ${state.fallbackCount} 次",
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 color = AppContentColors.secondaryText()
             )
             if (state.speedHistory.isNotEmpty()) {
@@ -93,22 +93,22 @@ internal fun CdnTransferPanel(
                 }
                 if (showHistory) {
                     val maximum = state.speedHistory.maxOrNull()?.coerceAtLeast(1) ?: 1L
-                    AppText("最近 12 个采样区间 · 从旧到新", style = MaterialTheme.typography.labelSmall)
+                    AppText("最近 12 个采样区间 · 从旧到新", style = COUITheme.textStyles.footnote2)
                     state.speedHistory.forEachIndexed { index, speed ->
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
                             AppLinearProgressIndicator(
                                 progress = { speed.toFloat() / maximum },
                                 modifier = Modifier.weight(1f).semantics { stateDescription = "第 ${index + 1} 个采样 ${cdnSpeed(speed)}" }
                             )
-                            AppText(cdnSpeed(speed), style = MaterialTheme.typography.labelSmall)
+                            AppText(cdnSpeed(speed), style = COUITheme.textStyles.footnote2)
                         }
                     }
                 }
             }
             AppHorizontalDivider()
-            AppText("授权节点", style = MaterialTheme.typography.titleSmall)
+            AppText("授权节点", style = COUITheme.textStyles.headline2)
             if (hosts.isEmpty()) {
-                AppText("播放视频后显示节点表现；缓存命中时不会额外测速。", style = MaterialTheme.typography.bodySmall)
+                AppText("播放视频后显示节点表现；缓存命中时不会额外测速。", style = COUITheme.textStyles.footnote1)
             }
             hosts.forEach { host ->
                 val node = nodeByHost[host]
@@ -121,7 +121,7 @@ internal fun CdnTransferPanel(
                     }
                 ) {
                     Column(modifier = Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        AppText(host, style = MaterialTheme.typography.bodySmall)
+                        AppText(host, style = COUITheme.textStyles.footnote1)
                         AppText(
                             when {
                                 node != null && node.active > 0 -> "取流中 · ${node.active} 个请求 · ${cdnSpeed(node.speedBps)}"
@@ -130,7 +130,7 @@ internal fun CdnTransferPanel(
                                 diagnostic?.speedKbps != null -> "手动测速 ${diagnostic.speedKbps} Kbps"
                                 else -> "等待传输样本"
                             },
-                            style = MaterialTheme.typography.labelSmall,
+                            style = COUITheme.textStyles.footnote2,
                             color = if (cooling) AppContentColors.error() else AppContentColors.secondaryText()
                         )
                         AppLinearProgressIndicator(
@@ -140,11 +140,11 @@ internal fun CdnTransferPanel(
                         if (expandedHost == host) {
                             AppText(
                                 "首字节 ${node?.firstByteMs?.let { "$it ms" } ?: "未采样"} · 完成 ${node?.completed ?: 0} · 失败 ${node?.failures ?: 0}",
-                                style = MaterialTheme.typography.bodySmall
+                                style = COUITheme.textStyles.footnote1
                             )
                             AppText(
                                 "累计 ${cdnBytes(node?.bytes ?: 0)}${node?.lastStatus?.let { " · 最近响应 HTTP $it" }.orEmpty()}",
-                                style = MaterialTheme.typography.labelSmall
+                                style = COUITheme.textStyles.footnote2
                             )
                             AppButton(onClick = { onAvoid(host) }, enabled = !cooling) { AppText("降低优先级 1 分钟") }
                         }
@@ -159,7 +159,7 @@ internal fun CdnTransferPanel(
             if (!canCheck) {
                 AppText(
                     "请先播放 B 站视频或音乐，让播放器获取媒体地址；已缓存的内容可能需要继续播放或拖到未缓存的位置。",
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = AppContentColors.secondaryText()
                 )
             }
@@ -168,7 +168,7 @@ internal fun CdnTransferPanel(
             }
             AppText(
                 "统计从本次应用启动累计，仅保留节点域名。手动检测每条线路最多读取 32 KiB；降低优先级将在后续请求生效。",
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 color = AppContentColors.secondaryText()
             )
         }
@@ -178,8 +178,8 @@ internal fun CdnTransferPanel(
 @Composable
 private fun CdnMetric(label: String, value: String, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
-        AppText(value, style = MaterialTheme.typography.titleSmall)
-        AppText(label, style = MaterialTheme.typography.labelSmall, color = AppContentColors.secondaryText())
+        AppText(value, style = COUITheme.textStyles.headline2)
+        AppText(label, style = COUITheme.textStyles.footnote2, color = AppContentColors.secondaryText())
     }
 }
 

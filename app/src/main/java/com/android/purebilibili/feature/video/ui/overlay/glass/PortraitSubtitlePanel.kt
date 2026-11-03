@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.video.ui.overlay.glass
 
 import com.android.purebilibili.feature.video.ui.overlay.*
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.feature.video.ui.components.playerOptionContainerColor
@@ -24,7 +25,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppSwitch
 import com.android.purebilibili.core.ui.components.AppText
@@ -127,7 +127,7 @@ internal fun PortraitSubtitlePanel(
                 AppText(
                     text = "字幕显示",
                     color = Color.White.copy(alpha = 0.88f),
-                    style = MaterialTheme.typography.titleSmall,
+                    style = COUITheme.textStyles.headline2,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.padding(start = 4.dp, bottom = 2.dp)
                 )
@@ -154,7 +154,7 @@ internal fun PortraitSubtitlePanel(
                             color = playerOptionContentColor(selected,
                                 if (selected) AppContentColors.accent() else Color.White.copy(alpha = if (option.enabled) 1f else 0.4f),
                                 surface = Color.Black),
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
                             modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp)
                         )
@@ -165,7 +165,7 @@ internal fun PortraitSubtitlePanel(
                     AppText(
                         text = "字幕轨道",
                         color = Color.White.copy(alpha = 0.72f),
-                        style = MaterialTheme.typography.labelMedium,
+                        style = COUITheme.textStyles.footnote1,
                         fontWeight = FontWeight.Medium,
                         modifier = Modifier.padding(start = 4.dp, top = 2.dp, bottom = 2.dp)
                     )
@@ -183,7 +183,7 @@ internal fun PortraitSubtitlePanel(
                                 color = playerOptionContentColor(option.selected,
                                     if (option.selected) AppContentColors.accent() else Color.White,
                                     surface = Color.Black),
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 fontWeight = if (option.selected) FontWeight.SemiBold else FontWeight.Normal,
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp)
                             )
@@ -201,7 +201,7 @@ internal fun PortraitSubtitlePanel(
                     AppText(
                         text = "大字号",
                         color = Color.White.copy(alpha = 0.85f),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         fontWeight = FontWeight.Medium
                     )
                     AppSwitch(
@@ -212,7 +212,7 @@ internal fun PortraitSubtitlePanel(
                 AppText(
                     text = if (positionLocked) "字幕位置已固定" else "上下拖动字幕可调整位置",
                     color = Color.White.copy(alpha = 0.55f),
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     modifier = Modifier.padding(start = 4.dp, top = 2.dp)
                 )
                 Row(
@@ -225,7 +225,7 @@ internal fun PortraitSubtitlePanel(
                     AppText(
                         text = "锁定位置",
                         color = Color.White.copy(alpha = 0.85f),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         fontWeight = FontWeight.Medium
                     )
                     AppSwitch(
@@ -243,7 +243,7 @@ internal fun PortraitSubtitlePanel(
                         AppText(
                             text = "重置位置",
                             color = Color.White.copy(alpha = 0.9f),
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             fontWeight = FontWeight.Medium,
                             modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp)
                         )

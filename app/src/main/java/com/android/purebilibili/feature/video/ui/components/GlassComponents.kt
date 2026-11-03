@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 /**
  *  iOS 风格毛玻璃卡片
@@ -26,8 +27,8 @@ fun GlassCard(
     content: @Composable BoxScope.() -> Unit
 ) {
     //  使用 MaterialTheme 颜色代替硬编码
-    val surfaceColor = MaterialTheme.colorScheme.surface
-    val outlineColor = MaterialTheme.colorScheme.outline
+    val surfaceColor = AppSurfaceTokens.surface()
+    val outlineColor = AppSurfaceTokens.outline()
     
     // 毛玻璃颜色 - 使用 surface 色
     val glassColor = surfaceColor.copy(alpha = glassAlpha + 0.5f)

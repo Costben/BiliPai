@@ -2,6 +2,7 @@
 package com.android.purebilibili.feature.video.ui.components.glass
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.feature.video.ui.components.*
 
@@ -105,10 +106,10 @@ private fun VideoSettingsPanelText(
     overflow: TextOverflow = TextOverflow.Clip,
 ) {
     val style = when (role) {
-        VideoSettingsPanelTextRole.TITLE -> MaterialTheme.typography.titleSmall
-        VideoSettingsPanelTextRole.BODY -> MaterialTheme.typography.bodySmall
-        VideoSettingsPanelTextRole.OPTION -> MaterialTheme.typography.labelMedium
-        VideoSettingsPanelTextRole.DIAGNOSTIC -> MaterialTheme.typography.labelSmall
+        VideoSettingsPanelTextRole.TITLE -> COUITheme.textStyles.headline2
+        VideoSettingsPanelTextRole.BODY -> COUITheme.textStyles.footnote1
+        VideoSettingsPanelTextRole.OPTION -> COUITheme.textStyles.footnote1
+        VideoSettingsPanelTextRole.DIAGNOSTIC -> COUITheme.textStyles.footnote2
     }
     AppText(
         text = text,
@@ -207,7 +208,7 @@ private fun videoSettingsChipContainerColor(isSelected: Boolean): Color {
     return if (usesTonalContainerTreatment) {
         if (isSelected) AppSurfaceTokens.secondaryContainer() else AppSurfaceTokens.surfaceContainerHigh()
     } else {
-        if (isSelected) AppContentColors.accent() else MaterialTheme.colorScheme.surfaceVariant
+        if (isSelected) AppContentColors.accent() else AppSurfaceTokens.surfaceContainer()
     }
 }
 
@@ -859,7 +860,7 @@ fun VideoSettingsPanel(
                                 onClick = { onCodecChange(codec) },
                                 shape = playerOptionShape(AppShapes.container(ContainerLevel.Card)),
                                 color = playerOptionContainerColor(isSelected,
-                                    if (isSelected) AppContentColors.accent() else MaterialTheme.colorScheme.surfaceVariant),
+                                    if (isSelected) AppContentColors.accent() else AppSurfaceTokens.surfaceContainer()),
                                 modifier = Modifier.height(
                                     if (useMiuixNonGlassPresentation) panelSpec.chipHeight else 32.dp
                                 )
@@ -943,7 +944,7 @@ fun VideoSettingsPanel(
                                 onClick = { onSecondCodecChange(codec) },
                                 shape = playerOptionShape(AppShapes.container(ContainerLevel.Card)),
                                 color = playerOptionContainerColor(isSelected,
-                                    if (isSelected) AppContentColors.accent() else MaterialTheme.colorScheme.surfaceVariant),
+                                    if (isSelected) AppContentColors.accent() else AppSurfaceTokens.surfaceContainer()),
                                 modifier = Modifier.height(
                                     if (useMiuixNonGlassPresentation) panelSpec.chipHeight else 32.dp
                                 )
@@ -1024,7 +1025,7 @@ fun VideoSettingsPanel(
                                 onClick = { onAudioQualityChange(option.preferenceId) },
                                 shape = playerOptionShape(AppShapes.container(ContainerLevel.Card)),
                                 color = playerOptionContainerColor(isSelected,
-                                    if (isSelected) AppContentColors.accent() else MaterialTheme.colorScheme.surfaceVariant),
+                                    if (isSelected) AppContentColors.accent() else AppSurfaceTokens.surfaceContainer()),
                                 modifier = Modifier.height(48.dp)
                             ) {
                                 Row(
@@ -1097,7 +1098,7 @@ fun VideoSettingsPanel(
                                     onClick = { onAudioLangChange(item.langCode) },
                                     shape = playerOptionShape(AppShapes.container(ContainerLevel.Card)),
                                     color = playerOptionContainerColor(isSelected,
-                                    if (isSelected) AppContentColors.accent() else MaterialTheme.colorScheme.surfaceVariant),
+                                    if (isSelected) AppContentColors.accent() else AppSurfaceTokens.surfaceContainer()),
                                     modifier = Modifier.height(
                                         if (useMiuixNonGlassPresentation) panelSpec.chipHeight else 32.dp
                                     )
@@ -1559,7 +1560,7 @@ private fun SettingsDivider() {
     AppHorizontalDivider(
         modifier = Modifier.padding(horizontal = spec.dividerHorizontalPadding),
         thickness = 0.5.dp,
-        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = spec.dividerAlpha)
+        color = AppSurfaceTokens.outline().copy(alpha = spec.dividerAlpha)
     )
 }
 
@@ -1792,7 +1793,7 @@ private fun SettingsActionPill(
         color = if (usesTonalContainerTreatment) {
             AppSurfaceTokens.secondaryContainer()
         } else {
-            MaterialTheme.colorScheme.secondaryContainer
+            AppSurfaceTokens.secondaryContainer()
         },
         modifier = Modifier
             .height(policy.pillHeightDp.dp)
@@ -1808,13 +1809,13 @@ private fun SettingsActionPill(
             AppIcon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                tint = AppSurfaceTokens.onSecondaryContainer(),
                 modifier = Modifier.size(policy.pillIconSizeDp.dp)
             )
             Spacer(modifier = Modifier.width(AppSpacingTokens.Small))
             VideoSettingsPanelText(
                 text = label,
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                color = AppSurfaceTokens.onSecondaryContainer(),
                 role = VideoSettingsPanelTextRole.OPTION,
 
                 maxLines = 1,

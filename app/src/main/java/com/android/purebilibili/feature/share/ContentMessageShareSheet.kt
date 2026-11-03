@@ -1,12 +1,14 @@
 package com.android.purebilibili.feature.share
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppContentColors
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -134,7 +136,7 @@ internal fun ContentMessageShareSheet(payload: ContentSharePayload, onDismiss: (
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            AppText("分享给 B 站好友", style = MaterialTheme.typography.titleLarge)
+            AppText("分享给 B 站好友", style = COUITheme.textStyles.title4)
             Column(
                 Modifier
                     .weight(1f, fill = presentationOverride == com.android.purebilibili.core.ui.AppModalPresentation.SideSheet)
@@ -161,7 +163,7 @@ internal fun ContentMessageShareSheet(payload: ContentSharePayload, onDismiss: (
                     if (state.error != null) AppTextButton(enabled = !state.loading && !state.sending, onClick = { scope.launch { state.load(recent = !state.more) } }) { AppText("重试加载") }
                 }
                 AppTextField(value = state.note, onValueChange = { if (!state.sending) state.note = it.take(100) }, placeholder = "说说你的想法…（可选，100 字以内）", modifier = Modifier.fillMaxWidth())
-                state.error?.let { AppText(it, color = MaterialTheme.colorScheme.error) }
+                state.error?.let { AppText(it, color = AppContentColors.error()) }
                 state.status?.let { AppText(it) }
             }
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {

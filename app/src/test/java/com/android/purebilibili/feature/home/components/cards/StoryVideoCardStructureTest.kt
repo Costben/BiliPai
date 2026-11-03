@@ -30,6 +30,6 @@ class StoryVideoCardStructureTest {
         assertTrue(coverContainerSource.contains(".testTag(\"home_story_video_cover\")"))
         assertTrue(coverContainerSource.contains(".aspectRatio(coverAspectRatio)"))
         assertTrue(coverContainerSource.contains(".clip(coverShape)"))
-        assertTrue(coverContainerSource.contains(".background(MaterialTheme.colorScheme.surfaceVariant)"))
+        assertTrue(coverContainerSource.contains(".background(AppSurfaceTokens.surfaceContainer())"))
     }
 }

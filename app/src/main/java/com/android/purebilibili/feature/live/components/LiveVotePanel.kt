@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +25,7 @@ import com.android.purebilibili.core.ui.components.AppLinearProgressIndicator
 import com.android.purebilibili.data.repository.LiveVoteInfo
 import com.android.purebilibili.data.repository.LiveVoteSnapshot
 import kotlin.math.roundToInt
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 fun LiveVotePanel(snapshot: LiveVoteSnapshot, modifier: Modifier = Modifier) {
@@ -44,7 +44,7 @@ fun LiveVotePanel(snapshot: LiveVoteSnapshot, modifier: Modifier = Modifier) {
             AppText("当前暂无投票", color = AppContentColors.secondaryText())
             AppText(
                 "投票开始后会自动显示，仅提供查看。",
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText()
             )
         }
@@ -78,7 +78,7 @@ private fun LiveVoteCard(vote: LiveVoteInfo) {
                 AppText(vote.question, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
                 AppText(
                     if (vote.isActive) "进行中" else vote.resultText.ifBlank { "已结束" },
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = if (vote.isActive) AppContentColors.accent() else AppContentColors.secondaryText()
                 )
             }
@@ -87,12 +87,12 @@ private fun LiveVoteCard(vote: LiveVoteInfo) {
                     AppText(
                         option.description,
                         modifier = Modifier.weight(1f),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         color = AppContentColors.primaryText()
                     )
                     AppText(
                         "${(option.percent * 100f).roundToInt()}%",
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         color = AppContentColors.primaryText()
                     )
                 }
@@ -107,7 +107,7 @@ private fun LiveVoteCard(vote: LiveVoteInfo) {
                 else -> ""
             }
             if (timing.isNotBlank()) {
-                AppText(timing, style = MaterialTheme.typography.bodySmall, color = AppContentColors.secondaryText())
+                AppText(timing, style = COUITheme.textStyles.footnote1, color = AppContentColors.secondaryText())
             }
         }
     }

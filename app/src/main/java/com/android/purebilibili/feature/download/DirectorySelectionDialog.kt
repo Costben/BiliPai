@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.download
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -81,13 +83,13 @@ fun DirectorySelectionDialog(
                 .appContentDialogWidth(policy = dialogLayout, wrapHeight = false)
                 .height(500.dp),
             shape = AppShapes.container(ContainerLevel.Card),
-            containerColor = MaterialTheme.colorScheme.surface,
+            containerColor = AppSurfaceTokens.surface(),
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 // 1. 顶部标题和当前路径
                 AppText(
                     text = "选择存储位置",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     fontWeight = FontWeight.Bold
                 )
 
@@ -95,7 +97,7 @@ fun DirectorySelectionDialog(
 
                 // 当前路径显示
                 AppSurface(
-                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                    color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.5f),
                     shape = AppShapes.container(ContainerLevel.Chip),
                     modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
                 ) {
@@ -112,7 +114,7 @@ fun DirectorySelectionDialog(
                         Spacer(modifier = Modifier.width(8.dp))
                         AppText(
                             text = currentPath,
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText(),
                             maxLines = 2
                         )
@@ -137,11 +139,11 @@ fun DirectorySelectionDialog(
                         Spacer(modifier = Modifier.width(12.dp))
                         AppText(
                             text = ".. (返回上级)",
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = COUITheme.textStyles.body1,
                             fontWeight = FontWeight.Bold
                         )
                     }
-                    AppHorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
+                    AppHorizontalDivider(thickness = 0.5.dp, color = AppSurfaceTokens.outline())
                 }
 
                 // 2. 文件夹列表
@@ -177,7 +179,7 @@ fun DirectorySelectionDialog(
                                 Spacer(modifier = Modifier.width(16.dp))
                                 AppText(
                                     text = file.name,
-                                    style = MaterialTheme.typography.bodyMedium,
+                                    style = COUITheme.textStyles.body1,
                                     color = AppContentColors.primaryText(),
                                     modifier = Modifier.weight(1f)
                                 )
@@ -188,7 +190,7 @@ fun DirectorySelectionDialog(
                                     modifier = Modifier.size(16.dp)
                                 )
                             }
-                            AppHorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                            AppHorizontalDivider(thickness = 0.5.dp, color = AppSurfaceTokens.outline().copy(alpha = 0.5f))
                         }
                     }
                 }

@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.home.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import com.android.purebilibili.core.ui.motion.AppMotionEasing
 import com.android.purebilibili.core.ui.AppContentColors
 import androidx.compose.animation.core.animateDpAsState
@@ -16,7 +18,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.ScrollState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -181,7 +182,7 @@ internal fun BottomBarFloatingSegmentedControl(
     val resolvedLabelFontSize = if (itemContent == null) {
         com.android.purebilibili.core.ui.appTabLabelFontSize(labelFontSize)
     } else labelFontSize
-    val labelStyle = MaterialTheme.typography.labelLarge.copy(
+    val labelStyle = COUITheme.textStyles.button.copy(
         fontSize = resolvedLabelFontSize,
         fontWeight = if (itemContent == null) FontWeight.SemiBold else FontWeight.Bold,
     )

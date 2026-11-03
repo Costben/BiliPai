@@ -1,5 +1,8 @@
 package com.android.purebilibili.core.ui.skeleton
 
+import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,7 +24,6 @@ import com.android.purebilibili.core.ui.components.AppLazyVerticalGrid as LazyVe
 import androidx.compose.foundation.lazy.grid.items as lazyGridItems
 import androidx.compose.foundation.lazy.items as lazyListItems
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
@@ -37,6 +39,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
+import com.android.purebilibili.core.ui.components.AppText
 
 /** 内容列表首屏骨架共用扫光状态，位置仅在绘制阶段读取。 */
 @Composable
@@ -44,8 +47,8 @@ fun rememberContentSkeletonPulseState(): State<Float> = rememberSkeletonSweepSta
 
 @Composable
 fun rememberContentSkeletonBlockColor(pulse: State<Float>): () -> Color {
-    val isDark = MaterialTheme.colorScheme.surface.luminance() < 0.5f
-    val onSurface = MaterialTheme.colorScheme.onSurface
+    val isDark = AppSurfaceTokens.surface().luminance() < 0.5f
+    val onSurface = AppContentColors.primaryText()
     return remember(pulse, isDark, onSurface) {
         skeletonFill(
             base = onSurface.copy(alpha = if (isDark) CONTENT_SKELETON_DARK_MIN_ALPHA else CONTENT_SKELETON_LIGHT_MAX_ALPHA),
@@ -333,8 +336,8 @@ fun UserListRowSkeleton(
  */
 @Composable
 fun rememberStaticSkeletonBlockColor(): Color {
-    val isDark = MaterialTheme.colorScheme.surface.luminance() < 0.5f
-    val onSurface = MaterialTheme.colorScheme.onSurface
+    val isDark = AppSurfaceTokens.surface().luminance() < 0.5f
+    val onSurface = AppContentColors.primaryText()
     return remember(isDark, onSurface) {
         onSurface.copy(
             alpha = if (isDark) STATIC_SKELETON_DARK_ALPHA else STATIC_SKELETON_LIGHT_ALPHA

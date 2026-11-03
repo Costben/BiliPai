@@ -1,6 +1,8 @@
 // 文件路径: feature/dynamic/components/ForwardedContent.kt
 package com.android.purebilibili.feature.dynamic.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppIcon
@@ -128,7 +130,7 @@ fun ForwardedContent(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f))
+            .background(AppSurfaceTokens.surfaceContainer().copy(alpha = 0.45f))
             // Tap the forward card (not @ / video / images) → open the original dynamic.
             .appActionClickable(
                 enabled = onDynamicDetailClick != null && origDynamicId.isNotEmpty(),
@@ -148,7 +150,7 @@ fun ForwardedContent(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 AppText(
                     "@${author.name}",
-                    fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                    fontSize = COUITheme.textStyles.footnote1.fontSize,
                     fontWeight = FontWeight.Medium,
                     color = AppContentColors.accent(), // 主题自适应颜色
                     modifier = Modifier.appActionClickable(enabled = origAuthorClickMid != null) {
@@ -158,7 +160,7 @@ fun ForwardedContent(
                 Spacer(modifier = Modifier.width(AppSpacingTokens.Small))
                 AppText(
                     authorTimeText,
-                    fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                    fontSize = COUITheme.textStyles.footnote2.fontSize,
                     color = AppContentColors.secondaryText().copy(0.5f)
                 )
             }
@@ -198,7 +200,7 @@ fun ForwardedContent(
         if (forwardedTitle != null) {
             AppText(
                 text = forwardedTitle,
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                fontSize = COUITheme.textStyles.body1.fontSize,
                 fontWeight = FontWeight.Bold,
                 color = AppContentColors.primaryText(),
                 maxLines = 2,
@@ -216,7 +218,7 @@ fun ForwardedContent(
                     .fillMaxWidth()
                     .padding(vertical = AppSpacingTokens.ExtraSmall)
                     .clip(AppShapes.container(ContainerLevel.Chip))
-                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f))
+                    .background(AppSurfaceTokens.surfaceContainer().copy(alpha = 0.35f))
                     .padding(horizontal = AppSpacingTokens.Medium, vertical = AppSpacingTokens.Small),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -229,7 +231,7 @@ fun ForwardedContent(
                 Spacer(modifier = Modifier.width(AppSpacingTokens.Small))
                 AppText(
                     text = tips,
-                    fontSize = MaterialTheme.typography.bodySmall.fontSize,
+                    fontSize = COUITheme.textStyles.footnote1.fontSize,
                     color = AppContentColors.secondaryText()
                 )
             }

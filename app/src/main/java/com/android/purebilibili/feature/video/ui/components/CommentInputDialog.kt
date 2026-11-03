@@ -2,6 +2,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppIcons
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -502,7 +503,7 @@ fun CommentInputDialog(
                             color = if (couiOverlay) {
                                 COUITheme.colorScheme.surfaceContainer.copy(alpha = 0.55f)
                             } else {
-                                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                                AppSurfaceTokens.surfaceContainer().copy(alpha = 0.3f)
                             },
                             shape = AppShapes.container(ContainerLevel.Chip),
                         )
@@ -532,7 +533,7 @@ fun CommentInputDialog(
                             modifier = Modifier.fillMaxSize()
                                 .focusRequester(focusRequester)
                                 .testTag("comment_composer_input"),
-                            textStyle = MaterialTheme.typography.bodyLarge.copy(
+                            textStyle = COUITheme.textStyles.main.copy(
                                 color = AppContentColors.primaryText()
                             ),
                         )
@@ -577,7 +578,7 @@ fun CommentInputDialog(
                     ) {
                         AppText(
                             text = "已选 ${selectedImageUris.size}/9 张",
-                            style = MaterialTheme.typography.labelMedium,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText()
                         )
                     }
@@ -594,7 +595,7 @@ fun CommentInputDialog(
                                     .clip(AppShapes.container(ContainerLevel.Chip))
                                     .border(
                                         width = 1.dp,
-                                        color = MaterialTheme.colorScheme.outlineVariant,
+                                        color = AppSurfaceTokens.outline(),
                                         shape = AppShapes.container(ContainerLevel.Chip)
                                     )
                             ) {
@@ -605,7 +606,7 @@ fun CommentInputDialog(
                                 )
                                 AppSurface(
                                     shape = AppShapes.container(ContainerLevel.Pill),
-                                    color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
+                                    color = AppSurfaceTokens.surface().copy(alpha = 0.9f),
                                     modifier = Modifier
                                         .align(Alignment.TopEnd)
                                         .padding(3.dp)
@@ -672,7 +673,7 @@ fun CommentInputDialog(
                                 Spacer(modifier = Modifier.width(4.dp))
                                 AppText(
                                     text = "转发到动态",
-                                    style = MaterialTheme.typography.bodySmall,
+                                    style = COUITheme.textStyles.footnote1,
                                     color = AppContentColors.secondaryText(),
                                     maxLines = 1
                                 )
@@ -792,7 +793,7 @@ fun CommentInputDialog(
                         } else {
                             AppText(
                                 text = "发布",
-                                style = MaterialTheme.typography.labelLarge,
+                                style = COUITheme.textStyles.button,
                                 fontWeight = FontWeight.Bold
                             )
                         }
@@ -803,7 +804,7 @@ fun CommentInputDialog(
                     AppText(
                         text = "当前评论区暂不可评论",
                         color = AppContentColors.secondaryText(),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         modifier = Modifier.padding(top = 6.dp)
                     )
                 }
@@ -897,7 +898,7 @@ fun CommentInputDialog(
                                             )
                                             AppText(
                                                 text = emoteText.removePrefix("[").removeSuffix("]"),
-                                                style = MaterialTheme.typography.labelSmall,
+                                                style = COUITheme.textStyles.footnote2,
                                                 color = AppContentColors.secondaryText(),
                                                 maxLines = 1,
                                                 overflow = TextOverflow.Ellipsis,
@@ -967,7 +968,7 @@ fun CommentInputDialog(
                                                     if (showEmoteLabels) {
                                                         AppText(
                                                             text = emote.text.removePrefix("[").removeSuffix("]"),
-                                                            style = MaterialTheme.typography.labelSmall,
+                                                            style = COUITheme.textStyles.footnote2,
                                                             color = AppContentColors.secondaryText(),
                                                             maxLines = 1,
                                                             overflow = TextOverflow.Ellipsis,
@@ -1068,7 +1069,7 @@ fun CommentInputDialog(
                             .fillMaxWidth()
                             .then(if (inputExpanded) Modifier.fillMaxHeight() else Modifier.wrapContentHeight()),
                         shape = AppShapes.container(ContainerLevel.Sheet),
-                        color = MaterialTheme.colorScheme.surface,
+                        color = AppSurfaceTokens.surface(),
                         tonalElevation = 8.dp
                     ) {
                         sheetBody()
@@ -1103,7 +1104,7 @@ private fun CommentKaomojiGrid(
                     .heightIn(min = 44.dp)
                     .appDesktopFocusableItemVisuals()
                     .clip(AppShapes.container(ContainerLevel.Tag))
-                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f))
+                    .background(AppSurfaceTokens.surfaceContainer().copy(alpha = 0.3f))
                     .clickable(enabled = enabled, role = Role.Button) {
                         onChoose(kaomoji)
                     }
@@ -1112,7 +1113,7 @@ private fun CommentKaomojiGrid(
             ) {
                 AppText(
                     text = kaomoji,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     textAlign = TextAlign.Center,
                 )
             }
@@ -1135,7 +1136,7 @@ private fun CommentMentionSearchPanel(
             .fillMaxWidth()
             .heightIn(max = 220.dp),
         shape = AppShapes.container(ContainerLevel.Chip),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.42f)
+        color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.42f)
     ) {
         Column(
             modifier = Modifier.fillMaxWidth()
@@ -1156,13 +1157,13 @@ private fun CommentMentionSearchPanel(
                     )
                 },
                 placeholder = { AppText("搜索好友昵称") },
-                textStyle = MaterialTheme.typography.bodySmall,
+                textStyle = COUITheme.textStyles.footnote1,
                 shape = AppShapes.container(ContainerLevel.Card),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.72f),
-                    unfocusedContainerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.56f),
+                    focusedContainerColor = AppSurfaceTokens.surface().copy(alpha = 0.72f),
+                    unfocusedContainerColor = AppSurfaceTokens.surface().copy(alpha = 0.56f),
                     focusedBorderColor = AppContentColors.accent(),
-                    unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant
+                    unfocusedBorderColor = AppSurfaceTokens.outline()
                 )
             )
 
@@ -1181,7 +1182,7 @@ private fun CommentMentionSearchPanel(
                         Spacer(modifier = Modifier.width(10.dp))
                         AppText(
                             text = "正在搜索好友",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText()
                         )
                     }
@@ -1190,7 +1191,7 @@ private fun CommentMentionSearchPanel(
                 errorMessage != null -> {
                     AppText(
                         text = errorMessage,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp)
                     )
@@ -1199,7 +1200,7 @@ private fun CommentMentionSearchPanel(
                 users.isEmpty() -> {
                     AppText(
                         text = if (query.isBlank()) "输入好友昵称搜索" else "没有找到匹配的用户",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp)
                     )
@@ -1232,14 +1233,14 @@ private fun CommentMentionSearchPanel(
                                 ) {
                                     AppText(
                                         text = user.name,
-                                        style = MaterialTheme.typography.bodyMedium,
+                                        style = COUITheme.textStyles.body1,
                                         color = AppContentColors.primaryText(),
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis
                                     )
                                     AppText(
                                         text = "${FormatUtils.formatStat(user.fans.toLong())} 粉丝",
-                                        style = MaterialTheme.typography.labelSmall,
+                                        style = COUITheme.textStyles.footnote2,
                                         color = AppContentColors.secondaryText(),
                                         maxLines = 1
                                     )

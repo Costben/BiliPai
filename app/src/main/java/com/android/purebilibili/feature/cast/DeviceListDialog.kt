@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.cast
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -163,10 +165,10 @@ fun DeviceListDialog(
             if (castPlugins.isEmpty() && hasDisabledCastPlugins) {
                 Box(Modifier.fillMaxWidth().height(100.dp), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        AppText("投屏插件未启用", style = MaterialTheme.typography.bodyMedium)
+                        AppText("投屏插件未启用", style = COUITheme.textStyles.body1)
                         AppText(
                             "请前往 设置 > 插件，启用 DLNA 或 Google Cast",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText(),
                         )
                     }
@@ -180,7 +182,7 @@ fun DeviceListDialog(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
                 ) {
-                    AppText("搜索投屏设备需要本地网络权限", style = MaterialTheme.typography.bodyMedium)
+                    AppText("搜索投屏设备需要本地网络权限", style = COUITheme.textStyles.body1)
                     Spacer(Modifier.height(6.dp))
                     AppText(
                         if (permissionRequested) {
@@ -188,7 +190,7 @@ fun DeviceListDialog(
                         } else {
                             "用于搜索和连接同一网络中的投屏设备，不会上传局域网信息。"
                         },
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                     )
                     Spacer(Modifier.height(8.dp))
@@ -228,7 +230,7 @@ fun DeviceListDialog(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.padding(horizontal = 8.dp)
                     ) {
-                        AppText("未找到设备", style = MaterialTheme.typography.bodyMedium)
+                        AppText("未找到设备", style = COUITheme.textStyles.body1)
                         Spacer(Modifier.height(6.dp))
                         AppText(
                             "排查建议：\n" +
@@ -238,7 +240,7 @@ fun DeviceListDialog(
                                 "4. DLNA 需接收端开启 DLNA/UPnP（CastFlow 选 DLNA 接收）\n" +
                                 "5. 小米自带投屏多为 Miracast，不一定支持 DLNA\n" +
                                 "6. Google Cast 需接收端支持 Chromecast 且手机有 GMS",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText(),
                         )
                     }
@@ -248,7 +250,7 @@ fun DeviceListDialog(
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         AdaptiveLoadingIndicator(size = 32.dp)
                         Spacer(Modifier.height(8.dp))
-                        AppText("搜索设备中...", style = MaterialTheme.typography.bodyMedium)
+                        AppText("搜索设备中...", style = COUITheme.textStyles.body1)
                     }
                 }
             } else {
@@ -260,7 +262,7 @@ fun DeviceListDialog(
                         ) {
                             AppText(
                                 "授权本地网络后可搜索更多投屏设备",
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText(),
                                 modifier = Modifier.weight(1f)
                             )

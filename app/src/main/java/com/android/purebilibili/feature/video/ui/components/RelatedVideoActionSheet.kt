@@ -2,6 +2,8 @@ package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppHorizontalDivider
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,7 +21,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -81,7 +82,7 @@ fun RelatedVideoActionSheet(
                 onClick = { dismissWithAction(onWatchLater) }
             )
             AppHorizontalDivider(
-                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)
+                color = AppSurfaceTokens.outline().copy(alpha = 0.45f)
             )
             SheetSectionHeader(
                 title = "反馈",
@@ -93,7 +94,7 @@ fun RelatedVideoActionSheet(
             )
             Spacer(modifier = Modifier.height(8.dp))
             AppHorizontalDivider(
-                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)
+                color = AppSurfaceTokens.outline().copy(alpha = 0.45f)
             )
             SheetSectionHeader(
                 title = "我不想看",
@@ -105,7 +106,7 @@ fun RelatedVideoActionSheet(
             )
             Spacer(modifier = Modifier.height(12.dp))
             AppHorizontalDivider(
-                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f)
+                color = AppSurfaceTokens.outline().copy(alpha = 0.55f)
             )
             SheetActionRow(
                 text = "取消",
@@ -146,12 +147,12 @@ private fun SheetSectionHeader(
     ) {
         AppText(
             text = title,
-            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+            style = COUITheme.textStyles.headline1.copy(fontWeight = FontWeight.SemiBold),
             color = AppContentColors.primaryText()
         )
         AppText(
             text = subtitle,
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText(),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
@@ -175,7 +176,7 @@ private fun SheetActionRow(
     ) {
         AppText(
             text = text,
-            style = MaterialTheme.typography.bodyLarge.copy(
+            style = COUITheme.textStyles.main.copy(
                 fontWeight = if (emphasize) FontWeight.Medium else FontWeight.Normal
             ),
             color = AppContentColors.primaryText()
@@ -227,10 +228,10 @@ private fun ReasonChip(
         modifier = modifier
             .heightIn(min = 44.dp)
             .clip(shape)
-            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f))
+            .background(AppSurfaceTokens.surfaceContainer().copy(alpha = 0.55f))
             .border(
                 width = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f),
+                color = AppSurfaceTokens.outline().copy(alpha = 0.55f),
                 shape = shape
             )
             .clickable(onClick = onClick)
@@ -239,7 +240,7 @@ private fun ReasonChip(
     ) {
         AppText(
             text = text,
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = AppContentColors.primaryText(),
             textAlign = TextAlign.Center,
             maxLines = 2,

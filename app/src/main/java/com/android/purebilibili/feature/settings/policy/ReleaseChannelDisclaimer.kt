@@ -2,12 +2,12 @@ package com.android.purebilibili.feature.settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import com.android.purebilibili.core.ui.AppAlertDialog
 import com.android.purebilibili.core.ui.components.AppTextButton
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 const val OFFICIAL_GITHUB_URL = "https://github.com/Costben/BiliPai/"
 /** 官方 Telegram 频道（公告 / 发布） */
@@ -30,7 +30,7 @@ fun ReleaseChannelDisclaimerDialog(
         title = {
             AppText(
                 text = title,
-                style = MaterialTheme.typography.titleLarge
+                style = COUITheme.textStyles.title4
             )
         },
         text = {

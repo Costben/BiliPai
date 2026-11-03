@@ -3,7 +3,6 @@ package com.android.purebilibili.feature.article
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -14,6 +13,7 @@ import com.android.purebilibili.core.ui.components.*
 import com.android.purebilibili.data.repository.ArticleDetailUiModel
 import com.android.purebilibili.feature.dynamic.DynamicViewModel
 import com.android.purebilibili.feature.dynamic.components.*
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun rememberArticleCommentContent(
@@ -34,7 +34,7 @@ internal fun rememberArticleCommentContent(
         item(key = "article-comments-header") {
             Column {
                 if (count == null) {
-                    AppText("评论", style = MaterialTheme.typography.titleMedium)
+                    AppText("评论", style = COUITheme.textStyles.headline1)
                 } else {
                     DynamicInlineCommentHeader(
                         totalCount = count.coerceIn(0L, Int.MAX_VALUE.toLong()).toInt(),

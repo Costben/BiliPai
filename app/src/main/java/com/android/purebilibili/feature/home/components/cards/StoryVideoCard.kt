@@ -1,6 +1,8 @@
 // 文件路径: feature/home/components/cards/StoryVideoCard.kt
 package com.android.purebilibili.feature.home.components.cards
 
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import coil3.request.crossfade
@@ -410,7 +412,7 @@ internal fun StoryVideoCard(
                     if (coverRequestSpec == null) measuredCoverSize = coordinates.size
                 }
                 .clip(coverShape)
-                .background(MaterialTheme.colorScheme.surfaceVariant) // 封面占位色
+                .background(AppSurfaceTokens.surfaceContainer()) // 封面占位色
         ) {
             // 封面比例由首页卡片样式统一配置。
             PageAwareAsyncImage(

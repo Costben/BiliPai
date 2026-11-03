@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.home.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import com.android.purebilibili.core.player.withAppVideoDecoderDiagnostics
 import com.android.purebilibili.core.player.withAppVideoDecoderPreference
 import com.android.purebilibili.core.ui.AppIcons
@@ -18,7 +20,6 @@ import com.android.purebilibili.core.ui.MediaContrastPalette
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -259,7 +260,7 @@ fun VideoPreviewDialog(
                             Column(modifier = Modifier.padding(AppSpacingTokens.Large)) {
                                 AppText(
                                     text = video.title,
-                                    style = MaterialTheme.typography.titleMedium,
+                                    style = COUITheme.textStyles.headline1,
                                     fontWeight = FontWeight.Bold,
                                     maxLines = 2,
                                     overflow = TextOverflow.Ellipsis
@@ -267,7 +268,7 @@ fun VideoPreviewDialog(
                                 Spacer(modifier = Modifier.height(AppSpacingTokens.Small))
                                 AppText(
                                     text = "${video.owner.name} · ${FormatUtils.formatStat(video.stat.view.toLong())}播放",
-                                    style = MaterialTheme.typography.bodySmall,
+                                    style = COUITheme.textStyles.footnote1,
                                     color = AppContentColors.secondaryText()
                                 )
                             }
@@ -465,7 +466,7 @@ private fun PreviewMenuItem(
         ) {
             AppText(
                 text = text,
-                fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                fontSize = COUITheme.textStyles.headline1.fontSize,
                 fontWeight = FontWeight.Normal,
                 color = if (isDestructive) AppContentColors.error() else AppContentColors.primaryText()
             )
@@ -482,7 +483,7 @@ private fun PreviewMenuItem(
 @Composable
 private fun MenuDivider() {
     AppHorizontalDivider(
-        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f),
+        color = AppSurfaceTokens.outline().copy(alpha = 0.2f),
         thickness = AppSpacingTokens.Micro / 4
     )
 }

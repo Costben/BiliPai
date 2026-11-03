@@ -1,47 +1,52 @@
 package com.android.purebilibili.feature.video.ui.components
 
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Typography
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.TextUnit
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 internal enum class VideoCommentTextRole { AUTHOR, METADATA, BODY, ACTION, ACTION_COUNT, SUB_REPLY }
 
-internal fun resolveVideoCommentFontSize(typography: Typography, role: VideoCommentTextRole): TextUnit =
-    when (role) {
-        VideoCommentTextRole.AUTHOR -> typography.bodySmall.fontSize
+@Composable
+@ReadOnlyComposable
+internal fun resolveVideoCommentFontSize(role: VideoCommentTextRole): TextUnit {
+    val styles = COUITheme.textStyles
+    return when (role) {
+        VideoCommentTextRole.AUTHOR -> styles.footnote1.fontSize
         // 评论正文与楼中楼都是主要阅读内容，跟随页面正文的字阶。
         VideoCommentTextRole.SUB_REPLY,
-        VideoCommentTextRole.BODY -> typography.bodyMedium.fontSize
-        VideoCommentTextRole.METADATA, VideoCommentTextRole.ACTION_COUNT -> typography.labelSmall.fontSize
-        VideoCommentTextRole.ACTION -> typography.labelMedium.fontSize
+        VideoCommentTextRole.BODY -> styles.body1.fontSize
+        VideoCommentTextRole.METADATA, VideoCommentTextRole.ACTION_COUNT -> styles.footnote2.fontSize
+        VideoCommentTextRole.ACTION -> styles.footnote1.fontSize
     }
+}
 
 internal object VideoCommentTypographyTokens {
     val author: TextUnit
         @Composable @ReadOnlyComposable
-        get() = resolveVideoCommentFontSize(MaterialTheme.typography, VideoCommentTextRole.AUTHOR)
+        get() = resolveVideoCommentFontSize(VideoCommentTextRole.AUTHOR)
     val metadata: TextUnit
         @Composable @ReadOnlyComposable
-        get() = resolveVideoCommentFontSize(MaterialTheme.typography, VideoCommentTextRole.METADATA)
+        get() = resolveVideoCommentFontSize(VideoCommentTextRole.METADATA)
     val body: TextUnit
         @Composable @ReadOnlyComposable
-        get() = resolveVideoCommentFontSize(MaterialTheme.typography, VideoCommentTextRole.BODY)
+        get() = resolveVideoCommentFontSize(VideoCommentTextRole.BODY)
     val action: TextUnit
         @Composable @ReadOnlyComposable
-        get() = resolveVideoCommentFontSize(MaterialTheme.typography, VideoCommentTextRole.ACTION)
+        get() = resolveVideoCommentFontSize(VideoCommentTextRole.ACTION)
     val actionCount: TextUnit
         @Composable @ReadOnlyComposable
-        get() = resolveVideoCommentFontSize(MaterialTheme.typography, VideoCommentTextRole.ACTION_COUNT)
+        get() = resolveVideoCommentFontSize(VideoCommentTextRole.ACTION_COUNT)
     val subReply: TextUnit
         @Composable @ReadOnlyComposable
-        get() = resolveVideoCommentFontSize(MaterialTheme.typography, VideoCommentTextRole.SUB_REPLY)
+        get() = resolveVideoCommentFontSize(VideoCommentTextRole.SUB_REPLY)
     val metadataLineHeight: TextUnit
         @Composable @ReadOnlyComposable
-        get() = MaterialTheme.typography.labelSmall.lineHeight
+        get() = COUITheme.textStyles.footnote2.lineHeight
 }
 
 internal data class VideoCommentAppearance(
@@ -93,26 +98,33 @@ internal fun resolveVideoCommentAppearance(
 
 @Composable
 internal fun rememberVideoCommentAppearance(): VideoCommentAppearance {
-    val colorScheme = MaterialTheme.colorScheme
+    val surfaceColor = AppSurfaceTokens.surface()
+    val surfaceVariantColor = AppSurfaceTokens.surfaceContainer()
+    val surfaceContainerHighColor = AppSurfaceTokens.surfaceContainerHigh()
+    val outlineVariantColor = AppSurfaceTokens.outline()
+    val onSurfaceColor = AppContentColors.primaryText()
+    val onSurfaceVariantColor = AppContentColors.secondaryText()
+    val primaryColor = AppContentColors.accent()
+    val onPrimaryColor = AppContentColors.onAccent()
     return remember(
-        colorScheme.surface,
-        colorScheme.surfaceVariant,
-        colorScheme.surfaceContainerHigh,
-        colorScheme.outlineVariant,
-        colorScheme.onSurface,
-        colorScheme.onSurfaceVariant,
-        colorScheme.primary,
-        colorScheme.onPrimary
+        surfaceColor,
+        surfaceVariantColor,
+        surfaceContainerHighColor,
+        outlineVariantColor,
+        onSurfaceColor,
+        onSurfaceVariantColor,
+        primaryColor,
+        onPrimaryColor
     ) {
         resolveVideoCommentAppearance(
-            surfaceColor = colorScheme.surface,
-            surfaceVariantColor = colorScheme.surfaceVariant,
-            surfaceContainerHighColor = colorScheme.surfaceContainerHigh,
-            outlineVariantColor = colorScheme.outlineVariant,
-            onSurfaceColor = colorScheme.onSurface,
-            onSurfaceVariantColor = colorScheme.onSurfaceVariant,
-            primaryColor = colorScheme.primary,
-            onPrimaryColor = colorScheme.onPrimary
+            surfaceColor = surfaceColor,
+            surfaceVariantColor = surfaceVariantColor,
+            surfaceContainerHighColor = surfaceContainerHighColor,
+            outlineVariantColor = outlineVariantColor,
+            onSurfaceColor = onSurfaceColor,
+            onSurfaceVariantColor = onSurfaceVariantColor,
+            primaryColor = primaryColor,
+            onPrimaryColor = onPrimaryColor
         )
     }
 }

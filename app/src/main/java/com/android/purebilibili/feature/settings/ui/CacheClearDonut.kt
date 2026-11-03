@@ -11,7 +11,6 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -49,6 +48,8 @@ import kotlinx.coroutines.isActive
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 internal val CacheClearChartColors = listOf(
     Color(0xFF39B94A), Color(0xFFEDAB16), Color(0xFF397BF0),
@@ -92,7 +93,7 @@ internal fun CacheClearUsageDonut(
             if (reduceMotion || !active) snap() else tween(200, easing = CacheDonutEasing), label = "cachePress-${it.target}")
     }
     val finished = animateFloatAsState(if (complete) 1f else 0f, motion, label = "cacheEmptyCompletion")
-    val track = MaterialTheme.colorScheme.surfaceVariant
+    val track = AppSurfaceTokens.surfaceContainer()
     val labelPaint = remember {
         Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = android.graphics.Color.WHITE
@@ -201,7 +202,7 @@ internal fun CacheClearUsageDonut(
             AppText(if (loading) "—" else parts[0], fontSize = if (parts[0].length > 4) 24.sp else 32.sp,
                 fontWeight = FontWeight.Bold, color = AppContentColors.primaryText())
             AppText(if (loading) "统计中" else parts.getOrElse(1) { "" },
-                style = MaterialTheme.typography.bodySmall, color = AppContentColors.secondaryText())
+                style = COUITheme.textStyles.footnote1, color = AppContentColors.secondaryText())
         }
     }
 }

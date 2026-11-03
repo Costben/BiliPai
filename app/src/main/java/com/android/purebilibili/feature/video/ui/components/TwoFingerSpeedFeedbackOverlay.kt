@@ -1,6 +1,8 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -63,7 +65,7 @@ fun BoxScope.TwoFingerSpeedFeedbackOverlay(
     }
     val gradientColors = listOf(
         AppContentColors.accent().copy(alpha = 0.18f),
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.10f),
+        AppSurfaceTokens.surface().copy(alpha = 0.10f),
         MaterialTheme.colorScheme.secondary.copy(alpha = 0.14f)
     )
 
@@ -76,7 +78,7 @@ fun BoxScope.TwoFingerSpeedFeedbackOverlay(
             .padding(top = 18.dp)
     ) {
         AppSurface(
-            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.06f),
+            color = AppSurfaceTokens.surface().copy(alpha = 0.06f),
             contentColor = Color.White,
             tonalElevation = 0.dp,
             shadowElevation = 0.dp,
@@ -114,14 +116,14 @@ fun BoxScope.TwoFingerSpeedFeedbackOverlay(
                         AppText(
                             text = cueText,
                             color = Color.White.copy(alpha = 0.76f),
-                            style = MaterialTheme.typography.labelMedium,
+                            style = COUITheme.textStyles.footnote1,
                             fontWeight = FontWeight.Medium
                         )
                     }
                     AppText(
                         text = PlaybackSpeed.formatSpeedFull(speed),
                         color = Color.White.copy(alpha = 0.98f),
-                        style = MaterialTheme.typography.titleLarge,
+                        style = COUITheme.textStyles.title4,
                         fontWeight = FontWeight.Bold
                     )
                 }

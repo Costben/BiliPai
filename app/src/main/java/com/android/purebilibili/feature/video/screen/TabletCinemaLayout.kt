@@ -5,6 +5,8 @@ import com.android.purebilibili.feature.video.ui.components.commentSectionNotice
 import com.android.purebilibili.navigation.tabSelectedPage
 import com.android.purebilibili.navigation.tabIndicatorPosition
 import com.android.purebilibili.feature.video.ui.components.RelatedVideoList
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -63,7 +65,6 @@ import com.android.purebilibili.core.ui.components.AppIconButton
 import com.android.purebilibili.core.ui.rememberBackToTopButtonEnabled
 import com.android.purebilibili.core.ui.components.AppLiquidGlassBackToTopButton
 import com.android.purebilibili.feature.video.ui.components.shouldShowVideoCommentBackToTop
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppTextButton
@@ -158,7 +159,6 @@ import com.android.purebilibili.feature.video.viewmodel.SubReplyUiState
 import com.android.purebilibili.feature.video.viewmodel.resolveVideoCommentSkeletonSlotCount
 import com.android.purebilibili.core.ui.AdaptiveLoadingIndicator
 import androidx.compose.ui.platform.LocalConfiguration
-import kotlinx.coroutines.launch
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -293,7 +293,7 @@ internal fun TabletCinemaLayout(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .background(AppSurfaceTokens.surfaceContainer())
     ) {
         VideoShareSheetHost(
             payload = pendingVideoShare,
@@ -408,7 +408,7 @@ internal fun TabletCinemaLayout(
                             .fillMaxWidth()
                             .weight(1f),
                         shape = AppShapes.container(ContainerLevel.Floating),
-                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
+                        color = AppSurfaceTokens.surface().copy(alpha = 0.9f)
                     ) {
                         Box(
                             modifier = Modifier.fillMaxSize(),
@@ -547,7 +547,7 @@ private fun CinemaStagePlayer(
             AppSurface(
                 modifier = Modifier.fillMaxSize(),
                 shape = AppShapes.container(ContainerLevel.Floating),
-                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.94f),
+                color = AppSurfaceTokens.surface().copy(alpha = 0.94f),
                 tonalElevation = 4.dp,
             ) {
                 VideoPlayerSection(
@@ -703,7 +703,7 @@ private fun CinemaMetaPanel(
     onShareVideo: () -> Unit
 ) {
     val context = LocalContext.current
-    val isDarkTheme = MaterialTheme.colorScheme.surface.luminance() < 0.5f
+    val isDarkTheme = AppSurfaceTokens.surface().luminance() < 0.5f
     val currentPageIndex = remember(success.info.cid, success.info.pages) {
         success.info.pages.indexOfFirst { it.cid == success.info.cid }.coerceAtLeast(0)
     }
@@ -747,7 +747,7 @@ private fun CinemaMetaPanel(
         shape = AppShapes.container(ContainerLevel.Floating),
         color = resolveCinemaMetaPanelContainerColor(
             isDarkTheme = isDarkTheme,
-            surfaceColor = MaterialTheme.colorScheme.surface
+            surfaceColor = AppSurfaceTokens.surface()
         )
     ) {
         val metaBlocks = remember(
@@ -1039,7 +1039,7 @@ private fun CinemaVideoIntroSection(
     onShareVideoNote: (VideoNoteEditorDocument) -> Unit = {},
     onPublicVideoNoteClick: (Long, String) -> Unit = { _, _ -> }
 ) {
-    val isDarkTheme = MaterialTheme.colorScheme.surface.luminance() < 0.5f
+    val isDarkTheme = AppSurfaceTokens.surface().luminance() < 0.5f
     var showAiSummarySheet by remember { mutableStateOf(false) }
     var showNoteListSheet by remember { mutableStateOf(false) }
 
@@ -1053,7 +1053,7 @@ private fun CinemaVideoIntroSection(
             shape = AppShapes.container(ContainerLevel.Card),
             color = resolveCinemaIntroCardContainerColor(
                 isDarkTheme = isDarkTheme,
-                surfaceContainerLowColor = MaterialTheme.colorScheme.surfaceContainerLow
+                surfaceContainerLowColor = AppSurfaceTokens.surfaceContainer()
             )
         ) {
             VideoTitleWithDesc(
@@ -1197,7 +1197,7 @@ private fun CinemaSideCurtain(
                         .fillMaxHeight()
                         .animateContentSize(),
                     shape = AppShapes.container(ContainerLevel.Floating),
-                    color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
+                    color = AppSurfaceTokens.surface().copy(alpha = 0.9f)
                 ) {
                     if (targetState == TabletSideCurtainState.PEEK) {
                         Column(
@@ -1578,7 +1578,7 @@ private fun CinemaCommentsPane(
                     ) {
                         AppText(
                             text = commentState.pageControl?.emptyMessage()?.takeIf { it.isNotBlank() } ?: "还没有评论，先看看相关推荐",
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = COUITheme.textStyles.body1,
                             color = commentAppearance.secondaryTextColor
                         )
                     }
@@ -1716,7 +1716,7 @@ private fun CinemaRelatedPane(
                     ) {
                         AppText(
                             text = "暂时没有推荐视频",
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = COUITheme.textStyles.body1,
                             color = AppContentColors.secondaryText()
                         )
                     }

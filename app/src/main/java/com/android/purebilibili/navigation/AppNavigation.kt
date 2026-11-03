@@ -1,6 +1,9 @@
 // 文件路径: navigation/AppNavigation.kt
 package com.android.purebilibili.navigation
 
+import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+
 import kotlinx.coroutines.flow.first
 import android.app.Activity
 import android.app.Application
@@ -55,7 +58,6 @@ import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.material3.MaterialTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
@@ -682,7 +684,7 @@ fun AppNavigation(
                 splashWallpaperUri = splashWallpaperUri
             )
         }
-        val backgroundColor = MaterialTheme.colorScheme.background
+        val backgroundColor = AppSurfaceTokens.background()
         val wallpaperIsStatic = com.android.purebilibili.core.ui.wallpaper.rememberIsStaticWallpaper(globalHomeWallpaperUri)
         val wallpaperTransform = if (windowSizeClass.isTablet) homeWallpaperSelection.tabletTransform
             else homeWallpaperSelection.mobileTransform
@@ -5538,7 +5540,7 @@ fun AppNavigation(
                                     .width(36.dp)
                                     .height(4.dp)
                                     .clip(androidx.compose.foundation.shape.RoundedCornerShape(50))
-                                    .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.35f))
+                                    .background(AppContentColors.primaryText().copy(alpha = 0.35f))
                             )
                         }
                     } else {

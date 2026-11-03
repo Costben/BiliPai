@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.dynamic.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.AppContentColors
 
 import com.android.purebilibili.core.ui.AppSpacingTokens
@@ -23,7 +25,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import com.android.purebilibili.core.ui.components.AppIcon
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.runtime.Composable
@@ -66,7 +67,7 @@ internal fun DynamicLinkCard(
                 .fillMaxWidth()
                 .clip(AppShapes.container(ContainerLevel.Card))
                 .then(if (clickEnabled) Modifier.appActionClickable(onClick = onClick) else Modifier),
-            color = MaterialTheme.colorScheme.surfaceContainer,
+            color = AppSurfaceTokens.surfaceContainer(),
             tonalElevation = AppSpacingTokens.None,
             shape = AppShapes.container(ContainerLevel.Card)
         ) {
@@ -83,7 +84,7 @@ internal fun DynamicLinkCard(
                     if (card.label.isNotBlank()) {
                         AppText(
                             text = card.label,
-                            style = MaterialTheme.typography.labelSmall,
+                            style = COUITheme.textStyles.footnote2,
                             color = AppContentColors.accent(),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
@@ -91,7 +92,7 @@ internal fun DynamicLinkCard(
                     }
                     AppText(
                         text = card.title.ifBlank { resolveLinkCardFallbackTitle(card.type) },
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         fontWeight = FontWeight.Medium,
                         color = AppContentColors.primaryText(),
                         maxLines = 2,
@@ -100,7 +101,7 @@ internal fun DynamicLinkCard(
                     resolveDynamicLinkCardDescriptions(card).forEach { description ->
                         AppText(
                             text = description,
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText(),
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis
@@ -112,7 +113,7 @@ internal fun DynamicLinkCard(
                     val actionEnabled = (reserveUi?.actionEnabled ?: true) && !reserveSubmitting
                     AppText(
                         text = card.badgeText,
-                        style = MaterialTheme.typography.labelMedium,
+                        style = COUITheme.textStyles.footnote1,
                         color = if (actionEnabled) AppContentColors.accent()
                         else AppContentColors.secondaryText(),
                         maxLines = 1,
@@ -158,7 +159,7 @@ private fun DynamicLinkCardMatchRow(matchUi: DynamicMatchUi) {
             )
             AppText(
                 text = left.name,
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                fontSize = COUITheme.textStyles.body1.fontSize,
                 fontWeight = FontWeight.Medium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -168,13 +169,13 @@ private fun DynamicLinkCardMatchRow(matchUi: DynamicMatchUi) {
             )
             AppText(
                 text = left.score.ifBlank { matchUi.centerLabel }.ifBlank { "VS" },
-                fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                fontSize = COUITheme.textStyles.headline2.fontSize,
                 fontWeight = FontWeight.SemiBold,
                 color = AppContentColors.accent()
             )
             AppText(
                 text = right.name,
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                fontSize = COUITheme.textStyles.body1.fontSize,
                 fontWeight = FontWeight.Medium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -193,7 +194,7 @@ private fun DynamicLinkCardMatchRow(matchUi: DynamicMatchUi) {
         if (left.score.isNotBlank() && matchUi.centerLabel.isNotBlank()) {
             AppText(
                 text = matchUi.centerLabel,
-                fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                fontSize = COUITheme.textStyles.footnote2.fontSize,
                 color = AppContentColors.secondaryText(),
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -228,7 +229,7 @@ private fun LinkCardCover(card: OpusLinkCard) {
                     height = AppSpacingTokens.TripleExtraLarge + AppSpacingTokens.Small + AppSpacingTokens.Micro
                 )
                 .clip(shape)
-                .background(MaterialTheme.colorScheme.surfaceVariant),
+                .background(AppSurfaceTokens.surfaceContainer()),
             contentAlignment = Alignment.Center
         ) {
             AppIcon(

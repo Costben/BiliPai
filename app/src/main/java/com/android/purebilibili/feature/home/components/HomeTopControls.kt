@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.home.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -24,7 +26,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppPressShiftContent
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -112,7 +113,7 @@ internal fun HomeTopSearchPillContent(
             Spacer(modifier = Modifier.width(iconTextGap))
             AppText(
                 text = "搜索视频、UP主...",
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 fontSize = textFontSize,
                 fontWeight = FontWeight.Normal,
                 color = contentColor,
@@ -147,8 +148,8 @@ internal fun HomeTopUnreadBadge(
         AppText(
             text = text,
             color = OpticalContrastPalette.Highlight,
-            fontSize = MaterialTheme.typography.labelSmall.fontSize,
-            lineHeight = MaterialTheme.typography.labelSmall.lineHeight,
+            fontSize = COUITheme.textStyles.footnote2.fontSize,
+            lineHeight = COUITheme.textStyles.footnote2.lineHeight,
             fontWeight = FontWeight.SemiBold,
             maxLines = 1
         )

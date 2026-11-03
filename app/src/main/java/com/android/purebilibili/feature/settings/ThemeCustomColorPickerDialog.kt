@@ -49,6 +49,8 @@ import com.materialkolor.PaletteStyle
 import com.materialkolor.dynamiccolor.ColorSpec
 import io.github.suqi8.coui.kmp.theme.COUITheme
 import io.github.suqi8.coui.kmp.theme.ThemeController
+import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 @Composable
 internal fun ThemeCustomColorPickerDialog(
@@ -157,8 +159,8 @@ internal fun ThemeCustomColorPickerDialog(
         ) {
             Column {
                 Column(Modifier.padding(horizontal = 24.dp, vertical = 20.dp)) {
-                    AppText(exactRoleTitle ?: roleTargetLabel ?: "自定义主题颜色", style = MaterialTheme.typography.titleLarge)
-                    AppText("先预览，再保存", style = MaterialTheme.typography.bodySmall,
+                    AppText(exactRoleTitle ?: roleTargetLabel ?: "自定义主题颜色", style = COUITheme.textStyles.title4)
+                    AppText("先预览，再保存", style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(), modifier = Modifier.padding(top = 4.dp))
                 }
                 Column(
@@ -175,8 +177,8 @@ internal fun ThemeCustomColorPickerDialog(
                                 Box(Modifier.size(40.dp).background(color, CircleShape)
                                     .border(1.dp, AppSurfaceTokens.divider(), CircleShape))
                                 Column(Modifier.weight(1f)) {
-                                    AppText(colorHex, style = MaterialTheme.typography.titleMedium)
-                                    AppText(if (exactRoleTitle != null) "角色颜色（精确值）" else if (controlColorPreview) "输入颜色（精确值）" else roleTargetLabel.orEmpty(), style = MaterialTheme.typography.bodySmall,
+                                    AppText(colorHex, style = COUITheme.textStyles.headline1)
+                                    AppText(if (exactRoleTitle != null) "角色颜色（精确值）" else if (controlColorPreview) "输入颜色（精确值）" else roleTargetLabel.orEmpty(), style = COUITheme.textStyles.footnote1,
                                         color = AppContentColors.secondaryText())
                                 }
                             }
@@ -187,17 +189,17 @@ internal fun ThemeCustomColorPickerDialog(
                                         modifier = Modifier.fillMaxWidth().padding(12.dp))
                                 }
                                 AppText("按所选色值应用，配套文字自动匹配明暗。",
-                                    style = MaterialTheme.typography.bodySmall, color = AppContentColors.secondaryText())
+                                    style = COUITheme.textStyles.footnote1, color = AppContentColors.secondaryText())
                             } else if (controlColorPreview) {
                                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                                     Box(Modifier.size(28.dp).background(previewTrackColor, CircleShape)
                                         .border(1.dp, AppSurfaceTokens.divider(), CircleShape))
                                     Column(Modifier.weight(1f)) {
-                                        AppText(formatMd3CustomColorHex(previewTrackColor), style = MaterialTheme.typography.titleSmall)
+                                        AppText(formatMd3CustomColorHex(previewTrackColor), style = COUITheme.textStyles.headline2)
                                         AppText(
                                             if (previewUsesLiquidControls) "液态控件 · 跟随主题色时的轨道颜色"
                                             else if (previewDark) "深色主题 · 实际轨道颜色" else "浅色主题 · 实际轨道颜色",
-                                            style = MaterialTheme.typography.bodySmall,
+                                            style = COUITheme.textStyles.footnote1,
                                             color = AppContentColors.secondaryText(),
                                         )
                                     }
@@ -205,7 +207,7 @@ internal fun ThemeCustomColorPickerDialog(
                                 AppText(
                                     if (previewUsesLiquidControls) "液态控件跟随主题色时使用输入颜色。"
                                     else "主色使用输入色值；容器保留主题层级，配套文字自动匹配明暗。",
-                                    style = MaterialTheme.typography.bodySmall,
+                                    style = COUITheme.textStyles.footnote1,
                                     color = AppContentColors.secondaryText(),
                                 )
                                 CompositionLocalProvider(
@@ -233,34 +235,34 @@ internal fun ThemeCustomColorPickerDialog(
                                         roleTarget == ThemeRoleColorTarget.DARK_SECONDARY_TEXT
                                     ) previewScheme.onSurfaceVariant else previewScheme.onSurface,
                                         modifier = Modifier.fillMaxWidth().padding(12.dp),
-                                        style = MaterialTheme.typography.titleMedium)
+                                        style = COUITheme.textStyles.headline1)
                                 }
                             }
                         }
                     }
                     if (exactRoleTitle == null) {
                         AppText("预览已应用当前高级覆盖色、表面与文字可读性修正。",
-                            style = MaterialTheme.typography.bodySmall, color = AppContentColors.secondaryText())
+                            style = COUITheme.textStyles.footnote1, color = AppContentColors.secondaryText())
                         // 调色时警告数量与换行会变化；固定信息区域避免拖动中的选色板移位。
                         Box(Modifier.fillMaxWidth().height(72.dp).verticalScroll(rememberScrollState())) {
                             AppText(
                                 if (previewIssues.isEmpty()) "当前配色的对比度达到目标。" else
                                     "最终配色有 ${previewIssues.size} 组配对低于目标：" +
                                         previewIssues.take(3).joinToString("；") { "${it.label} %.2f:1（目标 %.1f:1）".format(it.ratio, it.required) },
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = if (previewIssues.isEmpty()) AppContentColors.secondaryText() else AppContentColors.error(),
                             )
                         }
                     }
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        AppText("拖动选色", style = MaterialTheme.typography.labelLarge)
+                        AppText("拖动选色", style = COUITheme.textStyles.button)
                         AppText("饱和 ${(saturation * 100).roundToInt()}% · 明亮 ${(brightness * 100).roundToInt()}%",
-                            style = MaterialTheme.typography.bodySmall, color = AppContentColors.secondaryText())
+                            style = COUITheme.textStyles.footnote1, color = AppContentColors.secondaryText())
                     }
                     ThemeSaturationValuePanel(hue, saturation, brightness) { s, v -> updateHsv(hue, s, v) }
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        AppText("色相", style = MaterialTheme.typography.labelLarge)
-                        AppText("${hue.roundToInt()}°", style = MaterialTheme.typography.bodySmall,
+                        AppText("色相", style = COUITheme.textStyles.button)
+                        AppText("${hue.roundToInt()}°", style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText())
                     }
                     ThemeHueStrip(hue) { updateHsv(it, saturation, brightness) }
@@ -269,13 +271,13 @@ internal fun ThemeCustomColorPickerDialog(
                         modifier = Modifier.fillMaxWidth(), label = "HEX 颜色值",
                         singleLine = true, isError = !validHex,
                         supportingText = { AppText(if (validHex) "6 位颜色值，可省略 #" else "请输入 6 位颜色值，例如 #007AFF",
-                            style = MaterialTheme.typography.bodySmall) },
+                            style = COUITheme.textStyles.footnote1) },
                     )
                     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween) {
-                        AppText("常用颜色", style = MaterialTheme.typography.labelLarge)
+                        AppText("常用颜色", style = COUITheme.textStyles.button)
                         AppTextButton(onClick = { showAllColors = !showAllColors }) {
-                            AppText(if (showAllColors) "收起" else "全部 ${ThemeColors.size}", style = MaterialTheme.typography.labelMedium)
+                            AppText(if (showAllColors) "收起" else "全部 ${ThemeColors.size}", style = COUITheme.textStyles.footnote1)
                         }
                     }
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -296,7 +298,7 @@ internal fun ThemeCustomColorPickerDialog(
                                 contentAlignment = Alignment.Center,
                             ) {
                                 if (selected) AppText("✓", color = resolveReadableForeground(preset),
-                                    style = MaterialTheme.typography.titleMedium,
+                                    style = COUITheme.textStyles.headline1,
                                     modifier = Modifier.clearAndSetSemantics { })
                             }
                         }

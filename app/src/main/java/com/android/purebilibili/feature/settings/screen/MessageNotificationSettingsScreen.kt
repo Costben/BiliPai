@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -56,6 +55,7 @@ import com.android.purebilibili.feature.settings.ui.LocalSettingsTopContentPaddi
 import com.android.purebilibili.feature.settings.ui.SettingsPageScaffold
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 private enum class NotificationPermissionRequest {
     MASTER_ENABLE,
@@ -231,14 +231,14 @@ fun MessageNotificationSettingsScreen(onBack: () -> Unit) {
             Spacer(modifier = Modifier.height(LocalSettingsTopContentPadding.current))
             AppText(
                 text = context.getString(R.string.notify_intro),
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText(),
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
             )
             statusMessage?.let { message ->
                 AppText(
                     text = message,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.warning(),
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                 )

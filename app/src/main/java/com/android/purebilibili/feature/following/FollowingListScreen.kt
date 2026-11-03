@@ -62,9 +62,10 @@ import com.android.purebilibili.core.ui.OfficialVerifyAvatarBadge
 import com.android.purebilibili.core.ui.UserAvatarCornerMarkBadge
 import com.android.purebilibili.core.ui.resolveUserAvatarCornerMark
 import com.android.purebilibili.core.ui.globalWallpaperAwareBackground
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.android.purebilibili.core.ui.rememberAppBackIcon
 import com.android.purebilibili.core.ui.AdaptiveLoadingIndicator
-import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.components.AppButton
 import com.android.purebilibili.core.ui.components.AppCheckbox
 import com.android.purebilibili.core.ui.components.AppCircularProgressIndicator
@@ -981,7 +982,7 @@ fun FollowingListScreen(
                                                 contentAlignment = Alignment.Center
                                             ) {
                                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                                    AppText("😢", fontSize = MaterialTheme.typography.displaySmall.fontSize)
+                                                    AppText("😢", fontSize = COUITheme.textStyles.title1.fontSize)
                                                     Spacer(Modifier.height(AppSpacingTokens.Large))
                                                     AppText(errorState.message, color = AppContentColors.secondaryText())
                                                     Spacer(Modifier.height(AppSpacingTokens.Large))
@@ -1020,7 +1021,7 @@ fun FollowingListScreen(
                                         ) { text, animatedModifier ->
                                             AppText(
                                                 text = text,
-                                                fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                                                fontSize = COUITheme.textStyles.footnote1.fontSize,
                                                 color = AppContentColors.secondaryText(),
                                                 modifier = animatedModifier
                                             )
@@ -1055,7 +1056,7 @@ fun FollowingListScreen(
                                         item {
                                             AppText(
                                                 text = "分组信息加载中...($followGroupMetaLoadedCount/${followedUsers.size})",
-                                                fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                                                fontSize = COUITheme.textStyles.footnote2.fontSize,
                                                 color = AppContentColors.secondaryText(),
                                                 modifier = Modifier.padding(horizontal = AppSpacingTokens.Large, vertical = AppSpacingTokens.ExtraSmall)
                                             )
@@ -1113,7 +1114,7 @@ fun FollowingListScreen(
                                                     AppText(
                                                         "加载更多",
                                                         color = AppContentColors.accent(),
-                                                        fontSize = MaterialTheme.typography.labelMedium.fontSize
+                                                        fontSize = COUITheme.textStyles.footnote1.fontSize
                                                     )
                                                 }
                                             }
@@ -1195,7 +1196,7 @@ fun FollowingListScreen(
                                                 AppText(
                                                     text = "检测到已选 UP 主原分组不一致，已默认全部不选。",
                                                     color = AppContentColors.secondaryText(),
-                                                    fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                                                    fontSize = COUITheme.textStyles.footnote2.fontSize,
                                                     modifier = Modifier.padding(bottom = AppSpacingTokens.Small)
                                                 )
                                             }
@@ -1203,7 +1204,7 @@ fun FollowingListScreen(
                                                 AppText(
                                                     text = "暂无可用分组（不勾选即回到默认分组）",
                                                     color = AppContentColors.secondaryText(),
-                                                    fontSize = MaterialTheme.typography.labelMedium.fontSize
+                                                    fontSize = COUITheme.textStyles.footnote1.fontSize
                                                 )
                                             } else {
                                                 groupDialogTags.forEach { tag ->
@@ -1232,7 +1233,7 @@ fun FollowingListScreen(
                                                         )
                                                         AppText(
                                                             text = "${tag.name} (${tag.count})",
-                                                            fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                                                            fontSize = COUITheme.textStyles.footnote1.fontSize,
                                                             color = AppContentColors.primaryText()
                                                         )
                                                     }
@@ -1241,7 +1242,7 @@ fun FollowingListScreen(
                                             AppText(
                                                 text = "确定后会完全覆盖原分组设置。",
                                                 color = AppContentColors.secondaryText(),
-                                                fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                                                fontSize = COUITheme.textStyles.footnote2.fontSize,
                                                 modifier = Modifier.padding(top = AppSpacingTokens.Small)
                                             )
                                         }
@@ -1434,7 +1435,7 @@ private fun FollowingUserItem(
                 modifier = Modifier
                     .matchParentSize()
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .background(AppSurfaceTokens.surfaceContainer())
             )
             if (officialBadge != null) {
                 OfficialVerifyAvatarBadge(
@@ -1463,7 +1464,7 @@ private fun FollowingUserItem(
             ) {
                 AppText(
                     text = user.uname,
-                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                    fontSize = COUITheme.textStyles.body1.fontSize,
                     fontWeight = FontWeight.Medium,
                     color = AppContentColors.primaryText(),
                     maxLines = 1,
@@ -1475,7 +1476,7 @@ private fun FollowingUserItem(
                 Spacer(Modifier.height(AppSpacingTokens.ExtraSmall))
                 AppText(
                     text = followingSinceLabel,
-                    fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                    fontSize = COUITheme.textStyles.footnote2.fontSize,
                     color = AppContentColors.accent(),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -1485,7 +1486,7 @@ private fun FollowingUserItem(
                 Spacer(Modifier.height(AppSpacingTokens.ExtraSmall))
                 AppText(
                     text = user.sign,
-                    fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                    fontSize = COUITheme.textStyles.footnote2.fontSize,
                     color = AppContentColors.secondaryText(),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis

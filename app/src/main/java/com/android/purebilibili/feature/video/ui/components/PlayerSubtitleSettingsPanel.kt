@@ -1,6 +1,8 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppContentColors
 
 import com.android.purebilibili.core.ui.components.AppTextButton as TextButton
 import com.android.purebilibili.core.ui.components.AppIconButton as IconButton
@@ -97,8 +99,8 @@ fun PlayerSubtitleSettingsPanel(
                     Text("恢复默认字体")
                 }
             }
-            Text("支持 TTF、OTF、TTC，最大 32 MB，仅用于字幕", style = MaterialTheme.typography.bodySmall)
-            fontError?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+            Text("支持 TTF、OTF、TTC，最大 32 MB，仅用于字幕", style = COUITheme.textStyles.footnote1)
+            fontError?.let { Text(it, color = AppContentColors.error()) }
             SubtitleColorPreference("文字颜色", appearance.textColor) { onAppearanceChange(appearance.copy(textColor = it)) }
             SubtitleColorPreference("描边颜色", appearance.strokeColor) { onAppearanceChange(appearance.copy(strokeColor = it)) }
             SubtitleAppearanceSlider("字体大小", appearance.inlineFontScale, 0.5f..2.5f, 1f, { "${(it * 100).roundToInt()}%" }) {

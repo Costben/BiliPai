@@ -249,6 +249,8 @@ import kotlinx.coroutines.launch
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.purebilibili.core.ui.AdaptiveLoadingIndicator
 import com.android.purebilibili.core.theme.usesMiuixFamilySkin
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.components.AppButton
 
 
 internal fun shouldShowSearchHotSection(
@@ -292,7 +294,7 @@ internal fun resolveSearchInputHeightDp(
 @Composable
 private fun rememberSearchInputHeightDp(minHeightDp: Int): Int {
     val density = LocalDensity.current
-    val fontSize = MaterialTheme.typography.bodyLarge.fontSize
+    val fontSize = COUITheme.textStyles.main.fontSize
     return remember(minHeightDp, density, fontSize) {
         with(density) {
             resolveSearchInputHeightDp(
@@ -1523,9 +1525,9 @@ fun SearchScreen(
                                                 val easterEggMsg = state.easterEggMessage
                                                 if (easterEggMsg != null) {
                                                     val easterEggColors = resolveAccessibleContainerColors(
-                                                        containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f),
-                                                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                                        backgroundColor = MaterialTheme.colorScheme.surface,
+                                                        containerColor = AppSurfaceTokens.primaryContainer().copy(alpha = 0.6f),
+                                                        contentColor = AppSurfaceTokens.onPrimaryContainer(),
+                                                        backgroundColor = AppSurfaceTokens.surface(),
                                                         fallbackContentColors = listOf(
                                                             AppContentColors.primaryText(),
                                                             MaterialTheme.colorScheme.onBackground,
@@ -1548,7 +1550,7 @@ fun SearchScreen(
                                                             AppText(
                                                                 text = easterEggMsg,
                                                                 color = easterEggColors.contentColor,
-                                                                style = MaterialTheme.typography.bodyMedium,
+                                                                style = COUITheme.textStyles.body1,
                                                                 fontWeight = FontWeight.Medium,
                                                                 maxLines = 2,
                                                                 overflow = TextOverflow.Ellipsis,
@@ -2254,7 +2256,7 @@ fun SearchScreen(
                                                     .padding(16.dp),
                                                 textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                                                 color = AppContentColors.secondaryText(),
-                                                style = MaterialTheme.typography.bodySmall
+                                                style = COUITheme.textStyles.footnote1
                                             )
                                         }
                                     }
@@ -3124,7 +3126,7 @@ fun SearchTopBar(
                 } else if (chromeSpec.useFilledSearchAction) {
                     AppSurfaceTokens.surfaceContainerHigh()
                 } else {
-                    MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
+                    AppSurfaceTokens.surfaceContainer().copy(alpha = 0.6f)
                 }
                 SearchTopBarInputField(
                     value = textFieldValue,
@@ -3242,7 +3244,7 @@ private fun SearchTopBarInputField(
     val contentColor = AppSurfaceTokens.onSurface()
     val placeholderColor = AppSurfaceTokens.onSurfaceVariantSummary()
     val focusBorderColor = AppSurfaceTokens.primary()
-    val textStyle = MaterialTheme.typography.bodyLarge.copy(
+    val textStyle = COUITheme.textStyles.main.copy(
         color = contentColor,
         // Explicit line height avoids type-scale clipping in single-line fields.
         lineHeight = SEARCH_INPUT_LINE_HEIGHT_SP.sp
@@ -3348,7 +3350,7 @@ fun HistoryChip(
             AppText(
                 text = keyword,
                 color = AppContentColors.primaryText(),
-                style = MaterialTheme.typography.labelMedium,
+                style = COUITheme.textStyles.footnote1,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -3385,8 +3387,8 @@ fun QuickCategory(
             .heightIn(min = 48.dp)
             .padding(8.dp)
     ) {
-        AppText(text = emoji, style = MaterialTheme.typography.headlineSmall)
-        AppText(text = label, style = MaterialTheme.typography.bodySmall, color = AppContentColors.primaryText())
+        AppText(text = emoji, style = COUITheme.textStyles.title4)
+        AppText(text = label, style = COUITheme.textStyles.footnote1, color = AppContentColors.primaryText())
     }
 }
 
@@ -3415,12 +3417,12 @@ fun SearchDiscoverySection(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 AppText(
                     "💎",
-                    style = MaterialTheme.typography.titleMedium
+                    style = COUITheme.textStyles.headline1
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 AppText(
                     title, //  使用动态标题
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     color = AppContentColors.primaryText()
                 )
             }
@@ -3429,7 +3431,7 @@ fun SearchDiscoverySection(
             AppTextButton(onClick = onRefresh) {
                 AppText(
                     stringResource(R.string.search_shuffle),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText()
                 )
             }
@@ -3443,13 +3445,13 @@ fun SearchDiscoverySection(
         ) {
             list.forEach { keyword -> //  使用动态列表
                 AppSurface(
-                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                    color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.5f),
                     shape = AppShapes.container(ContainerLevel.Chip),
                     modifier = Modifier.appActionClickable { onItemClick(keyword) }
                 ) {
                     AppText(
                         keyword,
-                        style = MaterialTheme.typography.labelMedium,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.primaryText(),
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                     )
@@ -3486,12 +3488,12 @@ fun SearchHotSection(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     AppText(
                         "", // 🔥
-                        style = MaterialTheme.typography.titleMedium
+                        style = COUITheme.textStyles.headline1
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     AppText(
                         stringResource(R.string.search_hot_title),
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         color = AppContentColors.primaryText()
                     )
                 }
@@ -3501,7 +3503,7 @@ fun SearchHotSection(
                     color = if (hotSearchEnabled) {
                         AppContentColors.accent().copy(alpha = 0.14f)
                     } else {
-                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.72f)
+                        AppSurfaceTokens.surfaceContainer().copy(alpha = 0.72f)
                     }
                 ) {
                     AppText(
@@ -3511,7 +3513,7 @@ fun SearchHotSection(
                         } else {
                             AppContentColors.secondaryText()
                         },
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp)
                     )
                 }
@@ -3545,7 +3547,7 @@ fun SearchHotSection(
                                     // 排名序号
                                     AppText(
                                         text = "${globalIndex + 1}",
-                                        style = MaterialTheme.typography.labelLarge,
+                                        style = COUITheme.textStyles.button,
                                         fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                                         color = if (isTop3) AppContentColors.accent() else AppContentColors.secondaryText().copy(alpha = 0.5f),
                                         modifier = Modifier.width(24.dp)
@@ -3554,7 +3556,7 @@ fun SearchHotSection(
                                     // 标题
                                     AppText(
                                         text = hotItem.show_name,
-                                        style = MaterialTheme.typography.bodyMedium,
+                                        style = COUITheme.textStyles.body1,
                                         color = AppContentColors.primaryText(),
                                         maxLines = 1,
                                         overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
@@ -3664,7 +3666,7 @@ private fun SearchResultTypeTabRow(
             itemWidth = itemWidth.takeIf { useScrollableRail },
             height = AppChromeSizeTokens.BottomBarMatchedSegmentedControlHeightDp.dp,
             indicatorHeight = AppChromeSizeTokens.BottomBarMatchedSegmentedIndicatorHeightDp.dp,
-            labelFontSize = MaterialTheme.typography.labelMedium.fontSize,
+            labelFontSize = COUITheme.textStyles.footnote1.fontSize,
             allowNativeLabelOverflow = true,
             nativeIndicatorPresentation = AppTabRowIndicatorPresentation.TONAL_PILL,
             miuixBackdrop = miuixBackdrop,
@@ -4114,7 +4116,7 @@ private fun FilterMenuChip(
         label = {
             AppText(
                 text = text,
-                style = MaterialTheme.typography.labelMedium,
+                style = COUITheme.textStyles.footnote1,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -4141,7 +4143,7 @@ private fun SearchResultCardSurface(
     val color = if (surfaceSpec.usesTonalContainerTreatment) {
         AppSurfaceTokens.surfaceContainer()
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = appearance.containerAlpha)
+        AppSurfaceTokens.surface().copy(alpha = appearance.containerAlpha)
     }
     val border = when {
         surfaceSpec.usesTonalContainerTreatment -> {
@@ -4220,11 +4222,11 @@ private fun SearchResultText(
     overflow: TextOverflow = TextOverflow.Clip,
 ) {
     val style = when (role) {
-        SearchResultTextRole.DENSE_TITLE -> MaterialTheme.typography.bodySmall
-        SearchResultTextRole.TITLE -> MaterialTheme.typography.titleSmall
-        SearchResultTextRole.BODY -> MaterialTheme.typography.bodySmall
-        SearchResultTextRole.METADATA -> MaterialTheme.typography.labelMedium
-        SearchResultTextRole.BADGE -> MaterialTheme.typography.labelSmall
+        SearchResultTextRole.DENSE_TITLE -> COUITheme.textStyles.footnote1
+        SearchResultTextRole.TITLE -> COUITheme.textStyles.headline2
+        SearchResultTextRole.BODY -> COUITheme.textStyles.footnote1
+        SearchResultTextRole.METADATA -> COUITheme.textStyles.footnote1
+        SearchResultTextRole.BADGE -> COUITheme.textStyles.footnote2
     }
     AppText(
         text = text,
@@ -4266,7 +4268,7 @@ fun SearchResultCard(
                 .fillMaxWidth()
                 .aspectRatio(16f / 10f)
                 .clip(AppShapes.mediaCover())
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .background(AppSurfaceTokens.surfaceContainer())
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -4374,7 +4376,7 @@ fun SearchResultCard(
                         )
                     }
                 } else null,
-                nameStyle = MaterialTheme.typography.labelSmall,
+                nameStyle = COUITheme.textStyles.footnote2,
                 nameColor = AppContentColors.secondaryText(),
                 badgeTextColor = AppContentColors.secondaryText().copy(alpha = 0.85f),
                 badgeBorderColor = AppContentColors.secondaryText().copy(alpha = 0.35f),
@@ -4441,7 +4443,7 @@ internal fun UpSearchResultCard(
                     modifier = Modifier
                         .matchParentSize()
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surfaceVariant),
+                        .background(AppSurfaceTokens.surfaceContainer()),
                     contentScale = ContentScale.Crop
                 )
                 if (cleanedItem.is_live == 1) {
@@ -4449,14 +4451,14 @@ internal fun UpSearchResultCard(
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
                             .size(18.dp)
-                            .background(MaterialTheme.colorScheme.primary, CircleShape)
-                            .border(1.5.dp, MaterialTheme.colorScheme.surface, CircleShape)
+                            .background(AppContentColors.accent(), CircleShape)
+                            .border(1.5.dp, AppSurfaceTokens.surface(), CircleShape)
                             .padding(4.dp),
                         contentAlignment = Alignment.Center,
                     ) {
                         com.android.purebilibili.core.ui.components.PlaybackBarsIndicator(
                             isPlaying = true,
-                            color = MaterialTheme.colorScheme.onPrimary,
+                            color = AppContentColors.onAccent(),
                             contentDescription = "正在直播",
                             modifier = Modifier.size(10.dp),
                         )
@@ -4514,13 +4516,13 @@ internal fun UpSearchResultCard(
                                 onClick = { onLiveClick?.invoke() },
                             ),
                             shape = AppShapes.container(ContainerLevel.Tag),
-                            color = MaterialTheme.colorScheme.primaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                            color = AppSurfaceTokens.primaryContainer(),
+                            contentColor = AppSurfaceTokens.onPrimaryContainer(),
                         ) {
                             SearchResultText(
                                 text = "直播中",
                                 role = SearchResultTextRole.BADGE,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                color = AppSurfaceTokens.onPrimaryContainer(),
                                 maxLines = 1,
                                 modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp),
                             )
@@ -4609,7 +4611,7 @@ internal fun BangumiSearchResultCard(
                     .width(80.dp)
                     .height(110.dp)
                     .clip(AppShapes.container(ContainerLevel.Chip))
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                    .background(AppSurfaceTokens.surfaceContainer()),
                 contentScale = ContentScale.Crop
             )
 
@@ -4751,7 +4753,7 @@ internal fun MatchSearchResultCard(
                 color = if (item.contestStatus == 2) {
                     AppContentColors.accent()
                 } else {
-                    MaterialTheme.colorScheme.surfaceVariant
+                    AppSurfaceTokens.surfaceContainer()
                 },
                 shape = AppShapes.container(ContainerLevel.Tag)
             ) {
@@ -4838,7 +4840,7 @@ internal fun LiveSearchResultCard(
                         .width(120.dp)
                         .height(68.dp)
                         .clip(AppShapes.container(ContainerLevel.Chip))
-                        .background(MaterialTheme.colorScheme.surfaceVariant),
+                        .background(AppSurfaceTokens.surfaceContainer()),
                     contentScale = ContentScale.Crop
                 )
                 // 直播状态标签
@@ -4981,14 +4983,14 @@ private fun SearchNativeMessageState(
         }
         AppText(
             text = title,
-            style = MaterialTheme.typography.titleMedium,
+            style = COUITheme.textStyles.headline1,
             color = AppContentColors.primaryText()
         )
         if (!message.isNullOrBlank()) {
             Spacer(modifier = Modifier.height(8.dp))
             AppText(
                 text = message,
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 color = AppContentColors.secondaryText()
             )
         }
@@ -5036,7 +5038,7 @@ internal fun LiveUserSearchResultCard(
                 modifier = Modifier
                     .size(54.dp)
                     .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                    .background(AppSurfaceTokens.surfaceContainer()),
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.width(AppSpacingTokens.Medium))
@@ -5109,7 +5111,7 @@ internal fun TopicSearchResultCard(
                 modifier = Modifier
                     .size(64.dp)
                     .clip(AppShapes.container(ContainerLevel.Chip))
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                    .background(AppSurfaceTokens.surfaceContainer()),
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.width(AppSpacingTokens.Medium))
@@ -5173,7 +5175,7 @@ internal fun PhotoSearchResultCard(
                 modifier = Modifier
                     .size(width = 104.dp, height = 72.dp)
                     .clip(AppShapes.container(ContainerLevel.Chip))
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                    .background(AppSurfaceTokens.surfaceContainer()),
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.width(AppSpacingTokens.Medium))
@@ -5206,7 +5208,7 @@ internal fun PhotoSearchResultCard(
                 SearchResultText(
                     text = stringResource(R.string.search_not_supported),
                     role = SearchResultTextRole.BADGE,
-                    color = MaterialTheme.colorScheme.outline
+                    color = AppSurfaceTokens.outline()
                 )
             }
         }

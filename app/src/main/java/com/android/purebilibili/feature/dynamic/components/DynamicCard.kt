@@ -1,6 +1,7 @@
 // 文件路径: feature/dynamic/components/DynamicCard.kt
 package com.android.purebilibili.feature.dynamic.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.core.ui.components.appActionWithFeedback
@@ -449,7 +450,7 @@ fun DynamicCardV2(
                     AppText(
                         author.name,
                         fontWeight = FontWeight.SemiBold,
-                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        fontSize = COUITheme.textStyles.body1.fontSize,
                         color = resolveUpNameColor(
                             vipStatus = author.vip?.status ?: 0,
                             vipType = author.vip?.type ?: 0,
@@ -463,13 +464,13 @@ fun DynamicCardV2(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         AppText(
                             authorTimeText,
-                            fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                            fontSize = COUITheme.textStyles.footnote2.fontSize,
                             color = AppContentColors.secondaryText().copy(0.6f)
                         )
                         if (author.pub_action.isNotBlank()) {
                             AppText(
                                 " · ${author.pub_action}",
-                                fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                                fontSize = COUITheme.textStyles.footnote2.fontSize,
                                 color = AppContentColors.secondaryText().copy(0.6f)
                             )
                         }
@@ -504,7 +505,7 @@ fun DynamicCardV2(
                     ) {
                         AppText(
                             item.modules.module_tag?.text.orEmpty(),
-                            fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                            fontSize = COUITheme.textStyles.footnote2.fontSize,
                             color = AppContentColors.accent()
                         )
                     }
@@ -536,9 +537,9 @@ fun DynamicCardV2(
         item.modules.module_dispute?.takeIf { showDispute }?.let { dispute ->
             if (shouldShowDynamicDispute(dispute)) {
                 val disputeColors = resolveAccessibleContainerColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f),
+                    containerColor = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.7f),
                     contentColor = AppContentColors.secondaryText(),
-                    backgroundColor = MaterialTheme.colorScheme.surface,
+                    backgroundColor = AppSurfaceTokens.surface(),
                     fallbackContentColors = listOf(
                         AppContentColors.primaryText(),
                         MaterialTheme.colorScheme.onBackground,
@@ -578,7 +579,7 @@ fun DynamicCardV2(
                     Spacer(modifier = Modifier.width(AppSpacingTokens.ExtraSmall))
                     AppText(
                         dispute.title.ifBlank { dispute.desc },
-                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                        fontSize = COUITheme.textStyles.footnote1.fontSize,
                         color = disputeColors.contentColor
                     )
                 }
@@ -618,7 +619,7 @@ fun DynamicCardV2(
         if (dynamicCardTitle != null) {
             AppText(
                 text = dynamicCardTitle,
-                fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                fontSize = COUITheme.textStyles.headline1.fontSize,
                 fontWeight = FontWeight.Bold,
                 color = AppContentColors.primaryText(),
                 maxLines = if (isDetail) Int.MAX_VALUE else 3,
@@ -636,7 +637,7 @@ fun DynamicCardV2(
                     .fillMaxWidth()
                     .padding(vertical = AppSpacingTokens.Small)
                     .clip(AppShapes.container(ContainerLevel.Chip))
-                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                    .background(AppSurfaceTokens.surfaceContainer().copy(alpha = 0.5f))
                     .padding(horizontal = AppSpacingTokens.Medium, vertical = AppSpacingTokens.Small),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -649,7 +650,7 @@ fun DynamicCardV2(
                 Spacer(modifier = Modifier.width(AppSpacingTokens.Small))
                 AppText(
                     text = tips,
-                    fontSize = MaterialTheme.typography.bodySmall.fontSize,
+                    fontSize = COUITheme.textStyles.footnote1.fontSize,
                     color = AppContentColors.secondaryText()
                 )
             }
@@ -715,7 +716,7 @@ fun DynamicCardV2(
                         if (foldBodyText && openDynamicDetail != null) {
                             AppText(
                                 text = "展开更多",
-                                fontSize = MaterialTheme.typography.bodySmall.fontSize,
+                                fontSize = COUITheme.textStyles.footnote1.fontSize,
                                 color = AppContentColors.accent(),
                                 modifier = Modifier
                                     .padding(top = AppSpacingTokens.ExtraSmall)
@@ -735,7 +736,7 @@ fun DynamicCardV2(
             commentPreviewVisible = LocalDynamicCommentPreviewVisible.current,
         )
         if (interactionItems.isNotEmpty()) {
-            val interactionBarColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
+            val interactionBarColor = AppSurfaceTokens.outline().copy(alpha = 0.35f)
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -809,8 +810,8 @@ fun DynamicCardV2(
                             collapseWebLinks = isDetail,
                             onUserClick = onUserClick,
                             onBlankTap = onPreviewClick,
-                            fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                            lineHeight = MaterialTheme.typography.bodySmall.lineHeight,
+                            fontSize = COUITheme.textStyles.footnote1.fontSize,
+                            lineHeight = COUITheme.textStyles.footnote1.lineHeight,
                             extraEmoteUrlMap = dynamicCardEmoteMap,
                         )
                     }
@@ -1032,7 +1033,7 @@ fun DynamicCardV2(
                             } else if (blockText.isNotBlank()) {
                                 AppText(
                                     text = blockText,
-                                    style = MaterialTheme.typography.bodyLarge,
+                                    style = COUITheme.textStyles.main,
                                     color = AppContentColors.primaryText(),
                                     textAlign = resolveOpusTextAlign(block.alignment),
                                     modifier = Modifier
@@ -1045,9 +1046,9 @@ fun DynamicCardV2(
                             AppText(
                                 text = block.text,
                                 style = when (block.level) {
-                                    1 -> MaterialTheme.typography.headlineSmall
-                                    3 -> MaterialTheme.typography.titleMedium
-                                    else -> MaterialTheme.typography.titleLarge
+                                    1 -> COUITheme.textStyles.title4
+                                    3 -> COUITheme.textStyles.headline1
+                                    else -> COUITheme.textStyles.title4
                                 },
                                 fontWeight = FontWeight.SemiBold,
                                 color = AppContentColors.primaryText(),
@@ -1065,12 +1066,12 @@ fun DynamicCardV2(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(bottom = AppSpacingTokens.Medium),
-                                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f),
+                                containerColor = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.45f),
                                 contentPadding = PaddingValues(AppSpacingTokens.Medium),
                             ) {
                                 AppText(
                                     text = block.text,
-                                    style = MaterialTheme.typography.bodyLarge,
+                                    style = COUITheme.textStyles.main,
                                     color = AppContentColors.secondaryText(),
                                     textAlign = resolveOpusTextAlign(block.alignment),
                                     modifier = Modifier.fillMaxWidth(),
@@ -1082,7 +1083,7 @@ fun DynamicCardV2(
                                 text = block.items.mapIndexed { index, listItem ->
                                     if (block.ordered) "${index + 1}. $listItem" else "• $listItem"
                                 }.joinToString("\n"),
-                                style = MaterialTheme.typography.bodyLarge,
+                                style = COUITheme.textStyles.main,
                                 color = AppContentColors.primaryText(),
                                 textAlign = resolveOpusTextAlign(block.alignment),
                                 modifier = Modifier
@@ -1098,12 +1099,12 @@ fun DynamicCardV2(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(bottom = AppSpacingTokens.Medium),
-                                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                                containerColor = AppSurfaceTokens.surfaceContainerHigh(),
                                 contentPadding = PaddingValues(AppSpacingTokens.Medium),
                             ) {
                                 AppText(
                                     text = block.text,
-                                    style = MaterialTheme.typography.bodyMedium,
+                                    style = COUITheme.textStyles.body1,
                                     fontFamily = FontFamily.Monospace,
                                     color = AppContentColors.primaryText(),
                                     modifier = Modifier.fillMaxWidth(),
@@ -1146,7 +1147,7 @@ fun DynamicCardV2(
                             } else {
                                 AppHorizontalDivider(
                                     modifier = Modifier.padding(vertical = AppSpacingTokens.Medium),
-                                    color = MaterialTheme.colorScheme.outlineVariant,
+                                    color = AppSurfaceTokens.outline(),
                                 )
                             }
                         }
@@ -1726,7 +1727,7 @@ fun DynamicCardV2(
                     }
                     AppText(
                         foldStatement,
-                        fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                        fontSize = COUITheme.textStyles.footnote2.fontSize,
                         color = AppContentColors.secondaryText()
                     )
                     Spacer(modifier = Modifier.width(AppSpacingTokens.ExtraSmall))
@@ -1939,7 +1940,7 @@ internal fun DynamicTopicLabel(
                 AppText(
                     text = "#",
                     color = AppContentColors.accent(),
-                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                    fontSize = COUITheme.textStyles.headline1.fontSize,
                     fontWeight = FontWeight.Bold,
                 )
             }
@@ -1947,7 +1948,7 @@ internal fun DynamicTopicLabel(
             AppText(
                 text = topicName,
                 color = AppContentColors.accent(),
-                style = MaterialTheme.typography.titleMedium,
+                style = COUITheme.textStyles.headline1,
                 fontWeight = FontWeight.SemiBold,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -1991,9 +1992,9 @@ fun RichTextContent(
     onMusicClick: ((Long) -> Unit)? = null,
     onLinkClick: ((String) -> Unit)? = null,
     modifier: Modifier = Modifier,
-    fontSize: TextUnit = MaterialTheme.typography.bodyMedium.fontSize,
+    fontSize: TextUnit = COUITheme.textStyles.body1.fontSize,
     fontWeight: FontWeight? = null,
-    lineHeight: TextUnit = MaterialTheme.typography.bodyLarge.lineHeight,
+    lineHeight: TextUnit = COUITheme.textStyles.main.lineHeight,
     maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Clip,
     extraEmoteUrlMap: Map<String, String> = emptyMap(),
@@ -2434,7 +2435,7 @@ fun DynamicCardCompact(
                 AppText(
                     author?.name ?: "",
                     fontWeight = FontWeight.Medium,
-                    fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                    fontSize = COUITheme.textStyles.footnote1.fontSize,
                     color = AppContentColors.primaryText(),
                     maxLines = 1
                 )
@@ -2446,7 +2447,7 @@ fun DynamicCardCompact(
                             pubTs = it.pub_ts
                         )
                     }.orEmpty(),
-                    fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                    fontSize = COUITheme.textStyles.footnote2.fontSize,
                     color = AppContentColors.secondaryText().copy(0.5f)
                 )
             }
@@ -2456,7 +2457,7 @@ fun DynamicCardCompact(
             // 内容预览
             AppText(
                 previewText,
-                fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                fontSize = COUITheme.textStyles.footnote1.fontSize,
                 color = AppContentColors.secondaryText(),
                 maxLines = 1,
                 overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis

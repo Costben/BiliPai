@@ -39,7 +39,6 @@ import com.android.purebilibili.core.ui.components.AppSegmentOption
 import com.android.purebilibili.core.ui.components.AppThemeAdaptiveTabRow
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppIconButton
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppOutlinedTextField
 import com.android.purebilibili.core.ui.AppScaffold
 import com.android.purebilibili.core.ui.components.AppSurface
@@ -89,6 +88,7 @@ import com.android.purebilibili.core.ui.rememberAppBackIcon
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** 详情导航栈中的一层：`link` 原样回传给插件详情函数。 */
 data class BiliPaiJsDetailEntry(
@@ -400,7 +400,7 @@ private fun PluginContent(
         item(span = StaggeredGridItemSpan.FullLine) {
             AppText(
                 text = installed.manifest.description.ifBlank { "${installed.manifest.id} · v${installed.manifest.version}" },
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 color = AppContentColors.secondaryText()
             )
         }
@@ -413,7 +413,7 @@ private fun PluginContent(
                     )
                     AppText(
                         text = detailStack.last().title,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         color = AppContentColors.primaryText()
                     )
                 }
@@ -485,7 +485,7 @@ private fun PluginContent(
             item(span = StaggeredGridItemSpan.FullLine) {
                 AppText(
                     text = message,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppContentColors.error()
                 )
             }
@@ -648,14 +648,14 @@ private fun BiliPaiJsPosterCard(
             ) {
                 AppText(
                     text = item.title,
-                    style = MaterialTheme.typography.titleSmall,
+                    style = COUITheme.textStyles.headline2,
                     color = AppContentColors.primaryText(),
                     maxLines = 1
                 )
                 if (item.description.isNotBlank()) {
                     AppText(
                         text = item.description,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         maxLines = 1
                     )
@@ -699,7 +699,7 @@ private fun BiliPaiJsParamOptionChips(
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         AppText(
             text = param.title,
-            style = MaterialTheme.typography.labelMedium,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText()
         )
         Row(
@@ -801,14 +801,14 @@ private fun BiliPaiJsMediaItemRow(
             Column(modifier = Modifier.weight(1f)) {
                 AppText(
                     text = item.title,
-                    style = MaterialTheme.typography.titleSmall,
+                    style = COUITheme.textStyles.headline2,
                     color = AppContentColors.primaryText()
                 )
                 if (item.description.isNotBlank()) {
                     Spacer(modifier = Modifier.height(2.dp))
                     AppText(
                         text = item.description,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         maxLines = 2
                     )
@@ -817,7 +817,7 @@ private fun BiliPaiJsMediaItemRow(
                     Spacer(modifier = Modifier.height(6.dp))
                     AppText(
                         text = "线路 ${streams.size} 条",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppContentColors.accent()
                     )
                 }
@@ -825,7 +825,7 @@ private fun BiliPaiJsMediaItemRow(
             actionLabel?.let { label ->
                 AppText(
                     text = label,
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.accent()
                 )
             }
@@ -851,7 +851,7 @@ private fun PluginMediaImagePlaceholder(
     ) {
         AppSurface(
             modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.72f)
+            color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.72f)
         ) {}
         AppText(
             text = when (state) {
@@ -859,7 +859,7 @@ private fun PluginMediaImagePlaceholder(
                 PluginMediaImageState.LOAD_FAILED -> "失败"
                 PluginMediaImageState.LOADING -> title.take(2).ifBlank { "TV" }
             },
-            style = MaterialTheme.typography.labelMedium,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText()
         )
     }
@@ -879,7 +879,7 @@ private fun EmptyState(
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         AppText(
             text = text,
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = AppContentColors.secondaryText()
         )
     }

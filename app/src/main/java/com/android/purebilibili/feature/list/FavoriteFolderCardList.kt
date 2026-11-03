@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.list
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.core.ui.components.appActionWithFeedback
@@ -40,7 +42,6 @@ import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -239,7 +240,7 @@ private fun FavoriteFolderCard(
                 .width(150.dp)
                 .aspectRatio(16f / 10f)
                 .clip(AppShapes.mediaCover())
-                .background(MaterialTheme.colorScheme.surfaceVariant),
+                .background(AppSurfaceTokens.surfaceContainer()),
             contentAlignment = Alignment.Center,
         ) {
             if (coverUrl != null) {
@@ -266,7 +267,7 @@ private fun FavoriteFolderCard(
         ) {
             AppText(
                 text = folder.title,
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 fontWeight = FontWeight.Medium,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
@@ -274,7 +275,7 @@ private fun FavoriteFolderCard(
             if (folder.intro.isNotBlank()) {
                 AppText(
                     text = folder.intro,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
@@ -283,7 +284,7 @@ private fun FavoriteFolderCard(
             Spacer(modifier = Modifier.weight(1f))
             AppText(
                 text = metaLine,
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 color = AppContentColors.secondaryText(),
                 maxLines = 1,
             )
@@ -314,7 +315,7 @@ private fun FavoriteSubscribedEntryRow(
         AppText(
             text = "订阅收藏夹（追更）",
             modifier = Modifier.weight(1f),
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
         )
         AppIcon(
             imageVector = rememberAppChevronForwardIcon(),

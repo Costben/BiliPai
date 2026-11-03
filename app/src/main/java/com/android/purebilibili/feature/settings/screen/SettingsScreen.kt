@@ -75,6 +75,8 @@ import com.android.purebilibili.feature.dynamic.defaultDynamicTabVisibleIds
 import com.android.purebilibili.feature.dynamic.resolveDynamicVisibleTabIdsAfterToggle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.purebilibili.feature.settings.screen.CommentFraudHistoryScreen
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppAlertDialog
 
 const val GITHUB_URL = OFFICIAL_GITHUB_URL
 
@@ -602,19 +604,19 @@ fun SettingsScreen(
             title = { AppText(stringResource(R.string.settings_download_location_title), color = AppContentColors.primaryText()) },
             text = {
                 Column {
-                    AppText(stringResource(R.string.settings_download_location_default), style = MaterialTheme.typography.labelMedium, color = AppContentColors.secondaryText())
-                    AppText(defaultPath.substringAfterLast("Android/"), style = MaterialTheme.typography.bodySmall, color = AppContentColors.secondaryText())
+                    AppText(stringResource(R.string.settings_download_location_default), style = COUITheme.textStyles.footnote1, color = AppContentColors.secondaryText())
+                    AppText(defaultPath.substringAfterLast("Android/"), style = COUITheme.textStyles.footnote1, color = AppContentColors.secondaryText())
                     Spacer(modifier = Modifier.height(8.dp))
                     AppText(
                         stringResource(R.string.settings_download_location_export_help),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.warning()
                     )
                     if (!downloadExportTreeUri.isNullOrBlank()) {
                         Spacer(modifier = Modifier.height(8.dp))
                         AppText(
                             stringResource(R.string.settings_download_location_export_set),
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText()
                         )
                     }
@@ -646,20 +648,20 @@ fun SettingsScreen(
                 Column {
                     AppText(
                         stringResource(R.string.settings_image_location_default),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     AppText(
                         stringResource(R.string.settings_image_location_help),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.warning()
                     )
                     if (!imageSaveTreeUri.isNullOrBlank()) {
                         Spacer(modifier = Modifier.height(8.dp))
                         AppText(
                             stringResource(R.string.settings_image_location_custom_set),
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText()
                         )
                     }
@@ -985,7 +987,7 @@ internal fun SettingsCategoryHeader(title: String) {
     AppText(
         text = title,
         color = AppContentColors.secondaryText(),
-        style = MaterialTheme.typography.titleSmall,
+        style = COUITheme.textStyles.headline2,
         fontWeight = FontWeight.Medium,
         modifier = Modifier.padding(start = 20.dp, top = 20.dp, bottom = AppSpacingTokens.Small)
     )

@@ -1,6 +1,9 @@
 // 文件路径: app/src/main/java/com/android/purebilibili/MainActivity.kt
 package com.android.purebilibili
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+
 import com.android.purebilibili.core.ui.components.AppText
 
 import androidx.compose.runtime.collectAsState
@@ -1741,11 +1744,11 @@ class MainActivity : AppCompatActivity() {
                                     }
                                 }
                             )
-                            .background(MaterialTheme.colorScheme.background)  // 📐 [修复] 防止平板端返回后出现黑边
+                            .background(AppSurfaceTokens.background())  // 📐 [修复] 防止平板端返回后出现黑边
                     ) {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background
+                        color = AppSurfaceTokens.background()
                     ) {
                         //  [修复] 移除 .haze() 以避免与 hazeSource/hazeEffect 冲突
                         // 每个 Screen 自己管理 hazeSource（内容）和 hazeEffect（头部/底栏）
@@ -2067,7 +2070,7 @@ class MainActivity : AppCompatActivity() {
                             modifier = Modifier
                                 .fillMaxSize()
                                 .graphicsLayer(alpha = splashOverlayAlpha)
-                                .background(MaterialTheme.colorScheme.background)
+                                .background(AppSurfaceTokens.background())
                         ) {
                             when (splashWallpaperLayout) {
                                 SplashWallpaperLayout.FULL_CROP -> {
@@ -2170,7 +2173,7 @@ class MainActivity : AppCompatActivity() {
                                 .fillMaxSize()
                                 .background(
                                     if (showCustomSplashInitially) Color.Transparent
-                                    else MaterialTheme.colorScheme.background
+                                    else AppSurfaceTokens.background()
                                 )
                                 .clickable(
                                     interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() },
@@ -2290,7 +2293,7 @@ class MainActivity : AppCompatActivity() {
                                 "未提供"
                             }
                         }
-                        val isDialogDarkTheme = MaterialTheme.colorScheme.surface.luminance() < 0.5f
+                        val isDialogDarkTheme = AppSurfaceTokens.surface().luminance() < 0.5f
                         val dialogTextColors = remember(isDialogDarkTheme) {
                             resolveAppUpdateDialogTextColors(
                                 isDarkTheme = isDialogDarkTheme
@@ -2309,36 +2312,36 @@ class MainActivity : AppCompatActivity() {
                                 Column(modifier = Modifier.fillMaxWidth()) {
                                     AppText(
                                         text = "当前版本 v${info.currentVersion}",
-                                        style = MaterialTheme.typography.bodyMedium,
+                                        style = COUITheme.textStyles.body1,
                                         color = dialogTextColors.currentVersionColor
                                     )
                                     preferredAsset?.let { asset ->
                                         Spacer(modifier = Modifier.height(6.dp))
                                         AppText(
                                             text = "安装包：${asset.name}",
-                                            style = MaterialTheme.typography.bodySmall,
+                                            style = COUITheme.textStyles.footnote1,
                                             color = dialogTextColors.currentVersionColor
                                         )
                                     }
                                     Spacer(modifier = Modifier.height(6.dp))
                                     AppText(
                                         text = "Release 锁定：${if (info.releaseIsImmutable) "Immutable" else "可变"}",
-                                        style = MaterialTheme.typography.bodySmall,
+                                        style = COUITheme.textStyles.footnote1,
                                         color = dialogTextColors.currentVersionColor
                                     )
                                     AppText(
                                         text = "源码提交：$releaseCommit",
-                                        style = MaterialTheme.typography.bodySmall,
+                                        style = COUITheme.textStyles.footnote1,
                                         color = dialogTextColors.currentVersionColor
                                     )
                                     AppText(
                                         text = "构建来源：$releaseWorkflowSubtitle",
-                                        style = MaterialTheme.typography.bodySmall,
+                                        style = COUITheme.textStyles.footnote1,
                                         color = dialogTextColors.currentVersionColor
                                     )
                                     AppText(
                                         text = "Provenance：$releaseVerificationEvidence",
-                                        style = MaterialTheme.typography.bodySmall,
+                                        style = COUITheme.textStyles.footnote1,
                                         color = dialogTextColors.currentVersionColor
                                     )
                                     if (startupUpdateDownloadState.status != AppUpdateDownloadStatus.IDLE) {
@@ -2353,14 +2356,14 @@ class MainActivity : AppCompatActivity() {
                                                     startupUpdateDownloadState.errorMessage ?: "下载失败"
                                                 AppUpdateDownloadStatus.IDLE -> ""
                                             },
-                                            style = MaterialTheme.typography.bodySmall,
+                                            style = COUITheme.textStyles.footnote1,
                                             color = dialogTextColors.currentVersionColor
                                         )
                                     }
                                     Spacer(modifier = Modifier.height(8.dp))
                                     AppText(
                                         text = resolvedReleaseNotes,
-                                        style = MaterialTheme.typography.bodyMedium,
+                                        style = COUITheme.textStyles.body1,
                                         color = dialogTextColors.releaseNotesColor,
                                         modifier = Modifier
                                             .fillMaxWidth()

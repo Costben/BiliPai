@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.video.ui.pager
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.core.ui.AppSurfaceTokens
 
@@ -47,6 +48,7 @@ import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppTextButton
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
+import com.android.purebilibili.core.ui.AppAlertDialog
 
 /**
  * 竖屏视频详情页 (简介)
@@ -111,7 +113,7 @@ fun PortraitDetailSheet(
                     .heightIn(max = screenHeight * 0.75f) // max height 75%
                     .clickable(enabled = false) {}, // 拦截点击防止穿透
                 shape = AppShapes.container(ContainerLevel.Sheet),
-                color = MaterialTheme.colorScheme.surface,
+                color = AppSurfaceTokens.surface(),
                 tonalElevation = 8.dp
             ) {
                 Column(
@@ -129,7 +131,7 @@ fun PortraitDetailSheet(
                     ) {
                         AppText(
                             text = "简介",
-                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                            style = COUITheme.textStyles.title4.copy(fontWeight = FontWeight.Bold),
                             color = AppContentColors.primaryText()
                         )
                         Row(
@@ -138,7 +140,7 @@ fun PortraitDetailSheet(
                             AppTextButton(onClick = onDanmakuToggle) {
                                 AppText(
                                     text = if (danmakuEnabled) "弹幕开" else "弹幕关",
-                                    style = MaterialTheme.typography.labelMedium
+                                    style = COUITheme.textStyles.footnote1
                                 )
                             }
                             AppIconButton(onClick = onDismiss) {
@@ -151,7 +153,7 @@ fun PortraitDetailSheet(
                         }
                     }
 
-                    AppHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                    AppHorizontalDivider(color = AppSurfaceTokens.outline().copy(alpha = 0.5f))
 
                     // Content
                     if (info == null) {
@@ -212,7 +214,7 @@ fun PortraitDetailSheet(
 
                             AppText(
                                 text = info.title,
-                                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                                style = COUITheme.textStyles.title4.copy(fontWeight = FontWeight.Bold),
                                 color = AppContentColors.primaryText(),
                                 modifier = Modifier.padding(bottom = 8.dp)
                             )
@@ -234,13 +236,13 @@ fun PortraitDetailSheet(
                             if (publishTimeRowText.isNotBlank()) {
                                 if (emphasizePublishTime) {
                                     AppSurface(
-                                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.8f),
+                                        color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.8f),
                                         shape = AppShapes.container(ContainerLevel.Field),
                                         modifier = Modifier.padding(bottom = 10.dp)
                                     ) {
                                         AppText(
                                             text = publishTimeRowText,
-                                            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Medium),
+                                            style = COUITheme.textStyles.footnote1.copy(fontWeight = FontWeight.Medium),
                                             color = AppContentColors.secondaryText(),
                                             modifier = Modifier.padding(horizontal = 10.dp, vertical = 7.dp)
                                         )
@@ -248,7 +250,7 @@ fun PortraitDetailSheet(
                                 } else {
                                     AppText(
                                         text = publishTimeRowText,
-                                        style = MaterialTheme.typography.labelMedium,
+                                        style = COUITheme.textStyles.footnote1,
                                         color = AppContentColors.secondaryText(),
                                         modifier = Modifier.padding(bottom = 10.dp)
                                     )
@@ -279,14 +281,14 @@ fun PortraitDetailSheet(
                                 ) {
                                     AppText(
                                         text = info.owner.name,
-                                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Medium),
+                                        style = COUITheme.textStyles.headline2.copy(fontWeight = FontWeight.Medium),
                                         color = if (isBlocked) AppContentColors.neutralAction() else AppContentColors.error(),
                                         modifier = Modifier.clickable { showBlockConfirmDialog = true }
                                     )
                                     Spacer(modifier = Modifier.height(2.dp))
                                     AppText(
                                         text = "${FormatUtils.formatStat(info.stat.view.toLong())}观看 · ${FormatUtils.formatStat(info.stat.danmaku.toLong())}弹幕",
-                                        style = MaterialTheme.typography.labelSmall,
+                                        style = COUITheme.textStyles.footnote2,
                                         color = AppContentColors.secondaryText()
                                     )
                                 }
@@ -295,15 +297,15 @@ fun PortraitDetailSheet(
                             // VID Info
                             AppText(
                                 text = info.bvid,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.outline,
+                                style = COUITheme.textStyles.footnote1,
+                                color = AppSurfaceTokens.outline(),
                                 modifier = Modifier.padding(bottom = 16.dp)
                             )
 
                             // 简介正文
                             AppText(
                                 text = info.desc.ifEmpty { "暂无简介" },
-                                style = MaterialTheme.typography.bodyLarge,
+                                style = COUITheme.textStyles.main,
                                 color = AppContentColors.secondaryText(),
                                 modifier = Modifier.padding(bottom = 16.dp)
                             )
@@ -364,7 +366,7 @@ fun PortraitDetailSheet(
                             if (recommendations.isNotEmpty()) {
                                 AppText(
                                     text = recommendationTitle,
-                                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                                    style = COUITheme.textStyles.headline1.copy(fontWeight = FontWeight.SemiBold),
                                     color = AppContentColors.primaryText(),
                                     modifier = Modifier.padding(bottom = 10.dp)
                                 )
@@ -393,14 +395,14 @@ fun PortraitDetailSheet(
                                         ) {
                                             AppText(
                                                 text = video.title,
-                                                style = MaterialTheme.typography.bodyMedium,
+                                                style = COUITheme.textStyles.body1,
                                                 maxLines = 2,
                                                 color = AppContentColors.primaryText()
                                             )
                                             Spacer(modifier = Modifier.height(4.dp))
                                             AppText(
                                                 text = "${video.owner.name} · ${FormatUtils.formatStat(video.stat.view.toLong())}播放",
-                                                style = MaterialTheme.typography.labelSmall,
+                                                style = COUITheme.textStyles.footnote2,
                                                 color = AppContentColors.secondaryText()
                                             )
                                         }
@@ -434,7 +436,7 @@ private fun PortraitCollectionSection(
     if (items.isEmpty()) return
     AppText(
         text = title,
-        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+        style = COUITheme.textStyles.headline1.copy(fontWeight = FontWeight.SemiBold),
         color = AppContentColors.primaryText(),
         modifier = Modifier.padding(bottom = 10.dp)
     )
@@ -452,7 +454,7 @@ private fun PortraitCollectionSection(
                     color = if (item.selected) {
                         AppContentColors.accent().copy(alpha = 0.14f)
                     } else {
-                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f)
+                        AppSurfaceTokens.surfaceContainer().copy(alpha = 0.55f)
                     },
                     border = if (item.selected) {
                         BorderStroke(
@@ -466,7 +468,7 @@ private fun PortraitCollectionSection(
                 ) {
                     AppText(
                         text = item.label,
-                        style = MaterialTheme.typography.bodyMedium.copy(
+                        style = COUITheme.textStyles.body1.copy(
                             fontWeight = if (item.selected) FontWeight.SemiBold else FontWeight.Normal
                         ),
                         color = if (item.selected) {

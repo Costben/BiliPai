@@ -1,12 +1,12 @@
 package com.android.purebilibili.feature.video.ui.overlay
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -66,9 +66,9 @@ fun HotDanmakuBar(
     val presentation = remember { HotDanmakuPresentation() }
     val textMeasurer = rememberTextMeasurer()
     val density = LocalDensity.current
-    val countStyle = MaterialTheme.typography.titleLarge.copy(
-        fontSize = MaterialTheme.typography.titleLarge.fontSize * 0.9f,
-        lineHeight = MaterialTheme.typography.titleLarge.lineHeight * 0.9f,
+    val countStyle = COUITheme.textStyles.title4.copy(
+        fontSize = COUITheme.textStyles.title4.fontSize * 0.9f,
+        lineHeight = COUITheme.textStyles.title4.lineHeight * 0.9f,
         fontWeight = FontWeight.Bold,
         fontStyle = FontStyle.Italic,
         shadow = Shadow(Color.Black, Offset(1f, 1f), 3f),
@@ -127,7 +127,7 @@ fun HotDanmakuBar(
             modifier = modifier.fillMaxWidth(),
             contentAlignment = Alignment.TopCenter,
         ) {
-            val textStyle = MaterialTheme.typography.titleMedium.copy(
+            val textStyle = COUITheme.textStyles.headline1.copy(
                 shadow = Shadow(Color.Black, Offset(1f, 1f), 3f),
             )
             val visibleItems = remember(hotItems, likedDanmakuIds, maxWidth, textStyle, countStyle, density.density, density.fontScale) {

@@ -2,6 +2,12 @@
 
 package com.android.purebilibili.core.ui.common
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+import com.android.purebilibili.core.ui.AppShapes
+import com.android.purebilibili.core.ui.ContainerLevel
+
 import com.android.purebilibili.core.ui.AppIcons
 
 import android.os.Build
@@ -23,7 +29,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -138,7 +143,7 @@ fun TextSelectionBottomSheet(
             ) {
                 AppText(
                     text = resolvedTitle,
-                    style = MaterialTheme.typography.titleMedium.copy(
+                    style = COUITheme.textStyles.headline1.copy(
                         fontWeight = FontWeight.SemiBold
                     )
                 )
@@ -149,7 +154,7 @@ fun TextSelectionBottomSheet(
                     AppIcon(
                         imageVector = AppIcons.Filled.Close,
                         contentDescription = "关闭",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        tint = AppContentColors.secondaryText()
                     )
                 }
             }
@@ -158,8 +163,8 @@ fun TextSelectionBottomSheet(
 
             AppText(
                 text = TextSelectionPolicy.resolveSelectionHint(selectedText.length, text.length),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                style = COUITheme.textStyles.footnote1,
+                color = AppContentColors.secondaryText()
             )
 
             Spacer(modifier = Modifier.height(14.dp))
@@ -172,8 +177,8 @@ fun TextSelectionBottomSheet(
                     .weight(1f, fill = false)
                     .heightIn(min = 90.dp, max = 340.dp)
                     .background(
-                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f),
-                        shape = RoundedCornerShape(12.dp)
+                        color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.35f),
+                        shape = AppShapes.container(ContainerLevel.MediaCover)
                     )
                     .nestedScroll(textNestedScrollConnection)
                     .padding(14.dp)
@@ -183,11 +188,11 @@ fun TextSelectionBottomSheet(
                     value = textFieldValue,
                     onValueChange = { textFieldValue = it },
                     readOnly = true,
-                    textStyle = MaterialTheme.typography.bodyLarge.copy(
-                        color = MaterialTheme.colorScheme.onSurface,
+                    textStyle = COUITheme.textStyles.main.copy(
+                        color = AppContentColors.primaryText(),
                         fontWeight = FontWeight.Normal
                     ),
-                    cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+                    cursorBrush = SolidColor(AppContentColors.accent()),
                     modifier = Modifier
                         .fillMaxWidth()
                         .focusRequester(focusRequester)
@@ -290,7 +295,7 @@ fun TextSelectionBottomSheet(
                     AppIcon(
                         imageVector = AppIcons.Outlined.Share,
                         contentDescription = "分享",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        tint = AppContentColors.secondaryText()
                     )
                 }
             }

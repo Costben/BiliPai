@@ -1,5 +1,8 @@
 package com.android.purebilibili.feature.home.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -139,6 +142,12 @@ fun MineSideDrawer(
         budget = drawerMotionBudget
     )
     val colorScheme = MaterialTheme.colorScheme
+    val drawerContentColor = AppContentColors.primaryText()
+    val drawerSecondaryContentColor = AppContentColors.secondaryText()
+    val drawerDividerColor = AppSurfaceTokens.outline().copy(alpha = palette.dividerAlpha)
+    val drawerSurfaceColor = AppSurfaceTokens.surface()
+    val drawerContainerColor = AppSurfaceTokens.surfaceContainer()
+    val drawerErrorColor = AppContentColors.error()
     val downloadIcon = rememberAppDownloadIcon()
     val historyIcon = rememberAppHistoryIcon()
     val likeIcon = rememberAppLikeIcon()
@@ -152,18 +161,18 @@ fun MineSideDrawer(
     val hasSkinBackground = !skinBackgroundImagePath.isNullOrBlank()
 
     // 动态文字颜色
-    val activeContentColor = colorScheme.onSurface
+    val activeContentColor = drawerContentColor
     // 动态次级文字/图标颜色
-    val secondaryContentColor = colorScheme.onSurfaceVariant.copy(alpha = if (isDark) 0.92f else 0.86f)
+    val secondaryContentColor = drawerSecondaryContentColor.copy(alpha = if (isDark) 0.92f else 0.86f)
     // 动态分割线颜色
-    val dividerColor = colorScheme.outlineVariant.copy(alpha = palette.dividerAlpha)
+    val dividerColor = drawerDividerColor
     val useOpaqueContainers = visualPolicy.containerTreatment == AppDrawerContainerTreatment.OPAQUE
     val drawerBaseColor = if (useOpaqueContainers) {
-        colorScheme.surfaceContainer
+        drawerContainerColor
     } else if (isDark) {
-        colorScheme.surface.copy(alpha = palette.drawerBaseAlpha)
+        drawerSurfaceColor.copy(alpha = palette.drawerBaseAlpha)
     } else {
-        colorScheme.surface.copy(alpha = palette.drawerBaseAlpha)
+        drawerSurfaceColor.copy(alpha = palette.drawerBaseAlpha)
     }
     val chevronColor = secondaryContentColor.copy(alpha = if (isDark) 0.92f else 0.84f)
 
@@ -240,26 +249,26 @@ fun MineSideDrawer(
                         brush = Brush.verticalGradient(
                             colors = if (hasSkinBackground && isDark) {
                                 listOf(
-                                    colorScheme.surface.copy(alpha = 0.48f),
-                                    colorScheme.surface.copy(alpha = 0.28f),
+                                    drawerSurfaceColor.copy(alpha = 0.48f),
+                                    drawerSurfaceColor.copy(alpha = 0.28f),
                                     colorScheme.scrim.copy(alpha = 0.36f)
                                 )
                             } else if (hasSkinBackground) {
                                 listOf(
-                                    colorScheme.surface.copy(alpha = 0.30f),
-                                    colorScheme.surface.copy(alpha = 0.18f),
-                                    colorScheme.surface.copy(alpha = 0.34f)
+                                    drawerSurfaceColor.copy(alpha = 0.30f),
+                                    drawerSurfaceColor.copy(alpha = 0.18f),
+                                    drawerSurfaceColor.copy(alpha = 0.34f)
                                 )
                             } else if (isDark) {
                                 listOf(
-                                    colorScheme.onSurface.copy(alpha = 0.05f),
+                                    drawerContentColor.copy(alpha = 0.05f),
                                     Color.Transparent,
                                     colorScheme.scrim.copy(alpha = 0.08f)
                                 )
                             } else {
                                 listOf(
-                                    colorScheme.onSurface.copy(alpha = 0.18f),
-                                    colorScheme.onSurface.copy(alpha = 0.06f),
+                                    drawerContentColor.copy(alpha = 0.18f),
+                                    drawerContentColor.copy(alpha = 0.06f),
                                     Color.Transparent
                                 )
                             }
@@ -294,7 +303,7 @@ fun MineSideDrawer(
                         modifier = Modifier
                             .size(layoutPolicy.profileAvatarSizeDp.dp)
                             .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                            .background(AppSurfaceTokens.surfaceContainer())
                     )
 
                     Spacer(modifier = Modifier.width(AppSpacingTokens.Medium))
@@ -303,7 +312,7 @@ fun MineSideDrawer(
                     Column(modifier = Modifier.weight(1f)) {
                         AppText(
                             text = user.name.ifEmpty { "未登录" },
-                            style = MaterialTheme.typography.titleMedium,
+                            style = COUITheme.textStyles.headline1,
                             fontWeight = FontWeight.Bold,
                             color = activeContentColor,
                             maxLines = 1,
@@ -324,7 +333,7 @@ fun MineSideDrawer(
                                             label = user.vipLabel,
                                             vipType = user.vipType,
                                         ),
-                                        fontSize = androidx.compose.material3.MaterialTheme.typography.labelSmall.fontSize,
+                                        fontSize = COUITheme.textStyles.footnote2.fontSize,
                                         compact = true,
                                     )
                                 }
@@ -462,8 +471,8 @@ fun MineSideDrawer(
                         icon = logoutIcon,
                         title = "退出登录",
                         onClick = { closeAndRun(onLogout) },
-                        iconTint = colorScheme.error,
-                        textColor = colorScheme.error,
+                        iconTint = drawerErrorColor,
+                        textColor = drawerErrorColor,
                         valueColor = secondaryContentColor,
                         chevronTint = chevronColor
                     )
@@ -475,3 +484,4 @@ fun MineSideDrawer(
         }
     }
 }
+

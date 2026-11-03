@@ -2,6 +2,8 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -258,7 +260,7 @@ internal fun DanmakuSendDialogContent(
             ) {
                 AppText(
                     text = "发送弹幕",
-                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                    style = COUITheme.textStyles.title4.copy(fontWeight = FontWeight.Bold),
                     color = AppContentColors.primaryText()
                 )
 
@@ -308,7 +310,7 @@ internal fun DanmakuSendDialogContent(
             // 字数统计
             AppText(
                 text = "${text.length}/100",
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 color = if (text.length > 90) {
                     AppContentColors.error()
                 } else {
@@ -330,7 +332,7 @@ internal fun DanmakuSendDialogContent(
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 AppText(
                     text = "颜色",
-                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Medium),
+                    style = COUITheme.textStyles.headline2.copy(fontWeight = FontWeight.Medium),
                     color = AppContentColors.primaryText()
                 )
 
@@ -345,7 +347,7 @@ internal fun DanmakuSendDialogContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(AppShapes.container(ContainerLevel.Card))
-                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.38f))
+                    .background(AppSurfaceTokens.surfaceContainer().copy(alpha = 0.38f))
                     .clickable {
                         attentionCommandChecked = !attentionCommandChecked
                         onDraftChange(text, attentionCommandChecked)
@@ -364,12 +366,12 @@ internal fun DanmakuSendDialogContent(
                 Column(modifier = Modifier.weight(1f)) {
                     AppText(
                         text = "内嵌关注按钮",
-                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
+                        style = COUITheme.textStyles.body1.copy(fontWeight = FontWeight.Medium),
                         color = AppContentColors.primaryText()
                     )
                     AppText(
                         text = "发送一个视频内嵌关注按钮",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                 }
@@ -386,7 +388,7 @@ internal fun DanmakuSendDialogContent(
                 ) {
                     AppText(
                         text = "位置",
-                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Medium),
+                        style = COUITheme.textStyles.headline2.copy(fontWeight = FontWeight.Medium),
                         color = AppContentColors.primaryText()
                     )
 
@@ -399,7 +401,7 @@ internal fun DanmakuSendDialogContent(
                                 label = {
                                     AppText(
                                         text = label,
-                                        style = MaterialTheme.typography.labelMedium,
+                                        style = COUITheme.textStyles.footnote1,
                                         maxLines = 1
                                     )
                                 }
@@ -414,7 +416,7 @@ internal fun DanmakuSendDialogContent(
                 ) {
                     AppText(
                         text = "大小",
-                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Medium),
+                        style = COUITheme.textStyles.headline2.copy(fontWeight = FontWeight.Medium),
                         color = AppContentColors.primaryText()
                     )
 
@@ -427,7 +429,7 @@ internal fun DanmakuSendDialogContent(
                                 label = {
                                     AppText(
                                         text = label,
-                                        style = MaterialTheme.typography.labelMedium,
+                                        style = COUITheme.textStyles.footnote1,
                                         maxLines = 1
                                     )
                                 }
@@ -478,7 +480,7 @@ internal fun DanmakuSendDialogContent(
             } else {
                 AppText(
                     text = "发送",
-                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Medium)
+                    style = COUITheme.textStyles.button.copy(fontWeight = FontWeight.Medium)
                 )
             }
         }
@@ -521,7 +523,7 @@ internal fun DanmakuCustomColorPickerDialog(
                 )
                 AppText(
                     text = "#%06X".format(pickerRgb),
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText()
                 )
             }

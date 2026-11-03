@@ -1,6 +1,7 @@
 // 文件路径: feature/dynamic/DynamicScreen.kt
 package com.android.purebilibili.feature.dynamic
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.navigation.tabIndicatorPosition
@@ -1028,7 +1029,7 @@ fun DynamicScreen(
                                 ) {
                                     AppText(
                                         text = if (sidebarOnRight) "‹" else "›",
-                                        style = MaterialTheme.typography.headlineMedium
+                                        style = COUITheme.textStyles.title3
                                     )
                                 }
                             }
@@ -1796,7 +1797,7 @@ internal fun DynamicList(
                     modifier = Modifier.fillMaxWidth().padding(AppSpacingTokens.Large),
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                     color = AppContentColors.secondaryText().copy(0.5f),
-                    fontSize = MaterialTheme.typography.labelMedium.fontSize
+                    fontSize = COUITheme.textStyles.footnote1.fontSize
                 )
             }
         }
@@ -1832,7 +1833,7 @@ private fun DynamicSelectedUserFeedHeader(
                     userName.isNotBlank() -> "${userName}的$contentName"
                     else -> "UP的$contentName"
                 },
-                style = MaterialTheme.typography.titleMedium,
+                style = COUITheme.textStyles.headline1,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.weight(1f),
             )
@@ -1873,13 +1874,13 @@ private fun DynamicEmptyState(
         Spacer(modifier = Modifier.height(AppSpacingTokens.Large))
         AppText(
             text = title,
-            style = MaterialTheme.typography.titleMedium,
+            style = COUITheme.textStyles.headline1,
             fontWeight = FontWeight.SemiBold,
         )
         Spacer(modifier = Modifier.height(AppSpacingTokens.ExtraSmall))
         AppText(
             text = subtitle,
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             textAlign = androidx.compose.ui.text.style.TextAlign.Center,
             color = AppSurfaceTokens.onSurfaceVariantActions(),
         )
@@ -1895,7 +1896,7 @@ private fun OldContentDivider(label: String) {
         shape = RoundedCornerShape(10.dp),
         // 半透明主色容器：让模糊壁纸背景透出，与毛玻璃卡片的观感一致。
         color = resolveOldContentDividerContainerColor(MaterialTheme.colorScheme),
-        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        contentColor = AppSurfaceTokens.onPrimaryContainer(),
         tonalElevation = 0.dp,
     ) {
         Column(
@@ -1906,14 +1907,14 @@ private fun OldContentDivider(label: String) {
         ) {
             AppText(
                 text = "上次刷新到这里",
-                style = MaterialTheme.typography.titleSmall,
+                style = COUITheme.textStyles.headline2,
                 fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Center,
             )
             AppText(
                 text = label,
-                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f),
-                style = MaterialTheme.typography.labelSmall,
+                color = AppSurfaceTokens.onPrimaryContainer().copy(alpha = 0.8f),
+                style = COUITheme.textStyles.footnote2,
                 textAlign = TextAlign.Center,
             )
         }
@@ -2030,7 +2031,7 @@ private fun HorizontalUserList(
                         Spacer(modifier = Modifier.height(AppSpacingTokens.ExtraSmall))
                         AppText(
                             displayName,
-                            style = MaterialTheme.typography.labelSmall,
+                            style = COUITheme.textStyles.footnote2,
                             color = if (isSelected)
                                 AppContentColors.accent()
                             else
@@ -2084,7 +2085,7 @@ private fun HorizontalUserList(
                             modifier = Modifier
                                 .size(AppSpacingTokens.TripleExtraLarge)
                                 .clip(CircleShape)
-                                .background(MaterialTheme.colorScheme.surfaceVariant),
+                                .background(AppSurfaceTokens.surfaceContainer()),
                             contentAlignment = Alignment.Center
                         ) {
                             AppIcon(
@@ -2100,7 +2101,7 @@ private fun HorizontalUserList(
                         Spacer(modifier = Modifier.height(AppSpacingTokens.ExtraSmall))
                         AppText(
                             text = if (showHiddenUsers) "隐藏中" else "显示隐藏",
-                            style = MaterialTheme.typography.labelSmall,
+                            style = COUITheme.textStyles.footnote2,
                             color = AppContentColors.secondaryText(),
                             maxLines = 1
                         )

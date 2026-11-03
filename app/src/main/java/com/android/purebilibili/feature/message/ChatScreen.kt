@@ -126,6 +126,7 @@ import io.github.suqi8.coui.kmp.blur.Backdrop
 import io.github.suqi8.coui.kmp.blur.LayerBackdrop
 import io.github.suqi8.coui.kmp.blur.layerBackdrop
 import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 private const val MESSAGE_LARGE_VIDEO_COVER_ASPECT_RATIO = 4f / 3f
 private val CHAT_INPUT_DOCK_HEIGHT = AppSpacingTokens.TripleExtraLarge + AppSpacingTokens.Small
@@ -801,14 +802,14 @@ fun ChatInputBar(
                     maxLines = 4,
                     keyboardOptions = keyboardOptions,
                     keyboardActions = keyboardActions,
-                    textStyle = MaterialTheme.typography.bodyMedium.copy(color = fieldTextColor),
+                    textStyle = COUITheme.textStyles.body1.copy(color = fieldTextColor),
                     cursorBrush = SolidColor(AppContentColors.accent()),
                     decorationBox = { innerTextField ->
                         Box(contentAlignment = Alignment.CenterStart) {
                             if (text.text.isEmpty()) {
                                 AppText(
                                     "发个消息聊聊呗~",
-                                    style = MaterialTheme.typography.bodyMedium,
+                                    style = COUITheme.textStyles.body1,
                                     color = placeholderColor,
                                     maxLines = 1,
                                 )
@@ -906,7 +907,7 @@ fun MessageBubble(
     val fallbackContainerColor = resolveMessageBubbleFallbackContainerColor(
         isOwnMessage = isOwnMessage,
         primary = AppContentColors.accent(),
-        surfaceVariant = MaterialTheme.colorScheme.surfaceVariant,
+        surfaceVariant = AppSurfaceTokens.surfaceContainer(),
     )
     val fallbackContentColor = resolveMessageBubbleFallbackContentColor(
         isOwnMessage = isOwnMessage,
@@ -946,7 +947,7 @@ fun MessageBubble(
         AppText(
             text = formatMessageTime(message.timestamp),
             modifier = Modifier.fillMaxWidth(),
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             color = AppContentColors.secondaryText(),
             textAlign = TextAlign.Center,
         )
@@ -956,7 +957,7 @@ fun MessageBubble(
             AppText(
                 text = parseChatTip(message.content).ifBlank { "[会话提示]" },
                 color = AppContentColors.secondaryText(),
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 textAlign = TextAlign.Center,
             )
             return@Column
@@ -1013,7 +1014,7 @@ fun MessageBubble(
                             AppText(
                                 text = "[消息已撤回]",
                                 color = textColor.copy(alpha = 0.6f),
-                                style = MaterialTheme.typography.bodyMedium
+                                style = COUITheme.textStyles.body1
                             )
                         }
                         message.msg_type == 1 -> {
@@ -1025,7 +1026,7 @@ fun MessageBubble(
                                 emoteInfos = emoteInfos,
                                 color = textColor,
                                 linkColor = AppContentColors.accent(),
-                                style = MaterialTheme.typography.bodyLarge,
+                                style = COUITheme.textStyles.main,
                                 onLinkClick = onLinkClick
                             )
                             }
@@ -1049,7 +1050,7 @@ fun MessageBubble(
                                 AppText(
                                     text = "[图片]",
                                     color = textColor,
-                                    style = MaterialTheme.typography.bodyLarge
+                                    style = COUITheme.textStyles.main
                                 )
                             }
                         }
@@ -1071,7 +1072,7 @@ fun MessageBubble(
                                 AppText(
                                     text = "[表情]",
                                     color = textColor,
-                                    style = MaterialTheme.typography.bodyLarge
+                                    style = COUITheme.textStyles.main
                                 )
                             }
                         }
@@ -1082,7 +1083,7 @@ fun MessageBubble(
                             ChatRecommendationMessage(message.content, onOpenLink = { onLinkClick?.invoke(it) })
                         }
                         message.msg_type == 18 -> {
-                            AppText(parseChatTip(message.content).ifBlank { "[会话提示]" }, color = textColor, style = MaterialTheme.typography.bodySmall)
+                            AppText(parseChatTip(message.content).ifBlank { "[会话提示]" }, color = textColor, style = COUITheme.textStyles.footnote1)
                         }
                         message.msg_type == 11 -> {
                             parsedCard?.let { card ->
@@ -1099,7 +1100,7 @@ fun MessageBubble(
                             } ?: AppText(
                                 text = "[视频]",
                                 color = textColor,
-                                style = MaterialTheme.typography.bodyLarge
+                                style = COUITheme.textStyles.main
                             )
                         }
                         message.msg_type in setOf(7, 12, 13, 14) -> {
@@ -1117,14 +1118,14 @@ fun MessageBubble(
                             } ?: AppText(
                                 text = "[${getMessageTypeName(message.msg_type)}]",
                                 color = textColor,
-                                style = MaterialTheme.typography.bodyLarge
+                                style = COUITheme.textStyles.main
                             )
                         }
                         else -> {
                             AppText(
                                 text = "[${getMessageTypeName(message.msg_type)}]",
                                 color = textColor.copy(alpha = 0.6f),
-                                style = MaterialTheme.typography.bodyMedium
+                                style = COUITheme.textStyles.body1
                             )
                         }
                         }
@@ -1134,7 +1135,7 @@ fun MessageBubble(
         }
 
         if (message.msg_source in 8..11 && message.msg_status != 1) {
-            AppText("此条消息为自动回复", color = AppContentColors.secondaryText(), style = MaterialTheme.typography.labelSmall)
+            AppText("此条消息为自动回复", color = AppContentColors.secondaryText(), style = COUITheme.textStyles.footnote2)
         }
 
         // 视频链接预览卡片
@@ -1181,7 +1182,7 @@ private fun MessageLargeVideoCard(
                 .fillMaxWidth()
                 .aspectRatio(MESSAGE_LARGE_VIDEO_COVER_ASPECT_RATIO)
                 .clip(AppShapes.topRounded(cardCorner))
-                .background(MaterialTheme.colorScheme.surfaceVariant),
+                .background(AppSurfaceTokens.surfaceContainer()),
         ) {
             if (preview.cover.isNotBlank()) {
                 AsyncImage(
@@ -1309,7 +1310,7 @@ private fun MessageHorizontalVideoCard(
                 overlineText?.takeIf { it.isNotBlank() }?.let {
                     AppText(
                         text = it,
-                        style = MaterialTheme.typography.labelMedium,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.accent(),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -1407,7 +1408,7 @@ fun RichMessageText(
     text: String,
     emoteInfos: List<EmoteInfo>,
     color: Color,
-    style: TextStyle = MaterialTheme.typography.bodyLarge,
+    style: TextStyle = COUITheme.textStyles.main,
     fontSize: androidx.compose.ui.unit.TextUnit = androidx.compose.ui.unit.TextUnit.Unspecified,
     linkColor: Color = AppContentColors.accent(),  // 使用主题色
     onLinkClick: ((String) -> Unit)? = null
@@ -1556,7 +1557,7 @@ fun EmoteText(
     text: String,
     emoteInfos: List<EmoteInfo>,
     color: Color,
-    style: TextStyle = MaterialTheme.typography.bodyLarge,
+    style: TextStyle = COUITheme.textStyles.main,
     fontSize: androidx.compose.ui.unit.TextUnit = androidx.compose.ui.unit.TextUnit.Unspecified,
     linkColor: Color = AppContentColors.accent(),
     onLinkClick: ((String) -> Unit)? = null

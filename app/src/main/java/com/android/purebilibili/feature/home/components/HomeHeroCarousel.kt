@@ -2,6 +2,9 @@
 
 package com.android.purebilibili.feature.home.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+
 import com.android.purebilibili.core.ui.AppIcons
 
 import coil3.request.crossfade
@@ -41,7 +44,6 @@ import com.android.purebilibili.core.ui.components.AppHorizontalPager as Horizon
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import com.android.purebilibili.core.ui.components.AppIcon
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -488,7 +490,7 @@ private fun HomeHeroCarouselCard(
     ) {
         AppSurface(
         shape = cardShape,
-        color = MaterialTheme.colorScheme.surfaceVariant,
+        color = AppSurfaceTokens.surfaceContainer(),
         tonalElevation = AppSpacingTokens.None,
         shadowElevation = AppSpacingTokens.None,
         modifier = Modifier
@@ -612,7 +614,7 @@ private fun HomeHeroCarouselCard(
                         text = video.title,
                         color = MediaContrastPalette.Foreground,
                         // 背景图亮暗变化较大，给标题加柔和阴影保持可读性。
-                        style = MaterialTheme.typography.titleMedium.copy(
+                        style = COUITheme.textStyles.headline1.copy(
                             shadow = Shadow(
                                 color = Color.Black.copy(alpha = 0.72f),
                                 offset = androidx.compose.ui.geometry.Offset(0f, 2f),
@@ -629,7 +631,7 @@ private fun HomeHeroCarouselCard(
                     AppText(
                         text = video.owner.name,
                         color = MediaContrastPalette.Foreground.copy(alpha = 0.78f),
-                        style = MaterialTheme.typography.labelMedium.copy(
+                        style = COUITheme.textStyles.footnote1.copy(
                             shadow = Shadow(
                                 color = Color.Black.copy(alpha = 0.62f),
                                 offset = androidx.compose.ui.geometry.Offset(0f, 1.5f),
@@ -654,8 +656,8 @@ private fun HomeHeroCarouselCard(
                         AppText(
                             text = FormatUtils.formatDuration(video.duration),
                             color = MediaContrastPalette.Foreground.copy(alpha = 0.65f),
-                            fontSize = MaterialTheme.typography.labelSmall.fontSize,
-                            style = MaterialTheme.typography.labelSmall.copy(
+                            fontSize = COUITheme.textStyles.footnote2.fontSize,
+                            style = COUITheme.textStyles.footnote2.copy(
                                 shadow = Shadow(Color.Black.copy(alpha = 0.58f), blurRadius = 3f)
                             ),
                             fontWeight = FontWeight.Medium,
@@ -669,12 +671,12 @@ private fun HomeHeroCarouselCard(
                         if (separatorNeeded) AppText(
                             " · ",
                             color = MediaContrastPalette.Foreground.copy(alpha = 0.5f),
-                            fontSize = MaterialTheme.typography.labelSmall.fontSize
+                            fontSize = COUITheme.textStyles.footnote2.fontSize
                         )
                         AppText(
                             text = FormatUtils.formatStat(video.stat.view.toLong()) + "播放",
                             color = MediaContrastPalette.Foreground.copy(alpha = 0.65f),
-                            fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                            fontSize = COUITheme.textStyles.footnote2.fontSize,
                             fontWeight = FontWeight.Normal,
                             maxLines = 1,
                             modifier = Modifier.wrapContentSize()
@@ -686,12 +688,12 @@ private fun HomeHeroCarouselCard(
                         if (separatorNeeded) AppText(
                             " · ",
                             color = MediaContrastPalette.Foreground.copy(alpha = 0.5f),
-                            fontSize = MaterialTheme.typography.labelSmall.fontSize
+                            fontSize = COUITheme.textStyles.footnote2.fontSize
                         )
                         AppText(
                             text = FormatUtils.formatStat(video.stat.danmaku.toLong()) + "弹幕",
                             color = MediaContrastPalette.Foreground.copy(alpha = 0.65f),
-                            fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                            fontSize = COUITheme.textStyles.footnote2.fontSize,
                             fontWeight = FontWeight.Normal,
                             maxLines = 1,
                             modifier = Modifier.wrapContentSize()

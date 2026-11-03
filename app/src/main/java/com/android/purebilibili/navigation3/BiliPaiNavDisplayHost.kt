@@ -220,8 +220,8 @@ internal fun BiliPaiNavDisplayHost(
     val liveContainerPageColor = rememberUpdatedState(
         com.android.purebilibili.feature.live.resolveLiveBiliPaiRoomColorTokens().baseBackgroundColor,
     )
-    val webContainerPageColor = rememberUpdatedState(androidx.compose.material3.MaterialTheme.colorScheme.surface)
-    val articleContainerPageColor = rememberUpdatedState(androidx.compose.material3.MaterialTheme.colorScheme.background)
+    val webContainerPageColor = rememberUpdatedState(AppSurfaceTokens.surface())
+    val articleContainerPageColor = rememberUpdatedState(AppSurfaceTokens.background())
     val liveContainerIsLightBackground = rememberUpdatedState(isLightBackground)
     val availableLiveContainerTransitions = remember(
         liveContainerSnapshot, videoSharedTransitionDurationMillis,

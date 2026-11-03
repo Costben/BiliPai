@@ -34,6 +34,7 @@ import com.android.purebilibili.core.ui.components.rememberAdaptiveSemanticIconT
 import com.android.purebilibili.core.ui.components.AppPreferenceSectionTitle
 import com.android.purebilibili.feature.settings.ui.SettingsPageScaffold
 import com.android.purebilibili.core.theme.usesMiuixFamilySkin
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 private data class TipEntry(
     @DrawableRes val iconResId: Int,
@@ -250,14 +251,14 @@ private fun TipItem(
         Column {
             AppText(
                 text = title,
-                style = MaterialTheme.typography.titleMedium,
+                style = COUITheme.textStyles.headline1,
                 fontWeight = FontWeight.SemiBold,
                 color = AppContentColors.primaryText()
             )
             Spacer(modifier = Modifier.height(AppSpacingTokens.ExtraSmall))
             AppText(
                 text = content,
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 color = AppContentColors.secondaryText()
             )
         }
@@ -268,7 +269,7 @@ private fun TipItem(
 private fun TipDivider() {
     AppHorizontalDivider(
         modifier = Modifier.padding(start = 48.dp),
-        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.2f),
+        color = AppSurfaceTokens.outline().copy(alpha = 0.2f),
         thickness = 0.5.dp
     )
 }

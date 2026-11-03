@@ -1,6 +1,7 @@
 // 文件路径: feature/dynamic/components/DynamicCommentSheet.kt
 package com.android.purebilibili.feature.dynamic.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppText
@@ -429,12 +430,12 @@ fun DynamicCommentSheet(
                     Column {
                         AppText(
                             text = "评论",
-                            style = MaterialTheme.typography.titleLarge,
+                            style = COUITheme.textStyles.title4,
                             fontWeight = FontWeight.SemiBold,
                         )
                         AppText(
                             text = resolveDynamicCommentCountLabel(totalCount),
-                            style = MaterialTheme.typography.labelMedium,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppSurfaceTokens.onSurfaceVariantActions(),
                         )
                     }
@@ -514,13 +515,13 @@ fun DynamicCommentSheet(
                                             Spacer(modifier = Modifier.height(AppSpacingTokens.Large))
                                             AppText(
                                                 text = resolveDynamicCommentEmptyLabel(),
-                                                style = MaterialTheme.typography.titleSmall,
+                                                style = COUITheme.textStyles.headline2,
                                                 fontWeight = FontWeight.SemiBold,
                                             )
                                             Spacer(modifier = Modifier.height(AppSpacingTokens.ExtraSmall))
                                             AppText(
                                                 text = "来聊聊你对这条动态的看法",
-                                                style = MaterialTheme.typography.bodyMedium,
+                                                style = COUITheme.textStyles.body1,
                                                 color = AppSurfaceTokens.onSurfaceVariantActions(),
                                             )
                                         }
@@ -696,7 +697,7 @@ private fun DynamicCommentSortControl(
             itemWidth = spec.itemWidthDp.dp,
             height = spec.heightDp.dp,
             indicatorHeight = spec.indicatorHeightDp.dp,
-            labelFontSize = MaterialTheme.typography.bodySmall.fontSize,
+            labelFontSize = COUITheme.textStyles.footnote1.fontSize,
             // Keep the renderer's fillMaxWidth() inside the fixed-width outer box so
             // the whole latest/hottest control remains aligned to the header's end.
             modifier = Modifier.fillMaxWidth(),
@@ -757,13 +758,13 @@ fun DynamicInlineCommentHeader(
         Column {
             AppText(
                 text = resolveDynamicCommentCountLabel(totalCount),
-                style = MaterialTheme.typography.titleMedium,
+                style = COUITheme.textStyles.headline1,
                 fontWeight = FontWeight.SemiBold,
             )
             if (onShowReactions != null) {
                 AppText(
                     text = "赞和转发 ›",
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.accent(),
                     modifier = Modifier
                         .appActionClickable(onClick = onShowReactions)
@@ -784,7 +785,7 @@ fun DynamicInlineCommentHeader(
         )
     }
     if (!flat) {
-        AppHorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+        AppHorizontalDivider(color = AppSurfaceTokens.outline().copy(alpha = 0.5f))
     }
 }
 

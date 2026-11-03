@@ -1,5 +1,6 @@
 package com.android.purebilibili.feature.dynamic.components
 
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -52,7 +52,7 @@ internal fun DynamicCommentEntryBar(
     liquidGlassEnabled: Boolean,
     backdrop: MiuixBackdrop?,
     modifier: Modifier = Modifier,
-    containerColor: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
+    containerColor: Color = AppSurfaceTokens.surfaceContainerHigh(),
 ) {
     if (LocalAppUiStyle.current == AppUiStyle.COUI17) {
         CouiCommentEntryBar(onClick = onClick, backdrop = backdrop, modifier = modifier)
@@ -62,7 +62,7 @@ internal fun DynamicCommentEntryBar(
     val shape = resolveSharedBottomBarCapsuleShape()
     val textColor = resolveBottomInputBarPlaceholderTextColor(
         inputContainerColor = if (liquidGlassEnabled) {
-            MaterialTheme.colorScheme.surfaceContainer
+            AppSurfaceTokens.surfaceContainer()
         } else {
             containerColor
         },
@@ -94,7 +94,7 @@ internal fun DynamicCommentEntryBar(
                     textColor = textColor,
                     iconSize = 20.dp,
                     iconSpacing = 6.dp,
-                    textStyle = MaterialTheme.typography.bodyMedium,
+                    textStyle = COUITheme.textStyles.body1,
                 )
             }
         }
@@ -113,7 +113,7 @@ internal fun DynamicCommentEntryBar(
                 textColor = textColor,
                 iconSize = 18.dp,
                 iconSpacing = 8.dp,
-                textStyle = MaterialTheme.typography.bodySmall,
+                textStyle = COUITheme.textStyles.footnote1,
             )
         }
     }

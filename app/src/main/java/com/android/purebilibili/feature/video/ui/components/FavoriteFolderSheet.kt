@@ -5,6 +5,8 @@ import com.android.purebilibili.core.ui.components.AppGlassMenuPlacement
 import com.android.purebilibili.core.ui.components.AppGlassMenuSource
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppText
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -82,7 +84,7 @@ fun FavoriteFolderSheet(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         AppText(
                             "添加到收藏夹",
-                            style = MaterialTheme.typography.titleMedium,
+                            style = COUITheme.textStyles.headline1,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.weight(1f),
                             maxLines = 1,
@@ -99,7 +101,7 @@ fun FavoriteFolderSheet(
                 ) {
                     AppText(
                         text = "添加到收藏夹",
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         fontWeight = FontWeight.Bold,
                         // Reserve end space so a longer title cannot run under 新建.
                         modifier = Modifier
@@ -120,7 +122,7 @@ fun FavoriteFolderSheet(
                     Spacer(modifier = Modifier.height(4.dp))
                     AppText(
                         text = "可选择多个收藏夹",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center
@@ -173,7 +175,7 @@ fun FavoriteFolderSheet(
             ) {
                 AppText(
                     text = "已选择 ${selectedFolderIds.size} 个收藏夹",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppContentColors.secondaryText(),
                     modifier = Modifier.weight(1f)
                 )
@@ -215,7 +217,7 @@ fun FavoriteFolderSheet(
     AppModalBottomSheet(
         modifier = modifier,
         onDismissRequest = onDismissRequest,
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = AppSurfaceTokens.surface(),
         presentationOverride = if (sidePanel) AppModalPresentation.SideSheet else null,
         dragHandle = if (sidePanel) null else ({ BottomSheetDefaults.DragHandle() }),
     ) {
@@ -299,13 +301,13 @@ fun FavoriteFolderItem(
         Column(modifier = Modifier.weight(1f)) {
             AppText(
                 text = folder.title,
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium),
+                style = COUITheme.textStyles.headline1.copy(fontWeight = FontWeight.Medium),
                 color = AppContentColors.primaryText()
             )
             Spacer(modifier = Modifier.height(2.dp))
             AppText(
                 text = "${folder.media_count}个内容",
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText()
             )
         }

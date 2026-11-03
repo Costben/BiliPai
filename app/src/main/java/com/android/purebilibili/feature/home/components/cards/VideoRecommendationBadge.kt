@@ -1,16 +1,18 @@
 package com.android.purebilibili.feature.home.components.cards
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.AppShapes
+import com.android.purebilibili.core.ui.ContainerLevel
 import com.android.purebilibili.core.ui.components.AppText
 
 /** Server recommendation copy is independent of the optional UP identity badge. */
@@ -21,9 +23,9 @@ internal fun VideoRecommendationBadge(text: String, modifier: Modifier = Modifie
             text = text,
             modifier = modifier
                 .widthIn(max = 100.dp)
-                .background(AppContentColors.accent().copy(alpha = 0.12f), RoundedCornerShape(4.dp))
+                .background(AppContentColors.accent().copy(alpha = 0.12f), AppShapes.container(ContainerLevel.Tag))
                 .padding(horizontal = 4.dp, vertical = 1.dp),
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             fontWeight = FontWeight.SemiBold,
             color = AppContentColors.accent(),
             maxLines = 1,

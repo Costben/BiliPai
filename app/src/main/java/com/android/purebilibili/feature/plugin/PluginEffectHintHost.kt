@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -43,6 +42,7 @@ import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.motion.emphasizedEnterTween
 import com.android.purebilibili.core.ui.motion.emphasizedExitTween
 import kotlinx.coroutines.delay
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 fun PluginEffectHintHost(
@@ -115,7 +115,7 @@ private fun PluginEffectHintChip(
             Column(modifier = Modifier.weight(1f, fill = false)) {
                 AppText(
                     text = hint.title,
-                    style = MaterialTheme.typography.labelLarge,
+                    style = COUITheme.textStyles.button,
                     fontWeight = FontWeight.SemiBold,
                     color = AppContentColors.primaryText()
                 )
@@ -123,7 +123,7 @@ private fun PluginEffectHintChip(
                 if (!subtitle.isNullOrBlank()) {
                     AppText(
                         text = subtitle,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppSurfaceTokens.onSurfaceVariantSummary()
                     )
                 }

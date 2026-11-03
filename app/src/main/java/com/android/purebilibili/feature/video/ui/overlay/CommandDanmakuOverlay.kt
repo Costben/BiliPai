@@ -1,6 +1,8 @@
 package com.android.purebilibili.feature.video.ui.overlay
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import com.android.purebilibili.core.ui.motion.AppMotionEasing
 import com.android.purebilibili.core.ui.AppContentColors
@@ -37,7 +39,6 @@ import com.android.purebilibili.core.ui.components.AppExactTouchTargets
 import com.android.purebilibili.core.ui.components.AppIconButtonDefaults
 import com.android.purebilibili.core.ui.components.AppCircularProgressIndicator
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.runtime.Composable
@@ -362,12 +363,12 @@ private fun InfoCommandCard(item: CommandDanmakuItem) {
         Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
             AppText(
                 text = if (item.type == CommandDanmakuType.LINK) "关联视频" else "UP 主提示",
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 color = Color.White.copy(alpha = 0.74f)
             )
             AppText(
                 text = item.linkTitle.ifBlank { item.content },
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = Color.White,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
@@ -552,18 +553,17 @@ private fun AttentionCommandFollowButton(
     isSubmitting: Boolean,
     onClick: () -> Unit,
 ) {
-    val scheme = MaterialTheme.colorScheme
     val actionable = enabled
     val followed = followStatusKnown && isFollowing
     val containerColor = when {
-        actionable -> scheme.primary
-        followed -> scheme.primaryContainer
-        else -> scheme.surfaceContainerHigh
+        actionable -> AppContentColors.accent()
+        followed -> AppSurfaceTokens.primaryContainer()
+        else -> AppSurfaceTokens.surfaceContainerHigh()
     }
     val contentColor = when {
-        actionable -> scheme.onPrimary
-        followed -> scheme.onPrimaryContainer
-        else -> scheme.onSurface
+        actionable -> AppContentColors.onAccent()
+        followed -> AppSurfaceTokens.onPrimaryContainer()
+        else -> AppContentColors.primaryText()
     }
     val label = when {
         isSubmitting -> "处理中"
@@ -571,7 +571,7 @@ private fun AttentionCommandFollowButton(
         isFollowing -> "已关注"
         else -> "关注"
     }
-    val baseTextStyle = MaterialTheme.typography.labelMedium
+    val baseTextStyle = COUITheme.textStyles.footnote1
     val textStyle = remember(baseTextStyle) {
         baseTextStyle.copy(fontSize = 12.sp, lineHeight = 16.sp)
     }
@@ -765,7 +765,7 @@ private fun VoteCommandCard(
     }
     // 官方客户端只在投票后展示结果，未投票时不显示占比以免影响选择。
     val showPercent = hasVoted && voteCounts.isNotEmpty() && totalVotes > 0
-    val baseTextStyle = MaterialTheme.typography.bodySmall
+    val baseTextStyle = COUITheme.textStyles.footnote1
     val textStyle = remember(baseTextStyle) {
         baseTextStyle.copy(fontSize = 10.sp, lineHeight = 14.sp)
     }
@@ -874,15 +874,14 @@ private fun VoteCommandOption(
     percent: Int? = null,
 ) {
     // 选中项用当前配色的浅色容器（蓝色配色即浅蓝），未选中项保持半透明白。
-    val colors = MaterialTheme.colorScheme
-    val labelColor = if (isSelected) colors.onPrimaryContainer else Color.White
+    val labelColor = if (isSelected) AppSurfaceTokens.onPrimaryContainer() else Color.White
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(4.dp))
             .background(
                 if (isSelected) {
-                    colors.primaryContainer
+                    AppSurfaceTokens.primaryContainer()
                 } else {
                     Color.White.copy(alpha = if (enabled) 0.22f else 0.14f)
                 }
@@ -929,7 +928,7 @@ private fun GradeCommandCard(
     val gradeStarOptions = remember(item.id, item.voteOptions) {
         resolveGradeStarOptions(item.voteOptions)
     }
-    val baseTextStyle = MaterialTheme.typography.bodySmall
+    val baseTextStyle = COUITheme.textStyles.footnote1
     val titleStyle = remember(baseTextStyle) {
         baseTextStyle.copy(fontSize = 10.sp, lineHeight = 14.sp)
     }

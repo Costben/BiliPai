@@ -84,6 +84,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  * 竖屏详情点 UP 头像：半屏预览（关注 / 进入空间 / 近期投稿网格）。
@@ -425,7 +426,7 @@ fun UpPreviewSheet(
                                     AppText(
                                         text = "暂无投稿",
                                         color = colors.supportingColor,
-                                        style = MaterialTheme.typography.bodyMedium,
+                                        style = COUITheme.textStyles.body1,
                                     )
                                 }
                             }
@@ -545,7 +546,7 @@ private fun UpPreviewSheetHeader(
                     AppText(
                         text = owner.name.ifBlank { "UP主" },
                         color = colors.titleColor,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         fontWeight = FontWeight.SemiBold,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -558,7 +559,7 @@ private fun UpPreviewSheetHeader(
                             likeCount = likeCount,
                         ).ifBlank { " " },
                         color = colors.supportingColor,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         overflow = TextOverflow.Visible,
                     )
                 }
@@ -589,7 +590,7 @@ private fun UpPreviewSheetHeader(
                     } else {
                         colors.followContentColor
                     },
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
                 )
@@ -599,7 +600,7 @@ private fun UpPreviewSheetHeader(
                 maxLines = 1,
                 softWrap = false,
                 color = colors.enterSpaceColor,
-                style = MaterialTheme.typography.labelMedium,
+                style = COUITheme.textStyles.footnote1,
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier
                     .clip(AppShapes.container(ContainerLevel.Field))
@@ -661,14 +662,14 @@ private fun UpPreviewVideoCard(
                 AppText(
                     text = formatUpPreviewCount(item.playCount),
                     color = Color.White,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     maxLines = 1,
                 )
                 if (item.durationText.isNotBlank()) {
                     AppText(
                         text = item.durationText,
                         color = Color.White,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         maxLines = 1,
                     )
                 }
@@ -678,7 +679,7 @@ private fun UpPreviewVideoCard(
         AppText(
             text = item.title,
             color = colors.titleColor,
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             fontWeight = FontWeight.Medium,
             maxLines = videoCardTitleMaxLines(),
             overflow = videoCardTitleOverflow(),
@@ -688,7 +689,7 @@ private fun UpPreviewVideoCard(
             AppText(
                 text = formatUpPreviewRelativeDate(item.createdAtSeconds),
                 color = colors.supportingColor,
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 maxLines = 1,
             )
         }

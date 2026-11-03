@@ -1,6 +1,8 @@
 package com.android.purebilibili.feature.video.player
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import com.android.purebilibili.core.ui.components.rememberFollowActionWithConfirmation
 import com.android.purebilibili.core.ui.AppContentColors
@@ -59,7 +61,7 @@ fun VideoTitleSection(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)
+            .background(AppSurfaceTokens.surface())
             .clickable { expanded = !expanded }
             .padding(horizontal = 12.dp, vertical = 4.dp)
     ) {
@@ -70,7 +72,7 @@ fun VideoTitleSection(
         ) {
             AppText(
                 text = info.title,
-                style = MaterialTheme.typography.titleMedium.copy(
+                style = COUITheme.textStyles.headline1.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
                 maxLines = if (expanded) Int.MAX_VALUE else 1,
@@ -94,7 +96,7 @@ fun VideoTitleSection(
         // 统计行 (官方样式：播放量 • 弹幕 • 日期)
         AppText(
             text = "${FormatUtils.formatStat(info.stat.view.toLong())}  •  ${FormatUtils.formatStat(info.stat.danmaku.toLong())}弹幕  •  ${FormatUtils.formatPublishTime(info.pubdate)}",
-            style = MaterialTheme.typography.labelMedium,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText(),
             maxLines = 1
         )
@@ -111,7 +113,7 @@ fun VideoTitleWithDesc(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)
+            .background(AppSurfaceTokens.surface())
             .clickable { expanded = !expanded }
             .padding(horizontal = 12.dp, vertical = 4.dp)  //  紧凑布局：减小 vertical padding
     ) {
@@ -122,7 +124,7 @@ fun VideoTitleWithDesc(
         ) {
             AppText(
                 text = info.title,
-                style = MaterialTheme.typography.titleMedium.copy(
+                style = COUITheme.textStyles.headline1.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
                 maxLines = if (expanded) Int.MAX_VALUE else 1,
@@ -149,7 +151,7 @@ fun VideoTitleWithDesc(
         ) {
             AppText(
                 text = "${FormatUtils.formatStat(info.stat.view.toLong())}播放  •  ${FormatUtils.formatStat(info.stat.danmaku.toLong())}弹幕  •  ${FormatUtils.formatPublishTime(info.pubdate)}",
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 color = AppContentColors.secondaryText(),
                 maxLines = 1
             )
@@ -160,7 +162,7 @@ fun VideoTitleWithDesc(
             Spacer(Modifier.height(4.dp))  //  紧凑布局
             AppText(
                 text = info.desc,
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText(),
                 maxLines = if (expanded) Int.MAX_VALUE else 2,
                 overflow = TextOverflow.Ellipsis,
@@ -181,7 +183,7 @@ fun UpInfoSection(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)
+            .background(AppSurfaceTokens.surface())
             .clickable { onUpClick(info.owner.mid) }
             .padding(horizontal = 12.dp, vertical = 4.dp),  //  紧凑布局
         verticalAlignment = Alignment.CenterVertically
@@ -205,7 +207,7 @@ fun UpInfoSection(
                 Spacer(Modifier.width(4.dp))
                 AppText(
                     text = info.owner.name,
-                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Medium),
+                    style = COUITheme.textStyles.headline2.copy(fontWeight = FontWeight.Medium),
                     color = AppContentColors.primaryText(),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -214,7 +216,7 @@ fun UpInfoSection(
         }
 
         // Pair the follow label and plus icon with the actual fill, including bright custom seeds.
-        val followContainer = if (isFollowing) MaterialTheme.colorScheme.surfaceVariant else AppContentColors.accent()
+        val followContainer = if (isFollowing) AppSurfaceTokens.surfaceContainer() else AppContentColors.accent()
         val followContent = resolveButtonContentColor(
             followContainer,
             if (isFollowing) AppContentColors.secondaryText() else AppContentColors.onAccent(),
@@ -249,7 +251,7 @@ fun UpInfoSection(
                     text = if (isFollowing) "已关注" else "关注",
                     maxLines = 1,
                     softWrap = false,
-                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Medium),
+                    style = COUITheme.textStyles.footnote1.copy(fontWeight = FontWeight.Medium),
                     color = followContent
                 )
             }
@@ -279,7 +281,7 @@ fun ActionButtonsRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)
+            .background(AppSurfaceTokens.surface())
             .padding(horizontal = 4.dp, vertical = 2.dp),  //  紧凑布局
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
@@ -390,7 +392,7 @@ private fun BiliActionButton(
         Spacer(modifier = Modifier.height(2.dp))
         AppText(
             text = text,
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             color = textColor,
             maxLines = 1
         )
@@ -478,7 +480,7 @@ fun ActionButton(
         Spacer(modifier = Modifier.height(4.dp))
         AppText(
             text = text,
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             color = AppContentColors.secondaryText(),
             maxLines = 1
         )
@@ -494,7 +496,7 @@ fun DescriptionSection(desc: String) {
 
     AppSurface(
         modifier = Modifier.fillMaxWidth(),
-        color = MaterialTheme.colorScheme.background
+        color = AppSurfaceTokens.background()
     ) {
         Column(
             modifier = Modifier
@@ -504,7 +506,7 @@ fun DescriptionSection(desc: String) {
         ) {
             AppText(
                 text = desc,
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 color = AppContentColors.secondaryText(),
                 maxLines = if (expanded) Int.MAX_VALUE else 3,
                 overflow = TextOverflow.Ellipsis
@@ -522,7 +524,7 @@ fun DescriptionSection(desc: String) {
                     AppText(
                         text = if (expanded) "收起" else "展开更多",
                         color = AppContentColors.accent(),
-                        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Medium)
+                        style = COUITheme.textStyles.footnote1.copy(fontWeight = FontWeight.Medium)
                     )
                     Spacer(modifier = Modifier.width(2.dp))
                     AppIcon(
@@ -542,7 +544,7 @@ fun DescriptionSection(desc: String) {
 fun RelatedVideosHeader() {
     AppSurface(
         modifier = Modifier.fillMaxWidth(),
-        color = MaterialTheme.colorScheme.background
+        color = AppSurfaceTokens.background()
     ) {
         Row(
             modifier = Modifier
@@ -552,7 +554,7 @@ fun RelatedVideosHeader() {
         ) {
             AppText(
                 text = "更多推荐",
-                style = MaterialTheme.typography.titleMedium.copy(
+                style = COUITheme.textStyles.headline1.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
                 color = MaterialTheme.colorScheme.onBackground
@@ -584,7 +586,7 @@ fun RelatedVideoItem(video: RelatedVideo, onClick: () -> Unit) {
                 scaleX = scale
                 scaleY = scale
             },
-        color = MaterialTheme.colorScheme.background
+        color = AppSurfaceTokens.background()
     ) {
         Row(
             modifier = Modifier
@@ -601,7 +603,7 @@ fun RelatedVideoItem(video: RelatedVideo, onClick: () -> Unit) {
                     .width(150.dp)
                     .height(94.dp)
                     .clip(AppShapes.container(ContainerLevel.Card))
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .background(AppSurfaceTokens.surfaceContainer())
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
@@ -649,7 +651,7 @@ fun RelatedVideoItem(video: RelatedVideo, onClick: () -> Unit) {
                     AppText(
                         text = FormatUtils.formatStat(video.stat.view.toLong()),
                         color = Color.White.copy(alpha = 0.9f),
-                        style = MaterialTheme.typography.labelSmall
+                        style = COUITheme.textStyles.footnote2
                     )
                 }
             }
@@ -666,7 +668,7 @@ fun RelatedVideoItem(video: RelatedVideo, onClick: () -> Unit) {
                 // 标题
                 AppText(
                     text = video.title,
-                    style = MaterialTheme.typography.bodyMedium.copy(
+                    style = COUITheme.textStyles.body1.copy(
                         fontWeight = FontWeight.Medium
                     ),
                     maxLines = 2,
@@ -683,7 +685,7 @@ fun RelatedVideoItem(video: RelatedVideo, onClick: () -> Unit) {
                         Spacer(modifier = Modifier.width(4.dp))
                         AppText(
                             text = video.owner.name,
-                            style = MaterialTheme.typography.labelMedium,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText(),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
@@ -705,19 +707,19 @@ fun RelatedVideoItem(video: RelatedVideo, onClick: () -> Unit) {
                         Spacer(modifier = Modifier.width(2.dp))
                         AppText(
                             text = FormatUtils.formatStat(video.stat.view.toLong()),
-                            style = MaterialTheme.typography.labelSmall,
+                            style = COUITheme.textStyles.footnote2,
                             color = AppContentColors.secondaryText()
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         AppText(
                             text = "·",
-                            style = MaterialTheme.typography.labelSmall,
+                            style = COUITheme.textStyles.footnote2,
                             color = AppContentColors.secondaryText().copy(alpha = 0.4f)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         AppText(
                             text = "${FormatUtils.formatStat(video.stat.danmaku.toLong())}弹幕",
-                            style = MaterialTheme.typography.labelSmall,
+                            style = COUITheme.textStyles.footnote2,
                             color = AppContentColors.secondaryText()
                         )
                     }

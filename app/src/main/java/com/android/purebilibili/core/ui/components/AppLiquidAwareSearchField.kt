@@ -1,5 +1,9 @@
 package com.android.purebilibili.core.ui.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+
 import com.android.purebilibili.core.ui.AppIcons
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -10,7 +14,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.input.ImeAction
@@ -172,7 +175,7 @@ private fun CompactLiquidSearchInput(
             value = query,
             onValueChange = onQueryChange,
             modifier = Modifier.weight(1f).focusRequester(requester).padding(vertical = 6.dp),
-            textStyle = MaterialTheme.typography.bodyLarge.copy(color = contentColor),
+            textStyle = COUITheme.textStyles.main.copy(color = contentColor),
             singleLine = true,
             interactionSource = interactionSource,
             cursorBrush = androidx.compose.ui.graphics.SolidColor(contentColor),
@@ -184,7 +187,7 @@ private fun CompactLiquidSearchInput(
                         AppText(
                             placeholder,
                             color = hintColor,
-                            style = MaterialTheme.typography.bodyLarge,
+                            style = COUITheme.textStyles.main,
                             maxLines = 1,
                             overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                         )

@@ -106,6 +106,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
 import com.android.purebilibili.core.theme.usesMiuixFamilySkin
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 internal fun downloadUiSkinRemotePackage(url: String): ByteArray {
     val request = Request.Builder()
@@ -563,7 +565,7 @@ fun PluginsContent(
             item {
                 AppText(
                     text = "已安装插件".uppercase(),
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                     modifier = Modifier.padding(start = 32.dp, bottom = 8.dp)
                 )
@@ -575,7 +577,7 @@ fun PluginsContent(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .clip(AppShapes.container(ContainerLevel.Card)),
-                    color = MaterialTheme.colorScheme.surface,
+                    color = AppSurfaceTokens.surface(),
                     tonalElevation = 1.dp
                 ) {
                     Column {
@@ -596,7 +598,7 @@ fun PluginsContent(
                                         .fillMaxWidth()
                                         .height(0.5.dp)
                                         .padding(start = 66.dp)
-                                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                                        .background(AppSurfaceTokens.surfaceContainer())
                                 )
                             }
                         }
@@ -609,7 +611,7 @@ fun PluginsContent(
                 val enabledCount = plugins.count { it.enabled }
                 AppText(
                     text = "${plugins.size} 个插件，$enabledCount 个已启用",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                     modifier = Modifier.padding(start = 32.dp, top = 16.dp)
                 )
@@ -619,7 +621,7 @@ fun PluginsContent(
                 Spacer(modifier = Modifier.height(24.dp))
                 AppText(
                     text = "提示设置",
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                     modifier = Modifier.padding(start = 32.dp, bottom = 8.dp)
                 )
@@ -627,7 +629,7 @@ fun PluginsContent(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .clip(AppShapes.container(ContainerLevel.Card)),
-                    color = MaterialTheme.colorScheme.surface,
+                    color = AppSurfaceTokens.surface(),
                     tonalElevation = 1.dp
                 ) {
                     Row(
@@ -647,12 +649,12 @@ fun PluginsContent(
                         Column(modifier = Modifier.weight(1f)) {
                             AppText(
                                 text = "显示插件生效提示",
-                                style = MaterialTheme.typography.bodyLarge,
+                                style = COUITheme.textStyles.main,
                                 color = AppContentColors.primaryText()
                             )
                             AppText(
                                 text = "去广告或弹幕增强命中时显示顶部提示",
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText()
                             )
                         }
@@ -674,13 +676,13 @@ fun PluginsContent(
                 Spacer(modifier = Modifier.height(24.dp))
                 AppText(
                     text = "高级/实验功能",
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                     modifier = Modifier.padding(start = 32.dp, bottom = 4.dp)
                 )
                 AppText(
                     text = "JSON、JS、Kotlin 包与装扮等扩展能力",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                     modifier = Modifier.padding(start = 32.dp, bottom = 8.dp)
                 )
@@ -692,7 +694,7 @@ fun PluginsContent(
                         .padding(horizontal = 16.dp)
                         .clip(AppShapes.container(ContainerLevel.Card))
                         .clickable { showImportDialog = true },
-                    color = MaterialTheme.colorScheme.surface,
+                    color = AppSurfaceTokens.surface(),
                     tonalElevation = 1.dp
                 ) {
                     Row(
@@ -723,12 +725,12 @@ fun PluginsContent(
                         Column(modifier = Modifier.weight(1f)) {
                             AppText(
                                 text = "导入外部插件",
-                                style = MaterialTheme.typography.bodyLarge,
+                                style = COUITheme.textStyles.main,
                                 color = AppContentColors.primaryText()
                             )
                             AppText(
                                 text = "通过链接安装 JSON 规则插件，安装前预览能力",
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText()
                             )
                         }
@@ -748,7 +750,7 @@ fun PluginsContent(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .clip(AppShapes.container(ContainerLevel.Card)),
-                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.42f),
+                    color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.42f),
                     tonalElevation = 0.dp
                 ) {
                     Column(
@@ -780,7 +782,7 @@ fun PluginsContent(
                             Column(modifier = Modifier.weight(1f)) {
                                 AppText(
                                     text = "导入 JS 媒体插件",
-                                    style = MaterialTheme.typography.bodyLarge,
+                                    style = COUITheme.textStyles.main,
                                     color = AppContentColors.primaryText()
                                 )
                                 AppText(
@@ -789,7 +791,7 @@ fun PluginsContent(
                                     } else {
                                         "支持链接或本地 .js，预览 manifest 和权限后安装"
                                     },
-                                    style = MaterialTheme.typography.bodySmall,
+                                    style = COUITheme.textStyles.footnote1,
                                     color = AppContentColors.secondaryText()
                                 )
                             }
@@ -821,7 +823,7 @@ fun PluginsContent(
                 item {
                     AppText(
                         text = jsImportError ?: "",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.error(),
                         modifier = Modifier.padding(horizontal = 32.dp, vertical = 8.dp)
                     )
@@ -835,7 +837,7 @@ fun PluginsContent(
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
                             .clip(AppShapes.container(ContainerLevel.Card)),
-                        color = MaterialTheme.colorScheme.surface,
+                        color = AppSurfaceTokens.surface(),
                         tonalElevation = 1.dp
                     ) {
                         Column {
@@ -861,7 +863,7 @@ fun PluginsContent(
                                             .fillMaxWidth()
                                             .height(0.5.dp)
                                             .padding(start = 16.dp)
-                                            .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                                            .background(AppSurfaceTokens.outline().copy(alpha = 0.5f))
                                     )
                                 }
                             }
@@ -879,7 +881,7 @@ fun PluginsContent(
                         .clickable(enabled = !isKotlinPackageLoading) {
                             kotlinPackagePicker.launch("*/*")
                         },
-                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.42f),
+                    color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.42f),
                     tonalElevation = 0.dp
                 ) {
                     Row(
@@ -910,7 +912,7 @@ fun PluginsContent(
                         Column(modifier = Modifier.weight(1f)) {
                             AppText(
                                 text = "开放 Kotlin 插件包",
-                                style = MaterialTheme.typography.bodyLarge,
+                                style = COUITheme.textStyles.main,
                                 color = AppContentColors.primaryText()
                             )
                             AppText(
@@ -919,17 +921,17 @@ fun PluginsContent(
                                 } else {
                                     "选择 .bpplugin，展示 SHA-256、签名状态和敏感能力"
                                 },
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText()
                             )
                         }
                         AppSurface(
                             shape = AppShapes.container(ContainerLevel.Chip),
-                            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.72f)
+                            color = AppSurfaceTokens.surface().copy(alpha = 0.72f)
                         ) {
                             AppText(
                                 text = "预览",
-                                style = MaterialTheme.typography.labelSmall,
+                                style = COUITheme.textStyles.footnote2,
                                 color = AppContentColors.secondaryText(),
                                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                             )
@@ -942,7 +944,7 @@ fun PluginsContent(
                 item {
                     AppText(
                         text = kotlinImportError ?: "",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.error(),
                         modifier = Modifier.padding(horizontal = 32.dp, vertical = 8.dp)
                     )
@@ -956,7 +958,7 @@ fun PluginsContent(
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
                             .clip(AppShapes.container(ContainerLevel.Card)),
-                        color = MaterialTheme.colorScheme.surface,
+                        color = AppSurfaceTokens.surface(),
                         tonalElevation = 1.dp
                     ) {
                         Column {
@@ -970,17 +972,17 @@ fun PluginsContent(
                                     ) {
                                         AppText(
                                             text = installed.title,
-                                            style = MaterialTheme.typography.bodyLarge,
+                                            style = COUITheme.textStyles.main,
                                             color = AppContentColors.primaryText()
                                         )
                                         AppText(
                                             text = "${installed.subtitle} · ${installed.stateText}",
-                                            style = MaterialTheme.typography.bodySmall,
+                                            style = COUITheme.textStyles.footnote1,
                                             color = AppContentColors.secondaryText()
                                         )
                                         AppText(
                                             text = installed.packageHashText,
-                                            style = MaterialTheme.typography.bodySmall,
+                                            style = COUITheme.textStyles.footnote1,
                                             color = AppContentColors.secondaryText()
                                         )
                                     }
@@ -990,7 +992,7 @@ fun PluginsContent(
                                                 .fillMaxWidth()
                                                 .height(0.5.dp)
                                                 .padding(start = 16.dp)
-                                                .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                                                .background(AppSurfaceTokens.outline().copy(alpha = 0.5f))
                                         )
                                     }
                                 }
@@ -1003,7 +1005,7 @@ fun PluginsContent(
                 Spacer(modifier = Modifier.height(12.dp))
                 AppText(
                     text = "界面皮肤",
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                     modifier = Modifier.padding(start = 32.dp, bottom = 8.dp)
                 )
@@ -1014,7 +1016,7 @@ fun PluginsContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(AppShapes.container(ContainerLevel.Card)),
-                    color = MaterialTheme.colorScheme.surface,
+                    color = AppSurfaceTokens.surface(),
                     tonalElevation = 1.dp
                 ) {
                     Column {
@@ -1047,22 +1049,22 @@ fun PluginsContent(
                             Column(modifier = Modifier.weight(1f)) {
                                 AppText(
                                     text = "在线装扮",
-                                    style = MaterialTheme.typography.bodyLarge,
+                                    style = COUITheme.textStyles.main,
                                     color = AppContentColors.primaryText()
                                 )
                                 AppText(
                                     text = "浏览 Rovniced/bilibili-skin 主题存档，真实预览后一键导入",
-                                    style = MaterialTheme.typography.bodySmall,
+                                    style = COUITheme.textStyles.footnote1,
                                     color = AppContentColors.secondaryText()
                                 )
                             }
                             AppSurface(
                                 shape = AppShapes.container(ContainerLevel.Chip),
-                                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.72f)
+                                color = AppSurfaceTokens.surface().copy(alpha = 0.72f)
                             ) {
                                 AppText(
                                     text = "在线",
-                                    style = MaterialTheme.typography.labelSmall,
+                                    style = COUITheme.textStyles.footnote2,
                                     color = AppContentColors.secondaryText(),
                                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                                 )
@@ -1073,7 +1075,7 @@ fun PluginsContent(
                                 .fillMaxWidth()
                                 .height(0.5.dp)
                                 .padding(start = 16.dp)
-                                .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                                .background(AppSurfaceTokens.outline().copy(alpha = 0.5f))
                         )
                         Row(
                             modifier = Modifier
@@ -1106,7 +1108,7 @@ fun PluginsContent(
                             Column(modifier = Modifier.weight(1f)) {
                                 AppText(
                                     text = "导入界面皮肤包",
-                                    style = MaterialTheme.typography.bodyLarge,
+                                    style = COUITheme.textStyles.main,
                                     color = AppContentColors.primaryText()
                                 )
                                 AppText(
@@ -1115,17 +1117,17 @@ fun PluginsContent(
                                     } else {
                                         "支持 .bpskin、主题 ZIP 和装扮 JSON；缺少的远程资源将联网下载"
                                     },
-                                    style = MaterialTheme.typography.bodySmall,
+                                    style = COUITheme.textStyles.footnote1,
                                     color = AppContentColors.secondaryText()
                                 )
                             }
                             AppSurface(
                                 shape = AppShapes.container(ContainerLevel.Chip),
-                                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.72f)
+                                color = AppSurfaceTokens.surface().copy(alpha = 0.72f)
                             ) {
                                 AppText(
                                     text = "资源包",
-                                    style = MaterialTheme.typography.labelSmall,
+                                    style = COUITheme.textStyles.footnote2,
                                     color = AppContentColors.secondaryText(),
                                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
                                 )
@@ -1139,7 +1141,7 @@ fun PluginsContent(
                 item {
                     AppText(
                         text = uiSkinImportError ?: "",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.error(),
                         modifier = Modifier.padding(horizontal = 32.dp, vertical = 8.dp)
                     )
@@ -1152,7 +1154,7 @@ fun PluginsContent(
                         modifier = Modifier
                             .padding(horizontal = 16.dp, vertical = 12.dp)
                             .clip(AppShapes.container(ContainerLevel.Card)),
-                        color = MaterialTheme.colorScheme.surface,
+                        color = AppSurfaceTokens.surface(),
                         tonalElevation = 1.dp
                     ) {
                         Column {
@@ -1181,7 +1183,7 @@ fun PluginsContent(
                                             .fillMaxWidth()
                                             .height(0.5.dp)
                                             .padding(start = 16.dp)
-                                            .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                                            .background(AppSurfaceTokens.outline().copy(alpha = 0.5f))
                                     )
                                 }
                             }
@@ -1219,7 +1221,7 @@ fun PluginsContent(
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
                             .clip(AppShapes.container(ContainerLevel.Card)),
-                        color = MaterialTheme.colorScheme.surface,
+                        color = AppSurfaceTokens.surface(),
                         tonalElevation = 1.dp
                     ) {
                         Column {
@@ -1294,7 +1296,7 @@ fun PluginsContent(
                                             .fillMaxWidth()
                                             .padding(start = 52.dp)
                                             .height(0.5.dp)
-                                            .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                                            .background(AppSurfaceTokens.outline().copy(alpha = 0.5f))
                                     )
                                 }
                             }
@@ -1308,7 +1310,7 @@ fun PluginsContent(
                 Spacer(modifier = Modifier.height(24.dp))
                 AppText(
                     text = "插件可以扩展应用功能，如自动跳过广告、过滤推荐内容等。\n启用插件后可点击展开查看详细设置。",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                     modifier = Modifier.padding(horizontal = 32.dp)
                 )
@@ -1352,7 +1354,7 @@ fun PluginsContent(
                 Column {
                     AppText(
                         text = "输入 JS 插件链接。安装前只展示插件信息、模块和权限，确认后默认保持禁用。",
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         color = AppContentColors.secondaryText()
                     )
                     Spacer(modifier = Modifier.height(16.dp))
@@ -1418,27 +1420,27 @@ fun PluginsContent(
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     AppText(
                         text = preview.manifest.title,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         color = AppContentColors.primaryText()
                     )
                     AppText(
                         text = "${preview.manifest.id} · v${preview.manifest.version} · ${preview.manifest.author.ifBlank { "未知作者" }}",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                     AppText(
                         text = preview.manifest.description.ifBlank { "无描述" },
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         color = AppContentColors.secondaryText()
                     )
                     AppText(
                         text = "模块：${preview.manifest.modules.joinToString("、") { it.title }}",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                     AppText(
                         text = "来源：${preview.sourceUrl ?: "本地文件"}",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                     PluginCapabilityDetailSection(
@@ -1446,7 +1448,7 @@ fun PluginsContent(
                     )
                     AppText(
                         text = "外部 JS 由用户信任源提供；不会暴露登录 Cookie、Token、本地文件路径或 Android 对象。",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.error()
                     )
                     if (isJsInstalling) {
@@ -1455,7 +1457,7 @@ fun PluginsContent(
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             AppCircularProgressIndicator(modifier = Modifier.size(18.dp))
-                            AppText("正在安装…", style = MaterialTheme.typography.bodySmall)
+                            AppText("正在安装…", style = COUITheme.textStyles.footnote1)
                         }
                     }
                 }
@@ -1515,7 +1517,7 @@ fun PluginsContent(
                 Column {
                     AppText(
                         text = "粘贴规则插件的 http 或 https 链接",
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         color = AppContentColors.secondaryText()
                     )
                     Spacer(modifier = Modifier.height(16.dp))
@@ -1631,22 +1633,22 @@ fun PluginsContent(
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         AppText(
                             text = plugin.name,
-                            style = MaterialTheme.typography.titleMedium,
+                            style = COUITheme.textStyles.headline1,
                             color = AppContentColors.primaryText()
                         )
                         AppText(
                             text = plugin.description.ifEmpty { "无描述" },
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = COUITheme.textStyles.body1,
                             color = AppContentColors.secondaryText()
                         )
                         AppText(
                             text = "作者：${plugin.author}",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText()
                         )
                         AppText(
                             text = "版本：${plugin.version} · 类型：${plugin.type} · 规则数：${plugin.rules.size}",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText()
                         )
                         PluginCapabilityDetailSection(
@@ -1660,7 +1662,7 @@ fun PluginsContent(
                                 AppCircularProgressIndicator(modifier = Modifier.size(18.dp))
                                 AppText(
                                     text = "正在安装…",
-                                    style = MaterialTheme.typography.bodySmall
+                                    style = COUITheme.textStyles.footnote1
                                 )
                             }
                         }
@@ -1723,22 +1725,22 @@ fun PluginsContent(
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     AppText(
                         text = previewModel.title,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         color = AppContentColors.primaryText()
                     )
                     AppText(
                         text = previewModel.subtitle,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                     AppText(
                         text = previewModel.packageHashText,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                     AppText(
                         text = "${previewModel.signerText} · ${buildExternalPluginPayloadSummary(preview.payloadEntries)}",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                     PluginCapabilityDetailSection(
@@ -1747,7 +1749,7 @@ fun PluginsContent(
                     if (decision is ExternalPluginInstallDecision.Rejected) {
                         AppText(
                             text = decision.reason,
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.error()
                         )
                     }
@@ -1819,37 +1821,37 @@ fun PluginsContent(
                 ) {
                     AppText(
                         text = previewModel.title,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         color = AppContentColors.primaryText()
                     )
                     AppText(
                         text = previewModel.subtitle,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                     AppText(
                         text = previewModel.packageHashText,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                     AppText(
                         text = previewModel.assetSummaryText,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                     AppText(
                         text = previewModel.sourceText,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                     AppText(
                         text = previewModel.licenseText,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                     AppText(
                         text = "${previewModel.shareText} · ${previewModel.officialAssetText}",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = if (preview.manifest.containsOfficialAssets) {
                             AppContentColors.error()
                         } else {
@@ -1860,7 +1862,7 @@ fun PluginsContent(
                         preview.manifest.assets.homeProfileSquaredBackground != null ||
                         preview.manifest.assets.homeProfileVideoBackground != null
                     ) {
-                        AppText("导入方式", style = MaterialTheme.typography.labelLarge)
+                        AppText("导入方式", style = COUITheme.textStyles.button)
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             AppTextButton(onClick = { uiSkinImportMode = UiSkinImportMode.FULL_SKIN }) {
                                 AppText(if (uiSkinImportMode == UiSkinImportMode.FULL_SKIN) "✓ 完整皮肤" else "完整皮肤")
@@ -1881,7 +1883,7 @@ fun PluginsContent(
                     UiSkinImagePreviewGrid(items = imagePreviewItems)
                     AppText(
                         text = "皮肤只包含图片和配色，不执行代码。完整插画皮肤使用通栏底栏；其他皮肤沿用当前底栏样式。",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                 }
@@ -1957,37 +1959,37 @@ fun PluginsContent(
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     AppText(
                         text = previewModel.title,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         color = AppContentColors.primaryText()
                     )
                     AppText(
                         text = previewModel.subtitle,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                     AppText(
                         text = previewModel.packageHashText,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                     AppText(
                         text = previewModel.assetSummaryText,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                     AppText(
                         text = previewModel.sourceText,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                     AppText(
                         text = previewModel.licenseText,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                     AppText(
                         text = "${previewModel.shareText} · ${previewModel.officialAssetText}",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = if (installed.manifest.containsOfficialAssets) {
                             AppContentColors.error()
                         } else {
@@ -2098,7 +2100,7 @@ private fun UiSkinImagePreviewGrid(
     if (items.isEmpty()) {
         AppText(
             text = "图片预览：未找到可展示资源",
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText()
         )
         return
@@ -2118,7 +2120,7 @@ private fun UiSkinImagePreviewGrid(
                             .fillMaxWidth()
                             .height(56.dp)
                             .clip(AppShapes.container(ContainerLevel.Chip))
-                            .background(MaterialTheme.colorScheme.surfaceVariant),
+                            .background(AppSurfaceTokens.surfaceContainer()),
                         contentAlignment = Alignment.Center,
                     ) {
                         AppIcon(
@@ -2136,12 +2138,12 @@ private fun UiSkinImagePreviewGrid(
                             .fillMaxWidth()
                             .height(56.dp)
                             .clip(AppShapes.container(ContainerLevel.Chip))
-                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                            .background(AppSurfaceTokens.surfaceContainer())
                     )
                 }
                 AppText(
                     text = item.label,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = AppContentColors.secondaryText(),
                     maxLines = 1
                 )
@@ -2173,12 +2175,12 @@ private fun InstalledUiSkinItem(
         Column(modifier = Modifier.weight(1f)) {
             AppText(
                 text = skin.displayName,
-                style = MaterialTheme.typography.bodyLarge,
+                style = COUITheme.textStyles.main,
                 color = AppContentColors.primaryText()
             )
             AppText(
                 text = buildInstalledUiSkinSubtitle(skin.manifest),
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText(),
 
                 maxLines = 2
@@ -2305,25 +2307,25 @@ private fun PluginItem(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     AppText(
                         text = plugin.name,
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = COUITheme.textStyles.main,
                         color = AppContentColors.primaryText()
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     AppText(
                         text = "v${plugin.version}",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppContentColors.secondaryText()
                     )
                     if (activityLabel != null) {
                         Spacer(modifier = Modifier.width(6.dp))
                         AppSurface(
                             shape = AppShapes.container(ContainerLevel.Tag),
-                            color = MaterialTheme.colorScheme.primaryContainer
+                            color = AppSurfaceTokens.primaryContainer()
                         ) {
                             AppText(
                                 text = activityLabel,
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                style = COUITheme.textStyles.footnote2,
+                                color = AppSurfaceTokens.onPrimaryContainer(),
                                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                             )
                         }
@@ -2333,7 +2335,7 @@ private fun PluginItem(
                         val unavailableColors = resolveAccessibleContainerColors(
                             containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.8f),
                             contentColor = AppContentColors.error(),
-                            backgroundColor = MaterialTheme.colorScheme.surface,
+                            backgroundColor = AppSurfaceTokens.surface(),
                             fallbackContentColors = listOf(
                                 MaterialTheme.colorScheme.onErrorContainer,
                                 AppContentColors.primaryText(),
@@ -2346,7 +2348,7 @@ private fun PluginItem(
                         ) {
                             AppText(
                                 text = "暂不可用",
-                                style = MaterialTheme.typography.labelSmall,
+                                style = COUITheme.textStyles.footnote2,
                                 color = unavailableColors.contentColor,
                                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                             )
@@ -2356,14 +2358,14 @@ private fun PluginItem(
                 Spacer(modifier = Modifier.height(2.dp))
                 AppText(
                     text = plugin.description,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText()
                 )
                 //  显示作者
                 if (plugin.author != "Unknown") {
                     AppText(
                         text = "作者：${plugin.author}",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppContentColors.accent().copy(alpha = 0.7f)
                     )
                 }
@@ -2419,19 +2421,19 @@ private fun PluginDetailScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 16.dp),
-                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.42f),
+                        color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.42f),
                         shape = AppShapes.container(ContainerLevel.Card),
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             AppText(
                                 text = plugin.description,
-                                style = MaterialTheme.typography.bodyLarge,
+                                style = COUITheme.textStyles.main,
                                 color = AppContentColors.primaryText(),
                             )
                             if (plugin.author != "Unknown") {
                                 AppText(
                                     text = "${plugin.author} · v${plugin.version}",
-                                    style = MaterialTheme.typography.bodySmall,
+                                    style = COUITheme.textStyles.footnote1,
                                     color = AppContentColors.secondaryText(),
                                     modifier = Modifier.padding(top = 4.dp),
                                 )
@@ -2449,7 +2451,7 @@ private fun PluginDetailScreen(
                 if (plugin.unavailable) {
                     AppText(
                         text = plugin.unavailableReason,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         color = AppContentColors.secondaryText(),
                         modifier = Modifier.padding(horizontal = 32.dp, vertical = 8.dp),
                     )
@@ -2504,17 +2506,17 @@ private fun InstalledJsPluginItem(
             Column(modifier = Modifier.weight(1f)) {
                 AppText(
                     text = installed.manifest.title,
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = COUITheme.textStyles.main,
                     color = AppContentColors.primaryText()
                 )
                 AppText(
                     text = "${installed.manifest.id} · v${installed.manifest.version} · ${if (installed.enabled) "已启用" else "未启用"}",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText()
                 )
                 AppText(
                     text = installed.manifest.description.ifBlank { installed.sourceUrl ?: "本地 JS 插件" },
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                     maxLines = 1
                 )
@@ -2601,7 +2603,7 @@ private fun JsPluginTestDialog(
             Column {
                 AppText(
                     text = "检查插件能否正常加载内容及所需时间。浏览内容请选“打开内容”。",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppContentColors.secondaryText()
                 )
                 Spacer(modifier = Modifier.height(12.dp))
@@ -2623,7 +2625,7 @@ private fun JsPluginTestDialog(
                     if (currentModule != null) {
                         AppText(
                             text = currentModule.title,
-                            style = MaterialTheme.typography.titleSmall,
+                            style = COUITheme.textStyles.headline2,
                             color = AppContentColors.primaryText()
                         )
                     }
@@ -2644,7 +2646,7 @@ private fun JsPluginTestDialog(
                     Spacer(modifier = Modifier.height(8.dp))
                     AppText(
                         text = text,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.primaryText()
                     )
                 }
@@ -2721,7 +2723,7 @@ private fun PluginCapabilityChips(
                     } else {
                         model.label
                     },
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = if (showAuthorizationLabels && model.requiresExplicitApproval) {
                         approvalColors.contentColor
                     } else {
@@ -2748,7 +2750,7 @@ private fun PluginCapabilityDetailSection(
     ) {
         AppText(
             text = if (showAuthorizationLabels) "权限与用途" else "功能",
-            style = MaterialTheme.typography.labelLarge,
+            style = COUITheme.textStyles.button,
             color = AppContentColors.accent()
         )
         models.forEach { model ->
@@ -2759,12 +2761,12 @@ private fun PluginCapabilityDetailSection(
                     } else {
                         model.label
                     },
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.primaryText()
                 )
                 AppText(
                     text = model.description,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText()
                 )
             }
@@ -2784,7 +2786,7 @@ private fun JsonPluginStatsNotificationSection(
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .clip(AppShapes.container(ContainerLevel.Card)),
-        color = MaterialTheme.colorScheme.surface,
+        color = AppSurfaceTokens.surface(),
         tonalElevation = 1.dp
     ) {
         Column {
@@ -2816,12 +2818,12 @@ private fun JsonPluginStatsNotificationSection(
                 Column(modifier = Modifier.weight(1f)) {
                     AppText(
                         text = "插件统计通知",
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = COUITheme.textStyles.main,
                         color = AppContentColors.primaryText()
                     )
                     AppText(
                         text = "每天汇总 JSON 规则插件过滤数量",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                 }
@@ -2836,7 +2838,7 @@ private fun JsonPluginStatsNotificationSection(
                     .fillMaxWidth()
                     .padding(start = 66.dp)
                     .height(0.5.dp)
-                    .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                    .background(AppSurfaceTokens.outline().copy(alpha = 0.5f))
             )
             AppTextButton(
                 onClick = onSendTest,
@@ -2846,7 +2848,7 @@ private fun JsonPluginStatsNotificationSection(
             ) {
                 AppIcon(com.android.purebilibili.feature.settings.rememberMaterialSymbol(com.android.purebilibili.R.drawable.ms_notifications_24), null, modifier = Modifier.size(16.dp))
                 Spacer(modifier = Modifier.width(4.dp))
-                AppText("发送测试通知", style = MaterialTheme.typography.labelMedium)
+                AppText("发送测试通知", style = COUITheme.textStyles.footnote1)
             }
         }
     }
@@ -2918,19 +2920,19 @@ private fun JsonPluginItem(
                 ) {
                     AppText(
                         text = plugin.name,
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = COUITheme.textStyles.main,
                         color = AppContentColors.primaryText()
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     AppText(
                         text = "v${plugin.version}",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppContentColors.secondaryText()
                     )
                 }
                 AppText(
                     text = plugin.description.ifEmpty { plugin.type },
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                     maxLines = 1
                 )
@@ -2939,7 +2941,7 @@ private fun JsonPluginItem(
                 ) {
                     AppText(
                         text = "作者：${plugin.author}",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppContentColors.accent()
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -2949,11 +2951,11 @@ private fun JsonPluginItem(
                         color = if (filterCount > 0)
                             AppContentColors.success().copy(alpha = 0.15f)
                         else
-                            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                            AppSurfaceTokens.surfaceContainer().copy(alpha = 0.5f)
                     ) {
                         AppText(
                             text = "已过滤 $filterCount 项",
-                            style = MaterialTheme.typography.labelSmall,
+                            style = COUITheme.textStyles.footnote2,
                             color = if (filterCount > 0) AppContentColors.success() else AppContentColors.secondaryText(),
                             modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                         )
@@ -2992,7 +2994,7 @@ private fun JsonPluginItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 66.dp, end = 16.dp, bottom = 8.dp),
-                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.3f),
                 shape = AppShapes.container(ContainerLevel.Chip)
             ) {
                 Row(
@@ -3007,7 +3009,7 @@ private fun JsonPluginItem(
                     ) {
                         AppIcon(com.android.purebilibili.feature.settings.rememberMaterialSymbol(com.android.purebilibili.R.drawable.ms_lightbulb_24), null, modifier = Modifier.size(16.dp))
                         Spacer(modifier = Modifier.width(4.dp))
-                        AppText("测试规则", style = MaterialTheme.typography.labelMedium)
+                        AppText("测试规则", style = COUITheme.textStyles.footnote1)
                     }
 
                     // 重置统计按钮
@@ -3016,7 +3018,7 @@ private fun JsonPluginItem(
                     ) {
                         AppIcon(com.android.purebilibili.feature.settings.rememberMaterialSymbol(com.android.purebilibili.R.drawable.ms_refresh_24), null, modifier = Modifier.size(16.dp))
                         Spacer(modifier = Modifier.width(4.dp))
-                        AppText("重置统计", style = MaterialTheme.typography.labelMedium)
+                        AppText("重置统计", style = COUITheme.textStyles.footnote1)
                     }
 
                     // 编辑按钮
@@ -3025,7 +3027,7 @@ private fun JsonPluginItem(
                     ) {
                         AppIcon(com.android.purebilibili.feature.settings.rememberMaterialSymbol(com.android.purebilibili.R.drawable.ms_terminal_24), null, modifier = Modifier.size(16.dp))
                         Spacer(modifier = Modifier.width(4.dp))
-                        AppText("编辑", style = MaterialTheme.typography.labelMedium)
+                        AppText("编辑", style = COUITheme.textStyles.footnote1)
                     }
 
                     // 删除按钮
@@ -3037,7 +3039,7 @@ private fun JsonPluginItem(
                     ) {
                         AppIcon(com.android.purebilibili.feature.settings.rememberMaterialSymbol(com.android.purebilibili.R.drawable.ms_delete_24), null, modifier = Modifier.size(16.dp))
                         Spacer(modifier = Modifier.width(4.dp))
-                        AppText("删除", style = MaterialTheme.typography.labelMedium)
+                        AppText("删除", style = COUITheme.textStyles.footnote1)
                     }
                 }
             }
@@ -3081,8 +3083,8 @@ private fun TestResultDialog(
     val blockedCount = originalCount - filteredCount
     val dialogIconTint = rememberAdaptiveSemanticIconTint(AppContentColors.accent())
     val resultContainerColor = com.android.purebilibili.core.theme.opaqueCompositeOver(
-        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f),
-        MaterialTheme.colorScheme.surface,
+        AppSurfaceTokens.primaryContainer().copy(alpha = 0.3f),
+        AppSurfaceTokens.surface(),
     )
 
     AppAlertDialog(
@@ -3100,7 +3102,7 @@ private fun TestResultDialog(
             Column {
                 AppText(
                     text = "插件：$pluginName",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppContentColors.secondaryText()
                 )
                 Spacer(modifier = Modifier.height(12.dp))
@@ -3119,39 +3121,39 @@ private fun TestResultDialog(
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             AppText(
                                 text = "$originalCount",
-                                style = MaterialTheme.typography.headlineSmall,
+                                style = COUITheme.textStyles.title4,
                                 fontWeight = FontWeight.Bold,
                                 color = AppContentColors.primaryText()
                             )
                             AppText(
                                 text = "测试视频",
-                                style = MaterialTheme.typography.labelSmall,
+                                style = COUITheme.textStyles.footnote2,
                                 color = AppContentColors.secondaryText()
                             )
                         }
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             AppText(
                                 text = "$blockedCount",
-                                style = MaterialTheme.typography.headlineSmall,
+                                style = COUITheme.textStyles.title4,
                                 fontWeight = FontWeight.Bold,
                                 color = if (blockedCount > 0) AppContentColors.success() else AppContentColors.primaryText()
                             )
                             AppText(
                                 text = "被过滤",
-                                style = MaterialTheme.typography.labelSmall,
+                                style = COUITheme.textStyles.footnote2,
                                 color = AppContentColors.secondaryText()
                             )
                         }
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             AppText(
                                 text = "$filteredCount",
-                                style = MaterialTheme.typography.headlineSmall,
+                                style = COUITheme.textStyles.title4,
                                 fontWeight = FontWeight.Bold,
                                 color = AppContentColors.primaryText()
                             )
                             AppText(
                                 text = "保留",
-                                style = MaterialTheme.typography.labelSmall,
+                                style = COUITheme.textStyles.footnote2,
                                 color = AppContentColors.secondaryText()
                             )
                         }
@@ -3163,7 +3165,7 @@ private fun TestResultDialog(
                     Spacer(modifier = Modifier.height(12.dp))
                     AppText(
                         text = "被过滤的视频示例：",
-                        style = MaterialTheme.typography.labelMedium,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                     Spacer(modifier = Modifier.height(4.dp))
@@ -3185,13 +3187,13 @@ private fun TestResultDialog(
                                 Column(modifier = Modifier.weight(1f)) {
                                     AppText(
                                         text = video.title,
-                                        style = MaterialTheme.typography.bodySmall,
+                                        style = COUITheme.textStyles.footnote1,
                                         maxLines = 1,
                                         color = AppContentColors.primaryText()
                                     )
                                     AppText(
                                         text = "时长：${formatDuration(video.duration)}",
-                                        style = MaterialTheme.typography.labelSmall,
+                                        style = COUITheme.textStyles.footnote2,
                                         color = AppContentColors.secondaryText()
                                     )
                                 }
@@ -3200,7 +3202,7 @@ private fun TestResultDialog(
                         if (filteredVideos.size > 3) {
                             AppText(
                                 text = "……还有 ${filteredVideos.size - 3} 个视频",
-                                style = MaterialTheme.typography.labelSmall,
+                                style = COUITheme.textStyles.footnote2,
                                 color = AppContentColors.secondaryText(),
                                 modifier = Modifier.padding(top = 4.dp)
                             )
@@ -3210,7 +3212,7 @@ private fun TestResultDialog(
                     Spacer(modifier = Modifier.height(12.dp))
                     AppText(
                         text = " 当前测试样本中没有符合过滤条件的视频",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.success()
                     )
                 }

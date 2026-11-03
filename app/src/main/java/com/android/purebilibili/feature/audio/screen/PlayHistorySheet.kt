@@ -2,6 +2,8 @@
 package com.android.purebilibili.feature.audio.screen
 
 import com.android.purebilibili.core.ui.AppContentColors
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -14,7 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -46,7 +47,7 @@ fun PlayHistorySheet(
 
     AppModalBottomSheet(
         onDismissRequest = onDismiss,
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = AppSurfaceTokens.surface(),
         contentColor = AppContentColors.primaryText()
     ) {
         Column(
@@ -56,14 +57,14 @@ fun PlayHistorySheet(
         ) {
             AppText(
                 text = "最近播放",
-                style = MaterialTheme.typography.titleLarge,
+                style = COUITheme.textStyles.title4,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
             )
             if (entries.isEmpty()) {
                 AppText(
                     text = "还没有播放记录，去听几首歌吧。",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppContentColors.secondaryText(),
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
@@ -90,7 +91,7 @@ fun PlayHistorySheet(
                             Column(Modifier.weight(1f)) {
                                 AppText(
                                     text = entry.title.ifBlank { entry.bvid },
-                                    style = MaterialTheme.typography.bodyLarge,
+                                    style = COUITheme.textStyles.main,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
                                 )
@@ -101,7 +102,7 @@ fun PlayHistorySheet(
                                         append(entry.playCount)
                                         append(" 次")
                                     },
-                                    style = MaterialTheme.typography.bodySmall,
+                                    style = COUITheme.textStyles.footnote1,
                                     color = AppContentColors.secondaryText(),
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis

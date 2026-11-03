@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  * Compact cover-pane lyric preview (Halcyon `PlayerMiniLyrics` surface used by BiliPai).
@@ -120,7 +121,7 @@ internal fun PlayerMiniLyrics(
                 text = "轻点查看完整歌词",
                 style = TextStyle(
                     color = contentColor.copy(alpha = 0.70f),
-                    fontSize = androidx.compose.material3.MaterialTheme.typography.labelSmall.fontSize,
+                    fontSize = COUITheme.textStyles.footnote2.fontSize,
                     fontFamily = fontFamily,
                 ),
                 modifier = Modifier

@@ -35,6 +35,7 @@ import com.android.purebilibili.core.ui.ContainerLevel
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppTextButton
 import kotlinx.coroutines.launch
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 private val WallpaperPaletteRole.label: String
     get() = when (this) {
@@ -64,10 +65,10 @@ internal fun WallpaperPaletteEditor(modifier: Modifier = Modifier) {
     var editing by remember { mutableStateOf<WallpaperPaletteEdit?>(null) }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        AppText("壁纸重新调色 · $modeLabel", style = MaterialTheme.typography.labelMedium,
+        AppText("壁纸重新调色 · $modeLabel", style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText())
         AppText("点按色块修改；未修改的颜色继续跟随壁纸。浅色与深色分别保存。",
-            style = MaterialTheme.typography.bodySmall, color = AppContentColors.secondaryText())
+            style = COUITheme.textStyles.footnote1, color = AppContentColors.secondaryText())
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
             WallpaperPaletteRole.entries.forEach { role ->
                 val color = when (role) {
@@ -90,9 +91,9 @@ internal fun WallpaperPaletteEditor(modifier: Modifier = Modifier) {
                     verticalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
                     Box(Modifier.size(40.dp).clip(AppShapes.container(ContainerLevel.Field)).background(color))
-                    AppText(role.label, style = MaterialTheme.typography.labelSmall)
+                    AppText(role.label, style = COUITheme.textStyles.footnote2)
                     AppText(if (role in custom) "自定义" else "跟随壁纸",
-                        style = MaterialTheme.typography.labelSmall, color = AppContentColors.secondaryText())
+                        style = COUITheme.textStyles.footnote2, color = AppContentColors.secondaryText())
                 }
             }
         }

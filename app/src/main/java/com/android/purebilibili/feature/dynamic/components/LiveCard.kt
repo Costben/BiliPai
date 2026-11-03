@@ -1,6 +1,8 @@
 // 文件路径: feature/dynamic/components/LiveCard.kt
 package com.android.purebilibili.feature.dynamic.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.AppContentColors
 
 import coil3.network.NetworkHeaders
@@ -77,7 +79,7 @@ fun LiveCard(
                 .appActionClickable { onLiveClick(roomId, title, "") },  //  点击跳转直播
             shape = AppCardShape.Semantic(ContainerLevel.Card),
             colors = AppCardDefaults.colors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                containerColor = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.5f)
             )
         ) {
             Row(
@@ -116,7 +118,7 @@ fun LiveCard(
                             .background(AppContentColors.accent(), AppShapes.container(ContainerLevel.Tag))
                             .padding(horizontal = AppSpacingTokens.ExtraSmall, vertical = AppSpacingTokens.Micro)
                     ) {
-                        AppText("直播中", fontSize = MaterialTheme.typography.labelSmall.fontSize, color = AppContentColors.onAccent(), fontWeight = FontWeight.Bold)
+                        AppText("直播中", fontSize = COUITheme.textStyles.footnote2.fontSize, color = AppContentColors.onAccent(), fontWeight = FontWeight.Bold)
                     }
                 }
 
@@ -129,7 +131,7 @@ fun LiveCard(
                 ) {
                     AppText(
                         liveInfo.live_play_info?.title ?: "直播中",
-                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                        fontSize = COUITheme.textStyles.footnote1.fontSize,
                         fontWeight = FontWeight.Medium,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
@@ -145,7 +147,7 @@ fun LiveCard(
                         )
                         AppText(
                             "${liveInfo.live_play_info?.online ?: 0} 人观看",
-                            fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                            fontSize = COUITheme.textStyles.footnote2.fontSize,
                             color = AppContentColors.secondaryText().copy(0.6f)
                         )
                     }
@@ -158,7 +160,7 @@ fun LiveCard(
             modifier = Modifier.fillMaxWidth(),
             shape = AppCardShape.Semantic(ContainerLevel.Card),
             colors = AppCardDefaults.colors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                containerColor = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.5f)
             )
         ) {
             Row(
@@ -171,12 +173,12 @@ fun LiveCard(
                         .background(AppContentColors.accent(), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-                    AppText("🔴", fontSize = MaterialTheme.typography.titleMedium.fontSize)
+                    AppText("🔴", fontSize = COUITheme.textStyles.headline1.fontSize)
                 }
                 Spacer(modifier = Modifier.width(AppSpacingTokens.Medium))
                 AppText(
                     "直播中",
-                    fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                    fontSize = COUITheme.textStyles.footnote1.fontSize,
                     fontWeight = FontWeight.Medium,
                     color = AppContentColors.primaryText()
                 )
@@ -200,7 +202,7 @@ fun LiveMajorCard(
             .appActionClickable { onLiveClick(roomId, title, "") },
         shape = AppCardShape.Semantic(ContainerLevel.Card),
         colors = AppCardDefaults.colors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            containerColor = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.5f)
         )
     ) {
         Row(
@@ -240,13 +242,13 @@ fun LiveMajorCard(
                         .background(AppContentColors.accent(), AppShapes.container(ContainerLevel.Tag))
                         .padding(horizontal = AppSpacingTokens.ExtraSmall, vertical = AppSpacingTokens.Micro)
                 ) {
-                    AppText("直播中", fontSize = MaterialTheme.typography.labelSmall.fontSize, color = AppContentColors.onAccent(), fontWeight = FontWeight.Bold)
+                    AppText("直播中", fontSize = COUITheme.textStyles.footnote2.fontSize, color = AppContentColors.onAccent(), fontWeight = FontWeight.Bold)
                 }
             }
             Spacer(modifier = Modifier.width(AppSpacingTokens.Small + AppSpacingTokens.Micro))
             AppText(
                 title,
-                fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                fontSize = COUITheme.textStyles.footnote1.fontSize,
                 fontWeight = FontWeight.Medium,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,

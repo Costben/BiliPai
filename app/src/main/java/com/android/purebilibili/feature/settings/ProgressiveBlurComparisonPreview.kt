@@ -16,9 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -53,6 +51,10 @@ import com.android.purebilibili.feature.home.components.rememberOfficialProgress
 import com.android.purebilibili.feature.home.components.resolveLiquidGlassTuning
 import io.github.suqi8.coui.kmp.blur.ProgressiveBlur
 import io.github.suqi8.coui.kmp.blur.progressiveTextureBlur
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppShapes
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+import com.android.purebilibili.core.ui.ContainerLevel
 
 /** 两个真实渲染器消费相同画面；交互只移动预览背景，不修改已保存设置。 */
 @Composable
@@ -122,7 +124,7 @@ private fun ProgressiveBlurComparisonDialog(
                         }
                     }
                 }
-                AppText(stringResource(R.string.preview_blur_compare_scroll), style = MaterialTheme.typography.labelMedium)
+                AppText(stringResource(R.string.preview_blur_compare_scroll), style = COUITheme.textStyles.footnote1)
                 ComparisonScrollSlider(scrollPosition)
             }
         },
@@ -173,13 +175,13 @@ private fun ProgressiveBlurComparisonPanel(
     val label = if (official) stringResource(R.string.animation_progressive_renderer_android) else "Miuix"
     val accent = AppContentColors.accent()
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        AppText(label, style = MaterialTheme.typography.titleSmall)
+        AppText(label, style = COUITheme.textStyles.headline2)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(174.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .clip(AppShapes.container(ContainerLevel.Card))
+                .background(AppSurfaceTokens.surfaceContainer())
                 .semantics { contentDescription = label },
             contentAlignment = Alignment.Center,
         ) {
@@ -201,7 +203,7 @@ private fun ProgressiveBlurComparisonPanel(
                 AppText(
                     text = stringResource(R.string.preview_home_top_title),
                     modifier = Modifier.align(Alignment.TopCenter).padding(top = 20.dp),
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                 )
             } else {
                 AppText(

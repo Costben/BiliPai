@@ -6,7 +6,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +32,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import coil3.compose.AsyncImage
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 internal data class MessageAuxState(
     val page: String = "",
@@ -233,7 +233,7 @@ internal fun MessageAuxiliaryPage(
                     Row(Modifier.fillMaxWidth().clickable { onOpenLink("bilibili://space/${user.mid}") }.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                         AsyncImage(user.face, "头像", Modifier.size(44.dp))
                         Column(Modifier.weight(1f).padding(horizontal = 12.dp)) {
-                            AppText(user.uname, style = MaterialTheme.typography.bodyLarge)
+                            AppText(user.uname, style = COUITheme.textStyles.main)
                             AppText(user.sign, maxLines = 2, color = AppContentColors.secondaryText())
                         }
                         if (page == "blacklist") AppTextButton(onClick = { pendingUnblock = user }, enabled = !state.busy) { AppText("移除") }
@@ -298,9 +298,9 @@ internal fun MessageSettingRow(
 ) {
     Row(modifier.fillMaxWidth().clickable(enabled = enabled, onClick = onClick).padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.weight(1f)) {
-            AppText(title, style = MaterialTheme.typography.bodyLarge)
-            if (subtitle.isNotBlank()) AppText(subtitle, color = AppContentColors.secondaryText(), style = MaterialTheme.typography.bodySmall)
-            if (summary.isNotBlank()) AppText(summary, color = AppContentColors.secondaryText(), style = MaterialTheme.typography.bodySmall)
+            AppText(title, style = COUITheme.textStyles.main)
+            if (subtitle.isNotBlank()) AppText(subtitle, color = AppContentColors.secondaryText(), style = COUITheme.textStyles.footnote1)
+            if (summary.isNotBlank()) AppText(summary, color = AppContentColors.secondaryText(), style = COUITheme.textStyles.footnote1)
         }
         trailing()
     }

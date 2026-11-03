@@ -43,7 +43,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import com.android.purebilibili.core.ui.components.AppIcon
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppSlider
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.runtime.*
@@ -168,6 +167,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlin.math.roundToInt
 import androidx.lifecycle.compose.currentStateAsState
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 private const val TAG = "LivePlayerScreen"
 
@@ -1226,7 +1226,7 @@ private fun LiveRoomScreen(
                     AppText(
                         text = "仅播放音频",
                         color = roomColorTokens.inputOverlayColor,
-                        style = MaterialTheme.typography.titleSmall,
+                        style = COUITheme.textStyles.headline2,
                         fontWeight = FontWeight.SemiBold
                     )
                 }
@@ -2133,7 +2133,7 @@ private fun LiveDanmakuSettingsDialog(
                             onValuePreview = { onStylePreview(LiveDanmakuStyleOption.Speed, it) },
                             onValueChangeFinished = { onStyleChanged(LiveDanmakuStyleOption.Speed, it) }
                         )
-                        AppText("按类型屏蔽", style = MaterialTheme.typography.labelLarge)
+                        AppText("按类型屏蔽", style = COUITheme.textStyles.button)
                         FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             com.android.purebilibili.core.ui.components.AppFilterChip(!allowScroll, onToggleAllowScroll, label = { AppText("滚动") })
                             com.android.purebilibili.core.ui.components.AppFilterChip(!allowTop, onToggleAllowTop, label = { AppText("顶部") })
@@ -2192,7 +2192,7 @@ private fun LiveDanmakuSettingsDialog(
                             AppText(
                                 "Space/K 播放暂停 · F 全屏 · D 弹幕 · M 静音 · 方向键音量 · Q 点赞 · S 截图",
                                 color = AppContentColors.secondaryText(),
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                             )
                         }
                     }

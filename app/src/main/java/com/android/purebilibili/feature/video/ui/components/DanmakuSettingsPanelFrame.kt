@@ -14,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.android.purebilibili.core.ui.components.AppSurface
+import com.android.purebilibili.core.ui.AppShapes
+import com.android.purebilibili.core.ui.ContainerLevel
 
 /** 视频与直播共用弹幕面板外壳，内容及预览、保存回调由各自播放页面提供。 */
 @Composable
@@ -41,7 +43,7 @@ internal fun DanmakuSettingsPanelFrame(
             .heightIn(max = layoutPolicy.maxHeightDp.dp)
             .clickable(indication = null, interactionSource = remember { MutableInteractionSource() }) {},
         color = if (glassSurface) Color.Transparent else containerColor,
-        shape = RoundedCornerShape(12.dp),
+        shape = AppShapes.container(ContainerLevel.MediaCover),
         tonalElevation = 0.dp,
         shadowElevation = 0.dp,
         content = content,

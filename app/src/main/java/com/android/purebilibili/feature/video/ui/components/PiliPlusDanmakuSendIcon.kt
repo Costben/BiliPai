@@ -1,12 +1,12 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppContentColors
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.Canvas
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -83,7 +83,7 @@ fun PiliPlusDanmakuSendIcon(
                 color = tint,
                 fontSize = (size.value * 0.48f).sp,
                 lineHeight = (size.value * 0.54f).sp,
-                style = MaterialTheme.typography.labelSmall.copy(
+                style = COUITheme.textStyles.footnote2.copy(
                     platformStyle = PlatformTextStyle(includeFontPadding = false),
                 ),
                 tapToCopyEnabled = false,

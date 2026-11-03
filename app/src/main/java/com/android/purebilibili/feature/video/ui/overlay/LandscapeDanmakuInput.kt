@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import com.android.purebilibili.core.ui.components.AppText
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
 import com.android.purebilibili.core.ui.components.appDesktopFocusableItemVisuals
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  *  横屏弹幕输入框组件
@@ -45,7 +45,7 @@ fun LandscapeDanmakuInput(
         AppText(
             text = placeholder,
             color = Color.White.copy(alpha = 0.6f),
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             fontWeight = FontWeight.Normal,
             maxLines = 1
         )
@@ -77,7 +77,7 @@ fun LandscapeQuickActionButton(
         ) {
             AppText(
                 text = emoji,
-                style = MaterialTheme.typography.bodyMedium
+                style = COUITheme.textStyles.body1
             )
         }
     }

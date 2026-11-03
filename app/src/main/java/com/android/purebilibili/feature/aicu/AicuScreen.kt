@@ -19,7 +19,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import com.android.purebilibili.core.ui.common.AppSelectionContainer as SelectionContainer
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -224,7 +224,7 @@ internal fun AicuScreen(
                         }
                         item("status") {
                             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                AppText("数据来自 Aicu · 非实时且可能不完整", style = MaterialTheme.typography.bodySmall)
+                                AppText("数据来自 Aicu · 非实时且可能不完整", style = COUITheme.textStyles.footnote1)
                                 if (state.busy) {
                                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                                         AdaptiveLoadingIndicator(size = 24.dp)
@@ -242,7 +242,7 @@ internal fun AicuScreen(
                                 if (state.loadState == AicuLoadState.EMPTY) AppText("未收录符合条件的记录，不代表该用户从未发布内容。")
                                 state.page?.let {
                                     AppText("第 ${it.query.page} 页" + (it.total?.let { total -> " · 已收录 $total 条" } ?: ""))
-                                    if (it.query.filter != state.filter) AppText("筛选已修改，点击查询后生效。", style = MaterialTheme.typography.bodySmall)
+                                    if (it.query.filter != state.filter) AppText("筛选已修改，点击查询后生效。", style = COUITheme.textStyles.footnote1)
                                 }
                             }
                         }
@@ -308,9 +308,9 @@ internal fun AicuScreen(
                             coil3.compose.AsyncImage(model = item.avatar, contentDescription = null, modifier = Modifier.size(32.dp))
                             Column(Modifier.weight(1f).padding(horizontal = 8.dp)) {
                                 AppText(item.display_name, maxLines = 1)
-                                AppText("UID ${item.uid} · 搜索 ${item.search_count} 次 · 热度 ${item.hot_value}", style = MaterialTheme.typography.bodySmall)
+                                AppText("UID ${item.uid} · 搜索 ${item.search_count} 次 · 热度 ${item.hot_value}", style = COUITheme.textStyles.footnote1)
                             }
-                            AppText(when (item.trend) { "up" -> "上升"; "down" -> "下降"; else -> "持平" }, style = MaterialTheme.typography.bodySmall)
+                            AppText(when (item.trend) { "up" -> "上升"; "down" -> "下降"; else -> "持平" }, style = COUITheme.textStyles.footnote1)
                         }
                     }
                 }
@@ -370,7 +370,7 @@ private fun AicuFilters(
             AppOutlinedTextField(state.filter.endDate, { onFilter(state.filter.copy(endDate = it)) }, labelText = "结束日期", placeholderText = "YYYY-MM-DD", singleLine = true, modifier = Modifier.widthIn(min = 140.dp, max = 240.dp).weight(1f))
         }
         if (state.category == AicuCategory.COMMENT) {
-            AppText("评论类型", style = MaterialTheme.typography.labelLarge)
+            AppText("评论类型", style = COUITheme.textStyles.button)
             AicuCommentModeDock(
                 selectedMode = state.filter.commentMode,
                 liquidEnabled = liquidEnabled,
@@ -467,18 +467,18 @@ private fun AicuRecordCard(
                 category == AicuCategory.COMMENT && record.rank in 1..2 -> " · ${if (record.rank == 1) "一级" else "二级"}评论"
                 category == AicuCategory.VIDEO_DANMAKU && progressMs != null -> " · 视频内 ${progressMs / 1000.0} 秒"
                 else -> ""
-            }, style = MaterialTheme.typography.bodySmall)
-            if (record.authorName.isNotBlank()) AppText(record.authorName, style = MaterialTheme.typography.labelLarge)
+            }, style = COUITheme.textStyles.footnote1)
+            if (record.authorName.isNotBlank()) AppText(record.authorName, style = COUITheme.textStyles.button)
             RichCommentText(
                 text = record.text.ifBlank { "（正文缺失）" },
-                fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                fontSize = COUITheme.textStyles.main.fontSize,
                 color = AppContentColors.primaryText(),
                 emoteMap = emoteMap,
             )
             if (target != null && category == AicuCategory.COMMENT && (record.objectType == 12 || (record.rank == 2 && record.rootId.toLongOrNull() == null))) {
-                AppText("缺少完整评论定位信息，将打开原内容。", style = MaterialTheme.typography.bodySmall)
+                AppText("缺少完整评论定位信息，将打开原内容。", style = COUITheme.textStyles.footnote1)
             }
-            if (target == null) AppText("暂不支持原生打开此记录，可复制信息。", style = MaterialTheme.typography.bodySmall)
+            if (target == null) AppText("暂不支持原生打开此记录，可复制信息。", style = COUITheme.textStyles.footnote1)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 AppTextButton(onClick = onCopy, modifier = Modifier.heightIn(min = 48.dp)) { AppText("复制") }
                 if (target != null) AppTextButton(onClick = onOpen, modifier = Modifier.heightIn(min = 48.dp)) { AppText(if (category == AicuCategory.LIVE_DANMAKU) "打开直播间" else "打开原内容") }

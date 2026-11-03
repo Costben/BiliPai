@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.audio.screen
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.navigation.tabSelectedPage
 import com.android.purebilibili.navigation.tabIndicatorPosition
@@ -219,6 +220,8 @@ import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 import io.github.suqi8.coui.kmp.blur.Backdrop as MiuixBackdrop
 import com.android.purebilibili.core.ui.blur.rememberChromeBackdropSource
+import com.android.purebilibili.core.ui.AppAlertDialog
+import com.android.purebilibili.core.ui.components.AppDropdownMenuItem
 
 internal enum class MusicGlassMaterialMode {
     LIQUID,
@@ -330,11 +333,11 @@ internal fun resolveMusicGlassContainerColor(
 ): Color {
     val materialColor = LocalMusicPlayerMaterial.current.surfaceColor
     if (materialColor != Color.Unspecified) return materialColor
-    val base = glassTintColor.takeOrElse { MaterialTheme.colorScheme.surface }
+    val base = glassTintColor.takeOrElse { AppSurfaceTokens.surface() }
     val tonalTarget = if (isDark) {
         MaterialTheme.colorScheme.surfaceBright
     } else {
-        MaterialTheme.colorScheme.surfaceContainerLow
+        AppSurfaceTokens.surfaceContainer()
     }
     return lerp(base, tonalTarget, if (isDark) 0.24f else 0.40f)
         .copy(alpha = if (isDark) 0.28f else 0.42f)
@@ -348,8 +351,8 @@ internal fun resolveMusicGlassBorderColor(
 ): Color {
     val materialColor = LocalMusicPlayerMaterial.current.borderColor
     if (materialColor != Color.Unspecified) return materialColor
-    val base = glassTintColor.takeOrElse { MaterialTheme.colorScheme.surface }
-    val edge = if (isDark) AppContentColors.primaryText() else MaterialTheme.colorScheme.outline
+    val base = glassTintColor.takeOrElse { AppSurfaceTokens.surface() }
+    val edge = if (isDark) AppContentColors.primaryText() else AppSurfaceTokens.outline()
     return lerp(base, edge, if (isDark) 0.42f else 0.28f)
         .copy(alpha = if (isDark) 0.30f else 0.22f)
 }
@@ -1444,7 +1447,7 @@ internal fun MusicPlayerContent(
                         val actionsContent: @Composable () -> Unit = {
                             AppText(
                                 text = "播放器操作",
-                                style = MaterialTheme.typography.titleLarge,
+                                style = COUITheme.textStyles.title4,
                                 fontWeight = FontWeight.Bold,
                                 color = sheetContentColor,
                                 modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
@@ -1750,7 +1753,7 @@ internal fun MusicPlayerContent(
         ) {
             AppText(
                 text = "手动匹配歌词",
-                style = MaterialTheme.typography.titleLarge,
+                style = COUITheme.textStyles.title4,
                 fontWeight = FontWeight.Bold,
                 color = AppContentColors.primaryText(),
                 modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
@@ -1905,7 +1908,7 @@ private fun ImmersiveBottomQueueShelf(
     var confirmClear by remember { mutableStateOf(false) }
     val panelColor = resolveMusicImmersivePanelColor(
         backgroundColor = glassTintColor,
-        surfaceColor = MaterialTheme.colorScheme.surface,
+        surfaceColor = AppSurfaceTokens.surface(),
     ).copy(alpha = 0.92f)
     val coverFlowMode = isQueueCoverFlow && queue.isNotEmpty()
     // 跟手拖拽：下拉随手偏移，松手按阈值决定关闭或回弹，可中途打断反向。
@@ -2024,7 +2027,7 @@ private fun ImmersiveBottomQueueShelf(
                 ) {
                     AppText(
                         text = if (queue.isNotEmpty()) "待播清单 (${queue.size})" else "待播清单",
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         fontWeight = FontWeight.Bold,
                         color = MusicContentColor,
                         maxLines = 1,
@@ -2070,7 +2073,7 @@ private fun ImmersiveBottomQueueShelf(
                                         if (onQueueMove != null) "编辑队列" else "切换列表"
                                     } else "3D 唱片架",
                                     color = MusicAccentColor,
-                                    style = MaterialTheme.typography.labelMedium,
+                                    style = COUITheme.textStyles.footnote1,
                                     fontWeight = FontWeight.SemiBold
                                 )
                             }
@@ -2116,7 +2119,7 @@ private fun ImmersiveBottomQueueShelf(
                     AppText(
                         text = "待播清单为空",
                         color = MusicContentColor.copy(alpha = 0.6f),
-                        style = MaterialTheme.typography.bodyLarge
+                        style = COUITheme.textStyles.main
                     )
                 }
             } else if (isQueueCoverFlow) {
@@ -2159,7 +2162,7 @@ private fun ImmersiveBottomQueueShelf(
                                             AppText(
                                                 text = "长按居中唱片拖动排序",
                                                 color = MusicContentColor.copy(alpha = 0.65f),
-                                                style = MaterialTheme.typography.labelSmall,
+                                                style = COUITheme.textStyles.footnote2,
                                             )
                                         }
                                     }
@@ -2194,7 +2197,7 @@ private fun ImmersiveBottomQueueShelf(
                                         dragCenter.floatValue - info.offset - info.size / 2f
                                     } else 0f
                                 }
-                                .clip(RoundedCornerShape(12.dp))
+                                .clip(AppShapes.container(ContainerLevel.MediaCover))
                                 .appActionClickable {
                                     onQueueItemSelected(index)
                                 }
@@ -2217,7 +2220,7 @@ private fun ImmersiveBottomQueueShelf(
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
                                     fontWeight = if (index == currentIndex) FontWeight.Bold else FontWeight.Normal,
-                                    style = MaterialTheme.typography.bodyMedium
+                                    style = COUITheme.textStyles.body1
                                 )
                                 Spacer(Modifier.height(2.dp))
                                 AppText(
@@ -2225,7 +2228,7 @@ private fun ImmersiveBottomQueueShelf(
                                     color = MusicContentColor.copy(alpha = 0.65f),
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
-                                    style = MaterialTheme.typography.bodySmall
+                                    style = COUITheme.textStyles.footnote1
                                 )
                             }
                             if (index == currentIndex) {
@@ -2671,7 +2674,7 @@ private fun PlayerPage(
                     AppText(
                         text = state.title,
                         color = MusicContentColor,
-                        style = MaterialTheme.typography.titleLarge,
+                        style = COUITheme.textStyles.title4,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -2684,7 +2687,7 @@ private fun PlayerPage(
                         AppText(
                             text = state.artist.ifBlank { "未知艺术家" },
                             color = MusicContentColor.copy(alpha = 0.82f),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = COUITheme.textStyles.body1,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             modifier = Modifier.weight(1f, fill = false)
@@ -2692,7 +2695,7 @@ private fun PlayerPage(
 
                     }
                     state.error?.let {
-                        AppText(it, color = AppContentColors.error(), style = MaterialTheme.typography.bodySmall)
+                        AppText(it, color = AppContentColors.error(), style = COUITheme.textStyles.footnote1)
                     }
                     }
                 }
@@ -2879,8 +2882,8 @@ private fun MusicArtwork(
     )
     val artworkFallbackBrush = Brush.linearGradient(
         listOf(
-            MaterialTheme.colorScheme.surfaceVariant,
-            MaterialTheme.colorScheme.surface,
+            AppSurfaceTokens.surfaceContainer(),
+            AppSurfaceTokens.surface(),
         )
     )
     if (shape == RectangleShape) {
@@ -2956,7 +2959,7 @@ private fun MusicArtwork(
                 else -> Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.surfaceVariant),
+                        .background(AppSurfaceTokens.surfaceContainer()),
                     contentAlignment = Alignment.Center
                 ) {
                     AppIcon(
@@ -3062,7 +3065,7 @@ private fun MusicProgress(
         draggedPosition = null
     }
     val inactiveTrackColor = lerp(
-        glassTintColor.takeOrElse { MaterialTheme.colorScheme.surface },
+        glassTintColor.takeOrElse { AppSurfaceTokens.surface() },
         AppContentColors.primaryText(),
         if (isDarkEnvironment) 0.34f else 0.22f,
     ).copy(alpha = if (isDarkEnvironment) 0.36f else 0.24f)
@@ -3092,12 +3095,12 @@ private fun MusicProgress(
             AppText(
                 formatMusicTime(displayedPositionMs),
                 color = MusicContentColor.copy(alpha = 0.85f),
-                style = MaterialTheme.typography.labelSmall
+                style = COUITheme.textStyles.footnote2
             )
             AppText(
                 "-${formatMusicTime((state.durationMs - displayedPositionMs).coerceAtLeast(0L))}",
                 color = MusicContentColor.copy(alpha = 0.85f),
-                style = MaterialTheme.typography.labelSmall
+                style = COUITheme.textStyles.footnote2
             )
         }
     }
@@ -3142,7 +3145,7 @@ private fun MusicVolumeSlider(
     }
 
     val inactiveTrackColor = lerp(
-        glassTintColor.takeOrElse { MaterialTheme.colorScheme.surface },
+        glassTintColor.takeOrElse { AppSurfaceTokens.surface() },
         AppContentColors.primaryText(),
         if (isDarkEnvironment) 0.34f else 0.22f,
     ).copy(alpha = if (isDarkEnvironment) 0.36f else 0.24f)
@@ -3255,7 +3258,7 @@ private fun PlayerLyricsPreview(
 
     AppSurface(
         onClick = onOpenLyrics ?: {},
-        shape = RoundedCornerShape(16.dp),
+        shape = AppShapes.container(ContainerLevel.Card),
         color = Color.Transparent,
         modifier = modifier
             .fillMaxWidth()
@@ -3274,7 +3277,7 @@ private fun PlayerLyricsPreview(
                     AppText(
                         text = prevLine.text,
                         color = MusicContentColor.copy(alpha = 0.38f),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         textAlign = TextAlign.Center,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -3285,7 +3288,7 @@ private fun PlayerLyricsPreview(
                 AppText(
                     text = activeLine.text,
                     color = MusicAccentColor,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
                     maxLines = 2,
@@ -3303,7 +3306,7 @@ private fun PlayerLyricsPreview(
                     AppText(
                         text = previewTranslation,
                         color = MusicAccentColor.copy(alpha = 0.72f),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         textAlign = TextAlign.Center,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -3315,7 +3318,7 @@ private fun PlayerLyricsPreview(
                     AppText(
                         text = nextLine1.text,
                         color = MusicContentColor.copy(alpha = 0.58f),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         textAlign = TextAlign.Center,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -3327,7 +3330,7 @@ private fun PlayerLyricsPreview(
                     AppText(
                         text = nextLine2.text,
                         color = MusicContentColor.copy(alpha = 0.32f),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         textAlign = TextAlign.Center,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -3341,7 +3344,7 @@ private fun PlayerLyricsPreview(
                 AppText(
                     text = hint,
                     color = MusicAccentColor.copy(alpha = 0.75f),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     fontWeight = FontWeight.SemiBold,
                     textAlign = TextAlign.Center
                 )
@@ -3357,7 +3360,7 @@ private fun PlayerLyricsPreview(
                         AppText(
                             text = line.text,
                             color = MusicContentColor.copy(alpha = alpha),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = COUITheme.textStyles.body1,
                             textAlign = TextAlign.Center,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
@@ -3379,7 +3382,7 @@ private fun PlayerLyricsPreview(
                     AppText(
                         text = "轻点查看完整歌词",
                         color = MusicContentColor.copy(alpha = 0.78f),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = COUITheme.textStyles.body1
                     )
                 }
             }
@@ -3524,7 +3527,7 @@ private fun LyricsPage(
                         else -> "未找到匹配歌词"
                     },
                     color = MusicContentColor.copy(alpha = 0.88f),
-                    style = MaterialTheme.typography.headlineSmall
+                    style = COUITheme.textStyles.title4
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     GlassTextButton(
@@ -3777,7 +3780,7 @@ private fun LyricsPrimaryControls(
     )
     val panelColor = resolveMusicImmersivePanelColor(
         glassTintColor,
-        MaterialTheme.colorScheme.surface,
+        AppSurfaceTokens.surface(),
     )
     val (themeOnLight, themeOnDark) = resolveMusicPlayerThemeContentColors()
     val panelContentColor = resolveMusicPlayerContentColor(
@@ -3846,10 +3849,10 @@ private fun LyricsPrimaryControls(
                         isDarkEnvironment = isDarkEnvironment,
                     )
                     AppTextButton(onClick = onOpenSettings, modifier = Modifier.height(48.dp)) {
-                        AppText("歌词设置", color = MusicContentColor, style = MaterialTheme.typography.labelMedium)
+                        AppText("歌词设置", color = MusicContentColor, style = COUITheme.textStyles.footnote1)
                     }
                     AppTextButton(onClick = onHideControls, modifier = Modifier.height(48.dp)) {
-                        AppText("收起", color = MusicContentColor, style = MaterialTheme.typography.labelMedium)
+                        AppText("收起", color = MusicContentColor, style = COUITheme.textStyles.footnote1)
                     }
                 }
             }
@@ -3897,7 +3900,7 @@ private fun LyricsOffsetSettingsContent(
     ) {
         AppText(
             text = "字幕 / 歌词设置",
-            style = MaterialTheme.typography.titleLarge,
+            style = COUITheme.textStyles.title4,
             fontWeight = FontWeight.Bold,
             color = contentColor,
         )
@@ -3957,7 +3960,7 @@ private fun LyricsOffsetSettingsContent(
                 contentColor = contentColor,
             ) {
                 Column(Modifier.fillMaxWidth().heightIn(max = 420.dp).verticalScroll(rememberScrollState()).padding(16.dp)) {
-                    AppText(if (secondary) "选择附加字幕语言" else "选择主字幕语言", style = MaterialTheme.typography.titleMedium)
+                    AppText(if (secondary) "选择附加字幕语言" else "选择主字幕语言", style = COUITheme.textStyles.headline1)
                     options.forEach { (trackKey, label) ->
                         AppTextButton(
                             onClick = {
@@ -3977,13 +3980,13 @@ private fun LyricsOffsetSettingsContent(
         if (sourceLabel.isNotBlank()) {
             AppText(
                 text = "当前来源 · $sourceLabel",
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 color = secondaryColor,
             )
         }
         AppText(
             text = formatLyricsOffset(offsetMs),
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = secondaryColor,
         )
         Row(
@@ -4120,7 +4123,7 @@ private fun LyricsSettingsContent(
     ) {
         AppText(
             "歌词设置",
-            style = MaterialTheme.typography.titleLarge,
+            style = COUITheme.textStyles.title4,
             fontWeight = FontWeight.Bold,
             color = contentColor
         )
@@ -4128,7 +4131,7 @@ private fun LyricsSettingsContent(
             AppText(
                 "当前来源 · $sourceLabel",
                 color = secondaryColor,
-                style = MaterialTheme.typography.bodyMedium
+                style = COUITheme.textStyles.body1
             )
         }
         MusicActionSheetItem(
@@ -4183,9 +4186,9 @@ private fun LyricLineContent(
         Modifier
     }
     val textStyle = when {
-        immersive && isCurrent -> MaterialTheme.typography.headlineLarge
-        immersive -> MaterialTheme.typography.titleMedium
-        else -> MaterialTheme.typography.headlineSmall
+        immersive && isCurrent -> COUITheme.textStyles.title2
+        immersive -> COUITheme.textStyles.headline1
+        else -> COUITheme.textStyles.title4
     }
     val lineHeight = when {
         immersive && isCurrent -> 42.sp
@@ -4223,7 +4226,7 @@ private fun LyricLineContent(
             AppText(
                 text = it,
                 color = MusicContentColor.copy(alpha = if (immersive) 0.64f else 0.72f),
-                style = if (immersive) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodyLarge,
+                style = if (immersive) COUITheme.textStyles.body1 else COUITheme.textStyles.main,
                 modifier = Modifier.padding(top = if (immersive) 4.dp else 5.dp),
                 textAlign = if (centerAligned) TextAlign.Center else TextAlign.Start,
             )
@@ -4232,7 +4235,7 @@ private fun LyricLineContent(
             AppText(
                 text = it,
                 color = MusicContentColor.copy(alpha = if (immersive) 0.48f else 0.58f),
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 modifier = Modifier.padding(top = 3.dp),
                 textAlign = if (centerAligned) TextAlign.Center else TextAlign.Start,
             )
@@ -4457,7 +4460,7 @@ private fun GlassTextButton(
         AppText(
             label,
             color = textColor,
-            style = MaterialTheme.typography.labelMedium,
+            style = COUITheme.textStyles.footnote1,
             fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
         )
     }
@@ -4500,7 +4503,7 @@ private fun MusicDockPagePill(
         AppText(
             label,
             color = if (selected) MusicAccentColor else MusicContentColor.copy(alpha = 0.78f),
-            style = MaterialTheme.typography.labelMedium,
+            style = COUITheme.textStyles.footnote1,
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal
         )
     }
@@ -4713,7 +4716,7 @@ private fun ExpandedQueuePane(
     val panelShape = AppShapes.borderedContainer(ContainerLevel.Card)
     val panelColor = resolveMusicImmersivePanelColor(
         glassTintColor,
-        MaterialTheme.colorScheme.surface,
+        AppSurfaceTokens.surface(),
     )
     AppSurface(
         shape = panelShape,
@@ -4750,7 +4753,7 @@ private fun ExpandedQueuePane(
                 ) {
                     AppText(
                         text = if (queue.isNotEmpty()) "待播清单 (${queue.size})" else "待播清单",
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         fontWeight = FontWeight.Bold,
                         color = MusicContentColor
                     )
@@ -4783,7 +4786,7 @@ private fun ExpandedQueuePane(
                     AppText(
                         text = "待播清单为空",
                         color = MusicContentColor.copy(alpha = 0.6f),
-                        style = MaterialTheme.typography.bodyLarge
+                        style = COUITheme.textStyles.main
                     )
                 }
             } else if (isCoverFlowView) {
@@ -4833,7 +4836,7 @@ private fun ExpandedQueuePane(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clip(RoundedCornerShape(12.dp))
+                                .clip(AppShapes.container(ContainerLevel.MediaCover))
                                 .background(
                                     if (isPlayingItem) MusicAccentColor.copy(alpha = 0.16f) else Color.Transparent
                                 )
@@ -4857,7 +4860,7 @@ private fun ExpandedQueuePane(
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
                                     fontWeight = if (isPlayingItem) FontWeight.Bold else FontWeight.Normal,
-                                    style = MaterialTheme.typography.bodyLarge
+                                    style = COUITheme.textStyles.main
                                 )
                                 Spacer(Modifier.height(2.dp))
                                 AppText(
@@ -4865,7 +4868,7 @@ private fun ExpandedQueuePane(
                                     color = if (isPlayingItem) MusicAccentColor.copy(alpha = 0.78f) else MusicContentColor.copy(alpha = 0.65f),
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
-                                    style = MaterialTheme.typography.bodyMedium
+                                    style = COUITheme.textStyles.body1
                                 )
                             }
                             if (isPlayingItem) {
@@ -4906,7 +4909,7 @@ private fun MusicActionSheetItem(
             .padding(horizontal = 24.dp),
         contentAlignment = Alignment.CenterStart
     ) {
-        AppText(label, color = contentColor, style = MaterialTheme.typography.bodyLarge)
+        AppText(label, color = contentColor, style = COUITheme.textStyles.main)
     }
 }
 

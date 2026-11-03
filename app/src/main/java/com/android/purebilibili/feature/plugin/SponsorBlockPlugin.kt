@@ -77,6 +77,8 @@ import java.io.FileOutputStream
 import com.android.purebilibili.core.ui.isMiuixNonGlassEnabled
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 private const val TAG = "SponsorBlockPlugin"
 private const val SPONSOR_BLOCK_RECENT_COVER_ASPECT_RATIO = 16f / 10f
@@ -230,7 +232,7 @@ class SponsorBlockPlugin : BuiltinPlugin, PlayerPluginApi {
         val uriHandler = LocalUriHandler.current
         val scope = rememberCoroutineScope()
         val neutralMiuix = isMiuixNonGlassEnabled()
-        val preferenceIconColor = MaterialTheme.colorScheme.surfaceContainerHighest
+        val preferenceIconColor = AppSurfaceTokens.surfaceContainerHighest()
         var autoSkip by remember { mutableStateOf(config.autoSkip) }
         var markerMode by remember { mutableStateOf(config.markerMode) }
         var dailySummaryNotificationEnabled by remember { mutableStateOf(config.dailySummaryNotificationEnabled) }
@@ -399,7 +401,7 @@ class SponsorBlockPlugin : BuiltinPlugin, PlayerPluginApi {
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
                         singleLine = true,
                         label = { AppText("通知文案前缀") },
-                        textStyle = MaterialTheme.typography.bodyMedium,
+                        textStyle = COUITheme.textStyles.body1,
                     )
                 }
                 AppPreference(
@@ -550,7 +552,7 @@ class SponsorBlockPlugin : BuiltinPlugin, PlayerPluginApi {
                 title = { AppText("社区用户 ID") },
                 text = {
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        AppText(config.userId, style = MaterialTheme.typography.bodySmall)
+                        AppText(config.userId, style = COUITheme.textStyles.footnote1)
                         AppTextField(
                             value = userIdDraft,
                             onValueChange = { userIdDraft = it },
@@ -560,7 +562,7 @@ class SponsorBlockPlugin : BuiltinPlugin, PlayerPluginApi {
                         communityUserInfo?.let { info ->
                             AppText("${info.userName.ifBlank { "匿名用户" }} · 已贡献 ${info.segmentCount} 段 · 节省 ${info.minutesSaved.toInt()} 分钟")
                         }
-                        AppText("此 ID 仅用于当前服务器上的贡献归属。重新生成后，旧贡献不会迁移。", style = MaterialTheme.typography.bodySmall, color = AppContentColors.secondaryText())
+                        AppText("此 ID 仅用于当前服务器上的贡献归属。重新生成后，旧贡献不会迁移。", style = COUITheme.textStyles.footnote1, color = AppContentColors.secondaryText())
                         AppTextButton(onClick = { showRegenerateUserIdDialog = true }) { AppText("重新生成 ID") }
                     }
                 },
@@ -636,7 +638,7 @@ class SponsorBlockPlugin : BuiltinPlugin, PlayerPluginApi {
                             label = "颜色（#RRGGBB）",
                             singleLine = true,
                         )
-                        if (!validDraft) AppText("颜色格式应为 #RRGGBB", color = MaterialTheme.colorScheme.error)
+                        if (!validDraft) AppText("颜色格式应为 #RRGGBB", color = AppContentColors.error())
                         AppTextButton(onClick = {
                             colorDraft = ""
                             previewColor = Color(AndroidColor.parseColor(setting.defaultColorHex))
@@ -669,13 +671,13 @@ private fun SponsorBlockSettingsSection(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        AppText(text = title, style = MaterialTheme.typography.titleMedium, color = AppContentColors.primaryText())
+        AppText(text = title, style = COUITheme.textStyles.headline1, color = AppContentColors.primaryText())
         if (subtitle != null) {
-            AppText(text = subtitle, style = MaterialTheme.typography.bodySmall, color = AppContentColors.secondaryText())
+            AppText(text = subtitle, style = COUITheme.textStyles.footnote1, color = AppContentColors.secondaryText())
         }
         AppSurface(
             modifier = Modifier.fillMaxWidth(),
-            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.38f),
+            color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.38f),
             shape = AppShapes.container(ContainerLevel.Card),
         ) {
             Column(content = content)
@@ -694,12 +696,12 @@ private fun SponsorBlockCategorySettingsSection(
         settings.forEach { setting ->
             AppSurface(
                 modifier = Modifier.fillMaxWidth(),
-                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.62f),
+                color = AppSurfaceTokens.surface().copy(alpha = 0.62f),
                 shape = AppShapes.container(ContainerLevel.Card),
             ) {
                 Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    AppText(setting.title, style = MaterialTheme.typography.titleSmall, color = AppContentColors.primaryText())
-                    AppText(setting.description, style = MaterialTheme.typography.bodySmall, color = AppContentColors.secondaryText())
+                    AppText(setting.title, style = COUITheme.textStyles.headline2, color = AppContentColors.primaryText())
+                    AppText(setting.description, style = COUITheme.textStyles.footnote1, color = AppContentColors.secondaryText())
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         SponsorBlockSegmentBehavior.entries.forEach { behavior ->
                             AppFilterChip(
@@ -725,7 +727,7 @@ private fun SponsorBlockInsightPanel(
         modifier = Modifier
             .fillMaxWidth()
             .clip(AppShapes.container(ContainerLevel.Card))
-            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.42f))
+            .background(AppSurfaceTokens.surfaceContainer().copy(alpha = 0.42f))
             .padding(14.dp)
     ) {
         val useWideLayout = maxWidth >= 460.dp
@@ -822,13 +824,13 @@ private fun SponsorBlockSummaryHeader(summary: SponsorBlockInsightSummary) {
         ) {
             AppText(
                 text = "跳过统计",
-                style = MaterialTheme.typography.titleMedium,
+                style = COUITheme.textStyles.headline1,
                 fontWeight = FontWeight.SemiBold,
                 color = AppContentColors.primaryText()
             )
             AppText(
                 text = "记录只保存在本地",
-                style = MaterialTheme.typography.labelMedium,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText(),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -842,7 +844,7 @@ private fun SponsorBlockSummaryHeader(summary: SponsorBlockInsightSummary) {
         ) {
             AppText(
                 text = "${summary.totalSkipCount} 次",
-                style = MaterialTheme.typography.labelMedium,
+                style = COUITheme.textStyles.footnote1,
                 color = sponsorBlockBadgeContentColor(),
                 fontWeight = FontWeight.Medium
             )
@@ -856,7 +858,7 @@ private fun SponsorBlockCompactStats(summary: SponsorBlockInsightSummary) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(AppShapes.container(ContainerLevel.Card))
-            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.72f))
+            .background(AppSurfaceTokens.surface().copy(alpha = 0.72f))
             .padding(horizontal = 10.dp, vertical = 9.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -897,13 +899,13 @@ private fun SponsorBlockCompactStatItem(
     ) {
         AppText(
             text = title,
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             color = AppContentColors.secondaryText(),
             maxLines = 1
         )
         AppText(
             text = value,
-            style = MaterialTheme.typography.labelLarge,
+            style = COUITheme.textStyles.button,
             color = AppContentColors.primaryText(),
             fontWeight = FontWeight.SemiBold,
             maxLines = 1,
@@ -918,13 +920,13 @@ private fun SponsorBlockPeriodStats(summary: SponsorBlockInsightSummary) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(AppShapes.container(ContainerLevel.Card))
-            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.72f))
+            .background(AppSurfaceTokens.surface().copy(alpha = 0.72f))
             .padding(horizontal = 10.dp, vertical = 9.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         AppText(
             text = "频次对比",
-            style = MaterialTheme.typography.labelLarge,
+            style = COUITheme.textStyles.button,
             color = AppContentColors.secondaryText(),
             fontWeight = FontWeight.Medium
         )
@@ -936,12 +938,12 @@ private fun SponsorBlockPeriodStats(summary: SponsorBlockInsightSummary) {
             ) {
                 AppText(
                     text = stat.label,
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.primaryText()
                 )
                 AppText(
                     text = "${stat.skipCount} 次 · ${stat.uniqueVideoCount} 个视频",
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText()
                 )
             }
@@ -961,7 +963,7 @@ private fun SponsorBlockFavoriteSection(summary: SponsorBlockInsightSummary) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(AppShapes.container(ContainerLevel.Card))
-            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.72f))
+            .background(AppSurfaceTokens.surface().copy(alpha = 0.72f))
             .padding(horizontal = 10.dp, vertical = 9.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
@@ -975,12 +977,12 @@ private fun SponsorBlockFavoriteRow(title: String, value: String) {
     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
         AppText(
             text = title,
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             color = AppContentColors.secondaryText()
         )
         AppText(
             text = value,
-            style = MaterialTheme.typography.labelMedium,
+            style = COUITheme.textStyles.footnote1,
             fontWeight = FontWeight.Medium,
             color = AppContentColors.primaryText(),
             maxLines = 2,
@@ -1009,7 +1011,7 @@ internal fun SponsorBlockRecentSection(
             ) {
                 AppText(
                     text = "最近跳过 · ${summary.recentRecords.size} 条",
-                    style = MaterialTheme.typography.labelLarge,
+                    style = COUITheme.textStyles.button,
                     color = AppContentColors.secondaryText(),
                     fontWeight = FontWeight.Medium,
                     modifier = Modifier.weight(1f),
@@ -1036,18 +1038,18 @@ private fun SponsorBlockStatTile(
     Column(
         modifier = modifier
             .clip(AppShapes.container(ContainerLevel.Card))
-            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.72f))
+            .background(AppSurfaceTokens.surface().copy(alpha = 0.72f))
             .padding(horizontal = 12.dp, vertical = 10.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         AppText(
             text = title,
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             color = AppContentColors.secondaryText()
         )
         AppText(
             text = value,
-            style = MaterialTheme.typography.titleSmall,
+            style = COUITheme.textStyles.headline2,
             fontWeight = FontWeight.SemiBold,
             color = AppContentColors.primaryText()
         )
@@ -1060,13 +1062,13 @@ private fun SponsorBlockEmptyInsight() {
         modifier = Modifier
             .fillMaxWidth()
             .clip(AppShapes.container(ContainerLevel.Card))
-            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.62f))
+            .background(AppSurfaceTokens.surface().copy(alpha = 0.62f))
             .padding(horizontal = 14.dp, vertical = 18.dp),
         contentAlignment = Alignment.Center
     ) {
         AppText(
             text = "还没有跳过记录",
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = AppContentColors.secondaryText()
         )
     }
@@ -1086,7 +1088,7 @@ private fun SponsorBlockRecordRow(record: SponsorBlockSkipRecord) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(AppShapes.container(ContainerLevel.Card))
-            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.7f))
+            .background(AppSurfaceTokens.surface().copy(alpha = 0.7f))
             .combinedClickable(
                 onClick = {},
                 onLongClick = { showDetailDialog = true }
@@ -1105,7 +1107,7 @@ private fun SponsorBlockRecordRow(record: SponsorBlockSkipRecord) {
                 .fillMaxWidth()
                 .aspectRatio(SPONSOR_BLOCK_RECENT_COVER_ASPECT_RATIO)
                 .clip(AppShapes.container(ContainerLevel.Chip))
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .background(AppSurfaceTokens.surfaceContainer())
         )
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -1113,7 +1115,7 @@ private fun SponsorBlockRecordRow(record: SponsorBlockSkipRecord) {
         ) {
             AppText(
                 text = record.videoTitle.ifBlank { "未知视频" },
-                style = MaterialTheme.typography.titleSmall,
+                style = COUITheme.textStyles.headline2,
                 fontWeight = FontWeight.SemiBold,
                 color = AppContentColors.primaryText(),
                 maxLines = 2,
@@ -1133,11 +1135,11 @@ private fun SponsorBlockRecordRow(record: SponsorBlockSkipRecord) {
                     modifier = Modifier
                         .size(20.dp)
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .background(AppSurfaceTokens.surfaceContainer())
                 )
                 AppText(
                     text = record.upName.ifBlank { "未知 UP" },
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -1153,7 +1155,7 @@ private fun SponsorBlockRecordRow(record: SponsorBlockSkipRecord) {
             }
             AppText(
                 text = "${record.progressText}  ·  节省 ${record.savedText}",
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 color = AppContentColors.secondaryText()
             )
         }
@@ -1198,12 +1200,12 @@ private fun SponsorBlockDetailLine(
     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
         AppText(
             text = label,
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             color = AppContentColors.secondaryText()
         )
         AppText(
             text = value,
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = AppContentColors.primaryText()
         )
     }
@@ -1211,7 +1213,7 @@ private fun SponsorBlockDetailLine(
 
 @Composable
 private fun sponsorBlockBadgeContainerColor(alpha: Float): Color =
-    if (isMiuixNonGlassEnabled()) MaterialTheme.colorScheme.surfaceContainerHighest
+    if (isMiuixNonGlassEnabled()) AppSurfaceTokens.surfaceContainerHighest()
     else AppContentColors.accent().copy(alpha = alpha)
 
 @Composable
@@ -1229,7 +1231,7 @@ private fun SponsorBlockChip(text: String) {
     ) {
         AppText(
             text = text,
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             color = sponsorBlockBadgeContentColor(),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis

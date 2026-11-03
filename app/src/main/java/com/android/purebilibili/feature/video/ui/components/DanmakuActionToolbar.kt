@@ -1,6 +1,10 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppIcons
+import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+import com.android.purebilibili.core.ui.AppShapes
+import com.android.purebilibili.core.ui.ContainerLevel
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
@@ -10,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -86,8 +89,8 @@ internal fun DanmakuActionToolbar(
         // The shared popup surface selects glass explicitly and retains MD3/Miuix rendering otherwise.
         AppPopupSurface(
             type = AppPopupSurfaceType.DIALOG,
-            shape = RoundedCornerShape(12.dp),
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            shape = AppShapes.container(ContainerLevel.MediaCover),
+            containerColor = AppSurfaceTokens.surfaceContainerHigh(),
             tonalElevation = 3.dp,
             modifier = modifier.widthIn(max = maxWidth),
         ) {
@@ -133,6 +136,6 @@ private fun ToolbarAction(
 ) {
     AppIconButton(onClick = onClick, enabled = enabled, modifier = modifier.size(40.dp)) {
         AppIcon(icon, description, Modifier.size(20.dp), tint =
-            if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface)
+            if (selected) AppContentColors.accent() else AppContentColors.primaryText())
     }
 }

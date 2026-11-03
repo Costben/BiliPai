@@ -1,7 +1,6 @@
 package com.android.purebilibili.feature.article
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -13,6 +12,7 @@ import com.android.purebilibili.core.ui.components.AppTextButton
 import com.android.purebilibili.data.model.response.ArticleCollectionData
 import com.android.purebilibili.data.model.response.ArticleCollectionInfo
 import com.android.purebilibili.data.model.response.ArticleCollectionItem
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 internal fun ArticleCollectionNavigation(
@@ -49,7 +49,7 @@ internal fun ArticleCollectionNavigation(
                 color = AppContentColors.secondaryText(),
             )
             else -> {
-                AppText("第 ${neighbors.position} / ${neighbors.total} 篇", style = MaterialTheme.typography.labelMedium,
+                AppText("第 ${neighbors.position} / ${neighbors.total} 篇", style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText())
                 BoxWithConstraints(Modifier.fillMaxWidth()) {
                     if (maxWidth >= 400.dp) {
@@ -83,7 +83,7 @@ private fun ArticleNeighborButton(
         modifier = modifier.fillMaxWidth().heightIn(min = 48.dp),
     ) {
         Column(Modifier.fillMaxWidth()) {
-            AppText(label, style = MaterialTheme.typography.labelMedium, tapToCopyEnabled = false)
+            AppText(label, style = COUITheme.textStyles.footnote1, tapToCopyEnabled = false)
             AppText(article?.let { it.title.ifBlank { "专栏 cv${it.id}" } } ?: boundaryLabel,
                 maxLines = 2, overflow = TextOverflow.Ellipsis, tapToCopyEnabled = false)
         }

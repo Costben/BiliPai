@@ -3,6 +3,7 @@
 package com.android.purebilibili.feature.bangumi
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.navigation.tabSelectedPage
 import com.android.purebilibili.navigation.tabIndicatorPosition
@@ -28,7 +29,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -257,7 +257,7 @@ fun BangumiReviewScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .layerBackdrop(reviewChromeBackdrop)
-                    .background(MaterialTheme.colorScheme.background),
+                    .background(AppSurfaceTokens.background()),
             )
             Column(modifier = Modifier.fillMaxSize()) {
             Row(
@@ -292,7 +292,7 @@ fun BangumiReviewScreen(
                     itemWidth = if (com.android.purebilibili.core.ui.LocalAppThemeConfig.current.liquidGlassEnabled) null else 66.dp,
                     height = AppChromeSizeTokens.BottomBarMatchedSegmentedControlHeightDp.dp,
                     indicatorHeight = AppChromeSizeTokens.BottomBarMatchedSegmentedIndicatorHeightDp.dp,
-                    labelFontSize = MaterialTheme.typography.labelMedium.fontSize,
+                    labelFontSize = COUITheme.textStyles.footnote1.fontSize,
                     miuixBackdrop = reviewChromeBackdrop,
                     liquidGlassEffectsEnabled = true,
                     dragSelectionEnabled = reviewTypes.size > 1,
@@ -308,7 +308,7 @@ fun BangumiReviewScreen(
                     itemWidth = if (com.android.purebilibili.core.ui.LocalAppThemeConfig.current.liquidGlassEnabled) null else 66.dp,
                     height = AppChromeSizeTokens.BottomBarMatchedSegmentedControlHeightDp.dp,
                     indicatorHeight = AppChromeSizeTokens.BottomBarMatchedSegmentedIndicatorHeightDp.dp,
-                    labelFontSize = MaterialTheme.typography.labelMedium.fontSize,
+                    labelFontSize = COUITheme.textStyles.footnote1.fontSize,
                     miuixBackdrop = reviewChromeBackdrop,
                     liquidGlassEffectsEnabled = true,
                     dragSelectionEnabled = sortLabels.size > 1,
@@ -654,7 +654,7 @@ private fun BangumiShortReviewComposer(
                     singleLine = false,
                     minLines = 3
                 )
-                AppText("${content.length}/100", style = MaterialTheme.typography.bodySmall)
+                AppText("${content.length}/100", style = COUITheme.textStyles.footnote1)
                 if (initialReview == null) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                         AppText("分享到动态")

@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.matchinfo
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import com.android.purebilibili.core.ui.AppIcons
 
 import androidx.compose.foundation.layout.Arrangement
@@ -13,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -165,7 +166,7 @@ private fun MatchContestCard(
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 AppText(
                     contest.season?.title?.ifBlank { null } ?: "游戏赛事",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -186,7 +187,7 @@ private fun MatchContestCard(
                             }
                         )
                     },
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = if (contest.contestStatus == MATCH_CONTEST_STATUS_LIVING) {
                         AppSurfaceTokens.primary()
                     } else {
@@ -209,7 +210,7 @@ private fun MatchContestCard(
                         } else {
                             "VS"
                         },
-                        style = MaterialTheme.typography.headlineSmall,
+                        style = COUITheme.textStyles.title4,
                     )
                 }
                 MatchTeamContent(contest.awayTeam, Modifier.weight(1f))
@@ -259,7 +260,7 @@ private fun MatchTeamContent(team: MatchContestTeam?, modifier: Modifier = Modif
         }
         AppText(
             team?.title?.ifBlank { "待定" } ?: "待定",
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,

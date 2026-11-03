@@ -79,6 +79,8 @@ import com.android.purebilibili.core.ui.animation.entrance
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppAlertDialog
 
 /**
  *  播放设置二级页面
@@ -465,18 +467,18 @@ SettingsItemAnchor("playback.video_second_codec_preference") {
                                     )
                                     AppText(
                                         text = "调整长按加速提示的整体大小",
-                                        style = MaterialTheme.typography.bodySmall,
+                                        style = COUITheme.textStyles.footnote1,
                                         color = AppContentColors.secondaryText()
                                     )
                                 }
                                 AppSurface(
                                     shape = AppShapes.container(ContainerLevel.Pill),
-                                    color = MaterialTheme.colorScheme.primaryContainer
+                                    color = AppSurfaceTokens.primaryContainer()
                                 ) {
                                     AppText(
                                         text = "${(hintScale * 100f).roundToInt()}%",
-                                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                        style = MaterialTheme.typography.labelMedium,
+                                        color = AppSurfaceTokens.onPrimaryContainer(),
+                                        style = COUITheme.textStyles.footnote1,
                                         fontWeight = FontWeight.SemiBold,
                                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
                                     )
@@ -510,18 +512,18 @@ SettingsItemAnchor("playback.video_second_codec_preference") {
                                     )
                                     AppText(
                                         text = "调高后，倍速提示和其他提示的背景更深",
-                                        style = MaterialTheme.typography.bodySmall,
+                                        style = COUITheme.textStyles.footnote1,
                                         color = AppContentColors.secondaryText()
                                     )
                                 }
                                 AppSurface(
                                     shape = AppShapes.container(ContainerLevel.Pill),
-                                    color = MaterialTheme.colorScheme.primaryContainer
+                                    color = AppSurfaceTokens.primaryContainer()
                                 ) {
                                     AppText(
                                         text = "${(hintAlpha * 100f).roundToInt()}%",
-                                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                        style = MaterialTheme.typography.labelMedium,
+                                        color = AppSurfaceTokens.onPrimaryContainer(),
+                                        style = COUITheme.textStyles.footnote1,
                                         fontWeight = FontWeight.SemiBold,
                                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
                                     )
@@ -880,12 +882,12 @@ SettingsItemAnchor("playback.music_lyrics_ui_style") {
                                 Column(modifier = Modifier.weight(1f)) {
                                     AppText(
                                         "画中画权限未开启",
-                                        style = MaterialTheme.typography.bodyMedium,
+                                        style = COUITheme.textStyles.body1,
                                         color = warningTint
                                     )
                                     AppText(
                                         "点击前往系统设置开启",
-                                        style = MaterialTheme.typography.bodySmall,
+                                        style = COUITheme.textStyles.footnote1,
                                         color = AppContentColors.secondaryText()
                                     )
                                 }
@@ -1186,7 +1188,7 @@ SettingsSingleChoicePreference(
                             ) {
                                 AppText(
                                     text = "省流量模式下，画质最高为 480P",
-                                    style = MaterialTheme.typography.labelSmall,
+                                    style = COUITheme.textStyles.footnote2,
                                     color = AppContentColors.success().copy(alpha = 0.8f)
                                 )
                             }
@@ -2123,7 +2125,7 @@ private fun PlaybackFullscreenGestureSettingsSection(
                 Column(modifier = Modifier.weight(1f)) {
                     AppText(
                         text = "双击快进或后退",
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = COUITheme.textStyles.main,
                         color = AppContentColors.primaryText()
                     )
                     AppText(
@@ -2132,7 +2134,7 @@ private fun PlaybackFullscreenGestureSettingsSection(
                         } else {
                             "双击只切换播放或暂停"
                         },
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                 }

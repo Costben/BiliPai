@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.audio.screen
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -405,9 +406,9 @@ internal fun Music3DCoverFlow(
                                                 brush = Brush.linearGradient(
                                                     listOf(
                                                         MaterialTheme.colorScheme.surfaceBright.copy(alpha = 0.52f),
-                                                        MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.18f),
+                                                        AppSurfaceTokens.outline().copy(alpha = 0.18f),
                                                         MaterialTheme.colorScheme.surfaceBright.copy(alpha = 0.38f),
-                                                        MaterialTheme.colorScheme.outline.copy(alpha = 0.08f)
+                                                        AppSurfaceTokens.outline().copy(alpha = 0.08f)
                                                     )
                                                 ),
                                                 shape = RoundedCornerShape(6.dp)
@@ -431,7 +432,7 @@ internal fun Music3DCoverFlow(
                                                         listOf(
                                                             MaterialTheme.colorScheme.surfaceBright.copy(alpha = 0.50f),
                                                             shelfShadowColor.copy(alpha = 0.40f),
-                                                            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.28f),
+                                                            AppSurfaceTokens.outline().copy(alpha = 0.28f),
                                                             Color.Transparent
                                                         )
                                                     )
@@ -554,7 +555,7 @@ internal fun Music3DCoverFlow(
             // 底部悬浮胶囊控制条（主题色容器 + 歌名 - 歌手 + 心形/上一首/播放/下一首）
             val playingItem = queue[validCurrentIndex]
             val pillContainerColor = AppSurfaceTokens.surfaceContainer()
-            val pillBorderColor = MaterialTheme.colorScheme.outlineVariant
+            val pillBorderColor = AppSurfaceTokens.outline()
             val pillContentColor = AppContentColors.primaryText()
             // 玻璃开启时各唱片架共用背景采样；关闭时保留原生控制条。
             val useControlGlass = glassEnabled && miuixBackdrop != null
@@ -599,7 +600,7 @@ internal fun Music3DCoverFlow(
                     AppText(
                         text = "${playingItem.title} - ${playingItem.artist.ifBlank { "未知艺术家" }}",
                         color = pillContentColor.copy(alpha = 0.95f),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         fontWeight = FontWeight.Medium,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,

@@ -1,6 +1,8 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import com.android.purebilibili.core.ui.components.appActionClickable
 import com.android.purebilibili.core.ui.components.appActionWithFeedback
@@ -134,6 +136,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
+import com.android.purebilibili.core.ui.AppAlertDialog
+import com.android.purebilibili.core.ui.components.AppDropdownMenuItem
 
 // 表情 token 规则下沉 core-data（CommentMediaPolicy），手机原入口保留并委托。
 internal val EMOTE_TOKEN_PATTERN = COMMENT_EMOTE_TOKEN_PATTERN
@@ -1262,13 +1266,13 @@ fun ReplyHeader(count: Int) {
     ) {
         AppText(
             text = "评论",
-            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+            style = COUITheme.textStyles.headline1.copy(fontWeight = FontWeight.Bold),
             color = AppContentColors.primaryText()
         )
         Spacer(modifier = Modifier.width(8.dp))
         AppText(
             text = FormatUtils.formatStat(count.toLong()),
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = AppContentColors.secondaryText()
         )
     }
@@ -2789,13 +2793,13 @@ private fun FansMedalTag(detail: ReplyFansDetail) {
         ) {
             AppText(
                 text = detail.medalName,
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 color = nameColor,
                 maxLines = 1,
             )
             AppText(
                 text = " ${detail.level}",
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 fontWeight = FontWeight.Bold,
                 color = nameColor,
                 maxLines = 1,
@@ -2816,7 +2820,7 @@ private fun FansMedalTag(detail: ReplyFansDetail) {
     ) {
         AppText(
             text = detail.medalName,
-            style = MaterialTheme.typography.labelSmall,
+            style = COUITheme.textStyles.footnote2,
             fontWeight = FontWeight.Medium,
             color = nameColor,
             maxLines = 1,
@@ -2830,7 +2834,7 @@ private fun FansMedalTag(detail: ReplyFansDetail) {
         ) {
             AppText(
                 text = detail.level.toString(),
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
             )
@@ -2947,7 +2951,7 @@ internal fun FanGroupDecorationBadge(
         if (fanNumberText.isNotBlank()) {
             val textColor = resolveFanGroupLabelTextColor(
                 fanColorHex = visual.fanColorHex,
-                backgroundColor = MaterialTheme.colorScheme.surface,
+                backgroundColor = AppSurfaceTokens.surface(),
                 fallbackColor = AppContentColors.primaryText()
             )
             Column(
@@ -2956,7 +2960,7 @@ internal fun FanGroupDecorationBadge(
             ) {
                 AppText(
                     text = "NO.",
-                    style = MaterialTheme.typography.labelSmall.copy(
+                    style = COUITheme.textStyles.footnote2.copy(
                         fontSize = 7.sp,
                         lineHeight = 8.sp,
                         fontWeight = FontWeight.SemiBold
@@ -2966,7 +2970,7 @@ internal fun FanGroupDecorationBadge(
                 )
                 AppText(
                     text = fanNumberText,
-                    style = MaterialTheme.typography.labelSmall.copy(
+                    style = COUITheme.textStyles.footnote2.copy(
                         fontSize = 8.sp,
                         lineHeight = 9.sp,
                         fontWeight = FontWeight.Bold
@@ -3033,7 +3037,7 @@ private fun parseHexColorOrNull(hex: String?): Color? {
 internal fun ReplySpecialLabelChip(text: String) {
     AppText(
         text = text,
-        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium),
+        style = COUITheme.textStyles.footnote2.copy(fontWeight = FontWeight.Medium),
         color = AppContentColors.accent()
     )
 }
@@ -3212,7 +3216,7 @@ private fun ReplyActionSheetItem(
     }
     AppText(
         text = label,
-        style = MaterialTheme.typography.bodyLarge,
+        style = COUITheme.textStyles.main,
         color = if (isDestructive) AppContentColors.error() else AppContentColors.primaryText(),
         modifier = Modifier
             .fillMaxWidth()
@@ -3229,7 +3233,7 @@ fun UpTag() {
 
 @Composable
 fun TopTag(modifier: Modifier = Modifier) {
-    val labelStyle = MaterialTheme.typography.labelSmall
+    val labelStyle = COUITheme.textStyles.footnote2
     // TOP 没有下伸部，行框居中后仍会显得偏下；按字号补偿视觉中心。
     val opticalOffset = with(androidx.compose.ui.platform.LocalDensity.current) {
         (labelStyle.fontSize * -0.08f).toDp()
@@ -3267,7 +3271,7 @@ fun TopTag(modifier: Modifier = Modifier) {
 // 充电评论使用主题 tertiaryContainer / onTertiaryContainer，并保留闪电身份标识。
 @Composable
 fun ChargedReplyTag(text: String, modifier: Modifier = Modifier) {
-    val labelStyle = MaterialTheme.typography.labelSmall
+    val labelStyle = COUITheme.textStyles.footnote2
     val chargedContainer = MaterialTheme.colorScheme.tertiaryContainer
     val chargedContent = MaterialTheme.colorScheme.onTertiaryContainer
     val opticalOffset = with(androidx.compose.ui.platform.LocalDensity.current) {
@@ -3439,7 +3443,7 @@ fun CommentPictures(
                     .aspectRatio(aspectRatio)
                     .alpha(if (sourceHidden) 0f else 1f)
                     .clip(AppShapes.container(ContainerLevel.Card))  //  [优化] 更大圆角 8dp → 12dp
-                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .background(AppSurfaceTokens.surfaceContainer())
                     .onGloballyPositioned { coordinates ->
                         imageRect = coordinates.boundsInWindow()
                         imageRect?.let { galleryRects[0] = it }
@@ -3491,7 +3495,7 @@ fun CommentPictures(
                                     .testTag("${testTagPrefix}$globalIndex")
                                     .alpha(if (sourceHidden) 0f else 1f)
                                     .clip(AppShapes.container(ContainerLevel.Field))  //  [优化] 更大圆角 6dp → 10dp
-                                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                                    .background(AppSurfaceTokens.surfaceContainer())
                                     .onGloballyPositioned { coordinates ->
                                         imageRect = coordinates.boundsInWindow()
                                         imageRect?.let { galleryRects[globalIndex] = it }
@@ -3534,7 +3538,7 @@ fun CommentPictures(
                                         AppText(
                                             "+${totalCount - 9}",
                                             color = Color.White,
-                                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
+                                            style = COUITheme.textStyles.title4.copy(fontWeight = FontWeight.Bold)
                                         )
                                     }
                                 }

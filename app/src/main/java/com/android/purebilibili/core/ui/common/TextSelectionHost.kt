@@ -2,6 +2,12 @@
 
 package com.android.purebilibili.core.ui.common
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+import com.android.purebilibili.core.ui.AppShapes
+import com.android.purebilibili.core.ui.ContainerLevel
+
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.core.ui.components.AppSurface
@@ -22,7 +28,6 @@ import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.text.selection.SelectionState
 import androidx.compose.foundation.text.selection.rememberSelectionState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -130,12 +135,12 @@ internal fun AppFloatingSelectionToolbar(
         DisableSelection {
             AppSurface(
                 shape = RoundedCornerShape(24.dp),
-            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+            color = AppSurfaceTokens.surfaceContainerHigh(),
             tonalElevation = 6.dp,
             shadowElevation = 8.dp,
             border = BorderStroke(
                 width = 0.5.dp,
-                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f)
+                color = AppSurfaceTokens.outline().copy(alpha = 0.6f)
             )
         ) {
             Row(
@@ -147,14 +152,14 @@ internal fun AppFloatingSelectionToolbar(
                 val characterCount = selectedText.length
                 if (characterCount > 0) {
                     AppSurface(
-                        shape = RoundedCornerShape(12.dp),
-                        color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.65f),
+                        shape = AppShapes.container(ContainerLevel.MediaCover),
+                        color = AppSurfaceTokens.primaryContainer().copy(alpha = 0.65f),
                         modifier = Modifier.padding(start = 4.dp, end = 2.dp)
                     ) {
                         AppText(
                             text = TextSelectionPolicy.formatSelectedCountBadge(characterCount),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            style = COUITheme.textStyles.footnote2,
+                            color = AppSurfaceTokens.onPrimaryContainer(),
                             modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp)
                         )
                     }
@@ -179,13 +184,13 @@ internal fun AppFloatingSelectionToolbar(
                             imageVector = AppIcons.Outlined.ContentCopy,
                             contentDescription = "复制",
                             modifier = Modifier.size(16.dp),
-                            tint = MaterialTheme.colorScheme.primary
+                            tint = AppContentColors.accent()
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         AppText(
                             text = "复制",
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.primary
+                            style = COUITheme.textStyles.footnote1,
+                            color = AppContentColors.accent()
                         )
                     }
                 }
@@ -196,7 +201,7 @@ internal fun AppFloatingSelectionToolbar(
                         modifier = Modifier
                             .width(1.dp)
                             .height(14.dp)
-                            .background(MaterialTheme.colorScheme.outlineVariant)
+                            .background(AppSurfaceTokens.outline())
                     )
 
                     AppTextButton(
@@ -207,8 +212,8 @@ internal fun AppFloatingSelectionToolbar(
                     ) {
                         AppText(
                             text = "弹窗选择",
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.onSurface
+                            style = COUITheme.textStyles.footnote1,
+                            color = AppContentColors.primaryText()
                         )
                     }
                 }
@@ -219,7 +224,7 @@ internal fun AppFloatingSelectionToolbar(
                         modifier = Modifier
                             .width(1.dp)
                             .height(14.dp)
-                            .background(MaterialTheme.colorScheme.outlineVariant)
+                            .background(AppSurfaceTokens.outline())
                     )
 
                     AppTextButton(
@@ -231,13 +236,13 @@ internal fun AppFloatingSelectionToolbar(
                             imageVector = AppIcons.Filled.SelectAll,
                             contentDescription = "全选",
                             modifier = Modifier.size(16.dp),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            tint = AppContentColors.secondaryText()
                         )
                         Spacer(modifier = Modifier.width(2.dp))
                         AppText(
                             text = "全选",
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            style = COUITheme.textStyles.footnote1,
+                            color = AppContentColors.secondaryText()
                         )
                     }
                 }
@@ -247,7 +252,7 @@ internal fun AppFloatingSelectionToolbar(
                     modifier = Modifier
                         .width(1.dp)
                         .height(14.dp)
-                        .background(MaterialTheme.colorScheme.outlineVariant)
+                        .background(AppSurfaceTokens.outline())
                 )
 
                 AppTextButton(
@@ -267,7 +272,7 @@ internal fun AppFloatingSelectionToolbar(
                         imageVector = AppIcons.Outlined.Share,
                         contentDescription = "分享",
                         modifier = Modifier.size(16.dp),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        tint = AppContentColors.secondaryText()
                     )
                 }
             }

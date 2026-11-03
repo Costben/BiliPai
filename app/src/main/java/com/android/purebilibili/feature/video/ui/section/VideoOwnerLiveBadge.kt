@@ -14,7 +14,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -25,6 +24,7 @@ import com.android.purebilibili.core.ui.rememberDecorativeAnimationGate
 import com.android.purebilibili.data.model.response.SpaceLiveRoom
 import com.android.purebilibili.data.repository.VideoCatalogRepository
 import kotlinx.coroutines.launch
+import com.android.purebilibili.core.ui.AppContentColors
 
 /** 状态绑定 UP 身份并在页面恢复时刷新；未知、请求失败和轮播均不显示开播标识。 */
 @Composable
@@ -57,8 +57,8 @@ internal fun VideoOwnerLiveBadge(
         if (animationGate.active) current?.start() else current?.stop()
         onDispose { current?.stop() }
     }
-    val badgeBackground = MaterialTheme.colorScheme.primary
-    val badgeForeground = MaterialTheme.colorScheme.onPrimary
+    val badgeBackground = AppContentColors.accent()
+    val badgeForeground = AppContentColors.onAccent()
     val themeFilter = remember(badgeBackground, badgeForeground) {
         // 动图粉色底的绿色通道为 114，白色字形为 255；按两端映射保留抗锯齿和动画透明度。
         fun scale(background: Float, foreground: Float) = (foreground - background) * 255f / (255f - 114f)

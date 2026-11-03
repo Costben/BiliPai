@@ -26,7 +26,6 @@ import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import com.android.purebilibili.core.ui.components.AppIcon
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppIconButton
 import com.android.purebilibili.core.ui.components.appGlassMenuSource
 import com.android.purebilibili.core.ui.components.AppWindowAction
@@ -147,7 +146,7 @@ fun DynamicTopBarWithTabs(
         iconSurfaceColor = if (!isProgressiveBlurActive && headerBlurEnabled && hazeState != null) {
             AppSurfaceTokens.cardContainer().copy(alpha = AppSurfaceTokens.FrostedScrimAlpha)
         } else Color.Transparent,
-        surfaceColor = globalWallpaperAwareChromeColor(MaterialTheme.colorScheme.background),
+        surfaceColor = globalWallpaperAwareChromeColor(AppSurfaceTokens.background()),
         // 不让顶栏的渐进模糊向下越界盖住 UP 头像或动态卡片。
         // 顶栏自身渐进模糊效果保持不变，仅收敛其向下延伸。
         extendBelowBounds = false,

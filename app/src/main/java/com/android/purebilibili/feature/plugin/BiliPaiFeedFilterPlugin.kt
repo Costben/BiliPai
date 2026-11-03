@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -45,6 +44,8 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 /**
  * 推荐流过滤插件(移植自 BiliPai 的「推荐流设置」RecommendFilter)。
@@ -266,12 +267,12 @@ class BiliPaiFeedFilterPlugin : BuiltinPlugin, FeedPlugin<VideoItem> {
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             AppText(
                 text = title,
-                style = MaterialTheme.typography.titleMedium,
+                style = COUITheme.textStyles.headline1,
                 color = AppContentColors.primaryText()
             )
             AppSurface(
                 modifier = Modifier.fillMaxWidth().clip(AppShapes.container(ContainerLevel.Card)),
-                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.38f),
+                color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.38f),
             ) {
                 Column(content = content)
             }
@@ -350,13 +351,13 @@ class BiliPaiFeedFilterPlugin : BuiltinPlugin, FeedPlugin<VideoItem> {
         Column(modifier = Modifier.padding(16.dp)) {
             AppText(
                 text = title,
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 color = AppContentColors.primaryText()
             )
             if (subtitle.isNotEmpty()) {
                 AppText(
                     text = subtitle,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText()
                 )
             }

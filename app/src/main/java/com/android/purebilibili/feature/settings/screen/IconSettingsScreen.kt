@@ -49,6 +49,7 @@ import com.android.purebilibili.feature.settings.ui.SettingsPageScaffold
 import com.android.purebilibili.feature.settings.ui.settingsScrollContentPadding
 import com.android.purebilibili.core.ui.resolveBottomSafeAreaPadding
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  *  应用图标设置二级页面
@@ -207,7 +208,7 @@ fun IconSettingsContent(
                     Spacer(modifier = Modifier.width(12.dp))
                     AppText(
                         text = stringResource(R.string.icon_settings_apply_notice),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                 }
@@ -239,7 +240,7 @@ fun IconSettingsContent(
                 item(span = { GridItemSpan(maxLineSpan) }) {
                     AppText(
                         text = stringResource(group.titleResId),
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                        style = COUITheme.textStyles.headline1.copy(fontWeight = FontWeight.Bold),
                         color = AppContentColors.primaryText(),
                         modifier = Modifier.padding(top = 16.dp, bottom = 8.dp, start = 4.dp)
                     )
@@ -314,7 +315,7 @@ fun IconSettingsContent(
 
                         AppText(
                             text = stringResource(option.nameResId),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = COUITheme.textStyles.body1,
                             fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium,
                             color = if (isSelected) AppContentColors.accent()
                                     else AppContentColors.primaryText(),

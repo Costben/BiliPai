@@ -1,6 +1,8 @@
 package com.android.purebilibili.feature.video.ui.overlay.glass
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import com.android.purebilibili.feature.video.ui.overlay.*
 
@@ -406,7 +408,7 @@ fun PortraitFullscreenOverlay(
                             AppText(
                                 text = "正在恢复播放...",
                                 color = Color.White,
-                                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium)
+                                style = COUITheme.textStyles.body1.copy(fontWeight = FontWeight.Medium)
                             )
                         }
                     }
@@ -502,7 +504,7 @@ private fun PortraitProgressControlStrip(
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp),
                 text = timeLabel,
                 color = Color.White.copy(alpha = 0.86f),
-                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Medium)
+                style = COUITheme.textStyles.footnote2.copy(fontWeight = FontWeight.Medium)
             )
         }
         Spacer(modifier = Modifier.weight(1f))
@@ -572,7 +574,7 @@ private fun PortraitChromeChip(
             ) {
                 AppText(
                     text = label,
-                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
+                    style = COUITheme.textStyles.footnote2.copy(fontWeight = FontWeight.SemiBold),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -845,7 +847,7 @@ private fun PortraitVideoInfo(
             maxLines = 3,
             lineHeight = layoutPolicy.titleLineHeightSp.sp,
             overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             modifier = Modifier.clickable { onTitleClick() }
         )
         if (declarations.isNotEmpty()) {
@@ -866,7 +868,7 @@ private fun PortraitVideoInfo(
                         )
                         AppText(
                             text = message,
-                            style = MaterialTheme.typography.bodySmall.copy(
+                            style = COUITheme.textStyles.footnote1.copy(
                                 shadow = androidx.compose.ui.graphics.Shadow(
                                     color = Color.Black,
                                     blurRadius = 3f,
@@ -934,12 +936,12 @@ private fun PortraitStaffSheet(
     val scope = rememberCoroutineScope()
     AppModalBottomSheet(
         onDismissRequest = onDismiss,
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = AppSurfaceTokens.surface(),
         contentColor = AppContentColors.primaryText()
     ) {
         AppText(
             text = "联合创作 · 共 ${staff.size} 人",
-            style = MaterialTheme.typography.titleMedium,
+            style = COUITheme.textStyles.headline1,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)
         )
@@ -960,13 +962,13 @@ private fun PortraitStaffSheet(
                     modifier = Modifier
                         .size(40.dp)
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .background(AppSurfaceTokens.surfaceContainer())
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Column(modifier = Modifier.weight(1f)) {
                     AppText(
                         text = member.name.ifBlank { "用户${member.mid}" },
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         fontWeight = FontWeight.SemiBold,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -974,7 +976,7 @@ private fun PortraitStaffSheet(
                     if (member.title.isNotBlank()) {
                         AppText(
                             text = member.title,
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText()
                         )
                     }
@@ -1009,7 +1011,7 @@ private fun PortraitStaffSheet(
                             text = if (isFollowing) "已关注" else "关注",
                             maxLines = 1,
                             softWrap = false,
-                            style = MaterialTheme.typography.labelMedium,
+                            style = COUITheme.textStyles.footnote1,
                             color = if (isFollowing) {
                                 AppContentColors.primaryText().copy(alpha = 0.72f)
                             } else {
@@ -1021,7 +1023,7 @@ private fun PortraitStaffSheet(
                 } else if (member.mid == ownerMid) {
                     AppText(
                         text = "UP 主",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppContentColors.accent()
                     )
                 }

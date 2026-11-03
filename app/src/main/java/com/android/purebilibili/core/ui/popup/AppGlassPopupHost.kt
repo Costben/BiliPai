@@ -1,5 +1,7 @@
 package com.android.purebilibili.core.ui.popup
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import com.android.purebilibili.core.ui.AppIcons
 
 import androidx.activity.compose.BackHandler
@@ -1421,8 +1423,8 @@ private fun AppGlassChoicePopupCard(
                                     tapToCopyEnabled = false,
                                     // 保持各主题原生菜单的字号和字重，玻璃只改变弹窗材质。
                                     style = if (LocalAppUiStyle.current.usesMiuixFamilySkin) {
-                                        MaterialTheme.typography.bodyMedium
-                                    } else MaterialTheme.typography.bodyLarge,
+                                        COUITheme.textStyles.body1
+                                    } else COUITheme.textStyles.main,
                                     fontWeight = if (LocalAppUiStyle.current.usesMiuixFamilySkin) {
                                         FontWeight.Medium
                                     } else null,
@@ -1433,7 +1435,7 @@ private fun AppGlassChoicePopupCard(
                                     AppText(
                                         text = description,
                                         tapToCopyEnabled = false,
-                                        style = MaterialTheme.typography.bodySmall,
+                                        style = COUITheme.textStyles.footnote1,
                                         color = AppContentColors.secondaryText(),
                                     )
                                 }

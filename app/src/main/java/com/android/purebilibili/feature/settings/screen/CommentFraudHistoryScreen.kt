@@ -46,6 +46,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -166,7 +168,7 @@ fun CommentFraudHistoryScreen(
             Column(Modifier.fillMaxSize()) {
                 if (archiveMode) {
                     Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
-                        AppText("自动保存本机成功发送的评论；不补拉历史评论。", style = MaterialTheme.typography.bodySmall)
+                        AppText("自动保存本机成功发送的评论；不补拉历史评论。", style = COUITheme.textStyles.footnote1)
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             AppTextButton(onClick = { showAllAccounts = false }) {
                                 AppText(if (!showAllAccounts) "✓ 当前账号" else "当前账号")
@@ -180,7 +182,7 @@ fun CommentFraudHistoryScreen(
                             modifier = Modifier.fillMaxWidth(),
                             label = { AppText("搜索评论内容或原内容 ID") }, singleLine = true,
                         )
-                        AppText(if (loadedRecords == null) "正在读取评论…" else "${records.size} 条记录", modifier = Modifier.padding(vertical = 8.dp), style = MaterialTheme.typography.bodySmall)
+                        AppText(if (loadedRecords == null) "正在读取评论…" else "${records.size} 条记录", modifier = Modifier.padding(vertical = 8.dp), style = COUITheme.textStyles.footnote1)
                     }
                 }
                 if (loadedRecords == null) {
@@ -200,13 +202,13 @@ fun CommentFraudHistoryScreen(
                             Spacer(modifier = Modifier.height(16.dp))
                             AppText(
                                 text = if (archiveMode) "暂无匹配的本地评论" else "暂无评论检查记录",
-                                style = MaterialTheme.typography.titleMedium,
+                                style = COUITheme.textStyles.headline1,
                                 color = AppContentColors.secondaryText()
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                             AppText(
                                 text = if (archiveMode) "可切换全部本地记录，或导入 JSON 备份" else "在此查看已发评论是否正常显示",
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText()
                             )
                         }
@@ -386,7 +388,7 @@ private fun CommentFraudItemCard(
             .fillMaxWidth()
             .animateContentSize(), // 👈 手风琴平滑展开折叠动画
         shape = AppCardShape.Semantic(ContainerLevel.Card),
-        colors = AppCardDefaults.colors(containerColor = MaterialTheme.colorScheme.surface),
+        colors = AppCardDefaults.colors(containerColor = AppSurfaceTokens.surface()),
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
 
@@ -401,13 +403,13 @@ private fun CommentFraudItemCard(
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f, fill = false)) {
                     AppText(
                         text = postTimeStr,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                     Spacer(modifier = Modifier.width(AppSpacingTokens.Small))
                     AppText(
                         text = record.source_id ?: "OID: ${record.oid}",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         fontWeight = FontWeight.Bold,
                         color = AppContentColors.link()
                     )
@@ -422,7 +424,7 @@ private fun CommentFraudItemCard(
                 ) {
                     AppText(
                         text = statusLabel,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         fontWeight = FontWeight.Bold,
                         color = statusColor
                     )
@@ -434,7 +436,7 @@ private fun CommentFraudItemCard(
             // --- 评论正文内容 (点击复制/展开) ---
             AppText(
                 text = record.message,
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 color = AppContentColors.primaryText(),
                 modifier = Modifier.clickable { onCopyMessage() }
             )
@@ -454,7 +456,7 @@ private fun CommentFraudItemCard(
                         ) {
                             AppText(
                                 if (isRechecking) "更新中…" else "重新检查",
-                                style = MaterialTheme.typography.labelSmall,
+                                style = COUITheme.textStyles.footnote2,
                                 fontWeight = FontWeight.Bold
                             )
                         }
@@ -504,16 +506,16 @@ private fun CommentFraudItemCard(
                     ) {
                         AppText(
                             if (isRechecking) "检查中…" else "重新检查",
-                            style = MaterialTheme.typography.labelMedium
+                            style = COUITheme.textStyles.footnote1
                         )
                     }
 
                     AppTextButton(onClick = onCopyScheme) {
-                        AppText("复制链接", style = MaterialTheme.typography.labelMedium)
+                        AppText("复制链接", style = COUITheme.textStyles.footnote1)
                     }
 
                     AppTextButton(onClick = onDeleteLocal) {
-                        AppText("移除记录", style = MaterialTheme.typography.labelMedium)
+                        AppText("移除记录", style = COUITheme.textStyles.footnote1)
                     }
 
                     AppTextButton(
@@ -521,7 +523,7 @@ private fun CommentFraudItemCard(
                         enabled = canManageRemote,
                         colors = ButtonDefaults.textButtonColors(contentColor = AppContentColors.error())
                     ) {
-                        AppText("删除评论", style = MaterialTheme.typography.labelMedium)
+                        AppText("删除评论", style = COUITheme.textStyles.footnote1)
                     }
                 }
 
@@ -556,13 +558,13 @@ private fun DetailRow(
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f, fill = false)) {
             AppText(
                 text = "$label：",
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText(),
                 fontWeight = FontWeight.Medium
             )
             AppText(
                 text = value,
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = valueColor,
                 fontWeight = FontWeight.Normal
             )

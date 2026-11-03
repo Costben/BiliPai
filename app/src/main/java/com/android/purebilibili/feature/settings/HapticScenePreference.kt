@@ -34,6 +34,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.android.purebilibili.core.store.SettingsManager
 import com.android.purebilibili.core.ui.AppAlertDialog
 import com.android.purebilibili.core.ui.AppDialogAction
@@ -85,7 +86,7 @@ internal fun HapticScenePreference(enabled: Boolean) {
                         horizontalArrangement = Arrangement.spacedBy(6.dp),
                     ) {
                         AppText(countLabel, color = AppContentColors.secondaryText(),
-                            style = androidx.compose.material3.MaterialTheme.typography.bodyMedium)
+                            style = COUITheme.textStyles.body1)
                         AppIcon(AppIcons.AutoMirrored.Filled.ArrowForwardIos, contentDescription = null,
                             tint = AppContentColors.secondaryText().copy(alpha = 0.72f), modifier = Modifier.size(14.dp))
                     }
@@ -137,7 +138,7 @@ internal fun HapticScenePreference(enabled: Boolean) {
         ) {
             AppText(
                 HAPTIC_SCENES_TITLE,
-                style = androidx.compose.material3.MaterialTheme.typography.titleLarge,
+                style = COUITheme.textStyles.title4,
                 modifier = Modifier.padding(16.dp),
             )
             HapticSceneList(

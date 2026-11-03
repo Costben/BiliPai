@@ -2,7 +2,6 @@ package com.android.purebilibili.feature.space
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -14,6 +13,9 @@ import coil3.compose.AsyncImage
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.data.repository.SpaceShopProduct
 import com.android.purebilibili.data.repository.shopWebUrl
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 internal val LocalShopContainerMotionEnabled = androidx.compose.runtime.staticCompositionLocalOf { false }
 
@@ -26,7 +28,7 @@ internal fun SpaceShopCard(product: SpaceShopProduct, onWebClick: (String, Strin
         roomId = 0L,
         title = product.title,
         hostName = "",
-        color = MaterialTheme.colorScheme.surface,
+        color = AppSurfaceTokens.surface(),
         cornerRadius = 6.dp,
         enabled = LocalShopContainerMotionEnabled.current && target != null && !com.android.purebilibili.feature.web.shouldOpenWebUrlExternally(target),
         containerTarget = key,
@@ -43,10 +45,10 @@ internal fun SpaceShopCard(product: SpaceShopProduct, onWebClick: (String, Strin
             contentScale = ContentScale.Crop, modifier = Modifier.fillMaxWidth().aspectRatio(1f))
         Column(Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
             AppText(product.title, maxLines = 2, overflow = TextOverflow.Ellipsis)
-            if (product.labels.isNotBlank()) AppText(product.labels, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.primary)
-            if (product.price.isNotBlank()) AppText(product.price, color = MaterialTheme.colorScheme.error)
-            if (product.benefits.isNotBlank()) AppText(product.benefits, style = MaterialTheme.typography.labelSmall)
-            if (product.source.isNotBlank()) AppText("来自${product.source}", style = MaterialTheme.typography.labelSmall)
+            if (product.labels.isNotBlank()) AppText(product.labels, style = COUITheme.textStyles.footnote2, color = AppContentColors.accent())
+            if (product.price.isNotBlank()) AppText(product.price, color = AppContentColors.error())
+            if (product.benefits.isNotBlank()) AppText(product.benefits, style = COUITheme.textStyles.footnote2)
+            if (product.source.isNotBlank()) AppText("来自${product.source}", style = COUITheme.textStyles.footnote2)
         }
     }
 }

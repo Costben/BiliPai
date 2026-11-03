@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.video.ui.overlay.glass
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.feature.video.ui.overlay.*
 
@@ -30,7 +31,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.remember
 import com.android.purebilibili.feature.video.ui.components.NativeDanmakuToggleButton
 
@@ -88,7 +88,7 @@ fun PortraitBottomInputBar(
                     AppText(
                         text = "发弹幕...",
                         color = Color.White,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                     )
                 }
             }

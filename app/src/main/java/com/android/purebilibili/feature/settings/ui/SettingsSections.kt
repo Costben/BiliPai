@@ -87,7 +87,6 @@ import kotlin.math.roundToInt
 // ═══════════════════════════════════════════════════
 
 // Delegated to core/ui/components/iOSListComponents.kt
-import com.android.purebilibili.core.ui.animation.entrance
 import com.android.purebilibili.core.ui.components.AppPreferenceSectionTitle as SettingsSectionTitle
 import com.android.purebilibili.core.ui.components.AppPreferenceGroup as SettingsGroup
 import com.android.purebilibili.core.ui.components.AppSwitchPreference as SettingSwitchItem
@@ -97,6 +96,7 @@ import com.android.purebilibili.core.ui.components.AppPreferenceDivider as Setti
 import com.android.purebilibili.core.ui.components.AppSliderDialogPreference as SettingSliderItem
 import com.android.purebilibili.core.ui.components.AppPreferenceGroupPresentation
 import com.android.purebilibili.core.theme.usesMiuixFamilySkin
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 
 
@@ -377,13 +377,13 @@ private fun SettingsRootCategoryRow(
         Column(modifier = Modifier.weight(1f)) {
             AppText(
                 text = title,
-                style = MaterialTheme.typography.bodyLarge,
+                style = COUITheme.textStyles.main,
                 fontWeight = FontWeight.Medium,
                 color = AppContentColors.primaryText(),
             )
             AppText(
                 text = subtitle,
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText(),
             )
         }
@@ -982,7 +982,7 @@ fun ReleaseChannelPinnedCard(
             .padding(horizontal = 16.dp),
         shape = AppCardShape.Semantic(ContainerLevel.Dialog),
         colors = AppCardDefaults.colors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f)
+            containerColor = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.35f)
         )
     ) {
         Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp)) {
@@ -998,12 +998,12 @@ fun ReleaseChannelPinnedCard(
                 Column(modifier = Modifier.weight(1f)) {
                     AppText(
                         text = "官方渠道：GitHub · 频道 · 群组",
-                        style = MaterialTheme.typography.titleSmall,
+                        style = COUITheme.textStyles.headline2,
                         color = AppContentColors.primaryText()
                     )
                     AppText(
                         text = "请从官方渠道获取安装包，注意来源安全。",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText()
                     )
                 }
@@ -1264,13 +1264,13 @@ private fun FeedDynamicTabVisibilityItem(
             Column(modifier = Modifier.weight(1f)) {
                 AppText(
                     text = "动态分类",
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = COUITheme.textStyles.main,
                     color = AppContentColors.primaryText()
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 AppText(
                     text = "选择动态分类和顺序，至少保留一个；点关注用户可在“全部”中查看其动态。",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText()
                 )
             }
@@ -1755,7 +1755,7 @@ private fun DiagnosticsSection(
                         "账号凭据、用户标识、视频标识、搜索词和用户输入会在写入前脱敏。" +
                         "详细日志仅保存在应用私有目录（最多 256KB），不会自动上传；关闭后会清除详细日志。" +
                         "基础错误与启动诊断另行保留（最多 64KB），崩溃快照单独保存，可在诊断设置中清理。",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppContentColors.secondaryText(),
                 )
             },
@@ -1819,7 +1819,7 @@ private fun NetworkProxyEditDialog(
                     } else {
                         "作用于应用内的网络请求（接口、登录、RSS、图片等）。视频播放始终直连，避免本地代理端口不可用导致卡顿。"
                     },
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                 )
                 AppTextField(
@@ -1845,7 +1845,7 @@ private fun NetworkProxyEditDialog(
                 ) {
                     AppText(
                         text = "启用代理",
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = COUITheme.textStyles.main,
                     )
                     AppAdaptiveSwitch(
                         checked = enabled,
@@ -1862,11 +1862,11 @@ private fun NetworkProxyEditDialog(
                     Column(modifier = Modifier.weight(1f)) {
                         AppText(
                             text = "仅指定域名走代理",
-                            style = MaterialTheme.typography.bodyLarge,
+                            style = COUITheme.textStyles.main,
                         )
                         AppText(
                             text = "开启后只在访问下方域名时使用代理，其余请求直连",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText(),
                         )
                     }
@@ -1889,7 +1889,7 @@ private fun NetworkProxyEditDialog(
                         supportingText = {
                             AppText(
                                 text = "填写主域名即可，自动匹配其子域；例如 aicu.cc 会同时覆盖 www.aicu.cc",
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText(),
                             )
                         },
@@ -1898,7 +1898,7 @@ private fun NetworkProxyEditDialog(
                 if (enabled && !isAppHttpProxyConfigured(draft)) {
                     AppText(
                         text = "请填写有效的主机与端口（1–65535）",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.error(),
                     )
                 }
@@ -2031,13 +2031,13 @@ fun AboutSection(
                 ) {
                     AppText(
                         text = dialogContent.value,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         color = AppContentColors.primaryText()
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     AppText(
                         text = dialogContent.body,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         color = AppContentColors.secondaryText()
                     )
                 }
@@ -2381,12 +2381,12 @@ private fun AboutProjectOverviewCard(
                 Column(modifier = Modifier.weight(1f)) {
                     AppText(
                         text = "BiliPai",
-                        style = MaterialTheme.typography.headlineSmall,
+                        style = COUITheme.textStyles.title4,
                         color = AppContentColors.primaryText()
                     )
                     AppText(
                         text = "v$versionName",
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = COUITheme.textStyles.main,
                         color = AppContentColors.secondaryText()
                     )
                 }
@@ -2404,7 +2404,7 @@ private fun AboutProjectOverviewCard(
                 AppText(
                     text = slogan,
                     modifier = Modifier.weight(1f),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppContentColors.secondaryText(),
 
                 )
@@ -2412,7 +2412,7 @@ private fun AboutProjectOverviewCard(
             Spacer(modifier = Modifier.height(22.dp))
             AppText(
                 text = "开发者",
-                style = MaterialTheme.typography.titleMedium,
+                style = COUITheme.textStyles.headline1,
                 fontWeight = FontWeight.SemiBold,
                 color = AppContentColors.secondaryText()
             )
@@ -2447,7 +2447,7 @@ private fun AboutDeveloperItem(
             modifier = Modifier
                 .size(56.dp)
                 .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surfaceVariant),
+                .background(AppSurfaceTokens.surfaceContainer()),
             contentAlignment = Alignment.Center
         ) {
             developer.avatarUrl?.let { avatarUrl ->
@@ -2469,7 +2469,7 @@ private fun AboutDeveloperItem(
         Spacer(modifier = Modifier.height(8.dp))
         AppText(
             text = developer.name,
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.primaryText(),
             textAlign = TextAlign.Center,
             maxLines = 1,

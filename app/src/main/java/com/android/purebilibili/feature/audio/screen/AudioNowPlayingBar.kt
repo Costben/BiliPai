@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.audio.screen
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -63,7 +64,6 @@ import com.android.purebilibili.core.ui.transition.VideoCardSourceChromeSnapshot
 import com.android.purebilibili.core.ui.transition.VideoCardSourceLayout
 import com.android.purebilibili.core.ui.transition.resolveNowPlayingBarReturnVisibility
 import com.android.purebilibili.core.util.CardPositionManager
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -547,7 +547,7 @@ internal fun AudioNowPlayingBar(
                                 color = immersiveContentColor
                                     ?: AppContentColors.primaryText(),
                                 fontWeight = FontWeight.SemiBold,
-                                style = MaterialTheme.typography.bodyMedium
+                                style = COUITheme.textStyles.body1
                             )
                             Box(
                                 modifier = Modifier
@@ -578,7 +578,7 @@ internal fun AudioNowPlayingBar(
                                         text = state.artist,
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis,
-                                        style = MaterialTheme.typography.bodySmall,
+                                        style = COUITheme.textStyles.footnote1,
                                         color = immersiveContentColor?.copy(alpha = 0.72f)
                                             ?: AppContentColors.secondaryText()
                                     )

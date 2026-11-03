@@ -1,6 +1,8 @@
 package com.android.purebilibili.feature.audio.screen
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.AppAlertDialog
@@ -33,7 +35,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import com.android.purebilibili.core.ui.components.AppIcon as Icon
 import com.android.purebilibili.core.ui.components.AppIconButton as IconButton
 import com.android.purebilibili.core.ui.components.AppLinearProgressIndicator as LinearProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppOutlinedButton as OutlinedButton
 import com.android.purebilibili.core.ui.components.AppOutlinedTextField as OutlinedTextField
 import com.android.purebilibili.core.ui.components.AppSurface as Surface
@@ -341,7 +342,7 @@ fun ExternalPlaylistImportDialog(
     }
 
     val panelShape = RoundedCornerShape(24.dp)
-    val glassSurface = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.78f)
+    val glassSurface = AppSurfaceTokens.surfaceContainerHigh().copy(alpha = 0.78f)
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(
@@ -376,7 +377,7 @@ fun ExternalPlaylistImportDialog(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = "导入外部歌单",
-                        style = MaterialTheme.typography.headlineSmall,
+                        style = COUITheme.textStyles.title4,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.weight(1f),
                     )
@@ -390,7 +391,7 @@ fun ExternalPlaylistImportDialog(
                 if (meta == null) {
                     Text(
                         text = "支持网易云音乐和 QQ 音乐歌单。复制公开歌单的分享链接，粘贴到下面。",
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         color = AppContentColors.secondaryText(),
                     )
                     Spacer(Modifier.height(16.dp))
@@ -403,7 +404,7 @@ fun ExternalPlaylistImportDialog(
                     )
                     fetchError?.let { message ->
                         Spacer(Modifier.height(8.dp))
-                        Text(message, color = AppContentColors.error(), style = MaterialTheme.typography.bodySmall)
+                        Text(message, color = AppContentColors.error(), style = COUITheme.textStyles.footnote1)
                     }
                     Spacer(Modifier.height(12.dp))
                     Button(
@@ -467,14 +468,14 @@ fun ExternalPlaylistImportDialog(
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
                                 text = meta.name,
-                                style = MaterialTheme.typography.titleMedium,
+                                style = COUITheme.textStyles.headline1,
                                 fontWeight = FontWeight.SemiBold,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                             )
                             Text(
                                 text = "${meta.author} · ${meta.tracks.size} 首",
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText(),
                             )
                         }
@@ -489,7 +490,7 @@ fun ExternalPlaylistImportDialog(
                             )
                             Text(
                                 text = "正在匹配：$matchingTrackTitle ($matchCompleted/$matchTotal)",
-                                style = MaterialTheme.typography.labelSmall,
+                                style = COUITheme.textStyles.footnote2,
                                 color = AppContentColors.secondaryText(),
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
@@ -510,7 +511,7 @@ fun ExternalPlaylistImportDialog(
                                 } else {
                                     "已匹配 $matchedCount/${matchResults.size} 首，已选 $selectedCount 首"
                                 },
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = if (matchedCount == 0) AppContentColors.error() else AppContentColors.secondaryText(),
                                 modifier = Modifier.padding(bottom = 8.dp),
                             )
@@ -552,7 +553,7 @@ fun ExternalPlaylistImportDialog(
                                     } else {
                                         "共 $matchTotal 首，开始匹配后可逐首查看结果"
                                     },
-                                    style = MaterialTheme.typography.labelSmall,
+                                    style = COUITheme.textStyles.footnote2,
                                     color = AppContentColors.secondaryText(),
                                     modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
                                 )
@@ -605,7 +606,7 @@ fun ExternalPlaylistImportDialog(
                             )
                             Text(
                                 text = "全选 · 已选 $selectedCount/${matchedIndices.size} 首",
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText(),
                             )
                         }
@@ -633,7 +634,7 @@ fun ExternalPlaylistImportDialog(
                                     colors = CardDefaults.colors(
                                         containerColor = if (com.android.purebilibili.core.ui.isMiuixNonGlassEnabled()) {
                                             com.android.purebilibili.core.ui.AppSurfaceTokens.cardContainer()
-                                        } else MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.62f),
+                                        } else AppSurfaceTokens.surfaceContainerHighest().copy(alpha = 0.62f),
                                     ),
                                 ) {
                                     Row(
@@ -654,7 +655,7 @@ fun ExternalPlaylistImportDialog(
                                         Column(modifier = Modifier.weight(1f)) {
                                             Text(
                                                 text = "${index + 1}. ${outcome.track.title}",
-                                                style = MaterialTheme.typography.bodyMedium,
+                                                style = COUITheme.textStyles.body1,
                                                 fontWeight = FontWeight.Medium,
                                                 maxLines = 1,
                                                 overflow = TextOverflow.Ellipsis,
@@ -662,7 +663,7 @@ fun ExternalPlaylistImportDialog(
                                             Text(
                                                 text = outcome.video?.let { "${it.author} · ${it.title}" }
                                                     ?: outcome.track.artists.joinToString("/").ifBlank { "未匹配" },
-                                                style = MaterialTheme.typography.bodySmall,
+                                                style = COUITheme.textStyles.footnote1,
                                                 color = if (outcome.video != null) AppContentColors.secondaryText()
                                                 else AppContentColors.error().copy(alpha = 0.86f),
                                                 maxLines = 1,
@@ -756,7 +757,7 @@ fun ExternalPlaylistImportDialog(
                                             colors = CardDefaults.colors(
                                                 containerColor = if (com.android.purebilibili.core.ui.isMiuixNonGlassEnabled()) {
                                                     com.android.purebilibili.core.ui.AppSurfaceTokens.cardContainer()
-                                                } else MaterialTheme.colorScheme.surfaceContainerLow.copy(alpha = 0.7f),
+                                                } else AppSurfaceTokens.surfaceContainer().copy(alpha = 0.7f),
                                             ),
                                         ) {
                                             Row(
@@ -773,7 +774,7 @@ fun ExternalPlaylistImportDialog(
                                                 Spacer(Modifier.width(10.dp))
                                                 Column {
                                                     Text(video.title, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                                                    Text(video.author, style = MaterialTheme.typography.bodySmall,
+                                                    Text(video.author, style = COUITheme.textStyles.footnote1,
                                                         color = AppContentColors.secondaryText())
                                                 }
                                             }
@@ -786,7 +787,7 @@ fun ExternalPlaylistImportDialog(
                     if (completed) {
                         Text(
                             text = "未匹配或未勾选的曲目不会被保存或收藏。点击任意一行可搜索 B 站视频手动修正。",
-                            style = MaterialTheme.typography.labelSmall,
+                            style = COUITheme.textStyles.footnote2,
                             color = AppContentColors.secondaryText(),
                             modifier = Modifier.padding(top = 8.dp),
                         )
@@ -827,7 +828,7 @@ fun ExternalPlaylistImportDialog(
                     .fillMaxWidth(0.9f)
                     .fillMaxHeight(0.9f),
                 shape = panelShape,
-                color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                color = AppSurfaceTokens.surfaceContainerHigh(),
                 contentColor = AppContentColors.primaryText(),
                 tonalElevation = 0.dp,
             ) {
@@ -899,12 +900,12 @@ private fun FavoriteFolderPickerContent(
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = "收藏到 B 站收藏夹",
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         fontWeight = FontWeight.SemiBold,
                     )
                     Text(
                         text = "$playlistName · 将收藏 $matchedCount 首",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -923,7 +924,7 @@ private fun FavoriteFolderPickerContent(
                 )
                 Text(
                     text = "正在收藏 $processed/$total 首（成功 $succeeded，失败 $failed）",
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = AppContentColors.secondaryText(),
                     modifier = Modifier.padding(top = 6.dp),
                 )
@@ -955,7 +956,7 @@ private fun FavoriteFolderPickerContent(
                         Text(
                             text = error,
                             color = AppContentColors.error(),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = COUITheme.textStyles.body1,
                         )
                         Spacer(Modifier.height(8.dp))
                         OutlinedButton(onClick = onRetry, enabled = !favoriting) {
@@ -972,7 +973,7 @@ private fun FavoriteFolderPickerContent(
                         Text(
                             text = "当前账号没有可用的收藏夹",
                             color = AppContentColors.secondaryText(),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = COUITheme.textStyles.body1,
                         )
                     }
                 }
@@ -998,13 +999,13 @@ private fun FavoriteFolderPickerContent(
                                 Column(modifier = Modifier.weight(1f)) {
                                     Text(
                                         text = folder.title.ifBlank { "未命名收藏夹" },
-                                        style = MaterialTheme.typography.bodyMedium,
+                                        style = COUITheme.textStyles.body1,
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis,
                                     )
                                     Text(
                                         text = "${folder.media_count} 个内容",
-                                        style = MaterialTheme.typography.bodySmall,
+                                        style = COUITheme.textStyles.footnote1,
                                         color = AppContentColors.secondaryText(),
                                     )
                                 }

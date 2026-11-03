@@ -1,6 +1,8 @@
 // 文件路径: feature/home/components/HomeRefreshIndicator.kt
 package com.android.purebilibili.feature.home.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import com.android.purebilibili.core.ui.AppSpacingTokens
@@ -15,7 +17,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.runtime.*
@@ -108,8 +109,8 @@ fun Md3ScreenshotRefreshIndicator(
                 Spacer(modifier = Modifier.height(AppSpacingTokens.Small + AppSpacingTokens.Micro))
                 AppText(
                     text = if (hintText == "松手刷新") "松开刷新" else hintText,
-                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                    lineHeight = MaterialTheme.typography.bodyMedium.lineHeight,
+                    fontSize = COUITheme.textStyles.body1.fontSize,
+                    lineHeight = COUITheme.textStyles.body1.lineHeight,
                     fontWeight = FontWeight.SemiBold,
                     color = textColor
                 )
@@ -195,7 +196,7 @@ fun HomeRefreshIndicator(
                 //  箭头图标（旋转表示状态变化）
                 AppText(
                     text = "↓",
-                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                    fontSize = COUITheme.textStyles.headline1.fontSize,
                     fontWeight = FontWeight.Bold,
                     color = AppContentColors.accent(),
                     modifier = Modifier.rotate(arrowRotation)
@@ -207,7 +208,7 @@ fun HomeRefreshIndicator(
 
                 AppText(
                     text = hintText,
-                    fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                    fontSize = COUITheme.textStyles.footnote1.fontSize,
                     fontWeight = FontWeight.Medium,
                     color = AppContentColors.secondaryText()
                 )

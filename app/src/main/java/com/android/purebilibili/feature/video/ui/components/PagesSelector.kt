@@ -2,6 +2,7 @@ package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.util.rememberHapticFeedback
 import com.android.purebilibili.core.util.HapticType
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -46,7 +47,6 @@ import kotlin.math.PI
 import kotlin.math.sin
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.ContainerLevel
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -106,7 +106,7 @@ fun PagesSelector(
         ) {
             AppText(
                 text = "视频选集",
-                style = MaterialTheme.typography.titleMedium,
+                style = COUITheme.textStyles.headline1,
                 fontWeight = FontWeight.SemiBold,
                 color = AppContentColors.primaryText()
             )

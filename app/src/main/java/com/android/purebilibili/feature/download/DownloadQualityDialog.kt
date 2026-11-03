@@ -1,5 +1,6 @@
 package com.android.purebilibili.feature.download
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -59,7 +60,7 @@ fun DownloadQualityDialog(
             type = AppPopupSurfaceType.DIALOG,
             modifier = Modifier.appContentDialogWidth(policy = dialogLayout),
             shape = AppShapes.container(ContainerLevel.Card),
-            containerColor = MaterialTheme.colorScheme.surface,
+            containerColor = AppSurfaceTokens.surface(),
         ) {
             Column(modifier = Modifier.padding(AppSpacingTokens.Large)) {
                 // 标题行
@@ -70,7 +71,7 @@ fun DownloadQualityDialog(
                 ) {
                     AppText(
                         text = "选择下载画质",
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         fontWeight = FontWeight.Bold,
                         color = AppContentColors.primaryText()
                     )
@@ -88,7 +89,7 @@ fun DownloadQualityDialog(
                 // 视频标题
                 AppText(
                     text = title,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppContentColors.secondaryText(),
                     maxLines = 2
                 )
@@ -109,7 +110,7 @@ fun DownloadQualityDialog(
                     )
                     AppText(
                         text = "同时缓存弹幕",
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         color = AppContentColors.primaryText()
                     )
                 }
@@ -142,7 +143,7 @@ fun DownloadQualityDialog(
                                 ) {
                                     AppText(
                                         text = "VIP",
-                                        style = MaterialTheme.typography.labelSmall,
+                                        style = COUITheme.textStyles.footnote2,
                                         fontWeight = FontWeight.Bold,
                                         color = MaterialTheme.colorScheme.onTertiary,
                                         modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)

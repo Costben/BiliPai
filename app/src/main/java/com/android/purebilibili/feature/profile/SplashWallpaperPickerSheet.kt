@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.profile
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.AppContentColors
 
 import coil3.request.crossfade
@@ -167,7 +169,7 @@ fun SplashWallpaperPickerSheet(
     AppModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = AppSurfaceTokens.background(),
         dragHandle = null
     ) {
         Column(
@@ -192,7 +194,7 @@ fun SplashWallpaperPickerSheet(
 
                     AppText(
                         text = titleText,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         fontWeight = FontWeight.Bold
                     )
 
@@ -213,12 +215,12 @@ fun SplashWallpaperPickerSheet(
             ) {
                 AppText(
                     "共 ${officialWallpapers.size} 张 · 历史来源",
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     modifier = Modifier.weight(1f),
                 )
                 com.android.purebilibili.data.repository.wallpaperArchiveSources.forEach { (name, url) ->
                     AppTextButton(onClick = { archiveUriHandler.openUri(url) }) {
-                        AppText(if (name == "bili_app_splash") "开屏归档" else "插画归档", style = MaterialTheme.typography.labelSmall)
+                        AppText(if (name == "bili_app_splash") "开屏归档" else "插画归档", style = COUITheme.textStyles.footnote2)
                     }
                 }
             }
@@ -227,7 +229,7 @@ fun SplashWallpaperPickerSheet(
                 AppText(
                     text = error.orEmpty(),
                     color = AppContentColors.error(),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                 )
             }
@@ -335,7 +337,7 @@ fun SplashWallpaperPickerSheet(
             // 3. 底部操作栏
             AppSurface(
                 shadowElevation = 8.dp,
-                color = MaterialTheme.colorScheme.surface,
+                color = AppSurfaceTokens.surface(),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
@@ -448,7 +450,7 @@ fun SplashWallpaperPickerSheet(
                         ) {
                             AppText(
                                 text = "同时保存到相册",
-                                style = MaterialTheme.typography.bodyMedium,
+                                style = COUITheme.textStyles.body1,
                                 color = AppContentColors.primaryText()
                             )
                             AppSwitch(
@@ -477,7 +479,7 @@ fun SplashWallpaperPickerSheet(
                                 strokeWidth = 2.dp
                             )
                         } else {
-                            AppText(actionText, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+                            AppText(actionText, style = COUITheme.textStyles.button, fontWeight = FontWeight.Bold)
                         }
                     }
 
@@ -485,7 +487,7 @@ fun SplashWallpaperPickerSheet(
                         AppText(
                             text = (saveState as WallpaperSaveState.Error).message,
                             color = AppContentColors.error(),
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             modifier = Modifier.padding(top = 8.dp).align(Alignment.CenterHorizontally)
                         )
                     }
@@ -513,12 +515,12 @@ private fun SplashCustomWallpaperTile(
         onClick = onClick,
         title = "从相册选择",
         modifier = modifier,
-        unselectedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+        unselectedBorderColor = AppSurfaceTokens.outline(),
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             AppIcon(photoIcon, contentDescription = null, tint = contentColor, modifier = Modifier.size(28.dp))
             Spacer(modifier = Modifier.height(8.dp))
-            AppText("相册", style = MaterialTheme.typography.labelMedium, color = contentColor)
+            AppText("相册", style = COUITheme.textStyles.footnote1, color = contentColor)
         }
     }
 }
@@ -556,7 +558,7 @@ private fun WallpaperSelectionTile(
             modifier = Modifier
                 .aspectRatio(9f / 16f)
                 .clip(shape)
-                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .background(AppSurfaceTokens.surfaceContainer())
                 .border(if (isSelected) 2.dp else 1.dp, borderColor, shape),
             contentAlignment = Alignment.Center,
         ) {
@@ -576,6 +578,6 @@ private fun WallpaperSelectionTile(
             }
         }
         Spacer(modifier = Modifier.height(6.dp))
-        AppText(title, style = MaterialTheme.typography.bodySmall, maxLines = 1, color = titleColor)
+        AppText(title, style = COUITheme.textStyles.footnote1, maxLines = 1, color = titleColor)
     }
 }

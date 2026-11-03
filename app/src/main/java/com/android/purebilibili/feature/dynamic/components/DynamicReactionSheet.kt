@@ -1,5 +1,6 @@
 package com.android.purebilibili.feature.dynamic.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.android.purebilibili.core.ui.AppContentColors
 
 import com.android.purebilibili.core.ui.components.appActionClickable
@@ -9,7 +10,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -76,7 +76,7 @@ fun DynamicReactionSheet(item: DynamicItem, onDismiss: () -> Unit, onUserClick: 
         }
     }
     AppModalBottomSheet(onDismissRequest = onDismiss) {
-        AppText(title, style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(16.dp))
+        AppText(title, style = COUITheme.textStyles.title4, modifier = Modifier.padding(16.dp))
         LazyColumn(
             modifier = Modifier.fillMaxWidth().heightIn(max = 560.dp),
             state = listState,
@@ -89,7 +89,7 @@ fun DynamicReactionSheet(item: DynamicItem, onDismiss: () -> Unit, onUserClick: 
                 ) {
                     AsyncImage(model = user.face, contentDescription = null, modifier = Modifier.size(44.dp).clip(CircleShape))
                     Column {
-                        AppText(user.name, style = MaterialTheme.typography.bodyLarge)
+                        AppText(user.name, style = COUITheme.textStyles.main)
                         AppText(user.action, color = AppContentColors.secondaryText())
                     }
                 }

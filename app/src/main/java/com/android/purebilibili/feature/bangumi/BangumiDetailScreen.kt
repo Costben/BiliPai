@@ -2,6 +2,7 @@
 package com.android.purebilibili.feature.bangumi
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.resolveFilledButtonContainerColor
@@ -252,7 +253,7 @@ private fun TabletBangumiDetailContent(
                 .fillMaxHeight()
                 .padding(end = 24.dp)
                 .responsiveContentWidth() // Double check constraint
-                .background(MaterialTheme.colorScheme.surface)
+                .background(AppSurfaceTokens.surface())
         ) {
             LazyColumn(
                 contentPadding = PaddingValues(16.dp),
@@ -281,7 +282,7 @@ private fun TabletBangumiDetailContent(
                         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             AppText(
                                 text = detail.title,
-                                style = MaterialTheme.typography.headlineSmall,
+                                style = COUITheme.textStyles.title4,
                                 fontWeight = FontWeight.Bold,
                                 color = AppContentColors.primaryText(),
                                 maxLines = 3,
@@ -307,7 +308,7 @@ private fun TabletBangumiDetailContent(
                                         AppText(
                                             text = " (${rating.count}人评分)",
                                             color = AppContentColors.secondaryText(),
-                                            style = MaterialTheme.typography.bodySmall
+                                            style = COUITheme.textStyles.footnote1
                                         )
                                     }
                                 }
@@ -320,7 +321,7 @@ private fun TabletBangumiDetailContent(
                                 AppText(
                                     text = "${FormatUtils.formatStat(stat.views)}播放 · ${FormatUtils.formatStat(stat.favorites)}$followVerb",
                                     color = AppContentColors.secondaryText(),
-                                    style = MaterialTheme.typography.bodySmall
+                                    style = COUITheme.textStyles.footnote1
                                 )
                             }
                         }
@@ -334,7 +335,7 @@ private fun TabletBangumiDetailContent(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clip(AppShapes.container(ContainerLevel.Card))
-                                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                                .background(AppSurfaceTokens.surfaceContainer().copy(alpha = 0.5f))
                                 .clickable(enabled = up.mid > 0L) { onUserClick(up.mid) }
                                 .padding(12.dp),
                             verticalAlignment = Alignment.CenterVertically
@@ -351,7 +352,7 @@ private fun TabletBangumiDetailContent(
                             Column(modifier = Modifier.weight(1f)) {
                                 AppText(
                                     text = up.uname,
-                                    style = MaterialTheme.typography.titleMedium,
+                                    style = COUITheme.textStyles.headline1,
                                     fontWeight = FontWeight.SemiBold,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
@@ -364,7 +365,7 @@ private fun TabletBangumiDetailContent(
                                 if (subText.isNotBlank()) {
                                     AppText(
                                         text = subText,
-                                        style = MaterialTheme.typography.bodySmall,
+                                        style = COUITheme.textStyles.footnote1,
                                         color = AppContentColors.secondaryText(),
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis
@@ -430,7 +431,7 @@ private fun TabletBangumiDetailContent(
                                 }
                             },
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = if (isFollowing || targetEpisode != null) MaterialTheme.colorScheme.surfaceVariant else AppContentColors.accent(),
+                                containerColor = if (isFollowing || targetEpisode != null) AppSurfaceTokens.surfaceContainer() else AppContentColors.accent(),
                                 contentColor = if (isFollowing || targetEpisode != null) AppContentColors.secondaryText() else AppContentColors.onAccent()
                             ),
                             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
@@ -482,13 +483,13 @@ private fun TabletBangumiDetailContent(
                             AppText(
                                 text = "简介",
                                 fontWeight = FontWeight.Bold,
-                                style = MaterialTheme.typography.titleMedium
+                                style = COUITheme.textStyles.headline1
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             AppText(
                                 text = detail.evaluate,
                                 color = AppContentColors.secondaryText(),
-                                style = MaterialTheme.typography.bodyMedium
+                                style = COUITheme.textStyles.body1
                             )
                         }
                     }
@@ -504,7 +505,7 @@ private fun TabletBangumiDetailContent(
                             AppText(
                                 text = "课程概述",
                                 fontWeight = FontWeight.Bold,
-                                style = MaterialTheme.typography.titleMedium
+                                style = COUITheme.textStyles.headline1
                             )
                             detail.briefImgs.orEmpty().forEach { briefImg ->
                                 if (briefImg.url.isNotBlank()) {
@@ -542,7 +543,7 @@ private fun TabletBangumiDetailContent(
             modifier = Modifier
                 .weight(6f)
                 .fillMaxHeight()
-                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha=0.3f)) // Distinct background
+                .background(AppSurfaceTokens.surfaceContainer().copy(alpha=0.3f)) // Distinct background
         ) {
             // Re-implementing correctly using a single LazyVerticalGrid
             LazyVerticalGrid(
@@ -562,7 +563,7 @@ private fun TabletBangumiDetailContent(
                         ) {
                             AppText(
                                 text = "选集 (${allEpisodes.size})",
-                                style = MaterialTheme.typography.titleLarge,
+                                style = COUITheme.textStyles.title4,
                                 fontWeight = FontWeight.Bold
                             )
                             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -586,7 +587,7 @@ private fun TabletBangumiDetailContent(
                                      val selected = page == selectedEpisodePage
                                      AppSurface(
                                          onClick = { selectedEpisodePage = page },
-                                         color = if (selected) AppContentColors.accent() else MaterialTheme.colorScheme.surfaceVariant,
+                                         color = if (selected) AppContentColors.accent() else AppSurfaceTokens.surfaceContainer(),
                                          shape = AppShapes.container(ContainerLevel.Card)
                                      ) {
                                          AppText(
@@ -597,7 +598,7 @@ private fun TabletBangumiDetailContent(
                                                  descending = episodesDescending
                                              ),
                                              modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                                             style = MaterialTheme.typography.bodySmall,
+                                             style = COUITheme.textStyles.footnote1,
                                              color = if (selected) AppContentColors.onAccent() else AppContentColors.secondaryText()
                                          )
                                      }
@@ -623,7 +624,7 @@ private fun TabletBangumiDetailContent(
                              AppText(
                                  text = resolveBangumiSectionTitle(section, index),
                                  modifier = Modifier.padding(top = 24.dp, bottom = 8.dp),
-                                 style = MaterialTheme.typography.titleLarge,
+                                 style = COUITheme.textStyles.title4,
                                  fontWeight = FontWeight.Bold
                              )
                          }
@@ -644,7 +645,7 @@ private fun TabletBangumiDetailContent(
                          AppText(
                             text = "相关季度",
                             modifier = Modifier.padding(top = 24.dp, bottom = 8.dp),
-                            style = MaterialTheme.typography.titleLarge,
+                            style = COUITheme.textStyles.title4,
                             fontWeight = FontWeight.Bold
                         )
                      }
@@ -654,14 +655,14 @@ private fun TabletBangumiDetailContent(
                          AppSurface(
                             onClick = { if (!isCurrentSeason) onSeasonClick(season.seasonId) },
                             shape = AppShapes.container(ContainerLevel.Chip),
-                            color = if (isCurrentSeason) AppContentColors.accent() else MaterialTheme.colorScheme.surface,
+                            color = if (isCurrentSeason) AppContentColors.accent() else AppSurfaceTokens.surface(),
                             modifier = Modifier.height(48.dp) // Fixed height for consistency
                          ) {
                              Box(contentAlignment = Alignment.Center) {
                                  AppText(
                                     text = season.seasonTitle.ifEmpty { season.title },
                                     modifier = Modifier.padding(horizontal = 12.dp),
-                                    style = MaterialTheme.typography.bodyMedium,
+                                    style = COUITheme.textStyles.body1,
                                     color = if (isCurrentSeason) AppContentColors.onAccent() else AppContentColors.primaryText(),
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
@@ -696,7 +697,7 @@ private fun TabletBangumiDetailContent(
                         AppText(
                             text = jumpErrorMessage!!,
                             color = AppContentColors.error(),
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             modifier = Modifier.padding(top = 4.dp)
                         )
                     }
@@ -845,7 +846,7 @@ private fun MobileBangumiDetailContent(
                             AppText(
                                 text = detail.title,
                                 color = Color.White,
-                                style = MaterialTheme.typography.titleLarge,
+                                style = COUITheme.textStyles.title4,
                                 fontWeight = FontWeight.Bold,
                                 maxLines = 2
                             )
@@ -871,7 +872,7 @@ private fun MobileBangumiDetailContent(
                                         AppText(
                                             text = " (${rating.count}人评分)",
                                             color = Color.White.copy(alpha = 0.7f),
-                                            style = MaterialTheme.typography.bodySmall
+                                            style = COUITheme.textStyles.footnote1
                                         )
                                     }
                                 }
@@ -884,7 +885,7 @@ private fun MobileBangumiDetailContent(
                                 AppText(
                                     text = desc,
                                     color = Color.White.copy(alpha = 0.7f),
-                                    style = MaterialTheme.typography.bodySmall
+                                    style = COUITheme.textStyles.footnote1
                                 )
                             }
 
@@ -897,7 +898,7 @@ private fun MobileBangumiDetailContent(
                                 AppText(
                                     text = "${FormatUtils.formatStat(stat.views)}播放 · ${FormatUtils.formatStat(stat.favorites)}$followVerb",
                                     color = Color.White.copy(alpha = 0.7f),
-                                    style = MaterialTheme.typography.bodySmall
+                                    style = COUITheme.textStyles.footnote1
                                 )
                             }
                         }
@@ -913,7 +914,7 @@ private fun MobileBangumiDetailContent(
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 6.dp)
                             .clip(AppShapes.container(ContainerLevel.Card))
-                            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                            .background(AppSurfaceTokens.surfaceContainer().copy(alpha = 0.5f))
                             .clickable(enabled = up.mid > 0L) { onUserClick(up.mid) }
                             .padding(12.dp),
                         verticalAlignment = Alignment.CenterVertically
@@ -930,7 +931,7 @@ private fun MobileBangumiDetailContent(
                         Column(modifier = Modifier.weight(1f)) {
                             AppText(
                                 text = up.uname,
-                                style = MaterialTheme.typography.titleMedium,
+                                style = COUITheme.textStyles.headline1,
                                 fontWeight = FontWeight.SemiBold,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
@@ -943,7 +944,7 @@ private fun MobileBangumiDetailContent(
                             if (subText.isNotBlank()) {
                                 AppText(
                                     text = subText,
-                                    style = MaterialTheme.typography.bodySmall,
+                                    style = COUITheme.textStyles.footnote1,
                                     color = AppContentColors.secondaryText(),
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
@@ -1041,7 +1042,7 @@ private fun MobileBangumiDetailContent(
                                 onFollowStatusSelect(BANGUMI_FOLLOW_STATUS_WATCHING)
                             },
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = if (targetEpisode != null) MaterialTheme.colorScheme.surfaceVariant else resolveFilledButtonContainerColor(MaterialTheme.colorScheme),
+                                containerColor = if (targetEpisode != null) AppSurfaceTokens.surfaceContainer() else resolveFilledButtonContainerColor(MaterialTheme.colorScheme),
                                 contentColor = if (targetEpisode != null) AppContentColors.secondaryText() else resolveFilledButtonContentColor(MaterialTheme.colorScheme)
                             ),
                             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
@@ -1100,14 +1101,14 @@ private fun MobileBangumiDetailContent(
                     ) {
                         AppText(
                             text = "简介",
-                            style = MaterialTheme.typography.titleMedium,
+                            style = COUITheme.textStyles.headline1,
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         AppText(
                             text = detail.evaluate,
                             color = AppContentColors.secondaryText(),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = COUITheme.textStyles.body1,
                             maxLines = if (isEvaluateExpanded) Int.MAX_VALUE else 3,
                             overflow = TextOverflow.Ellipsis,
                             onTextLayout = { isEvaluateOverflowing = it.hasVisualOverflow },
@@ -1132,7 +1133,7 @@ private fun MobileBangumiDetailContent(
                     ) {
                         AppText(
                             text = "课程概述",
-                            style = MaterialTheme.typography.titleMedium,
+                            style = COUITheme.textStyles.headline1,
                             fontWeight = FontWeight.Bold
                         )
                         detail.briefImgs.orEmpty().forEach { briefImg ->
@@ -1179,7 +1180,7 @@ private fun MobileBangumiDetailContent(
                     ) {
                         AppText(
                             text = "选集 (${detail.episodes.orEmpty().size})",
-                            style = MaterialTheme.typography.titleMedium,
+                            style = COUITheme.textStyles.headline1,
                             fontWeight = FontWeight.Bold
                         )
 
@@ -1201,7 +1202,7 @@ private fun MobileBangumiDetailContent(
                                 AppText(
                                     text = "跳转",
                                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                                    style = MaterialTheme.typography.labelLarge,
+                                    style = COUITheme.textStyles.button,
                                     color = AppContentColors.secondaryText()
                                 )
                             }
@@ -1225,7 +1226,7 @@ private fun MobileBangumiDetailContent(
 
                                 AppSurface(
                                     onClick = { selectedPreviewPage = page },
-                                    color = if (isCurrentPage) AppContentColors.accent() else MaterialTheme.colorScheme.surfaceVariant,
+                                    color = if (isCurrentPage) AppContentColors.accent() else AppSurfaceTokens.surfaceContainer(),
                                     shape = AppShapes.container(ContainerLevel.Card)
                                 ) {
                                     AppText(
@@ -1236,7 +1237,7 @@ private fun MobileBangumiDetailContent(
                                             descending = episodesDescending
                                         ),
                                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                                        style = MaterialTheme.typography.bodySmall,
+                                        style = COUITheme.textStyles.footnote1,
                                         color = if (isCurrentPage) AppContentColors.onAccent() else AppContentColors.secondaryText()
                                     )
                                 }
@@ -1280,7 +1281,7 @@ private fun MobileBangumiDetailContent(
                                         .width(80.dp)
                                         .aspectRatio(16f / 9f),
                                     shape = AppShapes.container(ContainerLevel.Chip),
-                                    color = MaterialTheme.colorScheme.surfaceVariant
+                                    color = AppSurfaceTokens.surfaceContainer()
                                 ) {
                                     Box(
                                         contentAlignment = Alignment.Center
@@ -1295,7 +1296,7 @@ private fun MobileBangumiDetailContent(
                                             )
                                             AppText(
                                                 text = "全部${detail.episodes.orEmpty().size}集",
-                                                style = MaterialTheme.typography.labelSmall,
+                                                style = COUITheme.textStyles.footnote2,
                                                 color = AppContentColors.secondaryText()
                                             )
                                         }
@@ -1326,7 +1327,7 @@ private fun MobileBangumiDetailContent(
                     AppText(
                         text = "相关季度",
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -1348,13 +1349,13 @@ private fun MobileBangumiDetailContent(
                                 color = if (isCurrentSeason) {
                                     AppContentColors.accent()
                                 } else {
-                                    MaterialTheme.colorScheme.surfaceVariant
+                                    AppSurfaceTokens.surfaceContainer()
                                 }
                             ) {
                                 AppText(
                                     text = season.seasonTitle.ifEmpty { season.title },
                                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-                                    style = MaterialTheme.typography.bodyMedium,
+                                    style = COUITheme.textStyles.body1,
                                     color = if (isCurrentSeason) {
                                         AppContentColors.onAccent()
                                     } else {
@@ -1390,7 +1391,7 @@ private fun MobileBangumiDetailContent(
                             AppText(
                                 text = jumpErrorMessage!!,
                                 color = AppContentColors.error(),
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 modifier = Modifier.padding(top = 4.dp)
                             )
                         }
@@ -1499,7 +1500,7 @@ private fun BangumiCreditsSection(
     AppSurface(
         modifier = modifier,
         shape = AppShapes.container(ContainerLevel.Card),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
+        color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.45f)
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -1507,7 +1508,7 @@ private fun BangumiCreditsSection(
         ) {
             AppText(
                 text = "演职人员",
-                style = MaterialTheme.typography.titleMedium,
+                style = COUITheme.textStyles.headline1,
                 fontWeight = FontWeight.Bold
             )
             detail.actors.takeIf { it.isNotBlank() }?.let { actors ->
@@ -1532,13 +1533,13 @@ private fun BangumiCreditRow(
     ) {
         AppText(
             text = label,
-            style = MaterialTheme.typography.titleSmall,
+            style = COUITheme.textStyles.headline2,
             color = AppContentColors.accent(),
             fontWeight = FontWeight.Medium
         )
         AppText(
             text = value,
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = AppContentColors.secondaryText()
         )
     }
@@ -1556,7 +1557,7 @@ private fun BangumiSectionPreview(
         AppText(
             text = title,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            style = MaterialTheme.typography.titleMedium,
+            style = COUITheme.textStyles.headline1,
             fontWeight = FontWeight.Bold
         )
         LazyRow(
@@ -1595,7 +1596,7 @@ private fun BangumiFollowStatusDialog(
                     ) {
                             AppText(
                                 text = option.label,
-                                style = MaterialTheme.typography.bodyMedium,
+                                style = COUITheme.textStyles.body1,
                                 fontWeight = if (currentStatus == option.status) {
                                     FontWeight.SemiBold
                                 } else {
@@ -1646,7 +1647,7 @@ private fun EpisodeChip(
                 .fillMaxWidth()
                 .aspectRatio(16f / 9f),
             shape = AppShapes.container(ContainerLevel.Chip),
-            color = MaterialTheme.colorScheme.surfaceVariant
+            color = AppSurfaceTokens.surfaceContainer()
         ) {
             Box {
                 AsyncImage(
@@ -1671,7 +1672,7 @@ private fun EpisodeChip(
                             text = episode.badge,
                             modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp),
                             color = badgeColors.contentColor,
-                            style = MaterialTheme.typography.labelSmall
+                            style = COUITheme.textStyles.footnote2
                         )
                     }
                 }
@@ -1683,7 +1684,7 @@ private fun EpisodeChip(
                             .align(Alignment.BottomCenter)
                             .fillMaxWidth()
                             .height(2.dp)
-                            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+                            .background(AppSurfaceTokens.surfaceContainer().copy(alpha = 0.4f))
                     ) {
                         Box(
                             modifier = Modifier
@@ -1706,7 +1707,7 @@ private fun EpisodeChip(
             // 集数数字
             AppText(
                 text = episode.title.ifEmpty { episode.id.toString() },
-                style = MaterialTheme.typography.labelMedium,
+                style = COUITheme.textStyles.footnote1,
                 fontWeight = FontWeight.Bold,
                 color = AppContentColors.primaryText(),
                 maxLines = titleMaxLines,
@@ -1718,7 +1719,7 @@ private fun EpisodeChip(
                 Spacer(modifier = Modifier.width(6.dp))
                 AppText(
                     text = episode.longTitle,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = AppContentColors.secondaryText(),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -1770,7 +1771,7 @@ private fun EpisodeSelectionSheet(
             ) {
                 AppText(
                     text = "选集 (${detail.episodes?.size ?: 0})",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = COUITheme.textStyles.headline1,
                     fontWeight = FontWeight.Bold
                 )
 
@@ -1818,7 +1819,7 @@ private fun EpisodeSelectionSheet(
                             AppText(
                                 text = season.seasonTitle.ifEmpty { season.title },
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                                style = MaterialTheme.typography.bodyMedium,
+                                style = COUITheme.textStyles.body1,
                                 fontWeight = if (isCurrentSeason) FontWeight.Bold else FontWeight.Normal,
                                 color = if (isCurrentSeason) {
                                     AppContentColors.onAccent()
@@ -1836,14 +1837,14 @@ private fun EpisodeSelectionSheet(
                 AppText(
                     text = desc,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText()
                 )
             }
 
             AppHorizontalDivider(
                 modifier = Modifier.padding(vertical = 8.dp),
-                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
+                color = AppSurfaceTokens.outline().copy(alpha = 0.3f)
             )
 
             //  分页选择器（超过50集时显示）
@@ -1861,7 +1862,7 @@ private fun EpisodeSelectionSheet(
 
                         AppSurface(
                             onClick = { selectedPage = page },
-                            color = if (isCurrentPage) AppContentColors.accent() else MaterialTheme.colorScheme.surfaceVariant,
+                            color = if (isCurrentPage) AppContentColors.accent() else AppSurfaceTokens.surfaceContainer(),
                             shape = AppShapes.container(ContainerLevel.Card)
                         ) {
                             AppText(
@@ -1872,7 +1873,7 @@ private fun EpisodeSelectionSheet(
                                     descending = episodesDescending
                                 ),
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = if (isCurrentPage) AppContentColors.onAccent() else AppContentColors.secondaryText()
                             )
                         }
@@ -1949,7 +1950,7 @@ private fun EpisodeListItem(
                         .align(Alignment.BottomCenter)
                         .fillMaxWidth()
                         .height(2.dp)
-                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+                        .background(AppSurfaceTokens.surfaceContainer().copy(alpha = 0.4f))
                 ) {
                     Box(
                         modifier = Modifier
@@ -1975,7 +1976,7 @@ private fun EpisodeListItem(
                         text = episode.badge,
                         modifier = Modifier.padding(horizontal = 3.dp, vertical = 1.dp),
                         color = badgeColors.contentColor,
-                        style = MaterialTheme.typography.labelSmall
+                        style = COUITheme.textStyles.footnote2
                     )
                 }
             }
@@ -1991,7 +1992,7 @@ private fun EpisodeListItem(
                 // 集数
                 AppText(
                     text = "第${episode.title}话",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     fontWeight = FontWeight.Medium,
                     color = AppContentColors.primaryText(),
                     maxLines = 1,
@@ -2001,7 +2002,7 @@ private fun EpisodeListItem(
                     Spacer(modifier = Modifier.width(6.dp))
                     AppText(
                         text = FormatUtils.formatDuration((episode.duration / 1000L).toInt()),
-                        style = MaterialTheme.typography.labelSmall,
+                        style = COUITheme.textStyles.footnote2,
                         color = AppContentColors.secondaryText()
                     )
                 }
@@ -2010,7 +2011,7 @@ private fun EpisodeListItem(
             // 标题区预留一行，使同排剧集在大字号下仍然等高。
             AppText(
                 text = episode.longTitle,
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText(),
                 minLines = 1,
                 maxLines = 1,

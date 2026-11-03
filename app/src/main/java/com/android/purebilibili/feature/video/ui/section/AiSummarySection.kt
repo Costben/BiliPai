@@ -73,7 +73,7 @@ fun AiSummaryCard(
     var expanded by remember { mutableStateOf(defaultExpanded) }
     val useMiuix = LocalAppUiStyle.current.usesMiuixFamilySkin
     val horizontalPadding = if (useMiuix) 12.dp else 16.dp
-    val containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+    val containerColor = AppSurfaceTokens.surfaceContainer()
 
     AppContentCard(
         modifier = modifier
@@ -111,13 +111,13 @@ fun AiSummaryCard(
                 Column(modifier = Modifier.weight(1f)) {
                     AppText(
                         text = "AI 总结",
-                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                        style = COUITheme.textStyles.headline2.copy(fontWeight = FontWeight.SemiBold),
                         color = AppContentColors.primaryText(),
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     AppText(
                         text = collapsedPreview,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.secondaryText(),
                         maxLines = if (expanded) 2 else 1,
                         overflow = TextOverflow.Ellipsis,
@@ -141,7 +141,7 @@ fun AiSummaryCard(
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
             ) {
                 AppHorizontalDivider(
-                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f),
+                    color = AppSurfaceTokens.outline().copy(alpha = 0.55f),
                     thickness = 1.dp,
                     modifier = Modifier.padding(bottom = 12.dp),
                 )
@@ -149,7 +149,7 @@ fun AiSummaryCard(
                 if (modelResult.summary.isNotBlank()) {
                     AppText(
                         text = modelResult.summary,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         color = AppContentColors.primaryText(),
                         modifier = Modifier.padding(
                             bottom = if (modelResult.outline.isNotEmpty()) 12.dp else 0.dp
@@ -258,8 +258,8 @@ fun AiSummaryPromptCard(
     modifier: Modifier = Modifier
 ) {
     val containerColor = when (promptState.tone) {
-        AiSummaryPromptTone.INFO -> MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.55f)
-        AiSummaryPromptTone.MUTED -> MaterialTheme.colorScheme.surfaceContainerLow
+        AiSummaryPromptTone.INFO -> AppSurfaceTokens.primaryContainer().copy(alpha = 0.55f)
+        AiSummaryPromptTone.MUTED -> AppSurfaceTokens.surfaceContainer()
         AiSummaryPromptTone.WARNING -> MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.55f)
     }
     val accentColor = when (promptState.tone) {
@@ -302,13 +302,13 @@ fun AiSummaryPromptCard(
             Column(modifier = Modifier.weight(1f)) {
                 AppText(
                     text = promptState.title,
-                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                    style = COUITheme.textStyles.headline2.copy(fontWeight = FontWeight.SemiBold),
                     color = AppContentColors.primaryText(),
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 AppText(
                     text = promptState.message,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                 )
             }
@@ -382,7 +382,7 @@ private fun OutlineItemRow(
 
         AppText(
             text = title,
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = AppContentColors.primaryText(),
             modifier = Modifier
                 .weight(1f)
@@ -419,7 +419,7 @@ private fun OutlineItemRow(
                     Spacer(modifier = Modifier.width(3.dp))
                     AppText(
                         text = formatAiSummaryTimestamp(timestamp),
-                        style = MaterialTheme.typography.labelSmall.copy(
+                        style = COUITheme.textStyles.footnote2.copy(
                             fontFeatureSettings = "tnum",
                         ),
                         color = AppContentColors.accent(),

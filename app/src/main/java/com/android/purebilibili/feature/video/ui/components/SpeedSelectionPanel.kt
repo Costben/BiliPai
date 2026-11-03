@@ -3,6 +3,7 @@ package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppText
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -46,7 +47,7 @@ fun SpeedButton(
         AppText(
             text = PlaybackSpeed.formatSpeed(currentSpeed),
             color = if (currentSpeed != 1.0f) AppContentColors.accent() else Color.White,
-            style = MaterialTheme.typography.labelMedium,
+            style = COUITheme.textStyles.footnote1,
             fontWeight = if (currentSpeed != 1.0f) FontWeight.Bold else FontWeight.Normal,
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
         )

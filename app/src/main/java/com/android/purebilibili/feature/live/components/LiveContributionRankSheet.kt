@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.width
 import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.AppModalBottomSheet
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppSegmentOption
@@ -47,6 +46,8 @@ import com.android.purebilibili.feature.live.formatLiveViewerCount
 import com.android.purebilibili.data.model.response.LiveContributionRankItem
 import com.android.purebilibili.data.repository.LiveContributionRankType
 import com.android.purebilibili.data.repository.LiveRepository
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.components.AppTextButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,7 +69,7 @@ fun LiveContributionRankSheet(
     ) 1f else 0.7f).dp
     AppModalBottomSheet(onDismissRequest = onDismiss) {
         Column(Modifier.fillMaxWidth().height(panelHeight)) {
-            AppText("高能榜", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(12.dp))
+            AppText("高能榜", style = COUITheme.textStyles.title4, modifier = Modifier.padding(12.dp))
             AppThemeAdaptiveTabRow(
                 // Glass indicator fills the measured slot; native geometry keeps its defaults.
                 liquidGlassAdaptIndicatorToLabel = !com.android.purebilibili.core.ui.LocalAppThemeConfig.current.liquidGlassEnabled,
@@ -180,14 +181,14 @@ private fun RankItemRow(
             AppText(
                 text = item.rank.takeIf { it > 0 }?.toString() ?: "-",
                 color = AppSurfaceTokens.primary(),
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 fontWeight = FontWeight.Bold
             )
             Column(modifier = Modifier.weight(1f)) {
                 AppText(
                     text = item.name.ifBlank { "用户" },
                     color = AppSurfaceTokens.onSurface(),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     fontWeight = FontWeight.Medium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -197,7 +198,7 @@ private fun RankItemRow(
                     AppText(
                         text = "${medal.medalName} Lv.${medal.level}",
                         color = AppSurfaceTokens.onSurfaceVariantSummary(),
-                        style = MaterialTheme.typography.labelSmall
+                        style = COUITheme.textStyles.footnote2
                     )
                 }
             }
@@ -205,7 +206,7 @@ private fun RankItemRow(
         AppText(
             text = item.score.takeIf { it > 0 }?.toString() ?: "-",
             color = AppSurfaceTokens.onSurface(),
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.padding(start = AppSpacingTokens.Small)

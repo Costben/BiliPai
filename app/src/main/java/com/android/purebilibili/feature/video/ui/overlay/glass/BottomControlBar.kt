@@ -2,6 +2,7 @@
 package com.android.purebilibili.feature.video.ui.overlay.glass
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import androidx.compose.foundation.clickable
 import com.android.purebilibili.core.ui.components.appActionClickable
@@ -43,7 +44,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.appGlassMenuSource
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -2035,7 +2035,7 @@ fun BottomControlBar(
                     AppText(
                         text = "字幕显示",
                         color = Color.White.copy(alpha = 0.88f),
-                        style = MaterialTheme.typography.titleSmall,
+                        style = COUITheme.textStyles.headline2,
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier.padding(start = 4.dp, bottom = 2.dp)
                     )
@@ -2061,7 +2061,7 @@ fun BottomControlBar(
                         AppText(
                             text = "字幕轨道",
                             color = Color.White.copy(alpha = 0.72f),
-                            style = MaterialTheme.typography.labelMedium,
+                            style = COUITheme.textStyles.footnote1,
                             fontWeight = FontWeight.Medium,
                             modifier = Modifier.padding(start = 4.dp, top = 2.dp, bottom = 2.dp)
                         )
@@ -2091,7 +2091,7 @@ fun BottomControlBar(
                             AppText(
                                 text = "大字号",
                                 color = Color.White.copy(alpha = 0.85f),
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 fontWeight = FontWeight.Medium
                             )
                             AppSwitch(
@@ -2112,7 +2112,7 @@ fun BottomControlBar(
                         AppText(
                             text = "锁定位置",
                             color = Color.White.copy(alpha = 0.85f),
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             fontWeight = FontWeight.Medium
                         )
                         AppSwitch(
@@ -2380,7 +2380,7 @@ private fun SubtitlePanelOption(
             else -> Color.White
         },
         textAlign = TextAlign.Center,
-        style = MaterialTheme.typography.bodySmall,
+        style = COUITheme.textStyles.footnote1,
         fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Medium,
         modifier = Modifier
             .widthIn(min = minWidthDp.dp)
@@ -2401,7 +2401,7 @@ private fun MoreActionTextButton(
         text = label,
         color = if (highlighted) AppContentColors.accent() else Color.White,
         textAlign = TextAlign.Center,
-        style = MaterialTheme.typography.bodyMedium,
+        style = COUITheme.textStyles.body1,
         fontWeight = FontWeight.SemiBold,
         modifier = Modifier
             .widthIn(min = minWidthDp.dp)
@@ -2450,13 +2450,13 @@ private fun VideoEnhancementSettingsPanel(
                     AppText(
                         text = "画质增强",
                         color = Color.White,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         fontWeight = FontWeight.Medium
                     )
                     AppText(
                         text = if (enabled) "当前视频已开启" else "当前视频已关闭",
                         color = Color.White.copy(alpha = 0.68f),
-                        style = MaterialTheme.typography.labelSmall
+                        style = COUITheme.textStyles.footnote2
                     )
                 }
                 AppSwitch(
@@ -2469,7 +2469,7 @@ private fun VideoEnhancementSettingsPanel(
             AppText(
                 text = "增强算法",
                 color = Color.White.copy(alpha = 0.72f),
-                style = MaterialTheme.typography.labelMedium,
+                style = COUITheme.textStyles.footnote1,
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
             )
@@ -2496,7 +2496,7 @@ private fun VideoEnhancementSettingsPanel(
                 AppText(
                     text = "Anime4K 模型",
                     color = Color.White.copy(alpha = 0.72f),
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     fontWeight = FontWeight.Medium,
                     modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                 )
@@ -2525,13 +2525,13 @@ private fun VideoEnhancementSettingsPanel(
                     AppText(
                         text = "FSR 锐化",
                         color = Color.White.copy(alpha = 0.72f),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         fontWeight = FontWeight.Medium
                     )
                     AppText(
                         text = "${(fsrSharpness.coerceIn(0f, 1f) * 100).roundToInt()}%",
                         color = Color.White,
-                        style = MaterialTheme.typography.labelMedium,
+                        style = COUITheme.textStyles.footnote1,
                         fontWeight = FontWeight.SemiBold
                     )
                 }
@@ -2547,7 +2547,7 @@ private fun VideoEnhancementSettingsPanel(
             AppText(
                 text = "算法与模型会沿用上次选择",
                 color = Color.White.copy(alpha = 0.56f),
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
             )
         }
@@ -2580,7 +2580,7 @@ private fun VideoEnhancementChoice(
             text = label,
             color = if (selected) AppContentColors.accent() else Color.White,
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.labelMedium,
+            style = COUITheme.textStyles.footnote1,
             fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Medium,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis

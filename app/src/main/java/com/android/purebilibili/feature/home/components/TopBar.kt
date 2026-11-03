@@ -1,6 +1,8 @@
 // 文件路径: feature/home/components/TopBar.kt
 package com.android.purebilibili.feature.home.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.navigation.isTabSelectionInProgress
@@ -186,11 +188,12 @@ internal fun resolveTopTabDockEndInsetDp(
 /**
  * 非玻璃分类使用原生标签圆角，玻璃与 MD3 dock 保留各自的胶囊轮廓。
  */
+@Composable
 internal fun resolveTopTabIndicatorShape(
     showIcon: Boolean,
     showText: Boolean,
     isMiuixNonGlass: Boolean = false,
-): Shape = if (isMiuixNonGlass) androidx.compose.foundation.shape.RoundedCornerShape(12.dp)
+): Shape = if (isMiuixNonGlass) AppShapes.container(ContainerLevel.MediaCover)
     else resolveSharedBottomBarCapsuleShape()
 
 /**
@@ -815,7 +818,7 @@ fun FluidHomeTopBar(
             tonalElevation = AppSpacingTokens.None,
             border = androidx.compose.foundation.BorderStroke(
                 width = AppSpacingTokens.Micro / 2,
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.1f)
+                color = AppSurfaceTokens.outline().copy(alpha = 0.1f)
             )
         ) {
             Row(
@@ -838,7 +841,7 @@ fun FluidHomeTopBar(
                         modifier = Modifier
                             .size(AppSpacingTokens.DoubleExtraLarge + AppSpacingTokens.ExtraSmall)
                             .clip(CircleShape)
-                            .border(AppSpacingTokens.Micro / 2, MaterialTheme.colorScheme.surfaceVariant, CircleShape)
+                            .border(AppSpacingTokens.Micro / 2, AppSurfaceTokens.surfaceContainer(), CircleShape)
                     ) {
                         val displayFace = user.face
                         if (user.isLogin && displayFace.isNotEmpty()) {
@@ -852,7 +855,7 @@ fun FluidHomeTopBar(
                             )
                         } else {
                             Box(
-                                Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surfaceVariant),
+                                Modifier.fillMaxSize().background(AppSurfaceTokens.surfaceContainer()),
                                 contentAlignment = Alignment.Center
                             ) {
                                 AppIcon(
@@ -875,7 +878,7 @@ fun FluidHomeTopBar(
                         .weight(1f)
                         .height(AppSpacingTokens.DoubleExtraLarge + AppSpacingTokens.ExtraSmall)
                         .clip(AppShapes.container(ContainerLevel.Pill))
-                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                        .background(AppSurfaceTokens.surfaceContainer().copy(alpha = 0.5f))
                         .appActionClickable(
                             interactionSource = searchClickInteractionSource,
                             indication = null
@@ -900,8 +903,8 @@ fun FluidHomeTopBar(
                             Spacer(modifier = Modifier.width(AppSpacingTokens.Small))
                             AppText(
                                 text = "搜索视频、UP主...",
-                                style = MaterialTheme.typography.bodyMedium,
-                                fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                                style = COUITheme.textStyles.body1,
+                                fontSize = COUITheme.textStyles.footnote1.fontSize,
                                 color = AppContentColors.secondaryText(),
                                 maxLines = 1
                             )
@@ -989,7 +992,7 @@ internal fun Modifier.homeTopBottomBarMatchedSurface(
         ?: resolveLiquidGlassTuning(liquidGlassStyle)
     // Same container tint as FloatingBottomBar / bottom dock.
     val containerColor = resolveAndroidNativeFloatingBottomBarContainerColor(
-        surfaceColor = MaterialTheme.colorScheme.surfaceContainer,
+        surfaceColor = AppSurfaceTokens.surfaceContainer(),
         tuning = tuning,
         glassEnabled = isGlassEnabled,
         blurEnabled = isBlurEnabled,
@@ -1385,7 +1388,7 @@ private fun LightweightHomeTopTabs(
                     ),
                 ),
                 labels = if (showText) categories else emptyList(),
-                textStyle = MaterialTheme.typography.bodyLarge.copy(
+                textStyle = COUITheme.textStyles.main.copy(
                     fontSize = resolvedFloatingLabelFontSize,
                     fontWeight = FontWeight.Bold,
                 ),
@@ -2310,7 +2313,7 @@ private fun LightweightHomeTopTabs(
                     !skinPlainStyle && !forceMaterialUnderline &&
                     LocalAppUiStyle.current == AppUiStyle.MATERIAL3
                 if (useNativeTonalPill) {
-                    val pillColor = MaterialTheme.colorScheme.secondaryContainer
+                    val pillColor = AppSurfaceTokens.secondaryContainer()
                     Box(
                         modifier = Modifier
                             .fillMaxSize()

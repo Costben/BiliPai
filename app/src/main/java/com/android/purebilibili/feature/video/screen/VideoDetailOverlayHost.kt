@@ -2,6 +2,7 @@ package com.android.purebilibili.feature.video.screen
 
 import com.android.purebilibili.core.util.rememberHapticFeedback
 import com.android.purebilibili.core.util.HapticType
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.resolveFilledButtonContainerColor
@@ -298,7 +299,7 @@ internal fun VideoDetailFollowGroupDialog(
                         AppText(
                             text = "暂无可用分组（不勾选即为默认分组）",
                             color = AppContentColors.secondaryText(),
-                            style = MaterialTheme.typography.bodySmall
+                            style = COUITheme.textStyles.footnote1
                         )
                     } else {
                         followGroupTags.forEach { tag ->
@@ -315,7 +316,7 @@ internal fun VideoDetailFollowGroupDialog(
                                 )
                                 AppText(
                                     text = "${tag.name} (${tag.count})",
-                                    style = MaterialTheme.typography.bodyMedium,
+                                    style = COUITheme.textStyles.body1,
                                     color = AppContentColors.primaryText()
                                 )
                             }
@@ -324,7 +325,7 @@ internal fun VideoDetailFollowGroupDialog(
                     AppText(
                         text = "可多选，确定后覆盖原分组设置。",
                         color = AppContentColors.secondaryText(),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         modifier = Modifier.padding(top = 8.dp)
                     )
                 }
@@ -390,12 +391,12 @@ internal fun VideoDetailPlaybackEndedDialog(
             ) {
                 AppText(
                     text = "播放完成",
-                    style = MaterialTheme.typography.titleLarge,
+                    style = COUITheme.textStyles.title4,
                     fontWeight = FontWeight.Bold
                 )
                 AppText(
                     text = "选择接下来的操作",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppContentColors.secondaryText()
                 )
                 AppButton(
@@ -406,7 +407,7 @@ internal fun VideoDetailPlaybackEndedDialog(
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                        containerColor = AppSurfaceTokens.surfaceContainerHighest(),
                         contentColor = AppContentColors.primaryText()
                     )
                 ) {
@@ -750,7 +751,7 @@ internal fun ExternalPlaylistQueueSheet(
                         tonalElevation = 0.dp,
                         border = BorderStroke(
                             width = 0.6.dp,
-                            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
+                            color = AppSurfaceTokens.outline().copy(alpha = 0.35f)
                         )
                     ) {
                         ExternalPlaylistQueueSheetContent(
@@ -782,7 +783,7 @@ internal fun ExternalPlaylistQueueSheet(
                     tonalElevation = 0.dp,
                     border = BorderStroke(
                         width = 0.6.dp,
-                        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
+                        color = AppSurfaceTokens.outline().copy(alpha = 0.35f)
                     )
                 ) {
                     ExternalPlaylistQueueSheetContent(
@@ -829,14 +830,14 @@ internal fun ExternalPlaylistQueueSheetContent(
         ) {
             AppText(
                 text = title,
-                style = MaterialTheme.typography.titleMedium,
+                style = COUITheme.textStyles.headline1,
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.weight(1f))
             AppText(
                 text = "${playlist.size}个视频",
                 color = AppContentColors.accent(),
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 fontWeight = FontWeight.Medium
             )
             if (showDismissButton) {
@@ -850,7 +851,7 @@ internal fun ExternalPlaylistQueueSheetContent(
         }
 
         AppHorizontalDivider(
-            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
+            color = AppSurfaceTokens.outline().copy(alpha = 0.35f)
         )
 
         LazyColumn(
@@ -879,7 +880,7 @@ internal fun ExternalPlaylistQueueSheetContent(
                         .fillMaxWidth()
                         .background(
                             if (selected) {
-                                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.35f)
+                                AppSurfaceTokens.primaryContainer().copy(alpha = 0.35f)
                             } else {
                                 Color.Transparent
                             }
@@ -898,7 +899,7 @@ internal fun ExternalPlaylistQueueSheetContent(
                         } else {
                             AppContentColors.secondaryText()
                         },
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                         fontWeight = FontWeight.SemiBold
                     )
                     Spacer(modifier = Modifier.width(10.dp))
@@ -907,7 +908,7 @@ internal fun ExternalPlaylistQueueSheetContent(
                             .width(96.dp)
                             .height(54.dp)
                             .clip(AppShapes.container(ContainerLevel.Field))
-                            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f))
+                            .background(AppSurfaceTokens.surfaceContainer().copy(alpha = 0.45f))
                     ) {
                         if (normalizedCoverUrl.isNotEmpty()) {
                             AsyncImage(
@@ -923,7 +924,7 @@ internal fun ExternalPlaylistQueueSheetContent(
                             ) {
                                 AppText(
                                     text = "无封面",
-                                    style = MaterialTheme.typography.labelSmall,
+                                    style = COUITheme.textStyles.footnote2,
                                     color = AppContentColors.secondaryText()
                                 )
                             }
@@ -931,7 +932,7 @@ internal fun ExternalPlaylistQueueSheetContent(
                         if (item.duration > 0L) {
                             AppText(
                                 text = FormatUtils.formatDuration(item.duration.coerceAtMost(Int.MAX_VALUE.toLong()).toInt()),
-                                style = MaterialTheme.typography.labelSmall,
+                                style = COUITheme.textStyles.footnote2,
                                 color = Color.White,
                                 modifier = Modifier
                                     .align(Alignment.BottomEnd)
@@ -961,7 +962,7 @@ internal fun ExternalPlaylistQueueSheetContent(
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             color = AppContentColors.secondaryText(),
-                            style = MaterialTheme.typography.bodySmall
+                            style = COUITheme.textStyles.footnote1
                         )
                         val stats = listOfNotNull(
                             item.playCount?.let { "${FormatUtils.formatStat(it)}播放" },
@@ -973,7 +974,7 @@ internal fun ExternalPlaylistQueueSheetContent(
                                 text = stats,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
-                                style = MaterialTheme.typography.labelSmall,
+                                style = COUITheme.textStyles.footnote2,
                                 color = if (selected) AppContentColors.accent() else AppContentColors.secondaryText(),
                             )
                         }

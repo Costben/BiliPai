@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,6 +26,7 @@ import com.android.purebilibili.core.ui.resolveUserAvatarCornerMark
 import com.android.purebilibili.core.util.FormatUtils
 import com.android.purebilibili.data.repository.CreatorCardStats
 import com.android.purebilibili.data.repository.VideoRepository
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 /**
  * UP 头像：头像框挂件 + 大会员/认证角标。
@@ -64,7 +64,7 @@ fun OwnerDecoratedAvatar(
             modifier = faceModifier
                 .fillMaxSize(faceFraction)
                 .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surfaceVariant),
+                .background(AppSurfaceTokens.surfaceContainer()),
             contentScale = ContentScale.Crop,
         )
         if (hasPendant) {

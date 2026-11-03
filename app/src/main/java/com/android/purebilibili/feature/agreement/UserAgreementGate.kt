@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.agreement
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.activity.compose.LocalActivity
@@ -35,6 +37,7 @@ import com.android.purebilibili.core.ui.components.AppCard
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppTextButton
+import com.android.purebilibili.core.ui.AppAlertDialog
 
 /**
  * First-launch agreement gate: the app renders only after the user agrees to the
@@ -91,7 +94,7 @@ private fun UserAgreementGateScreen(onAgree: () -> Unit) {
         ) {
             AppText(
                 stringResource(UserAgreementText.TITLE),
-                style = MaterialTheme.typography.headlineSmall,
+                style = COUITheme.textStyles.title4,
                 color = titleColor,
                 textAlign = TextAlign.Center,
             )
@@ -105,7 +108,7 @@ private fun UserAgreementGateScreen(onAgree: () -> Unit) {
                     item {
                         AppText(
                             stringResource(com.android.purebilibili.R.string.user_agreement_read_to_end),
-                            style = MaterialTheme.typography.labelSmall,
+                            style = COUITheme.textStyles.footnote2,
                             color = AppContentColors.secondaryText(),
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center,
@@ -138,10 +141,10 @@ private fun UserAgreementGateScreen(onAgree: () -> Unit) {
 fun UserAgreementBody(modifier: Modifier = Modifier) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
         UserAgreementText.SECTIONS.forEach { section ->
-            AppText(stringResource(section.title), style = MaterialTheme.typography.titleSmall,
+            AppText(stringResource(section.title), style = COUITheme.textStyles.headline2,
                 color = AppContentColors.accent())
             section.bodyLines.forEach { line ->
-                LinkifiedText(stringResource(line), style = MaterialTheme.typography.bodyMedium)
+                LinkifiedText(stringResource(line), style = COUITheme.textStyles.body1)
             }
         }
     }

@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.home.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.core.ui.AppContentColors
@@ -29,7 +31,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import com.android.purebilibili.core.ui.components.AppIcon
 import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppPlatformNavigationRail
 import com.android.purebilibili.core.ui.components.AppPlatformNavigationRailItem
@@ -354,8 +355,8 @@ private fun ColumnScope.MiuixSideBarSkinItem(
         Spacer(modifier = Modifier.height(AppSpacingTokens.ExtraSmall))
         AppText(
             text = label,
-            style = MaterialTheme.typography.labelSmall,
-            fontSize = MaterialTheme.typography.labelSmall.fontSize,
+            style = COUITheme.textStyles.footnote2,
+            fontSize = COUITheme.textStyles.footnote2.fontSize,
             fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Medium,
             color = iconColor
         )
@@ -452,7 +453,7 @@ private fun FrostedSideBarContent(
         } else {
             androidx.compose.foundation.BorderStroke(
                 width = AppSpacingTokens.Micro / 4,
-                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.3f)
+                color = AppSurfaceTokens.outline().copy(alpha = 0.3f)
             )
         }
     ) {
@@ -564,8 +565,8 @@ private fun FrostedSideBarContent(
 
                     AppText(
                         text = itemLabel,
-                        style = MaterialTheme.typography.labelSmall,
-                        fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                        style = COUITheme.textStyles.footnote2,
+                        fontSize = COUITheme.textStyles.footnote2.fontSize,
                         fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium,
                         color = iconColor
                     )

@@ -1,5 +1,7 @@
 package com.android.purebilibili.feature.home.components.cards
 
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -80,7 +81,7 @@ internal fun HorizontalVideoCardFrame(
                         .fillMaxWidth()
                         .aspectRatio(effectiveAspectRatio)
                         .clip(coverShape)
-                        .background(MaterialTheme.colorScheme.surfaceVariant),
+                        .background(AppSurfaceTokens.surfaceContainer()),
                 ) {
                     coverContent()
                     if (coverOverlayContent != null) {
@@ -111,7 +112,7 @@ internal fun HorizontalVideoCardFrame(
                     Box(
                         modifier = coverModifier
                             .clip(coverShape)
-                            .background(MaterialTheme.colorScheme.surfaceVariant),
+                            .background(AppSurfaceTokens.surfaceContainer()),
                     ) {
                         coverContent()
                         if (coverOverlayContent != null) {

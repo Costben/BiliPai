@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import com.android.purebilibili.core.ui.components.AppButton
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppOutlinedTextField
 import com.android.purebilibili.core.ui.components.AppSwitch
 import com.android.purebilibili.core.ui.components.AppText
@@ -58,6 +57,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.Request
 import java.net.InetSocketAddress
 import java.net.Socket
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 private const val TAG = "CdnRegionPlugin"
 private const val CDN_PROBE_SAMPLE_BYTES = 32 * 1024
@@ -324,12 +324,12 @@ class CdnRegionPlugin : BuiltinPlugin, PlaybackCdnPlugin, CdnTransferControls {
         ) {
             AppText(
                 text = "安全签名选线",
-                style = MaterialTheme.typography.titleSmall,
+                style = COUITheme.textStyles.headline2,
                 color = AppContentColors.primaryText()
             )
             AppText(
                 text = "打开视频后会自动比较 B 站当前返回的签名主/备线路；不会改写 Host，也不会保存过期链接。",
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 color = AppContentColors.secondaryText()
             )
             Spacer(modifier = Modifier.height(10.dp))
@@ -369,7 +369,7 @@ class CdnRegionPlugin : BuiltinPlugin, PlaybackCdnPlugin, CdnTransferControls {
                 AppText(
                     text = "自适应预缓存",
                     modifier = Modifier.weight(1f),
-                    style = MaterialTheme.typography.bodyMedium
+                    style = COUITheme.textStyles.body1
                 )
                 AppSwitch(
                     checked = prefetchEnabled,
@@ -384,7 +384,7 @@ class CdnRegionPlugin : BuiltinPlugin, PlaybackCdnPlugin, CdnTransferControls {
             }
             AppText(
                 text = "仅在 DASH 可读取分片索引且播放器已有至少 15 秒缓冲时下载未来分片；默认关闭以避免额外流量、电量和磁盘消耗。",
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 color = AppContentColors.secondaryText()
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -392,7 +392,7 @@ class CdnRegionPlugin : BuiltinPlugin, PlaybackCdnPlugin, CdnTransferControls {
                 AppText(
                     text = "实验性属地 / URL 改写",
                     modifier = Modifier.weight(1f),
-                    style = MaterialTheme.typography.bodyMedium
+                    style = COUITheme.textStyles.body1
                 )
                 AppSwitch(
                     checked = experimentalRewriteEnabled,
@@ -408,7 +408,7 @@ class CdnRegionPlugin : BuiltinPlugin, PlaybackCdnPlugin, CdnTransferControls {
             }
             AppText(
                 text = "兼容旧版地域 Host 表和高级 URL 替换。它不参与安全自动选线或预缓存，可能因签名与线路策略变化而不可用。",
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 color = AppContentColors.secondaryText()
             )
             if (experimentalRewriteEnabled) {
@@ -420,19 +420,19 @@ class CdnRegionPlugin : BuiltinPlugin, PlaybackCdnPlugin, CdnTransferControls {
                 Spacer(modifier = Modifier.height(12.dp))
                 AppText(
                     text = "实验性属地检测",
-                    style = MaterialTheme.typography.titleSmall,
+                    style = COUITheme.textStyles.headline2,
                     color = AppContentColors.primaryText()
                 )
                 AppText(
                     text = "属地：${snapshot.location.province.ifBlank { "未知" }} / ${snapshot.location.city.ifBlank { "未知" }}；运营商：${snapshot.location.isp.ifBlank { "未知" }}；命中区域：$regionText",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 hostDiagnostics.forEachIndexed { index, diagnostic ->
                     AppText(
                         text = "${index + 1}. ${diagnostic.host} · ${formatCdnHostDiagnostic(diagnostic)}",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.primaryText()
                     )
                 }
@@ -453,12 +453,12 @@ class CdnRegionPlugin : BuiltinPlugin, PlaybackCdnPlugin, CdnTransferControls {
                 Spacer(modifier = Modifier.height(12.dp))
                 AppText(
                     text = "高级 URL 替换",
-                    style = MaterialTheme.typography.titleSmall,
+                    style = COUITheme.textStyles.headline2,
                     color = AppContentColors.primaryText()
                 )
                 AppText(
                     text = "规则按顺序匹配完整播放 URL，仅应用首条命中规则。替换结果必须是 HTTPS 且指向 B 站或当前候选 CDN。",
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = AppContentColors.secondaryText()
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -466,7 +466,7 @@ class CdnRegionPlugin : BuiltinPlugin, PlaybackCdnPlugin, CdnTransferControls {
                 AppText(
                     text = "严格使用自定义 CDN",
                     modifier = Modifier.weight(1f),
-                    style = MaterialTheme.typography.bodyMedium
+                    style = COUITheme.textStyles.body1
                 )
                 AppSwitch(
                     checked = strictCustomCdn,
@@ -475,7 +475,7 @@ class CdnRegionPlugin : BuiltinPlugin, PlaybackCdnPlugin, CdnTransferControls {
             }
             AppText(
                 text = "开启后，只要有自定义规则成功生成播放地址，就不再加入属地和原始线路；没有规则命中时仍会自动回退，避免无法播放。",
-                style = MaterialTheme.typography.labelSmall,
+                style = COUITheme.textStyles.footnote2,
                 color = AppContentColors.secondaryText()
             )
             customRules.forEachIndexed { index, rule ->
@@ -537,7 +537,7 @@ class CdnRegionPlugin : BuiltinPlugin, PlaybackCdnPlugin, CdnTransferControls {
             customRuleError?.let { error ->
                 AppText(
                     text = error,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = COUITheme.textStyles.footnote2,
                     color = AppContentColors.error()
                 )
             }
@@ -586,9 +586,9 @@ class CdnRegionPlugin : BuiltinPlugin, PlaybackCdnPlugin, CdnTransferControls {
                 AppText(
                     text = "规则 ${index + 1}",
                     modifier = Modifier.weight(1f),
-                    style = MaterialTheme.typography.bodyMedium
+                    style = COUITheme.textStyles.body1
                 )
-                AppText("启用", style = MaterialTheme.typography.bodySmall)
+                AppText("启用", style = COUITheme.textStyles.footnote1)
                 AppSwitch(checked = rule.enabled, onCheckedChange = { onChange(rule.copy(enabled = it)) })
             }
             AppOutlinedTextField(

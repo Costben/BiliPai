@@ -1,6 +1,8 @@
 // 文件路径: feature/dynamic/components/DrawGrid.kt
 package com.android.purebilibili.feature.dynamic.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.AppContentColors
 
 import coil3.network.NetworkHeaders
@@ -175,7 +177,7 @@ private fun DrawGridImage(
         modifier = modifier
             .alpha(if (sourceHidden) 0f else 1f)
             .clip(RoundedCornerShape(cornerRadius))
-            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .background(AppSurfaceTokens.surfaceContainer())
             .onGloballyPositioned { coordinates ->
                 imageRectRef.value = coordinates.boundsInWindow()
                 galleryRects[index] = imageRectRef.value!!
@@ -240,7 +242,7 @@ private fun DrawGridImage(
                 AppText(
                     "+${totalCount - displayCount}",
                     color = MediaContrastPalette.Foreground,
-                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                    fontSize = COUITheme.textStyles.title4.fontSize,
                     fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
                 )
             }
@@ -265,7 +267,7 @@ private fun DrawGridImage(
                 AppText(
                     "Live",
                     color = MediaContrastPalette.Foreground,
-                    fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                    fontSize = COUITheme.textStyles.footnote2.fontSize,
                     fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold
                 )
             }
@@ -288,7 +290,7 @@ private fun DrawGridImage(
                 AppText(
                     "长图",
                     color = MediaContrastPalette.Foreground,
-                    fontSize = MaterialTheme.typography.labelSmall.fontSize
+                    fontSize = COUITheme.textStyles.footnote2.fontSize
                 )
             }
         }

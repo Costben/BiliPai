@@ -1,6 +1,7 @@
 // 文件路径: feature/dynamic/components/ImagePreviewDialog.kt
 package com.android.purebilibili.feature.dynamic.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.android.purebilibili.core.ui.AppIcons
 
 import kotlinx.coroutines.ensureActive
@@ -1515,7 +1516,7 @@ private fun ImagePreviewOverlayContent(
                                                 AppText(
                                                     text = currentText.headline,
                                                     color = MediaContrastPalette.Foreground.copy(alpha = 0.9f),
-                                                    fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                                                    fontSize = COUITheme.textStyles.footnote1.fontSize,
                                                     maxLines = 1,
                                                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                                                     modifier = Modifier.weight(1f, fill = false)
@@ -1525,7 +1526,7 @@ private fun ImagePreviewOverlayContent(
                                                 AppText(
                                                     text = currentText.pageIndicator,
                                                     color = MediaContrastPalette.Foreground.copy(alpha = 0.64f),
-                                                    fontSize = MaterialTheme.typography.labelSmall.fontSize
+                                                    fontSize = COUITheme.textStyles.footnote2.fontSize
                                                 )
                                             }
                                         }
@@ -1534,8 +1535,8 @@ private fun ImagePreviewOverlayContent(
                                         AppText(
                                             text = currentText.body,
                                             color = MediaContrastPalette.Foreground.copy(alpha = 0.94f),
-                                            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                                            lineHeight = MaterialTheme.typography.bodyLarge.lineHeight,
+                                            fontSize = COUITheme.textStyles.body1.fontSize,
+                                            lineHeight = COUITheme.textStyles.main.lineHeight,
                                             maxLines = 4,
                                             overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                                         )
@@ -1572,7 +1573,7 @@ private fun ImagePreviewOverlayContent(
                         AppText(
                             text = "${pagerState.currentPage + 1}/${images.size}",
                             color = Color.White,
-                            fontSize = MaterialTheme.typography.bodyMedium.fontSize
+                            fontSize = COUITheme.textStyles.body1.fontSize
                         )
                     }
                 }
@@ -1697,7 +1698,7 @@ private fun ImagePreviewOverlayContent(
                                                 AppText(
                                                     text = secondaryText,
                                                     color = MediaContrastPalette.Foreground.copy(alpha = 0.82f),
-                                                    fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                                                    fontSize = COUITheme.textStyles.footnote2.fontSize,
                                                     maxLines = 1,
                                                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                                                 )
@@ -1706,7 +1707,7 @@ private fun ImagePreviewOverlayContent(
                                                 AppText(
                                                     text = primaryText,
                                                     color = MediaContrastPalette.Foreground,
-                                                    fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                                                    fontSize = COUITheme.textStyles.footnote1.fontSize,
                                                     maxLines = 2,
                                                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                                                     modifier = Modifier
@@ -1718,7 +1719,7 @@ private fun ImagePreviewOverlayContent(
                                                 AppText(
                                                     text = "${page + 1} / ${images.size}",
                                                     color = MediaContrastPalette.Foreground.copy(alpha = 0.8f),
-                                                    fontSize = MaterialTheme.typography.labelSmall.fontSize
+                                                    fontSize = COUITheme.textStyles.footnote2.fontSize
                                                 )
                                             }
                                         }
@@ -1729,7 +1730,7 @@ private fun ImagePreviewOverlayContent(
                                 AppText(
                                     "${pagerState.currentPage + 1} / ${images.size}",
                                     color = MediaContrastPalette.Foreground,
-                                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                                    fontSize = COUITheme.textStyles.body1.fontSize,
                                     modifier = Modifier
                                         .background(MediaContrastPalette.Scrim.copy(0.5f), AppShapes.container(ContainerLevel.Card))
                                         .padding(horizontal = AppSpacingTokens.Medium, vertical = AppSpacingTokens.ExtraSmall + AppSpacingTokens.Micro)
@@ -1879,7 +1880,7 @@ private fun ImagePreviewOverlayContent(
                                 AppText(
                                     text = if (isLivePhotoEnabled) "实况" else "实况已关",
                                     color = Color.White,
-                                    fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                                    fontSize = COUITheme.textStyles.footnote1.fontSize,
                                     fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold
                                 )
                                 Spacer(modifier = Modifier.width(4.dp))
@@ -1923,7 +1924,7 @@ private fun ImagePreviewOverlayContent(
                                             AppText(
                                                 text = if (isLivePhotoEnabled) "关闭实况" else "开启实况",
                                                 color = Color.White,
-                                                fontSize = MaterialTheme.typography.bodyMedium.fontSize
+                                                fontSize = COUITheme.textStyles.body1.fontSize
                                             )
                                         }
 
@@ -1957,7 +1958,7 @@ private fun ImagePreviewOverlayContent(
                                             AppText(
                                                 text = "重新播放",
                                                 color = Color.White,
-                                                fontSize = MaterialTheme.typography.bodyMedium.fontSize
+                                                fontSize = COUITheme.textStyles.body1.fontSize
                                             )
                                         }
                                     }
@@ -2079,7 +2080,7 @@ private fun ImagePreviewActionButton(
     ) {
         AppText(
             text = label,
-            style = MaterialTheme.typography.bodyLarge,
+            style = COUITheme.textStyles.main,
             modifier = Modifier.fillMaxWidth()
         )
     }
@@ -2117,7 +2118,7 @@ private fun ImagePreviewCommentTopBar(
             AppText(
                 text = label,
                 color = MediaContrastPalette.Foreground.copy(alpha = if (onViewOriginal != null) 0.9f else 0.38f),
-                fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                fontSize = COUITheme.textStyles.footnote1.fontSize,
                 maxLines = 1,
                 overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                 modifier = Modifier
@@ -2199,7 +2200,7 @@ private fun ImagePreviewCommentPanel(
                 AppText(
                     text = context.authorName,
                     color = MediaContrastPalette.Foreground,
-                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                    fontSize = COUITheme.textStyles.body1.fontSize,
                     maxLines = 1,
                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                 )
@@ -2207,7 +2208,7 @@ private fun ImagePreviewCommentPanel(
                     AppText(
                         text = context.timeText,
                         color = MediaContrastPalette.Foreground.copy(alpha = 0.58f),
-                        fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                        fontSize = COUITheme.textStyles.footnote2.fontSize,
                         maxLines = 1
                     )
                 }
@@ -2218,8 +2219,8 @@ private fun ImagePreviewCommentPanel(
             AppText(
                 text = context.body,
                 color = MediaContrastPalette.Foreground.copy(alpha = 0.94f),
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                lineHeight = MaterialTheme.typography.bodyLarge.lineHeight,
+                fontSize = COUITheme.textStyles.body1.fontSize,
+                lineHeight = COUITheme.textStyles.main.lineHeight,
                 maxLines = 3,
                 overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
             )
@@ -2242,7 +2243,7 @@ private fun ImagePreviewCommentPanel(
                 AppText(
                     text = "回复 ${context.authorName}",
                     color = MediaContrastPalette.Foreground.copy(alpha = 0.56f),
-                    fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                    fontSize = COUITheme.textStyles.footnote1.fontSize,
                     maxLines = 1,
                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                 )
@@ -2310,7 +2311,7 @@ private fun ImagePreviewCommentActionButton(
         AppText(
             text = label,
             color = MediaContrastPalette.Foreground.copy(alpha = if (enabled) 0.88f else 0.38f),
-            fontSize = MaterialTheme.typography.labelSmall.fontSize,
+            fontSize = COUITheme.textStyles.footnote2.fontSize,
             maxLines = 1,
             overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
         )

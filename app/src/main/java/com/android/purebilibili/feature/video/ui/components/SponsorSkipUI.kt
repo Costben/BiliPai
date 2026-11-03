@@ -2,6 +2,7 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppFilterChip
@@ -75,7 +76,7 @@ fun SponsorSkipButton(
                     AppText(
                         text = seg.categoryName,
                         color = MaterialTheme.colorScheme.inversePrimary,
-                        style = MaterialTheme.typography.labelMedium,
+                        style = COUITheme.textStyles.footnote1,
                         fontWeight = FontWeight.Medium
                     )
 
@@ -100,7 +101,7 @@ fun SponsorSkipButton(
                             AppText(
                                 text = "跳过",
                                 color = AppContentColors.onAccent(),
-                                style = MaterialTheme.typography.labelMedium,
+                                style = COUITheme.textStyles.footnote1,
                                 fontWeight = FontWeight.Bold
                             )
                         }
@@ -158,12 +159,12 @@ fun SponsorContributionOverlay(
                         } else {
                             "${formatSponsorContributionTime(state.startMs ?: 0L)} – ${formatSponsorContributionTime(state.endMs ?: 0L)}"
                         },
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                     )
                     if (state.phase != SponsorContributionPhase.SUCCESS) {
                         AppText(
                             text = "选择片段类别",
-                            style = MaterialTheme.typography.labelLarge,
+                            style = COUITheme.textStyles.button,
                             color = AppContentColors.secondaryText(),
                         )
                         FlowRow(
@@ -186,7 +187,7 @@ fun SponsorContributionOverlay(
                         }
                         AppText(
                             text = "动作类型",
-                            style = MaterialTheme.typography.labelLarge,
+                            style = COUITheme.textStyles.button,
                             color = AppContentColors.secondaryText(),
                         )
                         FlowRow(
@@ -206,14 +207,14 @@ fun SponsorContributionOverlay(
                         }
                         AppText(
                             text = "提交将发送类别、时间段、视频标识和社区用户 ID 至 ${state.serverBaseUrl}",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = AppContentColors.secondaryText(),
                         )
                     }
                     state.message?.let { message ->
                         AppText(
                             text = message,
-                            style = MaterialTheme.typography.bodySmall,
+                            style = COUITheme.textStyles.footnote1,
                             color = if (state.phase == SponsorContributionPhase.SUCCESS) {
                                 AppContentColors.accent()
                             } else {
@@ -297,7 +298,7 @@ fun SponsorSkipToast(
                     AppText(
                         text = it,
                         color = MaterialTheme.colorScheme.onTertiaryContainer,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         fontWeight = FontWeight.Medium
                     )
                 }

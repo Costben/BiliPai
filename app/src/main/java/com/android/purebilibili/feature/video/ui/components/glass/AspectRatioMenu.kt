@@ -1,6 +1,7 @@
 package com.android.purebilibili.feature.video.ui.components.glass
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.feature.video.ui.components.*
 import com.android.purebilibili.core.ui.AppContentColors
@@ -60,7 +61,7 @@ fun AspectRatioButton(
             AppText(
                 text = currentRatio.displayName,
                 color = Color.White,
-                style = MaterialTheme.typography.bodySmall
+                style = COUITheme.textStyles.footnote1
             )
         }
     }

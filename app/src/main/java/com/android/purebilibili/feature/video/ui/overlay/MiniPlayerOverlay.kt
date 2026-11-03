@@ -1257,7 +1257,7 @@ private fun MiniPlayerEdgeStashPreview(
                     // 提示框独立测量，不受侧边拉手的窄宽度约束。
                     .wrapContentSize(Alignment.CenterStart, unbounded = true)
                     .width(88.dp),
-                shape = RoundedCornerShape(12.dp),
+                shape = AppShapes.container(ContainerLevel.MediaCover),
                 color = Color.Black.copy(alpha = 0.78f),
             ) {
                 Box(

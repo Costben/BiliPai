@@ -1,10 +1,12 @@
 package com.android.purebilibili.core.ui.components
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppContentColors
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -34,8 +36,8 @@ internal fun resolveUserUpBadgeVisualSpec(): UserUpBadgeVisualSpec {
 @Composable
 fun UserUpBadge(
     modifier: Modifier = Modifier,
-    containerColor: Color = MaterialTheme.colorScheme.primary,
-    contentColor: Color = MaterialTheme.colorScheme.onPrimary
+    containerColor: Color = AppContentColors.accent(),
+    contentColor: Color = AppContentColors.onAccent()
 ) {
     val spec = remember { resolveUserUpBadgeVisualSpec() }
     Box(
@@ -50,8 +52,8 @@ fun UserUpBadge(
     ) {
         AppText(
             text = "UP",
-            style = MaterialTheme.typography.labelSmall.copy(
-                lineHeight = MaterialTheme.typography.labelSmall.fontSize,
+            style = COUITheme.textStyles.footnote2.copy(
+                lineHeight = COUITheme.textStyles.footnote2.fontSize,
                 platformStyle = PlatformTextStyle(includeFontPadding = false),
                 lineHeightStyle = LineHeightStyle(
                     alignment = LineHeightStyle.Alignment.Center,

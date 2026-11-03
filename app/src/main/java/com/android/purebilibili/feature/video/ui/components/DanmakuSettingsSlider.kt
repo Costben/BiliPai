@@ -1,9 +1,9 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,12 +51,12 @@ internal fun DanmakuSettingsSlider(
                 text = label,
                 modifier = Modifier.weight(1f).padding(end = AppSpacingTokens.Small),
                 color = AppContentColors.secondaryText(),
-                style = MaterialTheme.typography.bodyMedium
+                style = COUITheme.textStyles.body1
             )
             AppText(
                 text = valueText(localValue),
                 color = AppContentColors.secondaryText(),
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 maxLines = 1,
             )
             if (defaultValue != null) AppIconButton(

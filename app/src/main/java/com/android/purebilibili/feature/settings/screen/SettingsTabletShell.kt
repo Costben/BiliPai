@@ -20,7 +20,6 @@ import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import com.android.purebilibili.core.ui.components.AppIcon
 import com.android.purebilibili.core.ui.components.AppIconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import com.android.purebilibili.core.ui.components.AppNavigationDrawerItem
 import com.android.purebilibili.core.ui.components.AppText
@@ -75,6 +74,7 @@ import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldPaneScope
 import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldValue
 import androidx.compose.material3.adaptive.layout.calculatePaneScaffoldDirective
 import com.android.purebilibili.core.theme.usesMiuixFamilySkin
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
@@ -113,12 +113,12 @@ fun SettingsTabletShell(
             ) {
                 AppText(
                     text = "选择设置分类",
-                    style = MaterialTheme.typography.titleLarge,
+                    style = COUITheme.textStyles.title4,
                     fontWeight = FontWeight.Bold,
                 )
                 AppText(
                     text = "从左侧选择一个分类以查看和修改设置",
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = COUITheme.textStyles.main,
                     color = AppContentColors.secondaryText(),
                 )
             }
@@ -226,7 +226,7 @@ fun SettingsTabletShell(
                                         AppText(stringResource(category.titleResource()), fontWeight = FontWeight.Medium)
                                         AppText(
                                             text = stringResource(category.subtitleResource()),
-                                            style = MaterialTheme.typography.bodySmall,
+                                            style = COUITheme.textStyles.footnote1,
                                             color = AppContentColors.secondaryText(),
                                             maxLines = 2,
                                         )
@@ -281,13 +281,13 @@ fun SettingsTabletShell(
             AppText(
                 text = selectedCategory?.let { stringResource(it.titleResource()) }
                     ?: stringResource(R.string.settings_title),
-                style = MaterialTheme.typography.headlineSmall,
+                style = COUITheme.textStyles.title4,
                 fontWeight = FontWeight.Bold,
             )
             AppText(
                 text = selectedCategory?.let { stringResource(it.subtitleResource()) }
                     ?: stringResource(R.string.settings_category_select_hint),
-                style = MaterialTheme.typography.bodyLarge,
+                style = COUITheme.textStyles.main,
                 color = AppContentColors.secondaryText(),
             )
         }

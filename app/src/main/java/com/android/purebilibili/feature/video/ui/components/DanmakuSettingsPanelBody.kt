@@ -1,6 +1,8 @@
 package com.android.purebilibili.feature.video.ui.components
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
@@ -11,9 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.material3.MaterialTheme
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppTextButton
+import com.android.purebilibili.core.ui.components.AppHorizontalDivider
+import com.android.purebilibili.core.ui.components.AppIcon
+import com.android.purebilibili.core.ui.components.AppIconButton
 
 /** 固定标题与完成操作，只有设置内容滚动；玻璃与原生材质共用同一几何。 */
 @Composable
@@ -37,7 +41,7 @@ internal fun DanmakuSettingsPanelBody(
                     )
                 }
             }
-            AppText(title, modifier = Modifier.weight(1f), style = MaterialTheme.typography.titleSmall)
+            AppText(title, modifier = Modifier.weight(1f), style = COUITheme.textStyles.headline2)
             AppTextButton(onClick = onDismiss) { AppText("完成") }
         }
         navigation?.invoke()
@@ -70,12 +74,12 @@ internal fun DanmakuSettingsAction(
 internal fun DanmakuSettingsSectionTitle(title: String, modifier: Modifier = Modifier) {
     Column(modifier.padding(top = 16.dp, bottom = 8.dp)) {
         com.android.purebilibili.core.ui.components.AppHorizontalDivider(
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+            color = AppContentColors.primaryText().copy(alpha = 0.12f),
         )
         AppText(
             title,
             modifier = Modifier.padding(top = 12.dp),
-            style = MaterialTheme.typography.labelLarge,
+            style = COUITheme.textStyles.button,
         )
     }
 }
@@ -95,7 +99,7 @@ internal fun DanmakuSettingsToggle(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        AppText(title, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
+        AppText(title, modifier = Modifier.weight(1f), style = COUITheme.textStyles.body1)
         com.android.purebilibili.core.ui.components.AppSwitch(checked, onCheckedChange)
     }
 }

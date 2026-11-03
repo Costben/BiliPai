@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.width
 import com.android.purebilibili.core.ui.components.AppLazyColumn as LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +33,7 @@ import com.android.purebilibili.core.ui.components.AppSingleChoiceRow
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.feature.live.LivePlaybackCandidate
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  * 手动线路选择弹层
@@ -77,14 +77,14 @@ internal fun LiveStreamSourceSheet(
             AppText(
                 text = "直播线路",
                 color = AppContentColors.primaryText(),
-                style = MaterialTheme.typography.titleLarge,
+                style = COUITheme.textStyles.title4,
                 fontWeight = FontWeight.Bold
             )
             if (candidates.isEmpty()) {
                 AppText(
                     text = "暂无可用线路，请稍后重试",
                     color = AppContentColors.secondaryText(),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     modifier = Modifier.padding(vertical = AppSpacingTokens.Large)
                 )
             } else {
@@ -165,7 +165,7 @@ private fun LiveSourceRow(
                         append(candidate.codecName.uppercase().ifBlank { "?" })
                     },
                     color = AppSurfaceTokens.onSurfaceContainerHigh(),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     fontWeight = if (isActive) FontWeight.Bold else FontWeight.Normal,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -175,7 +175,7 @@ private fun LiveSourceRow(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     color = AppSurfaceTokens.onSurfaceVariantSummary(),
-                    style = MaterialTheme.typography.bodySmall
+                    style = COUITheme.textStyles.footnote1
                 )
             }
     }

@@ -6,7 +6,6 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -37,6 +36,7 @@ import com.android.purebilibili.core.ui.motion.rememberExpandablePreviewMotion
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** 只展开当前分组的配色小样；宿主继续决定玻璃、MD3、Miuix 的材质与圆角。 */
 @Composable
@@ -88,7 +88,7 @@ internal fun ExpandableThemeHomePreview(modifier: Modifier = Modifier) {
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 ThemeHomePreview(selectedNavigationIndex = selectedNavigationIndex)
-                AppText("点击展开配色预览", style = MaterialTheme.typography.labelMedium, color = AppContentColors.secondaryText())
+                AppText("点击展开配色预览", style = COUITheme.textStyles.footnote1, color = AppContentColors.secondaryText())
             }
             Column(
                 Modifier
@@ -103,7 +103,7 @@ internal fun ExpandableThemeHomePreview(modifier: Modifier = Modifier) {
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                    AppText("首页配色预览", modifier = Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
+                    AppText("首页配色预览", modifier = Modifier.weight(1f), style = COUITheme.textStyles.headline1)
                     AppTextButton(onClick = motion.close, enabled = motion.expanded) { AppText("收起") }
                 }
                 ThemeHomePreview(
@@ -114,7 +114,7 @@ internal fun ExpandableThemeHomePreview(modifier: Modifier = Modifier) {
                 ThemePreviewRoleSwatches()
                 AppText(
                     "可点击底栏查看选中配色，仅在此处演示，不改变设置或打开页面。",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     color = AppContentColors.secondaryText(),
                 )
             }
@@ -150,7 +150,7 @@ private fun ThemePreviewRoleSwatches(modifier: Modifier = Modifier) {
         roles.forEach { (label, color) ->
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Box(Modifier.fillMaxWidth().height(32.dp).clip(AppShapes.container(ContainerLevel.Field)).background(color))
-                AppText(label, style = MaterialTheme.typography.labelSmall, color = AppContentColors.secondaryText())
+                AppText(label, style = COUITheme.textStyles.footnote2, color = AppContentColors.secondaryText())
             }
         }
     }

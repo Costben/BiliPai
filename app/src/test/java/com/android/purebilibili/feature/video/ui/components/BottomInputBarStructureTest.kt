@@ -16,8 +16,8 @@ class BottomInputBarStructureTest {
         val source = File("src/main/java/com/android/purebilibili/feature/video/ui/components/BottomInputBar.kt")
             .readText()
 
-        assertTrue(source.contains("MaterialTheme.colorScheme.surface"))
-        assertTrue(source.contains("MaterialTheme.colorScheme.surfaceContainerHighest"))
+        assertTrue(source.contains("AppSurfaceTokens.surface()"))
+        assertTrue(source.contains("AppSurfaceTokens.surfaceContainerHighest()"))
         assertTrue(source.contains("DockedSolidBottomInputBar("))
         assertTrue(!source.contains("surfaceVariant.copy(alpha = 0.65f)"))
         assertTrue(!source.contains("liquidGlassBackground"))

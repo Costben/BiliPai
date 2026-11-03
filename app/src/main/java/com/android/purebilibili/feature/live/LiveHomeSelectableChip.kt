@@ -3,7 +3,6 @@ package com.android.purebilibili.feature.live
 import com.android.purebilibili.core.ui.AppContentColors
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,6 +15,7 @@ import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.ContainerLevel
 import com.android.purebilibili.core.ui.components.AppSurface
 import com.android.purebilibili.core.ui.components.AppText
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /**
  * BiliPai 风格的直播首页分区/标签 chip，使用中性 App* 组件与主题 Token 实现。
@@ -39,12 +39,12 @@ fun LiveHomeSelectableChip(
         return
     }
     val container = if (selected) {
-        MaterialTheme.colorScheme.secondaryContainer
+        AppSurfaceTokens.secondaryContainer()
     } else {
         Color.Transparent
     }
     val content = if (selected) {
-        MaterialTheme.colorScheme.onSecondaryContainer
+        AppSurfaceTokens.onSecondaryContainer()
     } else {
         AppSurfaceTokens.onSurfaceVariantSummary()
     }
@@ -68,7 +68,7 @@ fun LiveHomeSelectableChip(
         AppText(
             text = label,
             color = content,
-            style = MaterialTheme.typography.bodyMedium.copy(fontSize = if (compact) 13.sp else 14.sp, lineHeight = if (compact) 13.sp else 14.sp),
+            style = COUITheme.textStyles.body1.copy(fontSize = if (compact) 13.sp else 14.sp, lineHeight = if (compact) 13.sp else 14.sp),
             fontWeight = FontWeight.Normal,
             modifier = Modifier.padding(
                 horizontal = AppSpacingTokens.Small,

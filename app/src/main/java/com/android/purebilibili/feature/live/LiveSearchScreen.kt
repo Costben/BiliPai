@@ -22,7 +22,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -50,6 +49,8 @@ import com.android.purebilibili.data.repository.SearchLiveOrder
 import com.android.purebilibili.data.repository.SearchRepository
 import com.android.purebilibili.navigation.animatePagerSelection
 import kotlinx.coroutines.launch
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 @Composable
 fun LiveSearchScreen(
@@ -211,7 +212,7 @@ fun LiveSearchScreen(
                         onValueChange = { if (it.isEmpty()) clear() else query = it },
                         modifier = Modifier.weight(1f).focusRequester(focusRequester),
                         singleLine = true,
-                        textStyle = MaterialTheme.typography.bodyLarge.copy(color = AppContentColors.primaryText()),
+                        textStyle = COUITheme.textStyles.main.copy(color = AppContentColors.primaryText()),
                         cursorBrush = SolidColor(AppContentColors.accent()),
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                         keyboardActions = KeyboardActions(onSearch = { submit() }),
@@ -317,7 +318,7 @@ private fun LiveSearchState(message: String, modifier: Modifier = Modifier.fillM
 
 @Composable
 private fun LiveSearchUserCard(item: SearchLiveUserItem, onClick: () -> Unit) {
-    AppSurface(onClick = onClick, color = MaterialTheme.colorScheme.background) {
+    AppSurface(onClick = onClick, color = AppSurfaceTokens.background()) {
         Row(Modifier.fillMaxWidth().height(60.dp).padding(horizontal = 15.dp), verticalAlignment = Alignment.CenterVertically) {
             AsyncImage(
                 model = item.uface,
@@ -336,7 +337,7 @@ private fun LiveSearchUserCard(item: SearchLiveUserItem, onClick: () -> Unit) {
                 }
                 AppText(
                     "分区：${item.areaName.ifBlank { item.tags.ifBlank { "未分类" } }} · 关注数：${item.attentions}",
-                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 13.sp),
+                    style = COUITheme.textStyles.footnote1.copy(fontSize = 13.sp),
                     color = AppContentColors.secondaryText(),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

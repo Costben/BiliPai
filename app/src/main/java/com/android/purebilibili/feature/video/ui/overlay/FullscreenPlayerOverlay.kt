@@ -2,6 +2,7 @@
 package com.android.purebilibili.feature.video.ui.overlay
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 import com.android.purebilibili.core.ui.AppContentColors
 import com.android.purebilibili.core.ui.components.AppIcon
@@ -1185,7 +1186,7 @@ fun FullscreenPlayerOverlay(
             ) {
                 AppText(
                     text = "松开手指，取消进退",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
                 )
             }
@@ -1217,7 +1218,7 @@ fun FullscreenPlayerOverlay(
                         AppText(
                             text = miniPlayerManager.currentTitle,
                             color = Color.White,
-                            style = MaterialTheme.typography.titleMedium,
+                            style = COUITheme.textStyles.headline1,
                             fontWeight = FontWeight.Medium,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -1229,7 +1230,7 @@ fun FullscreenPlayerOverlay(
                         AppText(
                             text = currentClockText,
                             color = Color.White.copy(alpha = 0.9f),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = COUITheme.textStyles.body1,
                             fontWeight = FontWeight.SemiBold,
                             modifier = Modifier.padding(end = 8.dp)
                         )
@@ -1305,7 +1306,7 @@ fun FullscreenPlayerOverlay(
                             AppText(
                                 FormatUtils.formatDuration((displayedProgressState.current / 1000).toInt()),
                                 color = Color.White,
-                                style = MaterialTheme.typography.labelSmall
+                                style = COUITheme.textStyles.footnote2
                             )
 
                             var isDragging by remember { mutableStateOf(false) }
@@ -1344,7 +1345,7 @@ fun FullscreenPlayerOverlay(
                                 modifier = Modifier.weight(1f).padding(horizontal = 8.dp),
                             )
 
-                            AppText(FormatUtils.formatDuration((duration / 1000).toInt()), color = Color.White, style = MaterialTheme.typography.labelSmall)
+                            AppText(FormatUtils.formatDuration((duration / 1000).toInt()), color = Color.White, style = COUITheme.textStyles.footnote2)
                         }
 
                         Spacer(modifier = Modifier.height(4.dp))
@@ -1694,7 +1695,7 @@ private fun GestureIndicator(
                 AppText(
                     "${FormatUtils.formatDuration(((seekTime ?: 0) / 1000).toInt())} / ${FormatUtils.formatDuration((duration / 1000).toInt())}",
                     color = Color.White,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = COUITheme.textStyles.title4,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -1751,7 +1752,7 @@ private fun FullscreenControlButton(
         AppText(
             text = text,
             color = if (isHighlighted) AppContentColors.accent() else Color.White,
-            style = MaterialTheme.typography.labelMedium,
+            style = COUITheme.textStyles.footnote1,
             fontWeight = if (isHighlighted) FontWeight.Bold else FontWeight.Normal,
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
         )

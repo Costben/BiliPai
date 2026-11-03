@@ -73,6 +73,9 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
+import com.android.purebilibili.core.ui.AppShapes
 
 /**
  * BiliPai-style video filter chrome:
@@ -112,7 +115,7 @@ fun SearchVideoFilterBar(
             ) {
                 AppText(
                     text = localizedSearchOrderLabel(order),
-                    style = MaterialTheme.typography.labelMedium,
+                    style = COUITheme.textStyles.footnote1,
                     color = if (selected) {
                         com.android.purebilibili.core.ui.AppSurfaceTokens.primary()
                     } else {
@@ -323,7 +326,7 @@ private fun SearchVideoFilterSheetContent(
             )
             AppText(
                 text = stringResource(R.string.search_filter_to),
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 color = AppContentColors.secondaryText()
             )
             SearchFilterSelectableChip(
@@ -400,7 +403,7 @@ private fun SearchFilterSectionTitle(
 ) {
     AppText(
         text = text,
-        style = MaterialTheme.typography.titleMedium
+        style = COUITheme.textStyles.headline1
     )
 }
 
@@ -426,7 +429,7 @@ private fun SearchFilterSelectableChip(
                 text = label,
                 // 文字继承渲染器提供的配对前景色；原生 Miuix 统一使用淡色选中底，
                 // MD3 与玻璃保留各自的填充及对比度规则。
-                style = MaterialTheme.typography.labelMedium,
+                style = COUITheme.textStyles.footnote1,
                 maxLines = 1,
                 textAlign = if (center) TextAlign.Center else TextAlign.Start,
                 modifier = if (center) Modifier.fillMaxWidth() else Modifier
@@ -435,7 +438,7 @@ private fun SearchFilterSelectableChip(
         colors = FilterChipDefaults.filterChipColors(
             selectedContainerColor = selectedColors.backgroundColor,
             selectedLabelColor = selectedColors.textColor,
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(
+            containerColor = AppSurfaceTokens.surfaceContainer().copy(
                 alpha = if (glassEnabled) 0.88f else 0.55f
             ),
             labelColor = AppContentColors.secondaryText()

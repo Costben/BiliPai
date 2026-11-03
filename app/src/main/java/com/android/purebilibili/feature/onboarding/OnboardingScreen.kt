@@ -51,6 +51,8 @@ import com.android.purebilibili.R
 import com.android.purebilibili.feature.settings.OFFICIAL_GITHUB_URL
 import com.android.purebilibili.feature.settings.OFFICIAL_TELEGRAM_CHANNEL_URL
 import com.android.purebilibili.feature.settings.OFFICIAL_TELEGRAM_GROUP_URL
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 /**
  * Mandatory user-agreement gate (A+B): scrollable notice + required checkboxes.
@@ -83,7 +85,7 @@ fun OnboardingScreen(
     LocalNavigationBackHandler(enabled = true, onBackCompleted = onDisagree)
 
     AppSurface(
-        color = MaterialTheme.colorScheme.surface,
+        color = AppSurfaceTokens.surface(),
         modifier = Modifier
             .fillMaxSize()
             .testTag("onboarding_root")
@@ -118,7 +120,7 @@ fun OnboardingScreen(
                     ) {
                         AppText(
                             text = stringResource(R.string.onboarding_disagree),
-                            style = MaterialTheme.typography.titleMedium,
+                            style = COUITheme.textStyles.headline1,
                             fontWeight = FontWeight.SemiBold,
                         )
                     }
@@ -134,7 +136,7 @@ fun OnboardingScreen(
                     ) {
                         AppText(
                             text = stringResource(R.string.onboarding_acknowledge),
-                            style = MaterialTheme.typography.titleMedium,
+                            style = COUITheme.textStyles.headline1,
                             fontWeight = FontWeight.SemiBold,
                         )
                     }
@@ -160,14 +162,14 @@ fun OnboardingScreen(
                     Spacer(modifier = Modifier.width(10.dp))
                     AppText(
                         text = stringResource(R.string.onboarding_notice_title),
-                        style = MaterialTheme.typography.headlineMedium,
+                        style = COUITheme.textStyles.title3,
                         fontWeight = FontWeight.Bold,
                         color = AppContentColors.primaryText(),
                     )
                 }
                 AppText(
                     text = stringResource(R.string.onboarding_notice_intro),
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = COUITheme.textStyles.main,
                     color = AppContentColors.secondaryText(),
                 )
 
@@ -200,7 +202,7 @@ fun OnboardingScreen(
                                 Spacer(modifier = Modifier.width(8.dp))
                                 AppText(
                                     text = stringResource(clause.titleResource()),
-                                    style = MaterialTheme.typography.titleMedium,
+                                    style = COUITheme.textStyles.headline1,
                                     fontWeight = FontWeight.SemiBold,
                                     color = AppContentColors.primaryText(),
                                 )
@@ -209,7 +211,7 @@ fun OnboardingScreen(
                         supportingContent = {
                             AppText(
                                 text = stringResource(clause.bodyResource()),
-                                style = MaterialTheme.typography.bodyMedium,
+                                style = COUITheme.textStyles.body1,
                                 color = AppContentColors.secondaryText(),
                             )
                         },
@@ -228,14 +230,14 @@ fun OnboardingScreen(
                     Spacer(modifier = Modifier.width(8.dp))
                     AppText(
                         text = stringResource(R.string.onboarding_official_channels),
-                        style = MaterialTheme.typography.titleMedium,
+                        style = COUITheme.textStyles.headline1,
                         fontWeight = FontWeight.SemiBold,
                         color = AppContentColors.primaryText(),
                     )
                 }
                 AppText(
                     text = stringResource(R.string.onboarding_channels_description),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = COUITheme.textStyles.body1,
                     color = AppContentColors.secondaryText(),
                 )
 
@@ -263,7 +265,7 @@ fun OnboardingScreen(
                         headlineContent = {
                             AppText(
                                 text = channelLabel,
-                                style = MaterialTheme.typography.titleSmall,
+                                style = COUITheme.textStyles.headline2,
                                 fontWeight = FontWeight.SemiBold,
                                 color = AppContentColors.accent(),
                             )

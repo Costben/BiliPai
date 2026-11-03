@@ -14,7 +14,6 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -42,6 +41,9 @@ import com.android.purebilibili.core.ui.components.AppText
 import com.android.purebilibili.core.ui.components.AppTextButton
 import com.android.purebilibili.core.ui.util.rememberDeviceCornerShape
 import kotlinx.coroutines.launch
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 @Composable
 fun DonateDialog(onDismiss: () -> Unit) {
@@ -119,7 +121,7 @@ fun DonateDialog(onDismiss: () -> Unit) {
                 AppPopupSurface(
                     type = AppPopupSurfaceType.DIALOG,
                     shape = containerShape,
-                    containerColor = MaterialTheme.colorScheme.surface,
+                    containerColor = AppSurfaceTokens.surface(),
                     modifier = Modifier.heightIn(max = maxHeight),
                 ) {
                     DonationPreviewContainer(
@@ -185,7 +187,7 @@ internal fun DonationCardContent(
         Row(verticalAlignment = Alignment.CenterVertically) {
             AppText(
                 text = stringResource(R.string.settings_donate_title),
-                style = MaterialTheme.typography.titleLarge,
+                style = COUITheme.textStyles.title4,
                 color = AppContentColors.primaryText(),
                 modifier = Modifier.weight(1f),
             )
@@ -194,7 +196,7 @@ internal fun DonationCardContent(
         Spacer(Modifier.height(8.dp))
         AppText(
             text = stringResource(R.string.settings_donate_intro),
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = AppContentColors.secondaryText(),
         )
         Spacer(Modifier.height(20.dp))
@@ -235,7 +237,7 @@ private fun DonationQr(onEnlarge: () -> Unit, onLongPress: () -> Unit, modifier:
         AppTextButton(onClick = onEnlarge) {
             AppText(
                 stringResource(R.string.settings_donate_enlarge),
-                style = MaterialTheme.typography.labelMedium,
+                style = COUITheme.textStyles.footnote1,
             )
         }
     }
@@ -253,18 +255,18 @@ private fun DonationActions(
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(12.dp)) {
         AppText(
             stringResource(R.string.settings_donate_voluntary),
-            style = MaterialTheme.typography.titleSmall,
+            style = COUITheme.textStyles.headline2,
             color = AppContentColors.primaryText(),
         )
         AppText(
             stringResource(R.string.settings_donate_steps),
-            style = MaterialTheme.typography.bodyMedium,
+            style = COUITheme.textStyles.body1,
             color = AppContentColors.secondaryText(),
         )
         if (saved) {
             AppText(
                 stringResource(R.string.settings_donate_saved),
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 color = AppContentColors.secondaryText(),
                 modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
             )
@@ -282,14 +284,14 @@ private fun DonationActions(
         if (error != null) {
             AppText(
                 stringResource(error),
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodySmall,
+                color = AppContentColors.error(),
+                style = COUITheme.textStyles.footnote1,
                 modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite },
             )
         }
         AppText(
             stringResource(R.string.settings_donate_thanks),
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             color = AppContentColors.secondaryText(),
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth(),
@@ -323,7 +325,7 @@ private fun DonationQrPreview(onBack: () -> Unit, onLongPress: () -> Unit, image
         AppText(
             stringResource(R.string.settings_donate_preview_hint),
             color = AppContentColors.secondaryText(),
-            style = MaterialTheme.typography.bodySmall,
+            style = COUITheme.textStyles.footnote1,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(12.dp),
         )

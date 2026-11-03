@@ -1,5 +1,6 @@
 package com.android.purebilibili.feature.download
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
 import com.android.purebilibili.core.ui.AppIcons
 import com.android.purebilibili.core.util.responsiveContentWidth
 
@@ -203,7 +204,7 @@ fun DownloadListScreen(
                         }, modifier = Modifier.appElasticPress()) {
                             AppText(
                                 text = if (hasActive) "暂停全部" else "继续全部",
-                                style = MaterialTheme.typography.labelMedium,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.accent()
                             )
                         }
@@ -214,7 +215,7 @@ fun DownloadListScreen(
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = AppSurfaceTokens.surface()
                 )
             )
         }
@@ -410,19 +411,19 @@ fun DownloadListScreen(
                             text = "共 ${taskList.size} 个 · 已用 " + formatDownloadStorageBytes(
                                 taskList.sumOf { it.fileSize.coerceAtLeast(0L) }
                             ),
-                            style = MaterialTheme.typography.labelSmall,
+                            style = COUITheme.textStyles.footnote2,
                             color = AppContentColors.secondaryText()
                         )
                         Spacer(modifier = Modifier.height(AppSpacingTokens.ExtraSmall))
                         AppText(
                             text = "存储位置",
-                            style = MaterialTheme.typography.labelSmall,
+                            style = COUITheme.textStyles.footnote2,
                             color = AppContentColors.secondaryText()
                         )
                         Spacer(modifier = Modifier.height(AppSpacingTokens.ExtraSmall))
                         AppText(
                             text = currentDir,
-                            style = MaterialTheme.typography.labelSmall,
+                            style = COUITheme.textStyles.footnote2,
                             color = AppContentColors.secondaryText(),
                             textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                         )
@@ -493,7 +494,7 @@ fun DownloadListScreen(
             text = {
                 AppText(
                     text = "确定删除「${taskToDelete.title}」吗？已下载的视频、音频和弹幕文件将一并清除。",
-                    style = MaterialTheme.typography.bodyMedium
+                    style = COUITheme.textStyles.body1
                 )
             },
             confirmButton = {
@@ -603,7 +604,7 @@ private fun DownloadTaskItem(
                 ) {
                     when (task.status) {
                         DownloadStatus.QUEUED -> {
-                            AppText("排队中", color = Color.White, style = MaterialTheme.typography.labelMedium)
+                            AppText("排队中", color = Color.White, style = COUITheme.textStyles.footnote1)
                         }
                         DownloadStatus.DOWNLOADING, DownloadStatus.MERGING -> {
                             AppCircularProgressIndicator(
@@ -614,10 +615,10 @@ private fun DownloadTaskItem(
                             )
                         }
                         DownloadStatus.PAUSED -> {
-                            AppText("已暂停", color = Color.White, style = MaterialTheme.typography.labelMedium)
+                            AppText("已暂停", color = Color.White, style = COUITheme.textStyles.footnote1)
                         }
                         DownloadStatus.FAILED -> {
-                            AppText("失败", color = AppContentColors.error(), style = MaterialTheme.typography.labelMedium)
+                            AppText("失败", color = AppContentColors.error(), style = COUITheme.textStyles.footnote1)
                         }
                         else -> {}
                     }

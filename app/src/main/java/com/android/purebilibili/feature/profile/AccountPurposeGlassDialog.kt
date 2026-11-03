@@ -1,11 +1,12 @@
 package com.android.purebilibili.feature.profile
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppContentColors
 import android.os.Build
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.UnfoldMore
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,7 +49,7 @@ internal fun AccountPurposeDialogSurface(
                     // 面板按内容自适应收合；正文超出时在剩余空间内滚动，按钮紧随其后，
                     // 不再用 fillMaxSize 恒定撑满最大高度留下大段空面板。
                     Column(Modifier.fillMaxWidth().padding(24.dp)) {
-                        AppText(title, style = MaterialTheme.typography.headlineSmall,
+                        AppText(title, style = COUITheme.textStyles.title4,
                             fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
                         Spacer(Modifier.height(16.dp))
                         Box(Modifier.weight(1f, fill = false).fillMaxWidth()) { text() }
@@ -102,7 +103,7 @@ internal fun AccountPurposeGlassAnchor(label: String, actions: List<AppWindowAct
                 label,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.bodyMedium,
+                style = COUITheme.textStyles.body1,
                 color = AppContentColors.secondaryText(),
                 tapToCopyEnabled = false,
                 modifier = Modifier.weight(1f, fill = false),

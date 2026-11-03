@@ -67,6 +67,7 @@ import kotlinx.coroutines.launch
 import android.os.Build
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlin.math.roundToInt
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 @Composable
 private fun localizedAnimationSettingTitle(settingId: String): String {
@@ -417,7 +418,7 @@ fun AnimationSettingsContent(
                             ) {
                                 AppText(
                                     text = stringResource(R.string.animation_reduced_motion_notice),
-                                    style = MaterialTheme.typography.bodySmall,
+                                    style = COUITheme.textStyles.footnote1,
                                     color = AppContentColors.secondaryText()
                                 )
                             }
@@ -749,26 +750,26 @@ fun AnimationSettingsContent(
                         ) {
                             AppText(
                                 text = stringResource(R.string.animation_home_motion_title),
-                                style = MaterialTheme.typography.labelSmall,
+                                style = COUITheme.textStyles.footnote2,
                                 color = AppContentColors.secondaryText()
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                             AppText(
                                 text = motionTierLabel,
-                                style = MaterialTheme.typography.bodyMedium,
+                                style = COUITheme.textStyles.body1,
                                 fontWeight = FontWeight.Medium,
                                 color = AppContentColors.primaryText()
                             )
                             Spacer(modifier = Modifier.height(2.dp))
                             AppText(
                                 text = motionTierHint,
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText()
                             )
                             Spacer(modifier = Modifier.height(6.dp))
                             AppText(
                                 text = stringResource(R.string.animation_home_motion_summary),
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText()
                             )
                         }
@@ -996,7 +997,7 @@ fun AnimationSettingsContent(
                             .fillMaxWidth()
                             .padding(16.dp),
                         shape = AppShapes.container(ContainerLevel.Card),
-                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                        color = AppSurfaceTokens.surfaceContainer().copy(alpha = 0.5f)
                     ) {
                         Row(
                             modifier = Modifier.padding(16.dp),
@@ -1011,7 +1012,7 @@ fun AnimationSettingsContent(
                             Spacer(modifier = Modifier.width(12.dp))
                             AppText(
                                 text = stringResource(R.string.animation_performance_hint),
-                                style = MaterialTheme.typography.bodySmall,
+                                style = COUITheme.textStyles.footnote1,
                                 color = AppContentColors.secondaryText()
                             )
                         }
@@ -1043,15 +1044,15 @@ fun AnimationSettingsContent(
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     AppText(
                         text = stringResource(R.string.animation_import_profile, importSession.profile.profileName),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                     )
                     AppText(
                         text = stringResource(R.string.animation_import_details, importCount),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = COUITheme.textStyles.body1,
                     )
                     AppText(
                         text = stringResource(R.string.animation_import_unchanged),
-                        style = MaterialTheme.typography.bodySmall,
+                        style = COUITheme.textStyles.footnote1,
                         color = AppContentColors.link(),
                     )
                 }

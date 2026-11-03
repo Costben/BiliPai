@@ -2,6 +2,8 @@
 package com.android.purebilibili.feature.bangumi.ui.player
 
 import com.android.purebilibili.core.ui.AppIcons
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 
 import com.android.purebilibili.core.ui.AppContentColors
 
@@ -19,7 +21,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -74,14 +75,14 @@ fun BangumiCollapsedPlayerBar(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(topInset)
-                        .background(MaterialTheme.colorScheme.surface)
+                        .background(AppSurfaceTokens.surface())
                 )
             }
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
-                    .background(MaterialTheme.colorScheme.surface)
+                    .background(AppSurfaceTokens.surface())
                     .clickable(onClick = onPlayClick),
             ) {
                 Row(
@@ -122,7 +123,7 @@ fun BangumiCollapsedPlayerBar(
                     AppText(
                         text = playLabel,
                         color = AppContentColors.accent(),
-                        style = MaterialTheme.typography.titleMedium
+                        style = COUITheme.textStyles.headline1
                     )
                 }
             }

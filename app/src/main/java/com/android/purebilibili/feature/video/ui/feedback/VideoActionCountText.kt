@@ -9,7 +9,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -27,6 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import com.android.purebilibili.core.ui.motion.AppMotionEasing
 import com.android.purebilibili.core.ui.LocalSystemReduceMotion
 import com.android.purebilibili.core.ui.components.AppText
+import io.github.suqi8.coui.kmp.theme.COUITheme
 
 /** Arm only the count belonging to an explicit local action; hydration never arms it. */
 @Stable
@@ -67,7 +67,7 @@ internal fun VideoActionCountText(
     fontWeight: FontWeight,
     modifier: Modifier = Modifier,
     identity: Any? = Unit,
-    style: TextStyle = MaterialTheme.typography.labelSmall,
+    style: TextStyle = COUITheme.textStyles.footnote2,
     countValue: Int? = null,
 ) {
     val reducedMotion = LocalSystemReduceMotion.current

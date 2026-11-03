@@ -1,11 +1,13 @@
 package com.android.purebilibili.feature.profile
 
+import io.github.suqi8.coui.kmp.theme.COUITheme
+import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.AppSurfaceTokens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.*
 import kotlinx.coroutines.flow.collectLatest
@@ -75,7 +77,7 @@ internal fun HomeWallpaperAdjustmentSheet(
     val logicalHeight = if (actualWindow) configuration.screenHeightDp.coerceAtLeast(1).toFloat()
         else if (selectedTab == 0) 800f else 600f
     val aspectRatio = logicalWidth / logicalHeight
-    val baseColor = MaterialTheme.colorScheme.background
+    val baseColor = AppSurfaceTokens.background()
     val staticWallpaper = com.android.purebilibili.core.ui.wallpaper.rememberIsStaticWallpaper(uri)
     var previewReadability by remember(uri, selectedTab) { mutableStateOf<WallpaperReadabilityProfile?>(null) }
     LaunchedEffect(uri, selectedTab, baseColor, staticWallpaper) {
@@ -98,7 +100,7 @@ internal fun HomeWallpaperAdjustmentSheet(
     AppModalBottomSheet(
         onDismissRequest = { if (!saving) onDismiss() },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = AppSurfaceTokens.surface(),
     ) {
         Column(Modifier.fillMaxWidth().navigationBarsPadding().padding(bottom = 16.dp)) {
             Row(
@@ -107,7 +109,7 @@ internal fun HomeWallpaperAdjustmentSheet(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 AppTextButton(onClick = onDismiss, enabled = !saving) { AppText("取消") }
-                AppText("调整壁纸", style = MaterialTheme.typography.titleMedium)
+                AppText("调整壁纸", style = COUITheme.textStyles.headline1)
                 AppTextButton(
                     onClick = { onSave(mobile, tablet) },
                     enabled = !saving && loadState == WallpaperMediaLoadState.READY,
@@ -186,7 +188,7 @@ internal fun HomeWallpaperAdjustmentSheet(
             if (!saveError.isNullOrBlank()) {
                 AppText(
                     saveError,
-                    color = MaterialTheme.colorScheme.error,
+                    color = AppContentColors.error(),
                     modifier = Modifier.padding(horizontal = 24.dp),
                 )
             }
@@ -198,13 +200,13 @@ internal fun HomeWallpaperAdjustmentSheet(
             if (effectMode == HomeWallpaperEffectMode.OFF) {
                 AppText(
                     "当前壁纸效果已关闭，保存位置后可在壁纸效果中开启。",
-                    style = MaterialTheme.typography.bodySmall,
+                    style = COUITheme.textStyles.footnote1,
                     modifier = Modifier.padding(horizontal = 24.dp),
                 )
             }
             AppText(
                 "双指缩放、单指拖动；手机和平板分别保存。",
-                style = MaterialTheme.typography.bodySmall,
+                style = COUITheme.textStyles.footnote1,
                 modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
             )
         }
@@ -219,7 +221,7 @@ private fun WallpaperZoomControls(
 ) {
     Column(Modifier.fillMaxWidth().padding(horizontal = 24.dp)) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            AppText("缩放", style = MaterialTheme.typography.labelLarge)
+            AppText("缩放", style = COUITheme.textStyles.button)
             AppTextButton(onClick = { onChange(WallpaperTransform()) }, enabled = enabled) { AppText("重置位置") }
         }
         AppSlider(
