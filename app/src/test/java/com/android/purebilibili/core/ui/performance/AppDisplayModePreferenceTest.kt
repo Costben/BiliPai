@@ -31,4 +31,48 @@ class AppDisplayModePreferenceTest {
         )
     }
 
+    @Test
+    fun colorOsAuto_requestsHighRefreshAtCurrentResolutionUnlessPowerSaveOrStandard60Hz() {
+        val plkModes = listOf(
+            AppDisplayMode(modeId = 1, refreshRate = 165f, width = 1264, height = 2780),
+            AppDisplayMode(modeId = 2, refreshRate = 120f, width = 1264, height = 2780),
+            AppDisplayMode(modeId = 3, refreshRate = 60f, width = 1264, height = 2780),
+            AppDisplayMode(modeId = 4, refreshRate = 120f, width = 1080, height = 2376),
+        )
+        assertEquals(
+            2,
+            resolveAutoHighRefreshDisplayModeId(
+                supportedModes = plkModes,
+                currentWidth = 1264,
+                currentHeight = 2780,
+                isColorOsFamily = true,
+                oplusRefreshRateSetting = 3,
+                choiceModeRate = 120f,
+                peakRefreshRate = 120f,
+            ),
+        )
+        assertEquals(
+            SYSTEM_AUTO_DISPLAY_MODE_ID,
+            resolveAutoHighRefreshDisplayModeId(
+                supportedModes = plkModes,
+                currentWidth = 1264,
+                currentHeight = 2780,
+                isColorOsFamily = true,
+                powerSaveActive = true,
+                choiceModeRate = 120f,
+            ),
+        )
+        assertEquals(
+            SYSTEM_AUTO_DISPLAY_MODE_ID,
+            resolveAutoHighRefreshDisplayModeId(
+                supportedModes = plkModes,
+                currentWidth = 1264,
+                currentHeight = 2780,
+                isColorOsFamily = true,
+                oplusRefreshRateSetting = 2,
+                choiceModeRate = 60f,
+            ),
+        )
+    }
+
 }
