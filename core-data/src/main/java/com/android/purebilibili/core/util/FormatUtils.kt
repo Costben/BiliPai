@@ -11,15 +11,48 @@ object FormatUtils {
     private val detailedCommentTimeFormatter =
         java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.ROOT)
 
+    // 列表滚动时每张卡片每帧都会走到这些格式化函数。`ZoneId.systemDefault()` 要读系统
+    // 时区、`DateTimeFormatter.ofPattern` 要重新编译模式，两者都比拼接字符串贵一个数量级，
+    // 因此按 (pattern, locale) 缓存；时区取进程级快照，与手写一遍的语义一致。
+    private val systemZoneId: java.time.ZoneId by lazy { java.time.ZoneId.systemDefault() }
+    private val dateTimeFormatters =
+        java.util.concurrent.ConcurrentHashMap<String, java.time.format.DateTimeFormatter>()
+    private val simpleDateFormatters =
+        ThreadLocal.withInitial { HashMap<String, SimpleDateFormat>() }
+
+    private fun dateTimeFormatter(
+        pattern: String,
+        locale: Locale,
+    ): java.time.format.DateTimeFormatter {
+        val key = "$pattern\u0000${locale.toLanguageTag()}"
+        return dateTimeFormatters.getOrPut(key) {
+            java.time.format.DateTimeFormatter.ofPattern(pattern, locale)
+        }
+    }
+
+    private fun simpleDateFormat(pattern: String, locale: Locale): SimpleDateFormat {
+        val cache = simpleDateFormatters.get() ?: HashMap<String, SimpleDateFormat>().also {
+            simpleDateFormatters.set(it)
+        }
+        val key = "$pattern\u0000${locale.toLanguageTag()}"
+        return cache.getOrPut(key) { SimpleDateFormat(pattern, locale) }
+    }
+
     /**
      * 将数字格式化为 B站风格 (例如: 1.2万)
      */
     fun formatStat(count: Long): String {
         return when {
-            count >= 100000000 -> String.format("%.1f亿", count / 100000000.0)
-            count >= 10000 -> String.format("%.1f万", count / 10000.0)
+            count >= 100000000 -> formatOneDecimal(count, 100000000L, "亿")
+            count >= 10000 -> formatOneDecimal(count, 10000L, "万")
             else -> count.toString()
         }
+    }
+
+    /** 与 `String.format("%.1f…")` 同结果，但不创建 Formatter。 */
+    private fun formatOneDecimal(count: Long, divisor: Long, unit: String): String {
+        val tenths = (count + divisor / 20) / (divisor / 10)
+        return "${tenths / 10}.${tenths % 10}$unit"
     }
 
     /**
@@ -111,7 +144,7 @@ object FormatUtils {
     fun formatPublishTime(
         timestampSeconds: Long,
         nowMs: Long = System.currentTimeMillis(),
-        zoneId: java.time.ZoneId = java.time.ZoneId.systemDefault(),
+        zoneId: java.time.ZoneId = systemZoneId,
         locale: Locale = Locale.getDefault(),
     ): String {
         if (timestampSeconds <= 0) return ""
@@ -133,17 +166,13 @@ object FormatUtils {
             .between(published.toLocalDate(), now.toLocalDate())
             .coerceAtLeast(0L)
         if (elapsedDays == 1L) {
-            val time = java.time.format.DateTimeFormatter
-                .ofPattern("HH:mm", locale)
-                .format(published)
+            val time = dateTimeFormatter("HH:mm", locale).format(published)
             return "昨天 $time"
         }
         if (elapsedDays < 4L) return "${elapsedDays}天前"
 
         val pattern = if (published.year == now.year) "MM-dd" else "yyyy-MM-dd"
-        return java.time.format.DateTimeFormatter
-            .ofPattern(pattern, locale)
-            .format(published)
+        return dateTimeFormatter(pattern, locale).format(published)
     }
 
     /**
@@ -153,7 +182,7 @@ object FormatUtils {
         timestampSeconds: Long,
         detailedTimeEnabled: Boolean,
         nowMs: Long = System.currentTimeMillis(),
-        zoneId: java.time.ZoneId = java.time.ZoneId.systemDefault(),
+        zoneId: java.time.ZoneId = systemZoneId,
         locale: Locale = Locale.getDefault(),
     ): String {
         if (timestampSeconds <= 0L) return ""
@@ -171,20 +200,20 @@ object FormatUtils {
      */
     fun formatHistoryViewTime(
         timestampSeconds: Long,
-        zoneId: java.time.ZoneId = java.time.ZoneId.systemDefault(),
+        zoneId: java.time.ZoneId = systemZoneId,
         locale: Locale = Locale.getDefault(),
     ): String {
         if (timestampSeconds <= 0) return ""
 
         val viewed = java.time.Instant.ofEpochSecond(timestampSeconds).atZone(zoneId)
         val now = java.time.Instant.ofEpochMilli(System.currentTimeMillis()).atZone(zoneId)
-        val clock = java.time.format.DateTimeFormatter.ofPattern("HH:mm", locale).format(viewed)
+        val clock = dateTimeFormatter("HH:mm", locale).format(viewed)
         return when (viewed.toLocalDate()) {
             now.toLocalDate() -> "今天 $clock"
             now.toLocalDate().minusDays(1) -> "昨天 $clock"
             else -> {
                 val pattern = if (viewed.year == now.year) "MM-dd HH:mm" else "yyyy-MM-dd HH:mm"
-                java.time.format.DateTimeFormatter.ofPattern(pattern, locale).format(viewed)
+                dateTimeFormatter(pattern, locale).format(viewed)
             }
         }
     }
@@ -197,7 +226,7 @@ object FormatUtils {
     ): String {
         if (timestampSeconds <= 0) return ""
 
-        return SimpleDateFormat(pattern, locale).apply {
+        return simpleDateFormat(pattern, locale).apply {
             this.timeZone = timeZone
         }.format(Date(timestampSeconds * 1000L))
     }

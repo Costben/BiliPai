@@ -53,5 +53,10 @@ internal fun rememberVideoCardPublishTimeText(
         attempted = true
     }
     if (!enabled) return ""
-    return resolveCompactPublishTimeRowText(pubdate).ifBlank { "发布时间未知" }
+    // 卡片在滚动时每帧都会重组；相对时间文案按分钟粒度缓存，避免每帧重新构造
+    // Instant/ZonedDateTime 与格式化器。
+    val minuteBucket = System.currentTimeMillis() / 60_000L
+    return remember(pubdate, minuteBucket) {
+        resolveCompactPublishTimeRowText(pubdate).ifBlank { "发布时间未知" }
+    }
 }
