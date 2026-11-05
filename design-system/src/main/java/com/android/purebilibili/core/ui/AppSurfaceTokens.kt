@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.unit.dp
 import com.android.purebilibili.core.theme.AppUiStyle
 import com.android.purebilibili.core.theme.LocalAppUiStyle
@@ -121,7 +122,11 @@ object AppSurfaceTokens {
     @Composable
     @ReadOnlyComposable
     fun surface(): Color = resolveMiuixSemanticColorComposable(
-        miuixColor = COUITheme.colorScheme.surface,
+        // COUI 深色把 surface 定成纯黑（给播放器舞台那种场景用），页面画布用的是 background。
+        // 拿纯黑当页面/面板底色会让整屏发死黑，所以深色下表面统一回到 background。
+        miuixColor = COUITheme.colorScheme.let { scheme ->
+            if (scheme.background.luminance() < 0.5f) scheme.background else scheme.surface
+        },
         materialFallback = MaterialTheme.colorScheme.surface
     )
 

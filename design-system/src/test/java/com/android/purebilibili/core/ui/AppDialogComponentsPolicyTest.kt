@@ -29,11 +29,25 @@ class AppDialogComponentsPolicyTest {
             "design-system/src/main/java/com/android/purebilibili/core/ui/AdaptiveDialogComponents.kt"
         )
         val dialogSource = source.readText()
+        // 面板背景、45dp 连续曲率圆角与进出动画都由 COUI 的 WindowDialog 负责，
+        // 调用方不再自绘透明窗口外壳。
         assertTrue(dialogSource.contains("WindowDialog("))
-        assertTrue(dialogSource.contains("backgroundColor = Color.Transparent"))
-        assertTrue(dialogSource.contains("insideMargin = DpSize(0.dp, 0.dp)"))
-        assertTrue(dialogSource.contains("cornerRadius = 0.dp"))
+        assertTrue(dialogSource.contains("DialogDefaults.backgroundColor()"))
+        assertTrue(dialogSource.contains("COUITheme.textStyles"))
         assertFalse(dialogSource.contains("LocalAppPopupSurfaceRenderer.current"))
+    }
+
+    @Test
+    fun coui17AlwaysUsesWindowDialog() {
+        // 播放器与直播间会局部关掉原生弹窗宿主；COUI 17 的对话框仍然必须是 COUI 组件，
+        // 否则同一页里会出现 Material 对话框。
+        assertEquals(
+            AppAlertDialogRenderer.LOCAL_DIALOG,
+            resolveAppAlertDialogRenderer(
+                uiStyle = AppUiStyle.COUI17,
+                nativeMiuixPopupsEnabled = false,
+            )
+        )
     }
 
     @Test

@@ -59,11 +59,10 @@ fun resolveAppAlertDialogRenderer(
         AppAlertDialogRenderer.MATERIAL_ALERT
     }
     AppUiStyle.MATERIAL3 -> AppAlertDialogRenderer.MATERIAL_ALERT
-    AppUiStyle.COUI17 -> if (nativeMiuixPopupsEnabled) {
-        AppAlertDialogRenderer.LOCAL_DIALOG
-    } else {
-        AppAlertDialogRenderer.MATERIAL_ALERT
-    }
+    // COUI 17 皮肤的对话框只能是 COUI 组件。播放器与直播间会在局部关掉原生弹窗宿主
+    // （菜单不许另开窗口），但对话框走的是 WindowDialog，不依赖那个宿主；跟着关掉
+    // 就会在播放器里退化成 Material 对话框，和其它页面对不上。
+    AppUiStyle.COUI17 -> AppAlertDialogRenderer.LOCAL_DIALOG
 }
 
 data class DialogActionLayoutPolicy(

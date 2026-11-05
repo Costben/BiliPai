@@ -65,10 +65,13 @@ internal fun CouiHomeInlineSearchRow(
     rowHeight: Dp,
     horizontalPadding: Dp,
     modifier: Modifier = Modifier,
+    initialQuery: String = "",
+    /** 页内实时搜索（列表页）用；为空时只在回车时提交关键词。 */
+    onQueryChange: ((String) -> Unit)? = null,
     viewModel: SearchViewModel = viewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    var query by rememberSaveable { mutableStateOf("") }
+    var query by rememberSaveable { mutableStateOf(initialQuery) }
     val keyboard = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
     val interaction = remember { MutableInteractionSource() }
@@ -106,6 +109,7 @@ internal fun CouiHomeInlineSearchRow(
             viewModel.dismissSuggestions()
             kotlinx.coroutines.delay(320)
             query = ""
+            onQueryChange?.invoke("")
         }
     }
     LaunchedEffect(query, expanded) {
@@ -178,7 +182,10 @@ internal fun CouiHomeInlineSearchRow(
                 ) {
                     InputField(
                         query = query,
-                        onQueryChange = { query = it },
+                        onQueryChange = { next ->
+                            query = next
+                            onQueryChange?.invoke(next)
+                        },
                         onSearch = { submit(it) },
                         expanded = expanded,
                         onExpandedChange = { if (!it) onExpandedChange(false) },

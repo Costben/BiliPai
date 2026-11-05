@@ -4,6 +4,7 @@ package com.android.purebilibili.feature.dynamic.components
 import com.android.purebilibili.core.ui.AppIcons
 
 import com.android.purebilibili.core.ui.AppContentColors
+import com.android.purebilibili.core.ui.components.AppCouiContourTabRow
 import com.android.purebilibili.core.ui.components.AppThemeAdaptiveTabRow
 import com.android.purebilibili.core.ui.components.AppSegmentOption
 
@@ -116,6 +117,9 @@ fun DynamicTopBarWithTabs(
     val tabHeight = resolveDynamicTopBarTabHeightDp(density.fontScale).dp
     val appThemeConfig = com.android.purebilibili.core.ui.LocalAppThemeConfig.current
     val liquidGlassEnabled = appThemeConfig.liquidGlassEnabled
+    // COUI 17 纯文字标签沿用首页顶栏的胶囊底色 + 选中框；玻璃材质自带上壳，走原管线。
+    val useCouiContourTabs = !liquidGlassEnabled &&
+        com.android.purebilibili.core.theme.LocalAppUiStyle.current == com.android.purebilibili.core.theme.AppUiStyle.COUI17
     // COUI 17 的顶栏图标同样走光影按钮装饰。
     val topBarIconDecorationEnabled = liquidGlassEnabled ||
         com.android.purebilibili.core.theme.LocalAppUiStyle.current == com.android.purebilibili.core.theme.AppUiStyle.COUI17
@@ -173,29 +177,39 @@ fun DynamicTopBarWithTabs(
             horizontalArrangement = Arrangement.spacedBy(AppSpacingTokens.Small),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            AppThemeAdaptiveTabRow(
-                // Glass indicator fills the measured slot; native geometry keeps its defaults.
-                liquidGlassAdaptIndicatorToLabel = !com.android.purebilibili.core.ui.LocalAppThemeConfig.current.liquidGlassEnabled,
-                role = com.android.purebilibili.core.ui.components.AppTabRowRole.PRIMARY,
-                options = tabs.mapIndexed { index, label -> AppSegmentOption(index, label) },
-                selectedValue = selectedTab,
-                onSelectionChange = onTabSelected,
-                modifier = Modifier.weight(1f).height(tabHeight),
-                // Fixed slots: only the page or indicator changes selection; the rail
-                // itself never scrolls. Keep the same interaction across all materials.
-                scrollable = false,
-                forceEqualWidth = true,
-                liquidGlassLabelHorizontalPadding = if (liquidGlassEnabled) 20.dp else null,
-                compactMiuixWhenTwoOptions = false,
-                height = tabHeight,
-                indicatorHeight = tabHeight - 8.dp,
-                labelFontSize = com.android.purebilibili.core.ui.appTabLabelFontSize(),
-                indicatorPositionProvider = indicatorPositionProvider,
-                isScrollInProgressProvider = isScrollInProgressProvider,
-                dragSelectionEnabled = tabs.size > 1,
-                tapPressRefractionEnabled = true,
-                miuixBackdrop = visibleDockBackdrop.takeIf { liquidGlassEnabled },
-            )
+            if (useCouiContourTabs) {
+                AppCouiContourTabRow(
+                    tabs = tabs,
+                    selectedIndex = selectedTab,
+                    height = tabHeight,
+                    onTabSelected = onTabSelected,
+                    modifier = Modifier.weight(1f),
+                )
+            } else {
+                AppThemeAdaptiveTabRow(
+                    // Glass indicator fills the measured slot; native geometry keeps its defaults.
+                    liquidGlassAdaptIndicatorToLabel = !com.android.purebilibili.core.ui.LocalAppThemeConfig.current.liquidGlassEnabled,
+                    role = com.android.purebilibili.core.ui.components.AppTabRowRole.PRIMARY,
+                    options = tabs.mapIndexed { index, label -> AppSegmentOption(index, label) },
+                    selectedValue = selectedTab,
+                    onSelectionChange = onTabSelected,
+                    modifier = Modifier.weight(1f).height(tabHeight),
+                    // Fixed slots: only the page or indicator changes selection; the rail
+                    // itself never scrolls. Keep the same interaction across all materials.
+                    scrollable = false,
+                    forceEqualWidth = true,
+                    liquidGlassLabelHorizontalPadding = if (liquidGlassEnabled) 20.dp else null,
+                    compactMiuixWhenTwoOptions = false,
+                    height = tabHeight,
+                    indicatorHeight = tabHeight - 8.dp,
+                    labelFontSize = com.android.purebilibili.core.ui.appTabLabelFontSize(),
+                    indicatorPositionProvider = indicatorPositionProvider,
+                    isScrollInProgressProvider = isScrollInProgressProvider,
+                    dragSelectionEnabled = tabs.size > 1,
+                    tapPressRefractionEnabled = true,
+                    miuixBackdrop = visibleDockBackdrop.takeIf { liquidGlassEnabled },
+                )
+            }
             CompositionLocalProvider(
                 LocalAppTopBarIconDecorationEnabled provides topBarIconDecorationEnabled,
                 LocalAppTopBarIconBackdrop provides dockBackdrop,

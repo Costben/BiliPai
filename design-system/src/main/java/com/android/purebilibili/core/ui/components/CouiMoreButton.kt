@@ -7,7 +7,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.platform.LocalDensity
@@ -166,18 +169,48 @@ fun CouiMoreDisc(
         )
         return
     }
-    val galleryDensity = rememberGalleryDensity()
-    CouiDiscTheme(forceDark) {
-        CompositionLocalProvider(LocalDensity provides galleryDensity) {
-            HighlightedIconButton(
-                onClick = {},
-                modifier = modifier.size(size),
-                size = size,
-                enabled = false,
-            ) {
-                CouiMoreGlyph(tint = tint, iconSize = iconSize)
-            }
-        }
+    val isDark = forceDark || COUITheme.colorScheme.background.luminance() < 0.5f
+    Box(
+        modifier = modifier
+            .size(size)
+            .drawWithCache {
+                val radius = this.size.minDimension / 2f
+                val discCenter = androidx.compose.ui.geometry.Offset(
+                    this.size.width * 0.5f,
+                    this.size.height * 0.5f,
+                )
+                val fillBrush = Brush.radialGradient(
+                    colorStops = arrayOf(
+                        0f to HighlightedIconButtonDefaults.fillCenter(isDark)
+                            .copy(alpha = HighlightedIconButtonDefaults.FillAlpha),
+                        HighlightedIconButtonDefaults.FillEdgeStop to HighlightedIconButtonDefaults.fillEdge(isDark)
+                            .copy(alpha = HighlightedIconButtonDefaults.FillAlpha),
+                    ),
+                    center = discCenter,
+                    radius = radius.coerceAtLeast(1f),
+                )
+                val strokeWidthPx = HighlightedIconButtonDefaults.StrokeWidth.toPx()
+                val strokeAlpha = if (isDark) {
+                    HighlightedIconButtonDefaults.StrokeAlpha * 0.45f
+                } else {
+                    HighlightedIconButtonDefaults.LightStrokeAlpha
+                }
+                val strokeColor = Color.White.copy(alpha = strokeAlpha)
+                onDrawBehind {
+                    drawCircle(brush = fillBrush, radius = radius, center = discCenter)
+                    if (strokeWidthPx > 0f && radius > strokeWidthPx) {
+                        drawCircle(
+                            color = strokeColor,
+                            radius = radius - strokeWidthPx * 0.5f,
+                            center = discCenter,
+                            style = Stroke(width = strokeWidthPx),
+                        )
+                    }
+                }
+            },
+        contentAlignment = Alignment.Center,
+    ) {
+        CouiMoreGlyph(tint = tint, iconSize = iconSize)
     }
 }
 

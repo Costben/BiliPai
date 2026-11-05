@@ -887,6 +887,21 @@ fun CommonListScreen(
         listScopedSearchEnabled = homeSettings.listScopedSearchEnabled,
         searchQuery = searchQuery,
     )
+    // COUI 17 历史页：搜索改成顶栏右上角的按钮，点开就地展开成内联搜索框，
+    // 与首页顶栏同一套展开手感；其余皮肤仍保留列表顶部的常驻搜索框。
+    val couiInlineSearchAvailable = historyViewModel != null &&
+        !isHistoryBatchMode &&
+        !isSearchDestination &&
+        !hideListTopSearchBar &&
+        com.android.purebilibili.core.theme.LocalAppUiStyle.current ==
+        com.android.purebilibili.core.theme.AppUiStyle.COUI17 &&
+        !com.android.purebilibili.core.ui.LocalAppThemeConfig.current.liquidGlassEnabled
+    var couiInlineSearchExpanded by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(couiInlineSearchAvailable) {
+        if (!couiInlineSearchAvailable && couiInlineSearchExpanded) {
+            couiInlineSearchExpanded = false
+        }
+    }
     LaunchedEffect(listScopedSearchChannel) {
         listScopedSearchChannel?.receiveAsFlow()?.collect { query ->
             searchQuery = query
@@ -1880,8 +1895,10 @@ fun CommonListScreen(
                         Modifier
                     },
                     content = {
+                    Box(modifier = Modifier.fillMaxWidth()) {
                     AppTopBar(
                         title = when {
+                            couiInlineSearchExpanded -> ""
                             isFavoriteFolderSelectionMode -> "已选收藏夹: ${selectedFavoriteFolderIds.size}"
                             isFavoriteBatchMode -> "已选: ${selectedFavoriteResourceIds.size}"
                             isHistoryBatchMode -> "已选: ${selectedHistoryKeys.size}"
@@ -1898,25 +1915,28 @@ fun CommonListScreen(
                                 fixedTopBarHeightPx = coordinates.size.height
                             },
                         navigationIcon = {
-                            AppIconButton(
-                                onClick = {
-                                    if (isBatchActionMode) {
-                                        when {
-                                            isFavoriteFolderSelectionMode -> exitFavoriteFolderSelection()
-                                            isFavoriteBatchMode -> exitFavoriteBatchMode()
-                                            isHistoryBatchMode -> exitHistoryBatchMode()
-                                            isLikedBatchMode -> { isLikedBatchMode = false; selectedLikedKeys = emptySet() }
-                                            else -> exitFavoriteDetailBatchMode()
+                            // 内联搜索自带返回键，页面自己的返回键让位，避免两条箭头叠在一起。
+                            if (!couiInlineSearchExpanded) {
+                                AppIconButton(
+                                    onClick = {
+                                        if (isBatchActionMode) {
+                                            when {
+                                                isFavoriteFolderSelectionMode -> exitFavoriteFolderSelection()
+                                                isFavoriteBatchMode -> exitFavoriteBatchMode()
+                                                isHistoryBatchMode -> exitHistoryBatchMode()
+                                                isLikedBatchMode -> { isLikedBatchMode = false; selectedLikedKeys = emptySet() }
+                                                else -> exitFavoriteDetailBatchMode()
+                                            }
+                                        } else {
+                                            onBack()
                                         }
-                                    } else {
-                                        onBack()
                                     }
+                                ) {
+                                    AppIcon(
+                                        if (isBatchActionMode) AppIcons.Rounded.Close else rememberAppBackIcon(),
+                                        contentDescription = if (isBatchActionMode) "退出多选" else "Back",
+                                    )
                                 }
-                            ) {
-                                AppIcon(
-                                    if (isBatchActionMode) AppIcons.Rounded.Close else rememberAppBackIcon(),
-                                    contentDescription = if (isBatchActionMode) "退出多选" else "Back",
-                                )
                             }
                         },
                         actions = {
@@ -1924,6 +1944,11 @@ fun CommonListScreen(
                                 horizontalArrangement = Arrangement.spacedBy(AppSpacingTokens.ExtraSmall + AppSpacingTokens.Micro),
                                 verticalAlignment = Alignment.CenterVertically,
                             ) {
+                                if (couiInlineSearchAvailable) {
+                                    AppIconButton(onClick = { couiInlineSearchExpanded = true }) {
+                                        AppIcon(AppIcons.Rounded.Search, contentDescription = "搜索历史")
+                                    }
+                                }
                                 if (!isBatchActionMode) {
                                     onOpenSearchDestination?.let { openSearch ->
                                         AppIconButton(onClick = { openSearch(searchQuery, isSubscribedBrowse) }) {
@@ -2097,6 +2122,27 @@ fun CommonListScreen(
                         ),
                         scrollBehavior = scrollBehavior
                     )
+                    }
+
+                    // 展开后的内联搜索覆盖在顶栏这一行上：左侧返回键、右侧 COUI 搜索框，
+                    // 与首页顶栏的展开/收起是同一个组件、同一套动效。
+                    if (couiInlineSearchAvailable) {
+                        com.android.purebilibili.feature.home.components.CouiHomeInlineSearchRow(
+                            expanded = couiInlineSearchExpanded,
+                            onExpandedChange = { couiInlineSearchExpanded = it },
+                            onSubmit = { keyword ->
+                                searchQuery = keyword
+                                couiInlineSearchExpanded = false
+                            },
+                            rowHeight = with(LocalDensity.current) {
+                                fixedTopBarHeightPx.toDp()
+                            },
+                            horizontalPadding = AppSpacingTokens.Medium,
+                            initialQuery = searchQuery,
+                            onQueryChange = { searchQuery = it },
+                            modifier = Modifier.align(Alignment.BottomCenter),
+                        )
+                    }
 
                     // 🔍 搜索栏。历史页开启全局液态玻璃复用后，搜索与筛选各自成为
                     // 一条独立 Dock，结构与首页顶部一致。
@@ -2123,6 +2169,15 @@ fun CommonListScreen(
                                     ),
                             )
                         }
+                    } else if (couiInlineSearchAvailable) {
+                        // COUI 17：搜索已经收进顶栏右侧按钮，列表顶部不再常驻一行搜索框。
+                        androidx.compose.foundation.layout.Spacer(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .onGloballyPositioned { coordinates ->
+                                    searchBarHeightPx = coordinates.size.height
+                                }
+                        )
                     } else {
                         Box(
                             modifier = Modifier
