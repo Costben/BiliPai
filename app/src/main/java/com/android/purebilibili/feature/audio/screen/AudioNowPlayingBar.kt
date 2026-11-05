@@ -442,6 +442,7 @@ internal fun AudioNowPlayingBar(
                     },
                     // Visibility is owned by the explicit now-playing handoff above.
                     sourceRoute = sourceRoute,
+                    capturePixels = true,
                 )
                 .semantics {
                     contentDescription = if (onCompactClick != null) {

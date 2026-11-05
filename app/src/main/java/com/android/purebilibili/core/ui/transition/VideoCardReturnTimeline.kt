@@ -74,7 +74,38 @@ internal fun resolveVisualProgress(
 }
 
 /**
- * Frozen source-page snapshot release progress during a Miuix return.
+ * 「整张详情页 ↔ 列表卡简略信息」的交叉淡入淡出窗口。
+ *
+ * [progress] 与 morph 同向：`0` 是列表卡，`1` 是完整详情页。开合两个方向共用同一组数字，
+ * 所以返回（`1 → 0`）是打开（`0 → 1`）的严格逆放，不会出现只换封面、正文硬切的观感。
+ *
+ * 淡出的只有**飞行详情页**（底板 + 正文）。列表真卡全程原位满格，靠页面变透明「透出来」，
+ * 所以卡片可见度就是 `1 - 本函数`。窗口刻意压在末段：`DETAIL_START` 之后页面只剩卡片大小，
+ * 交叉淡化不会在半屏大小的半透明页面上糊成一团。
+ */
+internal object VideoCardCompactInfoCrossfade {
+    const val DETAIL_START = 0.08f
+    const val DETAIL_END = 0.42f
+}
+
+/** 飞行详情页（底板 + 正文：标题、简介、评论区）不透明度。 */
+internal fun resolveVideoCardDetailContentAlpha(progress: Float): Float {
+    val p = progress.takeIf { it.isFinite() }?.coerceIn(0f, 1f) ?: 0f
+    val span = VideoCardCompactInfoCrossfade.DETAIL_END - VideoCardCompactInfoCrossfade.DETAIL_START
+    return ((p - VideoCardCompactInfoCrossfade.DETAIL_START) / span).coerceIn(0f, 1f)
+}
+
+/**
+ * 理论上与 [resolveVideoCardDetailContentAlpha] 互补的卡片信息不透明度。
+ *
+ * 生产代码不直接用它叠 alpha（列表真卡保持满格，见
+ * `resolveHomeCardChromeAlphaDuringShellReturnMorph`）；它保留为「页面淡出多少、
+ * 卡片就露出多少」的单测契约与读数工具。
+ */
+internal fun resolveVideoCardCompactInfoAlpha(progress: Float): Float =
+    1f - resolveVideoCardDetailContentAlpha(progress)
+
+/** Frozen source-page snapshot release progress during a Miuix return.
  *
  * This releases the stale depth snapshot so the live list card can punch through the flying
  * entry. It must finish before the live → cover window, otherwise the opening-time snapshot

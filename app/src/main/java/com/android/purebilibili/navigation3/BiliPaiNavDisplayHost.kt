@@ -352,7 +352,9 @@ internal fun BiliPaiNavDisplayHost(
     ) {
         MiuixVideoCardTransitionProgress(
             gestureTranslationEnabled = videoSharedReturnGestureTranslationEnabled,
-            gesturePoseEnabled = videoSharedReturnGestureFollowEnabled,
+            // 返回手势不再叠加 3D 抬升/倾斜姿态。那一刻整页已经按手势进度一路缩向来源卡，
+            // 再叠一层绕手指支点的抬升，就会先向右上方飘一下再落回卡片，看起来是两段位移。
+            gesturePoseEnabled = false,
         )
     }
     // 返回手势的振动交给系统（predictive back 自己会反馈），应用不再叠加一次。
@@ -733,6 +735,11 @@ internal fun BiliPaiNavDisplayHost(
             )
         }
     }
+    val reportContentTopInsetPx = remember(videoCardTransitionProgress) {
+        { insetPx: Float ->
+            videoCardTransitionProgress.contentTopInsetPx = insetPx
+        }
+    }
     val miuixCardTransitionState = remember(
         cardMorphAvailable,
         heroMotion,
@@ -740,6 +747,7 @@ internal fun BiliPaiNavDisplayHost(
         videoCardGestureProvider,
         videoCardLayoutWidthProvider,
         videoCardLayoutHeightProvider,
+        reportContentTopInsetPx,
         sourceMetadata.sourceBounds,
         sourceMetadata.sourceCoverBounds,
         sourceMetadata.sourceInfoBounds,
@@ -758,6 +766,7 @@ internal fun BiliPaiNavDisplayHost(
             sourceInfoBoundsProvider = { sourceMetadata.sourceInfoBounds },
             sourceLayout = sourceMetadata.sourceLayout,
             sourceChromeSnapshot = sourceMetadata.sourceChromeSnapshot,
+            onReportContentTopInsetPx = reportContentTopInsetPx,
         )
     }
     // 恢复 0.2.2 的预测返回背景链路：目标返回页（栈前一 key）在预测返回手势中

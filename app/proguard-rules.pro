@@ -28,6 +28,22 @@
     public static void cancelAllInAllNamespaces(android.content.Context);
 }
 
+# ART 的 AOT/JIT 编译器有 16384 DEX 指令上限，超限方法会被永久降级为 Nterp
+# 解释执行。Compose 的巨型 Composable 很容易越线，而 R8 会把只有单一调用点的
+# 拆分函数重新内联回去，使拆分失效。这里固定这些拆分方法的边界：
+# 不给 allowoptimization，R8 就不能把方法体内联回调用者。
+-keepclassmembers,allowobfuscation class com.android.purebilibili.feature.home.components.cards.VideoCardKt {
+    private static void VideoCardSecondaryDialogs(...);
+    private static void SingleColumnElegantVideoCardBranch(...);
+    private static void VideoCardDismissMenuOverlay(...);
+    private static void VideoCardUnfavoriteDialog(...);
+    private static void VideoCardCoverOverlayBadges(...);
+    private static void VideoCardInfoMetadataColumn(...);
+}
+-keepclassmembers,allowobfuscation class com.android.purebilibili.feature.home.HomeScreenKt {
+    private static void HomeConsentAndPreloadEffects(...);
+}
+
 # Optional classes referenced by third-party libraries on specific code paths.
 # Consumer rules supplied by each dependency remain authoritative.
 -dontwarn javax.annotation.**

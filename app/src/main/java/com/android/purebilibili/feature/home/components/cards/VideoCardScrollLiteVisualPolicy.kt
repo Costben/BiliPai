@@ -1,8 +1,6 @@
 package com.android.purebilibili.feature.home.components.cards
 
-import com.android.purebilibili.core.ui.transition.VIDEO_CARD_SHELL_SOURCE_EXIT_FADE_RATIO
 import com.android.purebilibili.core.ui.transition.VideoCardTransitionBackgroundPhase
-import com.android.purebilibili.core.ui.transition.isVideoCardFlyingOverlayCoveringSource
 import com.android.purebilibili.core.ui.transition.normalizeSharedElementSourceRoute
 import com.android.purebilibili.core.ui.transition.resolveVideoCardReturnListCoverContract
 
@@ -89,49 +87,33 @@ internal fun isVideoCardFlyingReturnContext(
 }
 
 /**
- * Stationary list-card **cover** while a Miuix flying entry owns the morph.
+ * 列表真卡**封面**在 Miuix 飞行 entry 期间的可见 alpha。
  *
- * Cover pixels stay on the flying media path until park; list cover stays 0 to avoid dual image.
- * Title / UP / stats are drawn on the flying entry during morph (list chrome also stays 0).
+ * 恒为 **1**：真卡封面在开合全程原位在场。
  *
- * @return 0 while flying owns cover, 1 when the list cover may show again (or whole-card fallback).
+ * 覆盖它的有两层，各自负责自己的透明度：
+ * - 飞行 entry 的实时画面（不透明）—— 落位前一直压在封面槽上；
+ * - 飞行 entry 的整页底板 —— 按
+ *   [com.android.purebilibili.core.ui.transition.resolveVideoCardDetailContentAlpha] 淡出。
+ *
+ * 这里再叠一层 alpha 只会让「卡片从页面下面透出来」变成两层淡出相乘，
+ * 中段整张卡接近不可见，落位瞬间才补回来。
  */
+@Suppress("UNUSED_PARAMETER")
 internal fun resolveHomeCardStationaryRevealAlpha(
-    @Suppress("UNUSED_PARAMETER") isReturnContext: Boolean,
+    isReturnContext: Boolean,
     preferWholeCardReturn: Boolean,
     transitionBackgroundPhase: VideoCardTransitionBackgroundPhase,
     isVideoCardReturnGestureInProgress: Boolean,
     isSharedTransitionActive: Boolean,
     transitionBackgroundProgress: Float,
-): Float {
-    if (preferWholeCardReturn) return 1f
-    // Keep the list card painted until the flying overlay covers the click slot.
-    // OPENING is pre-armed on click before the destination exists.
-    if (
-        !isVideoCardFlyingOverlayCoveringSource(
-            phase = transitionBackgroundPhase,
-            depthProgress = transitionBackgroundProgress,
-            isReturnGestureInProgress = isVideoCardReturnGestureInProgress,
-        )
-    ) {
-        return 1f
-    }
-    if (isSharedTransitionActive) return 0f
-    return when (transitionBackgroundPhase) {
-        VideoCardTransitionBackgroundPhase.OPENING,
-        VideoCardTransitionBackgroundPhase.RETURNING,
-        VideoCardTransitionBackgroundPhase.HELD,
-        -> 0f
-        VideoCardTransitionBackgroundPhase.IDLE -> 1f
-    }
-}
+): Float = 1f
 
 /**
- * 来源卡封面在返回期间的可见 alpha。
+ * 来源卡封面在开合期间的可见 alpha。
  *
- * 封面像素由飞行媒体槽持有，直到 entry 卸层。列表真卡封面保持 0，避免和
- * 飞行封面叠一张空壳；底部信息则由 [resolveHomeCardChromeAlphaDuringShellReturnMorph]
- * 在封面落点外侧显示真卡。
+ * 与 [resolveHomeCardStationaryRevealAlpha] 同一契约：真卡封面原位满格，
+ * 可见度完全由飞行 entry 的实时画面与整页底板决定。
  */
 internal fun resolveHomeCardReturnSourceVisualAlpha(
     useCardContainerSharedBounds: Boolean,
@@ -168,10 +150,13 @@ internal data class HorizontalCardChromeMotionFrame(
 )
 
 /**
- * 横卡 chrome 与 shell 共用主进度。
+ * 横卡 chrome 的透明度与短距离位移。
  *
- * 打开前 28% 上移并淡出；返回时不再额外位移，文字与封面同一交接窗口。
+ * 恒为「原位、满格」：横卡信息区不再自带走位/淡出时间轴，开合的交叉淡入淡出统一交给
+ * 飞行详情页一侧（见 [resolveHomeCardChromeAlphaDuringShellReturnMorph]）。
+ * 横卡与竖卡因此共用同一条观感，不再出现文字先跑一步再被页面吃掉。
  */
+@Suppress("UNUSED_PARAMETER")
 internal fun resolveHorizontalCardChromeMotionFrame(
     useCardContainerSharedBounds: Boolean,
     isSharedMorphSourceCard: Boolean,
@@ -183,57 +168,22 @@ internal fun resolveHorizontalCardChromeMotionFrame(
     transitionBackgroundProgress: Float = 0f,
     isQuickReturnFromDetail: Boolean = false,
     preferWholeCardReturn: Boolean = false,
-): HorizontalCardChromeMotionFrame {
-    if (!useCardContainerSharedBounds || !isSharedMorphSourceCard) {
-        return HorizontalCardChromeMotionFrame(alpha = 1f, translationProgress = 0f)
-    }
-    val isReturnContext = isVideoCardFlyingReturnContext(
-        isReturningFromDetail = isReturningFromDetail,
-        isVideoCardReturnGestureInProgress = isVideoCardReturnGestureInProgress,
-        transitionBackgroundPhase = transitionBackgroundPhase,
-        isSharedTransitionActive = isSharedTransitionActive,
-        transitionBackgroundProgress = transitionBackgroundProgress,
-    )
-    if (isReturnContext) {
-        return HorizontalCardChromeMotionFrame(
-            alpha = resolveHomeCardStationaryRevealAlpha(
-                isReturnContext = true,
-                preferWholeCardReturn = preferWholeCardReturn,
-                transitionBackgroundPhase = transitionBackgroundPhase,
-                isVideoCardReturnGestureInProgress = isVideoCardReturnGestureInProgress,
-                isSharedTransitionActive = isSharedTransitionActive,
-                transitionBackgroundProgress = transitionBackgroundProgress,
-            ),
-            translationProgress = 0f,
-        )
-    }
-    if (transitionBackgroundPhase == VideoCardTransitionBackgroundPhase.OPENING) {
-        val exitProgress = (
-            transitionBackgroundProgress.coerceIn(0f, 1f) /
-                VIDEO_CARD_SHELL_SOURCE_EXIT_FADE_RATIO
-            ).coerceIn(0f, 1f)
-        return HorizontalCardChromeMotionFrame(
-            alpha = 1f - exitProgress,
-            translationProgress = exitProgress,
-        )
-    }
-    if (
-        transitionBackgroundPhase == VideoCardTransitionBackgroundPhase.HELD ||
-        isSharedTransitionActive
-    ) {
-        return HorizontalCardChromeMotionFrame(alpha = 0f, translationProgress = 1f)
-    }
-    return HorizontalCardChromeMotionFrame(alpha = 1f, translationProgress = 0f)
-}
+): HorizontalCardChromeMotionFrame = HorizontalCardChromeMotionFrame(
+    alpha = 1f,
+    translationProgress = 0f,
+)
 
 /**
  * 返回 shell morph 期间源卡 **chrome**（标题/UP/信息区）的 alpha。
  *
- * 规则：
- * - 非源卡 / 无 shell：恒 1
- * - 进场（OPENING 或 shared 进行中且非返回）：0，避免字叠播放器
- * - 返回：真实来源卡片始终为 1，由 sharedBounds 反向还原完整内容
+ * 恒为 **1**：列表真卡在开合全程原位满格。
+ *
+ * 交叉淡入淡出只由**飞行详情页**一侧完成 —— 整页底板与正文按
+ * [com.android.purebilibili.core.ui.transition.resolveVideoCardDetailContentAlpha] 从 1 淡到 0，
+ * 卡片是从它下面「透出来」的。若这里再乘一条互补 alpha，卡片可见度会变成 `(1 - a)²`，
+ * 飞行中段整张卡几乎消失、落位才「补」回来，正是「只有封面在换、标题没有交换」的观感来源。
  */
+@Suppress("UNUSED_PARAMETER")
 internal fun resolveHomeCardChromeAlphaDuringShellReturnMorph(
     useCardContainerSharedBounds: Boolean,
     isSharedMorphSourceCard: Boolean,
@@ -245,49 +195,7 @@ internal fun resolveHomeCardChromeAlphaDuringShellReturnMorph(
     transitionBackgroundProgress: Float = 0f,
     isQuickReturnFromDetail: Boolean = false,
     preferWholeCardReturn: Boolean = false,
-): Float {
-    if (!useCardContainerSharedBounds || !isSharedMorphSourceCard) return 1f
-
-    val isReturnContext = isVideoCardFlyingReturnContext(
-        isReturningFromDetail = isReturningFromDetail,
-        isVideoCardReturnGestureInProgress = isVideoCardReturnGestureInProgress,
-        transitionBackgroundPhase = transitionBackgroundPhase,
-        isSharedTransitionActive = isSharedTransitionActive,
-        transitionBackgroundProgress = transitionBackgroundProgress,
-    )
-
-    if (isReturnContext) {
-        // Keep the stationary list info hidden until the flying whole-card lands.
-        // Showing it here leaves title/stats in place while only the cover flies.
-        return resolveHomeCardStationaryRevealAlpha(
-            isReturnContext = true,
-            preferWholeCardReturn = preferWholeCardReturn,
-            transitionBackgroundPhase = transitionBackgroundPhase,
-            isVideoCardReturnGestureInProgress = isVideoCardReturnGestureInProgress,
-            isSharedTransitionActive = isSharedTransitionActive,
-            transitionBackgroundProgress = transitionBackgroundProgress,
-        )
-    }
-
-    if (
-        !isVideoCardFlyingOverlayCoveringSource(
-            phase = transitionBackgroundPhase,
-            depthProgress = transitionBackgroundProgress,
-            isReturnGestureInProgress = isVideoCardReturnGestureInProgress,
-        )
-    ) {
-        return 1f
-    }
-
-    // 进场：飞卡盖住源位后藏字，避免和飞行信息叠字。
-    if (
-        isSharedTransitionActive ||
-        transitionBackgroundPhase == VideoCardTransitionBackgroundPhase.OPENING
-    ) {
-        return 0f
-    }
-    return 1f
-}
+): Float = 1f
 
 /**
  * 兼容旧布尔语义：chrome 尚未完全露出版视为仍在抑制。

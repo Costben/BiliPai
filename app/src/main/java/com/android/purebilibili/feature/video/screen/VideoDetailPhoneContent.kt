@@ -136,6 +136,14 @@ internal fun VideoDetailPhoneSuccessContentLayer(
     deferFreshEntryContent: Boolean = false,
     navigationOwnsEntryMotion: Boolean = false,
     commentPagePreloadReady: Boolean = true,
+    /**
+     * 详情正文在卡片开合中的不透明度（0=列表卡，1=完整详情页）。
+     *
+     * 卡片标题/UP/时间由列表页自己的 chrome 以互补 alpha 同步浮现，两者共用
+     * [com.android.purebilibili.core.ui.transition.resolveVideoCardDetailContentAlpha] 曲线，
+     * 因此手势跟手返回与自动开合看到的是同一条交叉淡入淡出。
+     */
+    rootContentAlphaProvider: () -> Float = { 1f },
 ) {
     val engagementSuccess = success.withEngagementUiState(engagementState)
     var pendingVideoShare by remember { mutableStateOf<VideoSharePayload?>(null) }
@@ -166,7 +174,9 @@ internal fun VideoDetailPhoneSuccessContentLayer(
         val showLoadingUnderlay by remember(detailContentVisible, isLeaving) {
             derivedStateOf { holdSkeletonUnderlay || lateContentReveal.value < 1f }
         }
-        Box(modifier = Modifier.fillMaxSize().videoInputDiagnostics("detail_body") {
+        Box(modifier = Modifier.fillMaxSize()
+            .graphicsLayer { alpha = rootContentAlphaProvider() }
+            .videoInputDiagnostics("detail_body") {
             "fullscreen=$isFullscreenMode portraitFs=$isPortraitFullscreen " +
                 "leaving=$isLeaving transitionFinished=$isTransitionFinished thread=$isCommentThreadVisible " +
                 "commentInput=$showCommentInput favoriteDialog=$showFavoriteFolderDialog " +

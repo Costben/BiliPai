@@ -289,44 +289,23 @@ class VideoCardScrollLiteVisualPolicyTest {
     }
 
     @Test
-    fun homeCardSourceVisual_staysHiddenWhileFlyingEntryOwnsReturn() {
-        // Cover stays 0 until the flying entry unloads; the flying media slot owns those pixels.
-        assertEquals(
-            0f,
-            resolveHomeCardReturnSourceVisualAlpha(
-                useCardContainerSharedBounds = true,
-                isSharedMorphSourceCard = true,
-                isReturningFromDetail = true,
-                transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.RETURNING,
-                isVideoCardReturnGestureInProgress = false,
-                transitionBackgroundProgress = 1f,
-            ),
-            0.001f,
-        )
-        assertEquals(
-            0f,
-            resolveHomeCardReturnSourceVisualAlpha(
-                useCardContainerSharedBounds = true,
-                isSharedMorphSourceCard = true,
-                isReturningFromDetail = true,
-                transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.RETURNING,
-                isVideoCardReturnGestureInProgress = false,
-                transitionBackgroundProgress = 0.10f,
-            ),
-            0.001f,
-        )
-        assertEquals(
-            0f,
-            resolveHomeCardReturnSourceVisualAlpha(
-                useCardContainerSharedBounds = true,
-                isSharedMorphSourceCard = true,
-                isReturningFromDetail = true,
-                transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.RETURNING,
-                isVideoCardReturnGestureInProgress = false,
-                transitionBackgroundProgress = 0.02f,
-            ),
-            0.001f,
-        )
+    fun homeCardSourceVisual_staysVisibleWhileFlyingEntryOwnsReturn() {
+        // 真卡封面全程满格：像素可见度由飞行 entry 的实时画面 + 整页底板决定，不再叠第三层 alpha。
+        for (progress in listOf(0f, 0.02f, 0.10f, 0.5f, 1f)) {
+            assertEquals(
+                "cover alpha must stay opaque at $progress",
+                1f,
+                resolveHomeCardReturnSourceVisualAlpha(
+                    useCardContainerSharedBounds = true,
+                    isSharedMorphSourceCard = true,
+                    isReturningFromDetail = true,
+                    transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.RETURNING,
+                    isVideoCardReturnGestureInProgress = false,
+                    transitionBackgroundProgress = progress,
+                ),
+                0.001f,
+            )
+        }
         assertEquals(
             1f,
             resolveHomeCardReturnSourceVisualAlpha(
@@ -339,71 +318,25 @@ class VideoCardScrollLiteVisualPolicyTest {
             ),
             0.001f,
         )
-        assertEquals(
-            1f,
-            resolveHomeCardReturnSourceVisualAlpha(
-                useCardContainerSharedBounds = true,
-                isSharedMorphSourceCard = true,
-                isReturningFromDetail = true,
-                transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.RETURNING,
-                isVideoCardReturnGestureInProgress = false,
-                transitionBackgroundProgress = 1f,
-                preferWholeCardReturn = true,
-            ),
-            0.001f,
-        )
     }
 
     @Test
-    fun retainedSourceCardStaysTransparentUntilFlyingEntryLands() {
-        assertEquals(
-            1f,
-            resolveHomeCardStationaryRevealAlpha(
-                isReturnContext = false,
-                preferWholeCardReturn = false,
-                transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.OPENING,
-                isVideoCardReturnGestureInProgress = false,
-                isSharedTransitionActive = false,
-                transitionBackgroundProgress = 0f,
-            ),
-            0.001f,
-        )
-        assertEquals(
-            0f,
-            resolveHomeCardStationaryRevealAlpha(
-                isReturnContext = false,
-                preferWholeCardReturn = false,
-                transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.OPENING,
-                isVideoCardReturnGestureInProgress = false,
-                isSharedTransitionActive = false,
-                transitionBackgroundProgress = 0.2f,
-            ),
-            0.001f,
-        )
-        assertEquals(
-            0f,
-            resolveHomeCardStationaryRevealAlpha(
-                isReturnContext = true,
-                preferWholeCardReturn = false,
-                transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.RETURNING,
-                isVideoCardReturnGestureInProgress = false,
-                isSharedTransitionActive = false,
-                transitionBackgroundProgress = 0.04f,
-            ),
-            0.001f,
-        )
-        assertEquals(
-            0f,
-            resolveHomeCardStationaryRevealAlpha(
-                isReturnContext = true,
-                preferWholeCardReturn = false,
-                transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.HELD,
-                isVideoCardReturnGestureInProgress = true,
-                isSharedTransitionActive = false,
-                transitionBackgroundProgress = 0.5f,
-            ),
-            0.001f,
-        )
+    fun retainedSourceCardStaysVisibleThroughTheWholeMorph() {
+        for (progress in listOf(0f, 0.04f, 0.2f, 0.5f)) {
+            assertEquals(
+                "stationary cover must stay opaque at $progress",
+                1f,
+                resolveHomeCardStationaryRevealAlpha(
+                    isReturnContext = true,
+                    preferWholeCardReturn = false,
+                    transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.RETURNING,
+                    isVideoCardReturnGestureInProgress = false,
+                    isSharedTransitionActive = true,
+                    transitionBackgroundProgress = progress,
+                ),
+                0.001f,
+            )
+        }
         assertEquals(
             1f,
             resolveHomeCardStationaryRevealAlpha(
@@ -459,9 +392,9 @@ class VideoCardScrollLiteVisualPolicyTest {
                 transitionBackgroundProgress = 0.4f,
             )
         )
-        // Stationary list info stays hidden so it does not remain in place while the card flies.
+        // Miuix settle 期间真卡仍在原位满格：可见度由飞行详情页的整页淡出决定。
         assertEquals(
-            0f,
+            1f,
             resolveHomeCardChromeAlphaDuringShellReturnMorph(
                 useCardContainerSharedBounds = true,
                 isSharedMorphSourceCard = true,
@@ -474,7 +407,7 @@ class VideoCardScrollLiteVisualPolicyTest {
             0.001f,
         )
         assertEquals(
-            0f,
+            1f,
             resolveHomeCardReturnSourceVisualAlpha(
                 useCardContainerSharedBounds = true,
                 isSharedMorphSourceCard = true,
@@ -489,31 +422,35 @@ class VideoCardScrollLiteVisualPolicyTest {
     }
 
     @Test
-    fun homeCardChromeStaysHiddenUntilReverseReturnCompletes() {
-        assertEquals(
-            0f,
-            resolveHomeCardChromeAlphaDuringShellReturnMorph(
-                useCardContainerSharedBounds = true,
-                isSharedMorphSourceCard = true,
-                isReturningFromDetail = true,
-                isSharedTransitionActive = true,
-                transitionBackgroundProgress = 1f,
-            ),
-            0.001f,
-        )
-        assertEquals(
-            0f,
-            resolveHomeCardChromeAlphaDuringShellReturnMorph(
-                useCardContainerSharedBounds = true,
-                isSharedMorphSourceCard = true,
-                isReturningFromDetail = true,
-                transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.RETURNING,
-                isSharedTransitionActive = true,
-                transitionBackgroundProgress = 0.16f,
-            ),
-            0.001f,
-        )
-        // Morph finished: ownership transfers back to the stationary source card.
+    fun listCardChromeStaysFullyOpaqueSoTheFlyingPageOwnsTheCrossfade() {
+        for (progress in listOf(0f, 0.16f, 0.5f, 1f)) {
+            assertEquals(
+                "return chrome must stay opaque at $progress",
+                1f,
+                resolveHomeCardChromeAlphaDuringShellReturnMorph(
+                    useCardContainerSharedBounds = true,
+                    isSharedMorphSourceCard = true,
+                    isReturningFromDetail = true,
+                    transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.RETURNING,
+                    isSharedTransitionActive = true,
+                    transitionBackgroundProgress = progress,
+                ),
+                0.001f,
+            )
+            assertEquals(
+                "opening chrome must stay opaque at $progress",
+                1f,
+                resolveHomeCardChromeAlphaDuringShellReturnMorph(
+                    useCardContainerSharedBounds = true,
+                    isSharedMorphSourceCard = true,
+                    isReturningFromDetail = false,
+                    transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.OPENING,
+                    isSharedTransitionActive = true,
+                    transitionBackgroundProgress = progress,
+                ),
+                0.001f,
+            )
+        }
         assertEquals(
             1f,
             resolveHomeCardChromeAlphaDuringShellReturnMorph(
@@ -523,43 +460,6 @@ class VideoCardScrollLiteVisualPolicyTest {
                 transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.IDLE,
                 isSharedTransitionActive = false,
                 transitionBackgroundProgress = 0f,
-            ),
-            0.001f,
-        )
-        assertEquals(
-            1f,
-            resolveHomeCardChromeAlphaDuringShellReturnMorph(
-                useCardContainerSharedBounds = true,
-                isSharedMorphSourceCard = true,
-                isReturningFromDetail = true,
-                isSharedTransitionActive = true,
-                transitionBackgroundProgress = 1f,
-                preferWholeCardReturn = true,
-            ),
-            0.001f,
-        )
-        // 进场 OPENING：点击预武装时仍画整卡，飞卡盖住后再藏字。
-        assertEquals(
-            1f,
-            resolveHomeCardChromeAlphaDuringShellReturnMorph(
-                useCardContainerSharedBounds = true,
-                isSharedMorphSourceCard = true,
-                isReturningFromDetail = false,
-                transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.OPENING,
-                isSharedTransitionActive = true,
-                transitionBackgroundProgress = 0f,
-            ),
-            0.001f,
-        )
-        assertEquals(
-            0f,
-            resolveHomeCardChromeAlphaDuringShellReturnMorph(
-                useCardContainerSharedBounds = true,
-                isSharedMorphSourceCard = true,
-                isReturningFromDetail = false,
-                transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.OPENING,
-                isSharedTransitionActive = true,
-                transitionBackgroundProgress = 0.5f,
             ),
             0.001f,
         )
@@ -573,31 +473,60 @@ class VideoCardScrollLiteVisualPolicyTest {
     }
 
     @Test
-    fun sourceCardTakesOverAtTerminalDepthBeforeClockReachesIdle() {
+    fun detailBodyFadesOutOnlyInTheLastStretchOfTheMorph() {
+        for (step in 0..100) {
+            val progress = step / 100f
+            val detailAlpha =
+                com.android.purebilibili.core.ui.transition.resolveVideoCardDetailContentAlpha(progress)
+            val cardAlpha =
+                com.android.purebilibili.core.ui.transition.resolveVideoCardCompactInfoAlpha(progress)
+            assertEquals(1f, detailAlpha + cardAlpha, 0.0001f)
+            assertTrue("detail alpha out of range at $progress", detailAlpha in 0f..1f)
+        }
+        // 页面在大多数行程里满格，只在末段淡出：半屏大小的半透明页面不会糊成一团。
         assertEquals(
             1f,
-            resolveHomeCardStationaryRevealAlpha(
-                isReturnContext = true,
-                preferWholeCardReturn = false,
-                transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.RETURNING,
-                isVideoCardReturnGestureInProgress = false,
-                isSharedTransitionActive = false,
-                transitionBackgroundProgress = 0f,
-            ),
+            com.android.purebilibili.core.ui.transition.resolveVideoCardDetailContentAlpha(1f),
+            0.001f,
+        )
+        assertEquals(
+            1f,
+            com.android.purebilibili.core.ui.transition.resolveVideoCardDetailContentAlpha(0.42f),
             0.001f,
         )
         assertEquals(
             0f,
-            resolveHomeCardStationaryRevealAlpha(
-                isReturnContext = true,
-                preferWholeCardReturn = false,
-                transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.RETURNING,
-                isVideoCardReturnGestureInProgress = false,
-                isSharedTransitionActive = false,
-                transitionBackgroundProgress = 0.01f,
-            ),
+            com.android.purebilibili.core.ui.transition.resolveVideoCardDetailContentAlpha(0.08f),
             0.001f,
         )
+        assertEquals(
+            0f,
+            com.android.purebilibili.core.ui.transition.resolveVideoCardDetailContentAlpha(0f),
+            0.001f,
+        )
+        assertTrue(
+            com.android.purebilibili.core.ui.transition
+                .resolveVideoCardDetailContentAlpha(0.25f) in 0.2f..0.8f
+        )
+    }
+
+    @Test
+    fun listCardCoverStaysVisibleAtEveryDepth() {
+        for (progress in listOf(0f, 0.01f, 0.5f, 1f)) {
+            assertEquals(
+                "cover must stay opaque at $progress",
+                1f,
+                resolveHomeCardStationaryRevealAlpha(
+                    isReturnContext = true,
+                    preferWholeCardReturn = false,
+                    transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.RETURNING,
+                    isVideoCardReturnGestureInProgress = false,
+                    isSharedTransitionActive = false,
+                    transitionBackgroundProgress = progress,
+                ),
+                0.001f,
+            )
+        }
     }
 
     @Test
@@ -608,52 +537,25 @@ class VideoCardScrollLiteVisualPolicyTest {
     }
 
     @Test
-    fun horizontalCardChrome_followsOpeningAndStaysHiddenOnReturn() {
-        val openingStart = resolveHorizontalCardChromeMotionFrame(
-            useCardContainerSharedBounds = true,
-            isSharedMorphSourceCard = true,
-            transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.OPENING,
-            transitionBackgroundProgress = 0f,
+    fun horizontalCardChromeStaysInPlaceAndOpaqueInEveryPhase() {
+        val phases = listOf(
+            VideoCardTransitionBackgroundPhase.OPENING,
+            VideoCardTransitionBackgroundPhase.HELD,
+            VideoCardTransitionBackgroundPhase.RETURNING,
+            VideoCardTransitionBackgroundPhase.IDLE,
         )
-        assertEquals(1f, openingStart.alpha, 0.001f)
-        assertEquals(0f, openingStart.translationProgress, 0.001f)
-
-        val openingMid = resolveHorizontalCardChromeMotionFrame(
-            useCardContainerSharedBounds = true,
-            isSharedMorphSourceCard = true,
-            transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.OPENING,
-            transitionBackgroundProgress = 0.14f,
-        )
-        assertEquals(0.5f, openingMid.alpha, 0.001f)
-        assertEquals(0.5f, openingMid.translationProgress, 0.001f)
-
-        val openingFinished = resolveHorizontalCardChromeMotionFrame(
-            useCardContainerSharedBounds = true,
-            isSharedMorphSourceCard = true,
-            transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.OPENING,
-            transitionBackgroundProgress = 0.28f,
-        )
-        assertEquals(0f, openingFinished.alpha, 0.001f)
-        assertEquals(1f, openingFinished.translationProgress, 0.001f)
-
-        val returnReveal = resolveHorizontalCardChromeMotionFrame(
-            useCardContainerSharedBounds = true,
-            isSharedMorphSourceCard = true,
-            isReturningFromDetail = true,
-            transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.RETURNING,
-            transitionBackgroundProgress = 0.19f,
-        )
-        assertEquals(0f, returnReveal.alpha, 0.001f)
-        assertEquals(0f, returnReveal.translationProgress, 0.001f)
-
-        val landed = resolveHorizontalCardChromeMotionFrame(
-            useCardContainerSharedBounds = true,
-            isSharedMorphSourceCard = true,
-            isReturningFromDetail = true,
-            transitionBackgroundPhase = VideoCardTransitionBackgroundPhase.IDLE,
-            transitionBackgroundProgress = 0f,
-        )
-        assertEquals(1f, landed.alpha, 0.001f)
-        assertEquals(0f, landed.translationProgress, 0.001f)
+        for (phase in phases) {
+            for (progress in listOf(0f, 0.14f, 0.28f, 1f)) {
+                val frame = resolveHorizontalCardChromeMotionFrame(
+                    useCardContainerSharedBounds = true,
+                    isSharedMorphSourceCard = true,
+                    isReturningFromDetail = phase == VideoCardTransitionBackgroundPhase.RETURNING,
+                    transitionBackgroundPhase = phase,
+                    transitionBackgroundProgress = progress,
+                )
+                assertEquals("$phase/$progress alpha", 1f, frame.alpha, 0.001f)
+                assertEquals("$phase/$progress translation", 0f, frame.translationProgress, 0.001f)
+            }
+        }
     }
 }

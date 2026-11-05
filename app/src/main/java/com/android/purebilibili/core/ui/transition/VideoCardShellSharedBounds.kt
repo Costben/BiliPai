@@ -193,6 +193,11 @@ internal fun Modifier.videoCardShellSharedBoundsOrEmpty(
     sourceRoute: String?,
     motionSpec: VideoSharedTransitionMotionSpec,
     clipShape: Shape,
+    /**
+     * overlay 裁切轮廓。传入时优先于 [clipShape]：返回时圆角要随动画 bounds 从屏幕圆角
+     * 收到卡片圆角，固定 dp 的 Shape 做不到。
+     */
+    overlayClip: SharedTransitionScope.OverlayClip? = null,
     role: VideoCardShellSharedBoundsRole = VideoCardShellSharedBoundsRole.SourceCard,
     /**
      * 详情页顶部播放器：FillWidth + TopCenter。
@@ -274,7 +279,7 @@ internal fun Modifier.videoCardShellSharedBoundsOrEmpty(
                     }
                 },
                 resizeMode = resizeMode,
-                clipInOverlayDuringTransition = OverlayClip(clipShape)
+                clipInOverlayDuringTransition = overlayClip ?: OverlayClip(clipShape)
             )
         }
     )

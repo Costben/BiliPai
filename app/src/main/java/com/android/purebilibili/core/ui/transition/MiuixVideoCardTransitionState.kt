@@ -40,6 +40,7 @@ internal data class MiuixVideoCardTransitionState(
     val sourceInfoBoundsProvider: () -> Rect? = { null },
     val sourceLayout: VideoCardSourceLayout = VideoCardSourceLayout.COVER_ONLY,
     val sourceChromeSnapshot: VideoCardSourceChromeSnapshot? = null,
+    val onReportContentTopInsetPx: (Float) -> Unit = {},
 )
 
 internal val LocalMiuixVideoCardTransitionState = compositionLocalOf {

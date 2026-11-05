@@ -115,6 +115,7 @@ import com.android.purebilibili.core.ui.videoCardTitleOverflow
 import com.android.purebilibili.core.ui.AppShapes
 import com.android.purebilibili.core.ui.AppSurfaceTokens
 import com.android.purebilibili.core.ui.feedContentTypography
+import com.android.purebilibili.core.ui.FeedContentTypography
 import com.android.purebilibili.feature.home.LocalHomeWallpaperBackdrop
 import com.android.purebilibili.core.ui.LocalGlobalWallpaperBackdropVisible
 import com.android.purebilibili.core.ui.wallpaper.LocalGlobalWallpaperBackdropSource
@@ -137,8 +138,6 @@ import com.android.purebilibili.core.ui.transition.LocalVideoCardTransitionBackg
 import com.android.purebilibili.core.ui.transition.captureNativeCoverOverlayLayer
 import com.android.purebilibili.core.ui.transition.captureNativeVideoCardImage
 import com.android.purebilibili.core.ui.transition.captureWholeCardReturnBitmap
-import com.android.purebilibili.core.ui.transition.captureVideoCardPixelsAfterEntry
-import com.android.purebilibili.core.ui.transition.rememberVideoCardPixelCaptureAllowed
 import kotlinx.coroutines.launch
 import com.android.purebilibili.core.ui.transition.recordNativeVideoCardLayer
 import com.android.purebilibili.core.ui.transition.rememberNativeVideoCardLayer
@@ -604,132 +603,45 @@ internal fun ElegantVideoCard(
             }
         }
     }
-    if (showBlockDialog) {
-        AppAlertDialog(
-            onDismissRequest = { showBlockDialog = false },
-            title = { AppText("屏蔽 UP 主") },
-            text = { AppText("屏蔽后，将不再推荐该 UP 主的视频。\n确定要屏蔽 ${video.owner.name} 吗？") },
-            confirmButton = {
-                AppTextButton(
-                    onClick = {
-                        showBlockDialog = false
-                        cardActionScope.launch {
-                            val result = com.android.purebilibili.data.repository.BlockedUpRepository(context)
-                                .blockUpWithBilibiliSync(video.owner.mid, video.owner.name, video.owner.face)
-                            android.widget.Toast.makeText(context, result.message, android.widget.Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                ) {
-                    AppText("确认")
-                }
-            },
-            dismissButton = {
-                AppTextButton(onClick = { showBlockDialog = false }) {
-                    AppText("取消")
-                }
-            }
-        )
-    }
-
-    if (showAiSummaryDialog) {
-        AppAlertDialog(
-            onDismissRequest = { showAiSummaryDialog = false },
-            title = { AppText("AI 总结") },
-            text = {
-                Column(
-                    modifier = Modifier
-                        .heightIn(max = 360.dp)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    when {
-                        aiSummaryLoading -> AppText("正在获取 AI 总结…", color = AppContentColors.secondaryText())
-                        aiSummaryError != null -> AppText(aiSummaryError!!, color = AppContentColors.error())
-                        else -> AppText(
-                            aiSummaryData?.modelResult?.summary?.takeIf { it.isNotBlank() } ?: "该视频暂无 AI 总结",
-                            color = AppContentColors.primaryText()
-                        )
-                    }
-                }
-            },
-            confirmButton = {
-                AppTextButton(onClick = { showAiSummaryDialog = false }) {
-                    AppText("关闭")
-                }
-            }
+    if (showBlockDialog || showAiSummaryDialog) {
+        VideoCardSecondaryDialogs(
+            video = video,
+            context = context,
+            cardActionScope = cardActionScope,
+            showBlockDialog = showBlockDialog,
+            onDismissBlockDialog = { showBlockDialog = false },
+            showAiSummaryDialog = showAiSummaryDialog,
+            onDismissAiSummaryDialog = { showAiSummaryDialog = false },
+            aiSummaryLoading = aiSummaryLoading,
+            aiSummaryData = aiSummaryData,
+            aiSummaryError = aiSummaryError,
         )
     }
 
     if (singleColumn) {
-        val actions = buildList {
-            if (video.bvid.isNotBlank()) {
-                add(com.android.purebilibili.core.ui.components.AppWindowAction(
-                    label = "复制BV号",
-                    onClick = {
-                        copyPlainTextToClipboard(context, video.bvid, "BV号")
-                        android.widget.Toast.makeText(context, "已复制 ${video.bvid}", android.widget.Toast.LENGTH_SHORT).show()
-                    },
-                ))
-            }
-            onUpClick?.let { visit ->
-                add(com.android.purebilibili.core.ui.components.AppWindowAction(
-                    label = "访问UP主", onClick = { visit(video.owner.mid) },
-                ))
-            }
-            onWatchLater?.let {
-                add(com.android.purebilibili.core.ui.components.AppWindowAction(label = "加入稍后再看", onClick = it))
-            }
-            if (video.cid > 0L && video.bvid.isNotBlank()) {
-                add(com.android.purebilibili.core.ui.components.AppWindowAction(
-                    label = "AI总结", onClick = { launchAiSummary() },
-                ))
-            }
-            if (video.owner.mid > 0L) {
-                add(com.android.purebilibili.core.ui.components.AppWindowAction(
-                    label = "拉黑：${video.owner.name}", onClick = { showBlockDialog = true },
-                ))
-            }
-            add(com.android.purebilibili.core.ui.components.AppWindowAction(
-                label = "无痕模式",
-                onClick = {
-                    val next = !com.android.purebilibili.core.store.SettingsManager.isPrivacyModeEnabledSync(context)
-                    cardActionScope.launch {
-                        com.android.purebilibili.core.store.SettingsManager.setPrivacyModeEnabled(context, next)
-                        android.widget.Toast.makeText(
-                            context,
-                            if (next) "已进入无痕模式" else "已退出无痕模式",
-                            android.widget.Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                },
-            ))
-            onUnfavorite?.let {
-                add(com.android.purebilibili.core.ui.components.AppWindowAction(label = "取消收藏", onClick = it))
-            }
-            onDismiss?.let {
-                add(com.android.purebilibili.core.ui.components.AppWindowAction(label = dismissMenuText, onClick = it))
-            }
-        }
-        HomeStyleSingleColumnVideoCard(
+        SingleColumnElegantVideoCardBranch(
             video = video,
-            sourceRoute = sharedElementSourceRoute
-                ?: com.android.purebilibili.core.ui.transition.LocalVideoCardSharedElementSourceRoute.current.orEmpty(),
+            context = context,
+            cardActionScope = cardActionScope,
+            sharedElementSourceRoute = sharedElementSourceRoute,
             coverAspectRatio = coverAspectRatio,
             transitionEnabled = transitionEnabled,
             isFollowing = isFollowing,
-            showUpBadge = showUpBadge ?: com.android.purebilibili.core.ui.LocalUpBadgeVisibility.current.showBadges,
-            durationStyle = homeDurationStyle,
+            showUpBadge = showUpBadge,
+            homeDurationStyle = homeDurationStyle,
             showPublishTime = showPublishTime,
             modifier = modifier,
             highlightedTitle = highlightedTitle,
-            onClick = { onClick(video.bvid, video.cid) },
-            onLongClick = if (isLongPressEnabled) onLongClick?.let { callback -> { callback(video) } } else null,
-            trailingContent = if (actions.isEmpty()) null else ({
-                com.android.purebilibili.core.ui.components.AppWindowActionMenu(
-                    groups = listOf(actions),
-                    couiMore = true,
-                    moreDescription = "更多操作",
-                )
-            }),
+            isLongPressEnabled = isLongPressEnabled,
+            onLongClick = onLongClick,
+            onUpClick = onUpClick,
+            onWatchLater = onWatchLater,
+            onUnfavorite = onUnfavorite,
+            onDismiss = onDismiss,
+            dismissMenuText = dismissMenuText,
+            onLaunchAiSummary = launchAiSummary,
+            onShowBlockDialog = { showBlockDialog = true },
+            onClick = onClick,
         )
         return
     }
@@ -1057,8 +969,6 @@ internal fun ElegantVideoCard(
     val hasOverflowMenu = onDismiss != null || onWatchLater != null
     val hasTrailingCardAction = onUnfavorite != null || hasOverflowMenu
     val nativeCardLayer = rememberNativeVideoCardLayer()
-    val wholeCardCaptureScope = rememberCoroutineScope()
-    val wholeCardCaptureAllowed = rememberVideoCardPixelCaptureAllowed()
     val videoCardTransitionBackgroundState = LocalVideoCardTransitionBackgroundState.current
     val nativeCoverOverlayLayer = rememberNativeVideoCardLayer()
     val freezeNativeCardLayer = remember(video.bvid) { mutableStateOf(false) }
@@ -1201,26 +1111,6 @@ internal fun ElegantVideoCard(
                 freezeNativeCardLayer.value = true
                 captureNativeVideoCardImage(nativeCardLayer)
                 captureNativeCoverOverlayLayer(nativeCoverOverlayLayer)
-                val owner = CardPositionManager.videoCardPixelOwnerFor(CardPositionManager.lastClickedVideoSourceKey)
-                if (owner != null) {
-                    wholeCardCaptureScope.launch {
-                        captureVideoCardPixelsAfterEntry(
-                            phaseProvider = videoCardTransitionBackgroundState.phaseProvider,
-                            isReturnGestureInProgress = {
-                                videoCardTransitionBackgroundState.isReturnGestureInProgressProvider() ||
-                                    videoCardTransitionBackgroundState.isGestureRestoreInProgressProvider()
-                            },
-                            ownsCapture = {
-                                !nativeCardLayer.isReleased &&
-                                    CardPositionManager.isActiveVideoCardPixelOwner(owner) &&
-                                    CardPositionManager.isNativeVideoCardLayerCurrentOwner(nativeCardLayer)
-                            },
-                            captureAllowed = { wholeCardCaptureAllowed.value },
-                            entryWorkReleased = { owner.entryWorkReleased },
-                            capture = { captureWholeCardReturnBitmap(nativeCardLayer, owner) },
-                        )
-                    }
-                }
             }
         }
         onClick(video.bvid, video.cid)
@@ -1557,245 +1447,27 @@ internal fun ElegantVideoCard(
                         enabled = effectiveTransitionEnabled,
                     ),
             ) {
-            VideoStatusBadges(
-                labels = video.statusLabels,
-                modifier = Modifier.align(Alignment.TopEnd).padding(AppSpacingTokens.Small),
+            VideoCardCoverOverlayBadges(
+                video = video,
+                scrollLitePolicy = scrollLitePolicy,
+                coverOverlayBottomLayout = coverOverlayBottomLayout,
+                showHistoryProgressBar = showHistoryProgressBar,
+                historyProgressFraction = historyProgressFraction,
+                historyProgressBarColor = historyProgressBarColor,
+                compactStatsAvailableWidthDp = compactStatsAvailableWidthDp,
+                primaryStatText = primaryStatText,
+                secondaryStatText = secondaryStatText,
+                onlineCount = onlineCount,
+                durationText = durationText,
+                showDurationOnCover = showDurationOnCover,
+                showDurationOutside = showDurationOutside,
+                durationBadgeMinWidth = durationBadgeMinWidth,
+                durationStatMinWidthDp = durationStatMinWidthDp,
+                badgeStylePolicy = badgeStylePolicy,
+                badgeEffectVisual = badgeEffectVisual,
+                coverPillColors = coverPillColors,
+                coverOverlayTextStyle = coverOverlayTextStyle,
             )
-
-            //  底部渐变遮罩
-
-            if (scrollLitePolicy.showCoverGradientMask) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(AppSpacingTokens.TripleExtraLarge + AppSpacingTokens.Small)
-                        .align(Alignment.BottomCenter)
-                        .background(
-                            Brush.verticalGradient(
-                                colors = listOf(
-                                    Color.Transparent,
-                                    MediaContrastPalette.Scrim.copy(alpha = 0.3f),
-                                    MediaContrastPalette.Scrim.copy(alpha = 0.78f),
-                                )
-                            )
-                        )
-                )
-            }
-
-            if (scrollLitePolicy.showHistoryProgressBar && showHistoryProgressBar) {
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .fillMaxWidth()
-                        .height(coverOverlayBottomLayout.historyProgressBarHeightDp.dp)
-                        .background(MediaContrastPalette.Foreground.copy(alpha = 0.24f))
-                )
-                if (historyProgressFraction > 0f) {
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.BottomStart)
-                            .fillMaxWidth(historyProgressFraction)
-                            .height(coverOverlayBottomLayout.historyProgressBarHeightDp.dp)
-                            .background(historyProgressBarColor)
-                    )
-                }
-            }
-
-            if (scrollLitePolicy.showCompactStatsOnCover) {
-                val compactStatsLayout = remember(
-                    compactStatsAvailableWidthDp,
-                    primaryStatText,
-                    secondaryStatText,
-                    onlineCount,
-                    showDurationOnCover,
-                    showDurationOutside,
-                    durationBadgeMinWidth,
-                    durationStatMinWidthDp
-                ) {
-                    resolveVideoCardCompactCoverStatsLayout(
-                        availableWidthDp = compactStatsAvailableWidthDp,
-                        primaryStatText = primaryStatText,
-                        secondaryStatText = secondaryStatText,
-                        hasOnlineCount = onlineCount.isNotEmpty(),
-                        durationBadgeMinWidthDp = if (showDurationOnCover) {
-                            durationBadgeMinWidth.value
-                        } else {
-                            0f
-                        },
-                        durationStatMinWidthDp = if (showDurationOutside) {
-                            durationStatMinWidthDp
-                        } else {
-                            0f
-                        }
-                    )
-                }
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .fillMaxWidth()
-                        .padding(
-                            start = AppSpacingTokens.Small,
-                            top = AppSpacingTokens.ExtraSmall + AppSpacingTokens.Micro,
-                            end = AppSpacingTokens.Small,
-                            bottom = coverOverlayBottomLayout.compactStatsBottomPaddingDp.dp
-                        )
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(end = compactStatsLayout.statsEndPaddingDp.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(AppSpacingTokens.ExtraSmall + AppSpacingTokens.Micro)
-                    ) {
-                        val compactViewsModifier = Modifier.widthIn(min = compactStatsLayout.primaryMinWidthDp.dp)
-                        HomeVideoBadgePill(
-                            modifier = compactViewsModifier,
-                            style = badgeStylePolicy.coverStyle,
-                            useRealtimeHaze = badgeEffectVisual.useRealtimeHaze,
-                            shape = AppShapes.container(ContainerLevel.Pill),
-                            containerColor = coverPillColors.containerColor,
-                            borderColor = coverPillColors.borderColor
-                        ) {
-                            AppIcon(
-                                imageVector = AppIcons.Outlined.PlayCircle,
-                                contentDescription = null,
-                                modifier = Modifier.size(AppSpacingTokens.Small + AppSpacingTokens.Micro),
-                                tint = MediaContrastPalette.Foreground.copy(alpha = 0.94f)
-                            )
-                            AppText(
-                                text = primaryStatText,
-                                color = MediaContrastPalette.Foreground.copy(alpha = 0.94f),
-                                fontSize = COUITheme.textStyles.footnote2.fontSize,
-                                fontWeight = FontWeight.Medium,
-                                style = coverOverlayTextStyle,
-                                maxLines = 1,
-                                softWrap = false,
-                                overflow = TextOverflow.Visible
-                            )
-                        }
-
-                        if (compactStatsLayout.showSecondaryStat && secondaryStatText != null) {
-                            val compactDanmakuModifier = Modifier.widthIn(min = compactStatsLayout.secondaryMinWidthDp.dp)
-                            HomeVideoBadgePill(
-                                modifier = compactDanmakuModifier,
-                                style = badgeStylePolicy.coverStyle,
-                                useRealtimeHaze = badgeEffectVisual.useRealtimeHaze,
-                                shape = AppShapes.container(ContainerLevel.Pill),
-                                containerColor = coverPillColors.containerColor,
-                                borderColor = coverPillColors.borderColor
-                            ) {
-                                AppIcon(
-                                    imageVector = AppIcons.Outlined.Subtitles,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(AppSpacingTokens.Small + AppSpacingTokens.Micro),
-                                    tint = MediaContrastPalette.Foreground.copy(alpha = 0.90f)
-                                )
-                                AppText(
-                                    text = secondaryStatText,
-                                    color = MediaContrastPalette.Foreground.copy(alpha = 0.90f),
-                                    fontSize = COUITheme.textStyles.footnote2.fontSize,
-                                    fontWeight = FontWeight.Medium,
-                                    style = coverOverlayTextStyle,
-                                    maxLines = 1,
-                                    softWrap = false,
-                                    overflow = TextOverflow.Visible
-                                )
-                            }
-                        }
-
-                        if (compactStatsLayout.showOnlineCount) {
-                            HomeVideoBadgePill(
-                                modifier = Modifier.weight(1f, fill = false),
-                                style = badgeStylePolicy.coverStyle,
-                                useRealtimeHaze = badgeEffectVisual.useRealtimeHaze,
-                                shape = AppShapes.container(ContainerLevel.Pill),
-                                containerColor = coverPillColors.containerColor,
-                                borderColor = coverPillColors.borderColor
-                            ) {
-                                AppIcon(
-                                    imageVector = AppIcons.Outlined.Visibility,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(AppSpacingTokens.Small + AppSpacingTokens.Micro),
-                                    tint = MediaContrastPalette.Foreground.copy(alpha = 0.90f)
-                                )
-                                AppText(
-                                    text = onlineCount,
-                                    color = MediaContrastPalette.Foreground.copy(alpha = 0.90f),
-                                    fontSize = COUITheme.textStyles.footnote2.fontSize,
-                                    fontWeight = FontWeight.Medium,
-                                    style = coverOverlayTextStyle,
-                                    maxLines = 1,
-                                    softWrap = false,
-                                    overflow = TextOverflow.Visible
-                                )
-                            }
-                        }
-
-                        // 时长随统计行显示（OUTSIDE_COVER）：闹钟图标 + 时长，与其他统计 pill 同结构。
-                        if (showDurationOutside) {
-                            HomeVideoBadgePill(
-                                style = badgeStylePolicy.coverStyle,
-                                useRealtimeHaze = badgeEffectVisual.useRealtimeHaze,
-                                shape = AppShapes.container(ContainerLevel.Pill),
-                                containerColor = coverPillColors.containerColor,
-                                borderColor = coverPillColors.borderColor
-                            ) {
-                                AppIcon(
-                                    imageVector = AppIcons.Outlined.Alarm,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(AppSpacingTokens.Small + AppSpacingTokens.Micro),
-                                    tint = MediaContrastPalette.Foreground.copy(alpha = 0.90f)
-                                )
-                                AppText(
-                                    text = durationText,
-                                    color = MediaContrastPalette.Foreground.copy(alpha = 0.90f),
-                                    fontSize = COUITheme.textStyles.footnote2.fontSize,
-                                    fontWeight = FontWeight.Medium,
-                                    style = coverOverlayTextStyle,
-                                    maxLines = 1,
-                                    softWrap = false,
-                                    overflow = TextOverflow.Visible
-                                )
-                            }
-                        }
-                    }
-
-                    //  时长标签 (与播放量/评论数同行对齐)
-                    if (showDurationOnCover) {
-                        AppText(
-                            text = durationText,
-                            color = MediaContrastPalette.Foreground,
-                            fontSize = COUITheme.textStyles.footnote2.fontSize,
-                            fontWeight = FontWeight.Medium,
-                            style = coverOverlayTextStyle,
-                            maxLines = 1,
-                            softWrap = false,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.align(Alignment.BottomEnd)
-                        )
-                    }
-                }
-            } else {
-                //  非贴封面模式时，时长标签仍独立显示在右下角
-                if (showDurationOnCover) {
-                    AppText(
-                        text = durationText,
-                        color = MediaContrastPalette.Foreground,
-                        fontSize = COUITheme.textStyles.footnote2.fontSize,
-                        fontWeight = FontWeight.Medium,
-                        style = coverOverlayTextStyle,
-                        maxLines = 1,
-                        softWrap = false,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(
-                                end = AppSpacingTokens.Small + AppSpacingTokens.Micro,
-                                bottom = coverOverlayBottomLayout.floatingDurationBottomPaddingDp.dp
-                            )
-                    )
-                }
-            }
             }
 
         }
@@ -2047,11 +1719,430 @@ internal fun ElegantVideoCard(
 
         Spacer(modifier = Modifier.height(if (compactMetadata) AppSpacingTokens.ExtraSmall else AppSpacingTokens.ExtraSmall + AppSpacingTokens.Micro))
 
-        Column(
-            modifier = resolveVideoCardMetadataModifier(
-                (if (onUnfavorite != null) 1 else 0) + (if (hasOverflowMenu) 1 else 0)
+        VideoCardInfoMetadataColumn(
+            video = video,
+            isFollowing = isFollowing,
+            showUpBadge = showUpBadge,
+            showUpAvatar = showUpAvatar,
+            upFollowerCount = upFollowerCount,
+            upVideoCount = upVideoCount,
+            badgeStylePolicy = badgeStylePolicy,
+            badgeEffectVisual = badgeEffectVisual,
+            inlinePillColors = inlinePillColors,
+            onUpClick = onUpClick,
+            scrollLitePolicy = scrollLitePolicy,
+            primaryStatText = primaryStatText,
+            secondaryStatText = secondaryStatText,
+            onlineCount = onlineCount,
+            adaptiveContentColors = adaptiveContentColors,
+            contentTypography = contentTypography,
+            durationText = durationText,
+            showDurationOutside = showDurationOutside,
+            publishTimeRowText = publishTimeRowText,
+            emphasizePublishTime = emphasizePublishTime,
+            compactMetadata = compactMetadata,
+            trailingActionCount =
+                (if (onUnfavorite != null) 1 else 0) + (if (hasOverflowMenu) 1 else 0),
+        )
+        }
+
+        if (hasTrailingCardAction) {
+            Row(
+                modifier = Modifier.align(Alignment.BottomEnd),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (onUnfavorite != null) {
+                    Box(
+                        modifier = Modifier
+                            .size(AppChromeSizeTokens.MinimumTouchTarget)
+                            .appActionClickable {
+                                haptic(HapticType.MEDIUM)
+                                showUnfavoriteDialog = true
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        // 语义是“从收藏夹移除”，用 ✕ 而不是 ThumbUp——
+                        // 后者会被理解为点赞，与行为不符。
+                        AppIcon(
+                            imageVector = AppIcons.Outlined.Close,
+                            contentDescription = "从收藏夹移除",
+                            modifier = Modifier.size(AppSpacingTokens.Large),
+                            tint = adaptiveContentColors.subtitleColor.copy(alpha = 0.7f)
+                        )
+                    }
+                }
+
+                if (hasOverflowMenu) {
+                    Box(
+                        modifier = Modifier
+                            .size(AppChromeSizeTokens.MinimumTouchTarget)
+                            .semantics { contentDescription = "更多操作" }
+                            .onPlaced { coordinates ->
+                                menuButtonCoordsRef.value = coordinates
+                            }
+                            // 玻璃开启时按住即从按钮源图层展开菜单；关闭时 source 短路，仅剩 clickable。
+                            .appGlassMenuSource(overflowMenuSource, onOpen = {
+                                haptic(HapticType.LIGHT)
+                                menuGlassAnchorBounds = null
+                                openDismissMenu(menuButtonCoordsRef.value, null)
+                            })
+                            .appActionClickable {
+                                haptic(HapticType.LIGHT)
+                                menuGlassAnchorBounds = null
+                                openDismissMenu(menuButtonCoordsRef.value, null)
+                            },
+                        // 触控区 48dp，但图标光学上贴卡片右下角，与发布时间行对齐。
+                        contentAlignment = Alignment.BottomEnd
+                    ) {
+                        com.android.purebilibili.core.ui.components.CouiMoreDisc(
+                            tint = adaptiveContentColors.subtitleColor,
+                            size = 32.dp,
+                            iconSize = 18.dp,
+                            modifier = Modifier.padding(
+                                end = AppSpacingTokens.ExtraSmall,
+                                bottom = AppSpacingTokens.ExtraSmall,
+                            ),
+                        )
+                    }
+                }
+            }
+        }
+
+            }
+        }
+    }
+
+        if (showDismissMenu) {
+            Box(modifier = Modifier.matchParentSize(), propagateMinConstraints = false) {
+                VideoCardDismissMenuOverlay(
+                    video = video,
+                    context = context,
+                    cardActionScope = cardActionScope,
+                    showDismissMenu = showDismissMenu,
+                    onDismissMenuRequest = { showDismissMenu = false },
+                    menuOffset = menuOffset,
+                    menuGlassAnchorBounds = menuGlassAnchorBounds,
+                    overflowMenuSource = overflowMenuSource.takeIf { menuFromOverflowButton },
+                    onWatchLater = onWatchLater,
+                    onUpClick = onUpClick,
+                    onDismiss = onDismiss,
+                    dismissMenuText = dismissMenuText,
+                    onUnfavorite = onUnfavorite,
+                    onLaunchAiSummary = launchAiSummary,
+                    onRequestUnfavoriteDialog = { showUnfavoriteDialog = true },
+                    onRequestBlockDialog = { showBlockDialog = true },
+                )
+            }
+        }
+    }
+
+    if (showUnfavoriteDialog) {
+        VideoCardUnfavoriteDialog(
+            onDismiss = { showUnfavoriteDialog = false },
+            onConfirm = {
+                showUnfavoriteDialog = false
+                onUnfavorite?.invoke()
+            },
+        )
+    }
+
+}
+
+/**
+ * 封面浮层：状态角标、底部渐变、观看进度条、贴封面统计 pill 与时长。
+ *
+ * 单独成函数是为了让 [ElegantVideoCard] 落在 ART 的 16384 DEX 指令上限内，
+ * 否则整卡在 Release 下会被永久降级为 Nterp 解释执行。
+ */
+@Composable
+private fun BoxScope.VideoCardCoverOverlayBadges(
+    video: VideoItem,
+    scrollLitePolicy: VideoCardScrollLiteVisualPolicy,
+    coverOverlayBottomLayout: VideoCardCoverOverlayBottomLayout,
+    showHistoryProgressBar: Boolean,
+    historyProgressFraction: Float,
+    historyProgressBarColor: Color,
+    compactStatsAvailableWidthDp: Float,
+    primaryStatText: String,
+    secondaryStatText: String?,
+    onlineCount: String,
+    durationText: String,
+    showDurationOnCover: Boolean,
+    showDurationOutside: Boolean,
+    durationBadgeMinWidth: Dp,
+    durationStatMinWidthDp: Float,
+    badgeStylePolicy: HomeVideoGlassBadgeStylePolicy,
+    badgeEffectVisual: HomeCardBadgeEffectVisual,
+    coverPillColors: HomeGlassResolvedColors,
+    coverOverlayTextStyle: TextStyle,
+) {
+    VideoStatusBadges(
+        labels = video.statusLabels,
+        modifier = Modifier.align(Alignment.TopEnd).padding(AppSpacingTokens.Small),
+    )
+
+    //  底部渐变遮罩
+
+    if (scrollLitePolicy.showCoverGradientMask) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(AppSpacingTokens.TripleExtraLarge + AppSpacingTokens.Small)
+                .align(Alignment.BottomCenter)
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Transparent,
+                            MediaContrastPalette.Scrim.copy(alpha = 0.3f),
+                            MediaContrastPalette.Scrim.copy(alpha = 0.78f),
+                        )
+                    )
+                )
+        )
+    }
+
+    if (scrollLitePolicy.showHistoryProgressBar && showHistoryProgressBar) {
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .fillMaxWidth()
+                .height(coverOverlayBottomLayout.historyProgressBarHeightDp.dp)
+                .background(MediaContrastPalette.Foreground.copy(alpha = 0.24f))
+        )
+        if (historyProgressFraction > 0f) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .fillMaxWidth(historyProgressFraction)
+                    .height(coverOverlayBottomLayout.historyProgressBarHeightDp.dp)
+                    .background(historyProgressBarColor)
             )
+        }
+    }
+
+    if (scrollLitePolicy.showCompactStatsOnCover) {
+        val compactStatsLayout = remember(
+            compactStatsAvailableWidthDp,
+            primaryStatText,
+            secondaryStatText,
+            onlineCount,
+            showDurationOnCover,
+            showDurationOutside,
+            durationBadgeMinWidth,
+            durationStatMinWidthDp
         ) {
+            resolveVideoCardCompactCoverStatsLayout(
+                availableWidthDp = compactStatsAvailableWidthDp,
+                primaryStatText = primaryStatText,
+                secondaryStatText = secondaryStatText,
+                hasOnlineCount = onlineCount.isNotEmpty(),
+                durationBadgeMinWidthDp = if (showDurationOnCover) {
+                    durationBadgeMinWidth.value
+                } else {
+                    0f
+                },
+                durationStatMinWidthDp = if (showDurationOutside) {
+                    durationStatMinWidthDp
+                } else {
+                    0f
+                }
+            )
+        }
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .fillMaxWidth()
+                .padding(
+                    start = AppSpacingTokens.Small,
+                    top = AppSpacingTokens.ExtraSmall + AppSpacingTokens.Micro,
+                    end = AppSpacingTokens.Small,
+                    bottom = coverOverlayBottomLayout.compactStatsBottomPaddingDp.dp
+                )
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = compactStatsLayout.statsEndPaddingDp.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(AppSpacingTokens.ExtraSmall + AppSpacingTokens.Micro)
+            ) {
+                val compactViewsModifier = Modifier.widthIn(min = compactStatsLayout.primaryMinWidthDp.dp)
+                HomeVideoBadgePill(
+                    modifier = compactViewsModifier,
+                    style = badgeStylePolicy.coverStyle,
+                    useRealtimeHaze = badgeEffectVisual.useRealtimeHaze,
+                    shape = AppShapes.container(ContainerLevel.Pill),
+                    containerColor = coverPillColors.containerColor,
+                    borderColor = coverPillColors.borderColor
+                ) {
+                    AppIcon(
+                        imageVector = AppIcons.Outlined.PlayCircle,
+                        contentDescription = null,
+                        modifier = Modifier.size(AppSpacingTokens.Small + AppSpacingTokens.Micro),
+                        tint = MediaContrastPalette.Foreground.copy(alpha = 0.94f)
+                    )
+                    AppText(
+                        text = primaryStatText,
+                        color = MediaContrastPalette.Foreground.copy(alpha = 0.94f),
+                        fontSize = COUITheme.textStyles.footnote2.fontSize,
+                        fontWeight = FontWeight.Medium,
+                        style = coverOverlayTextStyle,
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Visible
+                    )
+                }
+
+                if (compactStatsLayout.showSecondaryStat && secondaryStatText != null) {
+                    val compactDanmakuModifier = Modifier.widthIn(min = compactStatsLayout.secondaryMinWidthDp.dp)
+                    HomeVideoBadgePill(
+                        modifier = compactDanmakuModifier,
+                        style = badgeStylePolicy.coverStyle,
+                        useRealtimeHaze = badgeEffectVisual.useRealtimeHaze,
+                        shape = AppShapes.container(ContainerLevel.Pill),
+                        containerColor = coverPillColors.containerColor,
+                        borderColor = coverPillColors.borderColor
+                    ) {
+                        AppIcon(
+                            imageVector = AppIcons.Outlined.Subtitles,
+                            contentDescription = null,
+                            modifier = Modifier.size(AppSpacingTokens.Small + AppSpacingTokens.Micro),
+                            tint = MediaContrastPalette.Foreground.copy(alpha = 0.90f)
+                        )
+                        AppText(
+                            text = secondaryStatText,
+                            color = MediaContrastPalette.Foreground.copy(alpha = 0.90f),
+                            fontSize = COUITheme.textStyles.footnote2.fontSize,
+                            fontWeight = FontWeight.Medium,
+                            style = coverOverlayTextStyle,
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Visible
+                        )
+                    }
+                }
+
+                if (compactStatsLayout.showOnlineCount) {
+                    HomeVideoBadgePill(
+                        modifier = Modifier.weight(1f, fill = false),
+                        style = badgeStylePolicy.coverStyle,
+                        useRealtimeHaze = badgeEffectVisual.useRealtimeHaze,
+                        shape = AppShapes.container(ContainerLevel.Pill),
+                        containerColor = coverPillColors.containerColor,
+                        borderColor = coverPillColors.borderColor
+                    ) {
+                        AppIcon(
+                            imageVector = AppIcons.Outlined.Visibility,
+                            contentDescription = null,
+                            modifier = Modifier.size(AppSpacingTokens.Small + AppSpacingTokens.Micro),
+                            tint = MediaContrastPalette.Foreground.copy(alpha = 0.90f)
+                        )
+                        AppText(
+                            text = onlineCount,
+                            color = MediaContrastPalette.Foreground.copy(alpha = 0.90f),
+                            fontSize = COUITheme.textStyles.footnote2.fontSize,
+                            fontWeight = FontWeight.Medium,
+                            style = coverOverlayTextStyle,
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Visible
+                        )
+                    }
+                }
+
+                // 时长随统计行显示（OUTSIDE_COVER）：闹钟图标 + 时长，与其他统计 pill 同结构。
+                if (showDurationOutside) {
+                    HomeVideoBadgePill(
+                        style = badgeStylePolicy.coverStyle,
+                        useRealtimeHaze = badgeEffectVisual.useRealtimeHaze,
+                        shape = AppShapes.container(ContainerLevel.Pill),
+                        containerColor = coverPillColors.containerColor,
+                        borderColor = coverPillColors.borderColor
+                    ) {
+                        AppIcon(
+                            imageVector = AppIcons.Outlined.Alarm,
+                            contentDescription = null,
+                            modifier = Modifier.size(AppSpacingTokens.Small + AppSpacingTokens.Micro),
+                            tint = MediaContrastPalette.Foreground.copy(alpha = 0.90f)
+                        )
+                        AppText(
+                            text = durationText,
+                            color = MediaContrastPalette.Foreground.copy(alpha = 0.90f),
+                            fontSize = COUITheme.textStyles.footnote2.fontSize,
+                            fontWeight = FontWeight.Medium,
+                            style = coverOverlayTextStyle,
+                            maxLines = 1,
+                            softWrap = false,
+                            overflow = TextOverflow.Visible
+                        )
+                    }
+                }
+            }
+
+            //  时长标签 (与播放量/评论数同行对齐)
+            if (showDurationOnCover) {
+                AppText(
+                    text = durationText,
+                    color = MediaContrastPalette.Foreground,
+                    fontSize = COUITheme.textStyles.footnote2.fontSize,
+                    fontWeight = FontWeight.Medium,
+                    style = coverOverlayTextStyle,
+                    maxLines = 1,
+                    softWrap = false,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.align(Alignment.BottomEnd)
+                )
+            }
+        }
+    } else {
+        //  非贴封面模式时，时长标签仍独立显示在右下角
+        if (showDurationOnCover) {
+            AppText(
+                text = durationText,
+                color = MediaContrastPalette.Foreground,
+                fontSize = COUITheme.textStyles.footnote2.fontSize,
+                fontWeight = FontWeight.Medium,
+                style = coverOverlayTextStyle,
+                maxLines = 1,
+                softWrap = false,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(
+                        end = AppSpacingTokens.Small + AppSpacingTokens.Micro,
+                        bottom = coverOverlayBottomLayout.floatingDurationBottomPaddingDp.dp
+                    )
+            )
+        }
+    }
+}
+
+@Composable
+private fun VideoCardInfoMetadataColumn(
+    video: VideoItem,
+    isFollowing: Boolean,
+    showUpBadge: Boolean?,
+    showUpAvatar: Boolean?,
+    upFollowerCount: Int?,
+    upVideoCount: Int?,
+    badgeStylePolicy: HomeVideoGlassBadgeStylePolicy,
+    badgeEffectVisual: HomeCardBadgeEffectVisual,
+    inlinePillColors: HomeGlassResolvedColors,
+    onUpClick: ((Long) -> Unit)?,
+    scrollLitePolicy: VideoCardScrollLiteVisualPolicy,
+    primaryStatText: String,
+    secondaryStatText: String?,
+    onlineCount: String,
+    adaptiveContentColors: VideoCardAdaptiveContentColors,
+    contentTypography: FeedContentTypography,
+    durationText: String,
+    showDurationOutside: Boolean,
+    publishTimeRowText: String,
+    emphasizePublishTime: Boolean,
+    compactMetadata: Boolean,
+    trailingActionCount: Int,
+) {
+    Column(modifier = resolveVideoCardMetadataModifier(trailingActionCount)) {
         val metadataColors = resolveHomeVideoCardMetadataColors(
             onSurfaceColor = adaptiveContentColors.titleColor,
             onSurfaceVariantColor = adaptiveContentColors.subtitleColor,
@@ -2125,256 +2216,333 @@ internal fun ElegantVideoCard(
                 AppSpacingTokens.Small - AppSpacingTokens.Micro
             },
         )
-
-        }
-        }
-
-        if (hasTrailingCardAction) {
-            Row(
-                modifier = Modifier.align(Alignment.BottomEnd),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                if (onUnfavorite != null) {
-                    Box(
-                        modifier = Modifier
-                            .size(AppChromeSizeTokens.MinimumTouchTarget)
-                            .appActionClickable {
-                                haptic(HapticType.MEDIUM)
-                                showUnfavoriteDialog = true
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        // 语义是“从收藏夹移除”，用 ✕ 而不是 ThumbUp——
-                        // 后者会被理解为点赞，与行为不符。
-                        AppIcon(
-                            imageVector = AppIcons.Outlined.Close,
-                            contentDescription = "从收藏夹移除",
-                            modifier = Modifier.size(AppSpacingTokens.Large),
-                            tint = adaptiveContentColors.subtitleColor.copy(alpha = 0.7f)
-                        )
-                    }
-                }
-
-                if (hasOverflowMenu) {
-                    Box(
-                        modifier = Modifier
-                            .size(AppChromeSizeTokens.MinimumTouchTarget)
-                            .semantics { contentDescription = "更多操作" }
-                            .onPlaced { coordinates ->
-                                menuButtonCoordsRef.value = coordinates
-                            }
-                            // 玻璃开启时按住即从按钮源图层展开菜单；关闭时 source 短路，仅剩 clickable。
-                            .appGlassMenuSource(overflowMenuSource, onOpen = {
-                                haptic(HapticType.LIGHT)
-                                menuGlassAnchorBounds = null
-                                openDismissMenu(menuButtonCoordsRef.value, null)
-                            })
-                            .appActionClickable {
-                                haptic(HapticType.LIGHT)
-                                menuGlassAnchorBounds = null
-                                openDismissMenu(menuButtonCoordsRef.value, null)
-                            },
-                        // 触控区 48dp，但图标光学上贴卡片右下角，与发布时间行对齐。
-                        contentAlignment = Alignment.BottomEnd
-                    ) {
-                        com.android.purebilibili.core.ui.components.CouiMoreDisc(
-                            tint = adaptiveContentColors.subtitleColor,
-                            size = 32.dp,
-                            iconSize = 18.dp,
-                            modifier = Modifier.padding(
-                                end = AppSpacingTokens.ExtraSmall,
-                                bottom = AppSpacingTokens.ExtraSmall,
-                            ),
-                        )
-                    }
-                }
-            }
-        }
-
-            }
-        }
     }
+}
 
-        // Equal-height feed rows give this card tight height constraints. The root propagates
-        // those minima, so isolate the small popup anchor in an overlay that clears them.
-        // matchParentSize keeps the overlay out of the card's intrinsic height calculation.
-        Box(modifier = Modifier.matchParentSize(), propagateMinConstraints = false) {
-            // 菜单需要挂在一个本地小锚点上，避免 DropdownMenu 在整张卡片根节点右侧 fallback 时反向偏移。
-            //
-            // 这里保留非 lambda 版 offset（lint 的 UseOfNonLambdaOffsetOverload 会报）：
-            // menuOffset 只在每次长按时变一次，不是逐帧动画值，lambda 版没有实际收益；
-            // 而改写形式会打断 VideoCardLongPressPolicyTest 对上面那次回归修复的字面守卫。
-            // 为零收益去动别人的回归守卫不划算。
-            @Suppress("UseOfNonLambdaOffsetOverload")
-            Box(
-                modifier = Modifier
-                    .offset(x = menuOffset.x, y = menuOffset.y)
-                    .size(AppSpacingTokens.Micro / 2)
-            ) {
-                AppDropdownMenu(
-                    expanded = showDismissMenu,
-                    onDismissRequest = { showDismissMenu = false },
-                    offset = DpOffset.Zero,
-                    glassAnchorBounds = menuGlassAnchorBounds,
-                    glassSource = overflowMenuSource.takeIf { menuFromOverflowButton },
-                ) {
-                    // 卡片菜单提供内容号、观看、作者与隐私相关操作。
-                    if (video.bvid.isNotBlank()) {
-                        AppDropdownMenuItem(
-                            text = { AppText(video.bvid, color = AppContentColors.primaryText()) },
-                            leadingIcon = { AppIcon(AppIcons.Outlined.ContentCopy, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
-                            onClick = {
-                                showDismissMenu = false
-                                copyPlainTextToClipboard(context, video.bvid, "BV号")
-                                android.widget.Toast.makeText(context, "已复制 ${video.bvid}", android.widget.Toast.LENGTH_SHORT).show()
-                            }
-                        )
-                    }
-
-                    // 稍后再看
-                    if (onWatchLater != null) {
-                        AppDropdownMenuItem(
-                            leadingIcon = { AppIcon(AppIcons.Outlined.WatchLater, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
-                            text = {
-                                AppText(
-                                    "稍后再看",
-                                    color = AppContentColors.primaryText()
-                                )
-                            },
-                            onClick = {
-                                showDismissMenu = false
-                                onWatchLater.invoke()
-                            }
-                        )
-                    }
-
-                    // AI 总结（需要 cid 才能请求）
-                    if (video.cid > 0L && video.bvid.isNotBlank()) {
-                        AppDropdownMenuItem(
-                            leadingIcon = { AppIcon(AppIcons.Outlined.AutoAwesome, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
-                            text = { AppText("AI总结", color = AppContentColors.primaryText()) },
-                            onClick = {
-                                showDismissMenu = false
-                                launchAiSummary()
-                            }
-                        )
-                    }
-
-                    // 访问 UP 主
-                    if (onUpClick != null && video.owner.mid > 0L) {
-                        AppDropdownMenuItem(
-                            leadingIcon = { AppIcon(AppIcons.Outlined.Person, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
-                            text = { AppText("访问：${video.owner.name}", color = AppContentColors.primaryText()) },
-                            onClick = {
-                                showDismissMenu = false
-                                onUpClick.invoke(video.owner.mid)
-                            }
-                        )
-                    }
-
-                    // 不感兴趣
-                    if (onDismiss != null) {
-                        AppDropdownMenuItem(
-                            leadingIcon = { AppIcon(AppIcons.Outlined.NotInterested, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
-                            text = {
-                                AppText(
-                                    dismissMenuText,
-                                    color = AppContentColors.primaryText()
-                                )
-                            },
-                            onClick = {
-                                showDismissMenu = false
-                                onDismiss.invoke()
-                            }
-                        )
-                    }
-
-                    // 取消收藏 (仅在收藏页显示)
-                    if (onUnfavorite != null) {
-                         AppDropdownMenuItem(
-                            leadingIcon = { AppIcon(AppIcons.Outlined.BookmarkRemove, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.error()) },
-                            text = {
-                                AppText(
-                                    "取消收藏",
-                                    color = AppContentColors.error()  // 使用错误色强调删除操作
-                                )
-                            },
-                            onClick = {
-                                showDismissMenu = false
-                                // onUnfavorite.invoke() -> 改为弹窗确认
-                                showUnfavoriteDialog = true
-                            }
-                        )
-                    }
-
-                    // 拉黑 UP 主：本地屏蔽并同步 B 站关系
-                    if (video.owner.mid > 0L) {
-                        AppDropdownMenuItem(
-                            leadingIcon = { AppIcon(AppIcons.Outlined.PersonOff, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
-                            text = { AppText("拉黑：${video.owner.name}", color = AppContentColors.primaryText()) },
-                            onClick = {
-                                showDismissMenu = false
-                                showBlockDialog = true
-                            }
-                        )
-                    }
-
-                    // 无痕模式开关
-                    val privacyModeEnabled by remember {
-                        com.android.purebilibili.core.store.SettingsManager.getPrivacyModeEnabled(context)
-                    }.collectAsStateWithLifecycle(initialValue = false)
-                    AppDropdownMenuItem(
-                        leadingIcon = {
-                            AppIcon(if (privacyModeEnabled) AppIcons.Outlined.Visibility else AppIcons.Outlined.VisibilityOff,
-                                contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText())
-                        },
-                        text = {
-                            AppText(
-                                if (privacyModeEnabled) "退出无痕模式" else "进入无痕模式",
-                                color = AppContentColors.primaryText()
-                            )
-                        },
-                        onClick = {
-                            showDismissMenu = false
-                            cardActionScope.launch {
-                                val next = !privacyModeEnabled
-                                com.android.purebilibili.core.store.SettingsManager.setPrivacyModeEnabled(context, next)
-                                android.widget.Toast.makeText(
-                                    context,
-                                    if (next) "已进入无痕模式" else "已退出无痕模式",
-                                    android.widget.Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-                    )
-                }
-            }
-        }
-    }
-
-    if (showUnfavoriteDialog) {
+@Composable
+private fun VideoCardSecondaryDialogs(
+    video: VideoItem,
+    context: android.content.Context,
+    cardActionScope: kotlinx.coroutines.CoroutineScope,
+    showBlockDialog: Boolean,
+    onDismissBlockDialog: () -> Unit,
+    showAiSummaryDialog: Boolean,
+    onDismissAiSummaryDialog: () -> Unit,
+    aiSummaryLoading: Boolean,
+    aiSummaryData: com.android.purebilibili.data.model.response.AiSummaryData?,
+    aiSummaryError: String?,
+) {
+    if (showBlockDialog) {
         AppAlertDialog(
-            onDismissRequest = { showUnfavoriteDialog = false },
-            title = { AppText("取消收藏") },
-            text = { AppText("确定要将此视频从收藏夹中移除吗？") },
+            onDismissRequest = onDismissBlockDialog,
+            title = { AppText("屏蔽 UP 主") },
+            text = { AppText("屏蔽后，将不再推荐该 UP 主的视频。\n确定要屏蔽 ${video.owner.name} 吗？") },
             confirmButton = {
                 AppTextButton(
                     onClick = {
-                        showUnfavoriteDialog = false
-                        onUnfavorite?.invoke()
+                        onDismissBlockDialog()
+                        cardActionScope.launch {
+                            val result = com.android.purebilibili.data.repository.BlockedUpRepository(context)
+                                .blockUpWithBilibiliSync(video.owner.mid, video.owner.name, video.owner.face)
+                            android.widget.Toast.makeText(context, result.message, android.widget.Toast.LENGTH_SHORT).show()
+                        }
                     }
                 ) {
-                    AppText("移除", color = AppContentColors.error())
+                    AppText("确认")
                 }
             },
             dismissButton = {
-                AppTextButton(onClick = { showUnfavoriteDialog = false }) {
+                AppTextButton(onClick = onDismissBlockDialog) {
                     AppText("取消")
                 }
             }
         )
     }
+    if (showAiSummaryDialog) {
+        AppAlertDialog(
+            onDismissRequest = onDismissAiSummaryDialog,
+            title = { AppText("AI 总结") },
+            text = {
+                Column(
+                    modifier = Modifier
+                        .heightIn(max = 360.dp)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    when {
+                        aiSummaryLoading -> AppText("正在获取 AI 总结…", color = AppContentColors.secondaryText())
+                        aiSummaryError != null -> AppText(aiSummaryError, color = AppContentColors.error())
+                        else -> AppText(
+                            aiSummaryData?.modelResult?.summary?.takeIf { it.isNotBlank() } ?: "该视频暂无 AI 总结",
+                            color = AppContentColors.primaryText()
+                        )
+                    }
+                }
+            },
+            confirmButton = {
+                AppTextButton(onClick = onDismissAiSummaryDialog) {
+                    AppText("关闭")
+                }
+            }
+        )
+    }
+}
 
+@Composable
+private fun SingleColumnElegantVideoCardBranch(
+    video: VideoItem,
+    context: android.content.Context,
+    cardActionScope: kotlinx.coroutines.CoroutineScope,
+    sharedElementSourceRoute: String?,
+    coverAspectRatio: Float,
+    transitionEnabled: Boolean,
+    isFollowing: Boolean,
+    showUpBadge: Boolean?,
+    homeDurationStyle: HomeDurationStyle,
+    showPublishTime: Boolean,
+    modifier: Modifier,
+    highlightedTitle: AnnotatedString?,
+    isLongPressEnabled: Boolean,
+    onLongClick: ((VideoItem) -> Unit)?,
+    onUpClick: ((Long) -> Unit)?,
+    onWatchLater: (() -> Unit)?,
+    onUnfavorite: (() -> Unit)?,
+    onDismiss: (() -> Unit)?,
+    dismissMenuText: String,
+    onLaunchAiSummary: () -> Unit,
+    onShowBlockDialog: () -> Unit,
+    onClick: (String, Long) -> Unit,
+) {
+    val actions = buildList {
+        if (video.bvid.isNotBlank()) {
+            add(com.android.purebilibili.core.ui.components.AppWindowAction(
+                label = "复制BV号",
+                onClick = {
+                    copyPlainTextToClipboard(context, video.bvid, "BV号")
+                    android.widget.Toast.makeText(context, "已复制 ${video.bvid}", android.widget.Toast.LENGTH_SHORT).show()
+                },
+            ))
+        }
+        onUpClick?.let { visit ->
+            add(com.android.purebilibili.core.ui.components.AppWindowAction(
+                label = "访问UP主", onClick = { visit(video.owner.mid) },
+            ))
+        }
+        onWatchLater?.let {
+            add(com.android.purebilibili.core.ui.components.AppWindowAction(label = "加入稍后再看", onClick = it))
+        }
+        if (video.cid > 0L && video.bvid.isNotBlank()) {
+            add(com.android.purebilibili.core.ui.components.AppWindowAction(
+                label = "AI总结", onClick = onLaunchAiSummary,
+            ))
+        }
+        if (video.owner.mid > 0L) {
+            add(com.android.purebilibili.core.ui.components.AppWindowAction(
+                label = "拉黑：${video.owner.name}", onClick = onShowBlockDialog,
+            ))
+        }
+        add(com.android.purebilibili.core.ui.components.AppWindowAction(
+            label = "无痕模式",
+            onClick = {
+                val next = !com.android.purebilibili.core.store.SettingsManager.isPrivacyModeEnabledSync(context)
+                cardActionScope.launch {
+                    com.android.purebilibili.core.store.SettingsManager.setPrivacyModeEnabled(context, next)
+                    android.widget.Toast.makeText(
+                        context,
+                        if (next) "已进入无痕模式" else "已退出无痕模式",
+                        android.widget.Toast.LENGTH_SHORT
+                    ).show()
+                }
+            },
+        ))
+        onUnfavorite?.let {
+            add(com.android.purebilibili.core.ui.components.AppWindowAction(label = "取消收藏", onClick = it))
+        }
+        onDismiss?.let {
+            add(com.android.purebilibili.core.ui.components.AppWindowAction(label = dismissMenuText, onClick = it))
+        }
+    }
+    HomeStyleSingleColumnVideoCard(
+        video = video,
+        sourceRoute = sharedElementSourceRoute
+            ?: com.android.purebilibili.core.ui.transition.LocalVideoCardSharedElementSourceRoute.current.orEmpty(),
+        coverAspectRatio = coverAspectRatio,
+        transitionEnabled = transitionEnabled,
+        isFollowing = isFollowing,
+        showUpBadge = showUpBadge ?: com.android.purebilibili.core.ui.LocalUpBadgeVisibility.current.showBadges,
+        durationStyle = homeDurationStyle,
+        showPublishTime = showPublishTime,
+        modifier = modifier,
+        highlightedTitle = highlightedTitle,
+        onClick = { onClick(video.bvid, video.cid) },
+        onLongClick = if (isLongPressEnabled) onLongClick?.let { callback -> { callback(video) } } else null,
+        trailingContent = if (actions.isEmpty()) null else ({
+            com.android.purebilibili.core.ui.components.AppWindowActionMenu(
+                groups = listOf(actions),
+                couiMore = true,
+                moreDescription = "更多操作",
+            )
+        }),
+    )
+}
+
+@Composable
+private fun VideoCardDismissMenuOverlay(
+    video: VideoItem,
+    context: android.content.Context,
+    cardActionScope: kotlinx.coroutines.CoroutineScope,
+    showDismissMenu: Boolean,
+    onDismissMenuRequest: () -> Unit,
+    menuOffset: DpOffset,
+    menuGlassAnchorBounds: androidx.compose.ui.geometry.Rect?,
+    overflowMenuSource: com.android.purebilibili.core.ui.components.AppGlassMenuSource?,
+    onWatchLater: (() -> Unit)?,
+    onUpClick: ((Long) -> Unit)?,
+    onDismiss: (() -> Unit)?,
+    dismissMenuText: String,
+    onUnfavorite: (() -> Unit)?,
+    onLaunchAiSummary: () -> Unit,
+    onRequestUnfavoriteDialog: () -> Unit,
+    onRequestBlockDialog: () -> Unit,
+) {
+    @Suppress("UseOfNonLambdaOffsetOverload")
+    Box(
+        modifier = Modifier
+            .offset(x = menuOffset.x, y = menuOffset.y)
+            .size(AppSpacingTokens.Micro / 2)
+    ) {
+        AppDropdownMenu(
+            expanded = showDismissMenu,
+            onDismissRequest = onDismissMenuRequest,
+            offset = DpOffset.Zero,
+            glassAnchorBounds = menuGlassAnchorBounds,
+            glassSource = overflowMenuSource,
+        ) {
+            if (video.bvid.isNotBlank()) {
+                AppDropdownMenuItem(
+                    text = { AppText(video.bvid, color = AppContentColors.primaryText()) },
+                    leadingIcon = { AppIcon(AppIcons.Outlined.ContentCopy, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
+                    onClick = {
+                        onDismissMenuRequest()
+                        copyPlainTextToClipboard(context, video.bvid, "BV号")
+                        android.widget.Toast.makeText(context, "已复制 ${video.bvid}", android.widget.Toast.LENGTH_SHORT).show()
+                    }
+                )
+            }
+            if (onWatchLater != null) {
+                AppDropdownMenuItem(
+                    leadingIcon = { AppIcon(AppIcons.Outlined.WatchLater, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
+                    text = { AppText("稍后再看", color = AppContentColors.primaryText()) },
+                    onClick = {
+                        onDismissMenuRequest()
+                        onWatchLater.invoke()
+                    }
+                )
+            }
+            if (video.cid > 0L && video.bvid.isNotBlank()) {
+                AppDropdownMenuItem(
+                    leadingIcon = { AppIcon(AppIcons.Outlined.AutoAwesome, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
+                    text = { AppText("AI总结", color = AppContentColors.primaryText()) },
+                    onClick = {
+                        onDismissMenuRequest()
+                        onLaunchAiSummary()
+                    }
+                )
+            }
+            if (onUpClick != null && video.owner.mid > 0L) {
+                AppDropdownMenuItem(
+                    leadingIcon = { AppIcon(AppIcons.Outlined.Person, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
+                    text = { AppText("访问：${video.owner.name}", color = AppContentColors.primaryText()) },
+                    onClick = {
+                        onDismissMenuRequest()
+                        onUpClick.invoke(video.owner.mid)
+                    }
+                )
+            }
+            if (onDismiss != null) {
+                AppDropdownMenuItem(
+                    leadingIcon = { AppIcon(AppIcons.Outlined.NotInterested, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
+                    text = { AppText(dismissMenuText, color = AppContentColors.primaryText()) },
+                    onClick = {
+                        onDismissMenuRequest()
+                        onDismiss.invoke()
+                    }
+                )
+            }
+            if (onUnfavorite != null) {
+                AppDropdownMenuItem(
+                    leadingIcon = { AppIcon(AppIcons.Outlined.BookmarkRemove, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.error()) },
+                    text = { AppText("取消收藏", color = AppContentColors.error()) },
+                    onClick = {
+                        onDismissMenuRequest()
+                        onRequestUnfavoriteDialog()
+                    }
+                )
+            }
+            if (video.owner.mid > 0L) {
+                AppDropdownMenuItem(
+                    leadingIcon = { AppIcon(AppIcons.Outlined.PersonOff, contentDescription = null, modifier = Modifier.size(20.dp), tint = AppContentColors.primaryText()) },
+                    text = { AppText("拉黑：${video.owner.name}", color = AppContentColors.primaryText()) },
+                    onClick = {
+                        onDismissMenuRequest()
+                        onRequestBlockDialog()
+                    }
+                )
+            }
+            val privacyModeEnabled by remember {
+                com.android.purebilibili.core.store.SettingsManager.getPrivacyModeEnabled(context)
+            }.collectAsStateWithLifecycle(initialValue = false)
+            AppDropdownMenuItem(
+                leadingIcon = {
+                    AppIcon(
+                        if (privacyModeEnabled) AppIcons.Outlined.Visibility else AppIcons.Outlined.VisibilityOff,
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp),
+                        tint = AppContentColors.primaryText(),
+                    )
+                },
+                text = {
+                    AppText(
+                        if (privacyModeEnabled) "退出无痕模式" else "进入无痕模式",
+                        color = AppContentColors.primaryText(),
+                    )
+                },
+                onClick = {
+                    onDismissMenuRequest()
+                    cardActionScope.launch {
+                        val next = !privacyModeEnabled
+                        com.android.purebilibili.core.store.SettingsManager.setPrivacyModeEnabled(context, next)
+                        android.widget.Toast.makeText(
+                            context,
+                            if (next) "已进入无痕模式" else "已退出无痕模式",
+                            android.widget.Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun VideoCardUnfavoriteDialog(
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit,
+) {
+    AppAlertDialog(
+        onDismissRequest = onDismiss,
+        title = { AppText("取消收藏") },
+        text = { AppText("确定要将此视频从收藏夹中移除吗？") },
+        confirmButton = {
+            AppTextButton(onClick = onConfirm) {
+                AppText("移除", color = AppContentColors.error())
+            }
+        },
+        dismissButton = {
+            AppTextButton(onClick = onDismiss) {
+                AppText("取消")
+            }
+        }
+    )
 }
 
 @Composable

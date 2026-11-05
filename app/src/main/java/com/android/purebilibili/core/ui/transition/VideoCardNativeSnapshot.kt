@@ -168,6 +168,7 @@ internal fun Modifier.recordNativeVideoCardLayer(
     sourceRoute: String?,
     enabled: Boolean = true,
     landingFeedbackEnabled: Boolean = false,
+    capturePixels: Boolean = false,
 ): Modifier {
     if (!enabled) return this
     val bgState = LocalVideoCardTransitionBackgroundState.current
@@ -192,27 +193,32 @@ internal fun Modifier.recordNativeVideoCardLayer(
             bvid = bvid,
             sourceRoute = sourceRoute,
             activeSourceKey = bgState.sourceKeyProvider(),
-            ownsRecordedLayer = CardPositionManager.isNativeVideoCardLayerCurrentOwner(layer) ||
+            ownsRecordedLayer = !capturePixels ||
+                CardPositionManager.isNativeVideoCardLayerCurrentOwner(layer) ||
                 CardPositionManager.isNativeCoverOverlayLayerCurrentOwner(layer),
         )
-        // Neighbour cards must not subscribe to the transition driver. They still record
-        // real content invalidations (images/statistics), rather than freezing stale pixels.
         val exposure = if (isSharedMorphSourceCard) sourceExposure.value else null
         coverLatch.covered = advanceSourceCardCoverLatch(
             latch = coverLatch.covered && isSharedMorphSourceCard,
             exposure = exposure,
             isReturnGestureInProgress = isSharedMorphSourceCard && sourceReturnGesture.value,
         )
-        if (shouldRecordNativeVideoCardLayer(exposure, isSharedMorphSourceCard) && !freezeProvider()) {
-            layer.record {
-                this@drawWithContent.drawContent()
-            }
-        }
         val hide = shouldHideStationarySourceCard(
             isSharedMorphSourceCard = isSharedMorphSourceCard,
             exposure = exposure,
             isCoveredLatch = coverLatch.covered,
         )
+        if (!capturePixels) {
+            if (!hide) {
+                drawContent()
+            }
+            return@drawWithContent
+        }
+        if (shouldRecordNativeVideoCardLayer(exposure, isSharedMorphSourceCard) && !freezeProvider()) {
+            layer.record {
+                this@drawWithContent.drawContent()
+            }
+        }
         if (!hide) {
             if (isNativeVideoCardLayerDrawable(layer.size.width, layer.size.height)) {
                 drawLayer(layer)
@@ -290,6 +296,7 @@ private val DisabledNativeVideoCardSnapshotController = NativeVideoCardSnapshotC
 internal fun rememberNativeVideoCardSnapshotController(
     key: Any,
     enabled: Boolean = true,
+    capturePixels: Boolean = false,
 ): NativeVideoCardSnapshotController {
     // Shared card-morph work only, across materials: disabling transitions must also skip
     // layer allocation, recording and capture. Native MD3/Miuix card layout stays untouched.
@@ -299,8 +306,6 @@ internal fun rememberNativeVideoCardSnapshotController(
     val layer = rememberNativeVideoCardLayer()
     val coverOverlayLayer = rememberNativeVideoCardLayer()
     val captureScope = rememberCoroutineScope()
-    val captureAllowed = rememberVideoCardPixelCaptureAllowed()
-    val backgroundState = LocalVideoCardTransitionBackgroundState.current
     val freezeState = remember(key) { mutableStateOf(false) }
     val bvid = (key as? String).orEmpty()
     val sourceRoute = LocalVideoCardSharedElementSourceRoute.current
@@ -314,52 +319,39 @@ internal fun rememberNativeVideoCardSnapshotController(
             sourceRoute = sourceRoute,
             enabled = enabled,
             landingFeedbackEnabled = true,
+            capturePixels = capturePixels,
         ),
-        coverOverlayModifier = Modifier.recordNativeVideoCardLayer(
-            layer = coverOverlayLayer,
-            freezeProvider = {
-                freezeState.value &&
-                    CardPositionManager.isNativeCoverOverlayLayerCurrentOwner(coverOverlayLayer)
-            },
-            bvid = bvid,
-            sourceRoute = sourceRoute,
-            enabled = enabled,
-        ),
+        coverOverlayModifier = if (capturePixels) {
+            Modifier.recordNativeVideoCardLayer(
+                layer = coverOverlayLayer,
+                freezeProvider = {
+                    freezeState.value &&
+                        CardPositionManager.isNativeCoverOverlayLayerCurrentOwner(coverOverlayLayer)
+                },
+                bvid = bvid,
+                sourceRoute = sourceRoute,
+                enabled = enabled,
+                capturePixels = true,
+            )
+        } else {
+            Modifier
+        },
         capture = {
-            freezeState.value = true
-            captureNativeVideoCardImage(layer)
-            captureNativeCoverOverlayLayer(coverOverlayLayer)
-            val expectedSourceKey = CardPositionManager.lastClickedVideoSourceKey
-            val owner = CardPositionManager.videoCardPixelOwnerFor(expectedSourceKey)
-            if (owner != null &&
-                CardPositionManager.lastClickedVideoSourceChromeSnapshot?.isNowPlayingBar != true
-            ) {
-                captureScope.launch {
-                    captureVideoCardPixelsAfterEntry(
-                        phaseProvider = backgroundState.phaseProvider,
-                        isReturnGestureInProgress = {
-                            backgroundState.isReturnGestureInProgressProvider() ||
-                                backgroundState.isGestureRestoreInProgressProvider()
-                        },
-                        ownsCapture = {
-                            !layer.isReleased &&
-                                CardPositionManager.isActiveVideoCardPixelOwner(owner) &&
-                                CardPositionManager.isNativeVideoCardLayerCurrentOwner(layer)
-                        },
-                        captureAllowed = { captureAllowed.value },
-                        entryWorkReleased = { owner.entryWorkReleased },
-                        capture = { captureWholeCardReturnBitmap(layer, owner) },
-                    )
-                }
+            if (capturePixels) {
+                freezeState.value = true
+                captureNativeVideoCardImage(layer)
+                captureNativeCoverOverlayLayer(coverOverlayLayer)
             }
         },
         freezeToBitmap = {
-            val expectedSourceKey = CardPositionManager.lastClickedVideoSourceKey
-            captureScope.launch(start = CoroutineStart.UNDISPATCHED) {
-                captureNativeVideoCardBitmap(
-                    layer = layer,
-                    expectedSourceKey = expectedSourceKey,
-                )
+            if (capturePixels) {
+                val expectedSourceKey = CardPositionManager.lastClickedVideoSourceKey
+                captureScope.launch(start = CoroutineStart.UNDISPATCHED) {
+                    captureNativeVideoCardBitmap(
+                        layer = layer,
+                        expectedSourceKey = expectedSourceKey,
+                    )
+                }
             }
         },
     )

@@ -184,6 +184,42 @@ internal fun resolveMiuixVideoCardClickTransform(
     )
 }
 
+internal fun resolveMiuixVideoCardLinearCornerPx(
+    sourceCornerPx: Float,
+    fullscreenCornerPx: Float,
+    morphProgress: Float,
+    sourceLayout: VideoCardSourceLayout = VideoCardSourceLayout.COVER_ONLY,
+    currentShortSidePx: Float = Float.POSITIVE_INFINITY,
+): Float {
+    val morph = morphProgress.coerceIn(0f, 1f)
+    val source = sourceCornerPx.coerceAtLeast(0f)
+    val target = fullscreenCornerPx.coerceAtLeast(0f)
+    if (sourceLayout == VideoCardSourceLayout.SIDE_BY_SIDE && source == 0f && target == 0f) {
+        return 0f
+    }
+    if (sourceLayout == VideoCardSourceLayout.SIDE_BY_SIDE && source == 0f) {
+        return (target * morph).coerceAtMost(currentShortSidePx.coerceAtLeast(0f) / 2f)
+    }
+    val radius = source + (target - source) * morph
+    return radius.coerceAtMost(currentShortSidePx.coerceAtLeast(0f) / 2f)
+}
+
+internal fun resolveMiuixVideoCardTopInsetCompensationTranslationY(
+    topInsetPx: Float,
+    morph: Float,
+    uniformScale: Float,
+    outerScaleY: Float,
+    layoutHeightPx: Float,
+): Float {
+    val inset = topInsetPx.coerceAtLeast(0f)
+    if (inset <= 0f) return 0f
+    val m = morph.coerceIn(0f, 1f)
+    val safeOuterY = outerScaleY.coerceAtLeast(0.01f)
+    val maxSafeShiftScreenPx = (layoutHeightPx * (uniformScale - safeOuterY)).coerceAtLeast(0f)
+    val shiftScreenPx = (inset * (uniformScale - m)).coerceIn(0f, maxSafeShiftScreenPx)
+    return -shiftScreenPx / safeOuterY
+}
+
 internal fun resolveMiuixVideoCardGestureCornerPx(
     sourceCornerPx: Float,
     morphProgress: Float,
@@ -485,6 +521,7 @@ internal class MiuixVideoCardTransitionProgress(
     // 仅保留自动阶段已经应用的对象；新抓取时才转换锚点，不增加逐帧姿态分配。
     private var automaticTransform: MiuixVideoCardGestureTransform? = null
     private var automaticOrigin = TransformOrigin.Center
+    var contentTopInsetPx: Float = 0f
 
     fun recordAutomaticPose(transform: MiuixVideoCardGestureTransform, origin: TransformOrigin) {
         automaticTransform = transform
@@ -864,9 +901,6 @@ internal fun miuixVideoCardNavTransition(
         heroMotionSpec, returning = true, gestureTranslationEnabled = gestureTranslationEnabled,
     )
     val corner = sourceCornerDp?.coerceAtLeast(0) ?: 16
-    // 透明相关推荐横卡没有整行底板，不为放大的整页轮廓生成动态阴影。
-    val useFlyingShadow = !(sourceLayout == VideoCardSourceLayout.SIDE_BY_SIDE &&
-        sourceRoute?.substringBefore('?')?.startsWith("video/") == true)
     val clipShapeA = MiuixVideoCardClipShape()
     val clipShapeB = MiuixVideoCardClipShape()
     val coveredShapeCache = MiuixVideoCardCoveredShapeCache()
@@ -888,57 +922,27 @@ internal fun miuixVideoCardNavTransition(
                     else MIUIX_VIDEO_CARD_FLOATING_CORNER_DP.dp.toPx()
                 floatingCornerPx
             }
-            val gestureModifier = if (gestureFollowEnabled || gestureTranslationEnabled) {
+            val gestureModifier = if (gestureTranslationEnabled) {
                 Modifier.graphicsLayer {
                     val depth = scope.relativeDepth
                     val gesture = scope.gesture
-                    if (depth <= 0f) {
+                    if (depth <= 0f && gesture != null) {
                         val width = scope.layoutSize.width.toFloat().coerceAtLeast(1f)
                         val height = scope.layoutSize.height.toFloat().coerceAtLeast(1f)
-                        // 帧内记忆：同一帧多层 graphicsLayer 只推进一次状态机。
-                        val morph = progress.visualDepthMemoized(scope)
                         val pose = progress.followPose(
-                            scope, bounds, width, height, 10.dp.toPx(), heroMotionSpec,
-                            preserveViewport = contentScale == MiuixVideoCardContentScale.FillWidthTop,
+                            scope, bounds, width, height, 0f, heroMotionSpec,
+                            preserveViewport = false,
                         )
-                        if (gesture != null) {
-                            if (pose != null) {
-                                transformOrigin = pose.transformOrigin
-                                translationX = pose.translation.x
-                                translationY = pose.translation.y
-                                rotationZ = pose.rotationZ
-                                rotationX = pose.rotationX
-                                rotationY = pose.rotationY
-                                scaleX = pose.liftScale
-                                scaleY = pose.liftScale
-                                cameraDistance = pose.cameraDistance
-                            }
-                        } else if (gestureFollowEnabled) {
-                            // Programmatic entry/return retain the existing click pose.
-                            val transform = resolveMiuixVideoCardClickTransform(
-                                morphProgress = morph,
-                                widthPx = width,
-                                heightPx = height,
-                                sourceBounds = bounds,
-                            )
-                            transformOrigin = resolveMiuixVideoCardGestureVisualOrigin(
-                                sourceBounds = bounds,
-                                layoutWidth = width,
-                                layoutHeight = height,
-                                morph = morph,
-                                localOrigin = transform.transformOrigin,
-                                preserveViewport = contentScale == MiuixVideoCardContentScale.FillWidthTop,
-                            )
-                            translationX = transform.translationX
-                            translationY = transform.translationY
-                            rotationZ = transform.rotationZ
-                            rotationX = transform.rotationX
-                            rotationY = transform.rotationY
-                            scaleX = transform.liftScale
-                            scaleY = transform.liftScale
-                            cameraDistance = transform.cameraDistance
-                            // 玻璃、MD3、Miuix 共用导航姿态；只记录实际应用值，不更改材质布局。
-                            progress.recordAutomaticPose(transform, transformOrigin)
+                        if (pose != null) {
+                            transformOrigin = pose.transformOrigin
+                            translationX = pose.translation.x
+                            translationY = pose.translation.y
+                            rotationZ = pose.rotationZ
+                            rotationX = pose.rotationX
+                            rotationY = pose.rotationY
+                            scaleX = pose.liftScale
+                            scaleY = pose.liftScale
+                            cameraDistance = pose.cameraDistance
                         }
                     }
                 }
@@ -962,29 +966,20 @@ internal fun miuixVideoCardNavTransition(
                                 scope.role == NavRole.Outgoing,
                         )
                         val outerScaleX = resolveMiuixVideoCardOuterScale(sourceScaleX, morph, landingScale)
-                        val outerScaleY = if (contentScale == MiuixVideoCardContentScale.FillWidthTop) {
-                            resolveMiuixVideoCardOuterScaleY(sourceScaleX, sourceScaleY, morph, landingScale)
-                        } else resolveMiuixVideoCardOuterScale(sourceScaleY, morph, landingScale)
+                        val outerScaleY = resolveMiuixVideoCardOuterScale(sourceScaleY, morph, landingScale)
                         scaleX = outerScaleX
                         scaleY = outerScaleY
                         transformOrigin = TransformOrigin(0f, 0f)
-                        val path = resolveVideoCardPathOffset(bounds, width, height, morph, 10.dp.toPx())
+                        val path = resolveVideoCardPathOffset(bounds, width, height, morph, 0f)
                         translationX = path.x
                         translationY = path.y
-                        // Keep the complete flying entry opaque. The source card and the detail entry
-                        // already share the same geometry driver; an entry-level alpha handoff would
-                        // expose the player's black Surface frame at landing.
                         alpha = 1f
-                        val poseWeight = resolveMiuixVideoCardGesturePoseWeight(morph)
-                        val needsClip = morph < 0.999f || poseWeight > 0.001f ||
-                            (gestureFollowEnabled && scope.gesture != null)
+                        val needsClip = morph < 0.999f || (gestureTranslationEnabled && scope.gesture != null)
                         clip = needsClip
-                        val physicalRadius = resolveMiuixVideoCardGestureCornerPx(
+                        val physicalRadius = resolveMiuixVideoCardLinearCornerPx(
                             sourceCornerPx = corner.dp.toPx(),
+                            fullscreenCornerPx = floatingCornerPx,
                             morphProgress = morph,
-                            floatingCornerPx = floatingCornerPx,
-                            // Fullscreen content must reach square host bounds, including on tablets.
-                            fullscreenCornerPx = 0f,
                             sourceLayout = sourceLayout,
                             currentShortSidePx = minOf(width * outerScaleX, height * outerScaleY),
                         )
@@ -992,7 +987,6 @@ internal fun miuixVideoCardNavTransition(
                         val radY = physicalRadius / outerScaleY.coerceAtLeast(0.01f)
                         val activeShape = if (useShapeA) clipShapeA else clipShapeB
                         if (!needsClip) {
-                            // 展开完成后同时清除圆角轮廓，避免旧系统保留进场遮罩直到尺寸改变。
                             shape = androidx.compose.ui.graphics.RectangleShape
                         } else if (kotlin.math.abs(activeShape.radiusX - radX) > 0.05f || kotlin.math.abs(activeShape.radiusY - radY) > 0.05f) {
                             useShapeA = !useShapeA
@@ -1003,11 +997,7 @@ internal fun miuixVideoCardNavTransition(
                         } else {
                             shape = activeShape
                         }
-                        if (gestureFollowEnabled && useFlyingShadow) {
-                            // Click and back poses share this envelope. Reuse it instead of
-                            // allocating and resolving the full gesture transform a second time.
-                            shadowElevation = MIUIX_VIDEO_CARD_GESTURE_SHADOW_DP.dp.toPx() * poseWeight
-                        }
+                        shadowElevation = 0f
                     } else {
                         // Same boundary ownership as Miuix's cross-activity example: transform
                         // the complete covered entry once, including its page chrome.
@@ -1040,17 +1030,23 @@ internal fun miuixVideoCardNavTransition(
                                 scope.role == NavRole.Outgoing,
                         )
                         val outerScaleX = resolveMiuixVideoCardOuterScale(bounds.width / width, morph, landingScale)
-                        val outerScaleY = if (contentScale == MiuixVideoCardContentScale.FillWidthTop) {
-                            resolveMiuixVideoCardOuterScaleY(bounds.width / width, bounds.height / height, morph, landingScale)
-                        } else resolveMiuixVideoCardOuterScale(bounds.height / height, morph, landingScale)
+                        val outerScaleY = resolveMiuixVideoCardOuterScale(bounds.height / height, morph, landingScale)
                         val safeOuterScaleX = outerScaleX.coerceAtLeast(0.01f)
                         val safeOuterScaleY = outerScaleY.coerceAtLeast(0.01f)
-                        val uniformScale = when (contentScale) {
-                            MiuixVideoCardContentScale.FillWidthTop -> safeOuterScaleX
-                            MiuixVideoCardContentScale.CropCenter -> maxOf(safeOuterScaleX, safeOuterScaleY)
-                        }
+                        val uniformScale = maxOf(safeOuterScaleX, safeOuterScaleY)
                         scaleX = uniformScale / safeOuterScaleX
                         scaleY = uniformScale / safeOuterScaleY
+                        translationY = if (contentScale == MiuixVideoCardContentScale.FillWidthTop) {
+                            resolveMiuixVideoCardTopInsetCompensationTranslationY(
+                                topInsetPx = progress.contentTopInsetPx,
+                                morph = morph,
+                                uniformScale = uniformScale,
+                                outerScaleY = safeOuterScaleY,
+                                layoutHeightPx = height,
+                            )
+                        } else {
+                            0f
+                        }
                         transformOrigin = when (contentScale) {
                             MiuixVideoCardContentScale.FillWidthTop -> TransformOrigin(0.5f, 0f)
                             MiuixVideoCardContentScale.CropCenter -> TransformOrigin.Center

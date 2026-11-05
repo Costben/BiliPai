@@ -224,6 +224,8 @@ import com.android.purebilibili.core.ui.transition.LocalVideoSharedTransitionSpe
 import com.android.purebilibili.core.ui.transition.LocalVideoTransitionAdaptiveInfo
 import com.android.purebilibili.core.ui.transition.VideoCardTransitionBackgroundPhase
 import com.android.purebilibili.core.ui.transition.VideoSharedTransitionPlaybackIntent
+import com.android.purebilibili.core.ui.transition.VideoCardMorphCornerClip
+import com.android.purebilibili.core.ui.transition.resolveDeviceDisplayCornerRadiusPx
 import com.android.purebilibili.core.ui.transition.resolveVideoDetailShellOverlayCornerDp
 import com.android.purebilibili.core.ui.transition.resolveVideoCardSharedTransitionMotionSpec
 import com.android.purebilibili.core.ui.transition.resolveVideoCardSharedTransitionEnterEasing
@@ -1737,6 +1739,23 @@ internal fun VideoDetailScreenStateHolder(
             presentationState.clearNavigatingToVideo()
         }
     }
+    // 返回时飞卡的裁切轮廓：从屏幕物理圆角一路收到来源卡圆角。固定 dp 的 clipShape 在整屏
+    // 尺度下等同直角，用户看到的就是四个直角往里缩。
+    val shellOverlayClip = remember(videoCardDepthBackgroundState, view) {
+        val density = view.resources.displayMetrics.density
+        VideoCardMorphCornerClip(
+            sourceCornerDpProvider = { sharedTransitionSourceCornerDp.toFloat() },
+            screenCornerPxProvider = {
+                resolveDeviceDisplayCornerRadiusPx(view.rootWindowInsets)
+            },
+            sourceHeightPxProvider = {
+                videoCardDepthBackgroundState.sourceBoundsProvider()?.height ?: 0f
+            },
+            screenHeightPxProvider = {
+                (configuration.screenHeightDp * density).takeIf { it > 1f } ?: 0f
+            },
+        )
+    }
     val detailShellModifier = Modifier.videoCardShellSharedBoundsOrEmpty(
         // 全屏整窗播放不参与详情卡片的尺寸插值和圆角裁切。
         enabled = detailShellSharedBoundsEnabled &&
@@ -1748,6 +1767,7 @@ internal fun VideoDetailScreenStateHolder(
         motionSpec = homeSharedTransitionMotionSpec,
         // 横屏详情与全屏画面均保持矩形，避免外壳保留来源卡片圆角。
         clipShape = if (isLandscape) androidx.compose.ui.graphics.RectangleShape else detailShellShape,
+        overlayClip = if (isLandscape) null else shellOverlayClip,
         role = VideoCardShellSharedBoundsRole.DetailShell,
         // 竖屏全屏（点赞/关注/发弹幕那套）：整卡展开到全屏，不要按顶部横屏播放器 TopCenter 落点。
         fillFullscreenShell = isPortraitFullscreen ||
@@ -2380,8 +2400,34 @@ internal fun VideoDetailScreenStateHolder(
             }
         }
     }
-    // Budget follows coarse return/restore flags, never frame-rate morph progress.
-    // Ownership is the resolved strategy, even when a resident return has a decoded video frame.
+    // 详情正文（标题/简介/评论）与列表卡简略信息（标题/UP/时间）的交叉淡入淡出。
+    //
+    // `1` = 完整详情页，`0` = 列表卡。手势跟手与自动开合共用同一条曲线，返回因此是打开的
+    // 严格逆放。IDLE 必须单独判：静止在详情页时 morph 进度为 0，直接套曲线会把整页变透明。
+    val videoCardDetailContentAlphaProvider = remember(
+        videoCardDepthBackgroundState,
+        entryOwnsMiuixCardTransition,
+        isCommittedCardReturn,
+        scopedHeroDriver.sourceChromeSnapshot?.isNowPlayingBar,
+    ) {
+        {
+            if (!entryOwnsMiuixCardTransition ||
+                scopedHeroDriver.sourceChromeSnapshot?.isNowPlayingBar == true
+            ) {
+                1f
+            } else if (videoCardDepthBackgroundState.phaseProvider() ==
+                VideoCardTransitionBackgroundPhase.IDLE
+            ) {
+                // 返回已提交：entry 正在卸载，正文保持让位；否则说明是静止的详情页，必须满格。
+                if (isCommittedCardReturn) 0f else 1f
+            } else {
+                com.android.purebilibili.core.ui.transition.resolveVideoCardDetailContentAlpha(
+                    videoCardDepthBackgroundState.progressProvider(),
+                )
+            }
+        }
+    }
+    // Budget follows coarse return/restore flags, never frame-rate morph progress.    // Ownership is the resolved strategy, even when a resident return has a decoded video frame.
     val returnSessionPhase = resolveVideoDetailReturnSessionPhase(
         isCommittedCardReturn = isCommittedCardReturn,
         isExitTransitionInProgress = isCardReturnExitInProgress,
@@ -2402,10 +2448,10 @@ internal fun VideoDetailScreenStateHolder(
     val returnBodyAlphaIsInvisible by remember(
         isCommittedCardReturn, liveReturnMorph, detailShellSharedBoundsEnabled,
         videoCardDepthBackgroundState, currentLandingState.sourceLayout,
-        detailTransitionProgress, scopedHeroDriver.enabled,
+        detailTransitionProgress, scopedHeroDriver.enabled, entryOwnsMiuixCardTransition,
     ) {
         derivedStateOf {
-            if (!isCommittedCardReturn || liveReturnMorph) {
+            if (!isCommittedCardReturn || liveReturnMorph || (entryOwnsMiuixCardTransition && scopedHeroDriver.enabled)) {
                 false
             } else {
                 val alpha = if (detailShellSharedBoundsEnabled) {
@@ -4759,16 +4805,25 @@ internal fun VideoDetailScreenStateHolder(
                         val miuixLandingState =
                             com.android.purebilibili.core.ui.transition
                                 .LocalMiuixVideoCardTransitionState.current
-                        val floatingPlayerTopInsetProvider: () -> Dp = {
+                        val isNowPlayingBarSource =
+                            miuixLandingState.sourceChromeSnapshot?.isNowPlayingBar == true
+                        val effectiveTransitionTopInset =
+                            if (!useOfficialInlinePortraitDetailExperience && !isFullscreenMode) {
+                                playerTopInset
+                            } else {
+                                0.dp
+                            }
+                        SideEffect {
                             if (entryOwnsMiuixCardTransition && miuixLandingState.enabled) {
-                                playerTopInset * resolveVideoDetailCardTopInsetFraction(
-                                    miuixLandingState.progressProvider(),
+                                miuixLandingState.onReportContentTopInsetPx(
+                                    with(videoCardTransitionDensity) {
+                                        effectiveTransitionTopInset.toPx().coerceAtLeast(0f)
+                                    },
                                 )
-                            } else playerTopInset
+                            }
                         }
-                        val removedPlayerTopInsetProvider: () -> Dp = {
-                            playerTopInset - floatingPlayerTopInsetProvider()
-                        }
+                        val floatingPlayerTopInsetProvider: () -> Dp = { playerTopInset }
+                        val removedPlayerTopInsetProvider: () -> Dp = { 0.dp }
                         val landingLayoutForMedia = run {
                             if (
                                 !entryOwnsMiuixCardTransition ||
@@ -4862,7 +4917,7 @@ internal fun VideoDetailScreenStateHolder(
                             )
                         }
                         val returnMediaHandoffProgressProvider: () -> Float = {
-                            if (!entryOwnsMiuixCardTransition || !miuixLandingState.enabled) {
+                            if (!entryOwnsMiuixCardTransition || !miuixLandingState.enabled || !isNowPlayingBarSource) {
                                 0f
                             } else if (isCommittedCardReturn &&
                                 !videoCardDepthBackgroundState.isReturnGestureInProgressProvider() &&
@@ -4870,38 +4925,12 @@ internal fun VideoDetailScreenStateHolder(
                                 videoCardDepthBackgroundState.phaseProvider() ==
                                     VideoCardTransitionBackgroundPhase.IDLE
                             ) {
-                                // Keep every media path at its source endpoint until the entry leaves.
                                 1f
                             } else {
-                                if (miuixLandingState.sourceChromeSnapshot?.isNowPlayingBar == true) {
-                                    com.android.purebilibili.core.ui.transition
-                                        .resolveNowPlayingBarMediaLayoutHandoff(
-                                            miuixLandingState.progressProvider(),
-                                        )
-                                } else if (nativeSnapshotTargetBoundsProvider != null) {
-                                    com.android.purebilibili.core.ui.transition
-                                        .resolveVideoCardReturnSettleFromMorphDepth(
-                                            miuixLandingState.progressProvider(),
-                                        )
-                                } else {
-                                    com.android.purebilibili.core.ui.transition
-                                        .resolveVideoDetailMediaLayoutHandoffProgress(
-                                            morphDepthProgress = miuixLandingState.progressProvider(),
-                                            phase = videoCardDepthBackgroundState.phaseProvider(),
-                                            isReturnGestureInProgress =
-                                                videoCardDepthBackgroundState
-                                                    .isReturnGestureInProgressProvider() ||
-                                                    videoCardDepthBackgroundState
-                                                        .isGestureRestoreInProgressProvider(),
-                                            sourceLayout = landingLayoutForMedia?.layout
-                                                ?: miuixLandingState.sourceLayout,
-                                            sourceChromeAlpha = flyingSourceChromeAlphaProvider(),
-                                            isCommittedCardReturn = isCommittedCardReturn,
-                                            preserveNativeViewport = scopedHeroDriver.enabled &&
-                                                videoCardDepthBackgroundState.motionTierProvider() !=
-                                                    com.android.purebilibili.core.ui.adaptive.MotionTier.Reduced,
-                                        )
-                                }
+                                com.android.purebilibili.core.ui.transition
+                                    .resolveNowPlayingBarMediaLayoutHandoff(
+                                        miuixLandingState.progressProvider(),
+                                    )
                             }
                         }
                         val residentCoverContentScale = VideoDetailCoverContentScale
@@ -5135,7 +5164,6 @@ internal fun VideoDetailScreenStateHolder(
                                         clipCornerDp = returnMediaClipCornerDp,
                                         nativeSnapshotBoundsProvider = nativeSnapshotTargetBoundsProvider,
                                     )
-                                    .videoDetailRemoveFloatingTopInset(removedPlayerTopInsetProvider)
                                     .zIndex(0f)
                                     .graphicsLayer {
                                         alpha = returnMediaFrameProvider().playerAlpha * nowPlayingMediaAlphaProvider()
@@ -5153,6 +5181,7 @@ internal fun VideoDetailScreenStateHolder(
                                 )
                             }
                             if (
+                                isNowPlayingBarSource &&
                                 miuixVisualAssetsActive &&
                                 shouldDrawFlyingReconstructedSourceChrome(
                                     phase = videoCardDepthBackgroundState.phaseProvider(),
@@ -5241,7 +5270,12 @@ internal fun VideoDetailScreenStateHolder(
                                     }
                                 )
                                 .drawWithContent {
-                                    val reveal = if (entryHeroDriver != null &&
+                                    val rigidPageCardMorph = entryOwnsMiuixCardTransition &&
+                                        scopedHeroDriver.enabled &&
+                                        !isNowPlayingBarSource
+                                    val reveal = if (rigidPageCardMorph) {
+                                        1f
+                                    } else if (entryHeroDriver != null &&
                                         videoCardDepthBackgroundState.phaseProvider() == VideoCardTransitionBackgroundPhase.OPENING
                                     ) resolveVideoCardDetailChromeAlpha(
                                         entryHeroDriver.progressProvider(),
@@ -5250,13 +5284,17 @@ internal fun VideoDetailScreenStateHolder(
                                             scopedHeroDriver.sourceChromeSnapshot?.isNowPlayingBar == true
                                         },
                                     ) else detailInfoRevealProgress.value.coerceIn(0f, 1f)
-                                    clipRect(
-                                        left = 0f,
-                                        top = 0f,
-                                        right = size.width,
-                                        bottom = size.height * reveal,
-                                    ) {
+                                    if (reveal >= 0.999f) {
                                         this@drawWithContent.drawContent()
+                                    } else {
+                                        clipRect(
+                                            left = 0f,
+                                            top = 0f,
+                                            right = size.width,
+                                            bottom = size.height * reveal,
+                                        ) {
+                                            this@drawWithContent.drawContent()
+                                        }
                                     }
                                     val collapseShadowAlpha =
                                         resolveVideoDetailCollapseShadowAlpha(layoutCollapseProgress)
@@ -5276,66 +5314,72 @@ internal fun VideoDetailScreenStateHolder(
                                     }
                                 }
                                 .graphicsLayer {
-                                    val reveal = if (entryHeroDriver != null &&
-                                        videoCardDepthBackgroundState.phaseProvider() == VideoCardTransitionBackgroundPhase.OPENING
-                                    ) resolveVideoCardDetailChromeAlpha(
-                                        entryHeroDriver.progressProvider(),
-                                        VideoCardTransitionBackgroundPhase.OPENING, false,
-                                        sourceLayout = scopedHeroDriver.sourceLayout.takeUnless {
-                                            scopedHeroDriver.sourceChromeSnapshot?.isNowPlayingBar == true
-                                        },
-                                    ) else detailInfoRevealProgress.value.coerceIn(0f, 1f)
-                                    val holdFullyOpaque =
-                                        suppressEnterFadeAfterBackPreview &&
-                                            !useReturningVideoDetailVisualState
-                                    // Miuix flying entry: always complement source-card chrome with
-                                    // morph depth (not only LIVE surface). Cover-first related/home
-                                    // returns need the same gradual player-below ↔ cover-below handoff.
-                                    val useMorphSecondaryYield =
-                                        (if (scopedHeroDriver.enabled) entryOwnsMiuixCardTransition
-                                        else liveReturnMorph || detailShellSharedBoundsEnabled) &&
-                                            !holdFullyOpaque
-                                    if (useMorphSecondaryYield) {
-                                        val frame = resolveVideoCardSecondaryContentVisualFrame(
-                                            morphDepthProgress =
-                                                videoCardDepthBackgroundState.progressProvider(),
-                                            phase = videoCardDepthBackgroundState.phaseProvider(),
-                                            isReturnGestureInProgress =
-                                                videoCardDepthBackgroundState
-                                                    .isReturnGestureInProgressProvider() ||
-                                                    videoCardDepthBackgroundState
-                                                        .isGestureRestoreInProgressProvider(),
-                                            motionTier =
-                                                videoCardDepthBackgroundState.motionTierProvider(),
-                                            sourceLayout = miuixLandingState.sourceLayout,
-                                            followProgressEnabled = videoCardDepthBackgroundState
-                                                .returnContentFollowProgressEnabledProvider(),
-                                            isCommittedCardReturn = isCommittedCardReturn,
-                                            preserveNativeViewport = scopedHeroDriver.enabled,
-                                        )
-                                        alpha = frame.alpha
-                                        // Native entry already owns geometry. Keep only its content
-                                        // handoff alpha; the legacy path retains its internal transform.
-                                        scaleX = if (scopedHeroDriver.enabled) 1f else frame.scale
-                                        scaleY = if (scopedHeroDriver.enabled) 1f else frame.scale
-                                        transformOrigin = TransformOrigin(0.5f, 0f)
-                                        clip = frame.handoffProgress > 0.001f
-                                        translationY = with(videoCardTransitionDensity) {
-                                            ((if (scopedHeroDriver.enabled) 0f else frame.translationYDp) +
-                                                (1f - reveal) * 12f).dp.toPx()
-                                        }
+                                    val rigidPageCardMorph = entryOwnsMiuixCardTransition &&
+                                        scopedHeroDriver.enabled &&
+                                        !isNowPlayingBarSource
+                                    if (rigidPageCardMorph) {
+                                        alpha = 1f
+                                        scaleX = 1f
+                                        scaleY = 1f
+                                        translationY = 0f
+                                        clip = false
                                     } else {
-                                        alpha = resolveVideoDetailReturnContentAlpha(
-                                            transitionProgress = detailTransitionProgress.value,
-                                            isCommittedCardReturn = isCommittedCardReturn,
-                                            holdFullyOpaqueAfterBackPreview = holdFullyOpaque,
-                                            liveReturnMorph = false,
-                                            isQuickReturn = isQuickReturningFromDetail,
-                                            morphDepthProgress =
-                                                videoCardDepthBackgroundState.progressProvider(),
-                                        )
-                                        translationY = with(videoCardTransitionDensity) {
-                                            ((1f - reveal) * 12f).dp.toPx()
+                                        val reveal = if (entryHeroDriver != null &&
+                                            videoCardDepthBackgroundState.phaseProvider() == VideoCardTransitionBackgroundPhase.OPENING
+                                        ) resolveVideoCardDetailChromeAlpha(
+                                            entryHeroDriver.progressProvider(),
+                                            VideoCardTransitionBackgroundPhase.OPENING, false,
+                                            sourceLayout = scopedHeroDriver.sourceLayout.takeUnless {
+                                                scopedHeroDriver.sourceChromeSnapshot?.isNowPlayingBar == true
+                                            },
+                                        ) else detailInfoRevealProgress.value.coerceIn(0f, 1f)
+                                        val holdFullyOpaque =
+                                            suppressEnterFadeAfterBackPreview &&
+                                                !useReturningVideoDetailVisualState
+                                        val useMorphSecondaryYield =
+                                            (if (scopedHeroDriver.enabled) entryOwnsMiuixCardTransition
+                                            else liveReturnMorph || detailShellSharedBoundsEnabled) &&
+                                                !holdFullyOpaque
+                                        if (useMorphSecondaryYield) {
+                                            val frame = resolveVideoCardSecondaryContentVisualFrame(
+                                                morphDepthProgress =
+                                                    videoCardDepthBackgroundState.progressProvider(),
+                                                phase = videoCardDepthBackgroundState.phaseProvider(),
+                                                isReturnGestureInProgress =
+                                                    videoCardDepthBackgroundState
+                                                        .isReturnGestureInProgressProvider() ||
+                                                        videoCardDepthBackgroundState
+                                                            .isGestureRestoreInProgressProvider(),
+                                                motionTier =
+                                                    videoCardDepthBackgroundState.motionTierProvider(),
+                                                sourceLayout = miuixLandingState.sourceLayout,
+                                                followProgressEnabled = videoCardDepthBackgroundState
+                                                    .returnContentFollowProgressEnabledProvider(),
+                                                isCommittedCardReturn = isCommittedCardReturn,
+                                                preserveNativeViewport = scopedHeroDriver.enabled,
+                                            )
+                                            alpha = frame.alpha
+                                            scaleX = if (scopedHeroDriver.enabled) 1f else frame.scale
+                                            scaleY = if (scopedHeroDriver.enabled) 1f else frame.scale
+                                            transformOrigin = TransformOrigin(0.5f, 0f)
+                                            clip = frame.handoffProgress > 0.001f
+                                            translationY = with(videoCardTransitionDensity) {
+                                                ((if (scopedHeroDriver.enabled) 0f else frame.translationYDp) +
+                                                    (1f - reveal) * 12f).dp.toPx()
+                                            }
+                                        } else {
+                                            alpha = resolveVideoDetailReturnContentAlpha(
+                                                transitionProgress = detailTransitionProgress.value,
+                                                isCommittedCardReturn = isCommittedCardReturn,
+                                                holdFullyOpaqueAfterBackPreview = holdFullyOpaque,
+                                                liveReturnMorph = false,
+                                                isQuickReturn = isQuickReturningFromDetail,
+                                                morphDepthProgress =
+                                                    videoCardDepthBackgroundState.progressProvider(),
+                                            )
+                                            translationY = with(videoCardTransitionDensity) {
+                                                ((1f - reveal) * 12f).dp.toPx()
+                                            }
                                         }
                                     }
                                 }
@@ -5408,6 +5452,7 @@ internal fun VideoDetailScreenStateHolder(
                                         navigationOwnsEntryMotion = navigationOwnsEntryMotion,
                                         isLeaving = isLeaving,
                                         rootTransitionOwnsContentAlpha = detailShellSharedBoundsEnabled,
+                                        rootContentAlphaProvider = videoCardDetailContentAlphaProvider,
                                         animateLateEntryContent = currentBvid == bvid &&
                                             isTransitionFinished &&
                                             // 关闭卡片过渡时同样启用骨架垫底交接：否则 Loading 骨架
@@ -5597,6 +5642,7 @@ internal fun VideoDetailScreenStateHolder(
                         // Nested detail entries share the host CompositionLocals. Only the
                         // outgoing child owns this session; the retained parent must not draw
                         // the child's frozen cover/chrome over its related-video list.
+                        miuixCardTransitionState.sourceChromeSnapshot?.isNowPlayingBar == true &&
                         miuixVisualAssetsActive &&
                         miuixCardTransitionState.enabled &&
                         !suppressPhoneDetailBodyForDirectPortrait &&
@@ -5926,8 +5972,12 @@ internal fun VideoDetailScreenStateHolder(
         isFullscreenMode = isFullscreenMode || isPipMode,
         backgroundColor = AppSurfaceTokens.background(),
         backgroundAlphaProvider = {
-            if (!rootCardTransition.enabled || rootCardTransition.sourceChromeSnapshot?.isNowPlayingBar != true) {
+            if (!rootCardTransition.enabled) {
                 1f
+            } else if (rootCardTransition.sourceChromeSnapshot?.isNowPlayingBar != true) {
+                // 卡片开合：页面底板与正文共用同一条交叉淡入淡出曲线，缩到卡片尺寸时
+                // 下方真实卡片已经完整透出，不再出现「底板挡住卡片、entry 卸载时整块弹出」。
+                videoCardDetailContentAlphaProvider()
             } else if (isCommittedCardReturn &&
                 videoCardDepthBackgroundState.phaseProvider() == VideoCardTransitionBackgroundPhase.IDLE
             ) {

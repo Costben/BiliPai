@@ -495,11 +495,112 @@ class MiuixVideoCardNavTransitionTest {
         assertEquals(true, transform.contains("alpha = 1f"))
         assertEquals(false, transform.contains("visibleHeightFraction"))
         assertEquals(false, transform.contains("outgoingClipFraction"))
-        assertEquals(true, transform.contains("resolveMiuixVideoCardGestureVisualOrigin("))
-        assertEquals(true, transform.contains("cameraDistance = transform.cameraDistance"))
-        assertEquals(true, transform.contains("shadowElevation = MIUIX_VIDEO_CARD_GESTURE_SHADOW_DP.dp.toPx() * poseWeight"))
+        assertEquals(false, transform.contains("resolveMiuixVideoCardClickTransform("))
+        assertEquals(true, transform.contains("shadowElevation = 0f"))
         assertEquals(true, transform.contains("floatingCornerPx = if (devicePx > 0f) devicePx"))
+        assertEquals(true, transform.contains("resolveMiuixVideoCardLinearCornerPx("))
+        assertEquals(true, transform.contains("resolveMiuixVideoCardTopInsetCompensationTranslationY("))
         assertEquals(true, transform.contains("progress.followPose("))
+    }
+
+    @Test
+    fun topInsetCompensationKeepsVideoTopOnExactStraightLineAtEveryDepth() {
+        val width = 1080f
+        val height = 2400f
+        val topInset = 140f
+        for (cardTop in listOf(0f, 80f, 140f, 400f, 1500f)) {
+            val bounds = androidx.compose.ui.geometry.Rect(24f, cardTop, 534f, cardTop + 680f)
+            val sourceScaleX = bounds.width / width
+            val sourceScaleY = bounds.height / height
+            for (step in 0..100) {
+                val morph = step / 100f
+                val outerX = resolveMiuixVideoCardOuterScale(sourceScaleX, morph, 1f)
+                val outerY = resolveMiuixVideoCardOuterScale(sourceScaleY, morph, 1f)
+                val uniform = maxOf(outerX, outerY)
+                val innerTransY = resolveMiuixVideoCardTopInsetCompensationTranslationY(
+                    topInsetPx = topInset,
+                    morph = morph,
+                    uniformScale = uniform,
+                    outerScaleY = outerY,
+                    layoutHeightPx = height,
+                )
+                val outerTransY = bounds.top * (1f - morph)
+                val videoTopOnScreen = outerTransY + (topInset * (uniform / outerY) + innerTransY) * outerY
+                val expectedStraightLineTop = bounds.top * (1f - morph) + topInset * morph
+                assertEquals(expectedStraightLineTop, videoTopOnScreen, 0.05f)
+            }
+        }
+    }
+
+    @Test
+    fun wholePageMorphsAsOneRigidBodyWithoutReversingAnyEdge() {
+        val width = 1080f
+        val height = 2400f
+        val topInset = 140f
+        val steps = 200
+        listOf(
+            androidx.compose.ui.geometry.Rect(24f, 120f, 534f, 800f),
+            androidx.compose.ui.geometry.Rect(24f, 800f, 534f, 1480f),
+            androidx.compose.ui.geometry.Rect(24f, 1900f, 1056f, 2180f),
+        ).forEach { bounds ->
+            var previousLeft = Float.POSITIVE_INFINITY
+            var previousTop = Float.POSITIVE_INFINITY
+            var previousRight = Float.NEGATIVE_INFINITY
+            var previousBottom = Float.NEGATIVE_INFINITY
+            var previousContentWidth = Float.NEGATIVE_INFINITY
+            for (step in 0..steps) {
+                val morph = step / steps.toFloat()
+                val outerX = resolveMiuixVideoCardOuterScale(bounds.width / width, morph, 1f)
+                val outerY = resolveMiuixVideoCardOuterScale(bounds.height / height, morph, 1f)
+                val uniformScale = maxOf(outerX, outerY)
+                val path = resolveVideoCardPathOffset(bounds, width, height, morph, 0f)
+
+                // 内容层用 max(outerX, outerY) 反向补偿：两层相乘后两轴净缩放恒等，
+                // 整页作为刚体等比缩放，不会出现「外壳先缩、内容后缩」的两套时间轴。
+                val contentScaleX = outerX * (uniformScale / outerX)
+                val contentScaleY = outerY * (uniformScale / outerY)
+                assertEquals(uniformScale, contentScaleX, 0.001f)
+                assertEquals(uniformScale, contentScaleY, 0.001f)
+
+                val left = path.x
+                val top = path.y
+                val right = left + width * outerX
+                val bottom = top + height * outerY
+                val contentWidth = width * contentScaleX
+
+                // 开合全程每个边只朝一个方向走，不允许中途回折（原先「先冲上顶再掉下来」）。
+                assertTrue(left <= previousLeft + 0.01f, "left reversed at morph=$morph")
+                assertTrue(top <= previousTop + 0.01f, "top reversed at morph=$morph")
+                assertTrue(right >= previousRight - 0.01f, "right reversed at morph=$morph")
+                assertTrue(bottom >= previousBottom - 0.01f, "bottom reversed at morph=$morph")
+                assertTrue(
+                    contentWidth >= previousContentWidth - 0.01f,
+                    "content width reversed at morph=$morph",
+                )
+                previousLeft = left
+                previousTop = top
+                previousRight = right
+                previousBottom = bottom
+                previousContentWidth = contentWidth
+
+                // 画面顶端全程落在 card top → status-bar inset 的直线上，没有 overshoot。
+                val innerTransY = resolveMiuixVideoCardTopInsetCompensationTranslationY(
+                    topInsetPx = topInset,
+                    morph = morph,
+                    uniformScale = uniformScale,
+                    outerScaleY = outerY,
+                    layoutHeightPx = height,
+                )
+                val videoTop = top + (topInset * (uniformScale / outerY) + innerTransY) * outerY
+                assertEquals(bounds.top * (1f - morph) + topInset * morph, videoTop, 0.05f)
+            }
+
+            // 首末帧分别精确落在卡片矩形与全屏矩形上。
+            assertEquals(bounds.left, resolveVideoCardPathOffset(bounds, width, height, 0f, 0f).x, 0.01f)
+            assertEquals(bounds.top, resolveVideoCardPathOffset(bounds, width, height, 0f, 0f).y, 0.01f)
+            assertEquals(0f, resolveVideoCardPathOffset(bounds, width, height, 1f, 0f).x, 0.01f)
+            assertEquals(0f, resolveVideoCardPathOffset(bounds, width, height, 1f, 0f).y, 0.01f)
+        }
     }
 
     @Test
