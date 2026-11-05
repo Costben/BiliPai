@@ -1191,8 +1191,10 @@ fun HomeScreen(
             smartVisualGuardEnabled = false
         )
     }
-    val isHeaderBlurEnabled = homePerformanceConfig.headerBlurEnabled
-    val isBottomBarBlurEnabled = homePerformanceConfig.bottomBarBlurEnabled
+    val isHeaderBlurEnabled = homePerformanceConfig.headerBlurEnabled &&
+        com.android.purebilibili.core.ui.LocalAppThemeConfig.current.globalBlurEnabled
+    val isBottomBarBlurEnabled = homePerformanceConfig.bottomBarBlurEnabled &&
+        com.android.purebilibili.core.ui.LocalAppThemeConfig.current.globalBlurEnabled
     // [统一门控] 系统「减弱动效」是所有界面动效的通用开关:开启时关闭卡片进场/消散等所有卡片动效,
     // 各功能面自身的开关(此处为卡片动画开关)仍各自独立。与设置页入场动画共用同一 reduce-motion 判定。
     val systemReduceMotion = rememberSystemReduceMotion()
@@ -1273,11 +1275,21 @@ fun HomeScreen(
             hasBackdrop = true,
             blurRadiusDp = homeLiquidGlassTuning.progressiveBlurRadius,
         ) && !com.android.purebilibili.core.ui.performance.isLowBlurBudgetForced()
-    // COUI 17 顶栏的渐变模糊材质始终采样首页内容。
-    val shouldCaptureHomeChromeBackdrop = isLiquidGlassEnabled || isHeaderBlurEnabled ||
-        isBottomBarBlurEnabled || progressiveTopBlurNeedsBackdrop ||
-        com.android.purebilibili.core.theme.LocalAppUiStyle.current ==
+    val couiBlurActive = io.github.suqi8.coui.kmp.blur.isBlurEnabled()
+    val isCoui17Skin = com.android.purebilibili.core.theme.LocalAppUiStyle.current ==
         com.android.purebilibili.core.theme.AppUiStyle.COUI17
+    val hasNativeAppBarBackdropBlur = Build.VERSION.SDK_INT >= 36 || remember {
+        val brand = "${Build.MANUFACTURER} ${Build.BRAND}".lowercase()
+        "oppo" in brand || "oneplus" in brand || "realme" in brand || "oplus" in brand
+    }
+    val headerNeedsComposeBackdrop = isHeaderBlurEnabled &&
+        (!isCoui17Skin || !hasNativeAppBarBackdropBlur)
+    // 总开关（couiBlurActive 已含 LocalBlurEnabled）关掉后连离屏录制都不建；
+    // 打开时只在实际有表面要采样时才录，COUI 17 顶栏的渐变材质是唯一常驻消费者。
+    val shouldCaptureHomeChromeBackdrop = couiBlurActive && (
+        isCoui17Skin || isLiquidGlassEnabled || headerNeedsComposeBackdrop ||
+            isBottomBarBlurEnabled || progressiveTopBlurNeedsBackdrop
+        )
     val homeMiuixBackdropSource = if (shouldCaptureHomeChromeBackdrop) {
         rememberChromeBackdropSource(isolateContentDrawing = true)
     } else {
@@ -3302,125 +3314,23 @@ fun HomeScreen(
         }
     }
 
-    //  [修复] 使用 rememberSaveable 记住本次会话中是否已处理过弹窗（防止导航后重新显示）
-    var consentDialogHandled by rememberSaveable { mutableStateOf(false) }
-    var showConsentDialog by remember { mutableStateOf(false) }
-
-    // 使用须知确认后再展示崩溃统计同意（避免与门禁叠层）
-    val welcomePrefs = remember { context.getSharedPreferences("app_welcome", Context.MODE_PRIVATE) }
-    val userAgreementAcked = welcomePrefs.getBoolean(
-        com.android.purebilibili.feature.onboarding.USER_AGREEMENT_ACK_KEY,
-        false
-    ) || welcomePrefs.getBoolean("first_launch_shown", false)
-
-    // 检查是否需要显示弹窗（使用须知已确认 且 同意弹窗尚未显示过 且 本次会话未处理过）
-    LaunchedEffect(crashTrackingConsentShown) {
-        if (userAgreementAcked && !crashTrackingConsentShown && !consentDialogHandled) {
-            showConsentDialog = true
-        }
-    }
-
-    // 显示弹窗
-    if (showConsentDialog) {
-        com.android.purebilibili.feature.home.components.CrashTrackingConsentDialog(
-            onDismiss = {
-                showConsentDialog = false
-                consentDialogHandled = true  // 标记为已处理
-            }
-        )
-    }
+    HomeConsentAndPreloadEffects(
+        context = context,
+        crashTrackingConsentShown = crashTrackingConsentShown,
+        currentCategory = currentCategory,
+        popularSubCategory = popularSubCategory,
+        isDataSaverActive = isDataSaverActive,
+        preloadAheadCount = preloadAheadCount,
+        homeCoverRequestSpec = homeCoverRequestSpec,
+        homeCoverPreloadAllowed = homeCoverPreloadAllowed,
+        lifecycleOwner = lifecycleOwner,
+        popularGridStates = popularGridStates,
+        gridStates = gridStates,
+        viewModel = viewModel,
+    )
 
     //  滚动方向（简化版 - 不再需要复杂检测，因为标签页只在顶部显示）
     val isScrollingUp = true  // 保留参数兼容性
-
-    //  [性能优化] 图片预加载 - 提前加载即将显示的视频封面
-    // 📉 [省流量] 省流量模式下禁用预加载
-    val foregroundSettling by com.android.purebilibili.core.lifecycle.ForegroundSettleBudget
-        .isSettling
-        .collectAsStateWithLifecycle()
-    LaunchedEffect(
-        currentCategory,
-        popularSubCategory,
-        isDataSaverActive,
-        preloadAheadCount,
-        homeCoverRequestSpec,
-        homeCoverPreloadAllowed,
-        foregroundSettling,
-        lifecycleOwner,
-    ) {
-        // 📉 省流量模式下跳过预加载
-        if (isDataSaverActive) return@LaunchedEffect
-        if (preloadAheadCount <= 0) return@LaunchedEffect
-        // Restore anchors before preloading. Focus, foreground, page and image permission
-        // changes cancel both the settling delay and any in-flight batch through this effect key.
-        if (!homeCoverPreloadAllowed) return@LaunchedEffect
-        // 回前台的安定窗口内暂缓封面预取：这批解码会和用户此刻的首次切页抢主线程。
-        // 窗口结束后本效应会以 foregroundSettling = false 重新触发。
-        if (foregroundSettling) return@LaunchedEffect
-
-        val currentGridState = if (currentCategory == HomeCategory.POPULAR) {
-            popularGridStates[popularSubCategory]
-        } else {
-            gridStates[currentCategory]
-        } ?: return@LaunchedEffect
-
-        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            snapshotFlow {
-                // 滚动时不订阅 layoutInfo，也不创建可见项列表；停稳后重新读取最新布局。
-                if (currentGridState.isScrollInProgress) null
-                else currentGridState.layoutInfo.visibleItemsInfo.map { it.key }
-            }
-                .distinctUntilChanged()
-                .collectLatest { visibleKeys ->
-                    // Cancel the previous batch immediately when scrolling starts. Debouncing
-                    // upstream would keep that batch alive until the next settled emission.
-                    if (visibleKeys == null) return@collectLatest
-                    // Visible cover work goes first, then card color/online work. Give
-                    // those a separate window before starting off-screen decodes.
-                    kotlinx.coroutines.delay(HOME_COVER_PRELOAD_SETTLE_MS)
-                    val videos = viewModel.getPreloadVideosSnapshot(
-                        category = currentCategory,
-                        popularSubCategory = popularSubCategory
-                    )
-                    val visibleKeySet = visibleKeys.toSet()
-                    val lastVisibleIndex = resolveHomeCategoryVideoGridKeys(videos)
-                        .indexOfLast { it in visibleKeySet }
-                    val preloadRange = resolveHomeCoverPreloadRange(
-                        isDataSaverActive = isDataSaverActive,
-                        isScrollInProgress = false,
-                        lastVisibleIndex = lastVisibleIndex,
-                        totalItemCount = videos.size,
-                        preloadAheadCount = preloadAheadCount
-                    ) ?: return@collectLatest
-                    // Adjacent entries may share a cover; decode each cache identity only once.
-                    val sources = preloadRange
-                        .mapNotNull { index -> videos.getOrNull(index) }
-                        .map { video ->
-                            resolveHomeCoverImageSource(video, false, homeCoverRequestSpec)
-                        }
-                        .filter { it.url.isNotBlank() }
-                        .distinctBy { it.cacheKey }
-                    if (sources.isEmpty()) return@collectLatest
-
-                    kotlinx.coroutines.coroutineScope {
-                        for (source in sources) launch {
-                            val request = coil3.request.ImageRequest.Builder(context)
-                                .data(source.url)
-                                .size(homeCoverRequestSpec.widthPx, homeCoverRequestSpec.heightPx)
-                                .scale(coil3.size.Scale.FILL)
-                                .memoryCacheKey(source.cacheKey)
-                                .diskCacheKey(source.cacheKey)
-                                .memoryCachePolicy(coil3.request.CachePolicy.ENABLED)
-                                .diskCachePolicy(coil3.request.CachePolicy.ENABLED)
-                                .build()
-                            // execute participates in this effect's cancellation; enqueue would
-                            // leave the work running after collectLatest/ON_STOP cancelled it.
-                            context.imageLoader.execute(request)
-                        }
-                    }
-                }
-        }
-    }
 
 
     //  PullToRefreshBox 自动处理下拉刷新逻辑
@@ -3456,6 +3366,119 @@ fun HomeScreen(
                     pendingNotInterestedVideo = null
                 }
             )
+        }
+    }
+}
+
+@Composable
+private fun HomeConsentAndPreloadEffects(
+    context: Context,
+    crashTrackingConsentShown: Boolean,
+    currentCategory: HomeCategory,
+    popularSubCategory: PopularSubCategory,
+    isDataSaverActive: Boolean,
+    preloadAheadCount: Int,
+    homeCoverRequestSpec: HomeCoverRequestSpec,
+    homeCoverPreloadAllowed: Boolean,
+    lifecycleOwner: androidx.lifecycle.LifecycleOwner,
+    popularGridStates: Map<PopularSubCategory, androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState>,
+    gridStates: Map<HomeCategory, androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState>,
+    viewModel: HomeViewModel,
+) {
+    var consentDialogHandled by rememberSaveable { mutableStateOf(false) }
+    var showConsentDialog by remember { mutableStateOf(false) }
+    val welcomePrefs = remember { context.getSharedPreferences("app_welcome", Context.MODE_PRIVATE) }
+    val userAgreementAcked = welcomePrefs.getBoolean(
+        com.android.purebilibili.feature.onboarding.USER_AGREEMENT_ACK_KEY,
+        false
+    ) || welcomePrefs.getBoolean("first_launch_shown", false)
+
+    LaunchedEffect(crashTrackingConsentShown) {
+        if (userAgreementAcked && !crashTrackingConsentShown && !consentDialogHandled) {
+            showConsentDialog = true
+        }
+    }
+
+    if (showConsentDialog) {
+        com.android.purebilibili.feature.home.components.CrashTrackingConsentDialog(
+            onDismiss = {
+                showConsentDialog = false
+                consentDialogHandled = true
+            }
+        )
+    }
+
+    val foregroundSettling by com.android.purebilibili.core.lifecycle.ForegroundSettleBudget
+        .isSettling
+        .collectAsStateWithLifecycle()
+    LaunchedEffect(
+        currentCategory,
+        popularSubCategory,
+        isDataSaverActive,
+        preloadAheadCount,
+        homeCoverRequestSpec,
+        homeCoverPreloadAllowed,
+        foregroundSettling,
+        lifecycleOwner,
+    ) {
+        if (isDataSaverActive) return@LaunchedEffect
+        if (preloadAheadCount <= 0) return@LaunchedEffect
+        if (!homeCoverPreloadAllowed) return@LaunchedEffect
+        if (foregroundSettling) return@LaunchedEffect
+
+        val currentGridState = if (currentCategory == HomeCategory.POPULAR) {
+            popularGridStates[popularSubCategory]
+        } else {
+            gridStates[currentCategory]
+        } ?: return@LaunchedEffect
+
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            snapshotFlow {
+                if (currentGridState.isScrollInProgress) null
+                else currentGridState.layoutInfo.visibleItemsInfo.map { it.key }
+            }
+                .distinctUntilChanged()
+                .collectLatest { visibleKeys ->
+                    if (visibleKeys == null) return@collectLatest
+                    kotlinx.coroutines.delay(HOME_COVER_PRELOAD_SETTLE_MS)
+                    val videos = viewModel.getPreloadVideosSnapshot(
+                        category = currentCategory,
+                        popularSubCategory = popularSubCategory
+                    )
+                    val visibleKeySet = visibleKeys.toSet()
+                    val lastVisibleIndex = resolveHomeCategoryVideoGridKeys(videos)
+                        .indexOfLast { it in visibleKeySet }
+                    val preloadRange = resolveHomeCoverPreloadRange(
+                        isDataSaverActive = isDataSaverActive,
+                        isScrollInProgress = false,
+                        lastVisibleIndex = lastVisibleIndex,
+                        totalItemCount = videos.size,
+                        preloadAheadCount = preloadAheadCount
+                    ) ?: return@collectLatest
+                    val sources = preloadRange
+                        .mapNotNull { index -> videos.getOrNull(index) }
+                        .map { video ->
+                            resolveHomeCoverImageSource(video, false, homeCoverRequestSpec)
+                        }
+                        .filter { it.url.isNotBlank() }
+                        .distinctBy { it.cacheKey }
+                    if (sources.isEmpty()) return@collectLatest
+
+                    kotlinx.coroutines.coroutineScope {
+                        for (source in sources) launch {
+                            val request = coil3.request.ImageRequest.Builder(context)
+                                .data(source.url)
+                                .size(homeCoverRequestSpec.widthPx, homeCoverRequestSpec.heightPx)
+                                .scale(coil3.size.Scale.FILL)
+                                .memoryCacheKey(source.cacheKey)
+                                .diskCacheKey(source.cacheKey)
+                                .memoryCachePolicy(coil3.request.CachePolicy.ENABLED)
+                                .diskCachePolicy(coil3.request.CachePolicy.ENABLED)
+                                .build()
+                            context.imageLoader.execute(request)
+                        }
+                    }
+                }
         }
     }
 }

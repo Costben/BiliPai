@@ -25,6 +25,8 @@ enum class LiquidSwitchThumbMode(val label: String) {
 
 data class AppThemeConfig(
     val blurIntensity: BlurIntensity = BlurIntensity.THIN,
+    /** 实时模糊总开关；关闭时所有 COUI 玻璃与模糊回落到不透明底色。 */
+    val globalBlurEnabled: Boolean = true,
     val headerBlurEnabled: Boolean = true,
     val bottomBarBlurEnabled: Boolean = false,
     val progressiveTopBlurEnabled: Boolean = true,
@@ -97,7 +99,11 @@ fun ProvideAppThemeConfig(
     config: AppThemeConfig,
     content: @Composable () -> Unit,
 ) {
-    CompositionLocalProvider(LocalAppThemeConfig provides config) {
+    val couiBlurEnabled = config.globalBlurEnabled
+    CompositionLocalProvider(
+        LocalAppThemeConfig provides config,
+        io.github.suqi8.coui.kmp.blur.LocalBlurEnabled provides couiBlurEnabled,
+    ) {
         val platformHaptic = LocalHapticFeedback.current
         val delegate = (platformHaptic as? AppPolicyHapticFeedback)?.delegate ?: platformHaptic
         val latestConfig = rememberUpdatedState(config)

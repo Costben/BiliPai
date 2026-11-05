@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.rememberGraphicsLayer
 import kotlinx.coroutines.CompletableDeferred
 import io.github.suqi8.coui.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.isBlurEnabled
 import io.github.suqi8.coui.kmp.blur.layerBackdrop
 import io.github.suqi8.coui.kmp.blur.rememberLayerBackdrop
 
@@ -53,6 +54,7 @@ fun rememberChromeBackdropSource(
     // to consumers or rebuilding its modifier chain. Child-layer invalidations still
     // record fresh content; this is not a frozen backdrop cache.
     val recordingBackgroundState = rememberUpdatedState(recordingBackground)
+    val blurEnabledState = rememberUpdatedState(isBlurEnabled())
     val recorded = remember(contentLayer) { mutableStateOf(false) }
     val firstRecording = remember(contentLayer) { CompletableDeferred<Unit>() }
     LaunchedEffect(firstRecording) {
@@ -66,25 +68,27 @@ fun rememberChromeBackdropSource(
     })
     return remember(backdrop, contentLayer, drawContentToScreen, isolateContentDrawing) {
         ChromeBackdropSource(
-            backdrop = ContinuousBackdrop(backdrop),
+            backdrop = backdrop,
             recorded = recorded,
             modifier = Modifier
                 .layerBackdrop(backdrop)
                 .drawWithContent {
-                    contentLayer.record {
-                        // An explicit animated background invalidates this recording even
-                        // when the page updates only its own child graphics layers. Keep
-                        // the backdrop/layer identities stable throughout theme changes.
-                        val background = recordingBackgroundState.value
-                        if (background != Color.Unspecified) drawRect(background)
-                        // Page viewports own clipping. Hidden optical captures need their
-                        // overflow intact; a global clip also changes glass rim sampling.
+                    if (!blurEnabledState.value && drawContentToScreen) {
                         this@drawWithContent.drawContent()
+                        firstRecording.complete(Unit)
+                    } else {
+                        contentLayer.record {
+                            val background = recordingBackgroundState.value
+                            if (background != Color.Unspecified) drawRect(background)
+                            this@drawWithContent.drawContent()
+                        }
+                        if (drawContentToScreen) drawLayer(contentLayer)
+                        if (!backdrop.graphicsLayer.isReleased) {
+                            backdrop.graphicsLayer.record { drawLayer(contentLayer) }
+                        }
+                        firstRecording.complete(Unit)
                     }
-                    if (drawContentToScreen) drawLayer(contentLayer)
                 }
-                // 显式用于首页/导航的采样壳：背景色或外层录制失效时只引用内层指令。
-                // Auto 图层不强制离屏纹理；子内容自行失效仍刷新，不冻结图片或视频。
                 .then(if (isolateContentDrawing) Modifier.graphicsLayer() else Modifier),
         )
     }

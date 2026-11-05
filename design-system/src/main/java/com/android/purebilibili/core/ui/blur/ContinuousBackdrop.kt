@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.unit.Density
 import io.github.suqi8.coui.kmp.blur.Backdrop
+import io.github.suqi8.coui.kmp.blur.LayerBackdrop
 
 /**
  * 在共同的连续坐标系中采样，再缩入调用方的降采样目标。
@@ -39,4 +40,5 @@ class ContinuousBackdrop(private val source: Backdrop) : Backdrop {
 
 @Composable
 fun rememberContinuousBackdrop(source: Backdrop): Backdrop =
-    if (source is ContinuousBackdrop) source else remember(source) { ContinuousBackdrop(source) }
+    if (source is LayerBackdrop || source is ContinuousBackdrop) source
+    else remember(source) { ContinuousBackdrop(source) }

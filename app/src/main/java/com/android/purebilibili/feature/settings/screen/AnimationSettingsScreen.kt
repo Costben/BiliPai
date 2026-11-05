@@ -88,6 +88,7 @@ private fun localizedAnimationSettingTitle(settingId: String): String {
             "animation.full_screen_swipe_back_enabled" -> R.string.animation_title_fullscreen_swipe_back
             "animation.video_shared_transition_speed" -> R.string.animation_title_video_speed
             "animation.skeleton_breathing_enabled" -> R.string.animation_title_skeleton
+            "animation.global_blur_enabled" -> R.string.animation_title_global_blur
             "animation.header_blur_enabled" -> R.string.animation_title_header_blur
             "animation.progressive_top_blur_enabled" -> R.string.animation_title_progressive_blur
             "animation.progressive_top_fade_enabled" -> R.string.animation_title_progressive_fade
@@ -233,6 +234,9 @@ fun AnimationSettingsContent(
     val maidLottieAnimationEnabled by remember(context) { SettingsManager.getMaidLottieAnimationEnabled(context) }
         .collectAsStateWithLifecycle(initialValue = true)
     val skeletonBreathingEnabled = com.android.purebilibili.core.ui.skeleton.rememberSkeletonBreathingEnabled()
+    val globalBlurEnabled by remember(context) {
+        com.android.purebilibili.core.store.BlurSettingsStore.globalBlurEnabled(context)
+    }.collectAsStateWithLifecycle(initialValue = themeConfiguration.globalBlurEnabled)
     val globalTextTapCopyEnabled by remember(context) { SettingsManager.getGlobalTextTapCopyEnabled(context) }
         .collectAsStateWithLifecycle(initialValue = themeConfiguration.globalTextTapCopyEnabled)
     val appNavigationSettings = rememberSettingsNavigationConfiguration()
@@ -889,6 +893,23 @@ fun AnimationSettingsContent(
                                     scope.launch {
                                         com.android.purebilibili.core.store.SkeletonSettingsStore
                                             .setBreathingEnabled(context, enabled)
+                                    }
+                                },
+                                iconTint = AppContentColors.secondaryText(),
+                            )
+                        }
+                        AppPreferenceDivider()
+                        // 实时模糊总开关：先于四个细粒度开关出现，关闭时它们也不再生效。
+                        SettingsItemAnchor("animation.global_blur_enabled") {
+                            AppSwitchPreference(
+                                icon = rememberSettingsSemanticIcon(SettingsIconRole.ANDROID_LIQUID_GLASS),
+                                title = localizedAnimationSettingTitle("animation.global_blur_enabled"),
+                                subtitle = stringResource(R.string.animation_global_blur_summary),
+                                checked = globalBlurEnabled,
+                                onCheckedChange = { enabled ->
+                                    scope.launch {
+                                        com.android.purebilibili.core.store.BlurSettingsStore
+                                            .setGlobalBlurEnabled(context, enabled)
                                     }
                                 },
                                 iconTint = AppContentColors.secondaryText(),

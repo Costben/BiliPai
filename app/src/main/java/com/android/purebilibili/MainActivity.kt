@@ -1447,6 +1447,9 @@ class MainActivity : AppCompatActivity() {
             val appScreenshotCaptureMode = appThemeSettings.appScreenshotCaptureMode
             val blurIntensity by SettingsManager.getBlurIntensity(context)
                 .collectAsStateWithLifecycle(initialValue = BlurIntensity.THIN)
+            val globalBlurEnabled by remember(context) {
+                com.android.purebilibili.core.store.BlurSettingsStore.globalBlurEnabled(context)
+            }.collectAsStateWithLifecycle(initialValue = true)
             val headerBlurEnabled by SettingsManager.getHeaderBlurEnabled(context)
                 .collectAsStateWithLifecycle(initialValue = true)
             val bottomBarBlurEnabled by SettingsManager.getBottomBarBlurEnabled(context)
@@ -1495,6 +1498,7 @@ class MainActivity : AppCompatActivity() {
                 liquidControlsUseThemeColor,
                 liquidSwitchThumbMode,
                 blurIntensity,
+                globalBlurEnabled,
                 headerBlurEnabled,
                 bottomBarBlurEnabled,
                 progressiveTopBlurEnabled,
@@ -1512,9 +1516,10 @@ class MainActivity : AppCompatActivity() {
                     liquidControlsUseThemeColor = liquidControlsUseThemeColor,
                     liquidSwitchThumbMode = liquidSwitchThumbMode,
                     blurIntensity = blurIntensity,
-                    headerBlurEnabled = headerBlurEnabled,
-                    bottomBarBlurEnabled = bottomBarBlurEnabled,
-                    progressiveTopBlurEnabled = progressiveTopBlurEnabled,
+                    globalBlurEnabled = globalBlurEnabled,
+                    headerBlurEnabled = headerBlurEnabled && globalBlurEnabled,
+                    bottomBarBlurEnabled = bottomBarBlurEnabled && globalBlurEnabled,
+                    progressiveTopBlurEnabled = progressiveTopBlurEnabled && globalBlurEnabled,
                     progressiveTopFadeEnabled = progressiveTopFadeEnabled,
                     hapticFeedbackEnabled = hapticFeedbackEnabled,
                     hapticSettings = hapticSettings,

@@ -14,6 +14,7 @@ internal val settingsStaticDescriptionIndex: Map<String, String> = mapOf(
     "animation.card_transition_enabled" to "封面和标题平滑过渡到详情页",
     "animation.full_screen_swipe_back_enabled" to "列表和设置页可从屏幕中间右滑返回；使用屏幕边缘的系统返回手势",
     "animation.global_drag_feedback_enabled" to "统一控制按钮与胶囊的拖动形变，关闭后保留按压反馈",
+    "animation.global_blur_enabled" to "允许界面使用实时背景模糊，关闭后顶栏、底栏和弹窗回落为纯色",
     "animation.global_text_tap_copy_enabled" to "点按正文文字即可复制",
     "animation.haptic_feedback_enabled" to "振动总开关，开启后可在振动场景中分别控制不同操作",
     "animation.header_blur_enabled" to "模糊顶栏背后的内容，不含折射和光效",

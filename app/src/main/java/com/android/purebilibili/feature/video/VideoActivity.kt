@@ -156,6 +156,9 @@ class VideoActivity : ComponentActivity() {
             }
             val blurIntensity by SettingsManager.getBlurIntensity(this@VideoActivity)
                 .collectAsStateWithLifecycle(initialValue = BlurIntensity.THIN)
+            val globalBlurEnabled by remember(this@VideoActivity) {
+                com.android.purebilibili.core.store.BlurSettingsStore.globalBlurEnabled(this@VideoActivity)
+            }.collectAsStateWithLifecycle(initialValue = true)
             val headerBlurEnabled by SettingsManager.getHeaderBlurEnabled(this@VideoActivity)
                 .collectAsStateWithLifecycle(initialValue = true)
             val bottomBarBlurEnabled by SettingsManager.getBottomBarBlurEnabled(this@VideoActivity)
@@ -207,6 +210,7 @@ class VideoActivity : ComponentActivity() {
                 liquidGlassEnabled,
                 liquidSwitchThumbMode,
                 blurIntensity,
+                globalBlurEnabled,
                 headerBlurEnabled,
                 bottomBarBlurEnabled,
                 progressiveTopBlurEnabled,
@@ -222,9 +226,10 @@ class VideoActivity : ComponentActivity() {
                     liquidGlassEnabled = liquidGlassEnabled,
                     liquidSwitchThumbMode = liquidSwitchThumbMode,
                     blurIntensity = blurIntensity,
-                    headerBlurEnabled = headerBlurEnabled,
-                    bottomBarBlurEnabled = bottomBarBlurEnabled,
-                    progressiveTopBlurEnabled = progressiveTopBlurEnabled,
+                    globalBlurEnabled = globalBlurEnabled,
+                    headerBlurEnabled = headerBlurEnabled && globalBlurEnabled,
+                    bottomBarBlurEnabled = bottomBarBlurEnabled && globalBlurEnabled,
+                    progressiveTopBlurEnabled = progressiveTopBlurEnabled && globalBlurEnabled,
                     progressiveTopFadeEnabled = progressiveTopFadeEnabled,
                     hapticFeedbackEnabled = hapticFeedbackEnabled,
                     hapticSettings = hapticSettings,

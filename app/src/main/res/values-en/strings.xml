@@ -355,6 +355,7 @@
     <string name="animation_glass_share_failed">Could not open the system share sheet</string>
     <string name="animation_glass_export_failed">Could not export Liquid Glass settings</string>
     <string name="animation_skeleton_summary">A soft highlight sweeps across loading placeholders; turn off for static placeholders</string>
+    <string name="animation_global_blur_summary">Allow realtime backdrop blur in the UI. Off-screen sampling every frame costs GPU time and memory bandwidth; turning it off falls back to solid fills for bars and popups</string>
     <string name="animation_header_blur_summary">Blur content behind the top bar, without refraction or lighting</string>
     <string name="animation_progressive_blur_summary">Gradually adjust top bar blur while scrolling (Android 13+)</string>
     <string name="animation_progressive_fade_summary">Use a solid color fade from the status bar to the top bar; more power efficient than blur</string>
@@ -384,6 +385,7 @@
     <string name="animation_title_fullscreen_swipe_back">Swipe back from anywhere</string>
     <string name="animation_title_video_speed">Video transition speed</string>
     <string name="animation_title_skeleton">Loading placeholder animation</string>
+    <string name="animation_title_global_blur">Realtime blur</string>
     <string name="animation_title_header_blur">Top bar blur</string>
     <string name="animation_title_progressive_blur">Progressive top bar blur</string>
     <string name="animation_title_progressive_fade">Progressive top bar fade</string>
