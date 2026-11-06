@@ -16,7 +16,9 @@ class BiliPaiNavDisplayHostStructureTest {
         assertTrue(source.contains("followNavigationDriver("))
         assertTrue(source.contains("snapshotFlow { videoCardTransitionProgress.settleStateOrNull() }"))
         assertFalse(source.contains("animateFallbackTo("))
-        assertTrue(source.contains("LocalMiuixVideoCardTransitionState provides entryCardTransitionState"))
+        // 开合期间页面内部一律当作已经全屏：几何归导航层那一层，页面拿到的进度恒为 1。
+        assertTrue(source.contains("LocalMiuixVideoCardTransitionState provides providedCardTransitionState"))
+        assertTrue(source.contains("entryCardTransitionState.copy(progressProvider = { 1f })"))
         assertTrue(source.contains("ProvideMiuixNavViewModelApplicationExtras(application)"))
     }
 
