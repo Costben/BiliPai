@@ -33,16 +33,30 @@ class HomeCoverRequestPolicyTest {
     }
 
     @Test
-    fun `normal cover keeps sampling margin and selects nearest sufficient tier`() {
+    fun `normal cover selects the smallest tier that still covers the displayed width`() {
         val spec = resolveHomeCoverRequestSpec(
             cardWidthDp = 180f,
             density = 3f,
             useLowQualityCover = false,
         )
 
-        assertEquals(960, spec.widthPx)
-        assertEquals(600, spec.heightPx)
-        assertEquals("960x600", spec.cacheKeySuffix)
+        // 180dp × 3 = 540px，640 档已覆盖，不再按 1.25 倍超采样跳到 960。
+        assertEquals(640, spec.widthPx)
+        assertEquals(400, spec.heightPx)
+        assertEquals("640x400", spec.cacheKeySuffix)
+    }
+
+    @Test
+    fun `two column cover on a 620dpi phone does not oversample to the 960 tier`() {
+        val spec = resolveHomeCoverRequestSpec(
+            cardWidthDp = 148f,
+            density = 3.875f,
+            useLowQualityCover = false,
+        )
+
+        // 被测设备实测卡片显示宽约 573px，解码面积比 960 档少一半以上。
+        assertEquals(640, spec.widthPx)
+        assertTrue(spec.widthPx >= 148f * 3.875f)
     }
 
     @Test
