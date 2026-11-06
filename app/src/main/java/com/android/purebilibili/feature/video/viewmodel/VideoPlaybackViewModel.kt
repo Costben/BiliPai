@@ -25,6 +25,7 @@ import com.android.purebilibili.core.plugin.PluginManager
 import com.android.purebilibili.plugin.sdk.SkipAction
 import com.android.purebilibili.core.plugin.PlayerPluginSessionEntry
 import com.android.purebilibili.core.plugin.PlayerPluginSessionHost
+import com.android.purebilibili.core.coroutines.AppScope
 import com.android.purebilibili.core.plugin.PluginVideoKey
 import com.android.purebilibili.core.plugin.SponsorBlockSessionApi
 import com.android.purebilibili.core.store.TodayWatchFeedbackSnapshot
@@ -9955,12 +9956,19 @@ class VideoPlaybackViewModel(application: Application) : AndroidViewModel(applic
         lastCreatorSignalPositionSec = currentPositionSec
         if (safeDelta <= 0L) return
 
-        TodayWatchProfileStore.recordWatchProgress(
-            context = context,
-            mid = mid,
-            creatorName = current.info.owner.name,
-            deltaWatchSec = safeDelta
-        )
+        val creatorName = current.info.owner.name
+        // 这个函数除了每 30 秒的定时心跳，还会在 onCleared 里被调用一次——也就是
+        // 「退出播放页」那一帧。TodayWatchProfileStore 是同步的 SharedPreferences 读取
+        // + JSON 解析（首次访问要读整份 XML），放在主线程上直接吃掉退出动画的时间。
+        // 值已经在这里拍好快照，写盘交给应用级 IO 作用域，页面退出不再等它。
+        AppScope.ioScope.launch {
+            TodayWatchProfileStore.recordWatchProgress(
+                context = context,
+                mid = mid,
+                creatorName = creatorName,
+                deltaWatchSec = safeDelta,
+            )
+        }
     }
     
     fun toast(
