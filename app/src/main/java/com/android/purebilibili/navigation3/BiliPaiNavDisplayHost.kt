@@ -15,6 +15,7 @@ import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.setValue
@@ -80,6 +81,7 @@ import com.android.purebilibili.core.ui.transition.shouldUseHostOwnedVideoCardTr
 import com.android.purebilibili.core.ui.adaptive.MotionTier
 import com.android.purebilibili.core.util.CardPositionManager
 import com.android.purebilibili.navigation3.predictiveback.VideoCardBackCompletionPolicy
+import com.android.purebilibili.navigation3.predictiveback.VideoCardMorphDriver
 import com.android.purebilibili.navigation3.predictiveback.BiliPaiPredictiveBackAnimationStyle
 import com.android.purebilibili.navigation3.predictiveback.BiliPaiPredictiveBackExitDirection
 import com.android.purebilibili.navigation3.predictiveback.MIUIX_PREDICTIVE_BACK_DEFAULT_MAX_PROGRESS_PERCENT
@@ -95,6 +97,7 @@ import com.android.purebilibili.navigation3.predictiveback.resolveMiuixVideoCard
 import com.android.purebilibili.navigation3.predictiveback.shouldUseMiuixPredictiveBackProgress
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import top.yukonga.miuix.kmp.nav.core.NavBackStack
 import top.yukonga.miuix.kmp.nav.core.NavCornerClipMode
 import top.yukonga.miuix.kmp.nav.core.NavDisplay
@@ -285,16 +288,51 @@ internal fun BiliPaiNavDisplayHost(
         predictiveBackAnimationStyle
     }
     val videoReturnAnimated = cardMorphAvailable || style != BiliPaiPredictiveBackAnimationStyle.NONE
+    // 开合几何唯一的时钟。放在 performBack 之前：返回时要在**弹出同帧**起跑。
+    val videoCardMorph = remember { VideoCardMorphDriver() }
+    val hostCoroutineScope = rememberCoroutineScope()
     val performBack = remember(
         backStack,
         cardMorphAvailable,
         sourceMetadata.sourceRoute,
+        sourceMetadata.sourceChromeSnapshot,
+        videoCardMorph,
+        hostCoroutineScope,
     ) {
         {
             val leavingKey = backStack.lastOrNull()
             if (leavingKey is BiliPaiNavKey.VideoDetail) {
                 latestPrepareReturn()
                 if (cardMorphAvailable) {
+                    // 返回：播放页从整屏缩回那张卡，底下的列表卡原位透出来。
+                    // 开与合是同一条曲线的两个方向，返回就是展开的倒放。
+                    //
+                    // 收缩必须在**弹出这一帧**起跑。放到弹出之后（等宿主的 LaunchedEffect）
+                    // 会白丢一帧，而离场 entry 只活四百多毫秒。
+                    //
+                    // 只有在「返回到的是一张列表卡」时才由这一页自己收缩：如果底下是另一个
+                    // 视频详情（相关推荐连点），那一页自己就是飞行页，几何归它管。
+                    val returnsToCardSource = !isCardMorphDestinationNavKey(
+                        backStack.getOrNull(backStack.lastIndex - 1),
+                    )
+                    if (returnsToCardSource) {
+                        val epoch = videoCardMorph.beginReturn()
+                        val startMorph = videoCardMorph.value().coerceIn(0f, 1f)
+                        hostCoroutineScope.launch {
+                            runCardMorphRamp(
+                                durationMs = VIDEO_CARD_MORPH_OUT_MS,
+                                from = startMorph,
+                                to = 0f,
+                            ) { value ->
+                                videoCardMorph.writeReturn(epoch = epoch, value = value)
+                            }
+                            // 兜底：缩完了人还停在播放页，说明这次返回没被消费（被别处拦掉）。
+                            // 不恢复的话页面会一直停在卡片大小上。
+                            if (isCardMorphDestinationNavKey(backStack.lastOrNull())) {
+                                videoCardMorph.settle()
+                            }
+                        }
+                    }
                     videoCardClock.beginReturning(sourceMetadata.sourceRoute, videoCardClock.depthProgress())
                 }
             }
@@ -392,6 +430,20 @@ internal fun BiliPaiNavDisplayHost(
     val navCornerRadius = rememberDeviceCornerRadius(defaultRadius = 0.dp)
     val effectiveDeviceCornerDp = if (navCornerRadius > 0.dp) navCornerRadius else 32.dp
     val hostCoveredShapeCache = remember { MiuixVideoCardCoveredShapeCache() }
+    // 预测返回松手但没退出（又弹回详情页）：整页立刻恢复满不透明。
+    // 只在「刚从返回回来」时恢复，否则会把进场那段斜坡提前掐断。
+    LaunchedEffect(cardMorphAvailable, videoCardClock, videoCardMorph) {
+        if (!cardMorphAvailable) return@LaunchedEffect
+        var previous: VideoCardTransitionBackgroundPhase? = null
+        snapshotFlow { videoCardClock.phase }.collect { phase ->
+            if (phase == VideoCardTransitionBackgroundPhase.HELD &&
+                previous == VideoCardTransitionBackgroundPhase.RETURNING
+            ) {
+                videoCardMorph.settle()
+            }
+            previous = phase
+        }
+    }
     val videoCardTransition = remember(
         cardMorphAvailable,
         sourceMetadata.sourceBounds,
@@ -406,6 +458,7 @@ internal fun BiliPaiNavDisplayHost(
         videoSharedReturnGestureFollowEnabled,
         videoSharedReturnGestureTranslationEnabled,
         effectiveDeviceCornerDp,
+        sourceMetadata.sourceChromeSnapshot,
     ) {
         if (cardMorphAvailable) {
             miuixVideoCardNavTransition(
@@ -423,6 +476,8 @@ internal fun BiliPaiNavDisplayHost(
                 deviceCornerDp = effectiveDeviceCornerDp,
                 sourceLayout = sourceMetadata.sourceLayout,
                 sourceRoute = sourceMetadata.sourceRoute,
+                // 宿主自己的开合时钟：页面第一帧画出来之后从这里起跑。
+                morphProvider = { videoCardMorph.value() },
             )
         } else {
             observedVideoFallbackTransition
@@ -441,6 +496,7 @@ internal fun BiliPaiNavDisplayHost(
         videoSharedReturnGestureFollowEnabled,
         videoSharedReturnGestureTranslationEnabled,
         effectiveDeviceCornerDp,
+        sourceMetadata.sourceChromeSnapshot,
     ) {
         if (cardMorphAvailable) {
             miuixVideoCardNavTransition(
@@ -458,6 +514,7 @@ internal fun BiliPaiNavDisplayHost(
                 deviceCornerDp = effectiveDeviceCornerDp,
                 sourceLayout = sourceMetadata.sourceLayout,
                 sourceRoute = sourceMetadata.sourceRoute,
+                morphProvider = { videoCardMorph.value() },
             )
         } else {
             observedVideoFallbackTransition
@@ -498,7 +555,7 @@ internal fun BiliPaiNavDisplayHost(
         }
     }
     var previousStack by remember { mutableStateOf(stackSnapshot) }
-    LaunchedEffect(stackSnapshot, cardMorphAvailable) {
+    LaunchedEffect(stackSnapshot, cardMorphAvailable, videoCardMorph) {
         val previous = previousStack
         previousStack = stackSnapshot
         if (!cardMorphAvailable) {
@@ -520,6 +577,24 @@ internal fun BiliPaiNavDisplayHost(
             returnedFromCardDestination -> {
                 videoCardClock.beginReturning(sourceMetadata.sourceRoute,
                     startDepth = videoCardClock.depthProgress())
+                // 兜底。正常的按钮返回与手势提交已经在 performBack 里**弹出同帧**起跑了
+                // 收缩，这里只补那些绕过 performBack 的弹出。绝不重复开一段：两段循环
+                // 抢同一个 driver 会让进度被往回拉。
+                if (!isCardMorphDestinationNavKey(stackSnapshot.lastOrNull()) &&
+                    !videoCardMorph.isReturning()
+                ) {
+                    val epoch = videoCardMorph.beginReturn()
+                    val startMorph = videoCardMorph.value().coerceIn(0f, 1f)
+                    launch {
+                        runCardMorphRamp(
+                            durationMs = VIDEO_CARD_MORPH_OUT_MS,
+                            from = startMorph,
+                            to = 0f,
+                        ) { value ->
+                            videoCardMorph.writeReturn(epoch = epoch, value = value)
+                        }
+                    }
+                }
             }
         }
     }
@@ -950,6 +1025,17 @@ internal fun BiliPaiNavDisplayHost(
                 var retainedCardTransition by remember(key) {
                     mutableStateOf(MiuixVideoCardTransitionState())
                 }
+                // 开合几何由这一层统一给出，第一次参与合成时定性、之后冻结：
+                // 分支随重组来回切换会把 content 挪到另一个槽位，整页状态会被重建。
+                // 听视频横条同样走这条几何——它没有自己的第二套曲线。
+                val entryMorphEnabled = remember(key, cardMorphAvailable) {
+                    cardMorphAvailable &&
+                        cardTransitionEnabled &&
+                        isCardMorphDestinationNavKey(key)
+                }
+                // 这一层第一帧真正绘制出来的时刻。展开从「看见」开始计时，不从「开始组合」
+                // 开始——详情页首帧组合要一两百毫秒，那段时间按帧计时会被整段吞掉。
+                val entryFirstDrawAt = remember(key) { longArrayOf(0L) }
                 val entryCardTransitionState = resolveVideoCardEntryTransitionState(
                     key = key,
                     source = sourceMetadata,
@@ -957,6 +1043,17 @@ internal fun BiliPaiNavDisplayHost(
                     retained = retainedCardTransition,
                 )
                 SideEffect { retainedCardTransition = entryCardTransitionState }
+                // 开合期间的 entry 里，页面内部一律当作「已经全屏」：落地媒体、反算缩放、
+                // 来源卡 chrome 这些补偿全部拿到恒等输入。整页几何（缩放 / 位移 / 窗口）
+                // 全部由 entry 那一层 `graphicsLayer` 给出，页面自己只管画整屏。两套几何
+                // 同时改同一个封面，画面才会被压扁。
+                val providedCardTransitionState = if (entryMorphEnabled) {
+                    remember(entryCardTransitionState) {
+                        entryCardTransitionState.copy(progressProvider = { 1f })
+                    }
+                } else {
+                    entryCardTransitionState
+                }
                 // Freeze this per entry so popping the key cannot remove its backing during exit.
                 val opaqueVideoChild = remember(key) {
                     shouldUseOpaqueVideoChildBackground(key, stackSnapshot)
@@ -990,7 +1087,7 @@ internal fun BiliPaiNavDisplayHost(
                         LocalVideoCardSharedElementSourceRoute provides key.toLegacyRoute(),
                         LocalVideoCardTransitionClock provides videoCardClock,
                         LocalVideoCardTransitionBackgroundState provides transitionBackgroundState,
-                        LocalMiuixVideoCardTransitionState provides entryCardTransitionState,
+                        LocalMiuixVideoCardTransitionState provides providedCardTransitionState,
                         LocalPredictiveBackBackgroundState provides predictiveBackBackgroundState,
                         LocalClickToPlayEnabled provides clickToPlayEnabled,
                         LocalDynamicImagePreviewTextVisible provides dynamicImagePreviewTextVisible,
@@ -998,15 +1095,44 @@ internal fun BiliPaiNavDisplayHost(
                         LocalSharedTransitionEnabled provides cardTransitionEnabled,
                     ) {
                         ProvideMiuixNavViewModelApplicationExtras(application) {
+                            if (entryMorphEnabled) {
+                                VideoCardMorphClock(videoCardMorph, entryFirstDrawAt)
+                            }
                             Box(
-                                modifier = Modifier.fillMaxSize().then(
-                                    if (opaqueVideoChild) {
-                                        Modifier.background(AppSurfaceTokens.groupedListContainer().copy(alpha = 1f))
-                                    } else if (LocalGlobalWallpaperBackdropVisible.current) {
-                                        Modifier.globalWallpaperAwareBackground()
-                                    } else Modifier
-                                ),
-                            ) { content(key) }
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    // 只做一件事：给「第一帧真正画出来」打时间戳。
+                                    //
+                                    // 展开的计时起点是「看见」，不是「开始组合」——详情页
+                                    // 首帧组合要一两百毫秒，从组合开始计时的话，那段行程
+                                    // 会被整段吞掉，看起来就是硬切。
+                                    //
+                                    // 几何与不透明度都不在这里：它们由导航层的
+                                    // `transformEntry` 统一给出，页面从卡片矩形长到整屏。
+                                    // 只写普通数组，不订阅任何状态。
+                                    .then(
+                                        if (entryMorphEnabled) {
+                                            Modifier.graphicsLayer {
+                                                if (entryFirstDrawAt[0] == 0L) {
+                                                    entryFirstDrawAt[0] = System.nanoTime()
+                                                }
+                                            }
+                                        } else {
+                                            Modifier
+                                        }
+                                    )
+                                    .then(
+                                        if (opaqueVideoChild) {
+                                            Modifier.background(
+                                                AppSurfaceTokens.groupedListContainer().copy(alpha = 1f)
+                                            )
+                                        } else if (LocalGlobalWallpaperBackdropVisible.current) {
+                                            Modifier.globalWallpaperAwareBackground()
+                                        } else Modifier
+                                    ),
+                            ) {
+                                content(key)
+                            }
                         }
                     }
                 }
@@ -1014,6 +1140,109 @@ internal fun BiliPaiNavDisplayHost(
         }
     }
 }
+
+/**
+ * 播放页展开的时钟。
+ *
+ * 起点是这一层**第一帧真正绘制出来**的时刻（由 entry 的 `graphicsLayer` 打时间戳），
+ * 不是开始组合的时刻，也不是导航驱动开始走的时刻：
+ *
+ * 1. 不能只挂在导航驱动上——驱动的行程从压栈那一帧开始算，而详情页首帧要一两百毫秒才
+ *    画得出来。挂上去的话，页面第一次出现时行程已经走完，看到的就是硬切。
+ * 2. 也不能从组合开始按帧数——实测那第一帧组合占掉主线程一百多毫秒，期间帧回调照发
+ *    不误，整段行程被吞成一帧。录屏里看到的就是「一帧跳满」。
+ * 3. 所以等第一帧画出来才开始计墙钟，按 [VIDEO_CARD_MORPH_IN_MS] 从 0 推到 1。
+ *    第一帧进度已经是 0，所以展开一定从卡片大小开始。
+ *
+ * 这里只写 [VideoCardMorphDriver]，不自己画：几何与不透明度由导航层的 `transformEntry`
+ * 在绘制阶段读取（写状态只让那层重绘，不重组）。
+ */
+@Composable
+private fun VideoCardMorphClock(
+    driver: VideoCardMorphDriver,
+    firstDrawAt: LongArray,
+) {
+    // 每进一次导航栈换一个 token：同一张卡的重复重组不会把进度重新压回 0。
+    val armToken = remember { Any() }
+    // 只在这一层**第一次**组合时把进度压回 0。
+    //
+    // 不能每次重组都压：详情页可以从详情页里再点开（相关推荐），两个 entry 都挂着
+    // 同一块时钟，被压在下面那个每次重组都会抢着 arm，把刚点开的那页按回卡片大小。
+    // 新 entry 永远是压栈进来的，所以「第一次组合」等价于「它就是这次进场的那一页」。
+    val armed = remember { booleanArrayOf(false) }
+    // 组合落地即压回 0——必须早于本帧绘制，否则第一帧会整页闪一下。
+    SideEffect {
+        if (!armed[0]) {
+            armed[0] = true
+            driver.arm(armToken)
+        }
+    }
+    LaunchedEffect(driver, armToken) {
+        // 等这一层真的画出来。组合/测量/首次布局都不算。
+        while (firstDrawAt[0] == 0L) withFrameNanos { }
+        runCardMorphRamp(
+            durationMs = VIDEO_CARD_MORPH_IN_MS,
+            from = 0f,
+            to = 1f,
+        ) { value ->
+            driver.writeEntry(armToken, value)
+        }
+    }
+}
+
+/**
+ * 按帧推进一段开合，[write] 每帧收到一个 0..1 之间的进度值。
+ *
+ * 用**帧间隔累加**而不是「现在 − 起点」，并且给单帧间隔设上限
+ * （[VIDEO_CARD_MORPH_MAX_STEP_MS]）。原因只有一个：播放页弹出/落位的那一下，
+ * 主线程要释放播放器、重建被覆盖的页面，实测会停两百多毫秒没有任何一帧上屏。
+ * 按墙钟算的话，那一停就把整段行程一次吃掉——录屏里看到的正是「停一下，然后直接
+ * 换脸」。按帧累加 + 限幅之后，那段停顿只算一帧，展开仍然老老实实走满。
+ */
+private suspend fun runCardMorphRamp(
+    durationMs: Float,
+    from: Float,
+    to: Float,
+    write: (Float) -> Unit,
+) {
+    val duration = durationMs.coerceAtLeast(1f)
+    var elapsedMs = 0f
+    var previousFrameNanos = 0L
+    while (true) {
+        val frameNanos = withFrameNanos { it }
+        if (previousFrameNanos != 0L) {
+            val deltaMs = (frameNanos - previousFrameNanos) / 1_000_000f
+            elapsedMs += deltaMs.coerceIn(0f, VIDEO_CARD_MORPH_MAX_STEP_MS)
+        }
+        previousFrameNanos = frameNanos
+        val progress = (elapsedMs / duration).coerceIn(0f, 1f)
+        write(from + (to - from) * progress)
+        if (progress >= 1f) return
+    }
+}
+
+/**
+ * 展开时长。与 Cobo / c001apk 的卡片展开同一个量级（420ms）。
+ *
+ * 再短一点（240ms）在 120Hz 上只有十几个可见帧，配合「首帧组合吃掉一百多毫秒」的
+ * 现实，看起来仍然像一次跳变；420ms 才够把「从卡片长到整屏」这件事读出来。
+ */
+internal const val VIDEO_CARD_MORPH_IN_MS = 420f
+
+/** 返回收缩时长。比展开短：返回是回到用户已经熟悉的位置，快一点更跟手。 */
+internal const val VIDEO_CARD_MORPH_OUT_MS = 240f
+
+/**
+ * 单帧最多推进多少毫秒。
+ *
+ * 一帧 16.7ms（60Hz）/ 8.3ms（120Hz）正常走完；超过这个量的一帧只按一帧算，
+ * 用来吸收「主线程被卡住几百毫秒、下一帧时间戳一下子跳很远」的那种停顿。
+ *
+ * 返回方向尤其需要它：弹出那一帧实测要 40–90ms，按墙钟推的话两三帧就把 240ms 的
+ * 收缩走完，观感还是硬切；按帧封顶之后，弹出瞬间那几帧慢，收缩就老老实实多走几帧，
+ * 但绝不超时——离场 entry 只活四百多毫秒，超了就看不见缩回去了。
+ */
+internal const val VIDEO_CARD_MORPH_MAX_STEP_MS = 26f
 
 @Composable
 private fun BiliPaiMiuixNavEntry(

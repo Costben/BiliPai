@@ -15,6 +15,7 @@ import java.io.File
 import kotlin.math.abs
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import com.android.purebilibili.core.ui.transition.resolveVideoHeroMotionSpec
 import com.android.purebilibili.core.ui.transition.resolveVideoHeroLandingScale
@@ -486,120 +487,195 @@ class MiuixVideoCardNavTransitionTest {
         assertEquals(.8f, progress.depthOrNull())
     }
     @Test
-    fun transitionKeepsOneOpaqueFlyingCardWithoutStationaryRevealMask() {
+    fun thePageGrowsOutOfTheSourceCardWithOneUniformScale() {
         val source = File(
             "src/main/java/com/android/purebilibili/navigation3/predictiveback/MiuixVideoCardNavTransition.kt"
         ).readText()
         val transform = source.substringAfter("override fun Modifier.transformEntry")
 
-        assertEquals(true, transform.contains("alpha = 1f"))
-        assertEquals(false, transform.contains("visibleHeightFraction"))
-        assertEquals(false, transform.contains("outgoingClipFraction"))
-        assertEquals(false, transform.contains("resolveMiuixVideoCardClickTransform("))
+        // 几何只有一条：整页从卡片矩形长到整屏，等比缩放 + 位移 + 可见窗口。
+        assertTrue(transform.contains("resolveMiuixVideoCardMorphFrame("))
+        assertTrue(transform.contains("scaleX = frame.scale"))
+        assertTrue(transform.contains("scaleY = frame.scale"))
+        assertTrue(transform.contains("translationX = frame.translationX"))
+        assertTrue(transform.contains("translationY = frame.translationY"))
+        assertTrue(transform.contains("MiuixVideoCardMorphShape("))
+        assertTrue(transform.contains("transformOrigin = TransformOrigin(0f, 0f)"))
+
+        // 两轴必须同一个比例。任何一处单独按 X / Y 缩放，画面都会被压扁或拉长。
+        assertFalse(transform.contains("outerScaleX"))
+        assertFalse(transform.contains("outerScaleY"))
+        assertFalse(transform.contains("uniformScale / outerScaleX"))
+        assertFalse(transform.contains("uniformScale / outerScaleY"))
+        assertFalse(transform.contains("visibleHeightFraction"))
+        assertFalse(transform.contains("resolveMiuixVideoCardCoveredScale("))
+        assertFalse(transform.contains("coveredShapeCache"))
+
+        // 被覆盖的首页/列表完全不动：不缩放、不建层、不改不透明度。
+        assertTrue(transform.contains("if (scope.relativeDepth > 0f) return@graphicsLayer"))
+        // 整条 modifier 链上只剩一层 graphicsLayer。
+        val chain = transform.substringAfter("return gestureModifier")
+        assertEquals(1, chain.split(".graphicsLayer {").size - 1)
         assertEquals(true, transform.contains("shadowElevation = 0f"))
-        assertEquals(true, transform.contains("floatingCornerPx = if (devicePx > 0f) devicePx"))
-        assertEquals(true, transform.contains("resolveMiuixVideoCardLinearCornerPx("))
-        assertEquals(true, transform.contains("resolveMiuixVideoCardTopInsetCompensationTranslationY("))
-        assertEquals(true, transform.contains("progress.followPose("))
+
+        // 导航驱动不是唯一时钟：页面首帧还没画出来时，行程停在卡片上。
+        assertTrue(transform.contains("minOf(navDepth, morphProvider())"))
+        // 手指就是时钟：手势跟手时以导航深度为准。
+        assertTrue(transform.contains("if (scope.gesture != null) navDepth else"))
+        // 缓动装配在宿主那份线性时钟上。
+        assertTrue(source.contains("MIUIX_VIDEO_CARD_MORPH_EASING = CubicBezierEasing("))
+
+        // 页面不是「淡出来的」：可见度是这条行程的一部分。
+        assertTrue(transform.contains("alpha = resolveMiuixVideoCardMorphAlpha(morph)"))
     }
 
     @Test
-    fun topInsetCompensationKeepsVideoTopOnExactStraightLineAtEveryDepth() {
-        val width = 1080f
-        val height = 2400f
-        val topInset = 140f
-        for (cardTop in listOf(0f, 80f, 140f, 400f, 1500f)) {
-            val bounds = androidx.compose.ui.geometry.Rect(24f, cardTop, 534f, cardTop + 680f)
-            val sourceScaleX = bounds.width / width
-            val sourceScaleY = bounds.height / height
-            for (step in 0..100) {
-                val morph = step / 100f
-                val outerX = resolveMiuixVideoCardOuterScale(sourceScaleX, morph, 1f)
-                val outerY = resolveMiuixVideoCardOuterScale(sourceScaleY, morph, 1f)
-                val uniform = maxOf(outerX, outerY)
-                val innerTransY = resolveMiuixVideoCardTopInsetCompensationTranslationY(
-                    topInsetPx = topInset,
-                    morph = morph,
-                    uniformScale = uniform,
-                    outerScaleY = outerY,
-                    layoutHeightPx = height,
-                )
-                val outerTransY = bounds.top * (1f - morph)
-                val videoTopOnScreen = outerTransY + (topInset * (uniform / outerY) + innerTransY) * outerY
-                val expectedStraightLineTop = bounds.top * (1f - morph) + topInset * morph
-                assertEquals(expectedStraightLineTop, videoTopOnScreen, 0.05f)
-            }
-        }
+    fun theMorphRunsOnItsOwnFrameClockInBothDirections() {
+        val host = File(
+            "src/main/java/com/android/purebilibili/navigation3/BiliPaiNavDisplayHost.kt"
+        ).readText()
+
+        // 展开：从这一层**第一帧真正画出来**开始计墙钟。
+        //
+        // 实测按帧数走会被首帧组合整段吞掉（主线程卡一百多毫秒，帧回调照发不误，
+        // 整段行程压成一帧），所以起点必须是「看见」，不是「开始组合」。
+        val clock = host.substringAfter("private fun VideoCardMorphClock(")
+            .substringBefore("internal const val VIDEO_CARD_MORPH_IN_MS")
+        assertTrue(clock.contains("driver.arm(armToken)"))
+        // 只在第一次组合时压回 0：两个详情 entry 共用一块时钟，重复 arm 会把新页压小。
+        assertTrue(clock.contains("if (!armed[0])"))
+        assertTrue(clock.contains("while (firstDrawAt[0] == 0L) withFrameNanos { }"))
+        assertTrue(clock.contains("VIDEO_CARD_MORPH_IN_MS"))
+        // 逐帧累加 + 单帧限幅：主线程停两百多毫秒时，那一停只能算一帧，
+        // 不能把整段行程一次吃掉（否则观感就是「停一下，然后直接换脸」）。
+        assertTrue(clock.contains("elapsedMs += deltaMs.coerceIn(0f, VIDEO_CARD_MORPH_MAX_STEP_MS)"))
+        assertFalse(clock.contains("System.nanoTime() - startNanos"))
+        assertFalse(clock.contains("animateTo("))
+        assertFalse(clock.contains("tween("))
+
+        // 时间戳由 entry 的 graphicsLayer 在绘制阶段打，早于本帧内容绘制。
+        assertTrue(host.contains("if (entryFirstDrawAt[0] == 0L) {"))
+        assertTrue(host.contains("entryFirstDrawAt[0] = System.nanoTime()"))
+        assertFalse(host.contains("fadeOutDrawAtNanos"))
+        assertFalse(host.contains("VIDEO_CARD_FADE_DRAW_TIMEOUT_MS"))
+
+        // 返回：同一层、同一个世代号，按帧累计推进。
+        assertTrue(host.contains("VIDEO_CARD_MORPH_OUT_MS"))
+        val performBack = host.substringAfter("val performBack = remember(")
+            .substringBefore("DisposableEffect(programmaticBackDispatcher")
+        assertTrue(performBack.contains("videoCardMorph.beginReturn()"))
+        // 弹出同一帧就起跑：放到弹出之后会白丢一帧，而离场 entry 只活四百多毫秒。
+        assertTrue(performBack.indexOf("beginReturn()") < performBack.indexOf("latestOnBack()"))
+        assertTrue(performBack.contains("runCardMorphRamp("))
+        // 退到另一个详情页时这一页不收缩：那一页自己就是飞行页，几何归它管。
+        assertTrue(performBack.contains("val returnsToCardSource = !isCardMorphDestinationNavKey("))
+
+        // 几何在导航层，entry 自己不再整页调 alpha——两处同时改可见度会互相打架。
+        val entryBox = host.substringAfter("ProvideMiuixNavViewModelApplicationExtras(application) {")
+            .substringBefore("content(key)")
+        assertFalse(entryBox.contains("alpha = videoCardMorph.value()"))
+
+        // 飞行页内部一律当作已经全屏：页面自己的缩放、反算、来源卡重建全部歇着。
+        assertTrue(host.contains("entryCardTransitionState.copy(progressProvider = { 1f })"))
+        assertTrue(host.contains("morphProvider = { videoCardMorph.value() }"))
     }
 
     @Test
-    fun wholePageMorphsAsOneRigidBodyWithoutReversingAnyEdge() {
+    fun morphFrameLandsExactlyOnTheCardAndOnTheScreen() {
         val width = 1080f
         val height = 2400f
-        val topInset = 140f
-        val steps = 200
+        val bounds = androidx.compose.ui.geometry.Rect(24f, 120f, 534f, 800f)
+
+        // 0：屏幕上正好是那张卡——左上角对齐、宽度铺满卡片、可见高度等于卡片高度。
+        val start = resolveMiuixVideoCardMorphFrame(bounds, width, height, 0f)
+        assertEquals(bounds.left, start.translationX, 0.01f)
+        assertEquals(bounds.top, start.translationY, 0.01f)
+        assertEquals(bounds.width / width, start.scale, 0.0001f)
+        assertEquals(bounds.height, start.visibleHeightPx * start.scale, 0.01f)
+        assertEquals(0f, start.visibleTopPx, 0.01f)
+
+        // 1：原样的整屏。
+        val end = resolveMiuixVideoCardMorphFrame(bounds, width, height, 1f)
+        assertEquals(0f, end.translationX, 0.01f)
+        assertEquals(0f, end.translationY, 0.01f)
+        assertEquals(1f, end.scale, 0.0001f)
+        assertEquals(height, end.visibleHeightPx * end.scale, 0.01f)
+        assertEquals(0f, end.visibleTopPx, 0.01f)
+    }
+
+    @Test
+    fun theStatusBarBandIsSqueezedOutWhenThePageSitsOnTheCard() {
+        val width = 1080f
+        val height = 2400f
+        val inset = 90f
+        val bounds = androidx.compose.ui.geometry.Rect(24f, 120f, 534f, 800f)
+
+        // 缩到卡片大小时，播放器顶边（页面 y = inset）必须正好落在卡片顶边。
+        val start = resolveMiuixVideoCardMorphFrame(bounds, width, height, 0f, inset)
+        assertEquals(bounds.top, start.translationY + start.visibleTopPx * start.scale, 0.01f)
+        // 露出来的正是播放器：从状态栏那一截的下沿开始，高度还是卡片高度。
+        assertEquals(inset, start.visibleTopPx, 0.01f)
+        assertEquals(bounds.height, start.visibleHeightPx * start.scale, 0.01f)
+
+        // 整屏时这一截必须归零，否则页面会整体上移一条状态栏。
+        val end = resolveMiuixVideoCardMorphFrame(bounds, width, height, 1f, inset)
+        assertEquals(0f, end.translationY, 0.01f)
+        assertEquals(0f, end.visibleTopPx, 0.01f)
+    }
+
+    @Test
+    fun morphStaysUniformAndNeverReversesAnEdge() {
+        val width = 1240f
+        val height = 2772f
         listOf(
-            androidx.compose.ui.geometry.Rect(24f, 120f, 534f, 800f),
-            androidx.compose.ui.geometry.Rect(24f, 800f, 534f, 1480f),
-            androidx.compose.ui.geometry.Rect(24f, 1900f, 1056f, 2180f),
+            androidx.compose.ui.geometry.Rect(62f, 640f, 569f, 1560f),
+            androidx.compose.ui.geometry.Rect(670f, 640f, 1177f, 1560f),
+            androidx.compose.ui.geometry.Rect(24f, 1900f, 1216f, 2250f),
         ).forEach { bounds ->
             var previousLeft = Float.POSITIVE_INFINITY
             var previousTop = Float.POSITIVE_INFINITY
             var previousRight = Float.NEGATIVE_INFINITY
             var previousBottom = Float.NEGATIVE_INFINITY
-            var previousContentWidth = Float.NEGATIVE_INFINITY
-            for (step in 0..steps) {
-                val morph = step / steps.toFloat()
-                val outerX = resolveMiuixVideoCardOuterScale(bounds.width / width, morph, 1f)
-                val outerY = resolveMiuixVideoCardOuterScale(bounds.height / height, morph, 1f)
-                val uniformScale = maxOf(outerX, outerY)
-                val path = resolveVideoCardPathOffset(bounds, width, height, morph, 0f)
+            for (step in 0..200) {
+                val morph = step / 200f
+                val frame = resolveMiuixVideoCardMorphFrame(bounds, width, height, morph)
+                val left = frame.translationX
+                val top = frame.translationY + frame.visibleTopPx * frame.scale
+                val right = left + frame.scale * width
+                val bottom = top + frame.visibleHeightPx * frame.scale
 
-                // 内容层用 max(outerX, outerY) 反向补偿：两层相乘后两轴净缩放恒等，
-                // 整页作为刚体等比缩放，不会出现「外壳先缩、内容后缩」的两套时间轴。
-                val contentScaleX = outerX * (uniformScale / outerX)
-                val contentScaleY = outerY * (uniformScale / outerY)
-                assertEquals(uniformScale, contentScaleX, 0.001f)
-                assertEquals(uniformScale, contentScaleY, 0.001f)
-
-                val left = path.x
-                val top = path.y
-                val right = left + width * outerX
-                val bottom = top + height * outerY
-                val contentWidth = width * contentScaleX
-
-                // 开合全程每个边只朝一个方向走，不允许中途回折（原先「先冲上顶再掉下来」）。
+                // 四条边各自单调外扩，中途不回抽。
                 assertTrue(left <= previousLeft + 0.01f, "left reversed at morph=$morph")
                 assertTrue(top <= previousTop + 0.01f, "top reversed at morph=$morph")
                 assertTrue(right >= previousRight - 0.01f, "right reversed at morph=$morph")
                 assertTrue(bottom >= previousBottom - 0.01f, "bottom reversed at morph=$morph")
-                assertTrue(
-                    contentWidth >= previousContentWidth - 0.01f,
-                    "content width reversed at morph=$morph",
-                )
                 previousLeft = left
                 previousTop = top
                 previousRight = right
                 previousBottom = bottom
-                previousContentWidth = contentWidth
 
-                // 画面顶端全程落在 card top → status-bar inset 的直线上，没有 overshoot。
-                val innerTransY = resolveMiuixVideoCardTopInsetCompensationTranslationY(
-                    topInsetPx = topInset,
-                    morph = morph,
-                    uniformScale = uniformScale,
-                    outerScaleY = outerY,
-                    layoutHeightPx = height,
-                )
-                val videoTop = top + (topInset * (uniformScale / outerY) + innerTransY) * outerY
-                assertEquals(bounds.top * (1f - morph) + topInset * morph, videoTop, 0.05f)
+                // 一个比例两轴共用：画面永远等比，不会被压扁或拉长。
+                assertTrue(frame.scale in 0.02f..1.0001f, "scale out of range at morph=$morph")
+                // 窗口永远被画面铺满：上下不出界，也不留空。
+                assertTrue(bottom <= height + 0.05f, "window taller than page at morph=$morph")
             }
+        }
+    }
 
-            // 首末帧分别精确落在卡片矩形与全屏矩形上。
-            assertEquals(bounds.left, resolveVideoCardPathOffset(bounds, width, height, 0f, 0f).x, 0.01f)
-            assertEquals(bounds.top, resolveVideoCardPathOffset(bounds, width, height, 0f, 0f).y, 0.01f)
-            assertEquals(0f, resolveVideoCardPathOffset(bounds, width, height, 1f, 0f).x, 0.01f)
-            assertEquals(0f, resolveVideoCardPathOffset(bounds, width, height, 1f, 0f).y, 0.01f)
+    @Test
+    fun thePageAppearsOutOfTheCardInsteadOfCuttingIn() {
+        // 起点完全透明：那一帧屏幕上只有底下那张真卡。
+        assertEquals(0f, resolveMiuixVideoCardMorphAlpha(0f), 0.0001f)
+        // 到铺满那一点之前都是半透明，卡片因此是被「长出来的页面」逐渐盖住的。
+        assertTrue(resolveMiuixVideoCardMorphAlpha(0.1f) in 0.2f..0.35f)
+        assertEquals(1f, resolveMiuixVideoCardMorphAlpha(MIUIX_VIDEO_CARD_MORPH_SOLID_AT), 0.0001f)
+        assertEquals(1f, resolveMiuixVideoCardMorphAlpha(1f), 0.0001f)
+        var previous = -1f
+        for (step in 0..100) {
+            val alpha = resolveMiuixVideoCardMorphAlpha(step / 100f)
+            assertTrue(alpha in 0f..1f, "out of range at $step")
+            assertTrue(alpha >= previous - 0.0001f, "not monotonic at $step")
+            previous = alpha
         }
     }
 

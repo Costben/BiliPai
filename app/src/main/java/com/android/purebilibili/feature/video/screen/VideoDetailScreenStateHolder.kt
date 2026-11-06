@@ -2375,59 +2375,13 @@ internal fun VideoDetailScreenStateHolder(
             isCommittedCardReturn = isCommittedCardReturn,
         )
     val videoCardTransitionDensity = LocalDensity.current
-    val videoCardDetailChromeAlphaProvider = remember(
-        videoCardDepthBackgroundState,
-        entryOwnsMiuixCardTransition,
-        isCommittedCardReturn,
-        scopedHeroDriver.sourceLayout,
-        scopedHeroDriver.sourceChromeSnapshot?.isNowPlayingBar,
-    ) {
-        {
-            if (!entryOwnsMiuixCardTransition) {
-                1f
-            } else {
-                resolveVideoCardDetailChromeAlpha(
-                    morphDepthProgress = videoCardDepthBackgroundState.progressProvider(),
-                    phase = videoCardDepthBackgroundState.phaseProvider(),
-                    isReturnGestureInProgress =
-                        videoCardDepthBackgroundState.isReturnGestureInProgressProvider() ||
-                            videoCardDepthBackgroundState.isGestureRestoreInProgressProvider(),
-                    isCommittedCardReturn = isCommittedCardReturn,
-                    sourceLayout = scopedHeroDriver.sourceLayout.takeUnless {
-                        scopedHeroDriver.sourceChromeSnapshot?.isNowPlayingBar == true
-                    },
-                )
-            }
-        }
-    }
-    // 详情正文（标题/简介/评论）与列表卡简略信息（标题/UP/时间）的交叉淡入淡出。
-    //
-    // `1` = 完整详情页，`0` = 列表卡。手势跟手与自动开合共用同一条曲线，返回因此是打开的
-    // 严格逆放。IDLE 必须单独判：静止在详情页时 morph 进度为 0，直接套曲线会把整页变透明。
-    val videoCardDetailContentAlphaProvider = remember(
-        videoCardDepthBackgroundState,
-        entryOwnsMiuixCardTransition,
-        isCommittedCardReturn,
-        scopedHeroDriver.sourceChromeSnapshot?.isNowPlayingBar,
-    ) {
-        {
-            if (!entryOwnsMiuixCardTransition ||
-                scopedHeroDriver.sourceChromeSnapshot?.isNowPlayingBar == true
-            ) {
-                1f
-            } else if (videoCardDepthBackgroundState.phaseProvider() ==
-                VideoCardTransitionBackgroundPhase.IDLE
-            ) {
-                // 返回已提交：entry 正在卸载，正文保持让位；否则说明是静止的详情页，必须满格。
-                if (isCommittedCardReturn) 0f else 1f
-            } else {
-                com.android.purebilibili.core.ui.transition.resolveVideoCardDetailContentAlpha(
-                    videoCardDepthBackgroundState.progressProvider(),
-                )
-            }
-        }
-    }
-    // Budget follows coarse return/restore flags, never frame-rate morph progress.    // Ownership is the resolved strategy, even when a resident return has a decoded video frame.
+    // 开合转场把整页当作**一块表面**：不透明度、位移、缩放全部由飞行 entry 自己的
+    // graphicsLayer 统一给出（见 miuixVideoCardNavTransition）。页面内部不再按时段分区
+    // 淡化——播放器区与它下面的信息区共用同一个可见度，所以这里恒为 1。
+    val videoCardDetailChromeAlphaProvider: () -> Float = { 1f }
+    val videoCardDetailContentAlphaProvider: () -> Float = { 1f }
+    // Budget follows coarse return/restore flags, never frame-rate morph progress.
+    // Ownership is the resolved strategy, even when a resident return has a decoded video frame.
     val returnSessionPhase = resolveVideoDetailReturnSessionPhase(
         isCommittedCardReturn = isCommittedCardReturn,
         isExitTransitionInProgress = isCardReturnExitInProgress,
@@ -5975,9 +5929,8 @@ internal fun VideoDetailScreenStateHolder(
             if (!rootCardTransition.enabled) {
                 1f
             } else if (rootCardTransition.sourceChromeSnapshot?.isNowPlayingBar != true) {
-                // 卡片开合：页面底板与正文共用同一条交叉淡入淡出曲线，缩到卡片尺寸时
-                // 下方真实卡片已经完整透出，不再出现「底板挡住卡片、entry 卸载时整块弹出」。
-                videoCardDetailContentAlphaProvider()
+                // 卡片开合：底板与正文同为整页表面，可见度统一由飞行 entry 给出。
+                1f
             } else if (isCommittedCardReturn &&
                 videoCardDepthBackgroundState.phaseProvider() == VideoCardTransitionBackgroundPhase.IDLE
             ) {

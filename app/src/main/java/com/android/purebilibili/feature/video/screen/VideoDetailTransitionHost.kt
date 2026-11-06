@@ -153,11 +153,14 @@ internal fun rememberVideoDetailTransitionState(
         remember { mutableFloatStateOf(1f) }
     }
     val detailChildTransitionEnabled = transitionEnabled && !detailShellSharedBoundsEnabled
-    val coverSharedBoundsActive = shouldEnableVideoCoverSharedTransition(
-        transitionEnabled = detailChildTransitionEnabled,
-        hasSharedTransitionScope = sharedTransitionScope != null,
-        hasAnimatedVisibilityScope = animatedVisibilityScope != null,
-    ) && !sourceRoute.isNullOrBlank()
+    // 卡片开合由飞行 entry 独家负责（整页淡入淡出 / 听视频横条窗口几何），页面内部
+    // 不许再叠共享元素或 sheet 自身的缩放——两套几何同时改同一个封面，画面会被压扁。
+    val coverSharedBoundsActive = !miuixCardTransition.enabled &&
+        shouldEnableVideoCoverSharedTransition(
+            transitionEnabled = detailChildTransitionEnabled,
+            hasSharedTransitionScope = sharedTransitionScope != null,
+            hasAnimatedVisibilityScope = animatedVisibilityScope != null,
+        ) && !sourceRoute.isNullOrBlank()
     val sharedBoundsActive = detailShellSharedBoundsEnabled || coverSharedBoundsActive
     // 单时钟回灌：与 sharedBounds 共用 AVS Transition 的 progress。
     // progress.value 每帧变化，必须圈在独立重组作用域内读取：本函数带返回值、
@@ -173,6 +176,9 @@ internal fun rememberVideoDetailTransitionState(
         motion = routeSheetMotion,
         isExitTransitionInProgress = isExitTransitionInProgress,
         sharedBoundsActive = sharedBoundsActive,
+        // 卡片开合开启时，进场/返回的几何全部归飞行 entry；sheet 自己的缩放、上移、
+        // 圆角、压暗一律停摆，否则「整页淡入淡出」会变成「先缩一下再淡」。
+        suppressOwnMotion = miuixCardTransition.enabled,
     )
     return VideoDetailTransitionState(
         animatedVisibilityScope = animatedVisibilityScope,
@@ -228,11 +234,16 @@ private fun ReportVideoDetailMorphProgressToClock(
 internal fun rememberVideoDetailRouteSheetFrameProvider(
     motion: VideoDetailRouteSheetMotion,
     isExitTransitionInProgress: Boolean,
-    sharedBoundsActive: Boolean = false
+    sharedBoundsActive: Boolean = false,
+    suppressOwnMotion: Boolean = false,
 ): () -> VideoDetailRouteSheetFrame {
     // shell sharedBounds 接管整张详情壳的 morph 时，sheet 自身的 scale/translation/corner/scrim
     // 必须全部停摆——否则会与共享元素同时形变导致撕裂。等价于 motion.enabled = false。
-    val effectiveMotion = if (sharedBoundsActive) motion.copy(enabled = false) else motion
+    val effectiveMotion = if (sharedBoundsActive || suppressOwnMotion) {
+        motion.copy(enabled = false)
+    } else {
+        motion
+    }
     val routeSheetProgress = remember(effectiveMotion.enabled) {
         Animatable(if (effectiveMotion.enabled) 0f else 1f)
     }

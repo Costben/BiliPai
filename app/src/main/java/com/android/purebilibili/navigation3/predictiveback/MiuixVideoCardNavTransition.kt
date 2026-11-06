@@ -1,5 +1,6 @@
 package com.android.purebilibili.navigation3.predictiveback
 
+import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Rect
@@ -204,21 +205,12 @@ internal fun resolveMiuixVideoCardLinearCornerPx(
     return radius.coerceAtMost(currentShortSidePx.coerceAtLeast(0f) / 2f)
 }
 
-internal fun resolveMiuixVideoCardTopInsetCompensationTranslationY(
-    topInsetPx: Float,
-    morph: Float,
-    uniformScale: Float,
-    outerScaleY: Float,
-    layoutHeightPx: Float,
-): Float {
-    val inset = topInsetPx.coerceAtLeast(0f)
-    if (inset <= 0f) return 0f
-    val m = morph.coerceIn(0f, 1f)
-    val safeOuterY = outerScaleY.coerceAtLeast(0.01f)
-    val maxSafeShiftScreenPx = (layoutHeightPx * (uniformScale - safeOuterY)).coerceAtLeast(0f)
-    val shiftScreenPx = (inset * (uniformScale - m)).coerceIn(0f, maxSafeShiftScreenPx)
-    return -shiftScreenPx / safeOuterY
-}
+/**
+ * 开合的缓动：起步快、收得软，和系统卡片展开一致（Cobo / c001apk 用的是同一条）。
+ *
+ * 装配在宿主那份帧时钟上（它在时间上是线性的），所以整段展开不会挤在头一百毫秒里。
+ */
+internal val MIUIX_VIDEO_CARD_MORPH_EASING = CubicBezierEasing(0.3f, 0f, 0.1f, 1f)
 
 internal fun resolveMiuixVideoCardGestureCornerPx(
     sourceCornerPx: Float,
@@ -413,6 +405,78 @@ internal fun resolveMiuixVideoCardClipRadii(
     )
 }
 
+/**
+ * 开合几何：整页按**宽度**等比缩放，再叠一个从来源卡片矩形长到整屏的可见窗口。
+ *
+ * 与 Cobo / c001apk 的卡片展开同一套做法：
+ * - 两轴共用同一个比例（`frameWidth / layoutWidth`），所以画面不会被压扁；
+ * - 图层原点在左上角，屏幕坐标 = 页面坐标 × scale + 位移，位移从卡片左上角逐帧走到 (0, 0)；
+ * - 可见高度也逐帧从卡片高度走到整屏高度，超出窗口的部分由圆角矩形裁掉。
+ *
+ * 进度 0 时屏幕上正好是「卡片大小、卡片圆角、页面的顶部那一块」——也就是那张卡；
+ * 进度 1 时是原样的整屏。返回就是这条曲线的倒放。
+ */
+internal data class MiuixVideoCardMorphFrame(
+    val scale: Float,
+    val translationX: Float,
+    val translationY: Float,
+    /** 图层坐标系里的可见窗口上边。 */
+    val visibleTopPx: Float,
+    /** 图层坐标系里的可见高度（屏幕可见高度 / scale）。 */
+    val visibleHeightPx: Float,
+)
+
+internal fun resolveMiuixVideoCardMorphFrame(
+    bounds: Rect,
+    layoutWidth: Float,
+    layoutHeight: Float,
+    morphProgress: Float,
+    /**
+     * 页面内容相对整屏的顶边内缩（状态栏那一截）。
+     *
+     * 整屏时视频就贴在屏幕顶边；缩到卡片大小时要把这一截空带挤掉，否则卡片里会多出
+     * 一条底色横杠——视频是从卡片的第二条边才开始画的。Cobo / c001apk 的展开同样有
+     * 这一步（`translationY = -statusBarTop * (1 - p)`）。
+     */
+    contentTopInsetPx: Float = 0f,
+): MiuixVideoCardMorphFrame {
+    val width = layoutWidth.coerceAtLeast(1f)
+    val height = layoutHeight.coerceAtLeast(1f)
+    val morph = morphProgress.coerceIn(0f, 1f)
+    val frameWidth = bounds.width + (width - bounds.width) * morph
+    val frameHeight = bounds.height + (height - bounds.height) * morph
+    val scale = (frameWidth / width).coerceIn(0.02f, 1f)
+    val screenTop = bounds.top * (1f - morph)
+    // 顶边对齐：缩到卡片大小时内容先上移 statusBar 那一截，露出来的正是播放器。
+    val inset = contentTopInsetPx.coerceAtLeast(0f)
+    val shiftPx = inset * (1f - morph)
+    return MiuixVideoCardMorphFrame(
+        scale = scale,
+        translationX = bounds.left * (1f - morph),
+        translationY = screenTop - shiftPx * scale,
+        visibleTopPx = shiftPx,
+        visibleHeightPx = frameHeight / scale,
+    )
+}
+
+/**
+ * 到这一段行程时页面已经铺满，之前它是一点点从卡片上「长」出来的。
+ *
+ * 页面窗口和真卡在这段时间里重叠：卡片原位照常画着，页面从它上面盖过去。
+ * 曲线是线性的——缓动已经加在进度上了，这里再弯一次会让开头顿住。
+ */
+internal const val MIUIX_VIDEO_CARD_MORPH_SOLID_AT = 0.36f
+
+/** 页面可见度：0 = 只剩底下那张真卡，1 = 页面实心。 */
+internal fun resolveMiuixVideoCardMorphAlpha(morphProgress: Float): Float =
+    (morphProgress.coerceIn(0f, 1f) / MIUIX_VIDEO_CARD_MORPH_SOLID_AT).coerceIn(0f, 1f)
+
+/**
+ * 覆盖页（首页 / 列表）后退时的圆角轮廓：整块图层矩形，按屏幕半径倒推。
+ *
+ * 与 [MiuixVideoCardMorphShape] 分开：那个是飞行页的可见窗口，这个是垫在
+ * 详情底下的静止页面边缘。
+ */
 internal class MiuixVideoCardClipShape(
     var radiusX: Float = 0f,
     var radiusY: Float = 0f,
@@ -463,6 +527,34 @@ internal class MiuixVideoCardClipShape(
         var result = radiusX.hashCode()
         result = 31 * result + radiusY.hashCode()
         return result
+    }
+}
+
+/**
+ * 飞行页的可见窗口：从 (0, 0) 起、宽整屏、高 [visibleHeightPx] 的圆角矩形。
+ *
+ * 用 data class：`graphicsLayer` 靠 `equals` 判断轮廓要不要重建，逐帧给一个新实例就行。
+ */
+internal data class MiuixVideoCardMorphShape(
+    private val visibleTopPx: Float,
+    private val visibleHeightPx: Float,
+    private val radiusPx: Float,
+) : Shape {
+    override fun createOutline(
+        size: Size,
+        layoutDirection: LayoutDirection,
+        density: Density,
+    ): Outline {
+        val top = visibleTopPx.coerceIn(0f, size.height)
+        val bottom = (visibleTopPx + visibleHeightPx).coerceIn(top, size.height)
+        val shortSide = minOf(size.width, bottom - top).coerceAtLeast(0f)
+        val radius = radiusPx.coerceIn(0f, shortSide / 2f)
+        return Outline.Rounded(
+            RoundRect(
+                rect = Rect(0f, top, size.width, bottom),
+                cornerRadius = CornerRadius(x = radius, y = radius),
+            ),
+        )
     }
 }
 
@@ -891,6 +983,14 @@ internal fun miuixVideoCardNavTransition(
     deviceCornerDp: Dp = 32.dp,
     sourceLayout: VideoCardSourceLayout = VideoCardSourceLayout.COVER_ONLY,
     sourceRoute: String? = null,
+    /**
+     * 宿主自己那份开合时钟（0 = 停在来源卡片上，1 = 整屏）。
+     *
+     * 导航驱动的行程从压栈开始算，而详情页首帧要一两百毫秒才画得出来——只跟导航驱动，
+     * 用户看到的就是「点一下，然后整屏页面直接出现」。这里取两者较小值：页面还没画出来
+     * 时进度停在 0（屏幕上就是那张卡），画出来之后由宿主的帧时钟把行程走完。
+     */
+    morphProvider: () -> Float = { 1f },
 ): NavTransition {
     val bounds = sourceBounds?.takeIf { it.width > 1f && it.height > 1f }
         ?: return fallback
@@ -901,10 +1001,6 @@ internal fun miuixVideoCardNavTransition(
         heroMotionSpec, returning = true, gestureTranslationEnabled = gestureTranslationEnabled,
     )
     val corner = sourceCornerDp?.coerceAtLeast(0) ?: 16
-    val clipShapeA = MiuixVideoCardClipShape()
-    val clipShapeB = MiuixVideoCardClipShape()
-    val coveredShapeCache = MiuixVideoCardCoveredShapeCache()
-    var useShapeA = true
 
     return object : NavTransition {
         override val opaqueDepth: Float = fallback.opaqueDepth
@@ -918,9 +1014,7 @@ internal fun miuixVideoCardNavTransition(
             progress.bind(scope)
             val floatingCornerPx = with(scope.density) {
                 val devicePx = deviceCornerDp.toPx()
-                val floatingCornerPx = if (devicePx > 0f) devicePx
-                    else MIUIX_VIDEO_CARD_FLOATING_CORNER_DP.dp.toPx()
-                floatingCornerPx
+                if (devicePx > 0f) devicePx else MIUIX_VIDEO_CARD_FLOATING_CORNER_DP.dp.toPx()
             }
             val gestureModifier = if (gestureTranslationEnabled) {
                 Modifier.graphicsLayer {
@@ -949,110 +1043,58 @@ internal fun miuixVideoCardNavTransition(
             } else {
                 Modifier
             }
+            // 卡片展开：整页从**被点的那张卡的矩形**长到整屏，返回就是倒放。
+            //
+            // 屏幕上只有这一层在动：等比缩放 + 位移 + 可见窗口，几何见
+            // [resolveMiuixVideoCardMorphFrame]。页面内部（播放器、标题、评论）全部按
+            // 整屏布局，跟着这一层一起放大缩小，所以不会出现「播放器先展开、信息区后
+            // 跟上」那种两段式，也不会有任何一处被压扁。
+            //
+            // 被覆盖的首页/列表什么都不做：不缩放、不建层、不改不透明度。底下那张真卡
+            // 就在原位画着，页面从它上面长出来时把它盖住——开是长出来，合是缩回去。
             return gestureModifier
                 .graphicsLayer {
+                    if (scope.relativeDepth > 0f) return@graphicsLayer
                     val width = scope.layoutSize.width.toFloat().coerceAtLeast(1f)
                     val height = scope.layoutSize.height.toFloat().coerceAtLeast(1f)
-                    val depth = scope.relativeDepth
-                    if (depth <= 0f) {
-                        // 帧内记忆：同一帧多层 graphicsLayer 只推进一次状态机。
-                        val morph = progress.visualDepthMemoized(scope)
-                        val sourceScaleX = (bounds.width / width).coerceIn(0.05f, 1f)
-                        val sourceScaleY = (bounds.height / height).coerceIn(0.05f, 1f)
-                        val landingScale = resolveVideoHeroLandingScale(
-                            depth = morph,
-                            autoReturning = !heroMotionSpec.reducedMotion &&
-                                scope.settle != null && scope.settle?.phase != NavSettlePhase.Cancel &&
-                                scope.role == NavRole.Outgoing,
+                    val navDepth = progress.visualDepthMemoized(scope).coerceIn(0f, 1f)
+                    // 手势跟手时手指就是时钟；自动开合取两者较小值，免得页面首帧还没画
+                    // 出来，导航就已经把行程走完。
+                    val raw = if (scope.gesture != null) navDepth else minOf(navDepth, morphProvider())
+                    val morph = MIUIX_VIDEO_CARD_MORPH_EASING.transform(raw)
+                    val frame = resolveMiuixVideoCardMorphFrame(
+                        bounds = bounds,
+                        layoutWidth = width,
+                        layoutHeight = height,
+                        morphProgress = morph,
+                        contentTopInsetPx = progress.contentTopInsetPx,
+                    )
+                    transformOrigin = TransformOrigin(0f, 0f)
+                    translationX = frame.translationX
+                    translationY = frame.translationY
+                    scaleX = frame.scale
+                    scaleY = frame.scale
+                    alpha = resolveMiuixVideoCardMorphAlpha(morph)
+                    shadowElevation = 0f
+                    if (morph < 0.999f) {
+                        clip = true
+                        shape = MiuixVideoCardMorphShape(
+                            visibleTopPx = frame.visibleTopPx,
+                            visibleHeightPx = frame.visibleHeightPx,
+                            radiusPx = resolveMiuixVideoCardLinearCornerPx(
+                                sourceCornerPx = corner.dp.toPx(),
+                                fullscreenCornerPx = floatingCornerPx,
+                                morphProgress = morph,
+                                sourceLayout = sourceLayout,
+                                currentShortSidePx = frame.visibleHeightPx * frame.scale,
+                            ) / frame.scale.coerceAtLeast(0.0001f),
                         )
-                        val outerScaleX = resolveMiuixVideoCardOuterScale(sourceScaleX, morph, landingScale)
-                        val outerScaleY = resolveMiuixVideoCardOuterScale(sourceScaleY, morph, landingScale)
-                        scaleX = outerScaleX
-                        scaleY = outerScaleY
-                        transformOrigin = TransformOrigin(0f, 0f)
-                        val path = resolveVideoCardPathOffset(bounds, width, height, morph, 0f)
-                        translationX = path.x
-                        translationY = path.y
-                        alpha = 1f
-                        val needsClip = morph < 0.999f || (gestureTranslationEnabled && scope.gesture != null)
-                        clip = needsClip
-                        val physicalRadius = resolveMiuixVideoCardLinearCornerPx(
-                            sourceCornerPx = corner.dp.toPx(),
-                            fullscreenCornerPx = floatingCornerPx,
-                            morphProgress = morph,
-                            sourceLayout = sourceLayout,
-                            currentShortSidePx = minOf(width * outerScaleX, height * outerScaleY),
-                        )
-                        val radX = physicalRadius / outerScaleX.coerceAtLeast(0.01f)
-                        val radY = physicalRadius / outerScaleY.coerceAtLeast(0.01f)
-                        val activeShape = if (useShapeA) clipShapeA else clipShapeB
-                        if (!needsClip) {
-                            shape = androidx.compose.ui.graphics.RectangleShape
-                        } else if (kotlin.math.abs(activeShape.radiusX - radX) > 0.05f || kotlin.math.abs(activeShape.radiusY - radY) > 0.05f) {
-                            useShapeA = !useShapeA
-                            val nextShape = if (useShapeA) clipShapeA else clipShapeB
-                            nextShape.radiusX = radX
-                            nextShape.radiusY = radY
-                            shape = nextShape
-                        } else {
-                            shape = activeShape
-                        }
-                        shadowElevation = 0f
                     } else {
-                        // Same boundary ownership as Miuix's cross-activity example: transform
-                        // the complete covered entry once, including its page chrome.
-                        val coveredDepth = progress.depthOr(depth)
-                        val coveredScale = resolveMiuixVideoCardCoveredScale(
-                            depth = coveredDepth,
-                            reducedMotion = heroMotionSpec.reducedMotion,
-                        )
-                        scaleX = coveredScale
-                        scaleY = coveredScale
-                        transformOrigin = TransformOrigin.Center
-                        clip = coveredScale < 1f
-                        shape = coveredShapeCache.resolve(resolveMiuixVideoCardCoveredCornerPx(
-                            depth = coveredDepth,
-                            reducedMotion = heroMotionSpec.reducedMotion,
-                            density = scope.density.density,
-                        ))
+                        clip = false
+                        shape = androidx.compose.ui.graphics.RectangleShape
                     }
-                }.graphicsLayer {
-                    val depth = scope.relativeDepth
-                    if (depth <= 0f) {
-                        val width = scope.layoutSize.width.toFloat().coerceAtLeast(1f)
-                        val height = scope.layoutSize.height.toFloat().coerceAtLeast(1f)
-                        // 帧内记忆：同一帧多层 graphicsLayer 只推进一次状态机。
-                        val morph = progress.visualDepthMemoized(scope)
-                        val landingScale = resolveVideoHeroLandingScale(
-                            depth = morph,
-                            autoReturning = !heroMotionSpec.reducedMotion &&
-                                scope.settle != null && scope.settle?.phase != NavSettlePhase.Cancel &&
-                                scope.role == NavRole.Outgoing,
-                        )
-                        val outerScaleX = resolveMiuixVideoCardOuterScale(bounds.width / width, morph, landingScale)
-                        val outerScaleY = resolveMiuixVideoCardOuterScale(bounds.height / height, morph, landingScale)
-                        val safeOuterScaleX = outerScaleX.coerceAtLeast(0.01f)
-                        val safeOuterScaleY = outerScaleY.coerceAtLeast(0.01f)
-                        val uniformScale = maxOf(safeOuterScaleX, safeOuterScaleY)
-                        scaleX = uniformScale / safeOuterScaleX
-                        scaleY = uniformScale / safeOuterScaleY
-                        translationY = if (contentScale == MiuixVideoCardContentScale.FillWidthTop) {
-                            resolveMiuixVideoCardTopInsetCompensationTranslationY(
-                                topInsetPx = progress.contentTopInsetPx,
-                                morph = morph,
-                                uniformScale = uniformScale,
-                                outerScaleY = safeOuterScaleY,
-                                layoutHeightPx = height,
-                            )
-                        } else {
-                            0f
-                        }
-                        transformOrigin = when (contentScale) {
-                            MiuixVideoCardContentScale.FillWidthTop -> TransformOrigin(0.5f, 0f)
-                            MiuixVideoCardContentScale.CropCenter -> TransformOrigin.Center
-                        }
-                    }
-                }.zIndex(1f)
+                }
+                .zIndex(1f)
         }
     }
 }
