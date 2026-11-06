@@ -1426,9 +1426,10 @@ internal fun ElegantVideoCard(
                 },
                 modifier = Modifier
                     .fillMaxSize(),
-                // 官方粉版：居中 Crop；16:9 框配 16:9 投稿封面时基本不裁
+                // 官方粉版：Crop，顶边对齐。画面比例与框不一致时裁掉的是底边，
+                // 标题/字幕/人物头肩这些关键信息留在缩略图里。
                 contentScale = ContentScale.Crop,
-                alignment = Alignment.Center,
+                alignment = Alignment.TopCenter,
             )
 
             Box(

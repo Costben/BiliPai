@@ -422,7 +422,10 @@ internal fun StoryVideoCard(
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxSize(),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
+                // 与双列卡一致：保持原比例，裁掉底边。画面比例和框不一致时，
+                // 标题、字幕、人物头肩这些关键信息都在上半部分。
+                alignment = Alignment.TopCenter,
             )
 
             Box(

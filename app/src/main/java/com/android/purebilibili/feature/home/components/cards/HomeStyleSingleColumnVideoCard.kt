@@ -293,6 +293,8 @@ internal fun HomeStyleSingleColumnVideoCard(
                 model = coverRequest,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
+                // 与双列卡一致：保持原比例、顶边对齐，缩放回卡片时不会把画面压扁。
+                alignment = Alignment.TopCenter,
                 modifier = Modifier.fillMaxSize(),
             )
         },
