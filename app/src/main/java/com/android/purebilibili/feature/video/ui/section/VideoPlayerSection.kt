@@ -3969,14 +3969,13 @@ private fun VideoPlayerSectionContent(
                 val fillMaxViewport = shouldUseFillMaxPlayerViewport(viewportAspectRatio)
                 val targetResizeMode = viewportAspectRatio.playerResizeMode
                 val transitionBackgroundState = LocalVideoCardTransitionBackgroundState.current
-                val isTransitionActive by remember(transitionBackgroundState) {
-                    derivedStateOf {
-                        val phase = transitionBackgroundState.phaseProvider()
-                        phase == VideoCardTransitionBackgroundPhase.OPENING ||
-                            phase == VideoCardTransitionBackgroundPhase.RETURNING ||
-                            transitionBackgroundState.isReturnGestureInProgressProvider() ||
-                            transitionBackgroundState.isGestureRestoreInProgressProvider()
-                    }
+                // 相位**不在这里订阅**。本函数六千行，只要在这里读一次快照状态，返回时
+                // phase 从 HELD 翻到 RETURNING 就会让整个函数体重跑一遍——atrace 实测
+                // 弹出那一帧 50ms 的重组正是这么来的。改成一个普通字段，由下面的 effect
+                // 在帧外更新；真正跟着它变的只有播放 viewport 刷新与 TextureView 的不透明
+                // 标记，两者都在那个 effect 里直接施加。
+                val transitionActive = remember(transitionBackgroundState) {
+                    PlayerTransitionActiveFlag()
                 }
 
                 DisposableEffect(playerViewRef) {
@@ -3987,6 +3986,7 @@ private fun VideoPlayerSectionContent(
                 // 上滑全屏 / 比例切换：容器尺寸与 resizeMode 可能不同步。
                 // Media3 仅在 mode 变化时 remeasure；FILL 右下黑边多为旧 measure 残留。
                 LaunchedEffect(
+                    transitionBackgroundState,
                     playerViewRef,
                     playerState.player,
                     viewportLayout.width,
@@ -3997,23 +3997,34 @@ private fun VideoPlayerSectionContent(
                     playerVideoSize.width,
                     playerVideoSize.height,
                     measuredPlayerViewportSize,
-                    isTransitionActive,
                 ) {
-                    val playerView = playerViewRef ?: return@LaunchedEffect
-                    // Card morph changes the visual bounds, not the playback viewport.
-                    // Recover once the gesture/animation settles, including cancelled back.
-                    if (isTransitionActive) {
-                        cancelPlayerViewViewportRefresh(playerView)
-                        return@LaunchedEffect
+                    snapshotFlow {
+                        val phase = transitionBackgroundState.phaseProvider()
+                        phase == VideoCardTransitionBackgroundPhase.OPENING ||
+                            phase == VideoCardTransitionBackgroundPhase.RETURNING ||
+                            transitionBackgroundState.isReturnGestureInProgressProvider() ||
+                            transitionBackgroundState.isGestureRestoreInProgressProvider()
+                    }.collect { active ->
+                        transitionActive.value = active
+                        val playerView = playerViewRef ?: return@collect
+                        // 卡片开合、预测预览与取消恢复期间把 TextureView 设为半透明，
+                        // 允许底下的封面垫层透出防黑；落位后恢复 opaque 提升播放性能。
+                        (playerView.videoSurfaceView as? TextureView)?.isOpaque = !active
+                        // Card morph changes the visual bounds, not the playback viewport.
+                        // Recover once the gesture/animation settles, including cancelled back.
+                        if (active) {
+                            cancelPlayerViewViewportRefresh(playerView)
+                            return@collect
+                        }
+                        schedulePlayerViewViewportRefresh(
+                            playerView = playerView,
+                            resizeMode = targetResizeMode,
+                            expectedWidth = measuredPlayerViewportSize.width,
+                            expectedHeight = measuredPlayerViewportSize.height,
+                            videoWidth = playerVideoSize.width,
+                            videoHeight = playerVideoSize.height,
+                        )
                     }
-                    schedulePlayerViewViewportRefresh(
-                        playerView = playerView,
-                        resizeMode = targetResizeMode,
-                        expectedWidth = measuredPlayerViewportSize.width,
-                        expectedHeight = measuredPlayerViewportSize.height,
-                        videoWidth = playerVideoSize.width,
-                        videoHeight = playerVideoSize.height,
-                    )
                 }
 
                 // Keep the viewport and cover mounted while the persisted surface choice loads.
@@ -4044,9 +4055,9 @@ private fun VideoPlayerSectionContent(
                             setShowBuffering(PlayerView.SHOW_BUFFERING_NEVER)
                             useController = false
                             keepScreenOn = keepVideoPlaybackAwake
-                            // 卡片开合、预测预览与取消恢复期间将 TextureView 设为半透明，
-                            // 允许底下的封面垫层透出防黑；动画落位后恢复为 opaque 提升正常播放性能与显存带宽。
-                            (videoSurfaceView as? TextureView)?.isOpaque = !isTransitionActive
+                            // 半透明标记由上面的 effect 在相位变化时直接施加；这里只读
+                            // 普通字段，不订阅状态，避免整函数体被重组。
+                            (videoSurfaceView as? TextureView)?.isOpaque = !transitionActive.value
                             applyPlayerViewResizeMode(
                                 playerView = this,
                                 resizeMode = targetResizeMode,
@@ -4075,7 +4086,7 @@ private fun VideoPlayerSectionContent(
                                 forceCoverDuringReturnAnimation = forceCoverDuringReturnAnimation
                             )
                         )
-                        (playerView.videoSurfaceView as? TextureView)?.isOpaque = !isTransitionActive
+                        (playerView.videoSurfaceView as? TextureView)?.isOpaque = !transitionActive.value
                         applyPlayerViewResizeMode(
                             playerView = playerView,
                             resizeMode = targetResizeMode,
@@ -5979,4 +5990,16 @@ private fun VideoPlayerSectionContent(
         onBack()
     }
     }
+}
+
+/**
+ * 卡片开合相位的**非订阅**快照。
+ *
+ * `VideoPlayerSectionContent` 有六千行：任何被观察的状态只要在函数体里读一次，值一变
+ * 整个函数体就要重跑（atrace 实测弹出那一帧 50ms 的重组就是这么来的）。播放器这里只
+ * 需要知道「动画中 / 静止」这一件事，而且只影响两处副作用——viewport 刷新与 TextureView
+ * 的不透明标记——所以值由一个 effect 在帧外写入，读的地方全是普通字段。
+ */
+private class PlayerTransitionActiveFlag {
+    var value: Boolean = false
 }
