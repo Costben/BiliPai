@@ -631,7 +631,11 @@ class VideoSharedTransitionPolicyTest {
         val chromeHelper = File(
             "src/main/java/com/android/purebilibili/feature/home/components/cards/VideoCardShellReturnChrome.kt"
         ).readText()
-        assertTrue(chromeHelper.contains("resolveHomeCardChromeAlphaDuringShellReturnMorph("))
+        // 开合改成「飞行页整页淡入淡出」之后，源卡 chrome 不再自带走位/淡出时间轴。
+        // 这里必须保持直通：此前每次都会挂一个 graphicsLayer，即使算出来是 alpha=1、
+        // translationY=0，也仍然给每张卡多建一个 RenderNode。
+        assertFalse(chromeHelper.contains("graphicsLayer"))
+        assertFalse(chromeHelper.contains("resolveHomeCardChromeAlphaDuringShellReturnMorph("))
         assertTrue(chromeHelper.contains("resolveSourceOwnershipAtDraw: Boolean = false"))
         val shellHelper = File(
             "src/main/java/com/android/purebilibili/core/ui/transition/VideoCardShellSharedBounds.kt"

@@ -171,6 +171,14 @@ internal fun Modifier.recordNativeVideoCardLayer(
     capturePixels: Boolean = false,
 ): Modifier {
     if (!enabled) return this
+    // 普通卡片一律不录制图层。
+    //
+    // 开合已经改成「两个面直接淡入淡出」，列表卡原位满格画着不动，飞行页那侧也不再
+    // 需要这一格的像素。继续录制只是每张卡白建一个 RenderNode、每帧多包一层 draw，
+    // 点击时还要冻结/解冻一套状态——全是纯开销。
+    //
+    // 只有真正会离开组合的来源（听视频横条）还读像素，它显式传 `capturePixels = true`。
+    if (!capturePixels) return this
     val bgState = LocalVideoCardTransitionBackgroundState.current
     val coverLatch = remember(layer, bvid, sourceRoute) { NativeVideoCardCoverLatch() }
     val sourceExposure = remember(bgState) {
@@ -193,8 +201,7 @@ internal fun Modifier.recordNativeVideoCardLayer(
             bvid = bvid,
             sourceRoute = sourceRoute,
             activeSourceKey = bgState.sourceKeyProvider(),
-            ownsRecordedLayer = !capturePixels ||
-                CardPositionManager.isNativeVideoCardLayerCurrentOwner(layer) ||
+            ownsRecordedLayer = CardPositionManager.isNativeVideoCardLayerCurrentOwner(layer) ||
                 CardPositionManager.isNativeCoverOverlayLayerCurrentOwner(layer),
         )
         val exposure = if (isSharedMorphSourceCard) sourceExposure.value else null
@@ -208,12 +215,6 @@ internal fun Modifier.recordNativeVideoCardLayer(
             exposure = exposure,
             isCoveredLatch = coverLatch.covered,
         )
-        if (!capturePixels) {
-            if (!hide) {
-                drawContent()
-            }
-            return@drawWithContent
-        }
         if (shouldRecordNativeVideoCardLayer(exposure, isSharedMorphSourceCard) && !freezeProvider()) {
             layer.record {
                 this@drawWithContent.drawContent()
@@ -300,7 +301,11 @@ internal fun rememberNativeVideoCardSnapshotController(
 ): NativeVideoCardSnapshotController {
     // Shared card-morph work only, across materials: disabling transitions must also skip
     // layer allocation, recording and capture. Native MD3/Miuix card layout stays untouched.
-    if (!enabled || !LocalSharedTransitionEnabled.current) {
+    //
+    // 不读像素的来源（列表里的普通视频卡）整条链路直接短路：开合已经是两个面淡入淡出，
+    // 卡片原位满格画着不动，不需要为它分配图层、也不需要冻结/解冻。只有会离开组合的
+    // 来源（听视频横条）才传 `capturePixels = true` 走下面这条路。
+    if (!enabled || !LocalSharedTransitionEnabled.current || !capturePixels) {
         return DisabledNativeVideoCardSnapshotController
     }
     val layer = rememberNativeVideoCardLayer()
